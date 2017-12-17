@@ -25,6 +25,7 @@ public class ApplicationConfig extends Application {
         resources.add(co.igb.rest.GenericOperationsREST.class);
         resources.add(co.igb.rest.ReceptionREST.class);
         resources.add(co.igb.rest.SalesOrdersREST.class);
+        resources.add(co.igb.rest.StockTransferREST.class);
         resources.add(co.igb.rest.UserREST.class);
     }
 }

@@ -76,7 +76,7 @@ public class SalesOrderFacade {
 
     public List findOrdersStockAvailability(List<Integer> orderNumbers, String schemaName) {
         StringBuilder sb = new StringBuilder();
-            sb.append("select cast(detalle.itemCode as varchar(20)) itemCode, cast(detalle.openQty as int) openQuantity, cast(detalle.quantity as int) quantity, ");
+        sb.append("select cast(detalle.itemCode as varchar(20)) itemCode, cast(detalle.openQty as int) openQuantity, cast(detalle.quantity as int) quantity, ");
         sb.append("cast(saldo.binabs as int) binAbs, cast(saldo.onhandqty as int) available, cast(ubicacion.bincode as varchar(50)) binCode, ");
         sb.append("cast(detalle.Dscription as varchar(100)) itemName ");
         sb.append("from ordr orden inner join rdr1 detalle on detalle.docentry = orden.docentry and detalle.lineStatus = 'O' ");
@@ -114,6 +114,22 @@ public class SalesOrderFacade {
             return chooseSchema(schemaName).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al buscar ordenes por id. ", e);
+            return new ArrayList();
+        }
+    }
+
+    public List<Object[]> listPendingItems(Integer orderNumber, String schemaName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(det.ItemCode as varchar(20)) itemcode, cast(sum(det.OpenQty) as int) pendingQuantity ");
+        sb.append("from ORDR enc inner join RDR1 det on det.docentry = enc.docentry ");
+        sb.append("where enc.docnum = ");
+        sb.append(orderNumber);
+        sb.append(" group by det.ItemCode ");
+
+        try {
+            return chooseSchema(schemaName).createNativeQuery(sb.toString()).getResultList();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar los items pendientes de la orden. ", e);
             return new ArrayList();
         }
     }
