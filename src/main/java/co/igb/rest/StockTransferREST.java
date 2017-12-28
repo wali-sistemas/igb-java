@@ -57,6 +57,25 @@ public class StockTransferREST implements Serializable {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Trasladando item a carrito de picking {0}", itemTransfer);
 
+        //Validates received data
+        if (itemTransfer == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "No se recibió información para la transferencia")).build();
+        } else if (itemTransfer.getBinAbsFrom() == null || itemTransfer.getBinAbsFrom() < 0) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "La ubicación de origen no es válida")).build();
+        } else if (itemTransfer.getBinAbsTo() == null || itemTransfer.getBinAbsTo() < 0) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "La ubicación de destino no es válida")).build();
+        } else if (itemTransfer.getItemCode() == null || itemTransfer.getItemCode().trim().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "La referencia no es válida")).build();
+        } else if (itemTransfer.getOrderNumber() == null || itemTransfer.getOrderNumber() < 0) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "El número de la órden no es válido")).build();
+        } else if (itemTransfer.getQuantity() == null || itemTransfer.getQuantity() < 0) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "La cantidad no es válida")).build();
+        } else if (itemTransfer.getUsername() == null || itemTransfer.getUsername().trim().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "No se recibió el usuario que realiza el picking")).build();
+        } else if (itemTransfer.getWarehouseCode() == null || itemTransfer.getWarehouseCode().trim().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "No se recibió el código de la bodega")).build();
+        }
+
         StockTransfer document = new StockTransfer();
         document.setSeries(24L); //TODO: parametrizar
         //document.setCardCode(itemTransfer.get);
@@ -119,21 +138,24 @@ public class StockTransferREST implements Serializable {
         }
         //4. Validar y retornar
         if (docEntry > 0) {
-            PickingRecord pickingRecord = new PickingRecord();
-            pickingRecord.setBinFrom(itemTransfer.getBinAbsFrom());
-            pickingRecord.setBinTo(itemTransfer.getBinAbsTo());
-            pickingRecord.setEmpId(itemTransfer.getUsername());
-            pickingRecord.setItemCode(itemTransfer.getItemCode());
-            pickingRecord.setOrderNumber(itemTransfer.getOrderNumber().longValue());
-            pickingRecord.setQuantity(itemTransfer.getQuantity().longValue());
-            pickingRecord.setStockTransferDocEntry(docEntry);
-            pickingRecord.setTransactionDate(new Date());
-
-            pickingRecordFacade.create(pickingRecord);
-
-            return Response.ok(new ResponseDTO(0, pickingRecord)).build();
+            try {
+                PickingRecord pickingRecord = new PickingRecord();
+                pickingRecord.setBinFrom(itemTransfer.getBinAbsFrom());
+                pickingRecord.setBinTo(itemTransfer.getBinAbsTo());
+                pickingRecord.setEmpId(itemTransfer.getUsername());
+                pickingRecord.setItemCode(itemTransfer.getItemCode());
+                pickingRecord.setOrderNumber(itemTransfer.getOrderNumber().longValue());
+                pickingRecord.setQuantity(itemTransfer.getQuantity().longValue());
+                pickingRecord.setStockTransferDocEntry(docEntry);
+                pickingRecord.setTransactionDate(new Date());
+                pickingRecordFacade.create(pickingRecord);
+                return Response.ok(new ResponseDTO(0, pickingRecord)).build();
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "There was an error recording the operation to the MySQL database. ", e);
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ResponseDTO(-1, "Ocurrió un error al procesar la solicitud. Valida si el traslado se realizó correctamente en SAP y reinicia sesión en Wali")).build();
+            }
         } else {
-            return Response.ok(new ResponseDTO(-1, "Ocurrio un error al crear la transferencia. " + errorMessage)).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ResponseDTO(-1, "Ocurrio un error al crear la transferencia. " + errorMessage)).build();
         }
     }
 
