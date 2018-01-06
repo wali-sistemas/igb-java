@@ -40,6 +40,18 @@ public class SalesOrderFacade {
         }
     }
 
+    public Integer getOrderDocEntry(Integer docNum, String schemaName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select DocEntry from ORDR where DocNum = ");
+        sb.append(docNum);
+        try {
+            return (Integer) chooseSchema(schemaName).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el docentry de la orden. ", e);
+            return -1;
+        }
+    }
+
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public List<SalesOrderDTO> findOpenOrders(boolean showAll, String schemaName) {
         StringBuilder sb = new StringBuilder();
@@ -74,11 +86,11 @@ public class SalesOrderFacade {
         return orders;
     }
 
-    public List findOrdersStockAvailability(List<Integer> orderNumbers, String schemaName) {
+    public List<Object[]> findOrdersStockAvailability(List<Integer> orderNumbers, String schemaName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(detalle.itemCode as varchar(20)) itemCode, cast(detalle.openQty as int) openQuantity, cast(detalle.quantity as int) quantity, ");
         sb.append("cast(saldo.binabs as int) binAbs, cast(saldo.onhandqty as int) available, cast(ubicacion.bincode as varchar(50)) binCode, ");
-        sb.append("cast(detalle.Dscription as varchar(100)) itemName ");
+        sb.append("cast(detalle.Dscription as varchar(100)) itemName, cast(orden.docnum as int) orderNumber ");
         sb.append("from ordr orden inner join rdr1 detalle on detalle.docentry = orden.docentry and detalle.lineStatus = 'O' ");
         sb.append("inner join OIBQ saldo on saldo.ItemCode = detalle.ItemCode and saldo.WhsCode = '01' and saldo.OnHandQty > 0 ");
         sb.append("inner join obin ubicacion on ubicacion.absentry = saldo.binabs and ubicacion.SysBin = 'N' ");

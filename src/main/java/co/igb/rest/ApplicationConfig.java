@@ -22,6 +22,7 @@ public class ApplicationConfig extends Application {
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(co.igb.ejb.IGBApplicationBean.class);
         resources.add(co.igb.rest.BinLocationREST.class);
+        resources.add(co.igb.rest.DeliveryNoteREST.class);
         resources.add(co.igb.rest.GenericOperationsREST.class);
         resources.add(co.igb.rest.ReceptionREST.class);
         resources.add(co.igb.rest.SalesOrdersREST.class);
