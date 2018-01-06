@@ -1,8 +1,5 @@
 package co.igb.rest;
 
-import co.igb.b1ws.client.login.LoginService;
-import co.igb.b1ws.client.login.Logout;
-import co.igb.b1ws.client.login.MsgHeader;
 import co.igb.b1ws.client.purchasedeliverynote.Add;
 import co.igb.b1ws.client.purchasedeliverynote.AddResponse;
 import co.igb.b1ws.client.purchasedeliverynote.Document;
@@ -44,6 +41,8 @@ public class ReceptionREST implements Serializable {
     private static final Logger CONSOLE = Logger.getLogger(ReceptionREST.class.getSimpleName());
     @EJB
     private PurchaseOrderFacade poFacade;
+    @EJB
+    private BasicSAPFunctions sapFunctions;
     @Inject
     private IGBApplicationBean appBean;
 
@@ -156,7 +155,7 @@ public class ReceptionREST implements Serializable {
         //1. Login
         String sessionId = null;
         try {
-            sessionId = login();
+            sessionId = sapFunctions.login();
             CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
         } catch (Exception e) {
         }
@@ -174,7 +173,7 @@ public class ReceptionREST implements Serializable {
         }
         //3. Logout
         if (sessionId != null) {
-            logout(sessionId);
+            sapFunctions.logout(sessionId);
         }
         if (docEntry > 0) {
             return Response.ok(new ResponseDTO(0, docEntry)).build();
@@ -194,37 +193,6 @@ public class ReceptionREST implements Serializable {
         AddResponse response = service.getPurchaseDeliveryNotesServiceSoap12().add(add, header);
         return response.getDocumentParams().getDocEntry();
 
-    }
-
-    private String login() {
-        try {
-            LoginService service = new LoginService(new URL(String.format(appBean.obtenerValorPropiedad("igb.b1ws.wsdlUrl"), "LoginService")));
-            return service.getLoginServiceSoap12().login(
-                    appBean.obtenerValorPropiedad("igb.b1ws.databaseServer"),
-                    appBean.obtenerValorPropiedad("igb.b1ws.databaseName"),
-                    appBean.obtenerValorPropiedad("igb.b1ws.databaseType"),
-                    appBean.obtenerValorPropiedad("igb.b1ws.companyUsername"),
-                    appBean.obtenerValorPropiedad("igb.b1ws.companyPassword"),
-                    appBean.obtenerValorPropiedad("igb.b1ws.language"),
-                    appBean.obtenerValorPropiedad("igb.b1ws.licenseServer"));
-        } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server. ", e);
-            return null;
-        }
-
-    }
-
-    private void logout(String sessionId) {
-        try {
-            LoginService service = new LoginService(new URL(String.format(appBean.obtenerValorPropiedad("igb.b1ws.wsdlUrl"), "LoginService")));
-            MsgHeader header = new MsgHeader();
-            header.setSessionID(sessionId);
-            Logout parameters = new Logout();
-            service.getLoginServiceSoap12().logout(parameters, header);
-            CONSOLE.log(Level.INFO, "Sesion {0} finalizada con exito", sessionId);
-        } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al finalizar la sesion " + sessionId, e);
-        }
     }
 
     private XMLGregorianCalendar dateToXML(Date date) {

@@ -48,11 +48,15 @@ public class AssignedOrderFacade extends AbstractFacade<AssignedOrder> {
         }
     }
 
-    public List<AssignedOrder> listOpenAssignationsByUser(String username) {
+    public List<AssignedOrder> listOpenAssignationsByUserAndCompany(String username, String company) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<AssignedOrder> cq = cb.createQuery(AssignedOrder.class);
         Root<AssignedOrder> root = cq.from(AssignedOrder.class);
-        cq.where(cb.equal(root.get(AssignedOrder_.status), "open"), cb.equal(root.get(AssignedOrder_.empId), username));
+        cq.where(
+                cb.equal(root.get(AssignedOrder_.status), "open"),
+                cb.equal(root.get(AssignedOrder_.empId), username),
+                cb.equal(root.get(AssignedOrder_.company), company)
+        );
         try {
             return em.createQuery(cq).getResultList();
         } catch (Exception e) {

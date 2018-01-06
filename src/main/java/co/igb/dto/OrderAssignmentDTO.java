@@ -10,7 +10,7 @@ public class OrderAssignmentDTO {
 
     private String assignedBy;
     private String employeeId;
-    private List<Integer> orders;
+    private List<String[]> orders;
 
     public OrderAssignmentDTO() {
     }
@@ -31,11 +31,11 @@ public class OrderAssignmentDTO {
         this.employeeId = employeeId;
     }
 
-    public List<Integer> getOrders() {
+    public List<String[]> getOrders() {
         return orders;
     }
 
-    public void setOrders(List<Integer> orders) {
+    public void setOrders(List<String[]> orders) {
         this.orders = orders;
     }
 

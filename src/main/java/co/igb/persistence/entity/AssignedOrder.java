@@ -38,11 +38,17 @@ public class AssignedOrder implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateAssigned;
     @Basic(optional = false)
+    @Column(name = "customer_id")
+    private String customerId;
+    @Basic(optional = false)
     @Column(name = "assigned_by")
     private String assignedBy;
     @Basic(optional = false)
     @Column(name = "status")
     private String status;
+    @Basic(optional = false)
+    @Column(name = "company")
+    private String company;
 
     public AssignedOrder() {
     }
@@ -79,6 +85,14 @@ public class AssignedOrder implements Serializable {
         this.dateAssigned = dateAssigned;
     }
 
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
     public String getAssignedBy() {
         return assignedBy;
     }
@@ -93,6 +107,14 @@ public class AssignedOrder implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     @Override
@@ -122,7 +144,7 @@ public class AssignedOrder implements Serializable {
 
     @Override
     public String toString() {
-        return "AssignedOrder{" + "id=" + id + ", empId=" + empId + ", orderNumber=" + orderNumber + ", dateAssigned=" + dateAssigned + ", assignedBy=" + assignedBy + ", status=" + status + '}';
+        return "AssignedOrder{" + "id=" + id + ", empId=" + empId + ", orderNumber=" + orderNumber + ", dateAssigned=" + dateAssigned + ", customerId=" + customerId + ", assignedBy=" + assignedBy + ", status=" + status + ", company=" + company + '}';
     }
 
 }
