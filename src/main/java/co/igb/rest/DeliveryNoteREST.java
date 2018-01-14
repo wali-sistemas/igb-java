@@ -61,14 +61,12 @@ public class DeliveryNoteREST implements Serializable {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "El ID del cliente no es válido (vacío)")).build();
         } else if (delivery.getLines() == null || delivery.getLines().isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "No se recibieron items para entregar")).build();
-        } else if (delivery.getOrderNumber() == null || delivery.getOrderNumber() <= 0) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "El número de la órden no es válido")).build();
         }
 
         Document document = new Document();
         document.setSeries(8L); //TODO: parametrizar
         document.setCardCode(delivery.getCardCode());
-        document.setComments("Proceso de packing orden #" + delivery.getOrderNumber());
+        document.setComments("Proceso de packing para ordenes " + delivery.getOrderNumbers());
 
         long lineNum = 0L;
         Document.DocumentLines documentLines = new Document.DocumentLines();
@@ -81,9 +79,11 @@ public class DeliveryNoteREST implements Serializable {
                 return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "El código de almacén del ítem en la linea " + lineNum++ + " no es válido")).build();
             } else if (lineDto.getBinAllocation() == null || lineDto.getBinAllocation().isEmpty()) {
                 return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "No se recibió información de ubicación para el ítem en la linea " + lineNum++)).build();
+            } else if (lineDto.getOrderNumber() == null || lineDto.getOrderNumber() <= 0) {
+                return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "El número de la órden no es válido")).build();
             }
 
-            Integer orderDocEntry = salesOrderFacade.getOrderDocEntry(delivery.getOrderNumber(), companyName);
+            Integer orderDocEntry = salesOrderFacade.getOrderDocEntry(lineDto.getOrderNumber(), companyName);
             if (orderDocEntry <= 0) {
                 return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "Ocurrió un error al consultar los datos de la orden. ")).build();
             }

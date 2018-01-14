@@ -10,7 +10,6 @@ import java.util.List;
 public class DeliveryNoteDTO {
 
     private String cardCode;
-    private Integer orderNumber;
     private List<DeliveryNoteLineDTO> lines;
 
     public DeliveryNoteDTO() {
@@ -25,14 +24,6 @@ public class DeliveryNoteDTO {
         this.cardCode = cardCode;
     }
 
-    public Integer getOrderNumber() {
-        return orderNumber;
-    }
-
-    public void setOrderNumber(Integer orderNumber) {
-        this.orderNumber = orderNumber;
-    }
-
     public List<DeliveryNoteLineDTO> getLines() {
         return lines;
     }
@@ -41,11 +32,23 @@ public class DeliveryNoteDTO {
         this.lines = lines;
     }
 
+    public String getOrderNumbers() {
+        StringBuilder sb = new StringBuilder();
+        for (DeliveryNoteLineDTO line : lines) {
+            if (sb.length() > 0) {
+                sb.append(",");
+            }
+            sb.append(line.getOrderNumber());
+        }
+        return sb.toString();
+    }
+
     public static class DeliveryNoteLineDTO {
 
         private String itemCode;
         private Integer quantity;
         private String warehouseCode;
+        private Integer orderNumber;
         private List<DeliveryNoteBinAllocationDTO> binAllocation;
 
         public DeliveryNoteLineDTO() {
@@ -74,6 +77,14 @@ public class DeliveryNoteDTO {
 
         public void setWarehouseCode(String warehouseCode) {
             this.warehouseCode = warehouseCode;
+        }
+
+        public Integer getOrderNumber() {
+            return orderNumber;
+        }
+
+        public void setOrderNumber(Integer orderNumber) {
+            this.orderNumber = orderNumber;
         }
 
         public List<DeliveryNoteBinAllocationDTO> getBinAllocation() {
@@ -113,13 +124,13 @@ public class DeliveryNoteDTO {
 
         @Override
         public String toString() {
-            return "DeliveryNoteLineDTO{" + "itemCode=" + itemCode + ", quantity=" + quantity + ", warehouseCode=" + warehouseCode + ", binAllocation=" + binAllocation + '}';
+            return "DeliveryNoteLineDTO{" + "itemCode=" + itemCode + ", orderNumber=" + orderNumber + ", quantity=" + quantity + ", warehouseCode=" + warehouseCode + ", binAllocation=" + binAllocation + '}';
         }
     }
 
     @Override
     public String toString() {
-        return "DeliveryNoteDTO{" + "cardCode=" + cardCode + ", orderNumber=" + orderNumber + ", lines=" + lines + '}';
+        return "DeliveryNoteDTO{" + "cardCode=" + cardCode + ", lines=" + lines + '}';
     }
 
 }

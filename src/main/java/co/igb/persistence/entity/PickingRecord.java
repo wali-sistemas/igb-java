@@ -20,7 +20,9 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "picking_record")
 public class PickingRecord implements Serializable {
-
+    
+    public static final String STATUS_PENDING = "P";
+    public static final String STATUS_DONE = "D";
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -52,6 +54,9 @@ public class PickingRecord implements Serializable {
     @Column(name = "transaction_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date transactionDate;
+    @Basic(optional = false)
+    @Column(name = "status")
+    private String status;
 
     public PickingRecord() {
     }
@@ -128,6 +133,14 @@ public class PickingRecord implements Serializable {
         this.transactionDate = transactionDate;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -155,6 +168,7 @@ public class PickingRecord implements Serializable {
 
     @Override
     public String toString() {
-        return "PickingRecord{" + "id=" + id + ", orderNumber=" + orderNumber + ", itemCode=" + itemCode + ", quantity=" + quantity + ", binFrom=" + binFrom + ", binTo=" + binTo + ", stockTransferDocEntry=" + stockTransferDocEntry + ", empId=" + empId + ", transactionDate=" + transactionDate + '}';
+        return "PickingRecord{" + "id=" + id + ", orderNumber=" + orderNumber + ", itemCode=" + itemCode + ", quantity=" + quantity + ", binFrom=" + binFrom + ", binTo=" + binTo + ", stockTransferDocEntry=" + stockTransferDocEntry + ", empId=" + empId + ", transactionDate=" + transactionDate + ", status=" + status + '}';
     }
+
 }

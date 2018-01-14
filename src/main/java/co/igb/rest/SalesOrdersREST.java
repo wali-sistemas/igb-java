@@ -157,8 +157,21 @@ public class SalesOrdersREST implements Serializable {
                 pendingItems.add(row);
             }
         }
-        CONSOLE.log(Level.INFO, "{0} items were returned from the query and only {1} are pending", new Object[]{stock.size(), pendingItems.size()});
-        return Response.ok(pendingItems).build();
+        if (stock == null || stock.isEmpty() || pendingItems.isEmpty()) {
+            CONSOLE.log(Level.INFO, "There are no more pending items to pick");
+            
+            //Marks picking assignation as done
+            for(AssignedOrder assignedOrder : assignations){
+                
+            }
+            
+            //Creates packing record
+            
+            return Response.ok(new ResponseDTO(-2, "There are no more items to pick")).build();
+        } else {
+            CONSOLE.log(Level.INFO, "{0} items were returned from the query and only {1} are pending", new Object[]{stock.size(), pendingItems.size()});
+            return Response.ok(pendingItems).build();
+        }
     }
 
     @GET

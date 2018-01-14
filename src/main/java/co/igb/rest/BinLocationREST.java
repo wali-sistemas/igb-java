@@ -57,16 +57,4 @@ public class BinLocationREST implements Serializable {
         CONSOLE.log(Level.INFO, "Se encontraron {0} carritos de picking", pickingCarts.size());
         return Response.ok(pickingCarts).build();
     }
-
-    @POST
-    @Path("pick-item")
-    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response pickItem(SingleItemTransferDTO itemTransfer, @HeaderParam("X-Company-Name") String companyName) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
-        CONSOLE.log(Level.INFO, "Trasladando item a carrito de picking {0}", itemTransfer);
-        //TODO: hacer traslado 
-        return Response.ok().build();
-    }
 }

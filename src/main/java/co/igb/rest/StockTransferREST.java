@@ -148,6 +148,7 @@ public class StockTransferREST implements Serializable {
                 pickingRecord.setQuantity(itemTransfer.getQuantity().longValue());
                 pickingRecord.setStockTransferDocEntry(docEntry);
                 pickingRecord.setTransactionDate(new Date());
+                pickingRecord.setStatus(PickingRecord.STATUS_PENDING);
                 pickingRecordFacade.create(pickingRecord);
                 return Response.ok(new ResponseDTO(0, pickingRecord)).build();
             } catch (Exception e) {
