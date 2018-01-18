@@ -93,7 +93,7 @@ public class SalesOrderFacade {
         sb.append("cast(detalle.Dscription as varchar(100)) itemName, cast(orden.docnum as int) orderNumber ");
         sb.append("from ordr orden inner join rdr1 detalle on detalle.docentry = orden.docentry and detalle.lineStatus = 'O' ");
         sb.append("inner join OIBQ saldo on saldo.ItemCode = detalle.ItemCode and saldo.WhsCode = '01' and saldo.OnHandQty > 0 ");
-        sb.append("inner join obin ubicacion on ubicacion.absentry = saldo.binabs and ubicacion.SysBin = 'N' ");
+        sb.append("inner join obin ubicacion on ubicacion.absentry = saldo.binabs and ubicacion.SysBin = 'N' and ubicacion.Attr1Val = 'STORAGE' ");
         sb.append("where orden.docnum in (");
         for (Integer orderNumber : orderNumbers) {
             sb.append(orderNumber);
@@ -143,6 +143,19 @@ public class SalesOrderFacade {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar los items pendientes de la orden. ", e);
             return new ArrayList();
+        }
+    }
+
+    public Object queryCustomer(Integer orderNumber, String schemaName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(cardcode as varchar(20)) cardcode, cast(cardname as varchar(100)) cardname ");
+        sb.append("from ORDR where docnum = ");
+        sb.append(orderNumber);
+        try {
+            return chooseSchema(schemaName).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el cliente para la orden. ", e);
+            return null;
         }
     }
 }

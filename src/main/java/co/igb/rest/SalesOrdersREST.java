@@ -3,7 +3,11 @@ package co.igb.rest;
 import co.igb.dto.OrderAssignmentDTO;
 import co.igb.dto.SalesOrderDTO;
 import co.igb.persistence.entity.AssignedOrder;
+import co.igb.persistence.entity.PackingOrder;
+import co.igb.persistence.entity.PackingOrderItem;
+import co.igb.persistence.entity.PackingOrderItemBin;
 import co.igb.persistence.facade.AssignedOrderFacade;
+import co.igb.persistence.facade.PackingOrderFacade;
 import co.igb.persistence.facade.PickingRecordFacade;
 import co.igb.persistence.facade.SalesOrderFacade;
 import java.io.Serializable;
@@ -45,6 +49,8 @@ public class SalesOrdersREST implements Serializable {
     private AssignedOrderFacade aoFacade;
     @EJB
     private PickingRecordFacade pickingRecordFacade;
+    @EJB
+    private PackingOrderFacade poFacade;
 
     @GET
     @Path("list/orders")
@@ -129,6 +135,9 @@ public class SalesOrdersREST implements Serializable {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "No se especificó la empresa")).build();
         }
         List<AssignedOrder> assignations = aoFacade.listOpenAssignationsByUserAndCompany(username, companyName);
+        if (assignations.isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-3, "El usuario no tiene asignaciones pendientes")).build();
+        }
         List<Integer> orderNumbers = new ArrayList<>();
         for (AssignedOrder assignation : assignations) {
             if ((orderNumber != null && orderNumber.equals(assignation.getOrderNumber().toString())) || orderNumber == null) {
@@ -159,19 +168,79 @@ public class SalesOrdersREST implements Serializable {
         }
         if (stock == null || stock.isEmpty() || pendingItems.isEmpty()) {
             CONSOLE.log(Level.INFO, "There are no more pending items to pick");
-            
-            //Marks picking assignation as done
-            for(AssignedOrder assignedOrder : assignations){
-                
+
+            try {
+                //Marks picking assignation as done
+                for (AssignedOrder assignedOrder : assignations) {
+                    if (orderNumber != null && orderNumber.equals(assignedOrder.getOrderNumber().toString())) {
+                        assignedOrder.setStatus("done");
+                        aoFacade.edit(assignedOrder);
+                        createPackingOrder(assignedOrder, companyName);
+                        break;
+                    } else if (orderNumber == null) {
+                        assignedOrder.setStatus("done");
+                        aoFacade.edit(assignedOrder);
+                        createPackingOrder(assignedOrder, companyName);
+                    }
+                }
+
+                return Response.ok(new ResponseDTO(-2, "There are no more items to pick")).build();
+            } catch (Exception e) {
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ResponseDTO(-1, "Ocurrio un error al finalizar el proceso de picking")).build();
             }
-            
-            //Creates packing record
-            
-            return Response.ok(new ResponseDTO(-2, "There are no more items to pick")).build();
+
         } else {
             CONSOLE.log(Level.INFO, "{0} items were returned from the query and only {1} are pending", new Object[]{stock.size(), pendingItems.size()});
             return Response.ok(pendingItems).build();
         }
+    }
+
+    private void createPackingOrder(AssignedOrder order, String schemaName) throws Exception {
+
+        Object[] customerData = (Object[]) soFacade.queryCustomer(order.getOrderNumber(), schemaName);
+        if (customerData == null) {
+            throw new Exception("Could not query customer data for order " + order.getOrderNumber());
+        }
+
+        //Creates packing record
+        PackingOrder packing = new PackingOrder();
+        packing.setCustomerId((String) customerData[0]);
+        packing.setCustomerName((String) customerData[1]);
+        packing.setOrderNumber(order.getOrderNumber());
+        packing.setStatus("open");
+
+        Map<String, Map<Long, Integer>> pickedItems = pickingRecordFacade.listPickedItems(order.getOrderNumber());
+        if (pickedItems.isEmpty()) {
+            throw new Exception("Could not query picking records for order " + order.getOrderNumber());
+        }
+
+        for (String itemcode : pickedItems.keySet()) {
+            PackingOrderItem item = new PackingOrderItem();
+            item.setItemCode(itemcode);
+
+            List<PackingOrderItemBin> bins = new ArrayList<>();
+            for (Long binAbs : pickedItems.get(itemcode).keySet()) {
+                PackingOrderItemBin bin = new PackingOrderItemBin();
+                bin.setBinAbs(binAbs);
+                bin.setBinCode(null);
+                bin.setPackingOrderItem(item);
+                bin.setPickedQty(pickedItems.get(itemcode).get(binAbs));
+                bin.setPackedQty(0);
+                bins.add(bin);
+            }
+
+            item.setBins(bins);
+            item.setPackingOrder(packing);
+            packing.getItems().add(item);
+        }
+
+        try {
+            poFacade.create(packing);
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el registro de packing. ", e);
+            throw new Exception("Ocurrio un error al crear el registro de packing.");
+        }
+
     }
 
     @GET
