@@ -3,6 +3,8 @@ package co.igb.ejb;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,6 +26,7 @@ public class IGBApplicationBean implements Serializable {
     private static final Logger CONSOLE = Logger.getLogger(IGBApplicationBean.class.getSimpleName());
 
     private Properties props = new Properties();
+    private HashSet<String> excludedPaths;
 
     @PostConstruct
     @GET
@@ -47,6 +50,9 @@ public class IGBApplicationBean implements Serializable {
             } else {
                 props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("/" + propertiesFileName));
             }
+
+            String values = props.getProperty("igb.no-filter.paths");
+            excludedPaths = new HashSet<>(Arrays.asList(values.split(",")));
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "There was an error loading the file.", e);
         }
@@ -54,5 +60,9 @@ public class IGBApplicationBean implements Serializable {
 
     public String obtenerValorPropiedad(String prop) {
         return props.getProperty(prop);
+    }
+
+    public boolean isPathExcludedFromTokenValidation(String path) {
+        return excludedPaths.contains(path);
     }
 }

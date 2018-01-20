@@ -48,7 +48,7 @@ public class UserREST {
 
     @POST
     @Path("login/")
-    @Consumes({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     public Response login(UserDTO user) {
         CONSOLE.log(Level.INFO, "Se recibieron datos de usuario para login {0}", user);
