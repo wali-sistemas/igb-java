@@ -1,12 +1,18 @@
 package co.igb.persistence.facade;
 
+import co.igb.persistence.entity.SaldoUbicacion;
+import co.igb.persistence.entity.SaldoUbicacion_;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -55,5 +61,23 @@ public class BinLocationFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los carritos de picking. ", e);
             return new ArrayList();
         }
+    }
+
+    public List<SaldoUbicacion> findLocationBalance(String binCode, String schema) {
+        EntityManager em = chooseSchema(schema);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<SaldoUbicacion> cq = cb.createQuery(SaldoUbicacion.class);
+        Root<SaldoUbicacion> saldo = cq.from(SaldoUbicacion.class);
+
+        cq.where(cb.equal(saldo.get("ubicacion").get("binCode"), binCode), cb.gt(saldo.get(SaldoUbicacion_.onHandQty), 1));
+
+        try {
+            return em.createQuery(cq).getResultList();
+        } catch (NoResultException e) {
+            CONSOLE.log(Level.SEVERE, "No se encontraron datos en la ubicacion {0}", binCode);
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los datos de la ubicacion. ", e);
+        }
+        return null;
     }
 }
