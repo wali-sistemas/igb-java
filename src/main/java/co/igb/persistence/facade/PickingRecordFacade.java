@@ -88,7 +88,7 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
             for (Object[] row : results) {
                 String itemCode = (String) row[2];
                 Integer quantity = (Integer) row[3];
-                Long binAbs = (Long) row[5];
+                Long binAbs = ((Integer) row[5]).longValue();
                 Map<Long, Integer> bins = pickedItems.get(itemCode);
                 if (bins == null) {
                     bins = new HashMap<>();

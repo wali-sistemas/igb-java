@@ -3,13 +3,16 @@ package co.igb.persistence.facade;
 import co.igb.dto.SalesOrderDTO;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 /**
@@ -94,13 +97,20 @@ public class SalesOrderFacade {
         sb.append("from ordr orden inner join rdr1 detalle on detalle.docentry = orden.docentry and detalle.lineStatus = 'O' ");
         sb.append("inner join OIBQ saldo on saldo.ItemCode = detalle.ItemCode and saldo.WhsCode = '01' and saldo.OnHandQty > 0 ");
         sb.append("inner join obin ubicacion on ubicacion.absentry = saldo.binabs and ubicacion.SysBin = 'N' and ubicacion.Attr1Val = 'STORAGE' ");
-        sb.append("where orden.docnum in (");
-        for (Integer orderNumber : orderNumbers) {
-            sb.append(orderNumber);
-            sb.append(",");
+        if (orderNumbers != null && orderNumbers.size() == 1) {
+            sb.append("where orden.docnum = ");
+            sb.append(orderNumbers.get(0));
+        } else if (orderNumbers != null && !orderNumbers.isEmpty()) {
+            sb.append("where orden.docnum in (");
+            for (Integer orderNumber : orderNumbers) {
+                sb.append(orderNumber);
+                sb.append(",");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            sb.append(")");
         }
-        sb.deleteCharAt(sb.length() - 1);
-        sb.append(")");
+        sb.append(" order by binCode ");
+
         CONSOLE.log(Level.INFO, sb.toString());
         try {
             return chooseSchema(schemaName).createNativeQuery(sb.toString()).getResultList();
@@ -130,19 +140,27 @@ public class SalesOrderFacade {
         }
     }
 
-    public List<Object[]> listPendingItems(Integer orderNumber, String schemaName) {
+    public Map<String, Integer> listPendingItems(Integer orderNumber, String schemaName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(det.ItemCode as varchar(20)) itemcode, cast(sum(det.OpenQty) as int) pendingQuantity ");
-        sb.append("from ORDR enc inner join RDR1 det on det.docentry = enc.docentry ");
+        sb.append("from ORDR enc inner join RDR1 det on det.docentry = enc.docentry and det.OpenQty > 0 ");
         sb.append("where enc.docnum = ");
         sb.append(orderNumber);
         sb.append(" group by det.ItemCode ");
-
+        CONSOLE.log(Level.INFO, sb.toString());
         try {
-            return chooseSchema(schemaName).createNativeQuery(sb.toString()).getResultList();
+            Map<String, Integer> results = new HashMap<>();
+            List<Object[]> rows = (List<Object[]>) chooseSchema(schemaName).createNativeQuery(sb.toString()).getResultList();
+            for (Object[] col : rows) {
+                results.put((String) col[0], (Integer) col[1]);
+            }
+            return results;
+        } catch (NoResultException e) {
+            CONSOLE.log(Level.WARNING, "No se encontraron items pendientes para la orden {0}", orderNumber);
+            return new HashMap<>();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar los items pendientes de la orden. ", e);
-            return new ArrayList();
+            return new HashMap<>();
         }
     }
 

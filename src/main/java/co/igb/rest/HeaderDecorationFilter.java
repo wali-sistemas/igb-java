@@ -39,11 +39,15 @@ public class HeaderDecorationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         ((HttpServletResponse) response).addHeader("Access-Control-Allow-Origin", "*");
-        ((HttpServletResponse) response).addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-Company-Name");
+        ((HttpServletResponse) response).addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-Company-Name, Authorization");
         ((HttpServletResponse) response).addHeader("Access-Control-Allow-Methods", "GET, OPTIONS, POST, PUT, DELETE");
-        if (validateAuthorizationToken(((HttpServletRequest) request))) {
+        HttpServletRequest req = (HttpServletRequest) request;
+        CONSOLE.log(Level.INFO, "Processing {0} method", req.getMethod());
+        if (req.getMethod().equals("OPTIONS") || validateAuthorizationToken(req)) {
+            CONSOLE.log(Level.INFO, "Processing continued");
             chain.doFilter(request, response);
         } else {
+            CONSOLE.log(Level.INFO, "Processing halted with error");
             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED);
         }
     }
@@ -62,7 +66,7 @@ public class HeaderDecorationFilter implements Filter {
             Algorithm algorithm = Algorithm.HMAC256(appBean.obtenerValorPropiedad("jwt.secret"));
             JWTVerifier verifier = JWT.require(algorithm).build();
             DecodedJWT jwt = verifier.verify(authorizationToken);
-            CONSOLE.log(Level.INFO, "User in token: ", jwt.getClaim("username"));
+            CONSOLE.log(Level.INFO, "User in token: {0}", jwt.getClaim("username"));
 
             return true;
         } catch (Exception e) {

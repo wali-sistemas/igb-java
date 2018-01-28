@@ -12,6 +12,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 /**
@@ -48,15 +49,22 @@ public class AssignedOrderFacade extends AbstractFacade<AssignedOrder> {
         }
     }
 
-    public List<AssignedOrder> listOpenAssignationsByUserAndCompany(String username, String company) {
+    public List<AssignedOrder> listOpenAssignationsByUserAndCompany(String username, Integer orderNumber, String company) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<AssignedOrder> cq = cb.createQuery(AssignedOrder.class);
         Root<AssignedOrder> root = cq.from(AssignedOrder.class);
-        cq.where(
-                cb.equal(root.get(AssignedOrder_.status), "open"),
-                cb.equal(root.get(AssignedOrder_.empId), username),
-                cb.equal(root.get(AssignedOrder_.company), company)
-        );
+
+        Predicate statusOpen = cb.equal(root.get(AssignedOrder_.status), "open");
+        Predicate userOwns = cb.equal(root.get(AssignedOrder_.empId), username);
+        Predicate companyFilter = cb.equal(root.get(AssignedOrder_.company), company);
+
+        if (orderNumber != null && orderNumber > 0) {
+            Predicate orderFilter = cb.equal(root.get(AssignedOrder_.orderNumber), orderNumber);
+            cq.where(statusOpen, userOwns, companyFilter, orderFilter);
+        } else {
+            cq.where(statusOpen, userOwns, companyFilter);
+        }
+
         try {
             return em.createQuery(cq).getResultList();
         } catch (Exception e) {

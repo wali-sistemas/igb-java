@@ -134,7 +134,7 @@ public class SalesOrdersREST implements Serializable {
         if (companyName == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "No se especificó la empresa")).build();
         }
-        List<AssignedOrder> assignations = aoFacade.listOpenAssignationsByUserAndCompany(username, companyName);
+        List<AssignedOrder> assignations = aoFacade.listOpenAssignationsByUserAndCompany(username, Integer.parseInt(orderNumber == null ? "0" : orderNumber), companyName);
         if (assignations.isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-3, "El usuario no tiene asignaciones pendientes")).build();
         }
@@ -254,7 +254,7 @@ public class SalesOrdersREST implements Serializable {
         if (companyName == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "No se especificó la empresa")).build();
         }
-        List<AssignedOrder> assignations = aoFacade.listOpenAssignationsByUserAndCompany(username, companyName);
+        List<AssignedOrder> assignations = aoFacade.listOpenAssignationsByUserAndCompany(username, null, companyName);
         List<Integer> orderIds = new ArrayList<>();
         for (AssignedOrder order : assignations) {
             orderIds.add(order.getOrderNumber());
