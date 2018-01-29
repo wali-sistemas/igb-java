@@ -80,4 +80,21 @@ public class BinLocationFacade {
         }
         return null;
     }
+
+    public Integer findLocationBinCode(String binCode, String schema) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("SELECT CAST(ubic.absentry AS INT) binAbs ");
+        sb.append("FROM   OBIN ubic ");
+        sb.append("WHERE  ubic.bincode = '");
+        sb.append(binCode);
+        sb.append("'");
+
+        try {
+            return (Integer) chooseSchema(schema).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los carritos de picking. ", e);
+            return null;
+        }
+    }
 }

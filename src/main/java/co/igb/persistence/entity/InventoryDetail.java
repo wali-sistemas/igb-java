@@ -25,7 +25,7 @@ public class InventoryDetail implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Basic(optional = false)
-    @Column(name = "idinventario_detail")
+    @Column(name = "idinventory_detail")
     private Integer idInventoryDetail;
     @Basic(optional = false)
     @Column(name = "idinventory")

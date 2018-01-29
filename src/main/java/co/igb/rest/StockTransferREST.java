@@ -8,14 +8,19 @@ import co.igb.b1ws.client.stocktransfer.StockTransferService;
 import co.igb.dto.SingleItemTransferDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.entity.Inventory;
+import co.igb.persistence.entity.InventoryDetail;
+import co.igb.persistence.entity.InventoryDifference;
 import co.igb.persistence.entity.PickingRecord;
 import co.igb.persistence.entity.SaldoUbicacion;
 import co.igb.persistence.facade.BinLocationFacade;
+import co.igb.persistence.facade.InventoryDetailFacade;
+import co.igb.persistence.facade.InventoryDifferenceFacade;
 import co.igb.persistence.facade.InventoryFacade;
 import co.igb.persistence.facade.PickingRecordFacade;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -53,6 +58,10 @@ public class StockTransferREST implements Serializable {
     private BinLocationFacade binLocationFacade;
     @EJB
     private InventoryFacade inventoryFacade;
+    @EJB
+    private InventoryDetailFacade inventoryDetailFacade;
+    @EJB
+    private InventoryDifferenceFacade inventoryDifferenceFacade;
     @Inject
     private IGBApplicationBean appBean;
 
@@ -176,7 +185,7 @@ public class StockTransferREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response cleanLocation(@PathParam("warehouse") String warehouse, @PathParam("bincode") String binCode, @HeaderParam("X-Company-Name") String companyName) {
-        List<SaldoUbicacion> stock = binLocationFacade.findLocationBalance(binCode, "IGB");
+        List<SaldoUbicacion> stock = binLocationFacade.findLocationBalance(binCode, companyName);
 
         if (stock != null && !stock.isEmpty()) {
             StockTransfer transfer = new StockTransfer();
@@ -265,6 +274,140 @@ public class StockTransferREST implements Serializable {
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el inventario. ", e);
             }
+        }
+
+        return Response.ok(-1).build();
+    }
+
+    @GET
+    @Path("finishInventory/{idInventory}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response finishInventory(@PathParam("idInventory") Integer idInventory, @HeaderParam("X-Company-Name") String companyName) {
+        Inventory inventory = inventoryFacade.find(idInventory);
+        List<InventoryDetail> detail = inventoryDetailFacade.findInventoryDetail(idInventory);
+        List<InventoryDifference> differences = new ArrayList<>();
+
+        if (detail != null && !detail.isEmpty()) {
+            List<SaldoUbicacion> stock = binLocationFacade.findLocationBalance(inventory.getStorage() + appBean.obtenerValorPropiedad("inventory.ubication.name"), companyName);
+
+            if (stock != null && !stock.isEmpty()) {
+                StockTransfer transfer = new StockTransfer();
+
+                transfer.setSeries(24L);
+                transfer.setToWarehouse(inventory.getStorage());
+                transfer.setFromWarehouse(inventory.getStorage());
+                transfer.setComments("Traslado despues de realizar inventario.");
+
+                StockTransfer.StockTransferLines documentLines = new StockTransfer.StockTransferLines();
+
+                long linea = 0;
+                for (InventoryDetail i : detail) {
+                    for (int j = 0; j < stock.size(); j++) {
+                        SaldoUbicacion s = stock.get(j);
+
+                        if (i.getItem().equals(s.getItemCode())) {
+                            StockTransfer.StockTransferLines.StockTransferLine line = new StockTransfer.StockTransferLines.StockTransferLine();
+
+                            line.setLineNum(linea);
+                            line.setItemCode(s.getItemCode());
+                            line.setWarehouseCode(s.getWhsCode());
+                            line.setFromWarehouseCode(s.getWhsCode());
+                            if (i.getQuantity() == s.getOnHandQty().intValue()) {
+                                line.setQuantity(i.getQuantity().doubleValue());
+                            } else if (i.getQuantity() < s.getOnHandQty().intValue()) {
+                                line.setQuantity(i.getQuantity().doubleValue());
+                                differences.add(new InventoryDifference(null, idInventory, i.getItem(), s.getOnHandQty().intValue(), i.getQuantity()));
+                            } else {
+                                line.setQuantity(s.getOnHandQty().doubleValue());
+                                differences.add(new InventoryDifference(null, idInventory, i.getItem(), s.getOnHandQty().intValue(), i.getQuantity()));
+                            }
+
+                            StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+
+                            outOperation.setAllowNegativeQuantity("tNO");
+                            outOperation.setBaseLineNumber(linea);
+                            outOperation.setBinAbsEntry(Long.parseLong(appBean.obtenerValorPropiedad("inventory.ubication")));
+                            outOperation.setBinActionType("batFromWarehouse");
+                            outOperation.setQuantity(line.getQuantity());
+
+                            StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+
+                            inOperation.setAllowNegativeQuantity("tNO");
+                            inOperation.setBaseLineNumber(linea);
+                            inOperation.setBinAbsEntry(binLocationFacade.findLocationBinCode(inventory.getLocation(), companyName).longValue());
+                            inOperation.setBinActionType("batToWarehouse");
+                            inOperation.setQuantity(line.getQuantity());
+
+                            StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations binAllocations = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations();
+                            binAllocations.getStockTransferLinesBinAllocation().add(inOperation);
+                            binAllocations.getStockTransferLinesBinAllocation().add(outOperation);
+
+                            line.setStockTransferLinesBinAllocations(binAllocations);
+
+                            documentLines.getStockTransferLine().add(line);
+                            linea++;
+
+                            stock.remove(j);
+                            j--;
+                        }
+                    }
+                }
+                transfer.setStockTransferLines(documentLines);
+
+                //1. Login
+                String sessionId = null;
+                try {
+                    sessionId = sapFunctions.login();
+                    CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+                } catch (Exception e) {
+                }
+                //2. Registrar documento
+                Long docEntry = -1L;
+                String errorMessage = null;
+                if (sessionId != null) {
+                    try {
+                        docEntry = createTransferDocument(transfer, sessionId);
+                        CONSOLE.log(Level.INFO, "Se creo la transferencia docEntry={0}", docEntry);
+                    } catch (MalformedURLException e) {
+                        CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
+                        errorMessage = e.getMessage();
+                    }
+                }
+                //3. Logout
+                if (sessionId != null) {
+                    sapFunctions.logout(sessionId);
+                }
+            }
+
+            //4. Se registran las diferencias
+            //4.1 Se registran las diferencias detectadas
+            for (InventoryDifference i : differences) {
+                inventoryDifferenceFacade.create(i);
+            }
+
+            //4.2 Se registran los datos que no se encontraron
+            for (SaldoUbicacion s : stock) {
+                InventoryDifference difference = new InventoryDifference();
+
+                difference.setExpected(s.getOnHandQty().intValue());
+                difference.setFound(0);
+                difference.setIdInventory(idInventory);
+                difference.setItem(s.getItemCode());
+
+                inventoryDifferenceFacade.create(difference);
+                differences.add(difference);
+            }
+
+            inventory.setStatus("F");
+
+            try {
+                inventoryFacade.edit(inventory);
+                CONSOLE.log(Level.INFO, "Se marco el inventario con id {0} como finalizado", inventory.getId());
+            } catch (Exception e) {
+            }
+
+            return Response.ok(differences).build();
         }
 
         return Response.ok(-1).build();
