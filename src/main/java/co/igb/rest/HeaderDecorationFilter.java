@@ -42,12 +42,12 @@ public class HeaderDecorationFilter implements Filter {
         ((HttpServletResponse) response).addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-Company-Name, Authorization");
         ((HttpServletResponse) response).addHeader("Access-Control-Allow-Methods", "GET, OPTIONS, POST, PUT, DELETE");
         HttpServletRequest req = (HttpServletRequest) request;
-        CONSOLE.log(Level.INFO, "Processing {0} method", req.getMethod());
+        CONSOLE.log(Level.FINE, "Processing {0} method", req.getMethod());
         if (req.getMethod().equals("OPTIONS") || validateAuthorizationToken(req)) {
-            CONSOLE.log(Level.INFO, "Processing continued");
+            CONSOLE.log(Level.FINE, "Processing continued");
             chain.doFilter(request, response);
         } else {
-            CONSOLE.log(Level.INFO, "Processing halted with error");
+            CONSOLE.log(Level.FINE, "Processing halted with error");
             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED);
         }
     }
@@ -57,16 +57,16 @@ public class HeaderDecorationFilter implements Filter {
             String path = request.getPathInfo();
             String authorizationToken = request.getHeader("Authorization");
             CONSOLE.log(Level.INFO, "Procesando solicitud a [{0}]", path);
-            CONSOLE.log(Level.INFO, "Validando token [{0}]", authorizationToken);
+            CONSOLE.log(Level.FINE, "Validando token [{0}]", authorizationToken);
             if (appBean.isPathExcludedFromTokenValidation(path)) {
-                CONSOLE.log(Level.INFO, "La ruta solicitada no requiere validacion de token");
+                CONSOLE.log(Level.FINE, "La ruta solicitada no requiere validacion de token");
                 return true;
             }
 
             Algorithm algorithm = Algorithm.HMAC256(appBean.obtenerValorPropiedad("jwt.secret"));
             JWTVerifier verifier = JWT.require(algorithm).build();
             DecodedJWT jwt = verifier.verify(authorizationToken);
-            CONSOLE.log(Level.INFO, "User in token: {0}", jwt.getClaim("username"));
+            CONSOLE.log(Level.FINE, "User in token: {0}", jwt.getClaim("username").asString());
 
             return true;
         } catch (Exception e) {

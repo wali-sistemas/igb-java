@@ -56,4 +56,15 @@ public class BinLocationFacade {
             return new ArrayList();
         }
     }
+
+    public String getBinCode(Long binAbs, String schema) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(BinCode as varchar(40)) from OBIN where AbsEntry = ");
+        sb.append(binAbs);
+        try {
+            return (String) chooseSchema(schema).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

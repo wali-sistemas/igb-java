@@ -45,7 +45,7 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
         }
         sb.deleteCharAt(sb.length() - 1);
         sb.append(")");
-        CONSOLE.log(Level.INFO, sb.toString());
+        CONSOLE.log(Level.FINE, sb.toString());
         try {
             Map<Integer, Map<String, Integer>> pickedItems = new HashMap<>();
             List<Object[]> results = em.createNativeQuery(sb.toString()).getResultList();
@@ -81,7 +81,7 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
         sb.append("select * from picking_record where order_number = ");
         sb.append(orderNumber);
 
-        CONSOLE.log(Level.INFO, sb.toString());
+        CONSOLE.log(Level.FINE, sb.toString());
         try {
             Map<String, Map<Long, Integer>> pickedItems = new HashMap<>();
             List<Object[]> results = em.createNativeQuery(sb.toString()).getResultList();

@@ -111,7 +111,7 @@ public class SalesOrderFacade {
         }
         sb.append(" order by binCode ");
 
-        CONSOLE.log(Level.INFO, sb.toString());
+        CONSOLE.log(Level.FINE, sb.toString());
         try {
             return chooseSchema(schemaName).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
@@ -121,6 +121,9 @@ public class SalesOrderFacade {
     }
 
     public List<Object[]> findOrdersById(List<Integer> orderIds, String schemaName) {
+        if(orderIds == null || orderIds.isEmpty()){
+            return new ArrayList();
+        }
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(enc.docnum as varchar(10)) docnum, ");
         sb.append("cast(enc.cardname as varchar(100)) cardname ");
@@ -147,7 +150,7 @@ public class SalesOrderFacade {
         sb.append("where enc.docnum = ");
         sb.append(orderNumber);
         sb.append(" group by det.ItemCode ");
-        CONSOLE.log(Level.INFO, sb.toString());
+        CONSOLE.log(Level.FINE, sb.toString());
         try {
             Map<String, Integer> results = new HashMap<>();
             List<Object[]> rows = (List<Object[]>) chooseSchema(schemaName).createNativeQuery(sb.toString()).getResultList();

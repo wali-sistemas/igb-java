@@ -2,11 +2,18 @@ package co.igb.rest;
 
 import co.igb.dto.SortedStockDTO;
 import co.igb.persistence.entity.AssignedOrder;
+import co.igb.persistence.entity.PackingOrder;
+import co.igb.persistence.entity.PackingOrderItem;
+import co.igb.persistence.entity.PackingOrderItemBin;
 import co.igb.persistence.facade.AssignedOrderFacade;
+import co.igb.persistence.facade.BinLocationFacade;
+import co.igb.persistence.facade.PackingOrderFacade;
 import co.igb.persistence.facade.PickingRecordFacade;
 import co.igb.persistence.facade.SalesOrderFacade;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
@@ -41,6 +48,10 @@ public class PickingREST implements Serializable {
     private AssignedOrderFacade aoFacade;
     @EJB
     private PickingRecordFacade prFacade;
+    @EJB
+    private BinLocationFacade blFacade;
+    @EJB
+    private PackingOrderFacade poFacade;
 
     public PickingREST() {
     }
@@ -80,19 +91,24 @@ public class PickingREST implements Serializable {
             if (pendingItems == null || pendingItems.isEmpty()) {
                 order.setStatus("warning");
                 CONSOLE.log(Level.WARNING, "La orden {0} no tiene items pendientes por despachar. ", order.getOrderNumber());
+                aoFacade.edit(order);
                 continue;
             }
 
             //a los items pendientes por entregar descontarle los que ya tuvieron picking. 
             //si un item existe en la lista de picking pero no en la de pendientes, no se tiene en cuenta
-            for (String itemCode : pendingItems.keySet()) {
+            for (int i = 0; i < pendingItems.keySet().size(); i++) {
+                //for (String itemCode : pendingItems.keySet()) {
+                String itemCode = (String) (pendingItems.keySet().toArray())[i];
                 if (pickedItems.containsKey(itemCode)) {
                     int totalPicked = 0;
                     for (Long binAbs : pickedItems.get(itemCode).keySet()) {
                         totalPicked += pickedItems.get(itemCode).get(binAbs);
                     }
                     if (totalPicked >= pendingItems.get(itemCode)) {
-                        pendingItems.put(itemCode, 0);
+                        //pendingItems.put(itemCode, 0);
+                        pendingItems.remove(itemCode);
+                        i--;
                     } else {
                         pendingItems.put(itemCode, pendingItems.get(itemCode) - totalPicked);
                     }
@@ -103,14 +119,15 @@ public class PickingREST implements Serializable {
             List<Object[]> orderStock = soFacade.findOrdersStockAvailability(Arrays.asList(order.getOrderNumber()), companyName);
 
             //si una orden no tiene inventario disponible, marcarla como warning
-            if (orderStock == null || orderStock.isEmpty()) {
+            if (orderStock == null || orderStock.isEmpty() || pendingItems.size() > getItemsCount(orderStock)) {
                 order.setStatus("warning");
-                CONSOLE.log(Level.WARNING, "La orden {0} no tiene inventario suficiente en ubicaciones de picking. ", order.getOrderNumber());
+                aoFacade.edit(order);
+                CONSOLE.log(Level.WARNING, "La orden {0} no tiene inventario suficiente en ubicaciones de picking y pasara a estado warning. ", order.getOrderNumber());
             } else {
                 //Agregar el inventario de la orden al set de stock
                 for (Object[] row : orderStock) {
                     SortedStockDTO sorted = new SortedStockDTO(row);
-                    if (pendingItems.get(sorted.getItemCode()) > 0) {
+                    if (pendingItems.containsKey(sorted.getItemCode()) && pendingItems.get(sorted.getItemCode()) > 0) {
                         sortedStock.add(sorted);
                     }
                 }
@@ -124,6 +141,14 @@ public class PickingREST implements Serializable {
         } else {
             return Response.ok(new ResponseDTO(0, sortedStock.first())).build();
         }
+    }
+
+    private int getItemsCount(List<Object[]> queryResult) {
+        HashSet<String> items = new HashSet<>();
+        for (Object[] row : queryResult) {
+            items.add((String) row[0]);
+        }
+        return items.size();
     }
 
     @GET
@@ -159,10 +184,8 @@ public class PickingREST implements Serializable {
                 order.setStatus("warning");
                 CONSOLE.log(Level.WARNING, "La orden {0} no tiene items pendientes por despachar. ", order.getOrderNumber());
                 try {
-                    order.setStatus("closed");
                     aoFacade.edit(order);
                 } catch (Exception e) {
-                    CONSOLE.log(Level.SEVERE, "Ocurrio un error al cambiar el estado de la asignacion de picking. ", e);
                 }
                 continue;
             }
@@ -195,16 +218,50 @@ public class PickingREST implements Serializable {
                 }
             }
 
-            try {
-                order.setStatus("closed");
-                aoFacade.edit(order);
-            } catch (Exception e) {
-                CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el estado de la asignacion de picking. ", e);
-            }
+            closeAndPack(order, pickedItems, companyName);
         }
 
         watch.stop();
         CONSOLE.log(Level.INFO, "El proceso tomo {0}ms", watch.getTime());
-        return Response.ok().build();
+        return Response.ok(new ResponseDTO(0, "")).build();
+    }
+
+    private void closeAndPack(AssignedOrder order, Map<String, Map<Long, Integer>> pickedItems, String companyName) {
+        try {
+            order.setStatus("closed");
+            aoFacade.edit(order);
+            CONSOLE.log(Level.INFO, "Cerro la asignacion de picking para la orden {0}", order.getOrderNumber());
+
+            HashMap<Long, String> bins = new HashMap<>();
+            PackingOrder packingOrder = new PackingOrder();
+            packingOrder.setCustomerId(order.getCustomerId());
+            packingOrder.setCustomerName(order.getCustomerName());
+            packingOrder.setOrderNumber(order.getOrderNumber());
+            packingOrder.setStatus("open");
+
+            for (String itemCode : pickedItems.keySet()) {
+                PackingOrderItem packingItem = new PackingOrderItem();
+                packingItem.setItemCode(itemCode);
+                packingItem.setPackingOrder(packingOrder);
+                for (Long binAbs : pickedItems.get(itemCode).keySet()) {
+                    PackingOrderItemBin bin = new PackingOrderItemBin();
+                    bin.setBinAbs(binAbs);
+                    if (!bins.containsKey(binAbs)) {
+                        bin.setBinCode(bins.get(binAbs));
+                        bins.put(binAbs, blFacade.getBinCode(binAbs, companyName));
+                    }
+                    bin.setBinCode(bins.get(binAbs));
+                    bin.setPackedQty(0);
+                    bin.setPickedQty(pickedItems.get(itemCode).get(binAbs));
+                    bin.setPackingOrderItem(packingItem);
+                    packingItem.getBins().add(bin);
+                }
+                packingOrder.getItems().add(packingItem);
+            }
+            poFacade.create(packingOrder);
+            CONSOLE.log(Level.INFO, "Se creo la orden de packing para la orden {0}", order.getOrderNumber());
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el estado de la asignacion de picking. ", e);
+        }
     }
 }

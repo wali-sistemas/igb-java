@@ -7,6 +7,7 @@ import co.igb.persistence.entity.PackingOrder;
 import co.igb.persistence.entity.PackingOrderItem;
 import co.igb.persistence.entity.PackingOrderItemBin;
 import co.igb.persistence.facade.AssignedOrderFacade;
+import co.igb.persistence.facade.CustomerFacade;
 import co.igb.persistence.facade.PackingOrderFacade;
 import co.igb.persistence.facade.PickingRecordFacade;
 import co.igb.persistence.facade.SalesOrderFacade;
@@ -51,6 +52,8 @@ public class SalesOrdersREST implements Serializable {
     private PickingRecordFacade pickingRecordFacade;
     @EJB
     private PackingOrderFacade poFacade;
+    @EJB
+    private CustomerFacade customerFacade;
 
     @GET
     @Path("list/orders")
@@ -106,6 +109,7 @@ public class SalesOrdersREST implements Serializable {
                 entity.setOrderNumber(Integer.parseInt(orderId[0]));
                 entity.setStatus("open");
                 entity.setCustomerId(orderId[1]);
+                entity.setCustomerName(customerFacade.getCustomerName(orderId[1], companyName));
                 entity.setCompany(companyName);
 
                 try {
@@ -255,10 +259,13 @@ public class SalesOrdersREST implements Serializable {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "No se especificó la empresa")).build();
         }
         List<AssignedOrder> assignations = aoFacade.listOpenAssignationsByUserAndCompany(username, null, companyName);
+        if (assignations == null || assignations.isEmpty()) {
+            return Response.ok(new ResponseDTO(-1, "No se encontraron asignaciones para el usuario")).build();
+        }
         List<Integer> orderIds = new ArrayList<>();
         for (AssignedOrder order : assignations) {
             orderIds.add(order.getOrderNumber());
         }
-        return Response.ok(soFacade.findOrdersById(orderIds, companyName)).build();
+        return Response.ok(new ResponseDTO(0, soFacade.findOrdersById(orderIds, companyName))).build();
     }
 }

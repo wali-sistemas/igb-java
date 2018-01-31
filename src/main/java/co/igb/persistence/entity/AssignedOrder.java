@@ -39,6 +39,9 @@ public class AssignedOrder implements Serializable {
     private Date dateAssigned;
     @Basic(optional = false)
     @Column(name = "customer_id")
+    private String customerName;
+    @Basic(optional = false)
+    @Column(name = "customer_name")
     private String customerId;
     @Basic(optional = false)
     @Column(name = "assigned_by")
@@ -91,6 +94,14 @@ public class AssignedOrder implements Serializable {
 
     public void setCustomerId(String customerId) {
         this.customerId = customerId;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     public String getAssignedBy() {
