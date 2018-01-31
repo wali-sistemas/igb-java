@@ -94,4 +94,13 @@ public class InventoryREST {
             return Response.ok(-1).build();
         }
     }
+    
+    @GET
+    @Path("inventoryrandom/{warehouse}")
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response inventoryRandom(@PathParam("warehouse") String warehouse, @HeaderParam("X-Company-Name") String companyName) {
+        //Se consultan los inventario del mas viejo al mas nuevo
+        
+    }
 }
