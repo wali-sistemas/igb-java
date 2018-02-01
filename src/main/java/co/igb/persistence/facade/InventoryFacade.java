@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -42,6 +43,8 @@ public class InventoryFacade extends AbstractFacade<Inventory> {
 
         try {
             return em.createQuery(cq).setMaxResults(1).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los inventarios pendientes. ", e);
             return null;
