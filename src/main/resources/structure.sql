@@ -128,6 +128,56 @@ CREATE TABLE `users` (
   `lastUpdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`username`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `inventory`
+--
+
+DROP TABLE IF EXISTS `inventory`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `inventory` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` datetime NOT NULL,
+  `status` varchar(2) NOT NULL,
+  `storage` varchar(45) NOT NULL,
+  `location` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `inventory_detail`
+--
+
+DROP TABLE IF EXISTS `inventory_detail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `inventory_detail` (
+  `idinventory_detail` int(11) NOT NULL AUTO_INCREMENT,
+  `item` varchar(45) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `date` datetime NOT NULL,
+  `idinventory` int(11) NOT NULL,
+  PRIMARY KEY (`idinventory_detail`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `inventory_difference`
+--
+
+DROP TABLE IF EXISTS `inventory_difference`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `inventory_difference` (
+  `idinventory_difference` int(11) NOT NULL AUTO_INCREMENT,
+  `idinventory` int(11) NOT NULL,
+  `item` varchar(45) NOT NULL,
+  `expected` int(11) NOT NULL,
+  `found` int(11) NOT NULL,
+  PRIMARY KEY (`idinventory_difference`),
+  KEY `id_idx` (`idinventory`),
+  CONSTRAINT `id` FOREIGN KEY (`idinventory`) REFERENCES `inventory` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=99 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
