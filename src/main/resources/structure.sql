@@ -30,6 +30,7 @@ CREATE TABLE `assigned_orders` (
   `assigned_by` varchar(80) NOT NULL,
   `status` varchar(8) DEFAULT NULL,
   `customer_id` varchar(45) NOT NULL,
+  `customer_name` varchar(100) NOT NULL,
   `company` varchar(10) NOT NULL,
   PRIMARY KEY (`idassigned_orders`)
 ) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;

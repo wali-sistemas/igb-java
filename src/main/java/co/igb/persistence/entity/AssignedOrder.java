@@ -38,10 +38,10 @@ public class AssignedOrder implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateAssigned;
     @Basic(optional = false)
-    @Column(name = "customer_id")
+    @Column(name = "customer_name")
     private String customerName;
     @Basic(optional = false)
-    @Column(name = "customer_name")
+    @Column(name = "customer_id")
     private String customerId;
     @Basic(optional = false)
     @Column(name = "assigned_by")
