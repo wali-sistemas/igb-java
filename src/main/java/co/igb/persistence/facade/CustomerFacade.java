@@ -34,6 +34,7 @@ public class CustomerFacade {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(cardname as varchar(100)) cardname from OCRD where cardcode = '");
         sb.append(customerId);
+        sb.append("'");
         return (String) chooseSchema(schema).createNativeQuery(sb.toString()).getSingleResult();
     }
 }
