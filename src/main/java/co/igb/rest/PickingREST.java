@@ -238,6 +238,7 @@ public class PickingREST implements Serializable {
             packingOrder.setCustomerName(order.getCustomerName());
             packingOrder.setOrderNumber(order.getOrderNumber());
             packingOrder.setStatus("open");
+            packingOrder.setCompanyName(companyName);
 
             for (String itemCode : pickedItems.keySet()) {
                 PackingOrderItem packingItem = new PackingOrderItem();

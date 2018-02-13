@@ -1,0 +1,125 @@
+package co.igb.dto;
+
+import java.util.Date;
+
+/**
+ *
+ * @author dbotero
+ */
+public class PackingListRecordDTO {
+
+    private Integer idPackingList;
+    private Integer orderNumber;
+    private String customerId;
+    private String customerName;
+    private Date datetimePacked;
+    private Integer pickingOrder;
+    private String itemCode;
+    private Integer quantity;
+    private String binCode;
+    private Long binAbs;
+    private Integer boxNumber;
+    private String status;
+
+    public Integer getIdPackingList() {
+        return idPackingList;
+    }
+
+    public void setIdPackingList(Integer idPackingList) {
+        this.idPackingList = idPackingList;
+    }
+
+    public Integer getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(Integer orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public Date getDatetimePacked() {
+        return datetimePacked;
+    }
+
+    public void setDatetimePacked(Date datetimePacked) {
+        this.datetimePacked = datetimePacked;
+    }
+
+    public Integer getPickingOrder() {
+        return pickingOrder;
+    }
+
+    public void setPickingOrder(Integer pickingOrder) {
+        this.pickingOrder = pickingOrder;
+    }
+
+    public String getItemCode() {
+        return itemCode;
+    }
+
+    public void setItemCode(String itemCode) {
+        this.itemCode = itemCode;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getBinCode() {
+        return binCode;
+    }
+
+    public void setBinCode(String binCode) {
+        this.binCode = binCode;
+    }
+
+    public Long getBinAbs() {
+        return binAbs;
+    }
+
+    public void setBinAbs(Long binAbs) {
+        this.binAbs = binAbs;
+    }
+
+    public Integer getBoxNumber() {
+        return boxNumber;
+    }
+
+    public void setBoxNumber(Integer boxNumber) {
+        this.boxNumber = boxNumber;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "PackingListRecordDTO{" + "idPackingList=" + idPackingList + ", orderNumber=" + orderNumber + ", customerId=" + customerId + ", customerName=" + customerName + ", datetimePacked=" + datetimePacked + ", pickingOrder=" + pickingOrder + ", itemCode=" + itemCode + ", quantity=" + quantity + ", binCode=" + binCode + ", binAbs=" + binAbs + ", boxNumber=" + boxNumber + ", status=" + status + '}';
+    }
+
+}

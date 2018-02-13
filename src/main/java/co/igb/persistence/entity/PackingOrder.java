@@ -42,6 +42,9 @@ public class PackingOrder implements Serializable {
     @Basic(optional = false)
     @Column(name = "customer_name")
     private String customerName;
+    @Basic(optional = false)
+    @Column(name = "company_name")
+    private String companyName;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "packingOrder", fetch = FetchType.EAGER)
     private List<PackingOrderItem> items;
 
@@ -97,6 +100,14 @@ public class PackingOrder implements Serializable {
         this.items = items;
     }
 
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -124,7 +135,7 @@ public class PackingOrder implements Serializable {
 
     @Override
     public String toString() {
-        return "PackingOrder{" + "id=" + id + ", orderNumber=" + orderNumber + ", status=" + status + ", customerId=" + customerId + ", customerName=" + customerName + '}';
+        return "PackingOrder{" + "id=" + id + ", orderNumber=" + orderNumber + ", status=" + status + ", customerId=" + customerId + ", customerName=" + customerName + ", companyName=" + companyName + ", items=" + items + '}';
     }
 
 }

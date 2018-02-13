@@ -34,7 +34,7 @@ public class PackingOrderFacade extends AbstractFacade<PackingOrder> {
         return em;
     }
 
-    public List<PackingDTO> listOpen() {
+    public List<PackingDTO> listOpen(String companyname) {
         StringBuilder sb = new StringBuilder();
         sb.append("select enc.idpacking_order, enc.order_number, enc.status, enc.customer_id, enc.customer_name, ");
         sb.append("item.idpacking_order_item, item.item_code, bin.idpacking_order_item_bin, bin.bin_code, ");
@@ -42,7 +42,9 @@ public class PackingOrderFacade extends AbstractFacade<PackingOrder> {
         sb.append("from packing_order enc ");
         sb.append("inner join packing_order_item item on item.idpacking_order = enc.idpacking_order ");
         sb.append("inner join packing_order_item_bin bin on bin.idpacking_order_item = item.idpacking_order_item ");
-        sb.append("where status = 'open' ");
+        sb.append("where status = 'open' and company_name = '");
+        sb.append(companyname);
+        sb.append("'");
         try {
             Map<Integer, PackingDTO> records = new HashMap<>();
             List<Object[]> rows = em.createNativeQuery(sb.toString()).getResultList();

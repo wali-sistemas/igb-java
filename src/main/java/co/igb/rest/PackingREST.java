@@ -1,16 +1,18 @@
 package co.igb.rest;
 
 import co.igb.dto.PackingDTO;
+import co.igb.dto.PackingListRecordDTO;
+import co.igb.persistence.entity.PackingListRecord;
 import co.igb.persistence.entity.PackingOrder;
 import co.igb.persistence.entity.PackingOrderItem;
 import co.igb.persistence.entity.PackingOrderItemBin;
+import co.igb.persistence.facade.PackingListRecordFacade;
 import co.igb.persistence.facade.PackingOrderFacade;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -38,6 +40,8 @@ public class PackingREST implements Serializable {
 
     @EJB
     private PackingOrderFacade poFacade;
+    @EJB
+    private PackingListRecordFacade plFacade;
 
     @POST
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
@@ -85,8 +89,48 @@ public class PackingREST implements Serializable {
     public Response listPackingRecords(@HeaderParam("X-Company-Name") String companyName) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Listando registros de packing");
-        List<PackingDTO> list = poFacade.listOpen();
+        List<PackingDTO> list = poFacade.listOpen(companyName);
         CONSOLE.log(Level.INFO, "Se obtuvieron {0} registros de packing. {1}", new Object[]{list.size(), Arrays.toString(list.toArray())});
         return Response.ok(list).build();
+    }
+
+    @POST
+    @Path("pack")
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response addToPackingList(PackingListRecordDTO packingRecord, @HeaderParam("X-Company-Name") String companyName) {
+        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
+        CONSOLE.log(Level.INFO, "Agregando item a packing list");
+        PackingListRecord record = new PackingListRecord();
+        if (packingRecord.getIdPackingList() == null || packingRecord.getIdPackingList() == 0) {
+            record.setIdPackingList(plFacade.getNextPackingListId());
+            if (record.getIdPackingList() == 0) {
+                return Response.ok(new ResponseDTO(-1, "Ocurrió un error al guardar el registro. ")).build();
+            }
+        } else {
+            record.setIdPackingList(packingRecord.getIdPackingList());
+        }
+
+        record.setBinAbs(packingRecord.getBinAbs());
+        record.setBinCode(packingRecord.getBinCode());
+        record.setBoxNumber(packingRecord.getBoxNumber());
+        record.setCustomerId(packingRecord.getCustomerId());
+        record.setCustomerName(packingRecord.getCustomerName());
+        record.setDatetimePacked(new Date());
+        record.setItemCode(packingRecord.getItemCode());
+        record.setOrderNumber(packingRecord.getOrderNumber());
+        record.setPickingOrder(packingRecord.getPickingOrder());
+        record.setQuantity(packingRecord.getQuantity());
+        record.setStatus(packingRecord.getStatus());
+
+        try {
+            plFacade.create(record);
+            return Response.ok(new ResponseDTO(0, record.getIdPackingList())).build();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el registro. ", e);
+            return Response.ok(new ResponseDTO(-1, "Ocurrió un error al crear el registro")).build();
+        }
+
     }
 }
