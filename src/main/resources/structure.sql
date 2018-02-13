@@ -49,6 +49,7 @@ CREATE TABLE `packing_order` (
   `status` varchar(10) NOT NULL,
   `customer_id` varchar(45) NOT NULL,
   `customer_name` varchar(100) NOT NULL,
+  `company_name` varchar(45) NOT NULL,
   PRIMARY KEY (`idpacking_order`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -179,6 +180,30 @@ CREATE TABLE `inventory_difference` (
   KEY `id_idx` (`idinventory`),
   CONSTRAINT `id` FOREIGN KEY (`idinventory`) REFERENCES `inventory` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=99 DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `packing_list_record`
+--
+
+DROP TABLE IF EXISTS `packing_list_record`;
+
+CREATE TABLE `packing_list_record` (
+  `idpacking_list_record` int(11) NOT NULL AUTO_INCREMENT,
+  `idpacking_list` int(11) NOT NULL,
+  `order_number` int(11) NOT NULL,
+  `customer_id` varchar(45) NOT NULL,
+  `customer_name` varchar(100) NOT NULL,
+  `datetime_packed` datetime NOT NULL,
+  `picking_order` int(11) NOT NULL,
+  `item_code` varchar(20) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `bin_abs` int(11) NOT NULL,
+  `bin_code` varchar(45) NOT NULL,
+  `box_number` int(11) NOT NULL,
+  `status` varchar(10) NOT NULL,
+  PRIMARY KEY (`idpacking_list_record`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
