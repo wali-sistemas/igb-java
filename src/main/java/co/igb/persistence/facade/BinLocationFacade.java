@@ -70,10 +70,10 @@ public class BinLocationFacade {
         try {
             return (String) chooseSchema(schema).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
-			CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los carritos de picking. ", e);
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los carritos de picking. ", e);
             return null;
         }
-	}
+    }
 
     public List<SaldoUbicacion> findLocationBalance(String binCode, String schema) {
         EntityManager em = chooseSchema(schema);
@@ -107,6 +107,17 @@ public class BinLocationFacade {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los carritos de picking. ", e);
             return null;
+        }
+    }
+
+    public Integer findInventoryLocationId(String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(absentry as int) from obin where attr1val = 'INVENTORY'");
+        try {
+            return (Integer) chooseSchema(companyName).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la ubicacion de inventario para la empresa " + companyName, e);
+            return -1;
         }
     }
 }

@@ -1,14 +1,17 @@
 package co.igb.ejb;
 
+import co.igb.persistence.facade.BinLocationFacade;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 import javax.ws.rs.GET;
@@ -27,12 +30,16 @@ public class IGBApplicationBean implements Serializable {
 
     private Properties props = new Properties();
     private HashSet<String> excludedPaths;
+    private HashMap<String, Integer> inventoryLocations = new HashMap<>();
+    @EJB
+    private BinLocationFacade binFacade;
 
     @PostConstruct
     @GET
     @Path("recargar/")
     public void initialize() {
         cargarProperties();
+        consultarUbicacionesInventario();
     }
 
     public void cargarProperties() {
@@ -58,11 +65,28 @@ public class IGBApplicationBean implements Serializable {
         }
     }
 
+    private void consultarUbicacionesInventario() {
+        inventoryLocations = new HashMap<>();
+        String[] companies = props.getProperty("igb.login.companies").split(";");
+        for (String company : companies) {
+            String databaseName = company.split(",")[0].trim();
+            Integer binAbs = binFacade.findInventoryLocationId(databaseName);
+            if (binAbs > 0) {
+                inventoryLocations.put(company, binAbs);
+            }
+        }
+        CONSOLE.log(Level.INFO, "Se cargaron {0} ubicaciones de inventario para {1} empresas", new Object[]{inventoryLocations.size(), companies.length});
+    }
+
     public String obtenerValorPropiedad(String prop) {
         return props.getProperty(prop);
     }
 
     public boolean isPathExcludedFromTokenValidation(String path) {
         return excludedPaths.contains(path);
+    }
+
+    public Integer getInventoryBinId(String companyName) {
+        return inventoryLocations.get(companyName);
     }
 }

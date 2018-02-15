@@ -219,7 +219,8 @@ public class StockTransferREST implements Serializable {
 
                 inOperation.setAllowNegativeQuantity("tNO");
                 inOperation.setBaseLineNumber(linea);
-                inOperation.setBinAbsEntry(Long.parseLong(appBean.obtenerValorPropiedad("inventory.ubication")));
+                //inOperation.setBinAbsEntry(Long.parseLong(appBean.obtenerValorPropiedad("inventory.ubication")));
+                inOperation.setBinAbsEntry(appBean.getInventoryBinId(companyName).longValue());
                 inOperation.setBinActionType("batToWarehouse");
                 inOperation.setQuantity(s.getOnHandQty().doubleValue());
 
@@ -289,7 +290,8 @@ public class StockTransferREST implements Serializable {
         List<InventoryDifference> differences = new ArrayList<>();
 
         if (detail != null && !detail.isEmpty()) {
-            List<SaldoUbicacion> stock = binLocationFacade.findLocationBalance(inventory.getStorage() + appBean.obtenerValorPropiedad("inventory.ubication.name"), companyName);
+            //List<SaldoUbicacion> stock = binLocationFacade.findLocationBalance(inventory.getStorage() + appBean.obtenerValorPropiedad("inventory.ubication.name"), companyName);
+            List<SaldoUbicacion> stock = binLocationFacade.findLocationBalance(inventory.getStorage() + appBean.getInventoryBinId(companyName), companyName);
 
             if (stock != null && !stock.isEmpty()) {
                 StockTransfer transfer = new StockTransfer();
@@ -327,7 +329,8 @@ public class StockTransferREST implements Serializable {
 
                             outOperation.setAllowNegativeQuantity("tNO");
                             outOperation.setBaseLineNumber(linea);
-                            outOperation.setBinAbsEntry(Long.parseLong(appBean.obtenerValorPropiedad("inventory.ubication")));
+                            //outOperation.setBinAbsEntry(Long.parseLong(appBean.obtenerValorPropiedad("inventory.ubication")));
+                            outOperation.setBinAbsEntry(appBean.getInventoryBinId(companyName).longValue());
                             outOperation.setBinActionType("batFromWarehouse");
                             outOperation.setQuantity(line.getQuantity());
 
