@@ -120,7 +120,7 @@ public class DeliveryNoteREST implements Serializable {
         //1. Login
         String sessionId = null;
         try {
-            sessionId = sapFunctions.login();
+            sessionId = sapFunctions.login(companyName);
             CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
         } catch (Exception e) {
         }

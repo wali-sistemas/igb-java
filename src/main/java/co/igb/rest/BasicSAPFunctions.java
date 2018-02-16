@@ -4,6 +4,7 @@ import co.igb.b1ws.client.login.LoginService;
 import co.igb.b1ws.client.login.Logout;
 import co.igb.b1ws.client.login.MsgHeader;
 import co.igb.ejb.IGBApplicationBean;
+import co.igb.util.IGBUtils;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,15 +23,15 @@ public class BasicSAPFunctions {
     @Inject
     private IGBApplicationBean appBean;
 
-    public String login() {
+    public String login(String companyName) {
         try {
             LoginService service = new LoginService(new URL(String.format(appBean.obtenerValorPropiedad("igb.b1ws.wsdlUrl"), "LoginService")));
             return service.getLoginServiceSoap12().login(
                     appBean.obtenerValorPropiedad("igb.b1ws.databaseServer"),
-                    appBean.obtenerValorPropiedad("igb.b1ws.databaseName"),
+                    IGBUtils.getProperParameter(appBean.obtenerValorPropiedad("igb.b1ws.databaseName"), companyName),
                     appBean.obtenerValorPropiedad("igb.b1ws.databaseType"),
-                    appBean.obtenerValorPropiedad("igb.b1ws.companyUsername"),
-                    appBean.obtenerValorPropiedad("igb.b1ws.companyPassword"),
+                    IGBUtils.getProperParameter(appBean.obtenerValorPropiedad("igb.b1ws.companyUsername"), companyName),
+                    IGBUtils.getProperParameter(appBean.obtenerValorPropiedad("igb.b1ws.companyPassword"), companyName),
                     appBean.obtenerValorPropiedad("igb.b1ws.language"),
                     appBean.obtenerValorPropiedad("igb.b1ws.licenseServer"));
         } catch (Exception e) {

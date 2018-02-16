@@ -70,8 +70,9 @@ public class ReceptionREST implements Serializable {
     @Path("receive-items")
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    public Response receiveAndClose(PurchaseOrderDTO order) {
-        CONSOLE.log(Level.INFO, "Generando entrada de mercandia con los siguientes datos {0}", order);
+    public Response receiveAndClose(PurchaseOrderDTO order, @HeaderParam("X-Company-Name") String companyName) {
+        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
+        CONSOLE.log(Level.INFO, "Generando entrada de mercancia con los siguientes datos {0}", order);
         Document document = new Document();
         document.setCardCode(order.getCardCode());
         document.setSeries(14L); //TODO: parametrizar serie de numeracion por empresa
@@ -155,7 +156,7 @@ public class ReceptionREST implements Serializable {
         //1. Login
         String sessionId = null;
         try {
-            sessionId = sapFunctions.login();
+            sessionId = sapFunctions.login(companyName);
             CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
         } catch (Exception e) {
         }

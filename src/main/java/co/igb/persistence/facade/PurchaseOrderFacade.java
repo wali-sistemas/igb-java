@@ -2,6 +2,7 @@ package co.igb.persistence.facade;
 
 import co.igb.dto.PurchaseOrderDTO;
 import co.igb.ejb.IGBApplicationBean;
+import co.igb.util.IGBUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,7 +36,7 @@ public class PurchaseOrderFacade {
     public PurchaseOrderFacade() {
 
     }
-    
+
     private EntityManager chooseSchema(String schemaName) {
         switch (schemaName) {
             case "IGB":
@@ -90,9 +91,10 @@ public class PurchaseOrderFacade {
         }
     }
 
-    private String listToString() {
+    private String listToString(String companyName) {
         StringBuilder sb = new StringBuilder();
-        for (String s : applicationBean.obtenerValorPropiedad("igb.purchase.order.series").split(",")) {
+        String parameterValue = IGBUtils.getProperParameter(applicationBean.obtenerValorPropiedad("igb.purchase.order.series"), companyName);
+        for (String s : parameterValue.split("\\|")) {
             sb.append("'");
             sb.append(s);
             sb.append("',");
@@ -109,7 +111,7 @@ public class PurchaseOrderFacade {
         sb.append("cast(enc.docdate as date) docdate, cast(enc.cardcode as varchar(20)) cardcode, cast(enc.cardname as varchar(100)) cardname, ");
         sb.append("enc.doctotal, enc.doctotalfc, (select count(1) from POR1 det where det.docentry = enc.docentry and det.LineStatus = 'O') items ");
         sb.append("from OPOR enc where enc.series in (");
-        sb.append(listToString());
+        sb.append(listToString(schemaName));
         sb.append(") and enc.docstatus = 'O' order by enc.docdate ");
         List<PurchaseOrderDTO> orders = new ArrayList<>();
         try {
