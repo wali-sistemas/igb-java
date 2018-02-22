@@ -1,5 +1,12 @@
 package co.igb.rest;
 
+import co.igb.b1ws.client.order.Document;
+import co.igb.b1ws.client.order.DocumentParams;
+import co.igb.b1ws.client.order.GetByParams;
+import co.igb.b1ws.client.order.GetByParamsResponse;
+import co.igb.b1ws.client.order.OrdersService;
+import co.igb.b1ws.client.order.Update;
+import co.igb.b1ws.client.order.UpdateResponse;
 import co.igb.b1ws.client.stocktransfer.Add;
 import co.igb.b1ws.client.stocktransfer.AddResponse;
 import co.igb.b1ws.client.stocktransfer.MsgHeader;
@@ -17,6 +24,7 @@ import co.igb.persistence.facade.InventoryDetailFacade;
 import co.igb.persistence.facade.InventoryDifferenceFacade;
 import co.igb.persistence.facade.InventoryFacade;
 import co.igb.persistence.facade.PickingRecordFacade;
+import co.igb.persistence.facade.SalesOrderFacade;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -62,10 +70,51 @@ public class StockTransferREST implements Serializable {
     private InventoryDetailFacade inventoryDetailFacade;
     @EJB
     private InventoryDifferenceFacade inventoryDifferenceFacade;
+    @EJB
+    private SalesOrderFacade salesOrderFacade;
     @Inject
     private IGBApplicationBean appBean;
 
     public StockTransferREST() {
+    }
+
+    private boolean modifySalesOrderQuantity(String companyName, Integer orderEntry, String itemCode, Integer newQuantity) {
+        boolean success = false;
+        //1. Login
+        String sessionId = null;
+        try {
+            sessionId = sapFunctions.login(companyName);
+            CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+        } catch (Exception e) {
+        }
+
+        //2. Procesar documento
+        Long docEntry = -1L;
+        String errorMessage = null;
+        if (sessionId != null) {
+            try {
+                Document doc = retrieveOrderDocument(orderEntry.longValue(), sessionId);
+                List<Document.DocumentLines.DocumentLine> lines = doc.getDocumentLines().getDocumentLine();
+                for (Document.DocumentLines.DocumentLine line : lines) {
+                    if (line.getItemCode().equals(itemCode)) {
+                        line.setQuantity(newQuantity.doubleValue());
+                        break;
+                    }
+                }
+                success = modifyOrderDocument(doc, sessionId);
+                CONSOLE.log(Level.INFO, "Se modifico la orden satisfactoriamente", docEntry);
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
+                errorMessage = e.getMessage();
+            }
+        }
+
+        //3. Logout
+        if (sessionId != null) {
+            sapFunctions.logout(sessionId);
+        }
+
+        return success;
     }
 
     @POST
@@ -94,6 +143,15 @@ public class StockTransferREST implements Serializable {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "No se recibió el usuario que realiza el picking")).build();
         } else if (itemTransfer.getWarehouseCode() == null || itemTransfer.getWarehouseCode().trim().isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "No se recibió el código de la bodega")).build();
+        }
+
+        if (itemTransfer.getExpectedQuantity() < itemTransfer.getQuantity()) {
+            CONSOLE.log(Level.INFO, "La cantidad tomada ({0}) es superior a la cantidad de la orden ({1}). Reajustando orden para acomodar nueva cantidad...",
+                    new Object[]{itemTransfer.getQuantity(), itemTransfer.getExpectedQuantity()});
+            Integer orderDocEntry = salesOrderFacade.getOrderDocEntry(itemTransfer.getOrderNumber(), companyName);
+            if (!modifySalesOrderQuantity(companyName, orderDocEntry, itemTransfer.getItemCode(), itemTransfer.getQuantity())) {
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error al modificar la cantidad de la orden. ")).build();
+            }
         }
 
         StockTransfer document = new StockTransfer();
@@ -426,5 +484,41 @@ public class StockTransferREST implements Serializable {
         header.setSessionID(sessionId);
         AddResponse response = service.getStockTransferServiceSoap12().add(add, header);
         return response.getStockTransferParams().getDocEntry();
+    }
+
+    private Document retrieveOrderDocument(Long docEntry, String sessionId) throws MalformedURLException {
+        OrdersService service = new OrdersService(new URL(String.format(appBean.obtenerValorPropiedad("igb.b1ws.wsdlUrl"), "OrdersService")));
+        co.igb.b1ws.client.order.MsgHeader header = new co.igb.b1ws.client.order.MsgHeader();
+        header.setServiceName("OrdersService");
+        header.setSessionID(sessionId);
+
+        DocumentParams docParams = new DocumentParams();
+        docParams.setDocEntry(docEntry);
+
+        GetByParams params = new GetByParams();
+        params.setDocumentParams(docParams);
+
+        GetByParamsResponse response = service.getOrdersServiceSoap12().getByParams(params, header);
+        return response.getDocument();
+    }
+
+    private boolean modifyOrderDocument(Document document, String sessionId) throws MalformedURLException {
+        OrdersService service = new OrdersService(new URL(String.format(appBean.obtenerValorPropiedad("igb.b1ws.wsdlUrl"), "OrdersService")));
+        co.igb.b1ws.client.order.MsgHeader header = new co.igb.b1ws.client.order.MsgHeader();
+        header.setServiceName("OrdersService");
+        header.setSessionID(sessionId);
+
+        Update params = new Update();
+        params.setDocument(document);
+
+        try {
+            UpdateResponse resp = service.getOrdersServiceSoap12().update(params, header);
+            if (resp != null) {
+                return true;
+            }
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al modificar la cantidad de la orden. ", e);
+        }
+        return false;
     }
 }
