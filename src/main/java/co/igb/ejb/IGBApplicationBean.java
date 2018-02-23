@@ -72,7 +72,7 @@ public class IGBApplicationBean implements Serializable {
             String databaseName = company.split(",")[0].trim();
             Integer binAbs = binFacade.findInventoryLocationId(databaseName);
             if (binAbs > 0) {
-                inventoryLocations.put(company, binAbs);
+                inventoryLocations.put(databaseName, binAbs);
             }
         }
         CONSOLE.log(Level.INFO, "Se cargaron {0} ubicaciones de inventario para {1} empresas", new Object[]{inventoryLocations.size(), companies.length});

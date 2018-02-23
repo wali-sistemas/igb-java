@@ -13,6 +13,7 @@ import co.igb.b1ws.client.stocktransfer.MsgHeader;
 import co.igb.b1ws.client.stocktransfer.StockTransfer;
 import co.igb.b1ws.client.stocktransfer.StockTransferService;
 import co.igb.dto.SingleItemTransferDTO;
+import co.igb.ejb.EmailManager;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.entity.Inventory;
 import co.igb.persistence.entity.InventoryDetail;
@@ -74,6 +75,8 @@ public class StockTransferREST implements Serializable {
     private SalesOrderFacade salesOrderFacade;
     @Inject
     private IGBApplicationBean appBean;
+    @Inject
+    private EmailManager mailManager;
 
     public StockTransferREST() {
     }
@@ -122,7 +125,7 @@ public class StockTransferREST implements Serializable {
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response createPickingTransferDocument(SingleItemTransferDTO itemTransfer, @HeaderParam("X-Company-Name") String companyName) {
+    public Response createPickingTransferDocument(SingleItemTransferDTO itemTransfer, @HeaderParam("X-Company-Name") String companyName, @HeaderParam("Authorization") String token) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Trasladando item a carrito de picking {0}", itemTransfer);
 
@@ -152,6 +155,21 @@ public class StockTransferREST implements Serializable {
             if (!modifySalesOrderQuantity(companyName, orderDocEntry, itemTransfer.getItemCode(), itemTransfer.getQuantity())) {
                 return Response.ok(new ResponseDTO(-1, "Ocurrio un error al modificar la cantidad de la orden. ")).build();
             }
+        } else if (itemTransfer.getExpectedQuantity() > itemTransfer.getQuantity()) {
+            CONSOLE.log(Level.INFO, "La cantidad tomada ({0}) es inferior a la cantidad de la orden ({1}). Realizando ajuste de inventario...",
+                    new Object[]{itemTransfer.getQuantity(), itemTransfer.getExpectedQuantity()});
+            Integer expectedQuantity = binLocationFacade.getTotalQuantity(itemTransfer.getBinAbsFrom(), itemTransfer.getItemCode(), companyName);
+            try {
+                //Trasladar la diferencia a la ubicacion de inconsistencias
+                Long docEntry = adjustMissingQuantity(itemTransfer, expectedQuantity, companyName);
+                CONSOLE.log(Level.INFO, "Se trasladaron las unidades sobrantes a la ubicacion de inventario. DocEntry=", docEntry);
+            } catch (Exception e) {
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error al reportar la inconsistencia de inventario. " + e.getMessage())).build();
+            }
+
+            //Enviar correo
+            mailManager.sendInventoryInconsistence(itemTransfer.getUsername(), binLocationFacade.getBinCode(itemTransfer.getBinAbsTo(), companyName),
+                    itemTransfer.getItemCode(), expectedQuantity, itemTransfer.getQuantity());
         }
 
         StockTransfer document = new StockTransfer();
@@ -520,5 +538,69 @@ public class StockTransferREST implements Serializable {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al modificar la cantidad de la orden. ", e);
         }
         return false;
+    }
+
+    private Long adjustMissingQuantity(SingleItemTransferDTO itemTransfer, Integer expectedQuantity, String companyName) throws Exception {
+        StockTransfer transfer = new StockTransfer();
+
+        transfer.setSeries(24L);
+        transfer.setToWarehouse(itemTransfer.getWarehouseCode());
+        transfer.setFromWarehouse(itemTransfer.getWarehouseCode());
+        transfer.setComments("Traslado despues de realizar inventario.");
+
+        StockTransfer.StockTransferLines documentLines = new StockTransfer.StockTransferLines();
+        StockTransfer.StockTransferLines.StockTransferLine line = new StockTransfer.StockTransferLines.StockTransferLine();
+        line.setLineNum(0L);
+        line.setItemCode(itemTransfer.getItemCode());
+        line.setWarehouseCode(itemTransfer.getWarehouseCode());
+        line.setFromWarehouseCode(itemTransfer.getWarehouseCode());
+        line.setQuantity(new Double(expectedQuantity - itemTransfer.getQuantity()));
+
+        StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+        outOperation.setAllowNegativeQuantity("tNO");
+        outOperation.setBaseLineNumber(0L);
+        outOperation.setBinAbsEntry(itemTransfer.getBinAbsFrom());
+        outOperation.setBinActionType("batFromWarehouse");
+        outOperation.setQuantity(line.getQuantity());
+
+        StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+        inOperation.setAllowNegativeQuantity("tNO");
+        inOperation.setBaseLineNumber(0L);
+        inOperation.setBinAbsEntry(appBean.getInventoryBinId(companyName).longValue());
+        inOperation.setBinActionType("batToWarehouse");
+        inOperation.setQuantity(line.getQuantity());
+
+        StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations binAllocations = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations();
+        binAllocations.getStockTransferLinesBinAllocation().add(inOperation);
+        binAllocations.getStockTransferLinesBinAllocation().add(outOperation);
+
+        line.setStockTransferLinesBinAllocations(binAllocations);
+        documentLines.getStockTransferLine().add(line);
+        transfer.setStockTransferLines(documentLines);
+
+        //1. Login
+        String sessionId = null;
+        try {
+            sessionId = sapFunctions.login(companyName);
+            CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+        } catch (Exception e) {
+        }
+        //2. Registrar documento
+        Long docEntry = -1L;
+        if (sessionId != null) {
+            try {
+                docEntry = createTransferDocument(transfer, sessionId);
+                CONSOLE.log(Level.INFO, "Se creo la transferencia docEntry={0}", docEntry);
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
+                throw e;
+            }
+        }
+        //3. Logout
+        if (sessionId != null) {
+            sapFunctions.logout(sessionId);
+        }
+
+        return docEntry;
     }
 }

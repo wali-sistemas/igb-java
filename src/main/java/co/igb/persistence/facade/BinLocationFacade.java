@@ -80,7 +80,6 @@ public class BinLocationFacade {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<SaldoUbicacion> cq = cb.createQuery(SaldoUbicacion.class);
         Root<SaldoUbicacion> saldo = cq.from(SaldoUbicacion.class);
-
         cq.where(cb.equal(saldo.get("ubicacion").get("binCode"), binCode), cb.gt(saldo.get(SaldoUbicacion_.onHandQty), 1));
 
         try {
@@ -118,6 +117,20 @@ public class BinLocationFacade {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la ubicacion de inventario para la empresa " + companyName, e);
             return -1;
+        }
+    }
+
+    public Integer getTotalQuantity(Long binAbs, String itemCode, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(OnHandQty as int) qty from oibq where itemcode = '");
+        sb.append(itemCode);
+        sb.append("' and binabs = ");
+        sb.append(binAbs);
+        try {
+            return (Integer) chooseSchema(companyName).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el saldo de un item por ubicacion. ", e);
+            return 0;
         }
     }
 }
