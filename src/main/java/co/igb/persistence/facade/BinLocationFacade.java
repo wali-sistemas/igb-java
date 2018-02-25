@@ -47,7 +47,7 @@ public class BinLocationFacade {
 
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(ubic.absentry as int) binAbs, cast(ubic.bincode as varchar(20)) binCode, cast(ubic.descr as varchar(50)) binName, ");
-        sb.append("sum(cast(ISNULL(saldo.onhandqty, 0) as int)) saldo from obin ubic ");
+        sb.append("count(distinct(saldo.itemcode)) items, sum(cast(ISNULL(saldo.onhandqty, 0) as int)) saldo from obin ubic ");
         sb.append("left join oibq saldo on saldo.binabs = ubic.absentry  ");
         sb.append("where ubic.whscode = '");
         sb.append(whsCode);

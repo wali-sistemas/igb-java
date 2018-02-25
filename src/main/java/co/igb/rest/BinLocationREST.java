@@ -28,15 +28,15 @@ import javax.ws.rs.core.Response;
 @Stateless
 @Path("binlocation")
 public class BinLocationREST implements Serializable {
-
+    
     private static final Logger CONSOLE = Logger.getLogger(BinLocationREST.class.getSimpleName());
-
+    
     @EJB
     private BinLocationFacade blFacade;
-
+    
     public BinLocationREST() {
     }
-
+    
     @GET
     @Path("picking-carts")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
@@ -52,6 +52,7 @@ public class BinLocationREST implements Serializable {
             dto.setBinCode((String) ((Object[]) row)[1]);
             dto.setBinName((String) ((Object[]) row)[2]);
             dto.setItems((Integer) ((Object[]) row)[3]);
+            dto.setPieces((Integer) ((Object[]) row)[4]);
             pickingCarts.add(dto);
         }
         CONSOLE.log(Level.INFO, "Se encontraron {0} carritos de picking", pickingCarts.size());

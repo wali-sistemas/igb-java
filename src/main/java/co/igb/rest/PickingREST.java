@@ -67,7 +67,6 @@ public class PickingREST implements Serializable {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Listando ordenes de venta asignadas ");
 
-        //TODO: validar parametros de entrada
         watch.start();
         //TODO: buscar ordenes asignadas en estado warning y cambiar estado a las que tengan disponibilidad de inventario
         //buscar ordenes asignadas en estado open para el empleado en la empresa seleccionada
