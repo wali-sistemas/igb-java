@@ -7,8 +7,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.commons.mail.DefaultAuthenticator;
-import org.apache.commons.mail.Email;
-import org.apache.commons.mail.SimpleEmail;
+import org.apache.commons.mail.HtmlEmail;
 
 /**
  *
@@ -26,15 +25,16 @@ public class EmailManager implements Serializable {
     public void sendInventoryInconsistence(String employeeName, String binCode,
             String itemCode, Integer expectedQuantity, Integer realQuantity) {
         try {
-            Email email = new SimpleEmail();
+            HtmlEmail email = new HtmlEmail();
             email.setHostName(appBean.obtenerValorPropiedad("mail.host"));
             email.setSmtpPort(Integer.parseInt(appBean.obtenerValorPropiedad("mail.port")));
             email.setAuthenticator(new DefaultAuthenticator(
                     appBean.obtenerValorPropiedad("mail.username"), appBean.obtenerValorPropiedad("mail.password")));
             email.setSSL(true);
+            email.setCharset("utf-8");
             email.setFrom(appBean.obtenerValorPropiedad("mail.from.inconsistency"));
             email.setSubject(appBean.obtenerValorPropiedad("mail.subject.inconsistency"));
-            email.setMsg(String.format(appBean.obtenerValorPropiedad("mail.msg.inconsistency"),
+            email.setHtmlMsg(String.format(appBean.obtenerValorPropiedad("mail.msg.inconsistency"),
                     employeeName, binCode, itemCode, expectedQuantity.toString(), realQuantity.toString(), Integer.toString(expectedQuantity - realQuantity)));
             email.addTo(appBean.obtenerValorPropiedad("mail.to.inconsistency"));
             email.send();

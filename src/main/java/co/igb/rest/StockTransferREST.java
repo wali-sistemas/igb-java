@@ -162,7 +162,7 @@ public class StockTransferREST implements Serializable {
             try {
                 //Trasladar la diferencia a la ubicacion de inconsistencias
                 Long docEntry = adjustMissingQuantity(itemTransfer, expectedQuantity, companyName);
-                CONSOLE.log(Level.INFO, "Se trasladaron las unidades sobrantes a la ubicacion de inventario. DocEntry=", docEntry);
+                CONSOLE.log(Level.INFO, "Se trasladaron las unidades sobrantes a la ubicacion de inventario. DocEntry={0}", docEntry);
             } catch (Exception e) {
                 return Response.ok(new ResponseDTO(-1, "Ocurrio un error al reportar la inconsistencia de inventario. " + e.getMessage())).build();
             }
