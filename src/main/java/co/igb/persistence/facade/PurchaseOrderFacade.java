@@ -66,7 +66,7 @@ public class PurchaseOrderFacade {
         sb.append("where enc.docnum =");
         sb.append(docNum);
         sb.append(" and det.OpenQty > 0 ");
-        sb.append("order by enc.docdate, det.itemcode");
+        sb.append("order by enc.docdate, det.lineNum, det.itemcode");
 
         try {
             PurchaseOrderDTO dto = new PurchaseOrderDTO();
