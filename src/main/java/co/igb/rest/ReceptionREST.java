@@ -8,6 +8,7 @@ import co.igb.dto.PurchaseOrderDTO;
 import co.igb.dto.PurchaseOrderLineDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.facade.PurchaseOrderFacade;
+import co.igb.util.IGBUtils;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -75,8 +76,8 @@ public class ReceptionREST implements Serializable {
         CONSOLE.log(Level.INFO, "Generando entrada de mercancia con los siguientes datos {0}", order);
         Document document = new Document();
         document.setCardCode(order.getCardCode());
-        document.setSeries(14L); //TODO: parametrizar serie de numeracion por empresa
-        document.setDocCurrency("USD");
+        document.setSeries(Long.parseLong(getPropertyValue("igb.purchase.delivery.note.series", companyName)));
+        document.setDocCurrency(getPropertyValue("igb.purchase.delivery.note.currency", companyName));
         document.setDocRate(order.getDocRate());
         document.setSalesPersonCode(order.getSalesPersonCode());
         document.setComments(order.getComments());
@@ -137,18 +138,13 @@ public class ReceptionREST implements Serializable {
         long lineNum = 1;
         for (PurchaseOrderLineDTO lineDto : order.getLines()) {
             Document.DocumentLines.DocumentLine line = new Document.DocumentLines.DocumentLine();
-            line.setAccountCode("14350505");
+            line.setAccountCode(getPropertyValue("igb.purchase.delivery.note.line.account", companyName));
             line.setBaseEntry(order.getDocEntry());
             line.setBaseLine(lineDto.getDocLine());
             line.setBaseType(22L);
-            //line.setCurrency(value);
             line.setItemCode(lineDto.getItemCode());
             line.setLineNum(lineNum++);
             line.setQuantity(lineDto.getQuantity().doubleValue());
-            //line.setUBANCO(null);
-            //line.setUBLDLyID(null);
-            //line.setUBLDNCps(null);
-            //TODO: confirmar si la cuenta es la 14350505
             docLines.getDocumentLine().add(line);
         }
         document.setDocumentLines(docLines);
@@ -204,5 +200,9 @@ public class ReceptionREST implements Serializable {
         } catch (Exception e) {
         }
         return null;
+    }
+
+    private String getPropertyValue(String propertyName, String companyName) {
+        return IGBUtils.getProperParameter(appBean.obtenerValorPropiedad("igb.purchase.delivery.note.line.account"), companyName);
     }
 }
