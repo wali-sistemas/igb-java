@@ -1,6 +1,7 @@
 package co.igb.ejb;
 
 import co.igb.persistence.facade.BinLocationFacade;
+import co.igb.rest.ResponseDTO;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.Serializable;
@@ -14,8 +15,14 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -35,11 +42,22 @@ public class IGBApplicationBean implements Serializable {
     private BinLocationFacade binFacade;
 
     @PostConstruct
-    @GET
-    @Path("recargar/")
     public void initialize() {
         cargarProperties();
         consultarUbicacionesInventario();
+    }
+
+    @GET
+    @Path("recargar/")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    public Response reloadConfig(@QueryParam("showprops") String showProps) {
+        initialize();
+        if (StringUtils.isNotBlank(showProps) && showProps.equals("yes")) {
+            return Response.ok(new ResponseDTO(0, props)).build();
+        } else {
+            return Response.ok(new ResponseDTO(0, null)).build();
+        }
     }
 
     public void cargarProperties() {

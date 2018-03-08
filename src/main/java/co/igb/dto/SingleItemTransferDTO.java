@@ -9,6 +9,7 @@ public class SingleItemTransferDTO {
     private Long binAbsFrom;
     private Long binAbsTo;
     private Integer quantity;
+    private Integer expectedQuantity;
     private Integer orderNumber;
     private String username;
     private String itemCode;
@@ -73,9 +74,17 @@ public class SingleItemTransferDTO {
         this.username = username;
     }
 
+    public Integer getExpectedQuantity() {
+        return expectedQuantity;
+    }
+
+    public void setExpectedQuantity(Integer expectedQuantity) {
+        this.expectedQuantity = expectedQuantity;
+    }
+
     @Override
     public String toString() {
-        return "SingleItemTransferDTO{" + "binAbsFrom=" + binAbsFrom + ", binAbsTo=" + binAbsTo + ", quantity=" + quantity + ", orderNumber=" + orderNumber + ", username=" + username + ", itemCode=" + itemCode + ", warehouseCode=" + warehouseCode + '}';
+        return "SingleItemTransferDTO{" + "binAbsFrom=" + binAbsFrom + ", binAbsTo=" + binAbsTo + ", quantity=" + quantity + ", expectedQuantity=" + expectedQuantity + ", orderNumber=" + orderNumber + ", username=" + username + ", itemCode=" + itemCode + ", warehouseCode=" + warehouseCode + '}';
     }
 
 }

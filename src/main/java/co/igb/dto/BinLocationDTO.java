@@ -10,6 +10,7 @@ public class BinLocationDTO {
     private String binCode;
     private String binName;
     private Integer items;
+    private Integer pieces;
 
     public BinLocationDTO() {
     }
@@ -44,6 +45,14 @@ public class BinLocationDTO {
 
     public void setItems(Integer items) {
         this.items = items;
+    }
+
+    public void setPieces(Integer pieces) {
+        this.pieces = pieces;
+    }
+
+    public Integer getPieces() {
+        return pieces;
     }
 
 }

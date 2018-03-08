@@ -47,7 +47,7 @@ public class BinLocationFacade {
 
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(ubic.absentry as int) binAbs, cast(ubic.bincode as varchar(20)) binCode, cast(ubic.descr as varchar(50)) binName, ");
-        sb.append("sum(cast(ISNULL(saldo.onhandqty, 0) as int)) saldo from obin ubic ");
+        sb.append("count(distinct(saldo.itemcode)) items, sum(cast(ISNULL(saldo.onhandqty, 0) as int)) saldo from obin ubic ");
         sb.append("left join oibq saldo on saldo.binabs = ubic.absentry  ");
         sb.append("where ubic.whscode = '");
         sb.append(whsCode);
@@ -80,7 +80,6 @@ public class BinLocationFacade {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<SaldoUbicacion> cq = cb.createQuery(SaldoUbicacion.class);
         Root<SaldoUbicacion> saldo = cq.from(SaldoUbicacion.class);
-
         cq.where(cb.equal(saldo.get("ubicacion").get("binCode"), binCode), cb.gt(saldo.get(SaldoUbicacion_.onHandQty), 1));
 
         try {
@@ -140,6 +139,20 @@ public class BinLocationFacade {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ubicaciones. ", e);
             return null;
+		}
+	}
+
+    public Integer getTotalQuantity(Long binAbs, String itemCode, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(OnHandQty as int) qty from oibq where itemcode = '");
+        sb.append(itemCode);
+        sb.append("' and binabs = ");
+        sb.append(binAbs);
+        try {
+            return (Integer) chooseSchema(companyName).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el saldo de un item por ubicacion. ", e);
+            return 0;
         }
     }
 }
