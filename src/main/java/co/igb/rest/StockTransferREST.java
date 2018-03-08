@@ -254,6 +254,8 @@ public class StockTransferREST implements Serializable {
                     CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
                     errorMessage = e.getMessage();
                 }
+            } else {
+                return Response.ok(-1).build();
             }
             //3. Logout
             if (sessionId != null) {

@@ -2,6 +2,7 @@ package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.Inventory;
 import co.igb.persistence.entity.Inventory_;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
@@ -47,6 +48,30 @@ public class InventoryFacade extends AbstractFacade<Inventory> {
             return null;
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los inventarios pendientes. ", e);
+            return null;
+        }
+    }
+
+    public List<Object[]> obtenerUltimosInventarios(List<String> locations) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("SELECT location, MAX(date) ");
+        sb.append("FROM   igb.inventory ");
+        sb.append("WHERE  location IN (");
+        for (String s : locations) {
+            sb.append("'");
+            sb.append(s);
+            sb.append("', ");
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append(") ");
+        sb.append("ORDER  BY MAX(date)");
+
+        try {
+            return em.createNativeQuery(sb.toString()).getResultList();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "", e);
             return null;
         }
     }

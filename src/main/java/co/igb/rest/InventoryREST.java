@@ -3,8 +3,10 @@ package co.igb.rest;
 import co.igb.dto.InventoryDTO;
 import co.igb.persistence.entity.Inventory;
 import co.igb.persistence.entity.InventoryDetail;
+import co.igb.persistence.facade.BinLocationFacade;
 import co.igb.persistence.facade.InventoryDetailFacade;
 import co.igb.persistence.facade.InventoryFacade;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -36,6 +38,8 @@ public class InventoryREST {
     private InventoryFacade inventoryFacade;
     @EJB
     private InventoryDetailFacade inventoryDetailFacade;
+    @EJB
+    private BinLocationFacade binLocationFacade;
 
     public InventoryREST() {
     }
@@ -80,18 +84,50 @@ public class InventoryREST {
 
         return Response.ok(-1).build();
     }
-    
+
     @GET
     @Path("inventoryhistory/{warehouse}/{idinventory}")
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response inventoryOpen(@PathParam("warehouse") String warehouse, @PathParam("idinventory") Integer idInventory) {
         List<InventoryDetail> details = inventoryDetailFacade.findInventoryDetail(idInventory);
-        
-        if(details != null && !details.isEmpty()){
+
+        if (details != null && !details.isEmpty()) {
             return Response.ok(details).build();
         } else {
             return Response.ok(-1).build();
         }
+    }
+
+    @GET
+    @Path("inventoryrandom/{warehouse}")
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response inventoryRandom(@PathParam("warehouse") String warehouse, @HeaderParam("X-Company-Name") String companyName) {
+        /*Se consultan las ubicaciones con saldo*/
+        List<String> locations = binLocationFacade.findLocations(companyName, warehouse);
+
+        if (locations != null && !locations.isEmpty()) {
+            List<String> locationsTmp = new ArrayList<>(locations);
+            List<Object[]> datos = inventoryFacade.obtenerUltimosInventarios(locations);
+
+            if (datos != null && !datos.isEmpty()) {
+                for (Object[] o : datos) {
+                    for (String l : locationsTmp) {
+                        if (l.equals((String) o[0])) {
+                            locationsTmp.remove(l);
+                            break;
+                        }
+                    }
+                }
+
+                if (!locationsTmp.isEmpty()) {
+                    return Response.ok(new ResponseDTO(1, locationsTmp.get(0))).build();
+                } else {
+                    return Response.ok(new ResponseDTO(1, datos.get(0)[0])).build();
+                }
+            }
+        }
+        return Response.ok(0).build();
     }
 }

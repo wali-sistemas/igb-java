@@ -120,4 +120,26 @@ public class BinLocationFacade {
             return -1;
         }
     }
+
+	public List<String> findLocations(String schema, String whsCode) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("SELECT CONVERT(VARCHAR(100), BinCode) AS ubicacion ");
+        sb.append("FROM   (SELECT o.SL1Code + ISNULL(SL2Code, '') AS ubicacion, ");
+        sb.append("		  SUM(CAST(q.OnHandQty AS INT)) AS saldo, ");
+        sb.append("		  o.AbsEntry, BinCode ");
+        sb.append("        FROM   OBIN o ");
+        sb.append("        INNER  JOIN OIBQ q ON q.BinAbs = o.AbsEntry ");
+        sb.append("        WHERE  q.OnHandQty > 0 AND    o.Attr1Val = 'STORAGE' AND    o.WhsCode = '");
+        sb.append(whsCode);
+        sb.append("        ' GROUP  BY o.SL1Code, o.SL2Code, o.AbsEntry, o.BinCode) AS t ");
+        sb.append("ORDER  BY t.saldo DESC ");
+
+        try {
+            return chooseSchema(schema).createNativeQuery(sb.toString()).getResultList();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ubicaciones. ", e);
+            return null;
+        }
+    }
 }
