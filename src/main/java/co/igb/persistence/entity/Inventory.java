@@ -36,11 +36,14 @@ public class Inventory implements Serializable {
     @Column(name = "status")
     private String status;
     @Basic(optional = false)
-    @Column(name = "storage")
-    private String storage;
+    @Column(name = "whsCode")
+    private String whsCode;
     @Basic(optional = false)
     @Column(name = "location")
     private String location;
+    @Basic(optional = false)
+    @Column(name = "company")
+    private String company;
 
     public Inventory() {
     }
@@ -73,12 +76,12 @@ public class Inventory implements Serializable {
         this.status = status;
     }
 
-    public String getStorage() {
-        return storage;
+    public String getWhsCode() {
+        return whsCode;
     }
 
-    public void setStorage(String storage) {
-        this.storage = storage;
+    public void setWhsCode(String whsCode) {
+        this.whsCode = whsCode;
     }
 
     public String getLocation() {
@@ -87,6 +90,14 @@ public class Inventory implements Serializable {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     @Override
@@ -113,6 +124,6 @@ public class Inventory implements Serializable {
 
     @Override
     public String toString() {
-        return "Inventory{" + "id=" + id + ", date=" + date + ", status=" + status + ", storage=" + storage + ", location=" + location + '}';
+        return "Inventory{" + "id=" + id + ", date=" + date + ", status=" + status + ", storage=" + whsCode + ", location=" + location + '}';
     }
 }

@@ -344,7 +344,8 @@ public class StockTransferREST implements Serializable {
             inventory.setDate(new Date());
             inventory.setLocation(binCode);
             inventory.setStatus("PE");
-            inventory.setStorage(warehouse);
+            inventory.setWhsCode(warehouse);
+            inventory.setCompany(companyName);
 
             try {
                 inventoryFacade.create(inventory);
@@ -369,14 +370,14 @@ public class StockTransferREST implements Serializable {
 
         if (detail != null && !detail.isEmpty()) {
             //List<SaldoUbicacion> stock = binLocationFacade.findLocationBalance(inventory.getStorage() + appBean.obtenerValorPropiedad("inventory.ubication.name"), companyName);
-            List<SaldoUbicacion> stock = binLocationFacade.findLocationBalance(inventory.getStorage() + appBean.getInventoryBinId(companyName), companyName);
+            List<SaldoUbicacion> stock = binLocationFacade.findLocationBalanceInventory(appBean.getInventoryBinId(companyName), companyName);
 
             if (stock != null && !stock.isEmpty()) {
                 StockTransfer transfer = new StockTransfer();
 
                 transfer.setSeries(24L);
-                transfer.setToWarehouse(inventory.getStorage());
-                transfer.setFromWarehouse(inventory.getStorage());
+                transfer.setToWarehouse(inventory.getWhsCode());
+                transfer.setFromWarehouse(inventory.getWhsCode());
                 transfer.setComments("Traslado despues de realizar inventario.");
 
                 StockTransfer.StockTransferLines documentLines = new StockTransfer.StockTransferLines();

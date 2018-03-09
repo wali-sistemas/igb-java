@@ -33,12 +33,14 @@ public class InventoryFacade extends AbstractFacade<Inventory> {
         super(Inventory.class);
     }
 
-    public Inventory findLastInventoryOpen(String warehouse) {
+    public Inventory findLastInventoryOpen(String warehouse, String schema) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Inventory> cq = cb.createQuery(Inventory.class);
         Root<Inventory> inventory = cq.from(Inventory.class);
 
-        cq.where(cb.equal(inventory.get(Inventory_.status), "PE"), cb.equal(inventory.get(Inventory_.storage), warehouse));
+        cq.where(cb.equal(inventory.get(Inventory_.status), "PE"),
+                cb.equal(inventory.get(Inventory_.whsCode), warehouse),
+                cb.equal(inventory.get(Inventory_.company), schema));
 
         cq.orderBy(cb.desc(inventory.get(Inventory_.id)));
 
@@ -52,12 +54,14 @@ public class InventoryFacade extends AbstractFacade<Inventory> {
         }
     }
 
-    public List<Object[]> obtenerUltimosInventarios(List<String> locations) {
+    public List<Object[]> obtenerUltimosInventarios(String schema, List<String> locations) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("SELECT location, MAX(date) ");
         sb.append("FROM   igb.inventory ");
-        sb.append("WHERE  location IN (");
+        sb.append("WHERE  company = '");
+        sb.append(schema);
+        sb.append("' AND   location IN (");
         for (String s : locations) {
             sb.append("'");
             sb.append(s);

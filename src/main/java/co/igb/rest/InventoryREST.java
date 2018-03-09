@@ -48,8 +48,8 @@ public class InventoryREST {
     @Path("inventoryopen/{warehouse}")
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response inventoryOpen(@PathParam("warehouse") String warehouse) {
-        Inventory inventory = inventoryFacade.findLastInventoryOpen(warehouse);
+    public Response inventoryOpen(@PathParam("warehouse") String warehouse, @HeaderParam("X-Company-Name") String companyName) {
+        Inventory inventory = inventoryFacade.findLastInventoryOpen(warehouse, companyName);
 
         if (inventory != null && inventory.getId() != null && inventory.getId() != 0) {
             return Response.ok(inventory).build();
@@ -109,7 +109,7 @@ public class InventoryREST {
 
         if (locations != null && !locations.isEmpty()) {
             List<String> locationsTmp = new ArrayList<>(locations);
-            List<Object[]> datos = inventoryFacade.obtenerUltimosInventarios(locations);
+            List<Object[]> datos = inventoryFacade.obtenerUltimosInventarios(companyName, locations);
 
             if (datos != null && !datos.isEmpty()) {
                 for (Object[] o : datos) {

@@ -92,6 +92,23 @@ public class BinLocationFacade {
         return null;
     }
 
+    public List<SaldoUbicacion> findLocationBalanceInventory(Integer absEntry, String schema) {
+        EntityManager em = chooseSchema(schema);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<SaldoUbicacion> cq = cb.createQuery(SaldoUbicacion.class);
+        Root<SaldoUbicacion> saldo = cq.from(SaldoUbicacion.class);
+        cq.where(cb.equal(saldo.get("ubicacion").get("absEntry"), absEntry), cb.gt(saldo.get(SaldoUbicacion_.onHandQty), 1));
+
+        try {
+            return em.createQuery(cq).getResultList();
+        } catch (NoResultException e) {
+            CONSOLE.log(Level.SEVERE, "No se encontraron datos en la ubicacion {0}", absEntry);
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los datos de la ubicacion. ", e);
+        }
+        return null;
+    }
+
     public Integer findLocationBinCode(String binCode, String schema) {
         StringBuilder sb = new StringBuilder();
 
@@ -120,7 +137,7 @@ public class BinLocationFacade {
         }
     }
 
-	public List<String> findLocations(String schema, String whsCode) {
+    public List<String> findLocations(String schema, String whsCode) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("SELECT CONVERT(VARCHAR(100), BinCode) AS ubicacion ");
@@ -139,8 +156,8 @@ public class BinLocationFacade {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ubicaciones. ", e);
             return null;
-		}
-	}
+        }
+    }
 
     public Integer getTotalQuantity(Long binAbs, String itemCode, String companyName) {
         StringBuilder sb = new StringBuilder();
