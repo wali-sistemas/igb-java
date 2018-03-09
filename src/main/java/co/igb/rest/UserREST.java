@@ -170,4 +170,14 @@ public class UserREST {
     public Response listEmployees(@PathParam("groupName") String groupName) {
         return Response.ok(authenticator.listEmployeesInGroup(groupName)).build();
     }
+
+    @GET
+    @Path("validate")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    public Response validateToken() {
+        //Si la llamada a este servicio significa que no fue rechazada por el filtro,
+        //por lo tanto el token enviado es valido
+        CONSOLE.log(Level.INFO, "Token validado con exito. ");
+        return Response.ok(new ResponseDTO(0, "Token validado con éxito")).build();
+    }
 }
