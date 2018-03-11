@@ -91,7 +91,7 @@ public class PackingREST implements Serializable {
         CONSOLE.log(Level.INFO, "Listando registros de packing");
         List<PackingDTO> list = poFacade.listOpen(companyName);
         CONSOLE.log(Level.INFO, "Se obtuvieron {0} registros de packing. {1}", new Object[]{list.size(), Arrays.toString(list.toArray())});
-        return Response.ok(list).build();
+        return Response.ok(new ResponseDTO(0, list)).build();
     }
 
     @POST
