@@ -44,6 +44,9 @@ public class Inventory implements Serializable {
     @Basic(optional = false)
     @Column(name = "company")
     private String company;
+    @Basic(optional = false)
+    @Column(name = "transfer")
+    private Integer transfer;
 
     public Inventory() {
     }
@@ -98,6 +101,14 @@ public class Inventory implements Serializable {
 
     public void setCompany(String company) {
         this.company = company;
+    }
+
+    public Integer getTransfer() {
+        return transfer;
+    }
+
+    public void setTransfer(Integer transfer) {
+        this.transfer = transfer;
     }
 
     @Override

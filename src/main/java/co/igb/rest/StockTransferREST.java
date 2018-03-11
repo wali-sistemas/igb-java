@@ -20,12 +20,14 @@ import co.igb.persistence.entity.InventoryDetail;
 import co.igb.persistence.entity.InventoryDifference;
 import co.igb.persistence.entity.PickingRecord;
 import co.igb.persistence.entity.SaldoUbicacion;
+import co.igb.persistence.entity.StockTransferDetail;
 import co.igb.persistence.facade.BinLocationFacade;
 import co.igb.persistence.facade.InventoryDetailFacade;
 import co.igb.persistence.facade.InventoryDifferenceFacade;
 import co.igb.persistence.facade.InventoryFacade;
 import co.igb.persistence.facade.PickingRecordFacade;
 import co.igb.persistence.facade.SalesOrderFacade;
+import co.igb.persistence.facade.StockTransferDetailFacade;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -73,6 +75,8 @@ public class StockTransferREST implements Serializable {
     private InventoryDifferenceFacade inventoryDifferenceFacade;
     @EJB
     private SalesOrderFacade salesOrderFacade;
+    @EJB
+    private StockTransferDetailFacade stockTransferDetailFacade;
     @Inject
     private IGBApplicationBean appBean;
     @Inject
@@ -346,6 +350,7 @@ public class StockTransferREST implements Serializable {
             inventory.setStatus("PE");
             inventory.setWhsCode(warehouse);
             inventory.setCompany(companyName);
+            inventory.setTransfer(docEntry.intValue());
 
             try {
                 inventoryFacade.create(inventory);
@@ -369,8 +374,8 @@ public class StockTransferREST implements Serializable {
         List<InventoryDifference> differences = new ArrayList<>();
 
         if (detail != null && !detail.isEmpty()) {
-            //List<SaldoUbicacion> stock = binLocationFacade.findLocationBalance(inventory.getStorage() + appBean.obtenerValorPropiedad("inventory.ubication.name"), companyName);
-            List<SaldoUbicacion> stock = binLocationFacade.findLocationBalanceInventory(appBean.getInventoryBinId(companyName), companyName);
+            List<StockTransferDetail> stock = stockTransferDetailFacade.findStockTransfer(inventory.getTransfer(), companyName);
+            //List<SaldoUbicacion> stock = binLocationFacade.findLocationBalanceInventory(appBean.getInventoryBinId(companyName), companyName);
 
             if (stock != null && !stock.isEmpty()) {
                 StockTransfer transfer = new StockTransfer();
@@ -385,7 +390,8 @@ public class StockTransferREST implements Serializable {
                 long linea = 0;
                 for (InventoryDetail i : detail) {
                     for (int j = 0; j < stock.size(); j++) {
-                        SaldoUbicacion s = stock.get(j);
+                        StockTransferDetail s = stock.get(j);
+                        //SaldoUbicacion s = stock.get(j);
 
                         if (i.getItem().equals(s.getItemCode())) {
                             StockTransfer.StockTransferLines.StockTransferLine line = new StockTransfer.StockTransferLines.StockTransferLine();
@@ -394,14 +400,14 @@ public class StockTransferREST implements Serializable {
                             line.setItemCode(s.getItemCode());
                             line.setWarehouseCode(s.getWhsCode());
                             line.setFromWarehouseCode(s.getWhsCode());
-                            if (i.getQuantity() == s.getOnHandQty().intValue()) {
+                            if (i.getQuantity() == s.getQuantity().intValue()) {
                                 line.setQuantity(i.getQuantity().doubleValue());
-                            } else if (i.getQuantity() < s.getOnHandQty().intValue()) {
+                            } else if (i.getQuantity() < s.getQuantity().intValue()) {
                                 line.setQuantity(i.getQuantity().doubleValue());
-                                differences.add(new InventoryDifference(null, idInventory, i.getItem(), s.getOnHandQty().intValue(), i.getQuantity()));
+                                differences.add(new InventoryDifference(null, idInventory, i.getItem(), s.getQuantity().intValue(), i.getQuantity()));
                             } else {
-                                line.setQuantity(s.getOnHandQty().doubleValue());
-                                differences.add(new InventoryDifference(null, idInventory, i.getItem(), s.getOnHandQty().intValue(), i.getQuantity()));
+                                line.setQuantity(s.getQuantity().doubleValue());
+                                differences.add(new InventoryDifference(null, idInventory, i.getItem(), s.getQuantity().intValue(), i.getQuantity()));
                             }
 
                             StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
@@ -469,10 +475,10 @@ public class StockTransferREST implements Serializable {
             }
 
             //4.2 Se registran los datos que no se encontraron
-            for (SaldoUbicacion s : stock) {
+            for (StockTransferDetail s : stock) {
                 InventoryDifference difference = new InventoryDifference();
 
-                difference.setExpected(s.getOnHandQty().intValue());
+                difference.setExpected(s.getQuantity().intValue());
                 difference.setFound(0);
                 difference.setIdInventory(idInventory);
                 difference.setItem(s.getItemCode());
