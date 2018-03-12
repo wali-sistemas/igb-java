@@ -108,26 +108,27 @@ public class InventoryREST {
         List<String> locations = binLocationFacade.findLocations(companyName, warehouse);
 
         if (locations != null && !locations.isEmpty()) {
-            List<String> locationsTmp = new ArrayList<>(locations);
             List<Object[]> datos = inventoryFacade.obtenerUltimosInventarios(companyName, locations);
 
             if (datos != null && !datos.isEmpty()) {
                 for (Object[] o : datos) {
-                    for (String l : locationsTmp) {
+                    for (String l : locations) {
                         if (l.equals((String) o[0])) {
-                            locationsTmp.remove(l);
+                            locations.remove(l);
                             break;
                         }
                     }
                 }
 
-                if (!locationsTmp.isEmpty()) {
-                    return Response.ok(new ResponseDTO(1, locationsTmp.get(0))).build();
+                if (!locations.isEmpty()) {
+                    return Response.ok(new ResponseDTO(0, locations.get(0))).build();
                 } else {
-                    return Response.ok(new ResponseDTO(1, datos.get(0)[0])).build();
+                    return Response.ok(new ResponseDTO(0, datos.get(0)[0])).build();
                 }
+            } else {
+                return Response.ok(new ResponseDTO(0, locations.get(0))).build();
             }
         }
-        return Response.ok(0).build();
+        return Response.ok(new ResponseDTO(-1, "No se encontraron ubicaciones aleatorias.")).build();
     }
 }
