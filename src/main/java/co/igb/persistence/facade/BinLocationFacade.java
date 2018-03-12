@@ -109,7 +109,7 @@ public class BinLocationFacade {
         return null;
     }
 
-    public Integer findLocationBinCode(String binCode, String schema) {
+    public Integer getBinAbs(String binCode, String schema) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("SELECT CAST(ubic.absentry AS INT) binAbs ");
@@ -121,7 +121,7 @@ public class BinLocationFacade {
         try {
             return (Integer) chooseSchema(schema).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los carritos de picking. ", e);
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el id de una ubicacion. ", e);
             return null;
         }
     }

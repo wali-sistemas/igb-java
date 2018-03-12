@@ -417,7 +417,7 @@ public class StockTransferREST implements Serializable {
 
                             inOperation.setAllowNegativeQuantity("tNO");
                             inOperation.setBaseLineNumber(linea);
-                            inOperation.setBinAbsEntry(binLocationFacade.findLocationBinCode(inventory.getLocation(), companyName).longValue());
+                            inOperation.setBinAbsEntry(binLocationFacade.getBinAbs(inventory.getLocation(), companyName).longValue());
                             inOperation.setBinActionType("batToWarehouse");
                             inOperation.setQuantity(line.getQuantity());
 

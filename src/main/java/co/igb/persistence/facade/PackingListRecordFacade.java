@@ -2,10 +2,13 @@ package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.PackingListRecord;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 /**
@@ -38,5 +41,21 @@ public class PackingListRecordFacade extends AbstractFacade<PackingListRecord> {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al obtener el siguiente id para packing list.", e);
             return 0;
         }
+    }
+
+    public List<Object[]> listOpenPackingRecords(String username, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select * from packing_list_record where status = 'open' and company_name = '");
+        sb.append(companyName);
+        sb.append("' and employee = '");
+        sb.append(username);
+        sb.append("' order by box_number");
+        try {
+            return em.createNativeQuery(sb.toString()).getResultList();
+        } catch (NoResultException e) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar si el empleado tiene un proceso de packing iniciado. ", e);
+        }
+        return new ArrayList<>();
     }
 }

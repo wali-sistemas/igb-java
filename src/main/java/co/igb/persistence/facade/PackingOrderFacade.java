@@ -2,6 +2,7 @@ package co.igb.persistence.facade;
 
 import co.igb.dto.PackingDTO;
 import co.igb.persistence.entity.PackingOrder;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -68,6 +69,97 @@ public class PackingOrderFacade extends AbstractFacade<PackingOrder> {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los proceso de packing abiertos. ", e);
             return new ArrayList<>();
+        }
+    }
+
+    public List<Object[]> listCustomersWithOpenRecords(String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select distinct customer_id, customer_name from packing_order where company_name = '");
+        sb.append(companyName);
+        sb.append("' and status = 'open' order by customer_name");
+        try {
+            return em.createNativeQuery(sb.toString()).getResultList();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los clientes con ordenes de empaque abiertas. ", e);
+            return new ArrayList<>();
+        }
+    }
+
+    public List<Integer> listCustomerOrders(String customerId, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select order_number from packing_order where customer_id = '");
+        sb.append(customerId);
+        sb.append("'and status = 'open' and company_name = '");
+        sb.append(companyName);
+        sb.append("' order by order_number");
+        try {
+            return em.createNativeQuery(sb.toString()).getResultList();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ordenes de empaque abiertas para el cliente " + customerId, e);
+            return new ArrayList<>();
+        }
+    }
+
+    public Integer countItemsOnBin(String binCode, Integer orderNumber, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select count(distinct itm.item_code) items from packing_order ord ");
+        sb.append("inner join packing_order_item itm on itm.idpacking_order = ord.idpacking_order ");
+        sb.append("inner join packing_order_item_bin bin on bin.idpacking_order_item = itm.idpacking_order_item ");
+        sb.append("where ord.order_number = ");
+        sb.append(orderNumber);
+        sb.append(" and bin.bin_code = '");
+        sb.append(binCode);
+        sb.append("' and ord.company_name = '");
+        sb.append(companyName);
+        sb.append("' and ord.status = 'open'");
+        try {
+            return ((BigInteger) em.createNativeQuery(sb.toString()).getSingleResult()).intValue();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los items por orden y ubicacion. ", e);
+            return 0;
+        }
+    }
+
+    public Integer validateItemOnBin(String itemCode, String binCode, Integer orderNumber, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select bin.picked_qty - bin.packed_qty missing_items from packing_order ord ");
+        sb.append("inner join packing_order_item itm on itm.idpacking_order = ord.idpacking_order ");
+        sb.append("inner join packing_order_item_bin bin on bin.idpacking_order_item = itm.idpacking_order_item ");
+        sb.append("where ord.order_number = ");
+        sb.append(orderNumber);
+        sb.append(" and bin.bin_code = '");
+        sb.append(binCode);
+        sb.append("' and itm.item_code = '");
+        sb.append(itemCode);
+        sb.append("' and ord.company_name = '");
+        sb.append(companyName);
+        sb.append("' and ord.status = 'open'");
+        try {
+            return ((BigInteger) em.createNativeQuery(sb.toString()).getSingleResult()).intValue();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al validar item por orden y ubicacion. ", e);
+            return 0;
+        }
+    }
+
+    public void updatePackedQuantity(String binCode, String itemCode, Integer orderNumber, Integer additionalQuantity, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("update packing_order_item_bin set packed_qty = packed_qty + ");
+        sb.append(additionalQuantity);
+        sb.append(" where bin_code = '");
+        sb.append(binCode);
+        sb.append("' and idpacking_order_item = ( select itm.idpacking_order_item from packing_order ord ");
+        sb.append("inner join packing_order_item itm on itm.idpacking_order = ord.idpacking_order ");
+        sb.append("where itm.item_code = '");
+        sb.append(itemCode);
+        sb.append("' and ord.order_number = ");
+        sb.append(orderNumber);
+        sb.append(")");
+        try {
+            int result = em.createNativeQuery(sb.toString()).executeUpdate();
+            CONSOLE.log(Level.INFO, "Se actualizaron {0} filas", result);
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar la cantidad de items empacados. ", e);
         }
     }
 }

@@ -69,8 +69,8 @@ public class InventoryFacade extends AbstractFacade<Inventory> {
         }
         sb.deleteCharAt(sb.length() - 1);
         sb.deleteCharAt(sb.length() - 1);
-        sb.append(") ");
-        sb.append("ORDER  BY MAX(date)");
+        sb.append(") GROUP by location ");
+        sb.append("ORDER BY MAX(date)");
 
         try {
             return em.createNativeQuery(sb.toString()).getResultList();

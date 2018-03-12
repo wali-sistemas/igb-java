@@ -6,6 +6,8 @@ import co.igb.persistence.entity.PackingListRecord;
 import co.igb.persistence.entity.PackingOrder;
 import co.igb.persistence.entity.PackingOrderItem;
 import co.igb.persistence.entity.PackingOrderItemBin;
+import co.igb.persistence.facade.BinLocationFacade;
+import co.igb.persistence.facade.CustomerFacade;
 import co.igb.persistence.facade.PackingListRecordFacade;
 import co.igb.persistence.facade.PackingOrderFacade;
 import java.io.Serializable;
@@ -24,6 +26,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -42,6 +45,10 @@ public class PackingREST implements Serializable {
     private PackingOrderFacade poFacade;
     @EJB
     private PackingListRecordFacade plFacade;
+    @EJB
+    private CustomerFacade cFacade;
+    @EJB
+    private BinLocationFacade blFacade;
 
     @POST
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
@@ -94,6 +101,55 @@ public class PackingREST implements Serializable {
         return Response.ok(new ResponseDTO(0, list)).build();
     }
 
+    @GET
+    @Path("customers")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response listCustomersWithPackingRecords(@HeaderParam("X-Company-Name") String companyName) {
+        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
+        CONSOLE.log(Level.INFO, "Listando clientes con registros de packing pendientes");
+        List<Object[]> customers = poFacade.listCustomersWithOpenRecords(companyName);
+        CONSOLE.log(Level.INFO, "Se obtuvieron {0} clientes con ordenes de empaque abiertas", customers.size());
+        return Response.ok(new ResponseDTO(0, customers)).build();
+    }
+
+    @GET
+    @Path("orders/{customerId}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response listCustomerOrders(@PathParam("customerId") String customerId, @HeaderParam("X-Company-Name") String companyName) {
+        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
+        CONSOLE.log(Level.INFO, "Listando ordenes de packing abiertas para el cliente {0}", customerId);
+        List<Integer> orders = poFacade.listCustomerOrders(customerId, companyName);
+        CONSOLE.log(Level.INFO, "Se obtuvieron {0} ordenes de empaque abiertas para el cliente {1}", new Object[]{orders.size(), customerId});
+        return Response.ok(new ResponseDTO(0, orders)).build();
+    }
+
+    @GET
+    @Path("bin/{orderNumber}/{binCode}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response validateBinCode(@PathParam("orderNumber") Integer orderNumber, @PathParam("binCode") String binCode, @HeaderParam("X-Company-Name") String companyName) {
+        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
+        CONSOLE.log(Level.INFO, "Listando items por ubicacion y orden ");
+        Integer items = poFacade.countItemsOnBin(binCode, orderNumber, companyName);
+        CONSOLE.log(Level.INFO, "Se obtuvieron {0} items para la orden {1} y ubicacion {2}", new Object[]{items, orderNumber, binCode});
+        return Response.ok(new ResponseDTO(0, items)).build();
+    }
+
+    @GET
+    @Path("item/{orderNumber}/{binCode}/{itemCode}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response validateItemCode(@PathParam("orderNumber") Integer orderNumber, @PathParam("itemCode") String itemCode,
+            @PathParam("binCode") String binCode, @HeaderParam("X-Company-Name") String companyName) {
+        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
+        CONSOLE.log(Level.INFO, "Listando items por ubicacion y orden ");
+        Integer items = poFacade.validateItemOnBin(itemCode, binCode, orderNumber, companyName);
+        CONSOLE.log(Level.INFO, "El item existe en la orden {0} y ubicacion {1}", new Object[]{orderNumber, binCode});
+        return Response.ok(new ResponseDTO(0, items)).build();
+    }
+
     @POST
     @Path("pack")
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
@@ -112,25 +168,51 @@ public class PackingREST implements Serializable {
             record.setIdPackingList(packingRecord.getIdPackingList());
         }
 
-        record.setBinAbs(packingRecord.getBinAbs());
+        if (packingRecord.getBinAbs() != null) {
+            record.setBinAbs(packingRecord.getBinAbs());
+        } else {
+            record.setBinAbs(blFacade.getBinAbs(packingRecord.getBinCode(), companyName).longValue());
+        }
+
         record.setBinCode(packingRecord.getBinCode());
         record.setBoxNumber(packingRecord.getBoxNumber());
         record.setCustomerId(packingRecord.getCustomerId());
-        record.setCustomerName(packingRecord.getCustomerName());
+        record.setEmployee(packingRecord.getEmployee());
+
+        if (packingRecord.getCustomerName() != null) {
+            record.setCustomerName(packingRecord.getCustomerName());
+        } else {
+            record.setCustomerName(cFacade.getCustomerName(packingRecord.getCustomerId(), companyName));
+        }
+
         record.setDatetimePacked(new Date());
         record.setItemCode(packingRecord.getItemCode());
         record.setOrderNumber(packingRecord.getOrderNumber());
         record.setPickingOrder(packingRecord.getPickingOrder());
         record.setQuantity(packingRecord.getQuantity());
-        record.setStatus(packingRecord.getStatus());
+        record.setStatus("open");
+        record.setCompanyName(companyName);
 
         try {
             plFacade.create(record);
-            return Response.ok(new ResponseDTO(0, record.getIdPackingList())).build();
+            poFacade.updatePackedQuantity(record.getBinCode(), record.getItemCode(), record.getOrderNumber(), record.getQuantity(), companyName);
+            return Response.ok(new ResponseDTO(0, record)).build();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el registro. ", e);
             return Response.ok(new ResponseDTO(-1, "Ocurrió un error al crear el registro")).build();
         }
 
+    }
+
+    @GET
+    @Path("list/{username}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response listOpenPackingJobs(@PathParam("username") String username, @HeaderParam("X-Company-Name") String companyName) {
+        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
+        CONSOLE.log(Level.INFO, "Listando procesos de packing abiertos para el empleado {0}", username);
+        List<Object[]> records = plFacade.listOpenPackingRecords(username, companyName);
+        CONSOLE.log(Level.INFO, "Se encontraron {0} entradas de registro de packing abiertas para el empleado", records.size());
+        return Response.ok(new ResponseDTO(0, records)).build();
     }
 }

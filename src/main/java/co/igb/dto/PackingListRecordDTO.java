@@ -19,6 +19,7 @@ public class PackingListRecordDTO {
     private String binCode;
     private Long binAbs;
     private Integer boxNumber;
+    private String employee;
     private String status;
 
     public Integer getIdPackingList() {
@@ -109,6 +110,14 @@ public class PackingListRecordDTO {
         this.boxNumber = boxNumber;
     }
 
+    public String getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(String employee) {
+        this.employee = employee;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -119,7 +128,7 @@ public class PackingListRecordDTO {
 
     @Override
     public String toString() {
-        return "PackingListRecordDTO{" + "idPackingList=" + idPackingList + ", orderNumber=" + orderNumber + ", customerId=" + customerId + ", customerName=" + customerName + ", datetimePacked=" + datetimePacked + ", pickingOrder=" + pickingOrder + ", itemCode=" + itemCode + ", quantity=" + quantity + ", binCode=" + binCode + ", binAbs=" + binAbs + ", boxNumber=" + boxNumber + ", status=" + status + '}';
+        return "PackingListRecordDTO{" + "idPackingList=" + idPackingList + ", orderNumber=" + orderNumber + ", customerId=" + customerId + ", customerName=" + customerName + ", datetimePacked=" + datetimePacked + ", pickingOrder=" + pickingOrder + ", itemCode=" + itemCode + ", quantity=" + quantity + ", binCode=" + binCode + ", binAbs=" + binAbs + ", boxNumber=" + boxNumber + ", employee=" + employee + ", status=" + status + '}';
     }
 
 }

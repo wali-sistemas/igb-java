@@ -63,6 +63,12 @@ public class PackingListRecord implements Serializable {
     @Column(name = "box_number")
     private Integer boxNumber;
     @Basic(optional = false)
+    @Column(name = "employee")
+    private String employee;
+    @Basic(optional = false)
+    @Column(name = "company_name")
+    private String companyName;
+    @Basic(optional = false)
     @Column(name = "status")
     private String status;
 
@@ -162,6 +168,22 @@ public class PackingListRecord implements Serializable {
         this.boxNumber = boxNumber;
     }
 
+    public String getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(String employee) {
+        this.employee = employee;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -197,7 +219,7 @@ public class PackingListRecord implements Serializable {
 
     @Override
     public String toString() {
-        return "PackingListRecord{" + "id=" + id + ", idPackingList=" + idPackingList + ", orderNumber=" + orderNumber + ", customerId=" + customerId + ", customerName=" + customerName + ", datetimePacked=" + datetimePacked + ", pickingOrder=" + pickingOrder + ", itemCode=" + itemCode + ", quantity=" + quantity + ", binCode=" + binCode + ", binAbs=" + binAbs + ", boxNumber=" + boxNumber + ", status=" + status + '}';
+        return "PackingListRecord{" + "id=" + id + ", idPackingList=" + idPackingList + ", orderNumber=" + orderNumber + ", customerId=" + customerId + ", customerName=" + customerName + ", datetimePacked=" + datetimePacked + ", pickingOrder=" + pickingOrder + ", itemCode=" + itemCode + ", quantity=" + quantity + ", binCode=" + binCode + ", binAbs=" + binAbs + ", boxNumber=" + boxNumber + ", employee=" + employee + ", companyName=" + companyName + ", status=" + status + '}';
     }
 
 }
