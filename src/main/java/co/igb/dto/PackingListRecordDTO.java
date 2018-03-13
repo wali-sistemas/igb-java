@@ -13,7 +13,7 @@ public class PackingListRecordDTO {
     private String customerId;
     private String customerName;
     private Date datetimePacked;
-    private Integer pickingOrder;
+    private Integer idPackingOrder;
     private String itemCode;
     private Integer quantity;
     private String binCode;
@@ -62,12 +62,12 @@ public class PackingListRecordDTO {
         this.datetimePacked = datetimePacked;
     }
 
-    public Integer getPickingOrder() {
-        return pickingOrder;
+    public Integer getIdPackingOrder() {
+        return idPackingOrder;
     }
 
-    public void setPickingOrder(Integer pickingOrder) {
-        this.pickingOrder = pickingOrder;
+    public void setIdPackingOrder(Integer idPackingOrder) {
+        this.idPackingOrder = idPackingOrder;
     }
 
     public String getItemCode() {
@@ -128,7 +128,7 @@ public class PackingListRecordDTO {
 
     @Override
     public String toString() {
-        return "PackingListRecordDTO{" + "idPackingList=" + idPackingList + ", orderNumber=" + orderNumber + ", customerId=" + customerId + ", customerName=" + customerName + ", datetimePacked=" + datetimePacked + ", pickingOrder=" + pickingOrder + ", itemCode=" + itemCode + ", quantity=" + quantity + ", binCode=" + binCode + ", binAbs=" + binAbs + ", boxNumber=" + boxNumber + ", employee=" + employee + ", status=" + status + '}';
+        return "PackingListRecordDTO{" + "idPackingList=" + idPackingList + ", orderNumber=" + orderNumber + ", customerId=" + customerId + ", customerName=" + customerName + ", datetimePacked=" + datetimePacked + ", idPackingOrder=" + idPackingOrder + ", itemCode=" + itemCode + ", quantity=" + quantity + ", binCode=" + binCode + ", binAbs=" + binAbs + ", boxNumber=" + boxNumber + ", employee=" + employee + ", status=" + status + '}';
     }
 
 }

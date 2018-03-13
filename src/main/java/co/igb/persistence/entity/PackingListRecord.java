@@ -45,8 +45,8 @@ public class PackingListRecord implements Serializable {
     @Column(name = "datetime_packed")
     private Date datetimePacked;
     @Basic(optional = false)
-    @Column(name = "picking_order")
-    private Integer pickingOrder;
+    @Column(name = "idpacking_order")
+    private Integer idPackingOrder;
     @Basic(optional = false)
     @Column(name = "item_code")
     private String itemCode;
@@ -120,12 +120,12 @@ public class PackingListRecord implements Serializable {
         this.datetimePacked = datetimePacked;
     }
 
-    public Integer getPickingOrder() {
-        return pickingOrder;
+    public Integer getIdPackingOrder() {
+        return idPackingOrder;
     }
 
-    public void setPickingOrder(Integer pickingOrder) {
-        this.pickingOrder = pickingOrder;
+    public void setIdPackingOrder(Integer idPackingOrder) {
+        this.idPackingOrder = idPackingOrder;
     }
 
     public String getItemCode() {
@@ -219,7 +219,7 @@ public class PackingListRecord implements Serializable {
 
     @Override
     public String toString() {
-        return "PackingListRecord{" + "id=" + id + ", idPackingList=" + idPackingList + ", orderNumber=" + orderNumber + ", customerId=" + customerId + ", customerName=" + customerName + ", datetimePacked=" + datetimePacked + ", pickingOrder=" + pickingOrder + ", itemCode=" + itemCode + ", quantity=" + quantity + ", binCode=" + binCode + ", binAbs=" + binAbs + ", boxNumber=" + boxNumber + ", employee=" + employee + ", companyName=" + companyName + ", status=" + status + '}';
+        return "PackingListRecord{" + "id=" + id + ", idPackingList=" + idPackingList + ", orderNumber=" + orderNumber + ", customerId=" + customerId + ", customerName=" + customerName + ", datetimePacked=" + datetimePacked + ", idPackingOrder=" + idPackingOrder + ", itemCode=" + itemCode + ", quantity=" + quantity + ", binCode=" + binCode + ", binAbs=" + binAbs + ", boxNumber=" + boxNumber + ", employee=" + employee + ", companyName=" + companyName + ", status=" + status + '}';
     }
 
 }

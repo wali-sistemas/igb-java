@@ -85,9 +85,9 @@ public class PackingOrderFacade extends AbstractFacade<PackingOrder> {
         }
     }
 
-    public List<Integer> listCustomerOrders(String customerId, String companyName) {
+    public List<Object[]> listCustomerOrders(String customerId, String companyName) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select order_number from packing_order where customer_id = '");
+        sb.append("select idpacking_order, order_number from packing_order where customer_id = '");
         sb.append(customerId);
         sb.append("'and status = 'open' and company_name = '");
         sb.append(companyName);
@@ -160,6 +160,23 @@ public class PackingOrderFacade extends AbstractFacade<PackingOrder> {
             CONSOLE.log(Level.INFO, "Se actualizaron {0} filas", result);
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar la cantidad de items empacados. ", e);
+        }
+    }
+
+    public List<Object[]> listOrderItems(Long idPackingOrder, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select bin.bin_code, bin.picked_qty - bin.packed_qty missing_quantity, itm.item_code ");
+        sb.append("from packing_order ord inner join packing_order_item itm on itm.idpacking_order = ord.idpacking_order ");
+        sb.append("inner join packing_order_item_bin bin on bin.idpacking_order_item = itm.idpacking_order_item where ord.company_name = '");
+        sb.append(companyName);
+        sb.append("' and ord.idpacking_order =");
+        sb.append(idPackingOrder);
+        sb.append(" and bin.picked_qty - bin.packed_qty > 0 order by bin_code, item_code");
+        try {
+            return em.createNativeQuery(sb.toString()).getResultList();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la orden de empaque. ", e);
+            return new ArrayList<>();
         }
     }
 }

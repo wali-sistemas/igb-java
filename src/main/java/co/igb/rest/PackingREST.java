@@ -120,7 +120,7 @@ public class PackingREST implements Serializable {
     public Response listCustomerOrders(@PathParam("customerId") String customerId, @HeaderParam("X-Company-Name") String companyName) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Listando ordenes de packing abiertas para el cliente {0}", customerId);
-        List<Integer> orders = poFacade.listCustomerOrders(customerId, companyName);
+        List<Object[]> orders = poFacade.listCustomerOrders(customerId, companyName);
         CONSOLE.log(Level.INFO, "Se obtuvieron {0} ordenes de empaque abiertas para el cliente {1}", new Object[]{orders.size(), customerId});
         return Response.ok(new ResponseDTO(0, orders)).build();
     }
@@ -188,7 +188,7 @@ public class PackingREST implements Serializable {
         record.setDatetimePacked(new Date());
         record.setItemCode(packingRecord.getItemCode());
         record.setOrderNumber(packingRecord.getOrderNumber());
-        record.setPickingOrder(packingRecord.getPickingOrder());
+        record.setIdPackingOrder(packingRecord.getIdPackingOrder());
         record.setQuantity(packingRecord.getQuantity());
         record.setStatus("open");
         record.setCompanyName(companyName);
@@ -214,5 +214,17 @@ public class PackingREST implements Serializable {
         List<Object[]> records = plFacade.listOpenPackingRecords(username, companyName);
         CONSOLE.log(Level.INFO, "Se encontraron {0} entradas de registro de packing abiertas para el empleado", records.size());
         return Response.ok(new ResponseDTO(0, records)).build();
+    }
+
+    @GET
+    @Path("{idPackingOrder}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response listPackingOrderItems(@PathParam("idPackingOrder") Long idPackingOrder, @HeaderParam("X-Company-Name") String companyName) {
+        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
+        CONSOLE.log(Level.INFO, "Retornando items para la packing order #{0}", idPackingOrder);
+        List<Object[]> items = poFacade.listOrderItems(idPackingOrder, companyName);
+        CONSOLE.log(Level.INFO, "Se encontraron {0} items para la packing list", items.size());
+        return Response.ok(new ResponseDTO(0, items)).build();
     }
 }
