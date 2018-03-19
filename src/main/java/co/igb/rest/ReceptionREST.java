@@ -203,6 +203,6 @@ public class ReceptionREST implements Serializable {
     }
 
     private String getPropertyValue(String propertyName, String companyName) {
-        return IGBUtils.getProperParameter(appBean.obtenerValorPropiedad("igb.purchase.delivery.note.line.account"), companyName);
+        return IGBUtils.getProperParameter(appBean.obtenerValorPropiedad(propertyName), companyName);
     }
 }
