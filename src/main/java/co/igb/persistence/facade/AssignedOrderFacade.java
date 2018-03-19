@@ -40,7 +40,9 @@ public class AssignedOrderFacade extends AbstractFacade<AssignedOrder> {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<AssignedOrder> cq = cb.createQuery(AssignedOrder.class);
         Root<AssignedOrder> root = cq.from(AssignedOrder.class);
-        cq.where(cb.equal(root.get(AssignedOrder_.status), "open"));
+        Predicate statusOpen = cb.equal(root.get(AssignedOrder_.status), "open");
+        Predicate statusWarning = cb.equal(root.get(AssignedOrder_.status), "warning");
+        cq.where(cb.or(statusOpen, statusWarning));
         try {
             return em.createQuery(cq).getResultList();
         } catch (Exception e) {
@@ -55,14 +57,16 @@ public class AssignedOrderFacade extends AbstractFacade<AssignedOrder> {
         Root<AssignedOrder> root = cq.from(AssignedOrder.class);
 
         Predicate statusOpen = cb.equal(root.get(AssignedOrder_.status), "open");
+        Predicate statusWarning = cb.equal(root.get(AssignedOrder_.status), "warning");
+        Predicate status = cb.or(statusOpen, statusWarning);
         Predicate userOwns = cb.equal(root.get(AssignedOrder_.empId), username);
         Predicate companyFilter = cb.equal(root.get(AssignedOrder_.company), company);
 
         if (orderNumber != null && orderNumber > 0) {
             Predicate orderFilter = cb.equal(root.get(AssignedOrder_.orderNumber), orderNumber);
-            cq.where(statusOpen, userOwns, companyFilter, orderFilter);
+            cq.where(status, userOwns, companyFilter, orderFilter);
         } else {
-            cq.where(statusOpen, userOwns, companyFilter);
+            cq.where(status, userOwns, companyFilter);
         }
 
         try {

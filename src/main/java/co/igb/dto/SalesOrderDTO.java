@@ -19,6 +19,7 @@ public class SalesOrderDTO {
     private Integer items;
     private String comments;
     private String assignedPickingEmployee;
+    private String status;
 
     public Long getDocEntry() {
         return docEntry;
@@ -106,6 +107,14 @@ public class SalesOrderDTO {
 
     public void setAssignedPickingEmployee(String assignedPickingEmployee) {
         this.assignedPickingEmployee = assignedPickingEmployee;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }

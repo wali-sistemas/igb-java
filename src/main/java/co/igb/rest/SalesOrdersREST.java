@@ -69,6 +69,7 @@ public class SalesOrdersREST implements Serializable {
                 for (SalesOrderDTO orderDto : orders) {
                     if (orderDto.getDocNum().equals(assignation.getOrderNumber().toString())) {
                         orderDto.setAssignedPickingEmployee(assignation.getEmpId());
+                        orderDto.setStatus(assignation.getStatus());
                         break;
                     }
                 }

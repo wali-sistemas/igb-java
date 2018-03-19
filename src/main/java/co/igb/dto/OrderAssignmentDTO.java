@@ -1,5 +1,6 @@
 package co.igb.dto;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -41,7 +42,13 @@ public class OrderAssignmentDTO {
 
     @Override
     public String toString() {
-        return "OrderAssignmentDTO{" + "assignedBy=" + assignedBy + ", employeeId=" + employeeId + ", orders=" + orders + '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("OrderAssignmentDTO{" + "assignedBy=").append(assignedBy).append(", employeeId=").append(employeeId).append(", orders=");
+        for (String[] str : orders) {
+            sb.append(Arrays.toString(str));
+        }
+        sb.append("}");
+        return sb.toString();
     }
 
 }
