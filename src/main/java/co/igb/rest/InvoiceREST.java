@@ -7,6 +7,8 @@ import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.facade.DeliveryNoteFacade;
 import co.igb.util.IGBUtils;
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,13 +24,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  *
  * @author dbotero
  */
 @Stateless
-@Path("packing")
+@Path("invoice")
 public class InvoiceREST implements Serializable {
 
     private static final Logger CONSOLE = Logger.getLogger(InvoiceREST.class.getSimpleName());
@@ -52,13 +56,31 @@ public class InvoiceREST implements Serializable {
         }
         //Crear factura a partir de la entrega
         Document invoice = new Document();
-        invoice.setSeries(Long.parseLong(getPropertyValue("igb.invoice.series", companyName)));
-        invoice.setCardCode(null);
-        invoice.setDocDueDate(null);
-        invoice.setDocDate(null);
-        invoice.setContactPersonCode(null);
-        invoice.setComments(null);
-        invoice.setSalesPersonCode(null);
+        for (Object[] row : deliveryData) {
+            if (invoice.getSeries() == null) {
+                invoice.setSeries(Long.parseLong(getPropertyValue("igb.invoice.series", companyName)));
+                invoice.setCardCode((String) row[3]);
+
+                try {
+                    GregorianCalendar date = new GregorianCalendar();
+                    XMLGregorianCalendar date2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(date);
+                    invoice.setDocDate(date2);
+                } catch (Exception e) {
+                }
+
+                try {
+                    GregorianCalendar date = new GregorianCalendar();
+                    date.add(Calendar.DATE, 0);
+                    invoice.setDocDueDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(date));
+                } catch (Exception e) {
+                }
+
+                invoice.setContactPersonCode(null);
+                invoice.setComments(null);
+                invoice.setSalesPersonCode(null);
+
+            }
+        }
 
         DocumentLines lines = new DocumentLines();
 
