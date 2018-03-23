@@ -122,7 +122,7 @@ public class SalesOrderFacade {
     }
 
     public List<Object[]> findOrdersById(List<Integer> orderIds, String schemaName) {
-        if(orderIds == null || orderIds.isEmpty()){
+        if (orderIds == null || orderIds.isEmpty()) {
             return new ArrayList();
         }
         StringBuilder sb = new StringBuilder();
@@ -178,6 +178,22 @@ public class SalesOrderFacade {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el cliente para la orden. ", e);
             return null;
+        }
+    }
+
+    public Long getLineNum(Integer orderNumber, String itemcode, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select top 1 det.linenum from ordr enc inner join rdr1 det on det.docentry = enc.docentry ");
+        sb.append("where enc.docnum = ");
+        sb.append(orderNumber);
+        sb.append(" and det.itemcode = '");
+        sb.append(itemcode);
+        sb.append("' and linestatus = 'O'");
+        try {
+            return ((Integer) chooseSchema(companyName).createNativeQuery(sb.toString()).getSingleResult()).longValue();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el numero de linea de una orden. ", e);
+            throw new RuntimeException("Ocurrio un error al consultar el numero de linea de una orden");
         }
     }
 }

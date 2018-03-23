@@ -57,16 +57,16 @@ public class AssignedOrderFacade extends AbstractFacade<AssignedOrder> {
         Root<AssignedOrder> root = cq.from(AssignedOrder.class);
 
         Predicate statusOpen = cb.equal(root.get(AssignedOrder_.status), "open");
-        Predicate statusWarning = cb.equal(root.get(AssignedOrder_.status), "warning");
-        Predicate status = cb.or(statusOpen, statusWarning);
+        //Predicate statusWarning = cb.equal(root.get(AssignedOrder_.status), "warning");
+        //Predicate status = cb.or(statusOpen, statusWarning);
         Predicate userOwns = cb.equal(root.get(AssignedOrder_.empId), username);
         Predicate companyFilter = cb.equal(root.get(AssignedOrder_.company), company);
 
         if (orderNumber != null && orderNumber > 0) {
             Predicate orderFilter = cb.equal(root.get(AssignedOrder_.orderNumber), orderNumber);
-            cq.where(status, userOwns, companyFilter, orderFilter);
+            cq.where(statusOpen, userOwns, companyFilter, orderFilter);
         } else {
-            cq.where(status, userOwns, companyFilter);
+            cq.where(statusOpen, userOwns, companyFilter);
         }
 
         try {

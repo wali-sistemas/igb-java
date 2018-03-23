@@ -46,4 +46,11 @@ public class GenericOperationsREST {
         CONSOLE.log(Level.INFO, "Se encontraron las siguientes empresas {0}", companies);
         return Response.ok(companies).build();
     }
+
+    @GET
+    @Path("status")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    public Response getStatus() {
+        return Response.ok(new ResponseDTO(0, null)).build();
+    }
 }

@@ -58,4 +58,48 @@ public class PackingListRecordFacade extends AbstractFacade<PackingListRecord> {
         }
         return new ArrayList<>();
     }
+
+    public List<Object[]> listRecords(Integer idPackingOrder, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select * from packing_list_record where idpacking_order = ");
+        sb.append(idPackingOrder);
+        sb.append(" and status = 'open' and company_name = '");
+        sb.append(companyName);
+        sb.append("' order by item_code, bin_abs");
+        try {
+            return em.createNativeQuery(sb.toString()).getResultList();
+        } catch (NoResultException e) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los registros de packing. ", e);
+        }
+        return new ArrayList<>();
+    }
+    
+    public void closePackingOrder(Integer idPackingOrder, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("update packing_list_record set status = 'closed' where idpacking_order = ");
+        sb.append(idPackingOrder);
+        sb.append(" and company_name = '");
+        sb.append(companyName);
+        sb.append("'");
+        try {
+            em.createNativeQuery(sb.toString()).executeUpdate();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la orden de packing. ", e);
+        }
+    }
+    
+    public void closePackingOrder(String username, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("update packing_list_record set status = 'closed' where employee = '");
+        sb.append(username);
+        sb.append("' and status = 'open' and company_name = '");
+        sb.append(companyName);
+        sb.append("' and idpacking_list_record <> 0");
+        try {
+            em.createNativeQuery(sb.toString()).executeUpdate();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la orden de packing. ", e);
+        }
+    }
 }

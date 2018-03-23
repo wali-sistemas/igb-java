@@ -2,6 +2,7 @@ package co.igb.persistence.facade;
 
 import co.igb.dto.PackingDTO;
 import co.igb.persistence.entity.PackingOrder;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -177,6 +178,35 @@ public class PackingOrderFacade extends AbstractFacade<PackingOrder> {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la orden de empaque. ", e);
             return new ArrayList<>();
+        }
+    }
+
+    public boolean isPackingOrderComplete(Integer idPackingOrder) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select sum(bin.picked_qty - bin.packed_qty) from packing_order ord ");
+        sb.append("inner join packing_order_item itm on itm.idpacking_order = ord.idpacking_order ");
+        sb.append("inner join packing_order_item_bin bin on bin.idpacking_order_item = itm.idpacking_order_item ");
+        sb.append("where ord.idpacking_order = ");
+        sb.append(idPackingOrder);
+        try {
+            return ((BigDecimal) em.createNativeQuery(sb.toString()).getSingleResult()).intValue() == 0;
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar si la orden de packing se encuentra completa. ", e);
+            return false;
+        }
+    }
+
+    public void closePackingOrder(Integer idPackingOrder, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("update packing_order set status = 'closed' where idpacking_order = ");
+        sb.append(idPackingOrder);
+        sb.append(" and company_name = '");
+        sb.append(companyName);
+        sb.append("'");
+        try {
+            em.createNativeQuery(sb.toString()).executeUpdate();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la orden de packing. ", e);
         }
     }
 }

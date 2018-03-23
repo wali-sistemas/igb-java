@@ -37,4 +37,8 @@ public class CustomerFacade {
         sb.append("'");
         return (String) chooseSchema(schema).createNativeQuery(sb.toString()).getSingleResult();
     }
+
+    public int getCustomerCreditDays(String cardCode) {
+        return 0;
+    }
 }

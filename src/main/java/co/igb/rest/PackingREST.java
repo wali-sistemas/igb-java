@@ -1,7 +1,16 @@
 package co.igb.rest;
 
+import static co.igb.b1ws.client.deliverynote.Document.DocumentLines.DocumentLine;
+import static co.igb.b1ws.client.deliverynote.Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations;
+import static co.igb.b1ws.client.deliverynote.Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation;
+import co.igb.b1ws.client.deliverynote.Add;
+import co.igb.b1ws.client.deliverynote.AddResponse;
+import co.igb.b1ws.client.deliverynote.DeliveryNotesService;
+import co.igb.b1ws.client.deliverynote.Document;
+import co.igb.b1ws.client.deliverynote.MsgHeader;
 import co.igb.dto.PackingDTO;
 import co.igb.dto.PackingListRecordDTO;
+import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.entity.PackingListRecord;
 import co.igb.persistence.entity.PackingOrder;
 import co.igb.persistence.entity.PackingOrderItem;
@@ -10,10 +19,17 @@ import co.igb.persistence.facade.BinLocationFacade;
 import co.igb.persistence.facade.CustomerFacade;
 import co.igb.persistence.facade.PackingListRecordFacade;
 import co.igb.persistence.facade.PackingOrderFacade;
+import co.igb.persistence.facade.SalesOrderFacade;
+import co.igb.util.IGBUtils;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,10 +37,12 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -49,6 +67,12 @@ public class PackingREST implements Serializable {
     private CustomerFacade cFacade;
     @EJB
     private BinLocationFacade blFacade;
+    @EJB
+    private SalesOrderFacade salesOrderFacade;
+    @EJB
+    private BasicSAPFunctions sapFunctions;
+    @Inject
+    private IGBApplicationBean appBean;
 
     @POST
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
@@ -56,7 +80,7 @@ public class PackingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response createPackingRecord(Long pickingId, @HeaderParam("X-Company-Name") String companyName) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
-        CONSOLE.log(Level.INFO, "Probando creacion de nuevo registro de packing");
+        CONSOLE.log(Level.INFO, "Creando registro de packing para pickingId={0}", pickingId);
         //Creates packing record
         PackingOrder packing = new PackingOrder();
         packing.setCustomerId("1234");
@@ -144,10 +168,15 @@ public class PackingREST implements Serializable {
     public Response validateItemCode(@PathParam("orderNumber") Integer orderNumber, @PathParam("itemCode") String itemCode,
             @PathParam("binCode") String binCode, @HeaderParam("X-Company-Name") String companyName) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
-        CONSOLE.log(Level.INFO, "Listando items por ubicacion y orden ");
+        CONSOLE.log(Level.INFO, "Validando item {0} en orden {1} y ubicacion {2} ", new Object[]{itemCode, orderNumber, binCode});
         Integer items = poFacade.validateItemOnBin(itemCode, binCode, orderNumber, companyName);
-        CONSOLE.log(Level.INFO, "El item existe en la orden {0} y ubicacion {1}", new Object[]{orderNumber, binCode});
-        return Response.ok(new ResponseDTO(0, items)).build();
+        if (items > 0) {
+            CONSOLE.log(Level.INFO, "El item existe en la orden {0} y ubicacion {1}", new Object[]{orderNumber, binCode});
+            return Response.ok(new ResponseDTO(0, items)).build();
+        } else {
+            CONSOLE.log(Level.SEVERE, "El item {0} no se encuentra pendiente por packing para la orden {1} y ubicacion {2}", new Object[]{itemCode, orderNumber, binCode});
+            return Response.ok(new ResponseDTO(-1, null)).build();
+        }
     }
 
     @POST
@@ -157,7 +186,7 @@ public class PackingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response addToPackingList(PackingListRecordDTO packingRecord, @HeaderParam("X-Company-Name") String companyName) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
-        CONSOLE.log(Level.INFO, "Agregando item a packing list");
+        CONSOLE.log(Level.INFO, "Agregando item a packing list {0}", packingRecord);
         PackingListRecord record = new PackingListRecord();
         if (packingRecord.getIdPackingList() == null || packingRecord.getIdPackingList() == 0) {
             record.setIdPackingList(plFacade.getNextPackingListId());
@@ -226,5 +255,215 @@ public class PackingREST implements Serializable {
         List<Object[]> items = poFacade.listOrderItems(idPackingOrder, companyName);
         CONSOLE.log(Level.INFO, "Se encontraron {0} items para la packing list", items.size());
         return Response.ok(new ResponseDTO(0, items)).build();
+    }
+
+    @POST
+    @Path("delivery")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    @SuppressWarnings("null")
+    public Response createDeliveryNote(Integer idPackingOrder, @HeaderParam("X-Company-Name") String companyName) {
+        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
+        CONSOLE.log(Level.INFO, "Creando documento de entrega para packing orden {0}", idPackingOrder);
+
+        List<Object[]> packingRecords = plFacade.listRecords(idPackingOrder, companyName);
+        if (packingRecords.isEmpty()) {
+            return Response.ok(new ResponseDTO(-1, "No se encontraron registros de packing pendientes por entregar")).build();
+        }
+
+        HashMap<String, DocumentLine> items = new HashMap<>();
+        Document document = new Document();
+        Integer orderDocEntry = null;
+        for (Object[] row : packingRecords) {
+            Integer idPackingListRecord = (Integer) row[0];
+            Integer idPackingList = (Integer) row[1];
+            Integer orderNumber = (Integer) row[2];
+            String customerId = (String) row[3];
+            String customerName = (String) row[4];
+            Date packingDate = (Date) row[5];
+            //Integer idPackingOrder = (Integer)row[6];
+            String itemCode = (String) row[7];
+            Integer quantity = (Integer) row[8];
+            Integer binAbs = (Integer) row[9];
+            String binCode = (String) row[10];
+            Integer boxNumber = (Integer) row[11];
+            String status = (String) row[12];
+            String employee = (String) row[13];
+            //String companyName = (String)row[14];
+
+            if (document.getSeries() == null) {
+                document.setSeries(Long.parseLong(getPropertyValue("igb.delivery.note.series", companyName)));
+                document.setCardCode(customerId);
+                document.setComments("Proceso de packing para orden " + orderNumber + " realizado por " + employee);
+                orderDocEntry = salesOrderFacade.getOrderDocEntry(orderNumber, companyName);
+                if (orderDocEntry == null || orderDocEntry <= 0) {
+                    return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "Ocurrió un error al consultar los datos de la orden. ")).build();
+                }
+            }
+
+            DocumentLine line = null;
+            if (!items.containsKey(itemCode)) {
+                //Si el item no se ha agregado a la orden
+                line = new DocumentLine();
+                line.setLineNum((long) items.size());
+                line.setItemCode(itemCode);
+                line.setQuantity(quantity.doubleValue());
+                line.setWarehouseCode(binCode.substring(0, 2));
+                line.setBaseLine(salesOrderFacade.getLineNum(orderNumber, itemCode, companyName));
+                line.setBaseEntry(orderDocEntry.longValue());
+                line.setBaseType(Long.parseLong(getPropertyValue("igb.sales.order.series", companyName)));
+                line.setDocumentLinesBinAllocations(new DocumentLinesBinAllocations());
+
+                items.put(itemCode, line);
+            } else {
+                //Si el item ya se agrego a la orden
+                line = items.get(itemCode);
+                line.setQuantity(line.getQuantity() + quantity.doubleValue());
+            }
+
+            boolean quantityAdded = false;
+            for (DocumentLinesBinAllocation binAllocation : line.getDocumentLinesBinAllocations().getDocumentLinesBinAllocation()) {
+                if (binAllocation.getBinAbsEntry().equals(binAbs.longValue())) {
+                    binAllocation.setQuantity(binAllocation.getQuantity() + quantity.doubleValue());
+                    quantityAdded = true;
+                    break;
+                }
+            }
+
+            if (!quantityAdded) {
+                DocumentLinesBinAllocation binAllocation = new DocumentLinesBinAllocation();
+                binAllocation.setAllowNegativeQuantity("tNO");
+                binAllocation.setBaseLineNumber(line.getLineNum());
+                binAllocation.setBinAbsEntry(binAbs.longValue());
+                binAllocation.setQuantity(quantity.doubleValue());
+                line.getDocumentLinesBinAllocations().getDocumentLinesBinAllocation().add(binAllocation);
+            }
+        }
+
+        Document.DocumentLines documentLines = new Document.DocumentLines();
+        List<DocumentLine> itemsList = new ArrayList<>(items.values());
+        Collections.sort(itemsList, new Comparator<DocumentLine>() {
+            @Override
+            public int compare(DocumentLine o1, DocumentLine o2) {
+                return o1.getLineNum().compareTo(o2.getLineNum());
+            }
+        });
+
+        documentLines.getDocumentLine().addAll(itemsList);
+
+//        for (DocumentLine line : itemsList) {
+//            documentLines.getDocumentLine().add(line);
+//            CONSOLE.log(Level.INFO, "Agrego la fila #{0} con {1} ubicaciones", new Object[]{line.getLineNum(),
+//                line.getDocumentLinesBinAllocations().getDocumentLinesBinAllocation().size()});
+//        }
+        document.setDocumentLines(documentLines);
+
+        logDocument(document);
+        //CONSOLE.log(Level.INFO, "Termino de crear el documento de entrega con {0} items (filas)", document.getDocumentLines().getDocumentLine().size());
+
+        //1. Login
+        String sessionId = null;
+        try {
+            sessionId = sapFunctions.login(companyName);
+            CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+        } catch (Exception e) {
+        }
+        //2. Registrar documento
+        Long docEntry = -1L;
+        String errorMessage = null;
+        if (sessionId != null) {
+            try {
+                docEntry = createDeliveryNote(document, sessionId);
+                CONSOLE.log(Level.INFO, "Se creo la entrega con docEntry={0}", docEntry);
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
+                errorMessage = e.getMessage();
+            }
+        }
+        //3. Logout
+        if (sessionId != null) {
+            sapFunctions.logout(sessionId);
+        }
+        //4. Validar y retornar
+        if (docEntry > 0) {
+            return Response.ok(new ResponseDTO(0, docEntry)).build();
+        } else {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ResponseDTO(-1, "Ocurrio un error al crear la entrega. " + errorMessage)).build();
+        }
+    }
+
+    private void logDocument(Document document) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("series=");
+        sb.append(document.getSeries());
+        sb.append(", cardCode=");
+        sb.append(document.getCardCode());
+        sb.append(", comments=");
+        sb.append(document.getComments());
+        sb.append(", lines[");
+        for (DocumentLine line : document.getDocumentLines().getDocumentLine()) {
+            sb.append("line{");
+            sb.append("lineNum=");
+            sb.append(line.getLineNum());
+            sb.append(", itemCode=");
+            sb.append(line.getItemCode());
+            sb.append(", quantity=");
+            sb.append(line.getQuantity());
+            sb.append(", whsCode=");
+            sb.append(line.getWarehouseCode());
+            sb.append(", baseEntry=");
+            sb.append(line.getBaseEntry());
+            sb.append(", baseType=");
+            sb.append(line.getBaseType());
+            sb.append(", bins[");
+            for (DocumentLinesBinAllocation binAllocation : line.getDocumentLinesBinAllocations().getDocumentLinesBinAllocation()) {
+                sb.append("bin{");
+                sb.append("allowNegative=");
+                sb.append(binAllocation.getAllowNegativeQuantity());
+                sb.append(", baseLineNum=");
+                sb.append(binAllocation.getBaseLineNumber());
+                sb.append(", binAbs=");
+                sb.append(binAllocation.getBinAbsEntry());
+                sb.append(", quantity=");
+                sb.append(binAllocation.getQuantity());
+                sb.append("}, ");
+            }
+            sb.delete(sb.length() - 2, sb.length());
+            sb.append("]}, ");
+        }
+        sb.delete(sb.length() - 2, sb.length());
+        sb.append("]");
+        CONSOLE.log(Level.INFO, "Enviando el documento a SAP {0}", sb.toString());
+    }
+
+    private Long createDeliveryNote(Document document, String sessionId) throws MalformedURLException {
+        DeliveryNotesService service = new DeliveryNotesService(new URL(String.format(appBean.obtenerValorPropiedad("igb.b1ws.wsdlUrl"), "DeliveryNotesService")));
+        Add add = new Add();
+        add.setDocument(document);
+
+        MsgHeader header = new MsgHeader();
+        header.setServiceName("DeliveryNotesService");
+        header.setSessionID(sessionId);
+        AddResponse response = service.getDeliveryNotesServiceSoap12().add(add, header);
+        return response.getDocumentParams().getDocEntry();
+    }
+
+    private String getPropertyValue(String propertyName, String companyName) {
+        return IGBUtils.getProperParameter(appBean.obtenerValorPropiedad(propertyName), companyName);
+    }
+
+    @PUT
+    @Path("close/{username}/{idPackingOrder}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    public Response closePackingOrder(@PathParam("username") String username, @PathParam("idPackingOrder") Integer idPackingOrder,
+            @HeaderParam("X-Company-Name") String companyName) {
+        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
+        CONSOLE.log(Level.INFO, "Cerrando packing orden {0}", username);
+        //Cierra los registros abiertos
+        plFacade.closePackingOrder(username, companyName);
+        if (poFacade.isPackingOrderComplete(idPackingOrder)) {
+            poFacade.closePackingOrder(idPackingOrder, companyName);
+        }
+        return Response.ok(new ResponseDTO(0, null)).build();
     }
 }
