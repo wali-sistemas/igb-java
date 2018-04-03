@@ -11,7 +11,6 @@ import co.igb.persistence.facade.PackingOrderFacade;
 import co.igb.persistence.facade.PickingRecordFacade;
 import co.igb.persistence.facade.SalesOrderFacade;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -65,7 +64,7 @@ public class PickingREST implements Serializable {
             @HeaderParam("X-Company-Name") String companyName) {
         StopWatch watch = new StopWatch();
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
-        CONSOLE.log(Level.INFO, "Listando ordenes de venta asignadas ");
+        CONSOLE.log(Level.INFO, "Buscando siguiente item para packing para el usuario {0} ", username);
 
         watch.start();
         //TODO: buscar ordenes asignadas en estado warning y cambiar estado a las que tengan disponibilidad de inventario
@@ -80,6 +79,7 @@ public class PickingREST implements Serializable {
             return Response.ok(new ResponseDTO(-2, "El usuario no tiene órdenes de venta asignadas pendientes por picking")).build();
         }
 
+        boolean warning = false;
         TreeSet<SortedStockDTO> sortedStock = new TreeSet<>();
         for (AssignedOrder order : orders) {
             //consultar los items a los que ya se les hizo picking para cada orden
@@ -88,41 +88,52 @@ public class PickingREST implements Serializable {
             //consultar los items pendientes por entregar de cada orden
             Map<String, Integer> pendingItems = soFacade.listPendingItems(order.getOrderNumber(), companyName);
             if (pendingItems == null || pendingItems.isEmpty()) {
-                order.setStatus("warning");
-                CONSOLE.log(Level.WARNING, "La orden {0} no tiene items pendientes por despachar. ", order.getOrderNumber());
-                aoFacade.edit(order);
+                CONSOLE.log(Level.WARNING, "La orden {0} no tiene items pendientes por despachar y se marca como cerrada. ", order.getOrderNumber());
+                closeAndPack(order, pickedItems, companyName);
                 continue;
             }
 
             //a los items pendientes por entregar descontarle los que ya tuvieron picking. 
             //si un item existe en la lista de picking pero no en la de pendientes, no se tiene en cuenta
-            for (int i = 0; i < pendingItems.keySet().size(); i++) {
+            for (int i = 0; i < pendingItems.keySet().toArray().length; i++) {
                 //for (String itemCode : pendingItems.keySet()) {
-                String itemCode = (String) (pendingItems.keySet().toArray())[i];
+                String itemCode = (String) pendingItems.keySet().toArray()[i];
                 if (pickedItems.containsKey(itemCode)) {
                     int totalPicked = 0;
                     for (Long binAbs : pickedItems.get(itemCode).keySet()) {
                         totalPicked += pickedItems.get(itemCode).get(binAbs);
                     }
-                    if (totalPicked >= pendingItems.get(itemCode)) {
+                    Integer pending = pendingItems.get(itemCode);
+                    if (pending != null && totalPicked >= pending) {
                         //pendingItems.put(itemCode, 0);
                         pendingItems.remove(itemCode);
                         i--;
-                    } else {
-                        pendingItems.put(itemCode, pendingItems.get(itemCode) - totalPicked);
+                    } else if (pending != null) {
+                        pendingItems.put(itemCode, pending - totalPicked);
                     }
                 }
             }
 
-            //validar disponibilidad de inventario por orden
-            List<Object[]> orderStock = soFacade.findOrdersStockAvailability(Arrays.asList(order.getOrderNumber()), companyName);
-
-            //si una orden no tiene inventario disponible, marcarla como warning
-            if (orderStock == null || orderStock.isEmpty() || pendingItems.size() > getItemsCount(orderStock)) {
-                order.setStatus("warning");
-                aoFacade.edit(order);
-                CONSOLE.log(Level.WARNING, "La orden {0} no tiene inventario suficiente en ubicaciones de picking y pasara a estado warning. ", order.getOrderNumber());
-            } else {
+            if (!pendingItems.isEmpty()) {
+                //validar disponibilidad de inventario por orden
+                List<Object[]> orderStock = soFacade.listRemainingStock(order.getOrderNumber(), companyName);
+                for (Object[] row : orderStock) {
+                    int pendingQ = (Integer) row[1];
+                    int availableQ = (Integer) row[6];
+                    int pickedQ = sumTotalPicked(pickedItems.get((String) row[0]));
+                    if (availableQ < pendingQ && pickedQ != pendingQ) {
+                        //Si no hay inventario disponible para un item, marca la orden como warning
+                        order.setStatus("warning");
+                        aoFacade.edit(order);
+                        CONSOLE.log(Level.WARNING, "La orden {0} no tiene inventario suficiente en ubicaciones de picking y pasara a estado warning. ", order.getOrderNumber());
+                        warning = true;
+                        break;
+                    }
+                }
+                if (warning) {
+                    continue;
+                }
+                orderStock = soFacade.findOrdersStockAvailability(order.getOrderNumber(), companyName);
                 //Agregar el inventario de la orden al set de stock
                 for (Object[] row : orderStock) {
                     SortedStockDTO sorted = new SortedStockDTO(row);
@@ -135,8 +146,10 @@ public class PickingREST implements Serializable {
         //seleccionar y retornar el siguiente item para picking
         watch.stop();
         CONSOLE.log(Level.INFO, "El proceso tomo {0}ms", watch.getTime());
-        if (sortedStock.isEmpty()) {
-            return Response.ok(new ResponseDTO(-1, "No hay mas items pendientes por picking")).build();
+        if (sortedStock.isEmpty() && !warning) {
+            return Response.ok(new ResponseDTO(-1, "No hay más items pendientes por picking")).build();
+        } else if (sortedStock.isEmpty() && warning) {
+            return Response.ok(new ResponseDTO(-3, "No hay saldo disponible para picking en la(s) orden(es) asignada(s)")).build();
         } else {
             return Response.ok(new ResponseDTO(0, sortedStock.first())).build();
         }
@@ -148,6 +161,17 @@ public class PickingREST implements Serializable {
             items.add((String) row[0]);
         }
         return items.size();
+    }
+
+    private int sumTotalPicked(Map<Long, Integer> data) {
+        if (data == null) {
+            return 0;
+        }
+        int totalQ = 0;
+        for (Long binAbs : data.keySet()) {
+            totalQ += data.get(binAbs);
+        }
+        return totalQ;
     }
 
     @GET

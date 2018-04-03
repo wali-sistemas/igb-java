@@ -27,6 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 public class HeaderDecorationFilter implements Filter {
 
     private static final Logger CONSOLE = Logger.getLogger(HeaderDecorationFilter.class.getSimpleName());
+    private static final String ALLOWED_HEADERS = "Origin, X-Requested-With, Content-Type, Accept, X-Company-Name, Authorization, X-Employee";
+    private static final String ALLOWED_METHODS = "GET, OPTIONS, POST, PUT, DELETE";
 
     @Inject
     private IGBApplicationBean appBean;
@@ -39,8 +41,8 @@ public class HeaderDecorationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         ((HttpServletResponse) response).addHeader("Access-Control-Allow-Origin", "*");
-        ((HttpServletResponse) response).addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-Company-Name, Authorization");
-        ((HttpServletResponse) response).addHeader("Access-Control-Allow-Methods", "GET, OPTIONS, POST, PUT, DELETE");
+        ((HttpServletResponse) response).addHeader("Access-Control-Allow-Headers", ALLOWED_HEADERS);
+        ((HttpServletResponse) response).addHeader("Access-Control-Allow-Methods", ALLOWED_METHODS);
         HttpServletRequest req = (HttpServletRequest) request;
         CONSOLE.log(Level.FINE, "Processing {0} method", req.getMethod());
         if (req.getMethod().equals("OPTIONS") || validateAuthorizationToken(req)) {

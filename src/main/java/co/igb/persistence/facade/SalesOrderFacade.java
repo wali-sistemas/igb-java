@@ -89,7 +89,7 @@ public class SalesOrderFacade {
         return orders;
     }
 
-    public List<Object[]> findOrdersStockAvailability(List<Integer> orderNumbers, String schemaName) {
+    public List<Object[]> findOrdersStockAvailability(Integer orderNumber, String schemaName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(detalle.itemCode as varchar(20)) itemCode, cast(detalle.openQty as int) openQuantity, cast(detalle.quantity as int) quantity, ");
         sb.append("cast(saldo.binabs as int) binAbs, cast(saldo.onhandqty as int) available, cast(ubicacion.bincode as varchar(50)) binCode, ");
@@ -97,11 +97,12 @@ public class SalesOrderFacade {
         sb.append("cast(ubicacion.attr2val as varchar(5)) velocidad, cast(ubicacion.attr3val as int) secuencia ");
         sb.append("from ordr orden inner join rdr1 detalle on detalle.docentry = orden.docentry and detalle.lineStatus = 'O' ");
         sb.append("inner join OIBQ saldo on saldo.ItemCode = detalle.ItemCode and saldo.WhsCode = '01' and saldo.OnHandQty > 0 ");
-        sb.append("inner join obin ubicacion on ubicacion.absentry = saldo.binabs and ubicacion.SysBin = 'N' and ubicacion.Attr1Val = 'STORAGE' ");
-        if (orderNumbers != null && orderNumbers.size() == 1) {
+        sb.append("inner join obin ubicacion on ubicacion.absentry = saldo.binabs and ubicacion.SysBin = 'N' and ubicacion.Attr1Val = 'PICKING' ");
+        //if (orderNumbers != null && orderNumbers.size() == 1) {
             sb.append("where orden.docnum = ");
-            sb.append(orderNumbers.get(0));
-        } else if (orderNumbers != null && !orderNumbers.isEmpty()) {
+            //sb.append(orderNumbers.get(0));
+            sb.append(orderNumber);
+        /*} else if (orderNumbers != null && !orderNumbers.isEmpty()) {
             sb.append("where orden.docnum in (");
             for (Integer orderNumber : orderNumbers) {
                 sb.append(orderNumber);
@@ -109,7 +110,7 @@ public class SalesOrderFacade {
             }
             sb.deleteCharAt(sb.length() - 1);
             sb.append(")");
-        }
+        }*/
         sb.append(" order by velocidad, secuencia ");
 
         CONSOLE.log(Level.FINE, sb.toString());
@@ -194,6 +195,27 @@ public class SalesOrderFacade {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el numero de linea de una orden. ", e);
             throw new RuntimeException("Ocurrio un error al consultar el numero de linea de una orden");
+        }
+    }
+
+    public List<Object[]> listRemainingStock(Integer orderNumber, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(detalle.itemCode as varchar(20)) itemCode, cast(detalle.openQty as int) openQuantity ");
+        sb.append(", cast(detalle.quantity as int) quantity, cast(detalle.Dscription as varchar(100)) itemName ");
+        sb.append(", cast(orden.docnum as int) orderNumber, cast(saldo.onhand as int) availableTotal, (");
+        sb.append("select cast(isnull(sum(onhandqty), 0) as int) availableBins from oibq saldoUbicacion ");
+        sb.append("inner join obin ubicacion on ubicacion.absentry = saldoUbicacion.binAbs ");
+        sb.append("where saldoUbicacion.itemcode = detalle.ItemCode and ubicacion.attr1val = 'PICKING' ");
+        sb.append(") availableBins from ordr orden ");
+        sb.append("inner join rdr1 detalle on detalle.docentry = orden.docentry and detalle.lineStatus = 'O' ");
+        sb.append("inner join oitw saldo on saldo.whscode = '01' and detalle.itemcode = saldo.itemcode ");
+        sb.append("where orden.docnum = ");
+        sb.append(orderNumber);
+        try {
+            return chooseSchema(companyName).createNativeQuery(sb.toString()).getResultList();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el saldo disponible para la orden. ", e);
+            return new ArrayList<>();
         }
     }
 }

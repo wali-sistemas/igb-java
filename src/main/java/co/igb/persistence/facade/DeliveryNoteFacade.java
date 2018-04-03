@@ -39,7 +39,7 @@ public class DeliveryNoteFacade {
     public List<Object[]> getDeliveryNoteData(Integer deliveryDocEntry, String companyName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select enc.docentry, enc.docnum, enc.objtype, enc.cardcode, enc.slpcode ");
-        sb.append(", det.linenum, det.itemcode, det.quantity from odln enc ");
+        sb.append(", enc.cntctcode, det.linenum, det.itemcode, det.quantity from odln enc ");
         sb.append("inner join dln1 det on det.docentry = enc.docentry where enc.docentry =");
         sb.append(deliveryDocEntry);
         try {

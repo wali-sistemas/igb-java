@@ -46,14 +46,15 @@ public class BinLocationFacade {
         CONSOLE.log(Level.INFO, "Listando carritos de picking para el almacen {0} y la empresa {1}", new Object[]{whsCode, schema});
 
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(ubic.absentry as int) binAbs, cast(ubic.bincode as varchar(20)) binCode, cast(ubic.descr as varchar(50)) binName, ");
-        sb.append("count(distinct(saldo.itemcode)) items, sum(cast(ISNULL(saldo.onhandqty, 0) as int)) saldo from obin ubic ");
-        sb.append("left join oibq saldo on saldo.binabs = ubic.absentry  ");
+        sb.append("select cast(ubic.absentry as int) binAbs, cast(ubic.bincode as varchar(20)) binCode ");
+        sb.append(", cast(ubic.descr as varchar(50)) binName, (");
+        sb.append("select cast(count(distinct ItemCode) as int)  from oibq where binabs = ubic.absentry and onhandqty > 0");
+        sb.append(") items, (");
+        sb.append("select cast(isnull(sum(onhandqty), 0) as int)  from oibq where binabs = ubic.absentry and onhandqty > 0");
+        sb.append(") saldo from obin ubic ");
         sb.append("where ubic.whscode = '");
         sb.append(whsCode);
-        sb.append("' and ubic.attr1val = 'PICKING' ");
-        sb.append("and ubic.disabled = 'N' ");
-        sb.append("group by ubic.absentry, ubic.bincode, ubic.descr ");
+        sb.append("' and ubic.attr1val = 'CART' and ubic.disabled = 'N' ");
 
         try {
             return chooseSchema(schema).createNativeQuery(sb.toString()).getResultList();
@@ -137,19 +138,17 @@ public class BinLocationFacade {
         }
     }
 
-    public List<String> findLocations(String schema, String whsCode) {
+    public List<String> listBinLocations(String schema, String whsCode) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("SELECT CONVERT(VARCHAR(100), BinCode) AS ubicacion ");
-        sb.append("FROM   (SELECT o.SL1Code + ISNULL(SL2Code, '') AS ubicacion, ");
-        sb.append("		  SUM(CAST(q.OnHandQty AS INT)) AS saldo, ");
-        sb.append("		  o.AbsEntry, BinCode ");
-        sb.append("        FROM   OBIN o ");
-        sb.append("        INNER  JOIN OIBQ q ON q.BinAbs = o.AbsEntry ");
-        sb.append("        WHERE  q.OnHandQty > 0 AND    o.Attr1Val = 'STORAGE' AND    o.WhsCode = '");
+        sb.append("FROM (SELECT o.SL1Code + ISNULL(SL2Code, '') AS ubicacion, ");
+        sb.append("SUM(CAST(q.OnHandQty AS INT)) AS saldo, o.AbsEntry, ");
+        sb.append("BinCode FROM OBIN o INNER  JOIN OIBQ q ON q.BinAbs = o.AbsEntry ");
+        sb.append("WHERE  q.OnHandQty > 0 AND o.Attr1Val NOT IN ('INVENTORY', 'CART') AND o.WhsCode = '");
         sb.append(whsCode);
-        sb.append("        ' GROUP  BY o.SL1Code, o.SL2Code, o.AbsEntry, o.BinCode) AS t ");
-        sb.append("ORDER  BY t.saldo DESC ");
+        sb.append("' GROUP  BY o.SL1Code, o.SL2Code, o.AbsEntry, o.BinCode) AS t ");
+        sb.append("ORDER BY t.saldo DESC ");
 
         try {
             return chooseSchema(schema).createNativeQuery(sb.toString()).getResultList();

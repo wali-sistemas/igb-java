@@ -459,11 +459,20 @@ public class PackingREST implements Serializable {
             @HeaderParam("X-Company-Name") String companyName) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Cerrando packing orden {0}", username);
-        //Cierra los registros abiertos
+        //Cierra los registros de packing abiertos
         plFacade.closePackingOrder(username, companyName);
-        if (poFacade.isPackingOrderComplete(idPackingOrder)) {
-            poFacade.closePackingOrder(idPackingOrder, companyName);
-        }
-        return Response.ok(new ResponseDTO(0, null)).build();
+        boolean orderComplete = poFacade.isPackingOrderComplete(idPackingOrder);
+        //Se cierra la orden de packing
+        poFacade.closePackingOrder(idPackingOrder, companyName);
+        return Response.ok(new ResponseDTO(0, orderComplete)).build();
+    }
+
+    @GET
+    @Path("status")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    public Response arePackingOrdersComplete(@HeaderParam("X-Employee") String username, @HeaderParam("X-Company-Name") String companyName) {
+        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
+        CONSOLE.log(Level.INFO, "Validando estado de packing para empleado {0}", username);
+        return Response.ok(new ResponseDTO(0, poFacade.arePackingOrdersComplete(username, companyName))).build();
     }
 }

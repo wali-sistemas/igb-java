@@ -34,7 +34,7 @@ public class PackingListRecordFacade extends AbstractFacade<PackingListRecord> {
 
     public Integer getNextPackingListId() {
         StringBuilder sb = new StringBuilder();
-        sb.append("select ifnull(max(idpacking_list_record),0)+1 as next from packing_list_record");
+        sb.append("select ifnull(max(idpacking_list),0)+1 as next from packing_list_record");
         try {
             return ((BigInteger) em.createNativeQuery(sb.toString()).getSingleResult()).intValue();
         } catch (Exception e) {
@@ -74,7 +74,22 @@ public class PackingListRecordFacade extends AbstractFacade<PackingListRecord> {
         }
         return new ArrayList<>();
     }
-    
+
+    public List<Object[]> listByPackingList(Integer idPackingList, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select * from packing_list_record where idpacking_list = ");
+        sb.append(idPackingList);
+        sb.append(" and company_name = '");
+        sb.append(companyName);
+        sb.append("' order by box_number");
+        try {
+            return em.createNativeQuery(sb.toString()).getResultList();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los items por packing list. ", e);
+            return new ArrayList<>();
+        }
+    }
+
     public void closePackingOrder(Integer idPackingOrder, String companyName) {
         StringBuilder sb = new StringBuilder();
         sb.append("update packing_list_record set status = 'closed' where idpacking_order = ");
@@ -88,7 +103,7 @@ public class PackingListRecordFacade extends AbstractFacade<PackingListRecord> {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la orden de packing. ", e);
         }
     }
-    
+
     public void closePackingOrder(String username, String companyName) {
         StringBuilder sb = new StringBuilder();
         sb.append("update packing_list_record set status = 'closed' where employee = '");

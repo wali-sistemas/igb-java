@@ -1,12 +1,19 @@
 package co.igb.rest;
 
+import co.igb.b1ws.client.invoice.Add;
+import co.igb.b1ws.client.invoice.AddResponse;
 import co.igb.b1ws.client.invoice.Document;
 import co.igb.b1ws.client.invoice.Document.DocumentLines;
 import co.igb.b1ws.client.invoice.Document.DocumentLines.DocumentLine;
+import co.igb.b1ws.client.invoice.InvoicesService;
+import co.igb.b1ws.client.invoice.MsgHeader;
 import co.igb.ejb.IGBApplicationBean;
+import co.igb.persistence.facade.CustomerFacade;
 import co.igb.persistence.facade.DeliveryNoteFacade;
 import co.igb.util.IGBUtils;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -39,6 +46,10 @@ public class InvoiceREST implements Serializable {
 
     @EJB
     private DeliveryNoteFacade dnFacade;
+    @EJB
+    private CustomerFacade customerFacade;
+    @EJB
+    private BasicSAPFunctions sapFunctions;
     @Inject
     private IGBApplicationBean appBean;
 
@@ -46,7 +57,7 @@ public class InvoiceREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response createInvoice(Integer deliveryDocEntry, @HeaderParam("X-Company-Name") String companyName) {
+    public Response createInvoice(Integer deliveryDocEntry, @HeaderParam("X-Company-Name") String companyName, @HeaderParam("X-Employee") String userName) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Creando factura para deliveryNoteDocEntry={0}", deliveryDocEntry);
         //Consultar entrega
@@ -55,11 +66,23 @@ public class InvoiceREST implements Serializable {
             return Response.ok(new ResponseDTO(-1, "No se encontraron datos de entrega para facturar")).build();
         }
         //Crear factura a partir de la entrega
+        DocumentLines lines = new DocumentLines();
         Document invoice = new Document();
+        long lineNum = 0;
         for (Object[] row : deliveryData) {
+            Long delDocEntry = (Long) row[0];
+            Long deliveryDocNum = (Long) row[1];
+            Long deliveryObjectType = (Long) row[2];
+            String cardCode = (String) row[3];
+            Long deliverySalesPersonCode = (Long) row[4];
+            Long deliveryContactCode = (Long) row[5];
+            Long deliveryLineNum = (Long) row[6];
+            String deliveryItemCode = (String) row[7];
+            Integer deliveryQuantity = (Integer) row[8];
+
             if (invoice.getSeries() == null) {
                 invoice.setSeries(Long.parseLong(getPropertyValue("igb.invoice.series", companyName)));
-                invoice.setCardCode((String) row[3]);
+                invoice.setCardCode(cardCode);
 
                 try {
                     GregorianCalendar date = new GregorianCalendar();
@@ -70,35 +93,72 @@ public class InvoiceREST implements Serializable {
 
                 try {
                     GregorianCalendar date = new GregorianCalendar();
-                    date.add(Calendar.DATE, 0);
+                    date.add(Calendar.DATE, customerFacade.getCustomerCreditDays(cardCode, companyName));
                     invoice.setDocDueDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(date));
                 } catch (Exception e) {
                 }
 
-                invoice.setContactPersonCode(null);
-                invoice.setComments(null);
-                invoice.setSalesPersonCode(null);
+                invoice.setContactPersonCode(deliveryContactCode);
+                invoice.setComments("Creado automaticamente desde WALI por " + userName);
+                invoice.setSalesPersonCode(deliverySalesPersonCode);
 
             }
+
+            DocumentLine line = new DocumentLine();
+            line.setBaseEntry(delDocEntry);
+            line.setBaseLine(deliveryLineNum);
+            line.setBaseType(deliveryObjectType);
+            line.setItemCode(deliveryItemCode);
+            line.setQuantity(deliveryQuantity.doubleValue());
+            line.setLineNum(lineNum++);
+
+            lines.getDocumentLine().add(line);
         }
 
-        DocumentLines lines = new DocumentLines();
-
-        DocumentLine line = new DocumentLine();
-        line.setBaseEntry(null);
-        line.setBaseLine(null);
-        line.setBaseType(null);
-        line.setItemCode(null);
-        line.setQuantity(null);
-        line.setLineNum(null);
-
-        lines.getDocumentLine().add(line);
-
         invoice.setDocumentLines(lines);
-        //login
-        //crear doc
-        //logout
-        return Response.ok(new ResponseDTO(0, null)).build();
+
+        //1. Login
+        String sessionId = null;
+        try {
+            sessionId = sapFunctions.login(companyName);
+            CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+        } catch (Exception e) {
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error al iniciar sesion en SAP. " + e.getMessage())).build();
+        }
+        //2. Registrar documento
+        Long docEntry = -1L;
+        String errorMessage = null;
+        if (sessionId != null) {
+            try {
+                docEntry = createInvoice(invoice, sessionId);
+                CONSOLE.log(Level.INFO, "Se creo la factura con docEntry={0}", docEntry);
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
+                errorMessage = e.getMessage();
+            }
+        }
+        //3. Logout
+        if (sessionId != null) {
+            sapFunctions.logout(sessionId);
+        }
+        //4. Validar y retornar
+        if (docEntry > 0) {
+            return Response.ok(new ResponseDTO(0, docEntry)).build();
+        } else {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ResponseDTO(-1, "Ocurrio un error al crear la factura. " + errorMessage)).build();
+        }
+    }
+
+    private Long createInvoice(Document document, String sessionId) throws MalformedURLException {
+        InvoicesService service = new InvoicesService(new URL(String.format(appBean.obtenerValorPropiedad("igb.b1ws.wsdlUrl"), "InvoicesService")));
+        Add add = new Add();
+        add.setDocument(document);
+
+        MsgHeader header = new MsgHeader();
+        header.setServiceName("InvoicesService");
+        header.setSessionID(sessionId);
+        AddResponse response = service.getInvoicesServiceSoap12().add(add, header);
+        return response.getDocumentParams().getDocEntry();
     }
 
     private String getPropertyValue(String propertyName, String companyName) {
