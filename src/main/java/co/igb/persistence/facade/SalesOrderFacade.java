@@ -97,7 +97,7 @@ public class SalesOrderFacade {
         sb.append("cast(ubicacion.attr2val as varchar(5)) velocidad, cast(ubicacion.attr3val as int) secuencia ");
         sb.append("from ordr orden inner join rdr1 detalle on detalle.docentry = orden.docentry and detalle.lineStatus = 'O' ");
         sb.append("inner join OIBQ saldo on saldo.ItemCode = detalle.ItemCode and saldo.WhsCode = '01' and saldo.OnHandQty > 0 ");
-        sb.append("inner join obin ubicacion on ubicacion.absentry = saldo.binabs and ubicacion.SysBin = 'N' and ubicacion.Attr1Val = 'PICKING' ");
+        sb.append("inner join obin ubicacion on ubicacion.absentry = saldo.binabs and ubicacion.SysBin = 'N' and ubicacion.Attr1Val IN ('PICKING','STORAGE') ");
         //if (orderNumbers != null && orderNumbers.size() == 1) {
         sb.append("where orden.docnum = ");
         //sb.append(orderNumbers.get(0));
@@ -205,7 +205,7 @@ public class SalesOrderFacade {
         sb.append(", cast(orden.docnum as int) orderNumber, cast(saldo.onhand as int) availableTotal, (");
         sb.append("select cast(isnull(sum(onhandqty), 0) as int) availableBins from oibq saldoUbicacion ");
         sb.append("inner join obin ubicacion on ubicacion.absentry = saldoUbicacion.binAbs ");
-        sb.append("where saldoUbicacion.itemcode = detalle.ItemCode and ubicacion.attr1val = 'PICKING' ");
+        sb.append("where saldoUbicacion.itemcode = detalle.ItemCode and ubicacion.attr1val IN ('PICKING','STORAGE') ");
         sb.append(") availableBins from ordr orden ");
         sb.append("inner join rdr1 detalle on detalle.docentry = orden.docentry and detalle.lineStatus = 'O' ");
         sb.append("inner join oitw saldo on saldo.whscode = '01' and detalle.itemcode = saldo.itemcode ");
