@@ -501,6 +501,103 @@ public class StockTransferREST implements Serializable {
         return Response.ok(-1).build();
     }
 
+    @POST
+    @Path("resupplylocation")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response resupplyLocation(SingleItemTransferDTO itemTransfer, @HeaderParam("X-Company-Name") String companyName) {
+        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
+        CONSOLE.log(Level.INFO, "Trasladando item {0} para re-abastecer", itemTransfer);
+
+        //Validates received data
+        if (itemTransfer == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "No se recibió información para la transferencia")).build();
+        } else if (itemTransfer.getBinCodeFrom() == null || itemTransfer.getBinCodeFrom().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "La ubicación de origen no es válida")).build();
+        } else if (itemTransfer.getBinCodeTo() == null || itemTransfer.getBinCodeTo().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "La ubicación de destino no es válida")).build();
+        } else if (itemTransfer.getItemCode() == null || itemTransfer.getItemCode().trim().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "La referencia no es válida")).build();
+        } else if (itemTransfer.getQuantity() == null || itemTransfer.getQuantity() < 0) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "La cantidad no es válida")).build();
+        } else if (itemTransfer.getWarehouseCode() == null || itemTransfer.getWarehouseCode().trim().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "No se recibió el código de la bodega")).build();
+        }
+
+        StockTransfer document = new StockTransfer();
+        document.setSeries(24L); //TODO: parametrizar
+        //document.setCardCode(itemTransfer.get);
+        document.setToWarehouse(itemTransfer.getWarehouseCode());
+        document.setFromWarehouse(itemTransfer.getWarehouseCode());
+        document.setComments("Re-abastecimiento de ubicación #" + itemTransfer.getOrderNumber());
+
+        StockTransfer.StockTransferLines.StockTransferLine line = new StockTransfer.StockTransferLines.StockTransferLine();
+        line.setLineNum(0L);
+        line.setItemCode(itemTransfer.getItemCode());
+        line.setQuantity(itemTransfer.getQuantity().doubleValue());
+        line.setWarehouseCode(itemTransfer.getWarehouseCode());
+        line.setFromWarehouseCode(itemTransfer.getWarehouseCode());
+
+        StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+        outOperation.setAllowNegativeQuantity("tNO");
+        outOperation.setBaseLineNumber(0L);
+        outOperation.setBinAbsEntry(binLocationFacade.getBinAbs(itemTransfer.getBinCodeFrom(), companyName).longValue());
+        outOperation.setBinActionType("batFromWarehouse");
+        outOperation.setQuantity(itemTransfer.getQuantity().doubleValue());
+
+        StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+        inOperation.setAllowNegativeQuantity("tNO");
+        inOperation.setBaseLineNumber(0L);
+        inOperation.setBinAbsEntry(binLocationFacade.getBinAbs(itemTransfer.getBinCodeTo(), companyName).longValue());
+        inOperation.setBinActionType("batToWarehouse");
+        inOperation.setQuantity(itemTransfer.getQuantity().doubleValue());
+
+        StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations binAllocations = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations();
+        binAllocations.getStockTransferLinesBinAllocation().add(inOperation);
+        binAllocations.getStockTransferLinesBinAllocation().add(outOperation);
+
+        line.setStockTransferLinesBinAllocations(binAllocations);
+        StockTransfer.StockTransferLines documentLines = new StockTransfer.StockTransferLines();
+        documentLines.getStockTransferLine().add(line);
+        document.setStockTransferLines(documentLines);
+
+        //1. Login
+        String sessionId = null;
+        try {
+            sessionId = sapFunctions.login(companyName);
+            CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+        } catch (Exception e) {
+        }
+        //2. Registrar documento
+        Long docEntry = -1L;
+        String errorMessage = null;
+        if (sessionId != null) {
+            try {
+                docEntry = createTransferDocument(document, sessionId);
+                CONSOLE.log(Level.INFO, "Se creo la transferencia docEntry={0}", docEntry);
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
+                errorMessage = e.getMessage();
+            }
+        }
+        //3. Logout
+        if (sessionId != null) {
+            sapFunctions.logout(sessionId);
+        }
+        //4. Validar y retornar
+        if (docEntry > 0) {
+            try {
+                return Response.ok(new ResponseDTO(0, docEntry)).build();
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "There was an error recording the operation to the MySQL database. ", e);
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ResponseDTO(-1, "Ocurrió un error al procesar la solicitud. Valida si el traslado se realizó correctamente en SAP y reinicia sesión en Wali")).build();
+            }
+        } else {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ResponseDTO(-1, "Ocurrio un error al crear la transferencia. " + errorMessage)).build();
+        }
+    }
+
     private Long createTransferDocument(StockTransfer document, String sessionId) throws MalformedURLException {
         StockTransferService service = new StockTransferService(new URL(String.format(appBean.obtenerValorPropiedad("igb.b1ws.wsdlUrl"), "StockTransferService")));
         Add add = new Add();

@@ -1,9 +1,12 @@
 package co.igb.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  *
  * @author dbotero
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SingleItemTransferDTO {
 
     private Long binAbsFrom;
@@ -14,6 +17,8 @@ public class SingleItemTransferDTO {
     private String username;
     private String itemCode;
     private String warehouseCode;
+    private String binCodeFrom;
+    private String binCodeTo;
 
     public SingleItemTransferDTO() {
     }
@@ -82,9 +87,24 @@ public class SingleItemTransferDTO {
         this.expectedQuantity = expectedQuantity;
     }
 
+    public String getBinCodeFrom() {
+        return binCodeFrom;
+    }
+
+    public void setBinCodeFrom(String binCodeFrom) {
+        this.binCodeFrom = binCodeFrom;
+    }
+
+    public String getBinCodeTo() {
+        return binCodeTo;
+    }
+
+    public void setBinCodeTo(String binCodeTo) {
+        this.binCodeTo = binCodeTo;
+    }
+
     @Override
     public String toString() {
         return "SingleItemTransferDTO{" + "binAbsFrom=" + binAbsFrom + ", binAbsTo=" + binAbsTo + ", quantity=" + quantity + ", expectedQuantity=" + expectedQuantity + ", orderNumber=" + orderNumber + ", username=" + username + ", itemCode=" + itemCode + ", warehouseCode=" + warehouseCode + '}';
     }
-
 }
