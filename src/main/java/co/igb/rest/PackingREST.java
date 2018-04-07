@@ -246,7 +246,7 @@ public class PackingREST implements Serializable {
     }
 
     @GET
-    @Path("{idPackingOrder}")
+    @Path("items/{idPackingOrder}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listPackingOrderItems(@PathParam("idPackingOrder") Long idPackingOrder, @HeaderParam("X-Company-Name") String companyName) {
