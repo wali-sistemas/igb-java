@@ -13,8 +13,8 @@ public class ZebraPrintDTO {
     private String packageTo;
     private String carrier;
     private String address;
-    private Integer salesOrderNumber;
-    private Integer orderNumber;
+    private String salesOrderNumbers;
+    private String numAtCards;
 
     public void setAddress(String address) {
         this.address = address;
@@ -52,12 +52,20 @@ public class ZebraPrintDTO {
         this.totalBoxes = totalBoxes;
     }
 
-    public Integer getOrderNumber() {
-        return orderNumber;
+    public String getNumAtCards() {
+        return numAtCards;
     }
 
-    public void setOrderNumber(Integer orderNumber) {
-        this.orderNumber = orderNumber;
+    public void setNumAtCards(String numAtCards) {
+        this.numAtCards = numAtCards;
+    }
+
+    public String getSalesOrderNumbers() {
+        return salesOrderNumbers;
+    }
+
+    public void setSalesOrderNumbers(String salesOrderNumbers) {
+        this.salesOrderNumbers = salesOrderNumbers;
     }
 
     public String getCarrier() {
@@ -66,14 +74,6 @@ public class ZebraPrintDTO {
 
     public void setCarrier(String carrier) {
         this.carrier = carrier;
-    }
-
-    public Integer getSalesOrderNumber() {
-        return salesOrderNumber;
-    }
-
-    public void setSalesOrderNumber(Integer salesOrderNumber) {
-        this.salesOrderNumber = salesOrderNumber;
     }
 
     public String getPrinterName() {
@@ -122,12 +122,12 @@ public class ZebraPrintDTO {
         sb.append(this.getCardName2());
         sb.append(", carrier: ");
         sb.append(this.getCarrier());
-        sb.append(", orderNumber: ");
-        sb.append(this.getOrderNumber());
+        sb.append(", numAtCards: ");
+        sb.append(this.getNumAtCards());
         sb.append(", printerName: ");
         sb.append(this.getPrinterName());
-        sb.append(", salesOrderNumber: ");
-        sb.append(this.getSalesOrderNumber());
+        sb.append(", salesOrderNumbers: ");
+        sb.append(this.getSalesOrderNumbers());
         sb.append(", totalBoxes: ");
         sb.append(this.getTotalBoxes());
         sb.append(", addressLine1: ");

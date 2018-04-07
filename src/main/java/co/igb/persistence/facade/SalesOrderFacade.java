@@ -99,9 +99,9 @@ public class SalesOrderFacade {
         sb.append("inner join OIBQ saldo on saldo.ItemCode = detalle.ItemCode and saldo.WhsCode = '01' and saldo.OnHandQty > 0 ");
         sb.append("inner join obin ubicacion on ubicacion.absentry = saldo.binabs and ubicacion.SysBin = 'N' and ubicacion.Attr1Val = 'PICKING' ");
         //if (orderNumbers != null && orderNumbers.size() == 1) {
-            sb.append("where orden.docnum = ");
-            //sb.append(orderNumbers.get(0));
-            sb.append(orderNumber);
+        sb.append("where orden.docnum = ");
+        //sb.append(orderNumbers.get(0));
+        sb.append(orderNumber);
         /*} else if (orderNumbers != null && !orderNumbers.isEmpty()) {
             sb.append("where orden.docnum in (");
             for (Integer orderNumber : orderNumbers) {
@@ -216,6 +216,41 @@ public class SalesOrderFacade {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el saldo disponible para la orden. ", e);
             return new ArrayList<>();
+        }
+    }
+
+    public Object[] retrieveStickerInfo(String orderNumbers, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select distinct cast(o.cardname as varchar(100)) cardname, cast(o.address2 as varchar(200)) address, ");
+        sb.append("cast(transp.name as varchar(50)) trans from ordr o inner join [@transp] transp on transp.code = o.u_transp ");
+        sb.append("where o.docnum in (");
+        sb.append(orderNumbers);
+        sb.append(")");
+        try {
+            return (Object[]) chooseSchema(companyName).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los datos para imprimir la etiqueta de packing. ", e);
+            return null;
+        }
+    }
+
+    public String listNumAtCards(String orderNumbers, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(numatcard as varchar(10)) from ordr where docnum in (");
+        sb.append(orderNumbers);
+        sb.append(") and numatcard is not null");
+        try {
+            List<String> numAtCardList = (List<String>) chooseSchema(companyName).createNativeQuery(sb.toString()).getResultList();
+            StringBuilder numAtCardText = new StringBuilder();
+            for (String numAtCard : numAtCardList) {
+                numAtCardText.append(numAtCard);
+                numAtCardText.append(",");
+            }
+            numAtCardText.delete(numAtCardText.length() - 1, numAtCardText.length());
+            return numAtCardText.toString();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los numAtCard del packingList. ", e);
+            return null;
         }
     }
 }

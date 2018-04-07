@@ -117,4 +117,44 @@ public class PackingListRecordFacade extends AbstractFacade<PackingListRecord> {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la orden de packing. ", e);
         }
     }
+
+    public Integer obtainNumberOfBoxes(Integer idPackingList, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select max(box_number) from packing_list_record where idpacking_list = ");
+        sb.append(idPackingList);
+        sb.append(" and company_name = '");
+        sb.append(companyName);
+        sb.append("'");
+        try {
+            return (Integer) em.createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el numero de cajas por packing list. ", e);
+            return 0;
+        }
+    }
+
+    public String listOrderNumbers(Integer idPackingList, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select distinct order_number from packing_list_record where idpacking_list = ");
+        sb.append(idPackingList);
+        sb.append(" and company_name = '");
+        sb.append(companyName);
+        sb.append("'");
+        try {
+            List<Integer> orderNumberList = (List<Integer>) em.createNativeQuery(sb.toString()).getResultList();
+            StringBuilder orderNumberText = new StringBuilder();
+            for (Integer orderNumber : orderNumberList) {
+                orderNumberText.append(orderNumber);
+                orderNumberText.append(",");
+            }
+            if(orderNumberText.length()==0){
+                return null;
+            }
+            orderNumberText.delete(orderNumberText.length() - 1, orderNumberText.length());
+            return orderNumberText.toString();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los numeros de orden de compra del packingList. ", e);
+            return null;
+        }
+    }
 }

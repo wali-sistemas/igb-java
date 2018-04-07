@@ -29,8 +29,8 @@ public class ZPLPrinter {
             context.put("cardname2", dto.getCardName2());
             context.put("boxNumber", dto.getBoxNumber());
             context.put("totalBoxes", dto.getTotalBoxes());
-            context.put("salesOrder", dto.getSalesOrderNumber());
-            context.put("order", dto.getOrderNumber());
+            context.put("salesOrders", dto.getSalesOrderNumbers());
+            context.put("numAtCards", dto.getNumAtCards());
             context.put("printDate", sdf.format(new Date()));
             context.put("carrier", dto.getCarrier());
             context.put("address1", dto.getAddressLine1());
