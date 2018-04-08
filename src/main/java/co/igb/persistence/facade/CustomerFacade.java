@@ -41,7 +41,7 @@ public class CustomerFacade {
 
     public int getCustomerCreditDays(String cardCode, String companyName) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select acst(pay.extradays as int) from ocrd cus ");
+        sb.append("select cast(pay.extradays as int) days from ocrd cus ");
         sb.append("inner join octg pay on pay.groupnum = cus.groupnum ");
         sb.append("where cus.cardcode = '");
         sb.append(cardCode);

@@ -198,7 +198,7 @@ public class PackingOrderFacade extends AbstractFacade<PackingOrder> {
 
     public boolean arePackingOrdersComplete(String username, String companyName) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select sum(bin.picked_qty - bin.packed_qty) from packing_order ord ");
+        sb.append("select ifnull(sum(bin.picked_qty - bin.packed_qty), 0) pendingItems from packing_order ord ");
         sb.append("inner join packing_order_item itm on itm.idpacking_order = ord.idpacking_order ");
         sb.append("inner join packing_order_item_bin bin on bin.idpacking_order_item = itm.idpacking_order_item ");
         sb.append("where ord.idpacking_order in (");

@@ -309,7 +309,17 @@ public class PackingREST implements Serializable {
                 line.setItemCode(itemCode);
                 line.setQuantity(quantity.doubleValue());
                 line.setWarehouseCode(binCode.substring(0, 2));
-                line.setBaseLine(salesOrderFacade.getLineNum(orderNumber, itemCode, companyName));
+
+                try {
+                    Long baseLineNum = salesOrderFacade.getLineNum(orderNumber, itemCode, companyName);
+                    if (baseLineNum < 0) {
+                        return Response.ok(new ResponseDTO(-1, "Ocurrio un error al consultar el numero de linea de la orden (baseLine). Es posible que la orden de compra ya se haya cerrado")).build();
+                    }
+                    line.setBaseLine(baseLineNum);
+                } catch (Exception e) {
+                    return Response.ok(new ResponseDTO(-1, e.getMessage())).build();
+                }
+
                 line.setBaseEntry(orderDocEntry.longValue());
                 line.setBaseType(Long.parseLong(getPropertyValue("igb.sales.order.series", companyName)));
                 line.setDocumentLinesBinAllocations(new DocumentLinesBinAllocations());

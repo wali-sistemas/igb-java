@@ -88,6 +88,6 @@ public class SortedStockDTO implements Comparable<SortedStockDTO> {
             return this.sequence.compareTo(o.getSequence());
         }
 
-        return this.velocity.compareTo(o.getVelocity());
+        return o.getVelocity().compareTo(this.velocity);
     }
 }

@@ -194,7 +194,7 @@ public class SalesOrderFacade {
             return ((Integer) chooseSchema(companyName).createNativeQuery(sb.toString()).getSingleResult()).longValue();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el numero de linea de una orden. ", e);
-            throw new RuntimeException("Ocurrio un error al consultar el numero de linea de una orden");
+            return -1L;
         }
     }
 
