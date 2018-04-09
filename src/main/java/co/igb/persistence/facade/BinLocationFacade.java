@@ -175,7 +175,7 @@ public class BinLocationFacade {
     public List<Object[]> findLocationsResupply(String whsCode, String companyName) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("SELECT DISTINCT CONVERT(VARCHAR(50), ubicacion.BinCode) AS binCode, CONVERT(INT, saldoAlmacen.MinStock - saldo.OnHandQty) AS quantity ");
+        sb.append("SELECT DISTINCT CONVERT(INT, ubicacion.AbsEntry) AS absEntry, CONVERT(VARCHAR(50), ubicacion.BinCode) AS binCode, CONVERT(INT, saldoAlmacen.MinStock - saldo.OnHandQty) AS quantity ");
         sb.append("FROM   OBIN ubicacion ");
         sb.append("INNER  JOIN OIBQ saldo ON saldo.BinAbs = ubicacion.AbsEntry ");
         sb.append("INNER  JOIN OITW saldoAlmacen ON saldoAlmacen.ItemCode = saldo.ItemCode AND saldoAlmacen.WhsCode = saldo.WhsCode ");
@@ -223,7 +223,7 @@ public class BinLocationFacade {
     public List<Object[]> listLocationsStorageResupply(String itemCode, String companyName) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("SELECT CONVERT(VARCHAR(50), ubicacion.BinCode) AS BinCode, CONVERT(INT, saldo.OnHandQty) AS OnHandQty ");
+        sb.append("SELECT CONVERT(INT, ubicacion.AbsEntry) AS absEntry, CONVERT(VARCHAR(50), ubicacion.BinCode) AS BinCode, CONVERT(INT, saldo.OnHandQty) AS OnHandQty ");
         sb.append("FROM   OBIN ubicacion ");
         sb.append("INNER  JOIN OIBQ saldo ON saldo.BinAbs = ubicacion.AbsEntry ");
         sb.append("WHERE  saldo.ItemCode = '");

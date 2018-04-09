@@ -365,7 +365,7 @@ public class StockTransferREST implements Serializable {
     }
 
     @GET
-    @Path("finishInventory/{idInventory}")
+    @Path("finish-inventory/{idInventory}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response finishInventory(@PathParam("idInventory") Integer idInventory, @HeaderParam("X-Company-Name") String companyName) {
@@ -502,7 +502,7 @@ public class StockTransferREST implements Serializable {
     }
 
     @POST
-    @Path("resupplylocation")
+    @Path("resupply-location")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
@@ -513,9 +513,9 @@ public class StockTransferREST implements Serializable {
         //Validates received data
         if (itemTransfer == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "No se recibió información para la transferencia")).build();
-        } else if (itemTransfer.getBinCodeFrom() == null || itemTransfer.getBinCodeFrom().isEmpty()) {
+        } else if (itemTransfer.getBinAbsFrom() == null || itemTransfer.getBinAbsFrom() < 0) {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "La ubicación de origen no es válida")).build();
-        } else if (itemTransfer.getBinCodeTo() == null || itemTransfer.getBinCodeTo().isEmpty()) {
+        } else if (itemTransfer.getBinAbsTo() == null || itemTransfer.getBinAbsTo() < 0) {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "La ubicación de destino no es válida")).build();
         } else if (itemTransfer.getItemCode() == null || itemTransfer.getItemCode().trim().isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "La referencia no es válida")).build();
@@ -542,14 +542,14 @@ public class StockTransferREST implements Serializable {
         StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
         outOperation.setAllowNegativeQuantity("tNO");
         outOperation.setBaseLineNumber(0L);
-        outOperation.setBinAbsEntry(binLocationFacade.getBinAbs(itemTransfer.getBinCodeFrom(), companyName).longValue());
+        outOperation.setBinAbsEntry(itemTransfer.getBinAbsFrom());
         outOperation.setBinActionType("batFromWarehouse");
         outOperation.setQuantity(itemTransfer.getQuantity().doubleValue());
 
         StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
         inOperation.setAllowNegativeQuantity("tNO");
         inOperation.setBaseLineNumber(0L);
-        inOperation.setBinAbsEntry(binLocationFacade.getBinAbs(itemTransfer.getBinCodeTo(), companyName).longValue());
+        inOperation.setBinAbsEntry(itemTransfer.getBinAbsTo());
         inOperation.setBinActionType("batToWarehouse");
         inOperation.setQuantity(itemTransfer.getQuantity().doubleValue());
 

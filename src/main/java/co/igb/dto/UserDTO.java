@@ -1,13 +1,16 @@
 package co.igb.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.Objects;
 
 /**
  *
  * @author dbotero
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDTO implements Comparable<UserDTO> {
 
+    private Integer ordenesAsignadas;
     private String username;
     private String password;
     private String name;
@@ -31,6 +34,14 @@ public class UserDTO implements Comparable<UserDTO> {
         this.surname = surname;
         this.email = email;
         this.completeName = completeName;
+    }
+
+    public Integer getOrdenesAsignadas() {
+        return ordenesAsignadas;
+    }
+
+    public void setOrdenesAsignadas(Integer ordenesAsignadas) {
+        this.ordenesAsignadas = ordenesAsignadas;
     }
 
     public String getSelectedCompany() {

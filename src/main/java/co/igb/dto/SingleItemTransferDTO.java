@@ -17,8 +17,6 @@ public class SingleItemTransferDTO {
     private String username;
     private String itemCode;
     private String warehouseCode;
-    private String binCodeFrom;
-    private String binCodeTo;
 
     public SingleItemTransferDTO() {
     }
@@ -85,22 +83,6 @@ public class SingleItemTransferDTO {
 
     public void setExpectedQuantity(Integer expectedQuantity) {
         this.expectedQuantity = expectedQuantity;
-    }
-
-    public String getBinCodeFrom() {
-        return binCodeFrom;
-    }
-
-    public void setBinCodeFrom(String binCodeFrom) {
-        this.binCodeFrom = binCodeFrom;
-    }
-
-    public String getBinCodeTo() {
-        return binCodeTo;
-    }
-
-    public void setBinCodeTo(String binCodeTo) {
-        this.binCodeTo = binCodeTo;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.PickingRecord;
+import co.igb.persistence.entity.PickingRecord_;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -105,5 +110,35 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
             CONSOLE.log(Level.SEVERE, "There was an error loading already picked items. ", e);
             return new HashMap<>();
         }
+    }
+
+    public List<Long> listPickingsRecords() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("SELECT DISTINCT CONVERT(NUMERIC(18, 0), order_number) AS order_number FROM igb.picking_record ");
+
+        try {
+            return em.createNativeQuery(sb.toString()).getResultList();
+        } catch (NoResultException e) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la lista de picking_record. ", e);
+        }
+        return null;
+    }
+
+    public List<PickingRecord> listPicking(Long orderNumber) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery(PickingRecord.class);
+        Root picking = cq.from(PickingRecord.class);
+
+        cq.where(cb.equal(picking.get(PickingRecord_.orderNumber), orderNumber));
+
+        try {
+            return em.createQuery(cq).getResultList();
+        } catch (NoResultException e) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los datos de la orden del picking_record. ", e);
+        }
+        return null;
     }
 }

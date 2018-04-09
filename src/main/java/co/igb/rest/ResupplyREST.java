@@ -46,7 +46,7 @@ public class ResupplyREST implements Serializable {
     }
 
     @GET
-    @Path("list-ubications-storage/{itemCode}")
+    @Path("list-location-storage/{itemCode}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listUbicationsStorage(@PathParam("itemCode") String itemCode, @HeaderParam("X-Company-Name") String companyName) {
