@@ -6,7 +6,6 @@ package co.igb.dto;
  */
 public class ZebraPrintDTO {
 
-    public static final String BOX_LABEL = "BOX_LABEL";
     private Integer boxNumber;
     private Integer totalBoxes;
     private String printerName;
@@ -18,21 +17,35 @@ public class ZebraPrintDTO {
 
     public void setAddress(String address) {
         this.address = address;
+        this.address = this.address.replace("\r", " ");
     }
 
     public String getAddressLine1() {
-        return "";
+        if (address.length() <= 55) {
+            return address;
+        } else {
+            return address.substring(0, 55);
+        }
     }
 
     public String getAddressLine2() {
+        if (address.length() > 55) {
+            return address.substring(55, address.length() > 110 ? 110 : address.length());
+        }
         return "";
     }
 
     public String getAddressLine3() {
+        if (address.length() > 110) {
+            return address.substring(110, address.length() > 165 ? 165 : address.length());
+        }
         return "";
     }
 
     public String getAddressLine4() {
+        if (address.length() > 165) {
+            return address.substring(165, address.length() > 220 ? 220 : address.length());
+        }
         return "";
     }
 

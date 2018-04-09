@@ -221,7 +221,7 @@ public class SalesOrderFacade {
 
     public Object[] retrieveStickerInfo(String orderNumbers, String companyName) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select distinct cast(o.cardname as varchar(100)) cardname, cast(o.address2 as varchar(200)) address, ");
+        sb.append("select distinct cast(o.cardname as varchar(100)) cardname, cast(o.address2 as varchar(220)) address, ");
         sb.append("cast(transp.name as varchar(50)) trans from ordr o inner join [@transp] transp on transp.code = o.u_transp ");
         sb.append("where o.docnum in (");
         sb.append(orderNumbers);
@@ -246,11 +246,14 @@ public class SalesOrderFacade {
                 numAtCardText.append(numAtCard);
                 numAtCardText.append(",");
             }
+            if (numAtCardText.length() == 0 || numAtCardText.toString().equals(",")) {
+                return "N/A";
+            }
             numAtCardText.delete(numAtCardText.length() - 1, numAtCardText.length());
             return numAtCardText.toString();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los numAtCard del packingList. ", e);
-            return null;
+            return "N/A";
         }
     }
 }

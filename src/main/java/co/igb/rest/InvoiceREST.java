@@ -135,7 +135,7 @@ public class InvoiceREST implements Serializable {
         if (sessionId != null) {
             try {
                 docEntry = createDraft(invoice, sessionId);
-                CONSOLE.log(Level.INFO, "Se creo la factura con docEntry={0}", docEntry);
+                CONSOLE.log(Level.INFO, "Se creo el borrador de factura con docEntry={0}", docEntry);
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
                 errorMessage = e.getMessage();

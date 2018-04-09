@@ -22,7 +22,7 @@ public class ZPLPrinter {
     public static byte[] getPrintData(ZebraPrintDTO dto, String companyName) {
         try {
             ClassLoader classLoader = ZPLPrinter.class.getClassLoader();
-            String templateText = IOUtils.toString(classLoader.getResourceAsStream(companyName + ".prn"), "UTF-8");
+            String templateText = IOUtils.toString(classLoader.getResourceAsStream(companyName.toLowerCase() + ".prn"), "UTF-8");
             Velocity.init();
             VelocityContext context = new VelocityContext();
             context.put("cardname1", dto.getCardName1());
@@ -34,9 +34,9 @@ public class ZPLPrinter {
             context.put("printDate", sdf.format(new Date()));
             context.put("carrier", dto.getCarrier());
             context.put("address1", dto.getAddressLine1());
-            context.put("address2", dto.getAddressLine1());
-            context.put("address3", dto.getAddressLine1());
-            context.put("address4", dto.getAddressLine1());
+            context.put("address2", dto.getAddressLine2());
+            context.put("address3", dto.getAddressLine3());
+            context.put("address4", dto.getAddressLine4());
             StringWriter writer = new StringWriter();
             Velocity.evaluate(context, writer, "TemplateName", templateText);
             return writer.toString().getBytes();
