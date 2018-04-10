@@ -32,7 +32,9 @@ import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -249,6 +251,11 @@ public class StockTransferREST implements Serializable {
                 pickingRecord.setStockTransferDocEntry(docEntry);
                 pickingRecord.setTransactionDate(new Date());
                 pickingRecord.setStatus(PickingRecord.STATUS_PENDING);
+                if (itemTransfer.getTemporary()) {
+                    GregorianCalendar cal = new GregorianCalendar();
+                    cal.add(Calendar.MINUTE, Integer.parseInt(appBean.obtenerValorPropiedad("igb.temporary.picking.ttl")));
+                    pickingRecord.setExpires(cal.getTime());
+                }
                 pickingRecordFacade.create(pickingRecord);
                 return Response.ok(new ResponseDTO(0, pickingRecord)).build();
             } catch (Exception e) {

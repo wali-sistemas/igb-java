@@ -63,7 +63,8 @@ public class SalesOrderFacade {
         sb.append("cast(enc.cardcode as varchar(20)) cardcode, ");
         sb.append("cast(enc.cardname as varchar(100)) cardname, ");
         sb.append("cast(enc.confirmed as varchar(1)) confirmed, ");
-        sb.append("(select count(1) from rdr1 det where det.docentry = enc.docentry and det.linestatus = 'O') items ");
+        sb.append("(select count(1) from rdr1 det where det.docentry = enc.docentry and det.linestatus = 'O') items, ");
+        sb.append("cast(comments as varchar(200)) comments ");
         sb.append("from ordr enc where enc.DocStatus = 'O' ");
         if (!showAll) {
             sb.append("and enc.confirmed = 'Y' ");
@@ -80,6 +81,7 @@ public class SalesOrderFacade {
                 order.setCardName((String) row[3]);
                 order.setConfirmed((String) row[4]);
                 order.setItems((Integer) row[5]);
+                order.setComments((String) row[6]);
 
                 orders.add(order);
             }

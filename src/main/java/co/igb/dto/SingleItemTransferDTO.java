@@ -14,6 +14,7 @@ public class SingleItemTransferDTO {
     private String username;
     private String itemCode;
     private String warehouseCode;
+    private Boolean temporary = false;
 
     public SingleItemTransferDTO() {
     }
@@ -82,9 +83,17 @@ public class SingleItemTransferDTO {
         this.expectedQuantity = expectedQuantity;
     }
 
+    public Boolean getTemporary() {
+        return temporary;
+    }
+
+    public void setTemporary(Boolean temporary) {
+        this.temporary = temporary;
+    }
+
     @Override
     public String toString() {
-        return "SingleItemTransferDTO{" + "binAbsFrom=" + binAbsFrom + ", binAbsTo=" + binAbsTo + ", quantity=" + quantity + ", expectedQuantity=" + expectedQuantity + ", orderNumber=" + orderNumber + ", username=" + username + ", itemCode=" + itemCode + ", warehouseCode=" + warehouseCode + '}';
+        return "SingleItemTransferDTO{" + "binAbsFrom=" + binAbsFrom + ", binAbsTo=" + binAbsTo + ", quantity=" + quantity + ", expectedQuantity=" + expectedQuantity + ", orderNumber=" + orderNumber + ", username=" + username + ", itemCode=" + itemCode + ", warehouseCode=" + warehouseCode + ", temporary=" + temporary + '}';
     }
 
 }
