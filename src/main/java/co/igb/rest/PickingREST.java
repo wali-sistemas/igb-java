@@ -1,6 +1,7 @@
 package co.igb.rest;
 
 import co.igb.dto.SortedStockDTO;
+import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.entity.AssignedOrder;
 import co.igb.persistence.entity.PackingOrder;
 import co.igb.persistence.entity.PackingOrderItem;
@@ -11,6 +12,8 @@ import co.igb.persistence.facade.PackingOrderFacade;
 import co.igb.persistence.facade.PickingRecordFacade;
 import co.igb.persistence.facade.SalesOrderFacade;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -21,6 +24,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -51,8 +55,42 @@ public class PickingREST implements Serializable {
     private BinLocationFacade blFacade;
     @EJB
     private PackingOrderFacade poFacade;
+    @Inject
+    private IGBApplicationBean appBean;
 
     public PickingREST() {
+    }
+
+    @GET
+    @Path("delete-temporary")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response deleteTemporaryRecords(@HeaderParam("X-Company-Name") String companyName) {
+        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
+        CONSOLE.log(Level.INFO, "Ejecutando proceso para eliminar registros de picking temporales");
+        List<Object[]> records = prFacade.findTemporaryRecords(companyName);
+        CONSOLE.log(Level.INFO, "Se encontraron {0} registros temporales", records.size());
+        Date now = new Date();
+        List<Integer> expiredRecords = new ArrayList<>();
+        for (Object[] row : records) {
+            Integer recordId = (Integer) row[0];
+            Date expires = (Date) row[1];
+            if (hasExpired(expires, now)) {
+                expiredRecords.add(recordId);
+            }
+        }
+        if (!expiredRecords.isEmpty()) {
+            CONSOLE.log(Level.INFO, "Eliminando {0} registros vencidos", expiredRecords);
+            prFacade.deleteExpiredRecords(expiredRecords);
+        }
+        return Response.ok(new ResponseDTO(0, expiredRecords)).build();
+    }
+
+    private boolean hasExpired(Date expires, Date now) {
+        int maxMinutes = Integer.parseInt(appBean.obtenerValorPropiedad("igb.temporary.picking.ttl"));
+        long diff = (now.getTime() - expires.getTime()) / 60000;
+        CONSOLE.log(Level.INFO, "Tiempo: {0}, limite: {1}", new Object[]{diff, maxMinutes});
+        return diff >= maxMinutes;
     }
 
     @GET
@@ -83,7 +121,7 @@ public class PickingREST implements Serializable {
         TreeSet<SortedStockDTO> sortedStock = new TreeSet<>();
         for (AssignedOrder order : orders) {
             //consultar los items a los que ya se les hizo picking para cada orden
-            Map<String, Map<Long, Integer>> pickedItems = prFacade.listPickedItems(order.getOrderNumber());
+            Map<String, Map<Long, Integer>> pickedItems = prFacade.listPickedItems(order.getOrderNumber(), companyName);
 
             //consultar los items pendientes por entregar de cada orden
             Map<String, Integer> pendingItems = soFacade.listPendingItems(order.getOrderNumber(), companyName);
@@ -199,7 +237,7 @@ public class PickingREST implements Serializable {
 
         for (AssignedOrder order : orders) {
             //consultar los items a los que ya se les hizo picking para cada orden
-            Map<String, Map<Long, Integer>> pickedItems = prFacade.listPickedItems(order.getOrderNumber());
+            Map<String, Map<Long, Integer>> pickedItems = prFacade.listPickedItems(order.getOrderNumber(), companyName);
 
             //consultar los items pendientes por entregar de cada orden
             Map<String, Integer> pendingItems = soFacade.listPendingItems(order.getOrderNumber(), companyName);

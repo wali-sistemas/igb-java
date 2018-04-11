@@ -60,6 +60,8 @@ public class PickingRecord implements Serializable {
     @Column(name = "expires")
     @Temporal(TemporalType.TIMESTAMP)
     private Date expires;
+    @Column(name = "company_name")
+    private String companyName;
 
     public PickingRecord() {
     }
@@ -152,6 +154,14 @@ public class PickingRecord implements Serializable {
         this.expires = expires;
     }
 
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -179,7 +189,7 @@ public class PickingRecord implements Serializable {
 
     @Override
     public String toString() {
-        return "PickingRecord{" + "id=" + id + ", orderNumber=" + orderNumber + ", itemCode=" + itemCode + ", quantity=" + quantity + ", binFrom=" + binFrom + ", binTo=" + binTo + ", stockTransferDocEntry=" + stockTransferDocEntry + ", empId=" + empId + ", transactionDate=" + transactionDate + ", status=" + status + ", expires=" + expires + '}';
+        return "PickingRecord{" + "id=" + id + ", orderNumber=" + orderNumber + ", itemCode=" + itemCode + ", quantity=" + quantity + ", binFrom=" + binFrom + ", binTo=" + binTo + ", stockTransferDocEntry=" + stockTransferDocEntry + ", empId=" + empId + ", transactionDate=" + transactionDate + ", status=" + status + ", expires=" + expires + ", companyName=" + companyName + '}';
     }
 
 }

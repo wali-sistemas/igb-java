@@ -251,6 +251,7 @@ public class StockTransferREST implements Serializable {
                 pickingRecord.setStockTransferDocEntry(docEntry);
                 pickingRecord.setTransactionDate(new Date());
                 pickingRecord.setStatus(PickingRecord.STATUS_PENDING);
+                pickingRecord.setCompanyName(companyName);
                 if (itemTransfer.getTemporary()) {
                     GregorianCalendar cal = new GregorianCalendar();
                     cal.add(Calendar.MINUTE, Integer.parseInt(appBean.obtenerValorPropiedad("igb.temporary.picking.ttl")));
