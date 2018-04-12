@@ -153,25 +153,27 @@ public class PickingREST implements Serializable {
             }
 
             if (!pendingItems.isEmpty()) {
+                //Se retira la funcionalidad de inactivar ordenes cuando no tienen saldo suficiente en picking
                 //validar disponibilidad de inventario por orden
-                List<Object[]> orderStock = soFacade.listRemainingStock(order.getOrderNumber(), companyName);
-                for (Object[] row : orderStock) {
-                    int pendingQ = (Integer) row[1];
-                    int availableQ = (Integer) row[6];
-                    int pickedQ = sumTotalPicked(pickedItems.get((String) row[0]));
-                    if (availableQ < pendingQ && pickedQ != pendingQ) {
-                        //Si no hay inventario disponible para un item, marca la orden como warning
-                        order.setStatus("warning");
-                        aoFacade.edit(order);
-                        CONSOLE.log(Level.WARNING, "La orden {0} no tiene inventario suficiente en ubicaciones de picking y pasara a estado warning. ", order.getOrderNumber());
-                        warning = true;
-                        break;
-                    }
-                }
-                if (warning) {
-                    continue;
-                }
-                orderStock = soFacade.findOrdersStockAvailability(order.getOrderNumber(), companyName);
+                //List<Object[]> orderStock = soFacade.listRemainingStock(order.getOrderNumber(), companyName);
+                //for (Object[] row : orderStock) {
+                //    int pendingQ = (Integer) row[1];
+                //    int availableQ = (Integer) row[6];
+                //    int pickedQ = sumTotalPicked(pickedItems.get((String) row[0]));
+                    
+                    //if (availableQ < pendingQ && pickedQ != pendingQ) {
+                    //Si no hay inventario disponible para un item, marca la orden como warning
+                    //order.setStatus("warning");
+                    //aoFacade.edit(order);
+                    //CONSOLE.log(Level.WARNING, "La orden {0} no tiene inventario suficiente en ubicaciones de picking y pasara a estado warning. ", order.getOrderNumber());
+                    //warning = true;
+                    //break;
+                    //}
+                //}
+                //if (warning) {
+                //    continue;
+                //}
+                List<Object[]> orderStock = soFacade.findOrdersStockAvailability(order.getOrderNumber(), companyName);
                 //Agregar el inventario de la orden al set de stock
                 for (Object[] row : orderStock) {
                     SortedStockDTO sorted = new SortedStockDTO(row);
@@ -241,15 +243,16 @@ public class PickingREST implements Serializable {
 
             //consultar los items pendientes por entregar de cada orden
             Map<String, Integer> pendingItems = soFacade.listPendingItems(order.getOrderNumber(), companyName);
-            if (pendingItems == null || pendingItems.isEmpty()) {
-                order.setStatus("warning");
-                CONSOLE.log(Level.WARNING, "La orden {0} no tiene items pendientes por despachar. ", order.getOrderNumber());
-                try {
-                    aoFacade.edit(order);
-                } catch (Exception e) {
-                }
-                continue;
-            }
+            //Se retira la funcionalidad de inactivar ordenes sin saldo
+            //if (pendingItems == null || pendingItems.isEmpty()) {
+                //order.setStatus("warning");
+                //CONSOLE.log(Level.WARNING, "La orden {0} no tiene items pendientes por despachar. ", order.getOrderNumber());
+                //try {
+                //    aoFacade.edit(order);
+                //} catch (Exception e) {
+                //}
+                //continue;
+            //}
 
             //a los items pendientes por entregar descontarle los que ya tuvieron picking. 
             //si un item existe en la lista de picking pero no en la de pendientes, no se tiene en cuenta

@@ -101,20 +101,20 @@ public class ZebraPrintDTO {
         if (packageTo == null || packageTo.trim().isEmpty()) {
             return "";
         }
-        if (packageTo.length() <= 48) {
+        if (packageTo.length() <= 43) {
             return packageTo;
         }
-        return packageTo.substring(0, 48);
+        return packageTo.substring(0, 43);
     }
 
     public String getCardName2() {
-        if (packageTo == null || packageTo.trim().isEmpty() || packageTo.length() <= 48) {
+        if (packageTo == null || packageTo.trim().isEmpty() || packageTo.length() <= 43) {
             return "";
         }
-        if (packageTo.length() < 96) {
-            return packageTo.substring(48);
+        if (packageTo.length() < 86) {
+            return packageTo.substring(43);
         }
-        return packageTo.substring(48, 96);
+        return packageTo.substring(43, 86);
     }
 
     public void setPackageTo(String packageTo) {
