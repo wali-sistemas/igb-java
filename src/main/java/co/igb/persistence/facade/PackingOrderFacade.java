@@ -166,7 +166,7 @@ public class PackingOrderFacade extends AbstractFacade<PackingOrder> {
 
     public List<Object[]> listOrderItems(Long idPackingOrder, String companyName) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select bin.bin_code, bin.picked_qty - bin.packed_qty missing_quantity, itm.item_code ");
+        sb.append("select bin.bin_code, bin.bin_name, bin.picked_qty - bin.packed_qty missing_quantity, itm.item_code ");
         sb.append("from packing_order ord inner join packing_order_item itm on itm.idpacking_order = ord.idpacking_order ");
         sb.append("inner join packing_order_item_bin bin on bin.idpacking_order_item = itm.idpacking_order_item where ord.company_name = '");
         sb.append(companyName);

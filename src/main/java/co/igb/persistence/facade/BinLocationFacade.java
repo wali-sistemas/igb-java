@@ -64,14 +64,14 @@ public class BinLocationFacade {
         }
     }
 
-    public String getBinCode(Long binAbs, String schema) {
+    public Object[] getBinCodeAndName(Long binAbs, String schema) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(BinCode as varchar(40)) from OBIN where AbsEntry = ");
+        sb.append("select cast(BinCode as varchar(40)) BinCode, cast(Descr as varchar(45)) BinName from OBIN where AbsEntry = ");
         sb.append(binAbs);
         try {
-            return (String) chooseSchema(schema).createNativeQuery(sb.toString()).getSingleResult();
+            return (Object[]) chooseSchema(schema).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los carritos de picking. ", e);
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el codigo y nombre de la ubicacion. ", e);
             return null;
         }
     }

@@ -11,14 +11,9 @@ import co.igb.persistence.facade.BinLocationFacade;
 import co.igb.persistence.facade.PackingOrderFacade;
 import co.igb.persistence.facade.PickingRecordFacade;
 import co.igb.persistence.facade.SalesOrderFacade;
+
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -34,10 +29,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import org.apache.commons.lang3.time.StopWatch;
 
 /**
- *
  * @author dbotero
  */
 @Path("picking/v2")
@@ -99,7 +94,7 @@ public class PickingREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response findNextItemToPick(@PathParam("username") String username, @QueryParam("orderNumber") Integer orderNumber,
-            @HeaderParam("X-Company-Name") String companyName) {
+                                       @HeaderParam("X-Company-Name") String companyName) {
         StopWatch watch = new StopWatch();
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Buscando siguiente item para packing para el usuario {0} ", username);
@@ -160,15 +155,15 @@ public class PickingREST implements Serializable {
                 //    int pendingQ = (Integer) row[1];
                 //    int availableQ = (Integer) row[6];
                 //    int pickedQ = sumTotalPicked(pickedItems.get((String) row[0]));
-                    
-                    //if (availableQ < pendingQ && pickedQ != pendingQ) {
-                    //Si no hay inventario disponible para un item, marca la orden como warning
-                    //order.setStatus("warning");
-                    //aoFacade.edit(order);
-                    //CONSOLE.log(Level.WARNING, "La orden {0} no tiene inventario suficiente en ubicaciones de picking y pasara a estado warning. ", order.getOrderNumber());
-                    //warning = true;
-                    //break;
-                    //}
+
+                //if (availableQ < pendingQ && pickedQ != pendingQ) {
+                //Si no hay inventario disponible para un item, marca la orden como warning
+                //order.setStatus("warning");
+                //aoFacade.edit(order);
+                //CONSOLE.log(Level.WARNING, "La orden {0} no tiene inventario suficiente en ubicaciones de picking y pasara a estado warning. ", order.getOrderNumber());
+                //warning = true;
+                //break;
+                //}
                 //}
                 //if (warning) {
                 //    continue;
@@ -220,7 +215,7 @@ public class PickingREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response closeOrders(@PathParam("username") String username, @QueryParam("orderNumber") Integer orderNumber,
-            @HeaderParam("X-Company-Name") String companyName) {
+                                @HeaderParam("X-Company-Name") String companyName) {
         StopWatch watch = new StopWatch();
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Listando ordenes de venta asignadas ");
@@ -245,13 +240,13 @@ public class PickingREST implements Serializable {
             Map<String, Integer> pendingItems = soFacade.listPendingItems(order.getOrderNumber(), companyName);
             //Se retira la funcionalidad de inactivar ordenes sin saldo
             //if (pendingItems == null || pendingItems.isEmpty()) {
-                //order.setStatus("warning");
-                //CONSOLE.log(Level.WARNING, "La orden {0} no tiene items pendientes por despachar. ", order.getOrderNumber());
-                //try {
-                //    aoFacade.edit(order);
-                //} catch (Exception e) {
-                //}
-                //continue;
+            //order.setStatus("warning");
+            //CONSOLE.log(Level.WARNING, "La orden {0} no tiene items pendientes por despachar. ", order.getOrderNumber());
+            //try {
+            //    aoFacade.edit(order);
+            //} catch (Exception e) {
+            //}
+            //continue;
             //}
 
             //a los items pendientes por entregar descontarle los que ya tuvieron picking. 
@@ -292,11 +287,7 @@ public class PickingREST implements Serializable {
 
     private void closeAndPack(AssignedOrder order, Map<String, Map<Long, Integer>> pickedItems, String companyName) {
         try {
-            order.setStatus("closed");
-            aoFacade.edit(order);
-            CONSOLE.log(Level.INFO, "Cerro la asignacion de picking para la orden {0}", order.getOrderNumber());
-
-            HashMap<Long, String> bins = new HashMap<>();
+            HashMap<Long, String[]> bins = new HashMap<>();
             PackingOrder packingOrder = new PackingOrder();
             packingOrder.setCustomerId(order.getCustomerId());
             packingOrder.setCustomerName(order.getCustomerName());
@@ -312,10 +303,13 @@ public class PickingREST implements Serializable {
                     PackingOrderItemBin bin = new PackingOrderItemBin();
                     bin.setBinAbs(binAbs);
                     if (!bins.containsKey(binAbs)) {
-                        bin.setBinCode(bins.get(binAbs));
-                        bins.put(binAbs, blFacade.getBinCode(binAbs, companyName));
+                        Object[] binAndName = blFacade.getBinCodeAndName(binAbs, companyName);
+                        bins.put(binAbs, Arrays.copyOf(binAndName, binAndName.length, String[].class));
                     }
-                    bin.setBinCode(bins.get(binAbs));
+
+                    bin.setBinCode(bins.get(binAbs)[0]);
+                    bin.setBinName(bins.get(binAbs)[1]);
+
                     bin.setPackedQty(0);
                     bin.setPickedQty(pickedItems.get(itemCode).get(binAbs));
                     bin.setPackingOrderItem(packingItem);
@@ -325,6 +319,10 @@ public class PickingREST implements Serializable {
             }
             poFacade.create(packingOrder);
             CONSOLE.log(Level.INFO, "Se creo la orden de packing para la orden {0}", order.getOrderNumber());
+
+            order.setStatus("closed");
+            aoFacade.edit(order);
+            CONSOLE.log(Level.INFO, "Cerro la asignacion de picking para la orden {0}", order.getOrderNumber());
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el estado de la asignacion de picking. ", e);
         }

@@ -174,7 +174,7 @@ public class StockTransferREST implements Serializable {
             }
 
             //Enviar correo
-            mailManager.sendInventoryInconsistence(itemTransfer.getUsername(), binLocationFacade.getBinCode(itemTransfer.getBinAbsTo(), companyName),
+            mailManager.sendInventoryInconsistence(itemTransfer.getUsername(), binLocationFacade.getBinCodeAndName(itemTransfer.getBinAbsTo(), companyName),
                     itemTransfer.getItemCode(), expectedQuantity, itemTransfer.getQuantity());
         }
 
