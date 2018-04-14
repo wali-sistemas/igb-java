@@ -175,16 +175,16 @@ public class BinLocationFacade {
     public List<Object[]> findLocationsResupply(String whsCode, String companyName) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("SELECT DISTINCT CONVERT(INT, ubicacion.AbsEntry) AS absEntry, CONVERT(VARCHAR(50), ubicacion.BinCode) AS binCode, CONVERT(INT, saldoAlmacen.MinStock - saldo.OnHandQty) AS quantity ");
+        sb.append("SELECT DISTINCT CONVERT(INT, ubicacion.AbsEntry) AS absEntry, CONVERT(VARCHAR(50), ubicacion.BinCode) AS binCode ");
         sb.append("FROM   OBIN ubicacion ");
         sb.append("INNER  JOIN OIBQ saldo ON saldo.BinAbs = ubicacion.AbsEntry ");
-        sb.append("INNER  JOIN OITW saldoAlmacen ON saldoAlmacen.ItemCode = saldo.ItemCode AND saldoAlmacen.WhsCode = saldo.WhsCode ");
+        sb.append("INNER  JOIN [@limites_ubicacion] limite on limite.u_ubicacion = ubicacion.BinCode ");
         sb.append("WHERE  ubicacion.Attr1Val = 'PICKING' ");
         sb.append("AND    saldo.OnHandQty > 0 ");
-        sb.append("AND    saldoAlmacen.WhsCode = '");
+        sb.append("AND    saldo.WhsCode = '");
         sb.append(whsCode);
         sb.append("' ");
-        sb.append("AND    saldoAlmacen.MinStock > saldo.OnHandQty ");
+        sb.append("AND    limite.u_cantminima > saldo.OnHandQty ");
         sb.append("ORDER  BY binCode ");
 
         try {
@@ -198,16 +198,17 @@ public class BinLocationFacade {
     public List<String> findItemsLocationResupply(String location, String whsCode, String companyName) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("SELECT DISTINCT CONVERT(VARCHAR(50), saldo.ItemCode) AS itemCode, CONVERT(INT, saldoAlmacen.MinStock - saldo.OnHandQty) AS quantity ");
+        sb.append("SELECT DISTINCT CONVERT(VARCHAR(50), saldo.ItemCode) AS itemCode, CONVERT(INT, limite.u_cantminima - saldo.OnHandQty) AS quantity, ");
+        sb.append("       CONVERT(INT, limite.u_cantmaxima) AS quantityMaxima ");
         sb.append("FROM   OBIN ubicacion ");
         sb.append("INNER  JOIN OIBQ saldo ON saldo.BinAbs = ubicacion.AbsEntry ");
-        sb.append("INNER  JOIN OITW saldoAlmacen ON saldoAlmacen.ItemCode = saldo.ItemCode AND saldoAlmacen.WhsCode = saldo.WhsCode ");
+        sb.append("INNER  JOIN [@limites_ubicacion] limite on limite.u_ubicacion = ubicacion.BinCode ");
         sb.append("WHERE  ubicacion.Attr1Val = 'PICKING' ");
         sb.append("AND    saldo.OnHandQty > 0 ");
-        sb.append("AND    saldoAlmacen.WhsCode = '");
+        sb.append("AND    saldo.WhsCode = '");
         sb.append(whsCode);
         sb.append("' ");
-        sb.append("AND    saldoAlmacen.MinStock > saldo.OnHandQty ");
+        sb.append("AND    limite.u_cantminima > saldo.OnHandQty ");
         sb.append("AND    ubicacion.BinCode = '");
         sb.append(location);
         sb.append("' ");
