@@ -12,6 +12,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -75,7 +76,7 @@ public class ResupplyREST implements Serializable {
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response createPickingTransferDocument(LocationLimitDTO limit, @HeaderParam("X-Company-Name") String companyName, @HeaderParam("Authorization") String token) {
+    public Response saveLocationLimit(LocationLimitDTO limit, @HeaderParam("X-Company-Name") String companyName) {
         CONSOLE.log(Level.INFO, "Se gestionara un limite de ubicacion");
         LocationLimit location = new LocationLimit();
 
@@ -101,5 +102,18 @@ public class ResupplyREST implements Serializable {
         }
 
         return Response.ok(new ResponseDTO(0, location)).build();
+    }
+
+    @DELETE
+    @Path("delete-location-limit/{code}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response deleteLocationLimit(@PathParam("code") String code, @HeaderParam("X-Company-Name") String companyName) {
+        try {
+            locationLimitFacade.deleteLimit(code, companyName);
+            return Response.ok(new ResponseDTO(0, "Se elimino correctamente.")).build();
+        } catch (Exception e) {
+            return Response.ok(new ResponseDTO(-1, e.getMessage())).build();
+        }
     }
 }
