@@ -3,7 +3,6 @@ package co.igb.dto;
 import java.util.Objects;
 
 /**
- *
  * @author dbotero
  */
 public class UserDTO implements Comparable<UserDTO> {
@@ -16,6 +15,7 @@ public class UserDTO implements Comparable<UserDTO> {
     private String completeName;
     private String token;
     private String selectedCompany;
+    private String warehouseCode;
 
     public UserDTO() {
     }
@@ -97,9 +97,27 @@ public class UserDTO implements Comparable<UserDTO> {
         this.surname = surname;
     }
 
+    public String getWarehouseCode() {
+        return warehouseCode;
+    }
+
+    public void setWarehouseCode(String warehouseCode) {
+        this.warehouseCode = warehouseCode;
+    }
+
     @Override
     public String toString() {
-        return "UserDTO{" + "username=" + username + ", password=" + password + ", name=" + name + ", surname=" + surname + ", email=" + email + ", completeName=" + completeName + ", token=" + token + ", selectedCompany=" + selectedCompany + '}';
+        return "UserDTO{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", email='" + email + '\'' +
+                ", completeName='" + completeName + '\'' +
+                ", token='" + token + '\'' +
+                ", selectedCompany='" + selectedCompany + '\'' +
+                ", warehouseCode='" + warehouseCode + '\'' +
+                '}';
     }
 
     @Override

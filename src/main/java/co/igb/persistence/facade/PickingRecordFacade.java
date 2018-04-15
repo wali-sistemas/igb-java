@@ -1,6 +1,7 @@
 package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.PickingRecord;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +17,6 @@ import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.Root;
 
 /**
- *
  * @author dbotero
  */
 @Stateless
@@ -37,7 +37,6 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
     }
 
     /**
-     *
      * @param orderNumbers
      * @param companyName
      * @return map with structure [orderNumber->[itemcode->quantity]]
@@ -80,15 +79,17 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
     }
 
     /**
-     *
      * @param orderNumber
      * @param companyName
      * @return map with structure [itemcode->[bin->quantity]]
      */
-    public Map<String, Map<Long, Integer>> listPickedItems(Integer orderNumber, String companyName) {
+    public Map<String, Map<Long, Integer>> listPickedItems(Integer orderNumber, Boolean excludeTemporary, String companyName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from picking_record where order_number = ");
         sb.append(orderNumber);
+        if (excludeTemporary) {
+            sb.append(" and expires is null ");
+        }
         sb.append(" and company_name = '");
         sb.append(companyName);
         sb.append("'");

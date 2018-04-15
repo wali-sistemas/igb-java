@@ -11,11 +11,9 @@ import co.igb.persistence.facade.BinLocationFacade;
 import co.igb.persistence.facade.PackingOrderFacade;
 import co.igb.persistence.facade.PickingRecordFacade;
 import co.igb.persistence.facade.SalesOrderFacade;
+import co.igb.util.IGBUtils;
+import org.apache.commons.lang3.time.StopWatch;
 
-import java.io.Serializable;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -23,14 +21,23 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.apache.commons.lang3.time.StopWatch;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author dbotero
@@ -88,6 +95,32 @@ public class PickingREST implements Serializable {
         return diff >= maxMinutes;
     }
 
+    private Object[] processPickingStatus(Integer orderNumber, Boolean excludeTemporary, String companyName) {
+        Map<String, Map<Long, Integer>> pickedItems = prFacade.listPickedItems(orderNumber, excludeTemporary, companyName);
+
+        //consultar los items pendientes por entregar de cada orden
+        Map<String, Integer> pendingItems = soFacade.listPendingItems(orderNumber, companyName);
+
+        //si un item existe en la lista de picking pero no en la de pendientes, no se tiene en cuenta
+        for (int i = 0; i < pendingItems.keySet().toArray().length; i++) {
+            String itemCode = (String) pendingItems.keySet().toArray()[i];
+            if (pickedItems.containsKey(itemCode)) {
+                int totalPicked = 0;
+                for (Long binAbs : pickedItems.get(itemCode).keySet()) {
+                    totalPicked += pickedItems.get(itemCode).get(binAbs);
+                }
+                Integer pending = pendingItems.get(itemCode);
+                if (pending != null && totalPicked >= pending) {
+                    pendingItems.remove(itemCode);
+                    i--;
+                } else if (pending != null) {
+                    pendingItems.put(itemCode, pending - totalPicked);
+                }
+            }
+        }
+        return new Object[]{pendingItems, pickedItems};
+    }
+
     @GET
     @Path("nextitem/{username}")
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
@@ -100,7 +133,6 @@ public class PickingREST implements Serializable {
         CONSOLE.log(Level.INFO, "Buscando siguiente item para packing para el usuario {0} ", username);
 
         watch.start();
-        //TODO: buscar ordenes asignadas en estado warning y cambiar estado a las que tengan disponibilidad de inventario
         //buscar ordenes asignadas en estado open para el empleado en la empresa seleccionada
         List<AssignedOrder> orders = aoFacade.listOpenAssignationsByUserAndCompany(username, orderNumber, companyName);
 
@@ -115,64 +147,25 @@ public class PickingREST implements Serializable {
         boolean warning = false;
         TreeSet<SortedStockDTO> sortedStock = new TreeSet<>();
         for (AssignedOrder order : orders) {
-            //consultar los items a los que ya se les hizo picking para cada orden
-            Map<String, Map<Long, Integer>> pickedItems = prFacade.listPickedItems(order.getOrderNumber(), companyName);
+            Object[] pickingStatus = processPickingStatus(order.getOrderNumber(), false, companyName);
+            Map<String, Integer> pendingItems = (Map<String, Integer>) pickingStatus[0];
+            Map<String, Map<Long, Integer>> pickedItems = (Map<String, Map<Long, Integer>>) pickingStatus[1];
 
-            //consultar los items pendientes por entregar de cada orden
-            Map<String, Integer> pendingItems = soFacade.listPendingItems(order.getOrderNumber(), companyName);
             if (pendingItems == null || pendingItems.isEmpty()) {
                 CONSOLE.log(Level.WARNING, "La orden {0} no tiene items pendientes por despachar y se marca como cerrada. ", order.getOrderNumber());
                 closeAndPack(order, pickedItems, companyName);
                 continue;
             }
 
-            //a los items pendientes por entregar descontarle los que ya tuvieron picking. 
-            //si un item existe en la lista de picking pero no en la de pendientes, no se tiene en cuenta
-            for (int i = 0; i < pendingItems.keySet().toArray().length; i++) {
-                //for (String itemCode : pendingItems.keySet()) {
-                String itemCode = (String) pendingItems.keySet().toArray()[i];
-                if (pickedItems.containsKey(itemCode)) {
-                    int totalPicked = 0;
-                    for (Long binAbs : pickedItems.get(itemCode).keySet()) {
-                        totalPicked += pickedItems.get(itemCode).get(binAbs);
-                    }
-                    Integer pending = pendingItems.get(itemCode);
-                    if (pending != null && totalPicked >= pending) {
-                        //pendingItems.put(itemCode, 0);
-                        pendingItems.remove(itemCode);
-                        i--;
-                    } else if (pending != null) {
-                        pendingItems.put(itemCode, pending - totalPicked);
-                    }
-                }
-            }
-
+            //Si hay items pendientes por picking, consulta su saldo y lo retorna organizado por velocidad y secuencia.
             if (!pendingItems.isEmpty()) {
-                //Se retira la funcionalidad de inactivar ordenes cuando no tienen saldo suficiente en picking
-                //validar disponibilidad de inventario por orden
-                //List<Object[]> orderStock = soFacade.listRemainingStock(order.getOrderNumber(), companyName);
-                //for (Object[] row : orderStock) {
-                //    int pendingQ = (Integer) row[1];
-                //    int availableQ = (Integer) row[6];
-                //    int pickedQ = sumTotalPicked(pickedItems.get((String) row[0]));
-
-                //if (availableQ < pendingQ && pickedQ != pendingQ) {
-                //Si no hay inventario disponible para un item, marca la orden como warning
-                //order.setStatus("warning");
-                //aoFacade.edit(order);
-                //CONSOLE.log(Level.WARNING, "La orden {0} no tiene inventario suficiente en ubicaciones de picking y pasara a estado warning. ", order.getOrderNumber());
-                //warning = true;
-                //break;
-                //}
-                //}
-                //if (warning) {
-                //    continue;
-                //}
-                List<Object[]> orderStock = soFacade.findOrdersStockAvailability(order.getOrderNumber(), companyName);
+                String warehouseCode = IGBUtils.getProperParameter(appBean.obtenerValorPropiedad("igb.warehouse.code"), companyName);
+                List<Object[]> orderStock = soFacade.findOrdersStockAvailability(order.getOrderNumber(), new ArrayList<>(pendingItems.keySet()), warehouseCode, companyName);
                 //Agregar el inventario de la orden al set de stock
                 for (Object[] row : orderStock) {
                     SortedStockDTO sorted = new SortedStockDTO(row);
                     if (pendingItems.containsKey(sorted.getItemCode()) && pendingItems.get(sorted.getItemCode()) > 0) {
+                        sorted.setPendingQuantity(pendingItems.get(row[0]));
                         sortedStock.add(sorted);
                     }
                 }
@@ -190,26 +183,7 @@ public class PickingREST implements Serializable {
         }
     }
 
-    private int getItemsCount(List<Object[]> queryResult) {
-        HashSet<String> items = new HashSet<>();
-        for (Object[] row : queryResult) {
-            items.add((String) row[0]);
-        }
-        return items.size();
-    }
-
-    private int sumTotalPicked(Map<Long, Integer> data) {
-        if (data == null) {
-            return 0;
-        }
-        int totalQ = 0;
-        for (Long binAbs : data.keySet()) {
-            totalQ += data.get(binAbs);
-        }
-        return totalQ;
-    }
-
-    @GET
+    @PUT
     @Path("close/{username}")
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
@@ -218,7 +192,7 @@ public class PickingREST implements Serializable {
                                 @HeaderParam("X-Company-Name") String companyName) {
         StopWatch watch = new StopWatch();
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
-        CONSOLE.log(Level.INFO, "Listando ordenes de venta asignadas ");
+        CONSOLE.log(Level.INFO, "Procesando solicitud de cierre de orden {0}", orderNumber != null ? orderNumber : "multiple");
 
         watch.start();
         //buscar ordenes asignadas en estado open para el empleado en la empresa seleccionada
@@ -233,38 +207,11 @@ public class PickingREST implements Serializable {
         }
 
         for (AssignedOrder order : orders) {
-            //consultar los items a los que ya se les hizo picking para cada orden
-            Map<String, Map<Long, Integer>> pickedItems = prFacade.listPickedItems(order.getOrderNumber(), companyName);
+            Object[] pickingStatus = processPickingStatus(order.getOrderNumber(), true, companyName);
+            Map<String, Integer> pendingItems = (Map<String, Integer>) pickingStatus[0];
+            Map<String, Map<Long, Integer>> pickedItems = (Map<String, Map<Long, Integer>>) pickingStatus[1];
 
-            //consultar los items pendientes por entregar de cada orden
-            Map<String, Integer> pendingItems = soFacade.listPendingItems(order.getOrderNumber(), companyName);
-            //Se retira la funcionalidad de inactivar ordenes sin saldo
-            //if (pendingItems == null || pendingItems.isEmpty()) {
-            //order.setStatus("warning");
-            //CONSOLE.log(Level.WARNING, "La orden {0} no tiene items pendientes por despachar. ", order.getOrderNumber());
-            //try {
-            //    aoFacade.edit(order);
-            //} catch (Exception e) {
-            //}
-            //continue;
-            //}
-
-            //a los items pendientes por entregar descontarle los que ya tuvieron picking. 
-            //si un item existe en la lista de picking pero no en la de pendientes, no se tiene en cuenta
-            for (String itemCode : pendingItems.keySet()) {
-                if (pickedItems.containsKey(itemCode)) {
-                    int totalPicked = 0;
-                    for (Long binAbs : pickedItems.get(itemCode).keySet()) {
-                        totalPicked += pickedItems.get(itemCode).get(binAbs);
-                    }
-                    if (totalPicked >= pendingItems.get(itemCode)) {
-                        pendingItems.put(itemCode, 0);
-                    } else {
-                        pendingItems.put(itemCode, pendingItems.get(itemCode) - totalPicked);
-                    }
-                }
-            }
-
+            //TODO: validar si este mapa trae items con valor cero o si solo incluye items que tengan algun valor
             //validar que todos los items pendientes tengan cantidad igual a cero
             for (String itemCode : pendingItems.keySet()) {
                 if (pendingItems.get(itemCode) > 0) {

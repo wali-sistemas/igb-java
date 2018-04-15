@@ -2,12 +2,15 @@ package co.igb.rest;
 
 import co.igb.dto.OrderAssignmentDTO;
 import co.igb.dto.SalesOrderDTO;
+import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.entity.AssignedOrder;
 import co.igb.persistence.facade.AssignedOrderFacade;
 import co.igb.persistence.facade.CustomerFacade;
 import co.igb.persistence.facade.PackingOrderFacade;
 import co.igb.persistence.facade.PickingRecordFacade;
 import co.igb.persistence.facade.SalesOrderFacade;
+import co.igb.util.IGBUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +22,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -32,7 +36,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- *
  * @author dbotero
  */
 @Stateless
@@ -51,6 +54,8 @@ public class SalesOrdersREST implements Serializable {
     private PackingOrderFacade poFacade;
     @EJB
     private CustomerFacade customerFacade;
+    @Inject
+    private IGBApplicationBean appBean;
 
     @GET
     @Path("list/orders")
@@ -75,7 +80,6 @@ public class SalesOrdersREST implements Serializable {
                 }
                 if (orderIndex >= 0) {
                     orders.remove(orderIndex);
-                    orderIndex = -1;
                 }
             }
             CONSOLE.log(Level.INFO, "{0} ordenes no han sido procesadas", orders.size());
@@ -141,7 +145,7 @@ public class SalesOrdersREST implements Serializable {
             return Response.ok(new ResponseDTO(-1, "No fue posible asignar todas las órdenes al empleado. Por favor refresca la ventana y vuelve a intentar")).build();
         }
     }
-    
+
     @GET
     @Path("orders/{username}")
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
@@ -173,7 +177,8 @@ public class SalesOrdersREST implements Serializable {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Validando saldo disponible para orden: {0}", orderNumber);
 
-        List<Object[]> data = soFacade.listRemainingStock(orderNumber, companyName);
+        String warehouseCode = IGBUtils.getProperParameter(appBean.obtenerValorPropiedad("igb.warehouse.code"), companyName);
+        List<Object[]> data = soFacade.listRemainingStock(orderNumber, warehouseCode, companyName);
         if (data.isEmpty()) {
             return Response.ok(new ResponseDTO(-1, "No se pudo ejecutar la consulta. ")).build();
         } else {

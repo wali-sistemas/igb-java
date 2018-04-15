@@ -1,7 +1,10 @@
 package co.igb.rest;
 
 import co.igb.dto.BinLocationDTO;
+import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.facade.BinLocationFacade;
+import co.igb.util.IGBUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +14,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
@@ -30,6 +34,8 @@ public class BinLocationREST implements Serializable {
 
     @EJB
     private BinLocationFacade blFacade;
+    @Inject
+    private IGBApplicationBean applicationBean;
 
     public BinLocationREST() {
     }
@@ -41,7 +47,10 @@ public class BinLocationREST implements Serializable {
     public Response listPickingCarts(@HeaderParam("X-Company-Name") String companyName) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Listando carritos de picking");
-        List response = blFacade.listPickingCarts("01", companyName);
+
+        String warehouseCode = IGBUtils.getProperParameter(applicationBean.obtenerValorPropiedad("igb.warehouse.code"), companyName);
+
+        List response = blFacade.listPickingCarts(warehouseCode, companyName);
         List<BinLocationDTO> pickingCarts = new ArrayList<>();
         for (Object row : response) {
             BinLocationDTO dto = new BinLocationDTO();

@@ -1,6 +1,7 @@
 package co.igb.persistence.facade;
 
 import co.igb.dto.SalesOrderDTO;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,7 +17,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 /**
- *
  * @author dbotero
  */
 @Stateless
@@ -91,28 +91,28 @@ public class SalesOrderFacade {
         return orders;
     }
 
-    public List<Object[]> findOrdersStockAvailability(Integer orderNumber, String schemaName) {
+    public List<Object[]> findOrdersStockAvailability(Integer orderNumber, List<String> itemCodes, String warehouseCode, String schemaName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(detalle.itemCode as varchar(20)) itemCode, cast(detalle.openQty as int) openQuantity, cast(detalle.quantity as int) quantity, ");
         sb.append("cast(saldo.binabs as int) binAbs, cast(saldo.onhandqty as int) available, cast(ubicacion.bincode as varchar(50)) binCode, ");
         sb.append("cast(detalle.Dscription as varchar(100)) itemName, cast(orden.docnum as int) orderNumber, ");
         sb.append("cast(ubicacion.attr2val as varchar(5)) velocidad, cast(ubicacion.attr3val as int) secuencia ");
         sb.append("from ordr orden inner join rdr1 detalle on detalle.docentry = orden.docentry and detalle.lineStatus = 'O' ");
-        sb.append("inner join OIBQ saldo on saldo.ItemCode = detalle.ItemCode and saldo.WhsCode = '01' and saldo.OnHandQty > 0 ");
-        sb.append("inner join obin ubicacion on ubicacion.absentry = saldo.binabs and ubicacion.SysBin = 'N' and ubicacion.Attr1Val IN ('PICKING','STORAGE') ");
-        //if (orderNumbers != null && orderNumbers.size() == 1) {
-        sb.append("where orden.docnum = ");
-        //sb.append(orderNumbers.get(0));
-        sb.append(orderNumber);
-        /*} else if (orderNumbers != null && !orderNumbers.isEmpty()) {
-            sb.append("where orden.docnum in (");
-            for (Integer orderNumber : orderNumbers) {
-                sb.append(orderNumber);
-                sb.append(",");
+        if (itemCodes != null && !itemCodes.isEmpty()) {
+            sb.append("and detalle.itemcode in (");
+            for (String itemCode : itemCodes) {
+                sb.append("'");
+                sb.append(itemCode);
+                sb.append("',");
             }
             sb.deleteCharAt(sb.length() - 1);
-            sb.append(")");
-        }*/
+            sb.append(") ");
+        }
+        sb.append("inner join OIBQ saldo on saldo.ItemCode = detalle.ItemCode and saldo.WhsCode = '");
+        sb.append(warehouseCode);
+        sb.append("' and saldo.OnHandQty > 0 inner join obin ubicacion on ubicacion.absentry = saldo.binabs and ubicacion.SysBin = 'N' ");
+        sb.append("and ubicacion.Attr1Val IN ('PICKING','STORAGE') where orden.docnum = ");
+        sb.append(orderNumber);
         sb.append(" order by velocidad, secuencia ");
 
         CONSOLE.log(Level.FINE, sb.toString());
@@ -200,7 +200,7 @@ public class SalesOrderFacade {
         }
     }
 
-    public List<Object[]> listRemainingStock(Integer orderNumber, String companyName) {
+    public List<Object[]> listRemainingStock(Integer orderNumber, String warehouseCode, String companyName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(detalle.itemCode as varchar(20)) itemCode, cast(detalle.openQty as int) openQuantity ");
         sb.append(", cast(detalle.quantity as int) quantity, cast(detalle.Dscription as varchar(100)) itemName ");
@@ -210,8 +210,9 @@ public class SalesOrderFacade {
         sb.append("where saldoUbicacion.itemcode = detalle.ItemCode and ubicacion.attr1val IN ('PICKING','STORAGE') ");
         sb.append(") availableBins from ordr orden ");
         sb.append("inner join rdr1 detalle on detalle.docentry = orden.docentry and detalle.lineStatus = 'O' ");
-        sb.append("inner join oitw saldo on saldo.whscode = '01' and detalle.itemcode = saldo.itemcode ");
-        sb.append("where orden.docnum = ");
+        sb.append("inner join oitw saldo on saldo.whscode = '");
+        sb.append(warehouseCode);
+        sb.append("' and detalle.itemcode = saldo.itemcode where orden.docnum = ");
         sb.append(orderNumber);
         try {
             return chooseSchema(companyName).createNativeQuery(sb.toString()).getResultList();

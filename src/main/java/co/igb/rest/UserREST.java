@@ -7,6 +7,7 @@ import co.igb.ejb.IGBApplicationBean;
 import co.igb.ejb.IGBAuthLDAP;
 import co.igb.persistence.entity.User;
 import co.igb.persistence.facade.UserFacade;
+import co.igb.util.IGBUtils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -103,6 +104,7 @@ public class UserREST {
                 return Response.ok(new AuthenticationResponseDTO(1, "Ocurrio un error al autenticar al usuario (JWT). ")).build();
             }
             user.setToken(token);
+            user.setWarehouseCode(IGBUtils.getProperParameter(applicationBean.obtenerValorPropiedad("igb.warehouse.code"), user.getSelectedCompany()));
             response.setUser(user);
         }
         return Response.ok(response).build();

@@ -14,6 +14,7 @@ public class SortedStockDTO implements Comparable<SortedStockDTO> {
     private int availableQuantity;
     private String binCode;
     private int orderNumber;
+    private int pendingQuantity;
     private String velocity;
     private Integer sequence;
 
@@ -28,6 +29,14 @@ public class SortedStockDTO implements Comparable<SortedStockDTO> {
         orderNumber = (Integer) dbData[7];
         velocity = (String) dbData[8];
         sequence = (Integer) dbData[9];
+    }
+
+    public int getPendingQuantity() {
+        return pendingQuantity;
+    }
+
+    public void setPendingQuantity(int pendingQuantity) {
+        this.pendingQuantity = pendingQuantity;
     }
 
     public String getItemCode() {
@@ -88,6 +97,6 @@ public class SortedStockDTO implements Comparable<SortedStockDTO> {
             return this.sequence.compareTo(o.getSequence());
         }
 
-        return o.getVelocity().compareTo(this.velocity);
+        return this.velocity.compareTo(o.getVelocity());
     }
 }
