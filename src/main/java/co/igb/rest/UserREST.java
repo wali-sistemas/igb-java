@@ -177,7 +177,7 @@ public class UserREST {
     @Path("validate")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     public Response validateToken() {
-        //Si la llamada a este servicio significa que no fue rechazada por el filtro,
+        //Si la llamada a este servicio llega hasta este metodo significa que no fue rechazada por el filtro,
         //por lo tanto el token enviado es valido
         CONSOLE.log(Level.INFO, "Token validado con exito. ");
         return Response.ok(new ResponseDTO(0, "Token validado con éxito")).build();

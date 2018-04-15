@@ -3,11 +3,13 @@ package co.igb.rest;
 import static co.igb.b1ws.client.deliverynote.Document.DocumentLines.DocumentLine;
 import static co.igb.b1ws.client.deliverynote.Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations;
 import static co.igb.b1ws.client.deliverynote.Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation;
+
 import co.igb.b1ws.client.deliverynote.Add;
 import co.igb.b1ws.client.deliverynote.AddResponse;
 import co.igb.b1ws.client.deliverynote.DeliveryNotesService;
 import co.igb.b1ws.client.deliverynote.Document;
 import co.igb.b1ws.client.deliverynote.MsgHeader;
+import co.igb.dto.AutoPackDTO;
 import co.igb.dto.PackingDTO;
 import co.igb.dto.PackingListRecordDTO;
 import co.igb.ejb.IGBApplicationBean;
@@ -21,6 +23,7 @@ import co.igb.persistence.facade.PackingListRecordFacade;
 import co.igb.persistence.facade.PackingOrderFacade;
 import co.igb.persistence.facade.SalesOrderFacade;
 import co.igb.util.IGBUtils;
+
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -50,7 +53,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- *
  * @author dbotero
  */
 @Stateless
@@ -71,48 +73,10 @@ public class PackingREST implements Serializable {
     private SalesOrderFacade salesOrderFacade;
     @EJB
     private BasicSAPFunctions sapFunctions;
+    @EJB
+    private InvoiceREST invoiceREST;
     @Inject
     private IGBApplicationBean appBean;
-
-    @POST
-    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response createPackingRecord(Long pickingId, @HeaderParam("X-Company-Name") String companyName) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
-        CONSOLE.log(Level.INFO, "Creando registro de packing para pickingId={0}", pickingId);
-        //Creates packing record
-        PackingOrder packing = new PackingOrder();
-        packing.setCustomerId("1234");
-        packing.setCustomerName("daniel");
-        packing.setOrderNumber(9987);
-        packing.setStatus("open");
-
-        PackingOrderItem item = new PackingOrderItem();
-        item.setItemCode("item1");
-
-        List<PackingOrderItemBin> bins = new ArrayList<>();
-
-        PackingOrderItemBin bin = new PackingOrderItemBin();
-        bin.setBinAbs(12345L);
-        bin.setBinCode("1234-5");
-        bin.setPackingOrderItem(item);
-        bin.setPickedQty(10);
-        bin.setPackedQty(0);
-        bins.add(bin);
-
-        item.setBins(bins);
-        item.setPackingOrder(packing);
-        packing.getItems().add(item);
-
-        try {
-            poFacade.create(packing);
-            return Response.ok(packing).build();
-        } catch (Exception e) {
-            return Response.ok(e).build();
-        }
-
-    }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
@@ -166,7 +130,7 @@ public class PackingREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response validateItemCode(@PathParam("orderNumber") Integer orderNumber, @PathParam("itemCode") String itemCode,
-            @PathParam("binCode") String binCode, @HeaderParam("X-Company-Name") String companyName) {
+                                     @PathParam("binCode") String binCode, @HeaderParam("X-Company-Name") String companyName) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Validando item {0} en orden {1} y ubicacion {2} ", new Object[]{itemCode, orderNumber, binCode});
         Integer items = poFacade.validateItemOnBin(itemCode, binCode, orderNumber, companyName);
@@ -360,16 +324,9 @@ public class PackingREST implements Serializable {
         });
 
         documentLines.getDocumentLine().addAll(itemsList);
-
-//        for (DocumentLine line : itemsList) {
-//            documentLines.getDocumentLine().add(line);
-//            CONSOLE.log(Level.INFO, "Agrego la fila #{0} con {1} ubicaciones", new Object[]{line.getLineNum(),
-//                line.getDocumentLinesBinAllocations().getDocumentLinesBinAllocation().size()});
-//        }
         document.setDocumentLines(documentLines);
 
         logDocument(document);
-        //CONSOLE.log(Level.INFO, "Termino de crear el documento de entrega con {0} items (filas)", document.getDocumentLines().getDocumentLine().size());
 
         //1. Login
         String sessionId = null;
@@ -466,7 +423,7 @@ public class PackingREST implements Serializable {
     @Path("close/{username}/{idPackingOrder}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     public Response closePackingOrder(@PathParam("username") String username, @PathParam("idPackingOrder") Integer idPackingOrder,
-            @HeaderParam("X-Company-Name") String companyName) {
+                                      @HeaderParam("X-Company-Name") String companyName) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Cerrando packing orden {0}", username);
         //Cierra los registros de packing abiertos
@@ -485,4 +442,114 @@ public class PackingREST implements Serializable {
         CONSOLE.log(Level.INFO, "Validando estado de packing para empleado {0}", username);
         return Response.ok(new ResponseDTO(0, poFacade.arePackingOrdersComplete(username, companyName))).build();
     }
+
+    @POST
+    @Path("autopack")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response autoPack(AutoPackDTO autoPackDTO, @HeaderParam("X-Company-Name") String companyName, @HeaderParam("X-Employee") String employee) {
+        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
+        CONSOLE.log(Level.INFO, "Iniciando proceso de empaque automatico. Cliente: {0}, Sales order: {1}",
+                new Object[]{autoPackDTO.getCustomerId(), autoPackDTO.getOrderNumber() != null ? autoPackDTO.getOrderNumber() : "todas"});
+
+        if (companyName == null || companyName.trim().isEmpty()) {
+            CONSOLE.log(Level.SEVERE, "No se enviaron los datos para realizar el cierre (companyName == null)");
+            return Response.ok(new ResponseDTO(-1, "No se enviaron los datos para realizar el cierre")).build();
+        }
+        if (employee == null || employee.trim().isEmpty()) {
+            CONSOLE.log(Level.SEVERE, "No se enviaron los datos para realizar el cierre (employee == null)");
+            return Response.ok(new ResponseDTO(-1, "No se enviaron los datos para realizar el cierre")).build();
+        }
+        if (autoPackDTO == null) {
+            CONSOLE.log(Level.SEVERE, "No se enviaron los datos para realizar el cierre (authPackDTO == null)");
+            return Response.ok(new ResponseDTO(-1, "No se enviaron los datos para realizar el cierre")).build();
+        }
+        if (autoPackDTO.getCustomerId() == null) {
+            CONSOLE.log(Level.SEVERE, "No se enviaron los datos para realizar el cierre (customerId == null)");
+            return Response.ok(new ResponseDTO(-1, "No se enviaron los datos para realizar el cierre")).build();
+        }
+
+        //cargar datos de ordenes de packing
+        List<PackingOrder> packingOrders = poFacade.listOrders(autoPackDTO.getCustomerId(), autoPackDTO.getOrderNumber(), companyName);
+        CONSOLE.log(Level.INFO, "Procesando {0} ordenes de packing", packingOrders.size());
+        if (packingOrders == null || packingOrders.isEmpty()) {
+            CONSOLE.log(Level.SEVERE, "La packing order no existe o no se encuentra abierta");
+            return Response.ok(new ResponseDTO(-1, "La packing order no existe o no se encuentra abierta")).build();
+        }
+
+        //crear registros de packing para cada item/bin
+        for (PackingOrder order : packingOrders) {
+            Integer idPackingList = null;
+            String customerName = null;
+            for (PackingOrderItem item : order.getItems()) {
+                for (PackingOrderItemBin itemBin : item.getBins()) {
+                    //agregar registro de packing solo si faltan items por empacar
+                    if (itemBin.getPackedQty() < itemBin.getPickedQty()) {
+                        PackingListRecordDTO recordDto = new PackingListRecordDTO();
+                        recordDto.setBinAbs(itemBin.getBinAbs());
+                        recordDto.setBinCode(itemBin.getBinCode());
+                        recordDto.setBoxNumber(1);
+                        recordDto.setCustomerId(autoPackDTO.getCustomerId());
+                        recordDto.setCustomerName(customerName);
+                        recordDto.setDatetimePacked(new Date());
+                        recordDto.setEmployee(employee);
+                        recordDto.setIdPackingList(idPackingList);
+                        recordDto.setIdPackingOrder(order.getId().intValue());
+                        recordDto.setItemCode(item.getItemCode());
+                        recordDto.setOrderNumber(order.getOrderNumber());
+                        recordDto.setQuantity(itemBin.getPickedQty() - itemBin.getPackedQty());
+
+                        ResponseDTO res = (ResponseDTO) this.addToPackingList(recordDto, companyName).getEntity();
+                        CONSOLE.log(Level.INFO, "  -> Packing record creado. Status: {0}", res.getCode());
+                        if (res.getCode() != 0) {
+                            return Response.ok(res).build();
+                        }
+                        if (idPackingList == null) {
+                            PackingListRecord record = (PackingListRecord) res.getContent();
+                            idPackingList = record.getIdPackingList();
+                            customerName = record.getCustomerName();
+                        }
+                    }
+                }
+            }
+
+            //generar entrega
+            CONSOLE.log(Level.INFO, "Creando documento de entrega para la orden de packing #{0}", order.getId());
+            ResponseDTO responseDelivery = (ResponseDTO) this.createDeliveryNote(order.getId().intValue(), companyName).getEntity();
+            if (responseDelivery.getCode() != 0) {
+                return Response.ok(responseDelivery).build();
+            }
+
+            //cerrar packing order
+            CONSOLE.log(Level.INFO, "Cerrando orden de packing #{0}", order.getId());
+            ResponseDTO res = (ResponseDTO) this.closePackingOrder(employee, order.getId().intValue(), companyName).getEntity();
+            if (res.getCode() != 0) {
+                return Response.ok(res).build();
+            }
+
+            //generar factura/borrador de factura
+            CONSOLE.log(Level.INFO, "Creando factura/borrador de factura para entrega con docEntry={0}", responseDelivery.getContent());
+            ResponseDTO responseInvoice = null;
+
+            String documentType = IGBUtils.getProperParameter(appBean.obtenerValorPropiedad("igb.invoice.type"), companyName);
+            CONSOLE.log(Level.INFO, "La empresa {0} usa el tipo de document {1}", new Object[]{companyName, documentType});
+            if (documentType.equals("draft")) {
+                responseInvoice = (ResponseDTO) invoiceREST.createDraft(((Long) responseDelivery.getContent()).intValue(), companyName, employee).getEntity();
+            } else if (documentType.equals("invoice")) {
+                responseInvoice = (ResponseDTO) invoiceREST.createInvoice(((Long) responseDelivery.getContent()).intValue(), companyName, employee).getEntity();
+            } else {
+                CONSOLE.log(Level.SEVERE, "La empresa no tiene configurado el tipo de documento (borrador o factura) que se debe crear");
+                return Response.ok(new ResponseDTO(-1, "La empresa no tiene configurado el tipo de documento (borrador o factura) que se debe crear")).build();
+            }
+            if (responseInvoice.getCode() != 0) {
+                return Response.ok(responseInvoice).build();
+            }
+
+            //TODO:
+            //cerrar OV si queda con items pendientes
+        }
+
+        return Response.ok(new ResponseDTO(0, "Proceso de empaque automatico finalizado con éxito")).build();
+    }
+
 }

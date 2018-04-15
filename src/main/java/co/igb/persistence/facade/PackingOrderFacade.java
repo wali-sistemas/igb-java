@@ -2,6 +2,10 @@ package co.igb.persistence.facade;
 
 import co.igb.dto.PackingDTO;
 import co.igb.persistence.entity.PackingOrder;
+import co.igb.persistence.entity.PackingOrder_;
+import org.bouncycastle.util.Pack;
+import org.hibernate.criterion.Conjunction;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -14,9 +18,12 @@ import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 /**
- *
  * @author dbotero
  */
 @Stateless
@@ -227,6 +234,26 @@ public class PackingOrderFacade extends AbstractFacade<PackingOrder> {
             em.createNativeQuery(sb.toString()).executeUpdate();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la orden de packing. ", e);
+        }
+    }
+
+    public List<PackingOrder> listOrders(String customerId, Integer salesOrder, String companyName) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<PackingOrder> cq = cb.createQuery(PackingOrder.class);
+        Root<PackingOrder> root = cq.from(PackingOrder.class);
+        Predicate customer = cb.equal(root.get(PackingOrder_.customerId), customerId);
+        Predicate status = cb.equal(root.get(PackingOrder_.status), "open");
+        if (salesOrder != null) {
+            cq.where(customer, status, cb.equal(root.get(PackingOrder_.orderNumber), salesOrder));
+        } else {
+            cq.where(customer, status);
+        }
+
+        try {
+            return em.createQuery(cq).getResultList();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar las ordenes de packing. ", e);
+            return new ArrayList<>();
         }
     }
 }

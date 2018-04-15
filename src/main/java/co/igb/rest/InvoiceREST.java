@@ -11,6 +11,7 @@ import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.facade.CustomerFacade;
 import co.igb.persistence.facade.DeliveryNoteFacade;
 import co.igb.util.IGBUtils;
+
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -35,7 +36,6 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
- *
  * @author dbotero
  */
 @Stateless
@@ -52,6 +52,25 @@ public class InvoiceREST implements Serializable {
     private BasicSAPFunctions sapFunctions;
     @Inject
     private IGBApplicationBean appBean;
+
+    @POST
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response createInvoiceDocument(Integer deliveryDocEntry, @HeaderParam("X-Company-Name") String companyName, @HeaderParam("X-Employee") String userName) {
+        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
+        CONSOLE.log(Level.INFO, "Creando factura para deliveryNoteDocEntry={0}", deliveryDocEntry);
+
+        ResponseDTO responseInvoice = null;
+        String documentType = IGBUtils.getProperParameter(appBean.obtenerValorPropiedad("igb.invoice.type"), companyName);
+        CONSOLE.log(Level.INFO, "La empresa {0} usa el tipo de document {1}", new Object[]{companyName, documentType});
+        if (documentType.equals("invoice")) {
+            responseInvoice = (ResponseDTO) createInvoice(deliveryDocEntry, companyName, userName).getEntity();
+        } else {
+            responseInvoice = (ResponseDTO) createDraft(deliveryDocEntry, companyName, userName).getEntity();
+        }
+        return Response.ok(responseInvoice).build();
+    }
 
     @POST
     @Path("draft")
@@ -154,6 +173,7 @@ public class InvoiceREST implements Serializable {
     }
 
     @POST
+    @Path("invoice")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
