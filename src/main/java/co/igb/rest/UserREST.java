@@ -172,6 +172,18 @@ public class UserREST {
     }
 
     @GET
+    @Path("validate-user-admin/{user}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    public Response validateUserGroup(@PathParam("user") String user) {
+        for (UserDTO u : authenticator.listEmployeesInGroup(applicationBean.obtenerValorPropiedad("ldap.administrator.group"))) {
+            if (u.getUsername().equals(user)) {
+                return Response.ok(new ResponseDTO(0, true)).build();
+            }
+        }
+        return Response.ok(new ResponseDTO(0, false)).build();
+    }
+
+    @GET
     @Path("validate")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     public Response validateToken() {
