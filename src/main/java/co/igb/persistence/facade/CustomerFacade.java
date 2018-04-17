@@ -1,5 +1,6 @@
 package co.igb.persistence.facade;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -38,7 +39,18 @@ public class CustomerFacade {
         return (String) chooseSchema(schema).createNativeQuery(sb.toString()).getSingleResult();
     }
 
-    public int getCustomerCreditDays(String cardCode) {
-        return 0;
+    public int getCustomerCreditDays(String cardCode, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(pay.extradays as int) days from ocrd cus ");
+        sb.append("inner join octg pay on pay.groupnum = cus.groupnum ");
+        sb.append("where cus.cardcode = '");
+        sb.append(cardCode);
+        sb.append("'");
+        try {
+            return (Integer) chooseSchema(companyName).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el plazo de credito para un cliente. ", e);
+            return 0;
+        }
     }
 }

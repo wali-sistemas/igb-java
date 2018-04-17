@@ -105,7 +105,7 @@ public class InventoryREST {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response inventoryRandom(@PathParam("warehouse") String warehouse, @HeaderParam("X-Company-Name") String companyName) {
         /*Se consultan las ubicaciones con saldo*/
-        List<String> locations = binLocationFacade.findLocations(companyName, warehouse);
+        List<String> locations = binLocationFacade.listBinLocations(companyName, warehouse);
 
         if (locations != null && !locations.isEmpty()) {
             List<Object[]> datos = inventoryFacade.obtenerUltimosInventarios(companyName, locations);
