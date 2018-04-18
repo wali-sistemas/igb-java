@@ -1,9 +1,12 @@
 package co.igb.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  *
  * @author dbotero
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SingleItemTransferDTO {
 
     private Long binAbsFrom;
@@ -95,5 +98,4 @@ public class SingleItemTransferDTO {
     public String toString() {
         return "SingleItemTransferDTO{" + "binAbsFrom=" + binAbsFrom + ", binAbsTo=" + binAbsTo + ", quantity=" + quantity + ", expectedQuantity=" + expectedQuantity + ", orderNumber=" + orderNumber + ", username=" + username + ", itemCode=" + itemCode + ", warehouseCode=" + warehouseCode + ", temporary=" + temporary + '}';
     }
-
 }

@@ -15,7 +15,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 /**
- *
  * @author dbotero
  */
 @Stateless
@@ -170,5 +169,76 @@ public class BinLocationFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el saldo de un item por ubicacion. ", e);
             return 0;
         }
+    }
+
+    public List<Object[]> findLocationsResupply(String whsCode, String companyName) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("SELECT DISTINCT CONVERT(INT, ubicacion.AbsEntry) AS absEntry, CONVERT(VARCHAR(50), ubicacion.BinCode) AS binCode ");
+        sb.append("FROM   OBIN ubicacion ");
+        sb.append("INNER  JOIN OIBQ saldo ON saldo.BinAbs = ubicacion.AbsEntry ");
+        sb.append("INNER  JOIN [@limites_ubicacion] limite on limite.u_ubicacion = ubicacion.BinCode ");
+        sb.append("WHERE  ubicacion.Attr1Val = 'PICKING' ");
+        sb.append("AND    saldo.OnHandQty > 0 ");
+        sb.append("AND    saldo.WhsCode = '");
+        sb.append(whsCode);
+        sb.append("' ");
+        sb.append("AND    limite.u_cantminima > saldo.OnHandQty ");
+        sb.append("ORDER  BY binCode ");
+
+        try {
+            return chooseSchema(companyName).createNativeQuery(sb.toString()).getResultList();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al obtener las ubicaciones para re-abastecer. ", e);
+            return null;
+        }
+    }
+
+    public List<String> findItemsLocationResupply(String location, String whsCode, String companyName) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("SELECT DISTINCT CONVERT(VARCHAR(50), saldo.ItemCode) AS itemCode, CONVERT(INT, limite.u_cantminima - saldo.OnHandQty) AS quantity, ");
+        sb.append("       CONVERT(INT, limite.u_cantmaxima) AS quantityMaxima ");
+        sb.append("FROM   OBIN ubicacion ");
+        sb.append("INNER  JOIN OIBQ saldo ON saldo.BinAbs = ubicacion.AbsEntry ");
+        sb.append("INNER  JOIN [@limites_ubicacion] limite on limite.u_ubicacion = ubicacion.BinCode ");
+        sb.append("WHERE  ubicacion.Attr1Val = 'PICKING' ");
+        sb.append("AND    saldo.OnHandQty > 0 ");
+        sb.append("AND    saldo.WhsCode = '");
+        sb.append(whsCode);
+        sb.append("' ");
+        sb.append("AND    limite.u_cantminima > saldo.OnHandQty ");
+        sb.append("AND    ubicacion.BinCode = '");
+        sb.append(location);
+        sb.append("' ");
+
+        try {
+            return chooseSchema(companyName).createNativeQuery(sb.toString()).getResultList();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al obtener las ubicaciones para re-abastecer. ", e);
+            return null;
+        }
+    }
+
+    public List<Object[]> listLocationsStorageResupply(String itemCode, String companyName) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("SELECT CONVERT(INT, ubicacion.AbsEntry) AS absEntry, CONVERT(VARCHAR(50), ubicacion.BinCode) AS BinCode, CONVERT(INT, saldo.OnHandQty) AS OnHandQty ");
+        sb.append("FROM   OBIN ubicacion ");
+        sb.append("INNER  JOIN OIBQ saldo ON saldo.BinAbs = ubicacion.AbsEntry ");
+        sb.append("WHERE  saldo.ItemCode = '");
+        sb.append(itemCode);
+        sb.append("' ");
+        sb.append("AND    saldo.OnHandQty > 0 ");
+        sb.append("AND    ubicacion.Attr1Val = 'STORAGE' ");
+        sb.append("ORDER  BY ubicacion.attr2val, ubicacion.attr3val ");
+
+        try {
+            return chooseSchema(companyName).createNativeQuery(sb.toString()).getResultList();
+        } catch (NoResultException e) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ubicaciones para resurtir. ", e);
+        }
+        return null;
     }
 }

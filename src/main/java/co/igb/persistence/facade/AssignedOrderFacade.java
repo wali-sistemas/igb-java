@@ -107,6 +107,23 @@ public class AssignedOrderFacade extends AbstractFacade<AssignedOrder> {
         }
     }
 
+    public Integer countOrderEmployeeAssigneed(String user) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery(Integer.class);
+        Root root = cq.from(AssignedOrder.class);
+
+        cq.where(cb.equal(root.get(AssignedOrder_.empId), user), cb.equal(root.get(AssignedOrder_.status), "open"));
+        cq.select(cb.count(root.get(AssignedOrder_.id)));
+
+        try {
+            return ((Long) em.createQuery(cq).getSingleResult()).intValue();
+        } catch (NoResultException e) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ordenes asignadas por empleado. ", e);
+        }
+        return 0;
+    }
+  
     public boolean enablePicking(Integer orderNumber) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaUpdate<AssignedOrder> cu = cb.createCriteriaUpdate(AssignedOrder.class);
