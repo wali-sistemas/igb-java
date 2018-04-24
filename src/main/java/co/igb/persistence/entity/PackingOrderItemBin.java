@@ -37,6 +37,9 @@ public class PackingOrderItemBin implements Serializable {
     @Column(name = "bin_abs")
     private Long binAbs;
     @Basic(optional = false)
+    @Column(name = "bin_name")
+    private String binName;
+    @Basic(optional = false)
     @Column(name = "picked_qty")
     private Integer pickedQty;
     @Basic(optional = false)
@@ -94,6 +97,14 @@ public class PackingOrderItemBin implements Serializable {
         this.packedQty = packedQty;
     }
 
+    public String getBinName() {
+        return binName;
+    }
+
+    public void setBinName(String binName) {
+        this.binName = binName;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -121,7 +132,7 @@ public class PackingOrderItemBin implements Serializable {
 
     @Override
     public String toString() {
-        return "PackingOrderItemBin{" + "id=" + id + ", binCode=" + binCode + ", binAbs=" + binAbs + ", pickedQty=" + pickedQty + ", packedQty=" + packedQty + '}';
+        return "PackingOrderItemBin{" + "id=" + id + ", packingOrderItem=" + packingOrderItem + ", binCode=" + binCode + ", binAbs=" + binAbs + ", binName=" + binName + ", pickedQty=" + pickedQty + ", packedQty=" + packedQty + '}';
     }
 
 }

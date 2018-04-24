@@ -6,11 +6,11 @@ import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.HtmlEmail;
 
 /**
- *
  * @author dbotero
  */
 @SessionScoped
@@ -22,8 +22,8 @@ public class EmailManager implements Serializable {
     @Inject
     private IGBApplicationBean appBean;
 
-    public void sendInventoryInconsistence(String employeeName, String binCode,
-            String itemCode, Integer expectedQuantity, Integer realQuantity) {
+    public void sendInventoryInconsistence(String employeeName, Object[] binCodeAndName,
+                                           String itemCode, Integer expectedQuantity, Integer realQuantity) {
         try {
             HtmlEmail email = new HtmlEmail();
             email.setHostName(appBean.obtenerValorPropiedad("mail.host"));
@@ -35,7 +35,8 @@ public class EmailManager implements Serializable {
             email.setFrom(appBean.obtenerValorPropiedad("mail.from.inconsistency"));
             email.setSubject(appBean.obtenerValorPropiedad("mail.subject.inconsistency"));
             email.setHtmlMsg(String.format(appBean.obtenerValorPropiedad("mail.msg.inconsistency"),
-                    employeeName, binCode, itemCode, expectedQuantity.toString(), realQuantity.toString(), Integer.toString(expectedQuantity - realQuantity)));
+                    employeeName, binCodeAndName[0], itemCode, expectedQuantity.toString(), realQuantity.toString(),
+                    Integer.toString(expectedQuantity - realQuantity)));
             email.addTo(appBean.obtenerValorPropiedad("mail.to.inconsistency"));
             email.send();
         } catch (Exception e) {

@@ -55,4 +55,9 @@ public class BinLocationDTO {
         return pieces;
     }
 
+    @Override
+    public String toString() {
+        return "BinLocationDTO{" + "binAbs=" + binAbs + ", binCode=" + binCode + ", binName=" + binName + ", items=" + items + ", pieces=" + pieces + '}';
+    }
+
 }

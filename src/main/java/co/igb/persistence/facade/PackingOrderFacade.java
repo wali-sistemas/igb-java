@@ -2,6 +2,10 @@ package co.igb.persistence.facade;
 
 import co.igb.dto.PackingDTO;
 import co.igb.persistence.entity.PackingOrder;
+import co.igb.persistence.entity.PackingOrder_;
+import org.bouncycastle.util.Pack;
+import org.hibernate.criterion.Conjunction;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -14,9 +18,12 @@ import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 /**
- *
  * @author dbotero
  */
 @Stateless
@@ -166,7 +173,7 @@ public class PackingOrderFacade extends AbstractFacade<PackingOrder> {
 
     public List<Object[]> listOrderItems(Long idPackingOrder, String companyName) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select bin.bin_code, bin.picked_qty - bin.packed_qty missing_quantity, itm.item_code ");
+        sb.append("select bin.bin_code, bin.bin_name, bin.picked_qty - bin.packed_qty missing_quantity, itm.item_code ");
         sb.append("from packing_order ord inner join packing_order_item itm on itm.idpacking_order = ord.idpacking_order ");
         sb.append("inner join packing_order_item_bin bin on bin.idpacking_order_item = itm.idpacking_order_item where ord.company_name = '");
         sb.append(companyName);
@@ -196,6 +203,26 @@ public class PackingOrderFacade extends AbstractFacade<PackingOrder> {
         }
     }
 
+    public boolean arePackingOrdersComplete(String username, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select ifnull(sum(bin.picked_qty - bin.packed_qty), 0) pendingItems from packing_order ord ");
+        sb.append("inner join packing_order_item itm on itm.idpacking_order = ord.idpacking_order ");
+        sb.append("inner join packing_order_item_bin bin on bin.idpacking_order_item = itm.idpacking_order_item ");
+        sb.append("where ord.idpacking_order in (");
+        sb.append("select distinct idpacking_order from packing_list_record ");
+        sb.append("where status = 'open' and employee = '");
+        sb.append(username);
+        sb.append("' and company_name = '");
+        sb.append(companyName);
+        sb.append("' )");
+        try {
+            return ((BigDecimal) em.createNativeQuery(sb.toString()).getSingleResult()).intValue() == 0;
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar si la orden de packing se encuentra completa. ", e);
+            return false;
+        }
+    }
+
     public void closePackingOrder(Integer idPackingOrder, String companyName) {
         StringBuilder sb = new StringBuilder();
         sb.append("update packing_order set status = 'closed' where idpacking_order = ");
@@ -207,6 +234,26 @@ public class PackingOrderFacade extends AbstractFacade<PackingOrder> {
             em.createNativeQuery(sb.toString()).executeUpdate();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la orden de packing. ", e);
+        }
+    }
+
+    public List<PackingOrder> listOrders(String customerId, Integer salesOrder, String companyName) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<PackingOrder> cq = cb.createQuery(PackingOrder.class);
+        Root<PackingOrder> root = cq.from(PackingOrder.class);
+        Predicate customer = cb.equal(root.get(PackingOrder_.customerId), customerId);
+        Predicate status = cb.equal(root.get(PackingOrder_.status), "open");
+        if (salesOrder != null) {
+            cq.where(customer, status, cb.equal(root.get(PackingOrder_.orderNumber), salesOrder));
+        } else {
+            cq.where(customer, status);
+        }
+
+        try {
+            return em.createQuery(cq).getResultList();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar las ordenes de packing. ", e);
+            return new ArrayList<>();
         }
     }
 }

@@ -12,6 +12,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -36,17 +37,31 @@ public class AssignedOrderFacade extends AbstractFacade<AssignedOrder> {
         super(AssignedOrder.class);
     }
 
-    public List<AssignedOrder> listOpenAssignations() {
+    public List<AssignedOrder> listOpenAssignations(String companyName) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<AssignedOrder> cq = cb.createQuery(AssignedOrder.class);
         Root<AssignedOrder> root = cq.from(AssignedOrder.class);
         Predicate statusOpen = cb.equal(root.get(AssignedOrder_.status), "open");
         Predicate statusWarning = cb.equal(root.get(AssignedOrder_.status), "warning");
-        cq.where(cb.or(statusOpen, statusWarning));
+        cq.where(cb.or(statusOpen, statusWarning), cb.equal(root.get(AssignedOrder_.company), companyName));
         try {
             return em.createQuery(cq).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ordenes de venta asignadas abiertas. ", e);
+            return new ArrayList();
+        }
+    }
+
+    public List<AssignedOrder> listClosedAssignations(String companyName) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<AssignedOrder> cq = cb.createQuery(AssignedOrder.class);
+        Root<AssignedOrder> root = cq.from(AssignedOrder.class);
+        Predicate statusClosed = cb.equal(root.get(AssignedOrder_.status), "closed");
+        cq.where(statusClosed, cb.equal(root.get(AssignedOrder_.company), companyName));
+        try {
+            return em.createQuery(cq).getResultList();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ordenes de venta asignadas cerradas. ", e);
             return new ArrayList();
         }
     }
@@ -77,11 +92,11 @@ public class AssignedOrderFacade extends AbstractFacade<AssignedOrder> {
         }
     }
 
-    public AssignedOrder findByOrderNumber(Integer orderNumber) {
+    public AssignedOrder findByOrderNumber(Integer orderNumber, String companyName) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<AssignedOrder> cq = cb.createQuery(AssignedOrder.class);
         Root<AssignedOrder> root = cq.from(AssignedOrder.class);
-        cq.where(cb.equal(root.get(AssignedOrder_.orderNumber), orderNumber));
+        cq.where(cb.equal(root.get(AssignedOrder_.orderNumber), orderNumber), cb.equal(root.get(AssignedOrder_.company), companyName));
         try {
             return em.createQuery(cq).getSingleResult();
         } catch (NoResultException e) {
@@ -107,5 +122,22 @@ public class AssignedOrderFacade extends AbstractFacade<AssignedOrder> {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ordenes asignadas por empleado. ", e);
         }
         return 0;
+    }
+  
+    public boolean enablePicking(Integer orderNumber) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaUpdate<AssignedOrder> cu = cb.createCriteriaUpdate(AssignedOrder.class);
+        Root<AssignedOrder> root = cu.from(AssignedOrder.class);
+        cu.set(root.get(AssignedOrder_.status), "open");
+        cu.where(cb.equal(root.get(AssignedOrder_.orderNumber), orderNumber));
+        try {
+            int rows = em.createQuery(cu).executeUpdate();
+            if (rows == 1) {
+                return true;
+            }
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al cambiar el estado de la asignacion de picking. ", e);
+        }
+        return false;
     }
 }
