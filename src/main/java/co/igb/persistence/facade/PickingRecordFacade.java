@@ -134,6 +134,7 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
         return null;
     }
 
+
     public List<PickingRecord> listPicking(Integer orderNumber) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(PickingRecord.class);
