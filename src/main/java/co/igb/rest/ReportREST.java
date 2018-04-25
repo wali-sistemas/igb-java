@@ -52,7 +52,7 @@ public class ReportREST implements Serializable {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
 
         List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, companyName);
-        List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations();
+        List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations(companyName);
 
         Integer[] contador = new Integer[]{0, 0};
         for (SalesOrderDTO s : orders) {
@@ -183,7 +183,7 @@ public class ReportREST implements Serializable {
     public Response obtainReportsOrdersByClient(@HeaderParam("X-Company-Name") String companyName) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, companyName);
-        List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations();
+        List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations(companyName);
 
         List<Object[]> datos = new ArrayList<>();
         for (SalesOrderDTO s : orders) {
