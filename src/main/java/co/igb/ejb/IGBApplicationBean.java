@@ -2,15 +2,20 @@ package co.igb.ejb;
 
 import co.igb.persistence.facade.BinLocationFacade;
 import co.igb.rest.ResponseDTO;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.ApplicationScoped;
@@ -22,10 +27,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import org.apache.commons.lang3.StringUtils;
 
 /**
- *
  * @author dbotero
  */
 @ApplicationScoped
@@ -37,6 +42,7 @@ public class IGBApplicationBean implements Serializable {
 
     private Properties props = new Properties();
     private HashSet<String> excludedPaths;
+    private List<Pattern> excludedPathTemplates;
     private HashMap<String, Integer> inventoryLocations = new HashMap<>();
     @EJB
     private BinLocationFacade binFacade;
@@ -76,8 +82,14 @@ public class IGBApplicationBean implements Serializable {
                 props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("/" + propertiesFileName));
             }
 
-            String values = props.getProperty("igb.no-filter.paths");
-            excludedPaths = new HashSet<>(Arrays.asList(values.split(",")));
+            String pathValues = props.getProperty("igb.no-filter.paths");
+            excludedPaths = new HashSet<>(Arrays.asList(pathValues.split(",")));
+
+            String templateValues = props.getProperty("igb.no-filter.templates");
+            excludedPathTemplates = new ArrayList<>();
+            for (String regex : Arrays.asList(templateValues.split(","))) {
+                excludedPathTemplates.add(Pattern.compile(regex));
+            }
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "There was an error loading the file.", e);
         }
@@ -101,7 +113,20 @@ public class IGBApplicationBean implements Serializable {
     }
 
     public boolean isPathExcludedFromTokenValidation(String path) {
-        return excludedPaths.contains(path);
+        return excludedPaths.contains(path) || pathMatchesTemplate(path);
+    }
+
+    private boolean pathMatchesTemplate(String path) {
+        for (Pattern pattern : excludedPathTemplates) {
+            CONSOLE.log(Level.FINE, "Validando si la ruta {0} equivale a la plantilla {1}", new Object[]{path, pattern.pattern()});
+            Matcher matcher = pattern.matcher(path);
+            if (matcher.matches()) {
+                CONSOLE.log(Level.INFO, "La ruta {0} equivale a la plantilla {1}", new Object[]{path, pattern.pattern()});
+                return true;
+            }
+        }
+        CONSOLE.log(Level.FINE, "La ruta {0} no equivale a ninguna de las plantillas", path);
+        return false;
     }
 
     public Integer getInventoryBinId(String companyName) {
