@@ -120,10 +120,10 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
         }
     }
 
-    public List<Long> listPickingsRecords() {
+    public List<Integer> listPickingsRecords() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("SELECT DISTINCT CONVERT(NUMERIC(18, 0), order_number) AS order_number FROM igb.picking_record ");
+        sb.append("SELECT DISTINCT order_number AS order_number FROM igb.picking_record ");
 
         try {
             return em.createNativeQuery(sb.toString()).getResultList();
@@ -134,7 +134,8 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
         return null;
     }
 
-    public List<PickingRecord> listPicking(Long orderNumber) {
+
+    public List<PickingRecord> listPicking(Integer orderNumber) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(PickingRecord.class);
         Root picking = cq.from(PickingRecord.class);
