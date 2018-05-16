@@ -29,6 +29,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+import org.jasypt.properties.EncryptableProperties;
 
 /**
  * @author dbotero
@@ -49,7 +51,7 @@ public class IGBApplicationBean implements Serializable {
 
     @PostConstruct
     public void initialize() {
-        cargarProperties();
+        loadProperties();
         consultarUbicacionesInventario();
     }
 
@@ -66,8 +68,11 @@ public class IGBApplicationBean implements Serializable {
         }
     }
 
-    public void cargarProperties() {
-        props = new Properties();
+    public void loadProperties() {
+        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+        encryptor.setPassword(System.getProperty("PROPERTIES_SECRET"));
+        props = new EncryptableProperties(encryptor);
+
         String serverConfUrl = System.getProperty("jboss.server.config.dir");
         CONSOLE.log(Level.INFO, "Server config URL [{0}]", serverConfUrl);
         String propertiesFileName = "igb.properties";
@@ -127,6 +132,15 @@ public class IGBApplicationBean implements Serializable {
         }
         CONSOLE.log(Level.FINE, "La ruta {0} no equivale a ninguna de las plantillas", path);
         return false;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Arrays.toString(args));
+
+        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+        encryptor.setPassword(args[0]);
+
+        System.out.println(encryptor.encrypt(args[1]));
     }
 
     public Integer getInventoryBinId(String companyName) {
