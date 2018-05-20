@@ -120,7 +120,7 @@ public class PackingREST implements Serializable {
     public Response validateBinCode(@PathParam("orderNumber") Integer orderNumber, @PathParam("binCode") String binCode, @HeaderParam("X-Company-Name") String companyName) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Listando items por ubicacion y orden ");
-        Integer items = poFacade.countItemsOnBin(binCode, orderNumber, companyName);
+        Integer items = poFacade.countItemsOnBin(binCode.trim(), orderNumber, companyName);
         CONSOLE.log(Level.INFO, "Se obtuvieron {0} items para la orden {1} y ubicacion {2}", new Object[]{items, orderNumber, binCode});
         return Response.ok(new ResponseDTO(0, items)).build();
     }
@@ -133,7 +133,7 @@ public class PackingREST implements Serializable {
                                      @PathParam("binCode") String binCode, @HeaderParam("X-Company-Name") String companyName) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Validando item {0} en orden {1} y ubicacion {2} ", new Object[]{itemCode, orderNumber, binCode});
-        Integer items = poFacade.validateItemOnBin(itemCode, binCode, orderNumber, companyName);
+        Integer items = poFacade.validateItemOnBin(itemCode, binCode.trim(), orderNumber, companyName);
         if (items > 0) {
             CONSOLE.log(Level.INFO, "El item existe en la orden {0} y ubicacion {1}", new Object[]{orderNumber, binCode});
             return Response.ok(new ResponseDTO(0, items)).build();
@@ -164,10 +164,10 @@ public class PackingREST implements Serializable {
         if (packingRecord.getBinAbs() != null) {
             record.setBinAbs(packingRecord.getBinAbs());
         } else {
-            record.setBinAbs(blFacade.getBinAbs(packingRecord.getBinCode(), companyName).longValue());
+            record.setBinAbs(blFacade.getBinAbs(packingRecord.getBinCode().trim(), companyName).longValue());
         }
 
-        record.setBinCode(packingRecord.getBinCode());
+        record.setBinCode(packingRecord.getBinCode().trim());
         record.setBoxNumber(packingRecord.getBoxNumber());
         record.setCustomerId(packingRecord.getCustomerId());
         record.setEmployee(packingRecord.getEmployee());
@@ -188,7 +188,7 @@ public class PackingREST implements Serializable {
 
         try {
             plFacade.create(record);
-            poFacade.updatePackedQuantity(record.getBinCode(), record.getItemCode(), record.getOrderNumber(), record.getQuantity(), companyName);
+            poFacade.updatePackedQuantity(record.getBinCode().trim(), record.getItemCode(), record.getOrderNumber(), record.getQuantity(), companyName);
             return Response.ok(new ResponseDTO(0, record)).build();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el registro. ", e);
@@ -487,7 +487,7 @@ public class PackingREST implements Serializable {
                     if (itemBin.getPackedQty() < itemBin.getPickedQty()) {
                         PackingListRecordDTO recordDto = new PackingListRecordDTO();
                         recordDto.setBinAbs(itemBin.getBinAbs());
-                        recordDto.setBinCode(itemBin.getBinCode());
+                        recordDto.setBinCode(itemBin.getBinCode().trim());
                         recordDto.setBoxNumber(1);
                         recordDto.setCustomerId(autoPackDTO.getCustomerId());
                         recordDto.setCustomerName(customerName);
@@ -551,5 +551,4 @@ public class PackingREST implements Serializable {
 
         return Response.ok(new ResponseDTO(0, "Proceso de empaque automatico finalizado con éxito")).build();
     }
-
 }
