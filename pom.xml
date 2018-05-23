@@ -99,7 +99,7 @@
                 <version>2.3</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
-                    <outputDirectory>${war.output.directory}</outputDirectory>
+                    <!--<outputDirectory>${war.output.directory}</outputDirectory>-->
                 </configuration>
             </plugin>
             <plugin>
