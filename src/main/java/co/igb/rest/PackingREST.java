@@ -120,6 +120,9 @@ public class PackingREST implements Serializable {
     public Response validateBinCode(@PathParam("orderNumber") Integer orderNumber, @PathParam("binCode") String binCode, @HeaderParam("X-Company-Name") String companyName) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Listando items por ubicacion y orden ");
+        if (binCode == null) {
+            return Response.ok(new ResponseDTO(-1, "El código de la ubicación es obligatorio")).build();
+        }
         Integer items = poFacade.countItemsOnBin(binCode, orderNumber, companyName);
         CONSOLE.log(Level.INFO, "Se obtuvieron {0} items para la orden {1} y ubicacion {2}", new Object[]{items, orderNumber, binCode});
         return Response.ok(new ResponseDTO(0, items)).build();
@@ -133,6 +136,11 @@ public class PackingREST implements Serializable {
                                      @PathParam("binCode") String binCode, @HeaderParam("X-Company-Name") String companyName) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Validando item {0} en orden {1} y ubicacion {2} ", new Object[]{itemCode, orderNumber, binCode});
+
+        if (binCode == null) {
+            return Response.ok(new ResponseDTO(-1, "El código de la ubicación es obligatorio")).build();
+        }
+
         Integer items = poFacade.validateItemOnBin(itemCode, binCode, orderNumber, companyName);
         if (items > 0) {
             CONSOLE.log(Level.INFO, "El item existe en la orden {0} y ubicacion {1}", new Object[]{orderNumber, binCode});
@@ -551,5 +559,4 @@ public class PackingREST implements Serializable {
 
         return Response.ok(new ResponseDTO(0, "Proceso de empaque automatico finalizado con éxito")).build();
     }
-
 }

@@ -18,6 +18,26 @@ USE `igb`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `report_picking_progress`
+--
+
+DROP TABLE IF EXISTS `report_picking_progress`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `report_picking_progress` (
+  `idreport_picking_progress` int(11) NOT NULL AUTO_INCREMENT,
+  `order_number` int(11) NOT NULL,
+  `dias` int(11) DEFAULT NULL,
+  `horas` int(11) DEFAULT NULL,
+  `minutos` int(11) NOT NULL,
+  `segundos` int(11) DEFAULT NULL,
+  `promedio` decimal(18,0) NOT NULL,
+  `total_tiempo` decimal(18,0) NOT NULL,
+  PRIMARY KEY (`idreport_picking_progress`)
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `assigned_orders`
 --
 

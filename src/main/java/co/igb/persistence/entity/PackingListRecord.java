@@ -14,7 +14,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- *
  * @author dbotero
  */
 @Entity
@@ -149,7 +148,11 @@ public class PackingListRecord implements Serializable {
     }
 
     public void setBinCode(String binCode) {
-        this.binCode = binCode;
+        if (binCode != null) {
+            this.binCode = binCode.trim();
+        } else {
+            this.binCode = null;
+        }
     }
 
     public Long getBinAbs() {

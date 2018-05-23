@@ -80,9 +80,9 @@ public class ResupplyREST implements Serializable {
         CONSOLE.log(Level.INFO, "Se gestionara un limite de ubicacion");
         LocationLimit location = new LocationLimit();
 
-        location.setCode(limit.getItem() + limit.getUbicacion());
-        location.setName(limit.getItem() + limit.getUbicacion());
-        location.setUbicacion(limit.getUbicacion());
+        location.setCode(limit.getItem() + limit.getUbicacion().trim());
+        location.setName(limit.getItem() + limit.getUbicacion().trim());
+        location.setUbicacion(limit.getUbicacion().trim());
         location.setItem(limit.getItem());
         location.setCantMinima(limit.getCantMinima());
         location.setCantMaxima(limit.getCantMaxima());

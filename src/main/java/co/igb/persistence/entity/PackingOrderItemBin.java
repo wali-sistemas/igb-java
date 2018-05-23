@@ -13,7 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
- *
  * @author dbotero
  */
 @Entity
@@ -70,7 +69,11 @@ public class PackingOrderItemBin implements Serializable {
     }
 
     public void setBinCode(String binCode) {
-        this.binCode = binCode;
+        if (binCode != null) {
+            this.binCode = binCode.trim();
+        } else {
+            this.binCode = null;
+        }
     }
 
     public Long getBinAbs() {
