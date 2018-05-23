@@ -28,6 +28,7 @@ import co.igb.persistence.facade.InventoryFacade;
 import co.igb.persistence.facade.PickingRecordFacade;
 import co.igb.persistence.facade.SalesOrderFacade;
 import co.igb.persistence.facade.StockTransferDetailFacade;
+
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -54,7 +55,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- *
  * @author dbotero
  */
 @Stateless
@@ -131,7 +131,7 @@ public class StockTransferREST implements Serializable {
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response createPickingTransferDocument(SingleItemTransferDTO itemTransfer, @HeaderParam("X-Company-Name") String companyName, @HeaderParam("Authorization") String token) {
+    public Response createPickingTransferDocument(SingleItemTransferDTO itemTransfer, @HeaderParam("X-Company-Name") String companyName) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Trasladando item a carrito de picking {0}", itemTransfer);
 
@@ -272,104 +272,117 @@ public class StockTransferREST implements Serializable {
     @Path("clean-location/{warehouse}/{bincode}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response cleanLocation(@PathParam("warehouse") String warehouse, @PathParam("bincode") String binCode, @HeaderParam("X-Company-Name") String companyName) {
-        List<SaldoUbicacion> stock = binLocationFacade.findLocationBalance(binCode, companyName);
+    public Response cleanLocation(@PathParam("warehouse") String warehouse, @PathParam("bincode") String binCode,
+                                  @HeaderParam("X-Company-Name") String companyName) {
+        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
+        CONSOLE.log(Level.INFO, "Borrando contenido de ubicacion {0}", binCode);
 
-        if (stock != null && !stock.isEmpty()) {
-            StockTransfer transfer = new StockTransfer();
-
-            transfer.setSeries(24L);
-            transfer.setToWarehouse(warehouse);
-            transfer.setFromWarehouse(warehouse);
-            transfer.setComments("Traslado para realizar inventario.");
-
-            StockTransfer.StockTransferLines documentLines = new StockTransfer.StockTransferLines();
-
-            long linea = 0;
-            for (SaldoUbicacion s : stock) {
-                StockTransfer.StockTransferLines.StockTransferLine line = new StockTransfer.StockTransferLines.StockTransferLine();
-
-                line.setLineNum(linea);
-                line.setItemCode(s.getItemCode());
-                line.setQuantity(s.getOnHandQty().doubleValue());
-                line.setWarehouseCode(s.getWhsCode());
-                line.setFromWarehouseCode(s.getWhsCode());
-
-                StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
-
-                outOperation.setAllowNegativeQuantity("tNO");
-                outOperation.setBaseLineNumber(linea);
-                outOperation.setBinAbsEntry(s.getUbicacion().getAbsEntry().longValue());
-                outOperation.setBinActionType("batFromWarehouse");
-                outOperation.setQuantity(s.getOnHandQty().doubleValue());
-
-                StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
-
-                inOperation.setAllowNegativeQuantity("tNO");
-                inOperation.setBaseLineNumber(linea);
-                //inOperation.setBinAbsEntry(Long.parseLong(appBean.obtenerValorPropiedad("inventory.ubication")));
-                inOperation.setBinAbsEntry(appBean.getInventoryBinId(companyName).longValue());
-                inOperation.setBinActionType("batToWarehouse");
-                inOperation.setQuantity(s.getOnHandQty().doubleValue());
-
-                StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations binAllocations = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations();
-                binAllocations.getStockTransferLinesBinAllocation().add(inOperation);
-                binAllocations.getStockTransferLinesBinAllocation().add(outOperation);
-
-                line.setStockTransferLinesBinAllocations(binAllocations);
-
-                documentLines.getStockTransferLine().add(line);
-                linea++;
-            }
-
-            transfer.setStockTransferLines(documentLines);
-
-            //1. Login
-            String sessionId = null;
-            try {
-                sessionId = sapFunctions.login(companyName);
-                CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
-            } catch (Exception e) {
-            }
-            //2. Registrar documento
-            Long docEntry = -1L;
-            String errorMessage = null;
-            if (sessionId != null) {
-                try {
-                    docEntry = createTransferDocument(transfer, sessionId);
-                    CONSOLE.log(Level.INFO, "Se creo la transferencia docEntry={0}", docEntry);
-                } catch (MalformedURLException e) {
-                    CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
-                    errorMessage = e.getMessage();
-                }
-            } else {
-                return Response.ok(-1).build();
-            }
-            //3. Logout
-            if (sessionId != null) {
-                sapFunctions.logout(sessionId);
-            }
-
-            //4. Crear el registro en base de datos
-            Inventory inventory = new Inventory();
-
-            inventory.setDate(new Date());
-            inventory.setLocation(binCode);
-            inventory.setStatus("PE");
-            inventory.setWhsCode(warehouse);
-            inventory.setCompany(companyName);
-            inventory.setTransfer(docEntry.intValue());
-
-            try {
-                inventoryFacade.create(inventory);
-                CONSOLE.log(Level.INFO, "Se creo un inventario con id {0}", inventory.getId());
-                return Response.ok(new ResponseDTO(0, inventory)).build();
-            } catch (Exception e) {
-                CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el inventario. ", e);
-            }
+        if (warehouse == null || warehouse.trim().isEmpty()) {
+            return Response.ok(new ResponseDTO(-1, "No se recibió el código del almacén. Se recomienda cerrar sesión, borrar cookies e historial de navegación de Wali y volver a intentar")).build();
         }
 
-        return Response.ok(-1).build();
+        List<SaldoUbicacion> stock = binLocationFacade.findLocationBalance(binCode, companyName);
+        if (stock == null || stock.isEmpty()) {
+            return Response.ok(new ResponseDTO(-1, "La ubicación " + binCode + " no tiene stock ")).build();
+        }
+
+        StockTransfer transfer = new StockTransfer();
+
+        transfer.setSeries(24L);
+        transfer.setToWarehouse(warehouse);
+        transfer.setFromWarehouse(warehouse);
+        transfer.setComments("Traslado para realizar inventario.");
+
+        StockTransfer.StockTransferLines documentLines = new StockTransfer.StockTransferLines();
+
+        long linea = 0;
+        for (SaldoUbicacion s : stock) {
+            StockTransfer.StockTransferLines.StockTransferLine line = new StockTransfer.StockTransferLines.StockTransferLine();
+
+            line.setLineNum(linea);
+            line.setItemCode(s.getItemCode());
+            line.setQuantity(s.getOnHandQty().doubleValue());
+            line.setWarehouseCode(s.getWhsCode());
+            line.setFromWarehouseCode(s.getWhsCode());
+
+            StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation =
+                    new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+
+            outOperation.setAllowNegativeQuantity("tNO");
+            outOperation.setBaseLineNumber(linea);
+            outOperation.setBinAbsEntry(s.getUbicacion().getAbsEntry().longValue());
+            outOperation.setBinActionType("batFromWarehouse");
+            outOperation.setQuantity(s.getOnHandQty().doubleValue());
+
+            StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation =
+                    new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+
+            inOperation.setAllowNegativeQuantity("tNO");
+            inOperation.setBaseLineNumber(linea);
+            //inOperation.setBinAbsEntry(Long.parseLong(appBean.obtenerValorPropiedad("inventory.ubication")));
+            inOperation.setBinAbsEntry(appBean.getInventoryBinId(companyName).longValue());
+            inOperation.setBinActionType("batToWarehouse");
+            inOperation.setQuantity(s.getOnHandQty().doubleValue());
+
+            StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations binAllocations =
+                    new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations();
+            binAllocations.getStockTransferLinesBinAllocation().add(inOperation);
+            binAllocations.getStockTransferLinesBinAllocation().add(outOperation);
+
+            line.setStockTransferLinesBinAllocations(binAllocations);
+
+            documentLines.getStockTransferLine().add(line);
+            linea++;
+        }
+
+        transfer.setStockTransferLines(documentLines);
+
+        //1. Login
+        String sessionId = null;
+        try {
+            sessionId = sapFunctions.login(companyName);
+            CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+        } catch (Exception e) {
+        }
+
+        //2. Registrar documento
+        Long docEntry = -1L;
+        String errorMessage = null;
+        if (sessionId != null) {
+            try {
+                docEntry = createTransferDocument(transfer, sessionId);
+                CONSOLE.log(Level.INFO, "Se creo la transferencia docEntry={0}", docEntry);
+            } catch (MalformedURLException e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
+                errorMessage = e.getMessage();
+            }
+        } else {
+            return Response.ok(new ResponseDTO(-1, "Ocurrió un error al crear el traslado. " + errorMessage)).build();
+        }
+
+        //3. Logout
+        if (sessionId != null) {
+            sapFunctions.logout(sessionId);
+        }
+
+        //4. Crear el registro en base de datos
+        Inventory inventory = new Inventory();
+
+        inventory.setDate(new Date());
+        inventory.setLocation(binCode);
+        inventory.setStatus("PE");
+        inventory.setWhsCode(warehouse);
+        inventory.setCompany(companyName);
+        inventory.setTransfer(docEntry.intValue());
+
+        try {
+            inventoryFacade.create(inventory);
+            CONSOLE.log(Level.INFO, "Se creo un inventario con id {0}", inventory.getId());
+            return Response.ok(new ResponseDTO(0, inventory)).build();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el inventario. ", e);
+            return Response.ok(new ResponseDTO(-1, "Ocurrió un error al crear el registro de inventario. " + e.getMessage())).build();
+        }
     }
 
     @GET
