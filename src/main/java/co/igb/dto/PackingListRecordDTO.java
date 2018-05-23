@@ -3,7 +3,6 @@ package co.igb.dto;
 import java.util.Date;
 
 /**
- *
  * @author dbotero
  */
 public class PackingListRecordDTO {
@@ -91,7 +90,11 @@ public class PackingListRecordDTO {
     }
 
     public void setBinCode(String binCode) {
-        this.binCode = binCode;
+        if (binCode != null) {
+            this.binCode = binCode.trim();
+        } else {
+            this.binCode = null;
+        }
     }
 
     public Long getBinAbs() {
