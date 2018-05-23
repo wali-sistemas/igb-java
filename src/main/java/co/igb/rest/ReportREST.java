@@ -5,8 +5,10 @@ import co.igb.dto.UserDTO;
 import co.igb.ejb.IGBAuthLDAP;
 import co.igb.persistence.entity.AssignedOrder;
 import co.igb.persistence.entity.PickingRecord;
+import co.igb.persistence.entity.ReportPickingProgress;
 import co.igb.persistence.facade.AssignedOrderFacade;
 import co.igb.persistence.facade.PickingRecordFacade;
+import co.igb.persistence.facade.ReportPickingProgressFacade;
 import co.igb.persistence.facade.SalesOrderFacade;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -43,6 +45,8 @@ public class ReportREST implements Serializable {
     private IGBAuthLDAP authenticator;
     @EJB
     private PickingRecordFacade pickingRecordFacade;
+    @EJB
+    private ReportPickingProgressFacade reportPickingProgressFacade;
 
     @GET
     @Path("reports-orders")
@@ -104,18 +108,55 @@ public class ReportREST implements Serializable {
 
         if (pickings != null && !pickings.isEmpty()) {
             for (Integer l : pickings) {
-                int dias = 0;
-                int horas = 0;
-                int minutos = 0;
-                int diferencia = 0;
-                long time1;
-                long time2;
-                double totalTiempo = 0.0;
-                double promedio = 0.0;
-                List<PickingRecord> datos = pickingRecordFacade.listPicking(l);
+                // Validar si el registro ya no fue registrado
+                ReportPickingProgress rpp = reportPickingProgressFacade.obtainReportOrder(l);
 
-                if (datos != null && !datos.isEmpty()) {
-                    for (int i = 0; i < datos.size(); i++) {
+                if (rpp != null && rpp.getOrderNumber() != null && rpp.getOrderNumber() != 0) {
+                    ordenes.add(new Object[]{l, rpp.getPromedio(), rpp.getTotalTiempo()});
+                } else {
+                    int dias = 0;
+                    int horas = 0;
+                    int minutos = 0;
+                    int diferencia = 0;
+                    long time1;
+                    long time2;
+                    double totalTiempo = 0.0;
+                    double promedio = 0.0;
+                    List<PickingRecord> datos = pickingRecordFacade.listPicking(l);
+
+                    if (datos != null && !datos.isEmpty()) {
+                        for (int i = 0; i < datos.size(); i++) {
+                            if (totalTiempo > 0) {
+                                diferencia = (int) totalTiempo;
+
+                                if (diferencia > 86400) {
+                                    dias = (int) Math.floor(diferencia / 86400);
+                                    diferencia = diferencia - (dias * 86400);
+                                }
+                                if (diferencia > 3600) {
+                                    horas = (int) Math.floor(diferencia / 3600);
+                                    diferencia = diferencia - (horas * 3600);
+                                }
+                                if (diferencia > 60) {
+                                    minutos = (int) Math.floor(diferencia / 60);
+                                    diferencia = diferencia - (minutos * 60);
+                                }
+                            }
+
+                            if (i < (datos.size() - 1)) {
+                                time1 = datos.get(i).getTransactionDate().getTime();
+
+                                if (Integer.parseInt(sdf.format(datos.get(i + 1).getTransactionDate())) > Integer.parseInt(sdf.format(datos.get(i).getTransactionDate()))) {
+                                    int tmp1 = (int) Math.floor(minutos / (i + 1));
+                                    minutos = minutos - (tmp1 * (i + 1));
+                                    totalTiempo += ((tmp1 * 60) + ((diferencia + (minutos * 60)) / (i + 1)));
+                                } else {
+                                    time2 = datos.get(i + 1).getTransactionDate().getTime();
+                                    totalTiempo += (time2 - time1) / 1000;
+                                }
+                            }
+                        }
+
                         if (totalTiempo > 0) {
                             diferencia = (int) totalTiempo;
 
@@ -133,42 +174,30 @@ public class ReportREST implements Serializable {
                             }
                         }
 
-                        if (i < (datos.size() - 1)) {
-                            time1 = datos.get(i).getTransactionDate().getTime();
-
-                            if (Integer.parseInt(sdf.format(datos.get(i + 1).getTransactionDate())) > Integer.parseInt(sdf.format(datos.get(i).getTransactionDate()))) {
-                                int tmp1 = (int) Math.floor(minutos / (i + 1));
-                                minutos = minutos - (tmp1 * (i + 1));
-                                totalTiempo += ((tmp1 * 60) + ((diferencia + (minutos * 60)) / (i + 1)));
-                            } else {
-                                time2 = datos.get(i + 1).getTransactionDate().getTime();
-                                totalTiempo += (time2 - time1) / 1000;
-                            }
-                        }
-
-                        System.out.println("Tiempo en posicion " + i + " " + totalTiempo);
+                        ordenes.add(new Object[]{l, ((((dias * 24) * 60) + (horas * 60) + minutos) / datos.size()), (((dias * 24) * 60) + (horas * 60) + minutos)});
+                    } else {
+                        ordenes.add(new Object[]{l, promedio, totalTiempo});
                     }
 
-                    if (totalTiempo > 0) {
-                        diferencia = (int) totalTiempo;
+                    // Si la orden ya esta cerrada se hace un registro en la base de datos
+                    AssignedOrder order = assignedOrderFacade.findByOrderNumber(l, companyName);
 
-                        if (diferencia > 86400) {
-                            dias = (int) Math.floor(diferencia / 86400);
-                            diferencia = diferencia - (dias * 86400);
-                        }
-                        if (diferencia > 3600) {
-                            horas = (int) Math.floor(diferencia / 3600);
-                            diferencia = diferencia - (horas * 3600);
-                        }
-                        if (diferencia > 60) {
-                            minutos = (int) Math.floor(diferencia / 60);
-                            diferencia = diferencia - (minutos * 60);
+                    if (order != null && order.getId() != null && order.getId() != 0 && order.getStatus().equals("closed")) {
+                        ReportPickingProgress progress = new ReportPickingProgress();
+
+                        progress.setDias(dias);
+                        progress.setHoras(horas);
+                        progress.setMinutos(minutos);
+                        progress.setOrderNumber(l);
+                        progress.setPromedio(promedio);
+                        progress.setSegundos(diferencia);
+                        progress.setTotalTiempo(totalTiempo);
+
+                        try {
+                            reportPickingProgressFacade.create(progress);
+                        } catch (Exception e) {
                         }
                     }
-
-                    ordenes.add(new Object[]{l, ((((dias * 24) * 60) + (horas * 60) + minutos) / datos.size()), (((dias * 24) * 60) + (horas * 60) + minutos)});
-                } else {
-                    ordenes.add(new Object[]{l, promedio, totalTiempo});
                 }
             }
         }

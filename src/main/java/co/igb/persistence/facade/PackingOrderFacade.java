@@ -116,7 +116,7 @@ public class PackingOrderFacade extends AbstractFacade<PackingOrder> {
         sb.append("where ord.order_number = ");
         sb.append(orderNumber);
         sb.append(" and bin.bin_code = '");
-        sb.append(binCode);
+        sb.append(binCode.trim());
         sb.append("' and ord.company_name = '");
         sb.append(companyName);
         sb.append("' and ord.status = 'open'");
@@ -136,7 +136,7 @@ public class PackingOrderFacade extends AbstractFacade<PackingOrder> {
         sb.append("where ord.order_number = ");
         sb.append(orderNumber);
         sb.append(" and bin.bin_code = '");
-        sb.append(binCode);
+        sb.append(binCode.trim());
         sb.append("' and itm.item_code = '");
         sb.append(itemCode);
         sb.append("' and ord.company_name = '");
@@ -155,7 +155,7 @@ public class PackingOrderFacade extends AbstractFacade<PackingOrder> {
         sb.append("update packing_order_item_bin set packed_qty = packed_qty + ");
         sb.append(additionalQuantity);
         sb.append(" where bin_code = '");
-        sb.append(binCode);
+        sb.append(binCode.trim());
         sb.append("' and idpacking_order_item = ( select itm.idpacking_order_item from packing_order ord ");
         sb.append("inner join packing_order_item itm on itm.idpacking_order = ord.idpacking_order ");
         sb.append("where itm.item_code = '");
