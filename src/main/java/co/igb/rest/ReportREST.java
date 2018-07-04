@@ -23,14 +23,13 @@ import javax.ejb.TransactionAttributeType;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
  *
- * @author YEIJARA
+ * @author YEIJARA||
  */
 @Stateless
 @Path("report")
@@ -82,11 +81,11 @@ public class ReportREST implements Serializable {
     }
 
     @GET
-    @Path("reports-employee-assigned/{groupName}")
+    @Path("reports-employee-assigned")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response obtainReportsEmployeeAssigned(@PathParam("groupName") String groupName, @HeaderParam("X-Company-Name") String companyName) {
-        List<UserDTO> users = authenticator.listEmployeesInGroup(groupName);
+    public Response obtainReportsEmployeeAssigned(@HeaderParam("X-Company-Name") String companyName) {
+        List<UserDTO> users = authenticator.listEmployeesInGroup("WMS");
 
         if (users != null && !users.isEmpty()) {
             for (UserDTO u : users) {
