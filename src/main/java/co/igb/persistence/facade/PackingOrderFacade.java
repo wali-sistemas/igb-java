@@ -256,4 +256,30 @@ public class PackingOrderFacade extends AbstractFacade<PackingOrder> {
             return new ArrayList<>();
         }
     }
+
+    public List<Object[]> listAllPackings(String customer, String companyName){
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("SELECT ord.customer_id, ord.customer_name, ord.order_number, item.item_code, bin.bin_name, bin.bin_code, bin.bin_abs, bin.picked_qty, ord.idpacking_order ");
+        sb.append("FROM   igb.packing_order ord ");
+        sb.append("INNER  JOIN igb.packing_order_item item ON item.idpacking_order = ord.idpacking_order ");
+        sb.append("INNER  JOIN igb.packing_order_item_bin bin ON bin.idpacking_order_item = item.idpacking_order_item ");
+        sb.append("WHERE  ord.status = 'open' ");
+        sb.append("AND    bin.packed_qty < bin.picked_qty ");
+        sb.append("AND    ord.company_name = '");
+        sb.append(companyName);
+        sb.append("' ");
+        if(customer != null && !customer.isEmpty() && !customer.equals("null")) {
+            sb.append(" AND   ord.customer_id = '");
+            sb.append(customer);
+            sb.append("'");
+        }
+
+        try {
+            return em.createNativeQuery(sb.toString()).getResultList();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar las ordenes de packing. ", e);
+            return new ArrayList<>();
+        }
+    }
 }
