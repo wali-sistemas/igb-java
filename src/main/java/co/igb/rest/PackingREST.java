@@ -559,4 +559,13 @@ public class PackingREST implements Serializable {
 
         return Response.ok(new ResponseDTO(0, "Proceso de empaque automatico finalizado con éxito")).build();
     }
+
+    @GET
+    @Path("get-packing-orders/{customer}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    public Response getPackingOrders(@PathParam("customer") String customer, @HeaderParam("X-Company-Name") String companyName){
+        List<Object[]> customers = poFacade.listAllPackings(customer, companyName);
+
+        return Response.ok(new ResponseDTO(0, customers)).build();
+    }
 }
