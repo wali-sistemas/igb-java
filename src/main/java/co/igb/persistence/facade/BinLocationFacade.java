@@ -128,7 +128,7 @@ public class BinLocationFacade {
 
     public Integer findInventoryLocationId(String companyName) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(absentry as int) from obin where attr1val = 'INVENTORY'");
+        sb.append("select cast(absentry as int) from obin where attr1val = 'INVENTORY' and Disabled = 'N'");
         try {
             return (Integer) chooseSchema(companyName).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
