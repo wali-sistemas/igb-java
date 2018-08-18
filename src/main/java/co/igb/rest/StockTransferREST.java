@@ -283,7 +283,7 @@ public class StockTransferREST implements Serializable {
 
         List<SaldoUbicacion> stock = binLocationFacade.findLocationBalance(binCode, companyName);
         if (stock == null || stock.isEmpty()) {
-            return Response.ok(new ResponseDTO(-2, "La ubicación " + binCode + " no tiene stock ")).build();
+            return startCounting(binCode, warehouse, companyName, 0L);
         }
 
         StockTransfer transfer = new StockTransfer();
@@ -366,6 +366,10 @@ public class StockTransferREST implements Serializable {
         }
 
         //4. Crear el registro en base de datos
+        return startCounting(binCode, warehouse, companyName, docEntry);
+    }
+
+    private Response startCounting(String binCode, String warehouse, String companyName, Long docEntry) {
         Inventory inventory = new Inventory();
 
         inventory.setDate(new Date());
