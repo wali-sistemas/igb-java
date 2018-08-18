@@ -58,7 +58,8 @@ public class HeaderDecorationFilter implements Filter {
         try {
             String path = request.getPathInfo();
             String authorizationToken = request.getHeader("Authorization");
-            CONSOLE.log(Level.INFO, "Procesando solicitud a [{0}]", path);
+            CONSOLE.log(Level.INFO, "Procesando solicitud a [{0}] desde [{1}]",
+                    new Object[]{path, request.getRemoteAddr()});
             CONSOLE.log(Level.FINE, "Validando token [{0}]", authorizationToken);
             if (appBean.isPathExcludedFromTokenValidation(path)) {
                 CONSOLE.log(Level.FINE, "La ruta solicitada no requiere validacion de token");
