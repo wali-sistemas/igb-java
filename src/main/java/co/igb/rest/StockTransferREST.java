@@ -283,7 +283,7 @@ public class StockTransferREST implements Serializable {
 
         List<SaldoUbicacion> stock = binLocationFacade.findLocationBalance(binCode, companyName);
         if (stock == null || stock.isEmpty()) {
-            return Response.ok(new ResponseDTO(-1, "La ubicación " + binCode + " no tiene stock ")).build();
+            return Response.ok(new ResponseDTO(-2, "La ubicación " + binCode + " no tiene stock ")).build();
         }
 
         StockTransfer transfer = new StockTransfer();

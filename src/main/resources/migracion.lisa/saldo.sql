@@ -3,7 +3,7 @@ select 'DocEntry,Series,Printed,DocDate,CardCode,CardName,Address,Reference1,Ref
 union all
 select 'DocEntry,Series,Printed,DocDate,CardCode,CardName,Address,Ref1,Ref2,Comments,JrnlMemo,GroupNum,SlpCode,Filler,TaxDate,CntctCode,FolioPref,FolioNum,ObjType'
 union all
-select cast(ROW_NUMBER ()  OVER(order by pro.InternIDProduct) as varchar(5)) + ',24,tNO,' + concat(datepart(year,getdate()), datepart(month,getdate()),datepart(day,getdate())) + ',P811011909,,,,,CONFIGURACION DE SALDOS EN UBICACIONES SAP,CONFIGURACION DE SALDOS EN UBICACIONES SAP,,,01,,,,,'
+select cast(ROW_NUMBER ()  OVER(order by pro.InternIDProduct) as varchar(5)) + ',24,tNO,' + concat(datepart(year,getdate()), right('0'+cast(datepart(month,getdate()) as varchar(2)),2),datepart(day,getdate())) + ',P811011909,,,,,CONFIGURACION DE SALDOS EN UBICACIONES SAP,CONFIGURACION DE SALDOS EN UBICACIONES SAP,,,01,,,,,'
 from inventory inv
 inner join Product pro on pro.IDProduct = inv.IDProduct
 inner join Locations loc on loc.idLocation = inv.idLocation and loc.IdWarehouse = 1
