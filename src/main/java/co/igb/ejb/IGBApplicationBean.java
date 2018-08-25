@@ -1,7 +1,7 @@
 package co.igb.ejb;
 
 import co.igb.persistence.facade.BinLocationFacade;
-import co.igb.rest.ResponseDTO;
+import co.igb.dto.ResponseDTO;
 
 import java.io.File;
 import java.io.FileInputStream;

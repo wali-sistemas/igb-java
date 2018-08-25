@@ -1,5 +1,6 @@
 package co.igb.rest;
 
+import co.igb.dto.ResponseDTO;
 import co.igb.dto.SortedStockDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.entity.AssignedOrder;
@@ -11,7 +12,6 @@ import co.igb.persistence.facade.BinLocationFacade;
 import co.igb.persistence.facade.PackingOrderFacade;
 import co.igb.persistence.facade.PickingRecordFacade;
 import co.igb.persistence.facade.SalesOrderFacade;
-import co.igb.util.IGBUtils;
 import org.apache.commons.lang3.time.StopWatch;
 
 import javax.ejb.EJB;
@@ -126,8 +126,11 @@ public class PickingREST implements Serializable {
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response findNextItemToPick(@PathParam("username") String username, @QueryParam("orderNumber") Integer orderNumber,
-                                       @HeaderParam("X-Company-Name") String companyName) {
+    public Response findNextItemToPick(
+            @PathParam("username") String username,
+            @QueryParam("orderNumber") Integer orderNumber,
+            @HeaderParam("X-Company-Name") String companyName,
+            @HeaderParam("X-Warehouse-Code") String warehouseCode) {
         StopWatch watch = new StopWatch();
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Buscando siguiente item para packing para el usuario {0} ", username);
@@ -159,8 +162,12 @@ public class PickingREST implements Serializable {
 
             //Si hay items pendientes por picking, consulta su saldo y lo retorna organizado por velocidad y secuencia.
             if (!pendingItems.isEmpty()) {
-                String warehouseCode = IGBUtils.getProperParameter(appBean.obtenerValorPropiedad("igb.warehouse.code"), companyName);
-                List<Object[]> orderStock = soFacade.findOrdersStockAvailability(order.getOrderNumber(), new ArrayList<>(pendingItems.keySet()), warehouseCode, companyName);
+                //String warehouseCode = IGBUtils.getProperParameter(appBean.obtenerValorPropiedad("igb.warehouse.code"), companyName);
+                List<Object[]> orderStock = soFacade.findOrdersStockAvailability(
+                        order.getOrderNumber(),
+                        new ArrayList<>(pendingItems.keySet()),
+                        warehouseCode,
+                        companyName);
                 //Agregar el inventario de la orden al set de stock
                 for (Object[] row : orderStock) {
                     SortedStockDTO sorted = new SortedStockDTO(row);

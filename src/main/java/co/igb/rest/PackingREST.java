@@ -12,6 +12,7 @@ import co.igb.b1ws.client.deliverynote.MsgHeader;
 import co.igb.dto.AutoPackDTO;
 import co.igb.dto.PackingDTO;
 import co.igb.dto.PackingListRecordDTO;
+import co.igb.dto.ResponseDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.entity.PackingListRecord;
 import co.igb.persistence.entity.PackingOrder;

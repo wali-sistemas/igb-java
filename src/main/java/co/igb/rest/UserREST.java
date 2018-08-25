@@ -1,24 +1,22 @@
 package co.igb.rest;
 
-import co.igb.rest.exception.IGBAuthenticationException;
 import co.igb.dto.AuthenticationResponseDTO;
+import co.igb.dto.ResponseDTO;
 import co.igb.dto.UserDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.ejb.IGBAuthLDAP;
 import co.igb.persistence.entity.User;
 import co.igb.persistence.facade.UserFacade;
-import co.igb.util.IGBUtils;
+import co.igb.persistence.facade.WarehouseFacade;
+import co.igb.rest.exception.IGBAuthenticationException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
-import java.io.UnsupportedEncodingException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 import javax.ws.rs.Consumes;
@@ -29,9 +27,14 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- *
  * @author martin
  */
 @Stateless
@@ -44,6 +47,8 @@ public class UserREST {
     private IGBAuthLDAP authenticator;
     @EJB
     private UserFacade userFacade;
+    @EJB
+    private WarehouseFacade warehouseFacade;
     @Inject
     private IGBApplicationBean applicationBean;
 
@@ -51,6 +56,7 @@ public class UserREST {
     @Path("login/")
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response login(UserDTO user) {
         CONSOLE.log(Level.INFO, "Se recibieron datos de usuario para login {0}", user);
         if (user == null || user.getUsername() == null || user.getUsername().trim().isEmpty()
@@ -103,11 +109,20 @@ public class UserREST {
             if (token == null) {
                 return Response.ok(new AuthenticationResponseDTO(1, "Ocurrio un error al autenticar al usuario (JWT). ")).build();
             }
+            try {
+                user.setWarehouseCode(getWarehouseCode(user.getSelectedCompany()));
+            } catch (Exception e) {
+                return Response.ok(new AuthenticationResponseDTO(1, "Ocurrio un error al obtener el código del almacén. ")).build();
+            }
+
             user.setToken(token);
-            user.setWarehouseCode(IGBUtils.getProperParameter(applicationBean.obtenerValorPropiedad("igb.warehouse.code"), user.getSelectedCompany()));
             response.setUser(user);
         }
         return Response.ok(response).build();
+    }
+
+    private String getWarehouseCode(String companyName) {
+        return warehouseFacade.listBinEnabledWarehouses(companyName).get(0).getCode();
     }
 
     private UserDTO getUserInfoFromLdap(UserDTO user, boolean create) throws IGBAuthenticationException {

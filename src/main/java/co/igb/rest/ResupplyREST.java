@@ -1,6 +1,7 @@
 package co.igb.rest;
 
 import co.igb.dto.LocationLimitDTO;
+import co.igb.dto.ResponseDTO;
 import co.igb.persistence.entity.LocationLimit;
 import co.igb.persistence.facade.BinLocationFacade;
 import co.igb.persistence.facade.LocationLimitFacade;

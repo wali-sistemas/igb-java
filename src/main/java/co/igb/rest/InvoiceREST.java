@@ -7,6 +7,7 @@ import co.igb.b1ws.client.invoice.Document.DocumentLines;
 import co.igb.b1ws.client.invoice.Document.DocumentLines.DocumentLine;
 import co.igb.b1ws.client.invoice.InvoicesService;
 import co.igb.b1ws.client.invoice.MsgHeader;
+import co.igb.dto.ResponseDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.facade.CustomerFacade;
 import co.igb.persistence.facade.DeliveryNoteFacade;

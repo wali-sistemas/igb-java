@@ -1,6 +1,7 @@
 package co.igb.rest;
 
 import co.igb.dto.OrderAssignmentDTO;
+import co.igb.dto.ResponseDTO;
 import co.igb.dto.SalesOrderDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.entity.AssignedOrder;

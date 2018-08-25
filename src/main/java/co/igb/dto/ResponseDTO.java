@@ -1,4 +1,4 @@
-package co.igb.rest;
+package co.igb.dto;
 
 /**
  *

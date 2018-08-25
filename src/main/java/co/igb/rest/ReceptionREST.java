@@ -6,6 +6,7 @@ import co.igb.b1ws.client.purchasedeliverynote.Document;
 import co.igb.b1ws.client.purchasedeliverynote.PurchaseDeliveryNotesService;
 import co.igb.dto.PurchaseOrderDTO;
 import co.igb.dto.PurchaseOrderLineDTO;
+import co.igb.dto.ResponseDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.facade.PurchaseOrderFacade;
 import co.igb.util.IGBUtils;

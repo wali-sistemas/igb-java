@@ -1,5 +1,6 @@
 package co.igb.rest;
 
+import co.igb.dto.ResponseDTO;
 import co.igb.dto.SalesOrderDTO;
 import co.igb.dto.UserDTO;
 import co.igb.ejb.IGBApplicationBean;

@@ -12,6 +12,7 @@ import co.igb.b1ws.client.stocktransfer.AddResponse;
 import co.igb.b1ws.client.stocktransfer.MsgHeader;
 import co.igb.b1ws.client.stocktransfer.StockTransfer;
 import co.igb.b1ws.client.stocktransfer.StockTransferService;
+import co.igb.dto.ResponseDTO;
 import co.igb.dto.SingleItemTransferDTO;
 import co.igb.ejb.EmailManager;
 import co.igb.ejb.IGBApplicationBean;

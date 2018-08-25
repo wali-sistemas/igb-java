@@ -1,5 +1,6 @@
 package co.igb.rest;
 
+import co.igb.dto.ResponseDTO;
 import co.igb.dto.ZebraPrintDTO;
 import co.igb.persistence.facade.PackingListRecordFacade;
 import co.igb.persistence.facade.PrinterFacade;
