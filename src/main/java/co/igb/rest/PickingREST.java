@@ -162,7 +162,6 @@ public class PickingREST implements Serializable {
 
             //Si hay items pendientes por picking, consulta su saldo y lo retorna organizado por velocidad y secuencia.
             if (!pendingItems.isEmpty()) {
-                //String warehouseCode = IGBUtils.getProperParameter(appBean.obtenerValorPropiedad("igb.warehouse.code"), companyName);
                 List<Object[]> orderStock = soFacade.findOrdersStockAvailability(
                         order.getOrderNumber(),
                         new ArrayList<>(pendingItems.keySet()),

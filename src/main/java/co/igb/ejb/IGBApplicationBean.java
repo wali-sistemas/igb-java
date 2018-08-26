@@ -1,8 +1,23 @@
 package co.igb.ejb;
 
-import co.igb.persistence.facade.BinLocationFacade;
 import co.igb.dto.ResponseDTO;
+import co.igb.persistence.facade.BinLocationFacade;
+import co.igb.util.Constants;
+import org.apache.commons.lang3.StringUtils;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+import org.jasypt.properties.EncryptableProperties;
 
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.Serializable;
@@ -16,21 +31,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.apache.commons.lang3.StringUtils;
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
-import org.jasypt.properties.EncryptableProperties;
 
 /**
  * @author dbotero
@@ -87,10 +87,10 @@ public class IGBApplicationBean implements Serializable {
                 props.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("/" + propertiesFileName));
             }
 
-            String pathValues = props.getProperty("igb.no-filter.paths");
+            String pathValues = props.getProperty(Constants.NO_FILTER_PATHS);
             excludedPaths = new HashSet<>(Arrays.asList(pathValues.split(",")));
 
-            String templateValues = props.getProperty("igb.no-filter.templates");
+            String templateValues = props.getProperty(Constants.NO_FILTER_TEMPLATES);
             excludedPathTemplates = new ArrayList<>();
             for (String regex : Arrays.asList(templateValues.split(","))) {
                 excludedPathTemplates.add(Pattern.compile(regex));
@@ -102,7 +102,7 @@ public class IGBApplicationBean implements Serializable {
 
     private void consultarUbicacionesInventario() {
         inventoryLocations = new HashMap<>();
-        String[] companies = props.getProperty("igb.login.companies").split(";");
+        String[] companies = props.getProperty(Constants.COMPANIES).split(";");
         for (String company : companies) {
             String databaseName = company.split(",")[0].trim();
             Integer binAbs = binFacade.findInventoryLocationId(databaseName);
