@@ -2,10 +2,7 @@ package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.SaldoUbicacion;
 import co.igb.persistence.entity.SaldoUbicacion_;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -13,6 +10,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author dbotero
@@ -220,7 +221,7 @@ public class BinLocationFacade {
         }
     }
 
-    public List<Object[]> listLocationsStorageResupply(String itemCode, String companyName) {
+    public List<Object[]> listLocationsStorageResupply(String itemCode, String companyName, String whsCode) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("SELECT CONVERT(INT, ubicacion.AbsEntry) AS absEntry, CONVERT(VARCHAR(50), ubicacion.BinCode) AS BinCode, CONVERT(INT, saldo.OnHandQty) AS OnHandQty ");
@@ -231,7 +232,9 @@ public class BinLocationFacade {
         sb.append("' ");
         sb.append("AND    saldo.OnHandQty > 0 ");
         sb.append("AND    ubicacion.Attr1Val = 'STORAGE' ");
-        sb.append("ORDER  BY ubicacion.attr2val, ubicacion.attr3val ");
+        sb.append("AND    ubicacion.whsCode = '");
+        sb.append(whsCode);
+        sb.append("' ORDER  BY ubicacion.attr2val, ubicacion.attr3val ");
 
         try {
             return chooseSchema(companyName).createNativeQuery(sb.toString()).getResultList();

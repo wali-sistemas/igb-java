@@ -2,9 +2,7 @@ package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.LocationLimit;
 import co.igb.persistence.entity.LocationLimit_;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -14,6 +12,9 @@ import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author dbotero
@@ -41,11 +42,12 @@ public class LocationLimitFacade {
         }
     }
 
-    public List<LocationLimit> listLocationsLimits(String schema) {
+    public List<LocationLimit> listLocationsLimits(String schema, String warehouseCode) {
         EntityManager em = chooseSchema(schema);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(LocationLimit.class);
         Root limite = cq.from(LocationLimit.class);
+        cq.where(cb.like(limite.get(LocationLimit_.ubicacion), warehouseCode));
 
         try {
             return em.createQuery(cq).getResultList();

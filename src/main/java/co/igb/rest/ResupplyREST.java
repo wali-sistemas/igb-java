@@ -5,9 +5,7 @@ import co.igb.dto.ResponseDTO;
 import co.igb.persistence.entity.LocationLimit;
 import co.igb.persistence.facade.BinLocationFacade;
 import co.igb.persistence.facade.LocationLimitFacade;
-import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -22,6 +20,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author YEIJARA
@@ -40,36 +41,46 @@ public class ResupplyREST implements Serializable {
     @Path("list-locations-resupply")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response listLocationsResupply(@HeaderParam("X-Company-Name") String companyName) {
+    public Response listLocationsResupply(
+            @HeaderParam("X-Company-Name") String companyName,
+            @HeaderParam("X-Warehouse-Code") String warehouseCode) {
         CONSOLE.log(Level.INFO, "Se estan consultando las ubicaciones pendientes por re-abastecer");
-        return Response.ok(new ResponseDTO(0, binLocationFacade.findLocationsResupply("01", companyName))).build();
+        return Response.ok(new ResponseDTO(0, binLocationFacade.findLocationsResupply(warehouseCode, companyName))).build();
     }
 
     @GET
     @Path("list-items-location/{location}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response listItemsLocation(@PathParam("location") String location, @HeaderParam("X-Company-Name") String companyName) {
+    public Response listItemsLocation(
+            @PathParam("location") String location,
+            @HeaderParam("X-Company-Name") String companyName,
+            @HeaderParam("X-Warehouse-Code") String warehouseCode) {
         CONSOLE.log(Level.INFO, "Se estan consultando las referencias que necesitan para re-abastecer de la ubicacion {0}", location);
-        return Response.ok(new ResponseDTO(0, binLocationFacade.findItemsLocationResupply(location, "01", companyName))).build();
+        return Response.ok(new ResponseDTO(0, binLocationFacade.findItemsLocationResupply(location, warehouseCode, companyName))).build();
     }
 
     @GET
     @Path("list-location-storage/{itemCode}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response listUbicationsStorage(@PathParam("itemCode") String itemCode, @HeaderParam("X-Company-Name") String companyName) {
+    public Response listUbicationsStorage(
+            @PathParam("itemCode") String itemCode,
+            @HeaderParam("X-Company-Name") String companyName,
+            @HeaderParam("X-Warehouse-Code") String warehouseCode) {
         CONSOLE.log(Level.INFO, "Se estan consultando las ubicaciones tipo STORAGE, para poder re-abastecer el item {0}", itemCode);
-        return Response.ok(new ResponseDTO(0, binLocationFacade.listLocationsStorageResupply(itemCode, companyName))).build();
+        return Response.ok(new ResponseDTO(0, binLocationFacade.listLocationsStorageResupply(itemCode, companyName, warehouseCode))).build();
     }
 
     @GET
     @Path("list-location-limits")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response listLocationLimits(@HeaderParam("X-Company-Name") String companyName) {
+    public Response listLocationLimits(
+            @HeaderParam("X-Company-Name") String companyName,
+            @HeaderParam("X-Warehouse-Code") String warehouseCode) {
         CONSOLE.log(Level.INFO, "Se estan obteniendo los limites de ubicacion");
-        return Response.ok(new ResponseDTO(0, locationLimitFacade.listLocationsLimits(companyName))).build();
+        return Response.ok(new ResponseDTO(0, locationLimitFacade.listLocationsLimits(companyName, warehouseCode))).build();
     }
 
     @POST
@@ -77,7 +88,10 @@ public class ResupplyREST implements Serializable {
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response saveLocationLimit(LocationLimitDTO limit, @HeaderParam("X-Company-Name") String companyName) {
+    public Response saveLocationLimit(
+            LocationLimitDTO limit,
+            @HeaderParam("X-Company-Name") String companyName,
+            @HeaderParam("X-Warehouse-Code") String warehouseCode) {
         CONSOLE.log(Level.INFO, "Se gestionara un limite de ubicacion");
         LocationLimit location = new LocationLimit();
 
@@ -109,7 +123,10 @@ public class ResupplyREST implements Serializable {
     @Path("delete-location-limit/{code}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response deleteLocationLimit(@PathParam("code") String code, @HeaderParam("X-Company-Name") String companyName) {
+    public Response deleteLocationLimit(
+            @PathParam("code") String code,
+            @HeaderParam("X-Company-Name") String companyName,
+            @HeaderParam("X-Warehouse-Code") String warehouseCode) {
         try {
             locationLimitFacade.deleteLimit(code, companyName);
             return Response.ok(new ResponseDTO(0, "Se elimino correctamente.")).build();
