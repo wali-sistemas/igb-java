@@ -169,7 +169,7 @@ public class IGBAuthLDAP {
                 Attribute usuario = attrs.get(Constants.LDAP_USERNAME_FIELD);
                 if (usuario != null) {
                     Attribute memberOf = attrs.get(Constants.LDAP_MEMBEROF_FIELD);
-                    if (memberOf != null && memberOf.contains("CN=" + groupName + Constants.LDAP_USERS_CONTAINER)) {
+                    if (memberOf != null && memberOf.contains("CN=" + groupName + "," + Constants.LDAP_USERS_CONTAINER)) {
                         String email = (String) attrs.get(Constants.LDAP_EMAIL_FIELD).get();
                         String name = (String) attrs.get(Constants.LDAP_NAME_FIELD).get();
                         String surname = (String) attrs.get(Constants.LDAP_LASTNAME_FIELD).get();
