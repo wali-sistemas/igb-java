@@ -127,14 +127,25 @@ public class BinLocationFacade {
         }
     }
 
-    public Integer findInventoryLocationId(String companyName) {
+    public List<Object[]> findInventoryLocationId(String companyName) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(absentry as int) from obin where attr1val = 'INVENTORY' and Disabled = 'N'");
+        sb.append("select cast(whscode as varchar(2)) whsCode, cast(absentry as int) absEntry from obin where attr1val = 'INVENTORY' and Disabled = 'N'");
         try {
-            return (Integer) chooseSchema(companyName).createNativeQuery(sb.toString()).getSingleResult();
+            return (List<Object[]>) chooseSchema(companyName).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la ubicacion de inventario para la empresa " + companyName, e);
-            return -1;
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ubicaciones de inventario para la empresa " + companyName, e);
+            return null;
+        }
+    }
+
+    public List<Object[]> findReceptionLocations(String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select TOP 1 cast(whscode as varchar(2)) whsCode, cast(absentry as int) absEntry from obin where sl1code = 'RECEPTION' and Disabled = 'N'");
+        try {
+            return (List<Object[]>) chooseSchema(companyName).createNativeQuery(sb.toString()).getResultList();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ubicaciones de recepcion para la empresa " + companyName, e);
+            return null;
         }
     }
 

@@ -1,18 +1,18 @@
 package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.PackingListRecord;
+
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 
 /**
- *
  * @author dbotero
  */
 @Stateless
@@ -59,11 +59,15 @@ public class PackingListRecordFacade extends AbstractFacade<PackingListRecord> {
         return new ArrayList<>();
     }
 
-    public List<Object[]> listRecords(Integer idPackingOrder, String companyName) {
+    public List<Object[]> listRecords(Integer idPackingOrder, String companyName, boolean openRecordsOnly) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from packing_list_record where idpacking_order = ");
         sb.append(idPackingOrder);
-        sb.append(" and status = 'open' and company_name = '");
+        if (openRecordsOnly) {
+            sb.append(" and status = 'open' ");
+        }
+        sb.append(" and company_name = '");
+
         sb.append(companyName);
         sb.append("' order by item_code, bin_abs");
         try {
@@ -147,7 +151,7 @@ public class PackingListRecordFacade extends AbstractFacade<PackingListRecord> {
                 orderNumberText.append(orderNumber);
                 orderNumberText.append(",");
             }
-            if(orderNumberText.length()==0){
+            if (orderNumberText.length() == 0) {
                 return null;
             }
             orderNumberText.delete(orderNumberText.length() - 1, orderNumberText.length());

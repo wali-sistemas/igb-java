@@ -1,8 +1,5 @@
 package co.igb.persistence.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author dbotero
@@ -49,6 +49,9 @@ public class PackingListRecord implements Serializable {
     @Basic(optional = false)
     @Column(name = "item_code")
     private String itemCode;
+    @Basic(optional = true)
+    @Column(name = "item_name")
+    private String itemName;
     @Basic(optional = false)
     @Column(name = "quantity")
     private Integer quantity;
@@ -133,6 +136,14 @@ public class PackingListRecord implements Serializable {
 
     public void setItemCode(String itemCode) {
         this.itemCode = itemCode;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 
     public Integer getQuantity() {

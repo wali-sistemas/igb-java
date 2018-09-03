@@ -30,16 +30,6 @@ import co.igb.persistence.facade.PickingRecordFacade;
 import co.igb.persistence.facade.SalesOrderFacade;
 import co.igb.persistence.facade.StockTransferDetailFacade;
 
-import java.io.Serializable;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -54,6 +44,16 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author dbotero
@@ -95,7 +95,7 @@ public class StockTransferREST implements Serializable {
         try {
             sessionId = sapFunctions.login(companyName);
             CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         //2. Procesar documento
@@ -132,7 +132,9 @@ public class StockTransferREST implements Serializable {
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response createPickingTransferDocument(SingleItemTransferDTO itemTransfer, @HeaderParam("X-Company-Name") String companyName) {
+    public Response createPickingTransferDocument(SingleItemTransferDTO itemTransfer,
+                                                  @HeaderParam("X-Company-Name") String companyName,
+                                                  @HeaderParam("X-Warehouse-Code") String warehouseCode) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Trasladando item a carrito de picking {0}", itemTransfer);
 
@@ -168,7 +170,7 @@ public class StockTransferREST implements Serializable {
             Integer expectedQuantity = binLocationFacade.getTotalQuantity(itemTransfer.getBinAbsFrom(), itemTransfer.getItemCode(), companyName);
             try {
                 //Trasladar la diferencia a la ubicacion de inconsistencias
-                Long docEntry = adjustMissingQuantity(itemTransfer, expectedQuantity, companyName);
+                Long docEntry = adjustMissingQuantity(itemTransfer, expectedQuantity, companyName, warehouseCode);
                 CONSOLE.log(Level.INFO, "Se trasladaron las unidades sobrantes a la ubicacion de inventario. DocEntry={0}", docEntry);
             } catch (Exception e) {
                 return Response.ok(new ResponseDTO(-1, "Ocurrio un error al reportar la inconsistencia de inventario. " + e.getMessage())).build();
@@ -221,7 +223,7 @@ public class StockTransferREST implements Serializable {
         try {
             sessionId = sapFunctions.login(companyName);
             CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         //2. Registrar documento
         Long docEntry = -1L;
@@ -274,7 +276,8 @@ public class StockTransferREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response cleanLocation(@PathParam("warehouse") String warehouse, @PathParam("bincode") String binCode,
-                                  @HeaderParam("X-Company-Name") String companyName) {
+                                  @HeaderParam("X-Company-Name") String companyName,
+                                  @HeaderParam("X-Warehouse-Code") String warehouseCode) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Borrando contenido de ubicacion {0}", binCode);
 
@@ -320,8 +323,7 @@ public class StockTransferREST implements Serializable {
 
             inOperation.setAllowNegativeQuantity("tNO");
             inOperation.setBaseLineNumber(linea);
-            //inOperation.setBinAbsEntry(Long.parseLong(appBean.obtenerValorPropiedad("inventory.ubication")));
-            inOperation.setBinAbsEntry(appBean.getInventoryBinId(companyName).longValue());
+            inOperation.setBinAbsEntry(appBean.getInventoryBinId(companyName, warehouseCode).longValue());
             inOperation.setBinActionType("batToWarehouse");
             inOperation.setQuantity(s.getOnHandQty().doubleValue());
 
@@ -343,7 +345,7 @@ public class StockTransferREST implements Serializable {
         try {
             sessionId = sapFunctions.login(companyName);
             CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         //2. Registrar documento
@@ -394,7 +396,9 @@ public class StockTransferREST implements Serializable {
     @Path("finish-inventory/{idInventory}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response finishInventory(@PathParam("idInventory") Integer idInventory, @HeaderParam("X-Company-Name") String companyName) {
+    public Response finishInventory(@PathParam("idInventory") Integer idInventory,
+                                    @HeaderParam("X-Company-Name") String companyName,
+                                    @HeaderParam("X-Warehouse-Code") String warehouseCode) {
         Inventory inventory = inventoryFacade.find(idInventory);
         List<InventoryDetail> detail = inventoryDetailFacade.findInventoryDetail(idInventory);
         List<InventoryDifference> differences = new ArrayList<>();
@@ -441,7 +445,7 @@ public class StockTransferREST implements Serializable {
                             outOperation.setAllowNegativeQuantity("tNO");
                             outOperation.setBaseLineNumber(linea);
                             //outOperation.setBinAbsEntry(Long.parseLong(appBean.obtenerValorPropiedad("inventory.ubication")));
-                            outOperation.setBinAbsEntry(appBean.getInventoryBinId(companyName).longValue());
+                            outOperation.setBinAbsEntry(appBean.getInventoryBinId(companyName, warehouseCode).longValue());
                             outOperation.setBinActionType("batFromWarehouse");
                             outOperation.setQuantity(line.getQuantity());
 
@@ -474,7 +478,7 @@ public class StockTransferREST implements Serializable {
                 try {
                     sessionId = sapFunctions.login(companyName);
                     CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
                 //2. Registrar documento
                 Long docEntry = -1L;
@@ -672,7 +676,8 @@ public class StockTransferREST implements Serializable {
         return false;
     }
 
-    private Long adjustMissingQuantity(SingleItemTransferDTO itemTransfer, Integer expectedQuantity, String companyName) throws Exception {
+    private Long adjustMissingQuantity(SingleItemTransferDTO itemTransfer, Integer expectedQuantity,
+                                       String companyName, String warehouseCode) throws Exception {
         StockTransfer transfer = new StockTransfer();
 
         transfer.setSeries(24L);
@@ -698,7 +703,7 @@ public class StockTransferREST implements Serializable {
         StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
         inOperation.setAllowNegativeQuantity("tNO");
         inOperation.setBaseLineNumber(0L);
-        inOperation.setBinAbsEntry(appBean.getInventoryBinId(companyName).longValue());
+        inOperation.setBinAbsEntry(appBean.getInventoryBinId(companyName, warehouseCode).longValue());
         inOperation.setBinActionType("batToWarehouse");
         inOperation.setQuantity(line.getQuantity());
 

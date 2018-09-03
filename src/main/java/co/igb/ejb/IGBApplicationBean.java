@@ -1,5 +1,6 @@
 package co.igb.ejb;
 
+import co.igb.dto.CompanyDTO;
 import co.igb.dto.ResponseDTO;
 import co.igb.persistence.facade.BinLocationFacade;
 import co.igb.util.Constants;
@@ -45,14 +46,17 @@ public class IGBApplicationBean implements Serializable {
     private Properties props = new Properties();
     private HashSet<String> excludedPaths;
     private List<Pattern> excludedPathTemplates;
-    private HashMap<String, Integer> inventoryLocations = new HashMap<>();
+    private HashMap<String, HashMap<String, Integer>> inventoryLocations = new HashMap<>();
+    private HashMap<String, HashMap<String, Integer>> receptionLocations = new HashMap<>();
+
     @EJB
     private BinLocationFacade binFacade;
 
     @PostConstruct
-    public void initialize() {
+    private void initialize() {
         loadProperties();
         consultarUbicacionesInventario();
+        consultarUbicacionesRecepcion();
     }
 
     @GET
@@ -68,7 +72,7 @@ public class IGBApplicationBean implements Serializable {
         }
     }
 
-    public void loadProperties() {
+    private void loadProperties() {
         StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
         encryptor.setPassword(System.getProperty("PROPERTIES_SECRET"));
         props = new EncryptableProperties(encryptor);
@@ -92,7 +96,7 @@ public class IGBApplicationBean implements Serializable {
 
             String templateValues = props.getProperty(Constants.NO_FILTER_TEMPLATES);
             excludedPathTemplates = new ArrayList<>();
-            for (String regex : Arrays.asList(templateValues.split(","))) {
+            for (String regex : templateValues.split(",")) {
                 excludedPathTemplates.add(Pattern.compile(regex));
             }
         } catch (Exception e) {
@@ -100,17 +104,48 @@ public class IGBApplicationBean implements Serializable {
         }
     }
 
+    private void consultarUbicacionesRecepcion() {
+        receptionLocations = new HashMap<>();
+        String[] companies = props.getProperty(Constants.COMPANIES).split(";");
+        for (String company : companies) {
+            String databaseName = company.split(",")[0].trim();
+            List<Object[]> bins = binFacade.findReceptionLocations(databaseName);
+            if (bins != null) {
+                for (Object[] row : bins) {
+                    String warehouseCode = (String) row[0];
+                    if (inventoryLocations.containsKey(warehouseCode)) {
+                        inventoryLocations.get(databaseName).put(warehouseCode, (Integer) row[1]);
+                    } else {
+                        HashMap<String, Integer> entry = new HashMap<>();
+                        entry.put(warehouseCode, (Integer) row[1]);
+                        inventoryLocations.put(databaseName, entry);
+                    }
+                }
+            }
+        }
+        CONSOLE.log(Level.INFO, "Se cargaron ubicaciones de recepcion para {0} empresas", companies.length);
+    }
+
     private void consultarUbicacionesInventario() {
         inventoryLocations = new HashMap<>();
         String[] companies = props.getProperty(Constants.COMPANIES).split(";");
         for (String company : companies) {
             String databaseName = company.split(",")[0].trim();
-            Integer binAbs = binFacade.findInventoryLocationId(databaseName);
-            if (binAbs > 0) {
-                inventoryLocations.put(databaseName, binAbs);
+            List<Object[]> bins = binFacade.findInventoryLocationId(databaseName);
+            if (bins != null) {
+                for (Object[] row : bins) {
+                    String warehouseCode = (String) row[0];
+                    if (inventoryLocations.containsKey(warehouseCode)) {
+                        inventoryLocations.get(databaseName).put(warehouseCode, (Integer) row[1]);
+                    } else {
+                        HashMap<String, Integer> entry = new HashMap<>();
+                        entry.put(warehouseCode, (Integer) row[1]);
+                        inventoryLocations.put(databaseName, entry);
+                    }
+                }
             }
         }
-        CONSOLE.log(Level.INFO, "Se cargaron {0} ubicaciones de inventario para {1} empresas", new Object[]{inventoryLocations.size(), companies.length});
+        CONSOLE.log(Level.INFO, "Se cargaron ubicaciones de inventario para {0} empresas", companies.length);
     }
 
     public String obtenerValorPropiedad(String prop) {
@@ -143,7 +178,28 @@ public class IGBApplicationBean implements Serializable {
         System.out.println(encryptor.encrypt(args[1]));
     }
 
-    public Integer getInventoryBinId(String companyName) {
-        return inventoryLocations.get(companyName);
+    public Integer getInventoryBinId(String companyName, String warehouseCode) {
+        return inventoryLocations.get(companyName).get(warehouseCode);
+    }
+
+    public Integer getReceptionBinId(String companyName, String warehouseCode) {
+        return receptionLocations.get(companyName).get(warehouseCode);
+    }
+
+    public List<CompanyDTO> listCompanies() {
+        List<CompanyDTO> companies = new ArrayList<>();
+        String strCompaniesPropertyValue = obtenerValorPropiedad(Constants.COMPANIES);
+        if (strCompaniesPropertyValue != null) {
+            String[] strCompanies = strCompaniesPropertyValue.split(";");
+            for (String strCompany : strCompanies) {
+                String[] strCompanyData = strCompany.split(",");
+                String companyId = strCompanyData[0].trim();
+                String companyName = strCompanyData[1].trim();
+
+                companies.add(new CompanyDTO(companyId, companyName));
+            }
+        }
+        CONSOLE.log(Level.INFO, "Se encontraron las siguientes empresas {0}", companies);
+        return companies;
     }
 }

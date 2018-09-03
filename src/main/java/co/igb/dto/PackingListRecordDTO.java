@@ -14,6 +14,7 @@ public class PackingListRecordDTO {
     private Date datetimePacked;
     private Integer idPackingOrder;
     private String itemCode;
+    private String itemName;
     private Integer quantity;
     private String binCode;
     private Long binAbs;
@@ -75,6 +76,14 @@ public class PackingListRecordDTO {
 
     public void setItemCode(String itemCode) {
         this.itemCode = itemCode;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 
     public Integer getQuantity() {
