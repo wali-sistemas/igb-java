@@ -10,13 +10,7 @@ import co.igb.dto.ResponseDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.facade.PurchaseOrderFacade;
 import co.igb.util.IGBUtils;
-import java.io.Serializable;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -31,6 +25,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -72,7 +73,10 @@ public class ReceptionREST implements Serializable {
     @Path("receive-items")
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    public Response receiveAndClose(PurchaseOrderDTO order, @HeaderParam("X-Company-Name") String companyName) {
+    public Response receiveAndClose(
+            PurchaseOrderDTO order,
+            @HeaderParam("X-Company-Name") String companyName,
+            @HeaderParam("X-Warehouse-Code") String warehouseCode) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Generando entrada de mercancia con los siguientes datos {0}", order);
         Document document = new Document();
@@ -146,6 +150,14 @@ public class ReceptionREST implements Serializable {
             line.setItemCode(lineDto.getItemCode());
             line.setLineNum(lineNum++);
             line.setQuantity(lineDto.getQuantity().doubleValue());
+
+            Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation binAllocation =
+                    new Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation();
+            binAllocation.setBaseLineNumber(line.getLineNum());
+            binAllocation.setBinAbsEntry(appBean.getReceptionBinId(companyName, warehouseCode).longValue());
+            binAllocation.setQuantity(line.getQuantity());
+
+            line.getDocumentLinesBinAllocations().getDocumentLinesBinAllocation().add(binAllocation);
             docLines.getDocumentLine().add(line);
         }
         document.setDocumentLines(docLines);

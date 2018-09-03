@@ -28,6 +28,10 @@ public class Constants {
     public static final String EMAIL_SUBJECT_INVENTORY_INCONSISTENCY = "mail.subject.inventory.inconsistency";
     public static final String EMAIL_MSG_INVENTORY_INCONSISTENCY = "mail.msg.inventory.inconsistency";
     public static final String EMAIL_TO_INVENTORY_INCONSISTENCY = "mail.to.inventory.inconsistency";
+    public static final String EMAIL_FROM_PACKING_LIST= "mail.from.packing.list";
+    public static final String EMAIL_SUBJECT_PACKING_LIST = "mail.subject.packing.list";
+    public static final String EMAIL_MSG_PACKING_LIST = "mail.msg.packing.list";
+    public static final String EMAIL_CC_PACKING_LIST = "mail.cc.packing.list";
 
     public static final String[] LDAP_ATTR_IDS = {"name", "givenName", "description", "sAMAccountname", "userPrincipalName", "sn", "distinguishedName", "cn", "mail", "memberOf"};
 }

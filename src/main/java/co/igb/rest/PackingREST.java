@@ -10,8 +10,11 @@ import co.igb.dto.CompanyDTO;
 import co.igb.dto.PackingDTO;
 import co.igb.dto.PackingListRecordDTO;
 import co.igb.dto.ResponseDTO;
+import co.igb.dto.UserDTO;
 import co.igb.dto.ValidatePackingItemResponseDTO;
+import co.igb.ejb.EmailManager;
 import co.igb.ejb.IGBApplicationBean;
+import co.igb.ejb.IGBAuthLDAP;
 import co.igb.ejb.PDFManager;
 import co.igb.persistence.entity.PackingListRecord;
 import co.igb.persistence.entity.PackingOrder;
@@ -83,10 +86,14 @@ public class PackingREST implements Serializable {
     private InvoiceREST invoiceREST;
     @EJB
     private ItemFacade itemFacade;
+    @EJB
+    private IGBAuthLDAP ldapUtil;
     @Inject
     private IGBApplicationBean appBean;
     @Inject
     private PDFManager pdfManager;
+    @Inject
+    private EmailManager emailManager;
 
     @GET
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
@@ -448,10 +455,10 @@ public class PackingREST implements Serializable {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Cerrando packing orden {0}", username);
         //Cierra los registros de packing abiertos
-        plFacade.closePackingOrder(username, companyName);
+        //plFacade.closePackingOrder(username, companyName);
         boolean orderComplete = poFacade.isPackingOrderComplete(idPackingOrder);
         //Se cierra la orden de packing
-        poFacade.closePackingOrder(idPackingOrder, companyName);
+        //poFacade.closePackingOrder(idPackingOrder, companyName);
 
         List<PackingListRecordDTO> records = parseRecords(
                 plFacade.listRecords(idPackingOrder, companyName, false));
@@ -469,6 +476,12 @@ public class PackingREST implements Serializable {
         File file = pdfManager.createPackingListPdf(idPackingOrder.toString(), fileName, companyReportName, records);
 
         //TODO: enviar PDF por email al usuario
+        UserDTO userDto = ldapUtil.getUserInfo(username);
+        CONSOLE.log(Level.INFO, "Enviando correo al empleado {0}", userDto.toString());
+        //emailManager.sendPackingList(userDto.getCompleteName(), userDto.getEmail());
+        emailManager.sendWithAttachment(file.getAbsolutePath(), fileName + ".pdf", userDto.getCompleteName(), userDto.getEmail());
+        //TODO: parametrizar ubicacion PDF
+        //TODO: eliminar PDF despues de enviarlo por correo?
 
         Response.ResponseBuilder response = Response.ok(file);
         response.header("Content-Disposition", "attachment; filename=" + fileName + ".pdf");
