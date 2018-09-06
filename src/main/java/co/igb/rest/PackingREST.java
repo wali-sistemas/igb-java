@@ -274,12 +274,13 @@ public class PackingREST implements Serializable {
             Date packingDate = (Date) row[5];
             //Integer idPackingOrder = (Integer)row[6];
             String itemCode = (String) row[7];
-            Integer quantity = (Integer) row[8];
-            Integer binAbs = (Integer) row[9];
-            String binCode = (String) row[10];
-            Integer boxNumber = (Integer) row[11];
-            String status = (String) row[12];
-            String employee = (String) row[13];
+            String itemName = (String) row[8];
+            Integer quantity = (Integer) row[9];
+            Integer binAbs = (Integer) row[10];
+            String binCode = (String) row[11];
+            Integer boxNumber = (Integer) row[12];
+            String status = (String) row[13];
+            String employee = (String) row[14];
             //String companyName = (String)row[14];
 
             if (document.getSeries() == null) {
@@ -455,10 +456,10 @@ public class PackingREST implements Serializable {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Cerrando packing orden {0}", username);
         //Cierra los registros de packing abiertos
-        //plFacade.closePackingOrder(username, companyName);
+        plFacade.closePackingOrder(username, companyName);
         boolean orderComplete = poFacade.isPackingOrderComplete(idPackingOrder);
         //Se cierra la orden de packing
-        //poFacade.closePackingOrder(idPackingOrder, companyName);
+        poFacade.closePackingOrder(idPackingOrder, companyName);
 
         List<PackingListRecordDTO> records = parseRecords(
                 plFacade.listRecords(idPackingOrder, companyName, false));

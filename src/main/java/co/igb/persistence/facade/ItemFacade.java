@@ -38,7 +38,7 @@ public class ItemFacade {
 
     public String getItemName(String itemCode, String companyName) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select itemname from oitm where itemcode='");
+        sb.append("select cast(itemname as varchar(200)) itemname from oitm where itemcode='");
         sb.append(itemCode);
         sb.append("'");
         try {

@@ -1,6 +1,8 @@
 package co.igb.util;
 
 public class Constants {
+    public static final String INVOICE_SERIES = "igb.invoice.series";
+    public static final String STOCK_TRANSFER_SERIES = "igb.stock-transfer.series";
     public static final String WAREHOUSE_CODE = "igb.warehouse.code";
     public static final String COMPANIES = "igb.login.companies";
     public static final String INITIAL_CONTEXT_FACTORY = "initial.context.factory";

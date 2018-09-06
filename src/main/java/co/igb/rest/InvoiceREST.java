@@ -11,16 +11,9 @@ import co.igb.dto.ResponseDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.facade.CustomerFacade;
 import co.igb.persistence.facade.DeliveryNoteFacade;
+import co.igb.util.Constants;
 import co.igb.util.IGBUtils;
 
-import java.io.Serializable;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -35,6 +28,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author dbotero
@@ -103,7 +104,7 @@ public class InvoiceREST implements Serializable {
             Integer deliveryQuantity = (Integer) row[8];
 
             if (invoice.getSeries() == null) {
-                invoice.setSeries(Long.parseLong(getPropertyValue("igb.invoice.series", companyName)));
+                invoice.setSeries(Long.parseLong(getPropertyValue(Constants.INVOICE_SERIES, companyName)));
                 invoice.setCardCode(cardCode);
                 invoice.setDocType("dDocument_Items");
                 invoice.setDocObjectCode("13");
@@ -191,13 +192,13 @@ public class InvoiceREST implements Serializable {
         Document invoice = new Document();
         long lineNum = 0;
         for (Object[] row : deliveryData) {
-            Long delDocEntry = (Long) row[0];
-            Long deliveryDocNum = (Long) row[1];
-            Long deliveryObjectType = (Long) row[2];
+            Long delDocEntry = ((Integer) row[0]).longValue();
+            Long deliveryDocNum = ((Integer) row[1]).longValue();
+            Long deliveryObjectType = ((Integer) row[2]).longValue();
             String cardCode = (String) row[3];
-            Long deliverySalesPersonCode = (Long) row[4];
-            Long deliveryContactCode = (Long) row[5];
-            Long deliveryLineNum = (Long) row[6];
+            Long deliverySalesPersonCode = ((Integer) row[4]).longValue();
+            Long deliveryContactCode = ((Integer) row[5]).longValue();
+            Long deliveryLineNum = ((Integer) row[6]).longValue();
             String deliveryItemCode = (String) row[7];
             Integer deliveryQuantity = (Integer) row[8];
 
