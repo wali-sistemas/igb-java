@@ -476,13 +476,10 @@ public class PackingREST implements Serializable {
         String fileName = String.valueOf(System.currentTimeMillis());
         File file = pdfManager.createPackingListPdf(idPackingOrder.toString(), fileName, companyReportName, records);
 
-        //TODO: enviar PDF por email al usuario
         UserDTO userDto = ldapUtil.getUserInfo(username);
-        CONSOLE.log(Level.INFO, "Enviando correo al empleado {0}", userDto.toString());
-        //emailManager.sendPackingList(userDto.getCompleteName(), userDto.getEmail());
+        CONSOLE.log(Level.INFO, "Enviando correo al empleado {0} -> {1}", new Object[]{userDto.toString(), userDto.getEmail()});
         emailManager.sendWithAttachment(file.getAbsolutePath(), fileName + ".pdf", userDto.getCompleteName(), userDto.getEmail());
         //TODO: parametrizar ubicacion PDF
-        //TODO: eliminar PDF despues de enviarlo por correo?
 
         Response.ResponseBuilder response = Response.ok(file);
         response.header("Content-Disposition", "attachment; filename=" + fileName + ".pdf");

@@ -209,4 +209,12 @@ public class UserREST {
         CONSOLE.log(Level.INFO, "Token validado con exito. ");
         return Response.ok(new ResponseDTO(0, "Token validado con éxito")).build();
     }
+
+    @GET
+    @Path("{username}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    public Response getUserInfo(@PathParam("username") String username) {
+        CONSOLE.log(Level.INFO, "Consultando datos de usuario {0} del Directorio Activo. ", username);
+        return Response.ok(new ResponseDTO(0, authenticator.getUserInfo(username))).build();
+    }
 }

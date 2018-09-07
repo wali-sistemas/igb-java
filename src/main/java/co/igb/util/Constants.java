@@ -14,7 +14,7 @@ public class Constants {
     public static final String LDAP_USERS_CONTAINER = "OU=Usuarios,DC=igbcolombia,DC=local";
     public static final String LDAP_ENABLED_USERS_FILTER = "(&(objectClass=user)(!(userAccountControl:1.2.840.113556.1.4.803:=2)))";
     public static final String LDAP_USERNAME_FIELD = "sAMAccountName";
-    public static final String LDAP_EMAIL_FIELD = "userprincipalname";
+    public static final String LDAP_EMAIL_FIELD = "mail";
     public static final String LDAP_NAME_FIELD = "givenname";
     public static final String LDAP_LASTNAME_FIELD = "sn";
     public static final String LDAP_FULLNAME_FIELD = "cn";
