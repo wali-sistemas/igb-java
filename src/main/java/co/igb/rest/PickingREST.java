@@ -118,7 +118,9 @@ public class PickingREST implements Serializable {
                 }
             }
         }
-        return new Object[]{pendingItems, pickedItems};
+
+        List<Object> skippedItems = prFacade.listSkippedItems(orderNumber, companyName);
+        return new Object[]{pendingItems, pickedItems, skippedItems};
     }
 
     @GET
@@ -153,11 +155,17 @@ public class PickingREST implements Serializable {
             Object[] pickingStatus = processPickingStatus(order.getOrderNumber(), false, companyName);
             Map<String, Integer> pendingItems = (Map<String, Integer>) pickingStatus[0];
             Map<String, Map<Long, Integer>> pickedItems = (Map<String, Map<Long, Integer>>) pickingStatus[1];
+            List<Object> skippedItems = (List<Object>) pickingStatus[2];
 
             if (pendingItems == null || pendingItems.isEmpty()) {
-                CONSOLE.log(Level.WARNING, "La orden {0} no tiene items pendientes por despachar y se marca como cerrada. ", order.getOrderNumber());
-                closeAndPack(order, pickedItems, companyName);
-                continue;
+                if (skippedItems.isEmpty()) {
+                    CONSOLE.log(Level.WARNING, "La orden {0} no tiene items pendientes por despachar y se marca como cerrada. ", order.getOrderNumber());
+                    closeAndPack(order, pickedItems, companyName);
+                    continue;
+                } else {
+                    CONSOLE.log(Level.INFO, "La orden {0} no tiene mas items pendientes por picking, pero tiene skipped items ");
+                    continue;
+                }
             }
 
             //Si hay items pendientes por picking, consulta su saldo y lo retorna organizado por velocidad y secuencia.
