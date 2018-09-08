@@ -113,12 +113,12 @@ public class IGBApplicationBean implements Serializable {
             if (bins != null) {
                 for (Object[] row : bins) {
                     String warehouseCode = (String) row[0];
-                    if (inventoryLocations.containsKey(warehouseCode)) {
-                        inventoryLocations.get(databaseName).put(warehouseCode, (Integer) row[1]);
+                    if (receptionLocations.containsKey(warehouseCode)) {
+                        receptionLocations.get(databaseName).put(warehouseCode, (Integer) row[1]);
                     } else {
                         HashMap<String, Integer> entry = new HashMap<>();
                         entry.put(warehouseCode, (Integer) row[1]);
-                        inventoryLocations.put(databaseName, entry);
+                        receptionLocations.put(databaseName, entry);
                     }
                 }
             }
