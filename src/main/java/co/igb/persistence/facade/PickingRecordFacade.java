@@ -2,20 +2,21 @@ package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.PickingRecord;
 import co.igb.persistence.entity.PickingRecord_;
+
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.Root;
 
 /**
  * @author dbotero
@@ -35,6 +36,21 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
 
     public PickingRecordFacade() {
         super(PickingRecord.class);
+    }
+
+    public List<Object> listSkippedItems(Integer orderNumber, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select * from picking_record where order_number =");
+        sb.append(orderNumber);
+        sb.append(" and company_name = '");
+        sb.append(companyName);
+        sb.append("' and expires is not null");
+
+        try {
+            return em.createNativeQuery(sb.toString()).getResultList();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
     }
 
     /**
@@ -150,7 +166,7 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
         }
         return null;
     }
-  
+
     public List<Object[]> findTemporaryRecords(String companyName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select idpicking_record, expires from picking_record where company_name = '");

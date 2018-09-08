@@ -3,7 +3,6 @@ package co.igb.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- *
  * @author dbotero
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -51,7 +50,12 @@ public class SingleItemTransferDTO {
     }
 
     public void setItemCode(String itemCode) {
-        this.itemCode = itemCode;
+        if (itemCode != null) {
+            this.itemCode = itemCode.toUpperCase();
+        } else {
+            this.itemCode = null;
+        }
+
     }
 
     public String getWarehouseCode() {
