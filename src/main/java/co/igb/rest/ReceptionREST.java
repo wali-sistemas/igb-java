@@ -34,7 +34,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author dbotero
  */
 @Stateless
@@ -157,7 +156,10 @@ public class ReceptionREST implements Serializable {
             binAllocation.setBinAbsEntry(appBean.getReceptionBinId(companyName, warehouseCode).longValue());
             binAllocation.setQuantity(line.getQuantity());
 
-            line.getDocumentLinesBinAllocations().getDocumentLinesBinAllocation().add(binAllocation);
+            Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations bins = new Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations();
+            bins.getDocumentLinesBinAllocation().add(binAllocation);
+
+            line.setDocumentLinesBinAllocations(bins);
             docLines.getDocumentLine().add(line);
         }
         document.setDocumentLines(docLines);
