@@ -15,6 +15,7 @@ import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -69,6 +70,20 @@ public class IGBApplicationBean implements Serializable {
             return Response.ok(new ResponseDTO(0, props)).build();
         } else {
             return Response.ok(new ResponseDTO(0, null)).build();
+        }
+    }
+
+    @GET
+    @Path("locations/{type}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    public Response listStandardLocations(@PathParam("type") String type) {
+        if (type != null && type.equals("inv")) {
+            return Response.ok(new ResponseDTO(0, inventoryLocations)).build();
+        } else if (type != null && type.equals("rec")) {
+            return Response.ok(new ResponseDTO(0, receptionLocations)).build();
+        } else {
+            return Response.ok(new ResponseDTO(-1, "Debes enviar inv o rec como parametro")).build();
         }
     }
 
