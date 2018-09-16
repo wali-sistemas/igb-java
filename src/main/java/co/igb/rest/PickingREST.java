@@ -150,20 +150,22 @@ public class PickingREST implements Serializable {
         }
 
         boolean warning = false;
+        boolean skippedItems = false;
         TreeSet<SortedStockDTO> sortedStock = new TreeSet<>();
         for (AssignedOrder order : orders) {
             Object[] pickingStatus = processPickingStatus(order.getOrderNumber(), false, companyName);
             Map<String, Integer> pendingItems = (Map<String, Integer>) pickingStatus[0];
             Map<String, Map<Long, Integer>> pickedItems = (Map<String, Map<Long, Integer>>) pickingStatus[1];
-            List<Object> skippedItems = (List<Object>) pickingStatus[2];
+            List<Object> skipped= (List<Object>) pickingStatus[2];
 
             if (pendingItems == null || pendingItems.isEmpty()) {
-                if (skippedItems.isEmpty()) {
+                if (skipped.isEmpty()) {
                     CONSOLE.log(Level.WARNING, "La orden {0} no tiene items pendientes por despachar y se marca como cerrada. ", order.getOrderNumber());
                     closeAndPack(order, pickedItems, companyName);
                     continue;
                 } else {
                     CONSOLE.log(Level.INFO, "La orden {0} no tiene mas items pendientes por picking, pero tiene skipped items ");
+                    skippedItems = true;
                     continue;
                 }
             }
@@ -187,11 +189,13 @@ public class PickingREST implements Serializable {
         }
         //seleccionar y retornar el siguiente item para picking
         watch.stop();
-        CONSOLE.log(Level.INFO, "El proceso tomo {0}ms", watch.getTime());
+        CONSOLE.log(Level.INFO, "El proceso para obtener el siguiente item de picking tomo {0}ms", watch.getTime());
         if (sortedStock.isEmpty() && !warning) {
             return Response.ok(new ResponseDTO(-1, "No hay más items pendientes por picking")).build();
         } else if (sortedStock.isEmpty() && warning) {
             return Response.ok(new ResponseDTO(-3, "No hay saldo disponible para picking en la(s) orden(es) asignada(s)")).build();
+        } else if(sortedStock.isEmpty() && skippedItems) {
+            return Response.ok(new ResponseDTO(-4, "No hay ítems pendientes por picking, pero hay ítems marcados para recoger después.")).build();
         } else {
             return Response.ok(new ResponseDTO(0, sortedStock.first())).build();
         }
