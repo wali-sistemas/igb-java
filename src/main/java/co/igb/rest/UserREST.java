@@ -5,10 +5,10 @@ import co.igb.dto.ResponseDTO;
 import co.igb.dto.UserDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.ejb.IGBAuthLDAP;
+import co.igb.exception.IGBAuthenticationException;
 import co.igb.persistence.entity.User;
 import co.igb.persistence.facade.UserFacade;
 import co.igb.persistence.facade.WarehouseFacade;
-import co.igb.rest.exception.IGBAuthenticationException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -83,7 +83,7 @@ public class UserREST {
 
                 if (days > 3) {
                     try {
-                        user = getUserInfoFromLdap(user, false);
+                        user = getUserInfoFromLdap(user, false, user.getSelectedCompany());
                     } catch (IGBAuthenticationException e) {
                         return Response.ok(new AuthenticationResponseDTO(1, "Ocurrio un error al autenticar al usuario (Post-LDAP). ")).build();
                     }
@@ -96,7 +96,7 @@ public class UserREST {
             } catch (NoResultException e) {
                 //No se tiene informacion del usuario. Consultar directorio activo y continuar
                 try {
-                    user = getUserInfoFromLdap(user, true);
+                    user = getUserInfoFromLdap(user, true, user.getSelectedCompany());
                 } catch (IGBAuthenticationException ex) {
                     return Response.ok(new AuthenticationResponseDTO(1, "Ocurrio un error al autenticar al usuario (Post-LDAP). ")).build();
                 }
@@ -125,7 +125,7 @@ public class UserREST {
         return warehouseFacade.listBinEnabledWarehouses(companyName).get(0).getCode();
     }
 
-    private UserDTO getUserInfoFromLdap(UserDTO user, boolean create) throws IGBAuthenticationException {
+    private UserDTO getUserInfoFromLdap(UserDTO user, boolean create, String companyName) throws IGBAuthenticationException {
         UserDTO userDataLdap = authenticator.getUserInfo(user.getUsername());
         if (userDataLdap == null) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al obtener la informacion del usuario en LDAP (aunque ya se habia autenticado correctamente). ");
@@ -155,6 +155,7 @@ public class UserREST {
                 throw new IGBAuthenticationException("Ocurrio un error al autenticar al usuario (MySQL-Edit). ");
             }
         }
+        user.setSelectedCompany(companyName);
         return user;
     }
 
