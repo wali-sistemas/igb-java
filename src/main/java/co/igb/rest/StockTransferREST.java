@@ -289,7 +289,7 @@ public class StockTransferREST implements Serializable {
             return Response.ok(new ResponseDTO(-1, "No se recibió el código del almacén. Se recomienda cerrar sesión, borrar cookies e historial de navegación de Wali y volver a intentar")).build();
         }
 
-        List<SaldoUbicacion> stock = binLocationFacade.findLocationBalance(binCode, companyName);
+        List<SaldoUbicacion> stock = binLocationFacade.findLocationBalance(binCode, warehouseCode, companyName);
         if (stock == null || stock.isEmpty()) {
             return startCounting(binCode, warehouse, companyName, 0L);
         }
@@ -765,7 +765,7 @@ public class StockTransferREST implements Serializable {
 
         StockTransfer.StockTransferLines documentLines = new StockTransfer.StockTransferLines();
         long lineNum = 0L;
-        for(StockTransferLineDTO lineDTO : stockTransfer.getLines()){
+        for (StockTransferLineDTO lineDTO : stockTransfer.getLines()) {
             StockTransfer.StockTransferLines.StockTransferLine line = new StockTransfer.StockTransferLines.StockTransferLine();
             line.setLineNum(lineNum++);
             line.setItemCode(lineDTO.getItemCode());
@@ -830,6 +830,20 @@ public class StockTransferREST implements Serializable {
         } else {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ResponseDTO(-1, "Ocurrio un error al crear la transferencia. " + errorMessage)).build();
         }
+    }
+
+    @POST
+    @Path("stock-transfer")
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response transferPickingToPackingArea(
+            @HeaderParam("X-Company-Name") String companyName,
+            @HeaderParam("X-Warehouse-Code") String warehouseCode,
+            Integer orderNumber) {
+        CONSOLE.log(Level.INFO, "Trasladando picking completo a zona de packing. Orden de venta: {0}", orderNumber);
+
+        return Response.ok(new ResponseDTO(-1,"Metodo aun no implementado")).build();
     }
 
     private String getPropertyValue(String propertyName, String companyName) {
