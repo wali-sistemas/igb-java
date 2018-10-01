@@ -76,12 +76,15 @@ public class BinLocationFacade {
         }
     }
 
-    public List<SaldoUbicacion> findLocationBalance(String binCode, String schema) {
+    public List<SaldoUbicacion> findLocationBalance(String binCode, String whsCode, String schema) {
         EntityManager em = chooseSchema(schema);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<SaldoUbicacion> cq = cb.createQuery(SaldoUbicacion.class);
         Root<SaldoUbicacion> saldo = cq.from(SaldoUbicacion.class);
-        cq.where(cb.equal(saldo.get("ubicacion").get("binCode"), binCode), cb.gt(saldo.get(SaldoUbicacion_.onHandQty), 1));
+        cq.where(
+                cb.equal(saldo.get("ubicacion").get("binCode"), binCode),
+                cb.gt(saldo.get(SaldoUbicacion_.onHandQty), 0),
+                cb.equal(saldo.get(SaldoUbicacion_.whsCode), whsCode));
 
         try {
             return em.createQuery(cq).getResultList();
@@ -93,12 +96,16 @@ public class BinLocationFacade {
         return null;
     }
 
-    public List<SaldoUbicacion> findLocationBalanceInventory(Integer absEntry, String schema) {
+    public List<SaldoUbicacion> findLocationBalanceInventory(Integer absEntry, String whsCode, String schema) {
         EntityManager em = chooseSchema(schema);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<SaldoUbicacion> cq = cb.createQuery(SaldoUbicacion.class);
         Root<SaldoUbicacion> saldo = cq.from(SaldoUbicacion.class);
-        cq.where(cb.equal(saldo.get("ubicacion").get("absEntry"), absEntry), cb.gt(saldo.get(SaldoUbicacion_.onHandQty), 1));
+        cq.where(
+                cb.equal(saldo.get("ubicacion").get("absEntry"), absEntry),
+                cb.gt(saldo.get(SaldoUbicacion_.onHandQty), 0),
+                cb.equal(saldo.get(SaldoUbicacion_.whsCode), whsCode)
+        );
 
         try {
             return em.createQuery(cq).getResultList();
@@ -145,6 +152,21 @@ public class BinLocationFacade {
             return (List<Object[]>) chooseSchema(companyName).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ubicaciones de recepcion para la empresa " + companyName, e);
+            return null;
+        }
+    }
+
+    public Long findPackingLocation(String warehouseCode, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select TOP 1 cast(absentry as int) absEntry from obin where sl1code = 'PACKING' and Disabled = 'N' and whscode = '");
+        sb.append(warehouseCode);
+        sb.append("'");
+        try {
+            return (Long) chooseSchema(companyName).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE,
+                    "Ocurrio un error al consultar la ubicacion de packing para la empresa " + companyName +
+                            " en el almacen " + warehouseCode, e);
             return null;
         }
     }
@@ -254,5 +276,17 @@ public class BinLocationFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ubicaciones para resurtir. ", e);
         }
         return null;
+    }
+
+    public String getBinWarehouse(Long binAbs, String companyName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(whscode as varchar(2)) whscode from obin where absentry = ");
+        sb.append(binAbs);
+
+        try {
+            return (String) chooseSchema(companyName).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
