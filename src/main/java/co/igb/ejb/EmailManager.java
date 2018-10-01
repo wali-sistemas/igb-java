@@ -40,7 +40,16 @@ public class EmailManager implements Serializable {
                             realQuantity.toString(),
                             expectedQuantity.toString(),
                             Integer.toString(expectedQuantity - realQuantity)));
-            email.addTo(appBean.obtenerValorPropiedad(Constants.EMAIL_TO_INVENTORY_INCONSISTENCY));
+            String emailsTo = appBean.obtenerValorPropiedad(Constants.EMAIL_TO_INVENTORY_INCONSISTENCY);
+            if (emailsTo != null && emailsTo.contains(",")) {
+                for (String emailTo : emailsTo.split(",")) {
+                    email.addTo(emailTo);
+                }
+            } else {
+                email.addTo(emailsTo);
+            }
+
+            email.addBcc(appBean.obtenerValorPropiedad(Constants.EMAIL_BCC_INVENTORY_INCONSISTENCY));
             email.send();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al enviar el correo de notificacion de inconsistencia de inventario. ", e);
