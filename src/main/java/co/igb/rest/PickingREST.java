@@ -166,7 +166,7 @@ public class PickingREST implements Serializable {
                     closeAndPack(order, pickedItems, companyName);
                     continue;
                 } else {
-                    CONSOLE.log(Level.INFO, "La orden {0} no tiene mas items pendientes por picking, pero tiene skipped items ");
+                    CONSOLE.log(Level.INFO, "La orden {0} no tiene mas items pendientes por picking, pero tiene skipped items ", order.getOrderNumber());
                     skippedItems = true;
                     continue;
                 }
