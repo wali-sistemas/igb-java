@@ -70,7 +70,7 @@ public class SalesOrderFacade {
         if (!showAll) {
             sb.append("and enc.confirmed = 'Y' ");
         }
-        sb.append("order by enc.docdate ");
+        sb.append("order by docdate ");
 
         List<SalesOrderDTO> orders = new ArrayList<>();
         try {
