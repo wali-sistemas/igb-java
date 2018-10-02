@@ -71,4 +71,17 @@ public class StockTransferDTO {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    @Override
+    public String toString() {
+        return "StockTransferDTO{" +
+                "username='" + username + '\'' +
+                ", binCodeFrom='" + binCodeFrom + '\'' +
+                ", binCodeTo='" + binCodeTo + '\'' +
+                ", binAbsFrom=" + binAbsFrom +
+                ", binAbsTo=" + binAbsTo +
+                ", warehouseCode='" + warehouseCode + '\'' +
+                ", lines=" + lines +
+                '}';
+    }
 }
