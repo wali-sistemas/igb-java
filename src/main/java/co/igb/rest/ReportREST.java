@@ -58,10 +58,11 @@ public class ReportREST implements Serializable {
     @Path("reports-orders")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response obtainReportsOrders(@HeaderParam("X-Company-Name") String companyName) {
+    public Response obtainReportsOrders(@HeaderParam("X-Company-Name") String companyName,
+                                        @HeaderParam("X-Warehouse-Code") String warehouseCode) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
 
-        List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, companyName);
+        List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, companyName, warehouseCode);
         List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations(companyName);
 
         Integer[] contador = new Integer[]{0, 0};
@@ -201,7 +202,7 @@ public class ReportREST implements Serializable {
 
                         try {
                             reportPickingProgressFacade.create(progress);
-                        } catch (Exception e) {
+                        } catch (Exception ignored) {
                         }
                     }
                 }
@@ -215,9 +216,10 @@ public class ReportREST implements Serializable {
     @Path("reports-orders-client")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response obtainReportsOrdersByClient(@HeaderParam("X-Company-Name") String companyName) {
+    public Response obtainReportsOrdersByClient(@HeaderParam("X-Company-Name") String companyName,
+                                                @HeaderParam("X-Warehouse-Code") String warehouseCode) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
-        List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, companyName);
+        List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, companyName, warehouseCode);
         List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations(companyName);
 
         List<Object[]> datos = new ArrayList<>();

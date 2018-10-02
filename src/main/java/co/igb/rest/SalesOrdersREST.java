@@ -61,11 +61,13 @@ public class SalesOrdersREST implements Serializable {
     @Path("list/orders")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response listOpenOrders(@QueryParam("showAll") Boolean showAll, @HeaderParam("X-Company-Name") String companyName) {
+    public Response listOpenOrders(@QueryParam("showAll") Boolean showAll,
+                                   @HeaderParam("X-Company-Name") String companyName,
+                                   @HeaderParam("X-Warehouse-Code") String warehouseCode) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Listando ordenes de compra abiertas. mostrar no autorizadas? {0}", showAll);
         try {
-            List<SalesOrderDTO> orders = soFacade.findOpenOrders(showAll, companyName);
+            List<SalesOrderDTO> orders = soFacade.findOpenOrders(showAll, companyName, warehouseCode);
             List<AssignedOrder> assignations = aoFacade.listOpenAssignations(companyName);
             List<AssignedOrder> closedAssignations = aoFacade.listClosedAssignations(companyName);
             CONSOLE.log(Level.INFO, "{0} ordenes abiertas encontradas...", orders.size());
