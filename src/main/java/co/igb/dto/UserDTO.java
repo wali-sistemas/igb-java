@@ -120,7 +120,6 @@ public class UserDTO implements Comparable<UserDTO> {
     public String toString() {
         return "UserDTO{" +
                 "username='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +

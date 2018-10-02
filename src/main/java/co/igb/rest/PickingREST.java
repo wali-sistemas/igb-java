@@ -70,11 +70,14 @@ public class PickingREST implements Serializable {
     @Path("delete-temporary")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response deleteTemporaryRecords(@HeaderParam("X-Company-Name") String companyName) {
+    public Response deleteTemporaryRecords(@HeaderParam("X-Company-Name") String companyName,
+                                           @HeaderParam("X-Warehouse-Code") String warehouseCode) {
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
-        CONSOLE.log(Level.INFO, "Ejecutando proceso para eliminar registros de picking temporales");
+        CONSOLE.log(Level.INFO, "Ejecutando proceso para eliminar registros de picking temporales. Empresa: {0}, Bodega: {1}",
+                new Object[]{companyName, warehouseCode});
         List<Object[]> records = prFacade.findTemporaryRecords(companyName);
-        CONSOLE.log(Level.INFO, "Se encontraron {0} registros temporales", records.size());
+        CONSOLE.log(Level.INFO, "Se encontraron {0} registros temporales para {1}-{2}",
+                new Object[]{records.size(), companyName, warehouseCode});
         Date now = new Date();
         List<Integer> expiredRecords = new ArrayList<>();
         for (Object[] row : records) {
@@ -234,15 +237,17 @@ public class PickingREST implements Serializable {
             }
 
             closeAndPack(order, pickedItems, companyName);
+            /*
             try {
                 moveItemsToPackingArea(order.getOrderNumber(), companyName);
-            }catch (Exception e){
+            } catch (Exception e) {
                 return Response.ok(
                         new ResponseDTO(
                                 -1,
                                 "Ocurrió un error al trasladar los ítems a la ubicación de packing. " + e.getMessage())
                 ).build();
             }
+             */
         }
         return Response.ok(new ResponseDTO(0, "")).build();
     }
