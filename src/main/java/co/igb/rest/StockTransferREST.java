@@ -644,7 +644,7 @@ public class StockTransferREST implements Serializable {
     }
 
     private Long createTransferDocument(StockTransfer document, String sessionId) throws MalformedURLException {
-        StockTransferService service = new StockTransferService(new URL(String.format(appBean.obtenerValorPropiedad("igb.b1ws.wsdlUrl"), "StockTransferService")));
+        StockTransferService service = new StockTransferService(new URL(String.format(appBean.obtenerValorPropiedad(Constants.B1WS_WSDL_URL), "StockTransferService")));
         Add add = new Add();
         add.setStockTransfer(document);
 
@@ -656,7 +656,7 @@ public class StockTransferREST implements Serializable {
     }
 
     private Document retrieveOrderDocument(Long docEntry, String sessionId) throws MalformedURLException {
-        OrdersService service = new OrdersService(new URL(String.format(appBean.obtenerValorPropiedad("igb.b1ws.wsdlUrl"), "OrdersService")));
+        OrdersService service = new OrdersService(new URL(String.format(appBean.obtenerValorPropiedad(Constants.B1WS_WSDL_URL), "OrdersService")));
         co.igb.b1ws.client.order.MsgHeader header = new co.igb.b1ws.client.order.MsgHeader();
         header.setServiceName("OrdersService");
         header.setSessionID(sessionId);
@@ -672,7 +672,7 @@ public class StockTransferREST implements Serializable {
     }
 
     private boolean modifyOrderDocument(Document document, String sessionId) throws MalformedURLException {
-        OrdersService service = new OrdersService(new URL(String.format(appBean.obtenerValorPropiedad("igb.b1ws.wsdlUrl"), "OrdersService")));
+        OrdersService service = new OrdersService(new URL(String.format(appBean.obtenerValorPropiedad(Constants.B1WS_WSDL_URL), "OrdersService")));
         co.igb.b1ws.client.order.MsgHeader header = new co.igb.b1ws.client.order.MsgHeader();
         header.setServiceName("OrdersService");
         header.setSessionID(sessionId);

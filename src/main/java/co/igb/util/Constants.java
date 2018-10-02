@@ -29,15 +29,28 @@ public class Constants {
     public static final String EMAIL_FROM_INVENTORY_INCONSISTENCY = "mail.from.inventory.inconsistency";
     public static final String EMAIL_SUBJECT_INVENTORY_INCONSISTENCY = "mail.subject.inventory.inconsistency";
     public static final String EMAIL_MSG_INVENTORY_INCONSISTENCY = "mail.msg.inventory.inconsistency";
+    public static final String EMAIL_MSG_INVENTORY_INCONSISTENCY_BODY = "mail.msg.inventory.inconsistency.body";
+    public static final String EMAIL_MSG_INVENTORY_INCONSISTENCY_HEAD = "mail.msg.inventory.inconsistency.head";
     public static final String EMAIL_MSG_INVENTORY_INCONSISTENCY_LINE = "mail.msg.inventory.inconsistency.line";
     public static final String EMAIL_TO_INVENTORY_INCONSISTENCY = "mail.to.inventory.inconsistency";
     public static final String EMAIL_BCC_INVENTORY_INCONSISTENCY = "mail.bcc.inventory.inconsistency";
-    public static final String EMAIL_FROM_PACKING_LIST= "mail.from.packing.list";
+    public static final String EMAIL_FROM_PACKING_LIST = "mail.from.packing.list";
     public static final String EMAIL_SUBJECT_PACKING_LIST = "mail.subject.packing.list";
     public static final String EMAIL_MSG_PACKING_LIST = "mail.msg.packing.list";
     public static final String EMAIL_CC_PACKING_LIST = "mail.cc.packing.list";
     public static final String STATUS_CLOSED = "closed";
     public static final String STATUS_OPEN = "open";
+    public static final String TEMPORARY_PICKING_TTL = "igb.temporary.picking.ttl";
+    public static final String B1WS_WSDL_URL = "igb.b1ws.wsdlUrl";
+    public static final String B1WS_DATABASE_SERVER = "igb.b1ws.databaseServer";
+    public static final String B1WS_DATABASE_NAME = "igb.b1ws.databaseName";
+    public static final String B1WS_DATABASE_TYPE = "igb.b1ws.databaseType";
+    public static final String B1WS_COMPANY_USERNAME = "igb.b1ws.companyUsername";
+    public static final String B1WS_COMPANY_PASSWORD = "igb.b1ws.companyPassword";
+    public static final String B1WS_LANGUAGE = "igb.b1ws.language";
+    public static final String B1WS_LICENSE_SERVER = "igb.b1ws.licenseServer";
+    public static final String B1WS_LOGIN_SERVICE = "LoginService";
+
 
     public static final String[] LDAP_ATTR_IDS = {"name", "givenName", "description", "sAMAccountname", "userPrincipalName", "sn", "distinguishedName", "cn", "mail", "memberOf"};
 }

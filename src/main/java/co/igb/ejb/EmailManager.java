@@ -1,5 +1,6 @@
 package co.igb.ejb;
 
+import co.igb.dto.InventoryInconsistency;
 import co.igb.util.Constants;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailAttachment;
@@ -10,6 +11,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,6 +42,49 @@ public class EmailManager implements Serializable {
                             realQuantity.toString(),
                             expectedQuantity.toString(),
                             Integer.toString(expectedQuantity - realQuantity)));
+            String emailsTo = appBean.obtenerValorPropiedad(Constants.EMAIL_TO_INVENTORY_INCONSISTENCY);
+            if (emailsTo != null && emailsTo.contains(",")) {
+                for (String emailTo : emailsTo.split(",")) {
+                    email.addTo(emailTo);
+                }
+            } else {
+                email.addTo(emailsTo);
+            }
+
+            email.addBcc(appBean.obtenerValorPropiedad(Constants.EMAIL_BCC_INVENTORY_INCONSISTENCY));
+            email.send();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al enviar el correo de notificacion de inconsistencia de inventario. ", e);
+        }
+    }
+
+    public void sendInventoryInconsistencies(String employeeName, List<InventoryInconsistency> inconsistencies) {
+        try {
+            HtmlEmail email = initializeNewEmail();
+            email.setFrom(appBean.obtenerValorPropiedad(Constants.EMAIL_FROM_INVENTORY_INCONSISTENCY));
+            email.setSubject(appBean.obtenerValorPropiedad(Constants.EMAIL_SUBJECT_INVENTORY_INCONSISTENCY));
+
+            StringBuilder htmlContent = new StringBuilder();
+            for (InventoryInconsistency inventoryInconsistency : inconsistencies) {
+                htmlContent.append(
+                        String.format(
+                                appBean.obtenerValorPropiedad(Constants.EMAIL_MSG_INVENTORY_INCONSISTENCY_LINE),
+                                inventoryInconsistency.getItemCode(),
+                                inventoryInconsistency.getBinCode(),
+                                inventoryInconsistency.getExpectedQuantity(),
+                                inventoryInconsistency.getFoundQuantity()
+                        ));
+            }
+
+            String htmlMsgBody = String.format(
+                    appBean.obtenerValorPropiedad(Constants.EMAIL_MSG_INVENTORY_INCONSISTENCY_BODY),
+                    employeeName,
+                    String.format(
+                            appBean.obtenerValorPropiedad(Constants.EMAIL_MSG_INVENTORY_INCONSISTENCY_HEAD),
+                            htmlContent.toString()
+                    )
+            );
+            email.setHtmlMsg(htmlMsgBody);
             String emailsTo = appBean.obtenerValorPropiedad(Constants.EMAIL_TO_INVENTORY_INCONSISTENCY);
             if (emailsTo != null && emailsTo.contains(",")) {
                 for (String emailTo : emailsTo.split(",")) {

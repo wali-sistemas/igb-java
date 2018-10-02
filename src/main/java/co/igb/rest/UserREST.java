@@ -74,7 +74,6 @@ public class UserREST {
                 if (userData == null) {
                     throw new NoResultException();
                 }
-                //TODO: validar si la ultima fecha de actualizacion es mayor a tres dias y actualizar datos desde LDAP
 
                 //diff in msec
                 long diff = System.currentTimeMillis() - userData.getLastUpdate().getTime();
