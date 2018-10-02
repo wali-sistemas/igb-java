@@ -12,6 +12,7 @@ import co.igb.b1ws.client.stocktransfer.AddResponse;
 import co.igb.b1ws.client.stocktransfer.MsgHeader;
 import co.igb.b1ws.client.stocktransfer.StockTransfer;
 import co.igb.b1ws.client.stocktransfer.StockTransferService;
+import co.igb.dto.InventoryInconsistency;
 import co.igb.dto.ResponseDTO;
 import co.igb.dto.SingleItemTransferDTO;
 import co.igb.dto.StockTransferDTO;
@@ -104,7 +105,6 @@ public class StockTransferREST implements Serializable {
 
         //2. Procesar documento
         Long docEntry = -1L;
-        String errorMessage = null;
         if (sessionId != null) {
             try {
                 Document doc = retrieveOrderDocument(orderEntry.longValue(), sessionId);
@@ -119,7 +119,6 @@ public class StockTransferREST implements Serializable {
                 CONSOLE.log(Level.INFO, "Se modifico la orden satisfactoriamente", docEntry);
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
-                errorMessage = e.getMessage();
             }
         }
 
@@ -127,7 +126,6 @@ public class StockTransferREST implements Serializable {
         if (sessionId != null) {
             sapFunctions.logout(sessionId);
         }
-
         return success;
     }
 
@@ -261,7 +259,7 @@ public class StockTransferREST implements Serializable {
                 pickingRecord.setCompanyName(companyName);
                 if (itemTransfer.getTemporary()) {
                     GregorianCalendar cal = new GregorianCalendar();
-                    cal.add(Calendar.MINUTE, Integer.parseInt(appBean.obtenerValorPropiedad("igb.temporary.picking.ttl")));
+                    cal.add(Calendar.MINUTE, Integer.parseInt(getPropertyValue(Constants.TEMPORARY_PICKING_TTL, companyName)));
                     pickingRecord.setExpires(cal.getTime());
                 }
                 pickingRecordFacade.create(pickingRecord);
@@ -346,31 +344,29 @@ public class StockTransferREST implements Serializable {
 
         //1. Login
         String sessionId = null;
+        String errorMessage = null;
         try {
             sessionId = sapFunctions.login(companyName);
             CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            errorMessage = e.getMessage();
         }
 
         //2. Registrar documento
         Long docEntry = -1L;
-        String errorMessage = null;
         if (sessionId != null) {
             try {
                 docEntry = createTransferDocument(transfer, sessionId);
                 CONSOLE.log(Level.INFO, "Se creo la transferencia docEntry={0}", docEntry);
             } catch (MalformedURLException e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
-                errorMessage = e.getMessage();
             }
         } else {
             return Response.ok(new ResponseDTO(-1, "Ocurrió un error al crear el traslado. " + errorMessage)).build();
         }
 
         //3. Logout
-        if (sessionId != null) {
-            sapFunctions.logout(sessionId);
-        }
+        sapFunctions.logout(sessionId);
 
         //4. Crear el registro en base de datos
         return startCounting(binCode, warehouse, companyName, docEntry);
@@ -402,7 +398,8 @@ public class StockTransferREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response finishInventory(@PathParam("idInventory") Integer idInventory,
                                     @HeaderParam("X-Company-Name") String companyName,
-                                    @HeaderParam("X-Warehouse-Code") String warehouseCode) {
+                                    @HeaderParam("X-Warehouse-Code") String warehouseCode,
+                                    @HeaderParam("X-Employee") String employeeName) {
         Inventory inventory = inventoryFacade.find(idInventory);
         List<InventoryDetail> detail = inventoryDetailFacade.findInventoryDetail(idInventory);
         List<InventoryDifference> differences = new ArrayList<>();
@@ -485,15 +482,13 @@ public class StockTransferREST implements Serializable {
                 } catch (Exception ignored) {
                 }
                 //2. Registrar documento
-                Long docEntry = -1L;
-                String errorMessage = null;
+                Long docEntry;
                 if (sessionId != null) {
                     try {
                         docEntry = createTransferDocument(transfer, sessionId);
                         CONSOLE.log(Level.INFO, "Se creo la transferencia docEntry={0}", docEntry);
                     } catch (MalformedURLException e) {
                         CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
-                        errorMessage = e.getMessage();
                     }
                 }
                 //3. Logout
@@ -509,6 +504,7 @@ public class StockTransferREST implements Serializable {
             }
 
             //4.2 Se registran los datos que no se encontraron
+            assert stock != null;
             for (StockTransferDetail s : stock) {
                 InventoryDifference difference = new InventoryDifference();
 
@@ -526,15 +522,28 @@ public class StockTransferREST implements Serializable {
             try {
                 inventoryFacade.edit(inventory);
                 CONSOLE.log(Level.INFO, "Se marco el inventario con id {0} como finalizado", inventory.getId());
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
 
-            //TODO: enviar correo con diferencias
+            sendInconsistenciesEmail(employeeName, differences, inventory.getLocation());
 
             return Response.ok(differences).build();
         }
 
         return Response.ok(-1).build();
+    }
+
+    private void sendInconsistenciesEmail(String employeeName, List<InventoryDifference> differences, String binCode) {
+        List<InventoryInconsistency> inconsistencies = new ArrayList<>();
+        for (InventoryDifference difference : differences) {
+            InventoryInconsistency inconsistency = new InventoryInconsistency();
+            inconsistency.setBinCode(binCode);
+            inconsistency.setItemCode(difference.getItem());
+            inconsistency.setExpectedQuantity(difference.getExpected());
+            inconsistency.setFoundQuantity(difference.getFound());
+            inconsistencies.add(inconsistency);
+        }
+        mailManager.sendInventoryInconsistencies(employeeName, inconsistencies);
     }
 
     @POST
@@ -603,7 +612,7 @@ public class StockTransferREST implements Serializable {
         try {
             sessionId = sapFunctions.login(companyName);
             CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         //2. Registrar documento
         Long docEntry = -1L;
@@ -697,7 +706,7 @@ public class StockTransferREST implements Serializable {
         line.setItemCode(itemTransfer.getItemCode());
         line.setWarehouseCode(itemTransfer.getWarehouseCode());
         line.setFromWarehouseCode(itemTransfer.getWarehouseCode());
-        line.setQuantity(new Double(expectedQuantity - itemTransfer.getQuantity()));
+        line.setQuantity((double) (expectedQuantity - itemTransfer.getQuantity()));
 
         StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
         outOperation.setAllowNegativeQuantity("tNO");
@@ -726,7 +735,7 @@ public class StockTransferREST implements Serializable {
         try {
             sessionId = sapFunctions.login(companyName);
             CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         //2. Registrar documento
         Long docEntry = -1L;
@@ -803,7 +812,7 @@ public class StockTransferREST implements Serializable {
         try {
             sessionId = sapFunctions.login(companyName);
             CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         //2. Registrar documento
         Long docEntry = -1L;
@@ -845,7 +854,7 @@ public class StockTransferREST implements Serializable {
             Integer orderNumber) {
         CONSOLE.log(Level.INFO, "Trasladando picking completo a zona de packing. Orden de venta: {0}", orderNumber);
 
-        return Response.ok(new ResponseDTO(-1,"Metodo aun no implementado")).build();
+        return Response.ok(new ResponseDTO(-1, "Metodo aun no implementado")).build();
     }
 
     private String getPropertyValue(String propertyName, String companyName) {

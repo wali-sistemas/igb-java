@@ -2,6 +2,12 @@ package co.igb.persistence.facade;
 
 import co.igb.dto.SalesOrderDTO;
 
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,12 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 
 /**
  * @author dbotero
@@ -56,16 +56,17 @@ public class SalesOrderFacade {
     }
 
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public List<SalesOrderDTO> findOpenOrders(boolean showAll, String schemaName) {
+    public List<SalesOrderDTO> findOpenOrders(boolean showAll, String schemaName, String warehouseCode) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(enc.docnum as varchar(10)) docnum, ");
-        sb.append("cast(enc.docdate as date) docdate, ");
-        sb.append("cast(enc.cardcode as varchar(20)) cardcode, ");
-        sb.append("cast(enc.cardname as varchar(100)) cardname, ");
-        sb.append("cast(enc.confirmed as varchar(1)) confirmed, ");
+
+        sb.append("select distinct cast(enc.docnum as varchar(10)) docnum, ");
+        sb.append("cast(enc.docdate as date) docdate, cast(enc.cardcode as varchar(20)) cardcode, ");
+        sb.append("cast(enc.cardname as varchar(100)) cardname, cast(enc.confirmed as varchar(1)) confirmed, ");
         sb.append("(select count(1) from rdr1 det where det.docentry = enc.docentry and det.linestatus = 'O') items, ");
-        sb.append("cast(comments as varchar(200)) comments ");
-        sb.append("from ordr enc where enc.DocStatus = 'O' ");
+        sb.append("cast(comments as varchar(200)) comments from ordr enc ");
+        sb.append("inner join rdr1 det on det.docentry = enc.docentry and det.whscode = '");
+        sb.append(warehouseCode);
+        sb.append("' where enc.DocStatus = 'O' ");
         if (!showAll) {
             sb.append("and enc.confirmed = 'Y' ");
         }
