@@ -151,12 +151,15 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
     }
 
 
-    public List<PickingRecord> listPicking(Integer orderNumber) {
+    public List<PickingRecord> listPicking(Integer orderNumber, String companyName) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(PickingRecord.class);
         Root picking = cq.from(PickingRecord.class);
 
-        cq.where(cb.equal(picking.get(PickingRecord_.orderNumber), orderNumber));
+        cq.where(cb.and(
+                cb.equal(picking.get(PickingRecord_.orderNumber), orderNumber),
+                cb.equal(picking.get(PickingRecord_.companyName), companyName)
+        ));
 
         try {
             return em.createQuery(cq).getResultList();

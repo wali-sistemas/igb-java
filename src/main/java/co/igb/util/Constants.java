@@ -29,6 +29,7 @@ public class Constants {
     public static final String EMAIL_FROM_INVENTORY_INCONSISTENCY = "mail.from.inventory.inconsistency";
     public static final String EMAIL_SUBJECT_INVENTORY_INCONSISTENCY = "mail.subject.inventory.inconsistency";
     public static final String EMAIL_MSG_INVENTORY_INCONSISTENCY = "mail.msg.inventory.inconsistency";
+    public static final String EMAIL_MSG_INVENTORY_INCONSISTENCY_LINE = "mail.msg.inventory.inconsistency.line";
     public static final String EMAIL_TO_INVENTORY_INCONSISTENCY = "mail.to.inventory.inconsistency";
     public static final String EMAIL_BCC_INVENTORY_INCONSISTENCY = "mail.bcc.inventory.inconsistency";
     public static final String EMAIL_FROM_PACKING_LIST= "mail.from.packing.list";

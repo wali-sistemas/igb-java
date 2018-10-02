@@ -2,10 +2,8 @@ package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.AssignedOrder;
 import co.igb.persistence.entity.AssignedOrder_;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import co.igb.util.Constants;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -15,6 +13,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -56,7 +58,7 @@ public class AssignedOrderFacade extends AbstractFacade<AssignedOrder> {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<AssignedOrder> cq = cb.createQuery(AssignedOrder.class);
         Root<AssignedOrder> root = cq.from(AssignedOrder.class);
-        Predicate statusClosed = cb.equal(root.get(AssignedOrder_.status), "closed");
+        Predicate statusClosed = cb.equal(root.get(AssignedOrder_.status), Constants.STATUS_CLOSED);
         cq.where(statusClosed, cb.equal(root.get(AssignedOrder_.company), companyName));
         try {
             return em.createQuery(cq).getResultList();

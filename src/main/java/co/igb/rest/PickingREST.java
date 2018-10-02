@@ -3,6 +3,7 @@ package co.igb.rest;
 import co.igb.dto.ResponseDTO;
 import co.igb.dto.SortedStockDTO;
 import co.igb.ejb.IGBApplicationBean;
+import co.igb.ejb.StockTransferEJB;
 import co.igb.persistence.entity.AssignedOrder;
 import co.igb.persistence.entity.PackingOrder;
 import co.igb.persistence.entity.PackingOrderItem;
@@ -12,7 +13,7 @@ import co.igb.persistence.facade.BinLocationFacade;
 import co.igb.persistence.facade.PackingOrderFacade;
 import co.igb.persistence.facade.PickingRecordFacade;
 import co.igb.persistence.facade.SalesOrderFacade;
-import org.apache.commons.lang3.time.StopWatch;
+import co.igb.util.Constants;
 
 import javax.ejb.EJB;
 import javax.ejb.TransactionAttribute;
@@ -57,6 +58,8 @@ public class PickingREST implements Serializable {
     private BinLocationFacade blFacade;
     @EJB
     private PackingOrderFacade poFacade;
+    @EJB
+    private StockTransferEJB stockTransferEJB;
     @Inject
     private IGBApplicationBean appBean;
 
@@ -133,19 +136,15 @@ public class PickingREST implements Serializable {
             @QueryParam("orderNumber") Integer orderNumber,
             @HeaderParam("X-Company-Name") String companyName,
             @HeaderParam("X-Warehouse-Code") String warehouseCode) {
-        StopWatch watch = new StopWatch();
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Buscando siguiente item para packing para el usuario {0} ", username);
 
-        watch.start();
         //buscar ordenes asignadas en estado open para el empleado en la empresa seleccionada
         List<AssignedOrder> orders = aoFacade.listOpenAssignationsByUserAndCompany(username, orderNumber, companyName);
 
         //si no hay ordenes pendientes, mostrar alerta con mensaje de error
         if (orders == null || orders.isEmpty()) {
             CONSOLE.log(Level.WARNING, "No se encontraron ordenes de venta asignadas al usuario {0} en la empresa {1}", new Object[]{username, companyName});
-            watch.stop();
-            CONSOLE.log(Level.INFO, "El proceso tomo {0}ms", watch.getTime());
             return Response.ok(new ResponseDTO(-2, "El usuario no tiene órdenes de venta asignadas pendientes por picking")).build();
         }
 
@@ -156,7 +155,7 @@ public class PickingREST implements Serializable {
             Object[] pickingStatus = processPickingStatus(order.getOrderNumber(), false, companyName);
             Map<String, Integer> pendingItems = (Map<String, Integer>) pickingStatus[0];
             Map<String, Map<Long, Integer>> pickedItems = (Map<String, Map<Long, Integer>>) pickingStatus[1];
-            List<Object> skipped= (List<Object>) pickingStatus[2];
+            List<Object> skipped = (List<Object>) pickingStatus[2];
 
             if (pendingItems == null || pendingItems.isEmpty()) {
                 if (skipped.isEmpty()) {
@@ -188,13 +187,11 @@ public class PickingREST implements Serializable {
             }
         }
         //seleccionar y retornar el siguiente item para picking
-        watch.stop();
-        CONSOLE.log(Level.INFO, "El proceso para obtener el siguiente item de picking tomo {0}ms", watch.getTime());
         if (sortedStock.isEmpty() && !warning) {
             return Response.ok(new ResponseDTO(-1, "No hay más items pendientes por picking")).build();
         } else if (sortedStock.isEmpty() && warning) {
             return Response.ok(new ResponseDTO(-3, "No hay saldo disponible para picking en la(s) orden(es) asignada(s)")).build();
-        } else if(sortedStock.isEmpty() && skippedItems) {
+        } else if (sortedStock.isEmpty() && skippedItems) {
             return Response.ok(new ResponseDTO(-4, "No hay ítems pendientes por picking, pero hay ítems marcados para recoger después.")).build();
         } else {
             return Response.ok(new ResponseDTO(0, sortedStock.first())).build();
@@ -208,19 +205,15 @@ public class PickingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response closeOrders(@PathParam("username") String username, @QueryParam("orderNumber") Integer orderNumber,
                                 @HeaderParam("X-Company-Name") String companyName) {
-        StopWatch watch = new StopWatch();
         CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Procesando solicitud de cierre de orden {0}", orderNumber != null ? orderNumber : "multiple");
 
-        watch.start();
         //buscar ordenes asignadas en estado open para el empleado en la empresa seleccionada
         List<AssignedOrder> orders = aoFacade.listOpenAssignationsByUserAndCompany(username, orderNumber, companyName);
 
         //si no hay ordenes pendientes, mostrar alerta con mensaje de error
         if (orders == null || orders.isEmpty()) {
             CONSOLE.log(Level.WARNING, "No se encontraron ordenes de venta asignadas al usuario {0} en la empresa {1}", new Object[]{username, companyName});
-            watch.stop();
-            CONSOLE.log(Level.INFO, "El proceso tomo {0}ms", watch.getTime());
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
@@ -235,18 +228,22 @@ public class PickingREST implements Serializable {
                 if (pendingItems.get(itemCode) > 0) {
                     CONSOLE.log(Level.SEVERE, "Se intento marcar como finalizada una orden que aun tiene items pendientes por picking. orden={0}, usuario={1}, item={2}, pendiente={3}",
                             new Object[]{order.getOrderNumber(), username, itemCode, pendingItems.get(itemCode)});
-                    watch.stop();
-                    CONSOLE.log(Level.INFO, "El proceso tomo {0}ms", watch.getTime());
                     return Response.ok(new ResponseDTO(-1, "La orden " + order.getOrderNumber() + " todavía tiene "
                             + pendingItems.get(itemCode) + " unidades pendientes del item " + itemCode)).build();
                 }
             }
 
             closeAndPack(order, pickedItems, companyName);
+            try {
+                moveItemsToPackingArea(order.getOrderNumber(), companyName);
+            }catch (Exception e){
+                return Response.ok(
+                        new ResponseDTO(
+                                -1,
+                                "Ocurrió un error al trasladar los ítems a la ubicación de packing. " + e.getMessage())
+                ).build();
+            }
         }
-
-        watch.stop();
-        CONSOLE.log(Level.INFO, "El proceso tomo {0}ms", watch.getTime());
         return Response.ok(new ResponseDTO(0, "")).build();
     }
 
@@ -285,11 +282,15 @@ public class PickingREST implements Serializable {
             poFacade.create(packingOrder);
             CONSOLE.log(Level.INFO, "Se creo la orden de packing para la orden {0}", order.getOrderNumber());
 
-            order.setStatus("closed");
+            order.setStatus(Constants.STATUS_CLOSED);
             aoFacade.edit(order);
             CONSOLE.log(Level.INFO, "Cerro la asignacion de picking para la orden {0}", order.getOrderNumber());
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el estado de la asignacion de picking. ", e);
         }
+    }
+
+    private void moveItemsToPackingArea(Integer orderNumber, String companyName) {
+        stockTransferEJB.transferClosedPickingToPackingArea(orderNumber, companyName);
     }
 }

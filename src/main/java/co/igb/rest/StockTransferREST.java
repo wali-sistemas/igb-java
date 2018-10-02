@@ -529,6 +529,8 @@ public class StockTransferREST implements Serializable {
             } catch (Exception e) {
             }
 
+            //TODO: enviar correo con diferencias
+
             return Response.ok(differences).build();
         }
 
@@ -833,7 +835,7 @@ public class StockTransferREST implements Serializable {
     }
 
     @POST
-    @Path("stock-transfer")
+    @Path("stock-transfer2")
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)

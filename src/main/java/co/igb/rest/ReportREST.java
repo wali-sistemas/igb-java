@@ -12,12 +12,8 @@ import co.igb.persistence.facade.AssignedOrderFacade;
 import co.igb.persistence.facade.PickingRecordFacade;
 import co.igb.persistence.facade.ReportPickingProgressFacade;
 import co.igb.persistence.facade.SalesOrderFacade;
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import co.igb.util.Constants;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -29,6 +25,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -126,7 +128,7 @@ public class ReportREST implements Serializable {
                     long time2;
                     double totalTiempo = 0.0;
                     double promedio = 0.0;
-                    List<PickingRecord> datos = pickingRecordFacade.listPicking(l);
+                    List<PickingRecord> datos = pickingRecordFacade.listPicking(l, companyName);
 
                     if (datos != null && !datos.isEmpty()) {
                         for (int i = 0; i < datos.size(); i++) {
@@ -186,7 +188,7 @@ public class ReportREST implements Serializable {
                     // Si la orden ya esta cerrada se hace un registro en la base de datos
                     AssignedOrder order = assignedOrderFacade.findByOrderNumber(l, companyName);
 
-                    if (order != null && order.getId() != null && order.getId() != 0 && order.getStatus().equals("closed")) {
+                    if (order != null && order.getId() != null && order.getId() != 0 && order.getStatus().equals(Constants.STATUS_CLOSED)) {
                         ReportPickingProgress progress = new ReportPickingProgress();
 
                         progress.setDias(dias);
