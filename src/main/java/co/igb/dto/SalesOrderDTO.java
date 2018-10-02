@@ -20,6 +20,8 @@ public class SalesOrderDTO {
     private String comments;
     private String assignedPickingEmployee;
     private String status;
+    private String address;
+    private String transp;
 
     public Long getDocEntry() {
         return docEntry;
@@ -117,4 +119,19 @@ public class SalesOrderDTO {
         this.status = status;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getTransp() {
+        return transp;
+    }
+
+    public void setTransp(String transp) {
+        this.transp = transp;
+    }
 }
