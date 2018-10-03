@@ -477,7 +477,7 @@ public class PackingREST implements Serializable {
         File file = pdfManager.createPackingListPdf(idPackingOrder.toString(), fileName, companyReportName, records);
 
         UserDTO userDto = ldapUtil.getUserInfo(username);
-        CONSOLE.log(Level.INFO, "Enviando correo al empleado {0} -> {1}", new Object[]{userDto.toString(), userDto.getEmail()});
+        CONSOLE.log(Level.INFO, "Enviando correo al empleado {0} -> {1}", new Object[]{userDto.getCompleteName(), userDto.getEmail()});
         emailManager.sendWithAttachment(file.getAbsolutePath(), fileName + ".pdf", userDto.getCompleteName(), userDto.getEmail());
         //TODO: parametrizar ubicacion PDF
 
