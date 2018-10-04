@@ -38,9 +38,9 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
         super(PickingRecord.class);
     }
 
-    public List<Object> listSkippedItems(Integer orderNumber, String companyName) {
+    public List<String> listSkippedItems(Integer orderNumber, String companyName) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select * from picking_record where order_number =");
+        sb.append("select item_code from picking_record where order_number =");
         sb.append(orderNumber);
         sb.append(" and company_name = '");
         sb.append(companyName);

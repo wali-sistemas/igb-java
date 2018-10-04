@@ -46,7 +46,6 @@ public class BinLocationREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listPickingCarts(@HeaderParam("X-Company-Name") String companyName,
                                      @HeaderParam("X-Warehouse-Code") String warehouseCode) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Listando carritos de picking");
 
         List response = blFacade.listPickingCarts(warehouseCode, companyName);
@@ -77,7 +76,6 @@ public class BinLocationREST implements Serializable {
             @PathParam("binCode") String binCode,
             @HeaderParam("X-Company-Name") String companyName,
             @HeaderParam("X-Warehouse-Code") String warehouseCode) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Obteniendo binabs para ubicacion " + binCode);
 
         Integer binAbs = blFacade.getBinAbs(binCode, companyName);

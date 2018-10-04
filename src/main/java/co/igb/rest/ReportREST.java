@@ -29,7 +29,6 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -60,8 +59,6 @@ public class ReportREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response obtainReportsOrders(@HeaderParam("X-Company-Name") String companyName,
                                         @HeaderParam("X-Warehouse-Code") String warehouseCode) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
-
         List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, companyName, warehouseCode);
         List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations(companyName);
 
@@ -218,7 +215,6 @@ public class ReportREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response obtainReportsOrdersByClient(@HeaderParam("X-Company-Name") String companyName,
                                                 @HeaderParam("X-Warehouse-Code") String warehouseCode) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, companyName, warehouseCode);
         List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations(companyName);
 

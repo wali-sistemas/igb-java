@@ -3,6 +3,8 @@ package co.igb.util;
 public class Constants {
     public static final String INVOICE_SERIES = "igb.invoice.series";
     public static final String STOCK_TRANSFER_SERIES = "igb.stock-transfer.series";
+    public static final String SALES_ORDER_SERIES = "igb.sales.order.series";
+    public static final String DELIVERY_NOTE_SERIES = "igb.delivery.note.series";
     public static final String WAREHOUSE_CODE = "igb.warehouse.code";
     public static final String COMPANIES = "igb.login.companies";
     public static final String INITIAL_CONTEXT_FACTORY = "initial.context.factory";
@@ -38,8 +40,17 @@ public class Constants {
     public static final String EMAIL_SUBJECT_PACKING_LIST = "mail.subject.packing.list";
     public static final String EMAIL_MSG_PACKING_LIST = "mail.msg.packing.list";
     public static final String EMAIL_CC_PACKING_LIST = "mail.cc.packing.list";
+    public static final String EMAIL_FROM_PACKING_ERROR = "mail.from.packing.error";
+    public static final String EMAIL_SUBJECT_PACKING_ERROR = "mail.subject.packing.error";
+    public static final String EMAIL_MSG_PACKING_ERROR = "mail.msg.packing.error";
+    public static final String EMAIL_TO_PACKING_ERROR = "mail.to.packing.error";
+    public static final String EMAIL_CC_PACKING_ERROR = "mail.cc.packing.error";
+    public static final String EMAIL_BCC_PACKING_ERROR = "mail.bcc.packing.error";
     public static final String STATUS_CLOSED = "closed";
     public static final String STATUS_OPEN = "open";
+    public static final String SAP_STATUS_OPEN = "O";
+    public static final String SAP_STATUS_NO = "tNO";
+    public static final String SAP_STATUS_YES = "tYES";
     public static final String TEMPORARY_PICKING_TTL = "igb.temporary.picking.ttl";
     public static final String B1WS_WSDL_URL = "igb.b1ws.wsdlUrl";
     public static final String B1WS_DATABASE_SERVER = "igb.b1ws.databaseServer";
@@ -50,6 +61,8 @@ public class Constants {
     public static final String B1WS_LANGUAGE = "igb.b1ws.language";
     public static final String B1WS_LICENSE_SERVER = "igb.b1ws.licenseServer";
     public static final String B1WS_LOGIN_SERVICE = "LoginService";
+    public static final String B1WS_DELIVERY_NOTE_SERVICE = "DeliveryNotesService";
+    public static final String BIN_TYPE_PICKING = "PICKING";
 
 
     public static final String[] LDAP_ATTR_IDS = {"name", "givenName", "description", "sAMAccountname", "userPrincipalName", "sn", "distinguishedName", "cn", "mail", "memberOf"};

@@ -26,6 +26,7 @@ import co.igb.persistence.facade.ItemFacade;
 import co.igb.persistence.facade.PackingListRecordFacade;
 import co.igb.persistence.facade.PackingOrderFacade;
 import co.igb.persistence.facade.SalesOrderFacade;
+import co.igb.util.Constants;
 import co.igb.util.IGBUtils;
 
 import javax.ejb.EJB;
@@ -49,7 +50,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -99,7 +99,6 @@ public class PackingREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listPackingRecords(@HeaderParam("X-Company-Name") String companyName) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Listando registros de packing");
         List<PackingDTO> list = poFacade.listOpen(companyName);
         CONSOLE.log(Level.INFO, "Se obtuvieron {0} registros de packing. {1}", new Object[]{list.size(), Arrays.toString(list.toArray())});
@@ -111,7 +110,6 @@ public class PackingREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listCustomersWithPackingRecords(@HeaderParam("X-Company-Name") String companyName) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Listando clientes con registros de packing pendientes");
         List<Object[]> customers = poFacade.listCustomersWithOpenRecords(companyName);
         CONSOLE.log(Level.INFO, "Se obtuvieron {0} clientes con ordenes de empaque abiertas", customers.size());
@@ -123,7 +121,6 @@ public class PackingREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listCustomerOrders(@PathParam("customerId") String customerId, @HeaderParam("X-Company-Name") String companyName) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Listando ordenes de packing abiertas para el cliente {0}", customerId);
         List<Object[]> orders = poFacade.listCustomerOrders(customerId, companyName);
         CONSOLE.log(Level.INFO, "Se obtuvieron {0} ordenes de empaque abiertas para el cliente {1}", new Object[]{orders.size(), customerId});
@@ -135,7 +132,6 @@ public class PackingREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response validateBinCode(@PathParam("orderNumber") Integer orderNumber, @PathParam("binCode") String binCode, @HeaderParam("X-Company-Name") String companyName) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Listando items por ubicacion y orden ");
         if (binCode == null) {
             return Response.ok(new ResponseDTO(-1, "El código de la ubicación es obligatorio")).build();
@@ -151,7 +147,6 @@ public class PackingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response validateItemCode(@PathParam("orderNumber") Integer orderNumber, @PathParam("itemCode") String itemCode,
                                      @PathParam("binCode") String binCode, @HeaderParam("X-Company-Name") String companyName) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Validando item {0} en orden {1} y ubicacion {2} ", new Object[]{itemCode, orderNumber, binCode});
 
         if (binCode == null) {
@@ -175,8 +170,14 @@ public class PackingREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response addToPackingList(PackingListRecordDTO packingRecord, @HeaderParam("X-Company-Name") String companyName) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Agregando item a packing list {0}", packingRecord);
+
+        //Valida el estado de la orden. Si esta cerrada, informa el error
+        String orderStatus = salesOrderFacade.getOrderStatus(packingRecord.getOrderNumber(), companyName);
+        if (orderStatus == null || !orderStatus.equals(Constants.SAP_STATUS_OPEN)) {
+            return Response.ok(new ResponseDTO(-2, "La órden no se encuentra abierta y por lo tanto no se puede proceder con el proceso de packing")).build();
+        }
+
         PackingListRecord record = new PackingListRecord();
         if (packingRecord.getIdPackingList() == null || packingRecord.getIdPackingList() == 0) {
             record.setIdPackingList(plFacade.getNextPackingListId());
@@ -210,7 +211,7 @@ public class PackingREST implements Serializable {
         record.setOrderNumber(packingRecord.getOrderNumber());
         record.setIdPackingOrder(packingRecord.getIdPackingOrder());
         record.setQuantity(packingRecord.getQuantity());
-        record.setStatus("open");
+        record.setStatus(Constants.STATUS_OPEN);
         record.setCompanyName(companyName);
 
         try {
@@ -229,7 +230,6 @@ public class PackingREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listOpenPackingJobs(@PathParam("username") String username, @HeaderParam("X-Company-Name") String companyName) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Listando procesos de packing abiertos para el empleado {0}", username);
         List<Object[]> records = plFacade.listOpenPackingRecords(username, companyName);
         CONSOLE.log(Level.INFO, "Se encontraron {0} entradas de registro de packing abiertas para el empleado", records.size());
@@ -241,7 +241,6 @@ public class PackingREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listPackingOrderItems(@PathParam("idPackingOrder") Long idPackingOrder, @HeaderParam("X-Company-Name") String companyName) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Retornando items para la packing order #{0}", idPackingOrder);
         List<Object[]> items = poFacade.listOrderItems(idPackingOrder, companyName);
         CONSOLE.log(Level.INFO, "Se encontraron {0} items para la packing list", items.size());
@@ -254,12 +253,17 @@ public class PackingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     @SuppressWarnings("null")
     public Response createDeliveryNote(Integer idPackingOrder, @HeaderParam("X-Company-Name") String companyName) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Creando documento de entrega para packing orden {0}", idPackingOrder);
 
         List<Object[]> packingRecords = plFacade.listRecords(idPackingOrder, companyName, true);
         if (packingRecords.isEmpty()) {
             return Response.ok(new ResponseDTO(-1, "No se encontraron registros de packing pendientes por entregar")).build();
+        }
+
+        //Valida el estado de la orden. Si esta cerrada, informa el error
+        String orderStatus = salesOrderFacade.getOrderStatus((Integer) packingRecords.get(0)[2], companyName);
+        if (orderStatus == null || !orderStatus.equals(Constants.SAP_STATUS_OPEN)) {
+            return Response.ok(new ResponseDTO(-2, "La órden no se encuentra abierta y por lo tanto no se puede proceder con el proceso de packing")).build();
         }
 
         HashMap<String, DocumentLine> items = new HashMap<>();
@@ -283,8 +287,8 @@ public class PackingREST implements Serializable {
             String employee = (String) row[14];
             //String companyName = (String)row[14];
 
-            if (document.getSeries() == null) {
-                document.setSeries(Long.parseLong(getPropertyValue("igb.delivery.note.series", companyName)));
+            if (orderDocEntry == null) {
+                document.setSeries(Long.parseLong(getPropertyValue(Constants.DELIVERY_NOTE_SERIES, companyName)));
                 document.setCardCode(customerId);
                 document.setComments("Proceso de packing para orden " + orderNumber + " realizado por " + employee);
                 orderDocEntry = salesOrderFacade.getOrderDocEntry(orderNumber, companyName);
@@ -293,7 +297,7 @@ public class PackingREST implements Serializable {
                 }
             }
 
-            DocumentLine line = null;
+            DocumentLine line;
             if (!items.containsKey(itemCode)) {
                 //Si el item no se ha agregado a la orden
                 line = new DocumentLine();
@@ -313,7 +317,7 @@ public class PackingREST implements Serializable {
                 }
 
                 line.setBaseEntry(orderDocEntry.longValue());
-                line.setBaseType(Long.parseLong(getPropertyValue("igb.sales.order.series", companyName)));
+                line.setBaseType(Long.parseLong(getPropertyValue(Constants.SALES_ORDER_SERIES, companyName)));
                 line.setDocumentLinesBinAllocations(new DocumentLinesBinAllocations());
 
                 items.put(itemCode, line);
@@ -334,7 +338,7 @@ public class PackingREST implements Serializable {
 
             if (!quantityAdded) {
                 DocumentLinesBinAllocation binAllocation = new DocumentLinesBinAllocation();
-                binAllocation.setAllowNegativeQuantity("tNO");
+                binAllocation.setAllowNegativeQuantity(Constants.SAP_STATUS_NO);
                 binAllocation.setBaseLineNumber(line.getLineNum());
                 binAllocation.setBinAbsEntry(binAbs.longValue());
                 binAllocation.setQuantity(quantity.doubleValue());
@@ -344,7 +348,7 @@ public class PackingREST implements Serializable {
 
         Document.DocumentLines documentLines = new Document.DocumentLines();
         List<DocumentLine> itemsList = new ArrayList<>(items.values());
-        Collections.sort(itemsList, new Comparator<DocumentLine>() {
+        itemsList.sort(new Comparator<DocumentLine>() {
             @Override
             public int compare(DocumentLine o1, DocumentLine o2) {
                 return o1.getLineNum().compareTo(o2.getLineNum());
@@ -361,7 +365,7 @@ public class PackingREST implements Serializable {
         try {
             sessionId = sapFunctions.login(companyName);
             CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         //2. Registrar documento
         Long docEntry = -1L;
@@ -432,12 +436,15 @@ public class PackingREST implements Serializable {
     }
 
     private Long createDeliveryNote(Document document, String sessionId) throws MalformedURLException {
-        DeliveryNotesService service = new DeliveryNotesService(new URL(String.format(appBean.obtenerValorPropiedad("igb.b1ws.wsdlUrl"), "DeliveryNotesService")));
+        DeliveryNotesService service = new DeliveryNotesService(new URL(
+                String.format(
+                        appBean.obtenerValorPropiedad(Constants.B1WS_WSDL_URL),
+                        Constants.B1WS_DELIVERY_NOTE_SERVICE)));
         Add add = new Add();
         add.setDocument(document);
 
         MsgHeader header = new MsgHeader();
-        header.setServiceName("DeliveryNotesService");
+        header.setServiceName(Constants.B1WS_DELIVERY_NOTE_SERVICE);
         header.setSessionID(sessionId);
         AddResponse response = service.getDeliveryNotesServiceSoap12().add(add, header);
         return response.getDocumentParams().getDocEntry();
@@ -453,7 +460,6 @@ public class PackingREST implements Serializable {
     @Produces("application/pdf")
     public Response closePackingOrder(@PathParam("username") String username, @PathParam("idPackingOrder") Integer idPackingOrder,
                                       @HeaderParam("X-Company-Name") String companyName) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Cerrando packing orden {0}", username);
         //Cierra los registros de packing abiertos
         plFacade.closePackingOrder(username, companyName);
@@ -535,7 +541,6 @@ public class PackingREST implements Serializable {
     @Path("status")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     public Response arePackingOrdersComplete(@HeaderParam("X-Employee") String username, @HeaderParam("X-Company-Name") String companyName) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Validando estado de packing para empleado {0}", username);
         return Response.ok(new ResponseDTO(0, poFacade.arePackingOrdersComplete(username, companyName))).build();
     }
@@ -545,8 +550,13 @@ public class PackingREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response autoPack(AutoPackDTO autoPackDTO, @HeaderParam("X-Company-Name") String companyName, @HeaderParam("X-Employee") String employee) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
-        CONSOLE.log(Level.INFO, "Iniciando proceso de empaque automatico. Cliente: {0}, Sales order: {1}",
+        CONSOLE.log(Level.INFO, "Iniciando proceso de empaque automatico.");
+        if (autoPackDTO == null) {
+            CONSOLE.log(Level.SEVERE, "No se enviaron los datos para realizar el cierre (authPackDTO == null)");
+            return Response.ok(new ResponseDTO(-1, "No se enviaron los datos para realizar el cierre")).build();
+        }
+
+        CONSOLE.log(Level.INFO, "Cliente: {0}, Sales order: {1}",
                 new Object[]{autoPackDTO.getCustomerId(), autoPackDTO.getOrderNumber() != null ? autoPackDTO.getOrderNumber() : "todas"});
 
         if (companyName == null || companyName.trim().isEmpty()) {
@@ -557,10 +567,7 @@ public class PackingREST implements Serializable {
             CONSOLE.log(Level.SEVERE, "No se enviaron los datos para realizar el cierre (employee == null)");
             return Response.ok(new ResponseDTO(-1, "No se enviaron los datos para realizar el cierre")).build();
         }
-        if (autoPackDTO == null) {
-            CONSOLE.log(Level.SEVERE, "No se enviaron los datos para realizar el cierre (authPackDTO == null)");
-            return Response.ok(new ResponseDTO(-1, "No se enviaron los datos para realizar el cierre")).build();
-        }
+
         if (autoPackDTO.getCustomerId() == null) {
             CONSOLE.log(Level.SEVERE, "No se enviaron los datos para realizar el cierre (customerId == null)");
             return Response.ok(new ResponseDTO(-1, "No se enviaron los datos para realizar el cierre")).build();
@@ -568,11 +575,11 @@ public class PackingREST implements Serializable {
 
         //cargar datos de ordenes de packing
         List<PackingOrder> packingOrders = poFacade.listOrders(autoPackDTO.getCustomerId(), autoPackDTO.getOrderNumber(), companyName);
-        CONSOLE.log(Level.INFO, "Procesando {0} ordenes de packing", packingOrders.size());
         if (packingOrders == null || packingOrders.isEmpty()) {
             CONSOLE.log(Level.SEVERE, "La packing order no existe o no se encuentra abierta");
             return Response.ok(new ResponseDTO(-1, "La packing order no existe o no se encuentra abierta")).build();
         }
+        CONSOLE.log(Level.INFO, "Procesando {0} ordenes de packing", packingOrders.size());
 
         //crear registros de packing para cada item/bin
         for (PackingOrder order : packingOrders) {
@@ -630,9 +637,9 @@ public class PackingREST implements Serializable {
 
             String documentType = IGBUtils.getProperParameter(appBean.obtenerValorPropiedad("igb.invoice.type"), companyName);
             CONSOLE.log(Level.INFO, "La empresa {0} usa el tipo de document {1}", new Object[]{companyName, documentType});
-            if (documentType.equals("draft")) {
+            if (documentType != null && documentType.equals("draft")) {
                 responseInvoice = (ResponseDTO) invoiceREST.createDraft(((Long) responseDelivery.getContent()).intValue(), companyName, employee).getEntity();
-            } else if (documentType.equals("invoice")) {
+            } else if (documentType != null && documentType.equals("invoice")) {
                 responseInvoice = (ResponseDTO) invoiceREST.createInvoice(((Long) responseDelivery.getContent()).intValue(), companyName, employee).getEntity();
             } else {
                 CONSOLE.log(Level.SEVERE, "La empresa no tiene configurado el tipo de documento (borrador o factura) que se debe crear");
@@ -656,5 +663,30 @@ public class PackingREST implements Serializable {
         List<Object[]> customers = poFacade.listAllPackings(customer, companyName);
 
         return Response.ok(new ResponseDTO(0, customers)).build();
+    }
+
+    @PUT
+    @Path("cancel/{idPackingOrder}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response cleanPackingProcess(@PathParam("idPackingOrder") Integer idPackingOrder,
+                                        @HeaderParam("X-Company-Name") String companyName,
+                                        @HeaderParam("X-Employee") String username) {
+        CONSOLE.log(Level.WARNING, "Cancelando proceso de packing para packingOrder {0}", idPackingOrder);
+        try {
+            //cerrar packing records
+            plFacade.closePackingOrder(idPackingOrder, companyName);
+            CONSOLE.log(Level.WARNING, "--- Los packing records fueron cerrados");
+            //consultar y cerrar packing order
+            poFacade.closePackingOrder(idPackingOrder, companyName);
+            CONSOLE.log(Level.WARNING, "--- La orden de packing fue cerrada");
+            //enviar correo de notificacion a sistemas y logistica
+            PackingOrder packingOrder = poFacade.find(idPackingOrder.longValue());
+            emailManager.sendPackingErrorNotification(packingOrder.getOrderNumber(), username);
+        }catch (Exception e){
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al cancelar el proceso de packing " + idPackingOrder, e);
+        }
+
+        return Response.ok(new ResponseDTO(0, "")).build();
     }
 }

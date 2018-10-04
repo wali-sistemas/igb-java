@@ -65,7 +65,6 @@ public class InventoryREST {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response addItem(InventoryDTO inventory, @HeaderParam("X-Company-Name") String companyName) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Agregando item al inventario {0}", inventory);
 
         InventoryDetail detail = new InventoryDetail();

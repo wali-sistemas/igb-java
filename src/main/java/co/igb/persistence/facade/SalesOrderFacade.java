@@ -43,6 +43,18 @@ public class SalesOrderFacade {
         }
     }
 
+    public String getOrderStatus(Integer docNum, String schemaName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(DocStatus as varchar(1)) docstatus from ORDR where DocNum = ");
+        sb.append(docNum);
+        try {
+            return (String) chooseSchema(schemaName).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el estado de la orden " + docNum + ". ", e);
+            return null;
+        }
+    }
+
     public Integer getOrderDocEntry(Integer docNum, String schemaName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select DocEntry from ORDR where DocNum = ");
@@ -100,7 +112,8 @@ public class SalesOrderFacade {
         sb.append("select cast(detalle.itemCode as varchar(20)) itemCode, cast(detalle.openQty as int) openQuantity, cast(detalle.quantity as int) quantity, ");
         sb.append("cast(saldo.binabs as int) binAbs, cast(saldo.onhandqty as int) available, cast(ubicacion.bincode as varchar(50)) binCode, ");
         sb.append("cast(detalle.Dscription as varchar(100)) itemName, cast(orden.docnum as int) orderNumber, ");
-        sb.append("cast(ubicacion.attr2val as varchar(5)) velocidad, cast(ubicacion.attr3val as int) secuencia ");
+        sb.append("cast(ubicacion.attr2val as varchar(5)) velocidad, cast(ubicacion.attr3val as int) secuencia, ");
+        sb.append("cast(ubicacion.attr1val as varchar(10)) binType ");
         sb.append("from ordr orden inner join rdr1 detalle on detalle.docentry = orden.docentry and detalle.lineStatus = 'O' ");
         if (itemCodes != null && !itemCodes.isEmpty()) {
             sb.append("and detalle.itemcode in (");

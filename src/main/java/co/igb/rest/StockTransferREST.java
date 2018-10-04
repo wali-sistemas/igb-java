@@ -137,7 +137,6 @@ public class StockTransferREST implements Serializable {
     public Response createPickingTransferDocument(SingleItemTransferDTO itemTransfer,
                                                   @HeaderParam("X-Company-Name") String companyName,
                                                   @HeaderParam("X-Warehouse-Code") String warehouseCode) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Trasladando item a carrito de picking {0}", itemTransfer);
 
         //Validates received data
@@ -232,8 +231,10 @@ public class StockTransferREST implements Serializable {
         String errorMessage = null;
         if (sessionId != null) {
             try {
-                docEntry = createTransferDocument(document, sessionId);
-                CONSOLE.log(Level.INFO, "Se creo la transferencia docEntry={0}", docEntry);
+                if(!itemTransfer.getTemporary()){
+                    docEntry = createTransferDocument(document, sessionId);
+                    CONSOLE.log(Level.INFO, "Se creo la transferencia docEntry={0}", docEntry);
+                }
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
                 errorMessage = e.getMessage();
@@ -244,7 +245,7 @@ public class StockTransferREST implements Serializable {
             sapFunctions.logout(sessionId);
         }
         //4. Validar y retornar
-        if (docEntry > 0) {
+        if (docEntry > 0 || itemTransfer.getTemporary()) {
             try {
                 PickingRecord pickingRecord = new PickingRecord();
                 pickingRecord.setBinFrom(itemTransfer.getBinAbsFrom());
@@ -252,15 +253,17 @@ public class StockTransferREST implements Serializable {
                 pickingRecord.setEmpId(itemTransfer.getUsername());
                 pickingRecord.setItemCode(itemTransfer.getItemCode());
                 pickingRecord.setOrderNumber(itemTransfer.getOrderNumber().longValue());
-                pickingRecord.setQuantity(itemTransfer.getQuantity().longValue());
                 pickingRecord.setStockTransferDocEntry(docEntry);
                 pickingRecord.setTransactionDate(new Date());
                 pickingRecord.setStatus(PickingRecord.STATUS_PENDING);
                 pickingRecord.setCompanyName(companyName);
                 if (itemTransfer.getTemporary()) {
                     GregorianCalendar cal = new GregorianCalendar();
-                    cal.add(Calendar.MINUTE, Integer.parseInt(getPropertyValue(Constants.TEMPORARY_PICKING_TTL, companyName)));
+                    cal.add(Calendar.MINUTE, Integer.parseInt(appBean.obtenerValorPropiedad(Constants.TEMPORARY_PICKING_TTL)));
                     pickingRecord.setExpires(cal.getTime());
+                    pickingRecord.setQuantity(0L);
+                }else{
+                    pickingRecord.setQuantity(itemTransfer.getQuantity().longValue());
                 }
                 pickingRecordFacade.create(pickingRecord);
                 return Response.ok(new ResponseDTO(0, pickingRecord)).build();
@@ -280,7 +283,6 @@ public class StockTransferREST implements Serializable {
     public Response cleanLocation(@PathParam("warehouse") String warehouse, @PathParam("bincode") String binCode,
                                   @HeaderParam("X-Company-Name") String companyName,
                                   @HeaderParam("X-Warehouse-Code") String warehouseCode) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Borrando contenido de ubicacion {0}", binCode);
 
         if (warehouse == null || warehouse.trim().isEmpty()) {
@@ -552,7 +554,6 @@ public class StockTransferREST implements Serializable {
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response resupplyLocation(SingleItemTransferDTO itemTransfer, @HeaderParam("X-Company-Name") String companyName) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Trasladando item {0} para re-abastecer", itemTransfer);
 
         //Validates received data
@@ -765,7 +766,6 @@ public class StockTransferREST implements Serializable {
             StockTransferDTO stockTransfer,
             @HeaderParam("X-Company-Name") String companyName,
             @HeaderParam("X-Warehouse-Code") String warehouseCode) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Realizando traslado entre ubicaciones {0}", stockTransfer);
 
         StockTransfer document = new StockTransfer();

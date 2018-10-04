@@ -64,7 +64,6 @@ public class SalesOrdersREST implements Serializable {
     public Response listOpenOrders(@QueryParam("showAll") Boolean showAll,
                                    @HeaderParam("X-Company-Name") String companyName,
                                    @HeaderParam("X-Warehouse-Code") String warehouseCode) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Listando ordenes de compra abiertas. mostrar no autorizadas? {0}", showAll);
         try {
             List<SalesOrderDTO> orders = soFacade.findOpenOrders(showAll, companyName, warehouseCode);
@@ -154,7 +153,6 @@ public class SalesOrdersREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listAssignedOrders(@PathParam("username") String username, @HeaderParam("X-Company-Name") String companyName) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Listando ordenes asignadas al usuario: {0}", new Object[]{username});
         if (companyName == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "No se especificó la empresa")).build();
@@ -179,7 +177,6 @@ public class SalesOrdersREST implements Serializable {
             @PathParam("orderNumber") Integer orderNumber,
             @HeaderParam("X-Company-Name") String companyName,
             @HeaderParam("X-Warehouse-Code") String warehouseCode) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Validando saldo disponible para orden: {0}", orderNumber);
 
         List<Object[]> data = soFacade.listRemainingStock(orderNumber, warehouseCode, companyName);
@@ -196,7 +193,6 @@ public class SalesOrdersREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response enableAssignation(Integer orderNumber, @HeaderParam("X-Company-Name") String companyName) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Habilitando asignacion de picking para orden: {0}", orderNumber);
         boolean success = aoFacade.enablePicking(orderNumber);
         return Response.ok(new ResponseDTO(success ? 0 : -1, null)).build();

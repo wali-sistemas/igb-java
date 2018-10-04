@@ -76,7 +76,6 @@ public class ReceptionREST implements Serializable {
             PurchaseOrderDTO order,
             @HeaderParam("X-Company-Name") String companyName,
             @HeaderParam("X-Warehouse-Code") String warehouseCode) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Generando entrada de mercancia con los siguientes datos {0}", order);
         Document document = new Document();
         document.setCardCode(order.getCardCode());

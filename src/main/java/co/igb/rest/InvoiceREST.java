@@ -60,7 +60,6 @@ public class InvoiceREST implements Serializable {
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response createInvoiceDocument(Integer deliveryDocEntry, @HeaderParam("X-Company-Name") String companyName, @HeaderParam("X-Employee") String userName) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Creando factura para deliveryNoteDocEntry={0}", deliveryDocEntry);
 
         ResponseDTO responseInvoice = null;
@@ -80,7 +79,6 @@ public class InvoiceREST implements Serializable {
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response createDraft(Integer deliveryDocEntry, @HeaderParam("X-Company-Name") String companyName, @HeaderParam("X-Employee") String userName) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Creando borrador de factura para deliveryNoteDocEntry={0}", deliveryDocEntry);
         //Consultar entrega
         List<Object[]> deliveryData = dnFacade.getDeliveryNoteData(deliveryDocEntry, companyName);
@@ -180,7 +178,6 @@ public class InvoiceREST implements Serializable {
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response createInvoice(Integer deliveryDocEntry, @HeaderParam("X-Company-Name") String companyName, @HeaderParam("X-Employee") String userName) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Creando factura para deliveryNoteDocEntry={0}", deliveryDocEntry);
         //Consultar entrega
         List<Object[]> deliveryData = dnFacade.getDeliveryNoteData(deliveryDocEntry, companyName);

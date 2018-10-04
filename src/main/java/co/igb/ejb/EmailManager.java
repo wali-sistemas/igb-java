@@ -4,6 +4,7 @@ import co.igb.dto.InventoryInconsistency;
 import co.igb.util.Constants;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailAttachment;
+import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.MultiPartEmail;
 
@@ -85,14 +86,7 @@ public class EmailManager implements Serializable {
                     )
             );
             email.setHtmlMsg(htmlMsgBody);
-            String emailsTo = appBean.obtenerValorPropiedad(Constants.EMAIL_TO_INVENTORY_INCONSISTENCY);
-            if (emailsTo != null && emailsTo.contains(",")) {
-                for (String emailTo : emailsTo.split(",")) {
-                    email.addTo(emailTo);
-                }
-            } else {
-                email.addTo(emailsTo);
-            }
+            addRecipients(email, "to", appBean.obtenerValorPropiedad(Constants.EMAIL_TO_INVENTORY_INCONSISTENCY));
 
             email.addBcc(appBean.obtenerValorPropiedad(Constants.EMAIL_BCC_INVENTORY_INCONSISTENCY));
             email.send();
@@ -111,10 +105,10 @@ public class EmailManager implements Serializable {
                             appBean.obtenerValorPropiedad(Constants.EMAIL_MSG_PACKING_LIST),
                             employeeName));
             if (employeeEmail != null) {
-                email.addCc(appBean.obtenerValorPropiedad(Constants.EMAIL_CC_PACKING_LIST));
-                email.addTo(employeeEmail);
+                addRecipients(email, "cc", appBean.obtenerValorPropiedad(Constants.EMAIL_CC_PACKING_LIST));
+                addRecipients(email, "to", employeeEmail);
             } else {
-                email.addTo(appBean.obtenerValorPropiedad(Constants.EMAIL_CC_PACKING_LIST));
+                addRecipients(email, "to", appBean.obtenerValorPropiedad(Constants.EMAIL_CC_PACKING_LIST));
             }
             email.send();
         } catch (Exception e) {
@@ -174,5 +168,55 @@ public class EmailManager implements Serializable {
         email.setSSL(true);
         email.setCharset("utf-8");
         return email;
+    }
+
+    public void sendPackingErrorNotification(Integer orderNumber, String employeeName) {
+        CONSOLE.log(Level.INFO, "Enviando notificacion de error en packing. orden {0}, usuario {1}", new Object[]{orderNumber, employeeName});
+        try {
+            HtmlEmail email = initializeNewEmail();
+            email.setFrom(appBean.obtenerValorPropiedad(Constants.EMAIL_FROM_PACKING_ERROR));
+            email.setSubject(appBean.obtenerValorPropiedad(Constants.EMAIL_SUBJECT_PACKING_ERROR));
+            email.setHtmlMsg(
+                    String.format(
+                            appBean.obtenerValorPropiedad(Constants.EMAIL_MSG_PACKING_ERROR),
+                            orderNumber.toString(),
+                            employeeName));
+            addRecipients(email, "to", appBean.obtenerValorPropiedad(Constants.EMAIL_TO_PACKING_ERROR));
+            addRecipients(email, "cc", appBean.obtenerValorPropiedad(Constants.EMAIL_CC_PACKING_ERROR));
+            addRecipients(email, "bcc", appBean.obtenerValorPropiedad(Constants.EMAIL_BCC_PACKING_ERROR));
+            email.send();
+            CONSOLE.log(Level.INFO, "La notificacion de error en packing fue enviada");
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al enviar la notificacion de error en packing. ", e);
+        }
+    }
+
+    private void addRecipients(HtmlEmail email, String recipientType, String recipients) {
+        if (recipients != null && recipients.contains(",")) {
+            for (String recipient : recipients.split(",")) {
+                addRecipient(email, recipientType, recipient);
+            }
+        } else {
+            addRecipient(email, recipientType, recipients);
+        }
+    }
+
+    private void addRecipient(HtmlEmail email, String recipientType, String recipient) {
+        try {
+            switch (recipientType) {
+                case "to":
+                    email.addTo(recipient);
+                    break;
+                case "cc":
+                    email.addCc(recipient);
+                    break;
+                case "bcc":
+                    email.addBcc(recipient);
+                    break;
+                default:
+
+            }
+        } catch (EmailException ignored) {
+        }
     }
 }
