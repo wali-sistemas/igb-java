@@ -72,7 +72,6 @@ public class PickingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response deleteTemporaryRecords(@HeaderParam("X-Company-Name") String companyName,
                                            @HeaderParam("X-Warehouse-Code") String warehouseCode) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Ejecutando proceso para eliminar registros de picking temporales. Empresa: {0}, Bodega: {1}",
                 new Object[]{companyName, warehouseCode});
         List<Object[]> records = prFacade.findTemporaryRecords(companyName);
@@ -95,10 +94,7 @@ public class PickingREST implements Serializable {
     }
 
     private boolean hasExpired(Date expires, Date now) {
-        int maxMinutes = Integer.parseInt(appBean.obtenerValorPropiedad("igb.temporary.picking.ttl"));
-        long diff = (now.getTime() - expires.getTime()) / 60000;
-        CONSOLE.log(Level.INFO, "Tiempo: {0}, limite: {1}", new Object[]{diff, maxMinutes});
-        return diff >= maxMinutes;
+        return now.getTime() > expires.getTime();
     }
 
     private Object[] processPickingStatus(Integer orderNumber, Boolean excludeTemporary, String companyName) {
@@ -125,7 +121,7 @@ public class PickingREST implements Serializable {
             }
         }
 
-        List<Object> skippedItems = prFacade.listSkippedItems(orderNumber, companyName);
+        List<String> skippedItems = prFacade.listSkippedItems(orderNumber, companyName);
         return new Object[]{pendingItems, pickedItems, skippedItems};
     }
 
@@ -139,7 +135,6 @@ public class PickingREST implements Serializable {
             @QueryParam("orderNumber") Integer orderNumber,
             @HeaderParam("X-Company-Name") String companyName,
             @HeaderParam("X-Warehouse-Code") String warehouseCode) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Buscando siguiente item para packing para el usuario {0} ", username);
 
         //buscar ordenes asignadas en estado open para el empleado en la empresa seleccionada
@@ -158,7 +153,7 @@ public class PickingREST implements Serializable {
             Object[] pickingStatus = processPickingStatus(order.getOrderNumber(), false, companyName);
             Map<String, Integer> pendingItems = (Map<String, Integer>) pickingStatus[0];
             Map<String, Map<Long, Integer>> pickedItems = (Map<String, Map<Long, Integer>>) pickingStatus[1];
-            List<Object> skipped = (List<Object>) pickingStatus[2];
+            List<String> skipped = (List<String>) pickingStatus[2];
 
             if (pendingItems == null || pendingItems.isEmpty()) {
                 if (skipped.isEmpty()) {
@@ -182,6 +177,13 @@ public class PickingREST implements Serializable {
                 //Agregar el inventario de la orden al set de stock
                 for (Object[] row : orderStock) {
                     SortedStockDTO sorted = new SortedStockDTO(row);
+                    if (avoidBin(skipped, sorted.getItemCode(), (String) row[10], Constants.BIN_TYPE_PICKING)) {
+                        //No agrega el registro de saldo a la lista si el item solo debe ser tomado de zona de almacenamiento
+                        CONSOLE.log(Level.INFO, "No se tiene el cuenta para picking el inventario en la ubicacion {0} para el item {1} porque la ubicacion NO es de almacenamiento",
+                                new Object[]{sorted.getBinCode(), sorted.getItemCode()});
+                        continue;
+                    }
+
                     if (pendingItems.containsKey(sorted.getItemCode()) && pendingItems.get(sorted.getItemCode()) > 0) {
                         sorted.setPendingQuantity(pendingItems.get(row[0]));
                         sortedStock.add(sorted);
@@ -201,6 +203,10 @@ public class PickingREST implements Serializable {
         }
     }
 
+    private boolean avoidBin(List<String> skippedItems, String itemCode, String binType, String binTypeToAvoid) {
+        return skippedItems != null && skippedItems.contains(itemCode) && binType != null && binType.equals(binTypeToAvoid);
+    }
+
     @PUT
     @Path("close/{username}")
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
@@ -208,7 +214,6 @@ public class PickingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response closeOrders(@PathParam("username") String username, @QueryParam("orderNumber") Integer orderNumber,
                                 @HeaderParam("X-Company-Name") String companyName) {
-        CONSOLE.log(Level.INFO, "company-name: {0}", companyName);
         CONSOLE.log(Level.INFO, "Procesando solicitud de cierre de orden {0}", orderNumber != null ? orderNumber : "multiple");
 
         //buscar ordenes asignadas en estado open para el empleado en la empresa seleccionada
@@ -221,6 +226,7 @@ public class PickingREST implements Serializable {
         }
 
         for (AssignedOrder order : orders) {
+            CONSOLE.log(Level.INFO, "Procesando estado de picking para {0}", order.toString());
             Object[] pickingStatus = processPickingStatus(order.getOrderNumber(), true, companyName);
             Map<String, Integer> pendingItems = (Map<String, Integer>) pickingStatus[0];
             Map<String, Map<Long, Integer>> pickedItems = (Map<String, Map<Long, Integer>>) pickingStatus[1];
@@ -259,7 +265,7 @@ public class PickingREST implements Serializable {
             packingOrder.setCustomerId(order.getCustomerId());
             packingOrder.setCustomerName(order.getCustomerName());
             packingOrder.setOrderNumber(order.getOrderNumber());
-            packingOrder.setStatus("open");
+            packingOrder.setStatus(Constants.STATUS_OPEN);
             packingOrder.setCompanyName(companyName);
 
             for (String itemCode : pickedItems.keySet()) {
