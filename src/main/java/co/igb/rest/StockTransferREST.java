@@ -403,7 +403,7 @@ public class StockTransferREST implements Serializable {
                                     @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                     @HeaderParam("X-Employee") String employeeName) {
         Inventory inventory = inventoryFacade.find(idInventory);
-        List<InventoryDetail> detail = inventoryDetailFacade.findInventoryDetail(idInventory);
+        List<InventoryDetail> detail = inventoryDetailFacade.findInventoryDetail(idInventory, companyName);
         List<InventoryDifference> differences = new ArrayList<>();
 
         if (detail != null && !detail.isEmpty()) {

@@ -2,15 +2,16 @@ package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.ReportPickingProgress;
 import co.igb.persistence.entity.ReportPickingProgress_;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author dbotero
@@ -20,27 +21,27 @@ public class ReportPickingProgressFacade extends AbstractFacade<ReportPickingPro
 
     private static final Logger CONSOLE = Logger.getLogger(ReportPickingProgressFacade.class.getSimpleName());
 
-    @PersistenceContext(unitName = "MySQLPU")
-    private EntityManager em;
+    @EJB
+    private PersistenceConf persistenceConf;
 
     @Override
     protected EntityManager getEntityManager() {
-        return em;
+        return persistenceConf.chooseSchema("MySQLPU");
     }
 
     public ReportPickingProgressFacade() {
         super(ReportPickingProgress.class);
     }
 
-    public ReportPickingProgress obtainReportOrder(Integer orderNumber) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
+    public ReportPickingProgress obtainReportOrder(Integer orderNumber, String companyName) {
+        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName).getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(ReportPickingProgress.class);
         Root report = cq.from(ReportPickingProgress.class);
 
         cq.where(cb.equal(report.get(ReportPickingProgress_.orderNumber), orderNumber));
 
         try {
-            return (ReportPickingProgress) em.createQuery(cq).getSingleResult();
+            return (ReportPickingProgress) persistenceConf.chooseSchema(companyName).createQuery(cq).getSingleResult();
         } catch (NoResultException e) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el reporte para una orden. ", e);

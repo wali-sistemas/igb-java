@@ -3,18 +3,18 @@ package co.igb.persistence.facade;
 import co.igb.dto.PurchaseOrderDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.util.IGBUtils;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 /**
  *
@@ -28,24 +28,11 @@ public class PurchaseOrderFacade {
     @Inject
     private IGBApplicationBean applicationBean;
 
-    @PersistenceContext(unitName = "IGBPU")
-    private EntityManager emIGB;
-    @PersistenceContext(unitName = "VARROCPU")
-    private EntityManager emVARROC;
+    @EJB
+    private PersistenceConf persistenceConf;
 
     public PurchaseOrderFacade() {
 
-    }
-
-    private EntityManager chooseSchema(String schemaName) {
-        switch (schemaName) {
-            case "IGB":
-                return emIGB;
-            case "VARROC":
-                return emVARROC;
-            default:
-                return null;
-        }
     }
 
     public PurchaseOrderDTO find(String docNum, String schemaName) {
@@ -70,7 +57,7 @@ public class PurchaseOrderFacade {
 
         try {
             PurchaseOrderDTO dto = new PurchaseOrderDTO();
-            for (Object[] row : (List<Object[]>) chooseSchema(schemaName).createNativeQuery(sb.toString()).getResultList()) {
+            for (Object[] row : (List<Object[]>) persistenceConf.chooseSchema(schemaName).createNativeQuery(sb.toString()).getResultList()) {
                 if (dto.getDocNum() == null) {
                     dto.setSeries((String) row[0]);
                     dto.setDocEntry(((Integer) row[1]).longValue());
@@ -115,7 +102,7 @@ public class PurchaseOrderFacade {
         sb.append(") and enc.docstatus = 'O' order by enc.docdate ");
         List<PurchaseOrderDTO> orders = new ArrayList<>();
         try {
-            for (Object[] row : (List<Object[]>) chooseSchema(schemaName).createNativeQuery(sb.toString()).getResultList()) {
+            for (Object[] row : (List<Object[]>) persistenceConf.chooseSchema(schemaName).createNativeQuery(sb.toString()).getResultList()) {
                 PurchaseOrderDTO dto = new PurchaseOrderDTO();
                 dto.setSeries((String) row[0]);
                 dto.setDocNum((String) row[1]);

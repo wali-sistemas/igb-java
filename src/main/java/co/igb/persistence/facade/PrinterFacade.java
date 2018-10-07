@@ -1,23 +1,23 @@
 package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.Printer;
+
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 /**
- *
  * @author dbotero
  */
 @Stateless
 public class PrinterFacade extends AbstractFacade<Printer> {
 
-    @PersistenceContext(unitName = "MySQLPU")
-    private EntityManager em;
+    @EJB
+    private PersistenceConf persistenceConf;
 
     @Override
     protected EntityManager getEntityManager() {
-        return em;
+        return persistenceConf.chooseSchema("MySQLPU");
     }
 
     public PrinterFacade() {

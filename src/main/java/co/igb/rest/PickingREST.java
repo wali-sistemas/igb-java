@@ -88,7 +88,7 @@ public class PickingREST implements Serializable {
         }
         if (!expiredRecords.isEmpty()) {
             CONSOLE.log(Level.INFO, "Eliminando {0} registros vencidos", expiredRecords);
-            prFacade.deleteExpiredRecords(expiredRecords);
+            prFacade.deleteExpiredRecords(expiredRecords, companyName);
         }
         return Response.ok(new ResponseDTO(0, expiredRecords)).build();
     }
@@ -185,6 +185,7 @@ public class PickingREST implements Serializable {
                     }
 
                     if (pendingItems.containsKey(sorted.getItemCode()) && pendingItems.get(sorted.getItemCode()) > 0) {
+                        //si el item se salto durante el picking, solo se deben agregar registros de ubicaciones tipo storage
                         sorted.setPendingQuantity(pendingItems.get(row[0]));
                         sortedStock.add(sorted);
                     }

@@ -2,12 +2,11 @@ package co.igb.persistence.facade;
 
 import co.igb.dto.SalesOrderDTO;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,23 +23,10 @@ public class SalesOrderFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(SalesOrderFacade.class.getSimpleName());
 
-    @PersistenceContext(unitName = "IGBPU")
-    private EntityManager emIGB;
-    @PersistenceContext(unitName = "VARROCPU")
-    private EntityManager emVARROC;
+    @EJB
+    private PersistenceConf persistenceConf;
 
     public SalesOrderFacade() {
-    }
-
-    private EntityManager chooseSchema(String schemaName) {
-        switch (schemaName) {
-            case "IGB":
-                return emIGB;
-            case "VARROC":
-                return emVARROC;
-            default:
-                return null;
-        }
     }
 
     public String getOrderStatus(Integer docNum, String schemaName) {
@@ -48,7 +34,7 @@ public class SalesOrderFacade {
         sb.append("select cast(DocStatus as varchar(1)) docstatus from ORDR where DocNum = ");
         sb.append(docNum);
         try {
-            return (String) chooseSchema(schemaName).createNativeQuery(sb.toString()).getSingleResult();
+            return (String) persistenceConf.chooseSchema(schemaName).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el estado de la orden " + docNum + ". ", e);
             return null;
@@ -60,7 +46,7 @@ public class SalesOrderFacade {
         sb.append("select DocEntry from ORDR where DocNum = ");
         sb.append(docNum);
         try {
-            return (Integer) chooseSchema(schemaName).createNativeQuery(sb.toString()).getSingleResult();
+            return (Integer) persistenceConf.chooseSchema(schemaName).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el docentry de la orden. ", e);
             return -1;
@@ -87,7 +73,7 @@ public class SalesOrderFacade {
 
         List<SalesOrderDTO> orders = new ArrayList<>();
         try {
-            for (Object[] row : (List<Object[]>) chooseSchema(schemaName).createNativeQuery(sb.toString()).getResultList()) {
+            for (Object[] row : (List<Object[]>) persistenceConf.chooseSchema(schemaName).createNativeQuery(sb.toString()).getResultList()) {
                 SalesOrderDTO order = new SalesOrderDTO();
                 order.setDocNum((String) row[0]);
                 order.setDocDate((Date) row[1]);
@@ -134,7 +120,7 @@ public class SalesOrderFacade {
 
         CONSOLE.log(Level.FINE, sb.toString());
         try {
-            return chooseSchema(schemaName).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(schemaName).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar el inventario para lis items de las ordenes asignadas. ", e);
             return new ArrayList();
@@ -157,7 +143,7 @@ public class SalesOrderFacade {
         sb.deleteCharAt(sb.length() - 1);
         sb.append(")");
         try {
-            return chooseSchema(schemaName).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(schemaName).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al buscar ordenes por id. ", e);
             return new ArrayList();
@@ -174,7 +160,7 @@ public class SalesOrderFacade {
         CONSOLE.log(Level.FINE, sb.toString());
         try {
             Map<String, Integer> results = new HashMap<>();
-            List<Object[]> rows = (List<Object[]>) chooseSchema(schemaName).createNativeQuery(sb.toString()).getResultList();
+            List<Object[]> rows = (List<Object[]>) persistenceConf.chooseSchema(schemaName).createNativeQuery(sb.toString()).getResultList();
             for (Object[] col : rows) {
                 results.put((String) col[0], (Integer) col[1]);
             }
@@ -194,7 +180,7 @@ public class SalesOrderFacade {
         sb.append("from ORDR where docnum = ");
         sb.append(orderNumber);
         try {
-            return chooseSchema(schemaName).createNativeQuery(sb.toString()).getSingleResult();
+            return persistenceConf.chooseSchema(schemaName).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el cliente para la orden. ", e);
             return null;
@@ -210,7 +196,7 @@ public class SalesOrderFacade {
         sb.append(itemcode);
         sb.append("' and linestatus = 'O'");
         try {
-            return ((Integer) chooseSchema(companyName).createNativeQuery(sb.toString()).getSingleResult()).longValue();
+            return ((Integer) persistenceConf.chooseSchema(companyName).createNativeQuery(sb.toString()).getSingleResult()).longValue();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el numero de linea de una orden. ", e);
             return -1L;
@@ -232,7 +218,7 @@ public class SalesOrderFacade {
         sb.append("' and detalle.itemcode = saldo.itemcode where orden.docnum = ");
         sb.append(orderNumber);
         try {
-            return chooseSchema(companyName).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el saldo disponible para la orden. ", e);
             return new ArrayList<>();
@@ -247,7 +233,7 @@ public class SalesOrderFacade {
         sb.append(orderNumbers);
         sb.append(")");
         try {
-            return (Object[]) chooseSchema(companyName).createNativeQuery(sb.toString()).getSingleResult();
+            return (Object[]) persistenceConf.chooseSchema(companyName).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los datos para imprimir la etiqueta de packing. ", e);
             return null;
@@ -260,7 +246,7 @@ public class SalesOrderFacade {
         sb.append(orderNumbers);
         sb.append(") and numatcard is not null");
         try {
-            List<String> numAtCardList = (List<String>) chooseSchema(companyName).createNativeQuery(sb.toString()).getResultList();
+            List<String> numAtCardList = (List<String>) persistenceConf.chooseSchema(companyName).createNativeQuery(sb.toString()).getResultList();
             StringBuilder numAtCardText = new StringBuilder();
             for (String numAtCard : numAtCardList) {
                 numAtCardText.append(numAtCard);

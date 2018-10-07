@@ -1,12 +1,13 @@
 package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.InventoryDetail;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 /**
  *
@@ -16,19 +17,20 @@ import javax.persistence.PersistenceContext;
 public class InventoryDetailFacade extends AbstractFacade<InventoryDetail> {
 
     private static final Logger CONSOLE = Logger.getLogger(InventoryFacade.class.getSimpleName());
-    @PersistenceContext(unitName = "MySQLPU")
-    private EntityManager em;
+
+    @EJB
+    private PersistenceConf persistenceConf;
 
     @Override
     protected EntityManager getEntityManager() {
-        return em;
+        return persistenceConf.chooseSchema("MySQLPU");
     }
 
     public InventoryDetailFacade() {
         super(InventoryDetail.class);
     }
 
-    public List<InventoryDetail> findInventoryDetail(Integer idInventory) {
+    public List<InventoryDetail> findInventoryDetail(Integer idInventory, String companyName) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("SELECT * ");
@@ -37,7 +39,7 @@ public class InventoryDetailFacade extends AbstractFacade<InventoryDetail> {
         sb.append(idInventory);
 
         try {
-            return em.createNativeQuery(sb.toString(), InventoryDetail.class).getResultList();
+            return persistenceConf.chooseSchema(companyName).createNativeQuery(sb.toString(), InventoryDetail.class).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al obtener el detalle del inventario. ", e);
             return null;

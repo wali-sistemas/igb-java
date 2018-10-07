@@ -94,7 +94,7 @@ public class ReportREST implements Serializable {
 
         if (users != null && !users.isEmpty()) {
             for (UserDTO u : users) {
-                u.setOrdenesAsignadas(assignedOrderFacade.countOrderEmployeeAssigneed(u.getUsername()));
+                u.setOrdenesAsignadas(assignedOrderFacade.countOrderEmployeeAssigneed(u.getUsername(), companyName));
             }
         }
 
@@ -107,13 +107,13 @@ public class ReportREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listPickingProgress(@HeaderParam("X-Company-Name") String companyName) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd");
-        List<Integer> pickings = pickingRecordFacade.listPickingsRecords();
+        List<Integer> pickings = pickingRecordFacade.listPickingsRecords(companyName);
         List<Object[]> ordenes = new ArrayList<>();
 
         if (pickings != null && !pickings.isEmpty()) {
             for (Integer l : pickings) {
                 // Validar si el registro ya no fue registrado
-                ReportPickingProgress rpp = reportPickingProgressFacade.obtainReportOrder(l);
+                ReportPickingProgress rpp = reportPickingProgressFacade.obtainReportOrder(l, companyName);
 
                 if (rpp != null && rpp.getOrderNumber() != null && rpp.getOrderNumber() != 0) {
                     ordenes.add(new Object[]{l, rpp.getPromedio(), rpp.getTotalTiempo()});

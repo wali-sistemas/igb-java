@@ -89,8 +89,10 @@ public class InventoryREST {
     @Path("inventoryhistory/{warehouse}/{idinventory}")
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response findInventoryDetail(@PathParam("warehouse") String warehouse, @PathParam("idinventory") Integer idInventory) {
-        List<InventoryDetail> details = inventoryDetailFacade.findInventoryDetail(idInventory);
+    public Response findInventoryDetail(@PathParam("warehouse") String warehouse,
+                                        @PathParam("idinventory") Integer idInventory,
+                                        @HeaderParam("X-Company-Name") String companyName) {
+        List<InventoryDetail> details = inventoryDetailFacade.findInventoryDetail(idInventory, companyName);
 
         if (details != null && !details.isEmpty()) {
             return Response.ok(details).build();
@@ -108,7 +110,7 @@ public class InventoryREST {
         List<String> locations = binLocationFacade.listBinLocations(companyName, warehouse);
 
         if (locations != null && !locations.isEmpty()) {
-            List<Object[]> datos = inventoryFacade.obtenerUltimosInventarios(companyName, locations);
+            List<Object[]> datos = inventoryFacade.obtenerUltimosInventarios(companyName, locations, companyName);
 
             if (datos != null && !datos.isEmpty()) {
                 for (Object[] o : datos) {

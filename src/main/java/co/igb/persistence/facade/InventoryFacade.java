@@ -2,50 +2,51 @@ package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.Inventory;
 import co.igb.persistence.entity.Inventory_;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- *
  * @author YEIJARA
  */
 @Stateless
 public class InventoryFacade extends AbstractFacade<Inventory> {
 
     private static final Logger CONSOLE = Logger.getLogger(InventoryFacade.class.getSimpleName());
-    @PersistenceContext(unitName = "MySQLPU")
-    private EntityManager em;
+
+    @EJB
+    private PersistenceConf persistenceConf;
 
     @Override
     protected EntityManager getEntityManager() {
-        return em;
+        return persistenceConf.chooseSchema("MySQLPU");
     }
 
     public InventoryFacade() {
         super(Inventory.class);
     }
 
-    public Inventory findLastInventoryOpen(String warehouse, String schema) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
+    public Inventory findLastInventoryOpen(String warehouse, String companyName) {
+        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName).getCriteriaBuilder();
         CriteriaQuery<Inventory> cq = cb.createQuery(Inventory.class);
         Root<Inventory> inventory = cq.from(Inventory.class);
 
         cq.where(cb.equal(inventory.get(Inventory_.status), "PE"),
                 cb.equal(inventory.get(Inventory_.whsCode), warehouse),
-                cb.equal(inventory.get(Inventory_.company), schema));
+                cb.equal(inventory.get(Inventory_.company), companyName));
 
         cq.orderBy(cb.desc(inventory.get(Inventory_.id)));
 
         try {
-            return em.createQuery(cq).setMaxResults(1).getSingleResult();
+            return persistenceConf.chooseSchema(companyName).createQuery(cq).setMaxResults(1).getSingleResult();
         } catch (NoResultException e) {
             return null;
         } catch (Exception e) {
@@ -54,7 +55,7 @@ public class InventoryFacade extends AbstractFacade<Inventory> {
         }
     }
 
-    public List<Object[]> obtenerUltimosInventarios(String schema, List<String> locations) {
+    public List<Object[]> obtenerUltimosInventarios(String schema, List<String> locations, String companyName) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("SELECT location, MAX(date) ");
@@ -73,7 +74,7 @@ public class InventoryFacade extends AbstractFacade<Inventory> {
         sb.append("ORDER BY MAX(date)");
 
         try {
-            return em.createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "", e);
             return null;

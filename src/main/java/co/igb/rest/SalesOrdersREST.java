@@ -194,7 +194,7 @@ public class SalesOrdersREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response enableAssignation(Integer orderNumber, @HeaderParam("X-Company-Name") String companyName) {
         CONSOLE.log(Level.INFO, "Habilitando asignacion de picking para orden: {0}", orderNumber);
-        boolean success = aoFacade.enablePicking(orderNumber);
+        boolean success = aoFacade.enablePicking(orderNumber, companyName);
         return Response.ok(new ResponseDTO(success ? 0 : -1, null)).build();
     }
 }

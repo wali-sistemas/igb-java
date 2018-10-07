@@ -3,10 +3,10 @@ package co.igb.persistence.facade;
 import co.igb.persistence.entity.LocationLimit;
 import co.igb.persistence.entity.LocationLimit_;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
@@ -23,27 +23,15 @@ import java.util.logging.Logger;
 public class LocationLimitFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(LocationLimitFacade.class.getSimpleName());
-    @PersistenceContext(unitName = "IGBPU")
-    private EntityManager emIGB;
-    @PersistenceContext(unitName = "VARROCPU")
-    private EntityManager emVARROC;
+
+    @EJB
+    private PersistenceConf persistenceConf;
 
     public LocationLimitFacade() {
     }
 
-    private EntityManager chooseSchema(String schemaName) {
-        switch (schemaName) {
-            case "IGB":
-                return emIGB;
-            case "VARROC":
-                return emVARROC;
-            default:
-                return null;
-        }
-    }
-
     public List<LocationLimit> listLocationsLimits(String schema, String warehouseCode) {
-        EntityManager em = chooseSchema(schema);
+        EntityManager em = persistenceConf.chooseSchema(schema);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(LocationLimit.class);
         Root limite = cq.from(LocationLimit.class);
@@ -59,7 +47,7 @@ public class LocationLimitFacade {
     }
 
     public void editLimit(String schema, LocationLimit limit) {
-        EntityManager em = chooseSchema(schema);
+        EntityManager em = persistenceConf.chooseSchema(schema);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaUpdate cu = cb.createCriteriaUpdate(LocationLimit.class);
         Root limite = cu.from(LocationLimit.class);
@@ -89,14 +77,14 @@ public class LocationLimitFacade {
         sb.append(limit.getCantMaxima()).append(") ");
 
         try {
-            chooseSchema(schema).createNativeQuery(sb.toString()).executeUpdate();
+            persistenceConf.chooseSchema(schema).createNativeQuery(sb.toString()).executeUpdate();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el nuevo limite de ubicacion. ", e);
         }
     }
 
     public void deleteLimit(String code, String schema) {
-        EntityManager em = chooseSchema(schema);
+        EntityManager em = persistenceConf.chooseSchema(schema);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaDelete cd = cb.createCriteriaDelete(LocationLimit.class);
         Root limit = cd.from(LocationLimit.class);
