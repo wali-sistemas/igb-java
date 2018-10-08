@@ -5,9 +5,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -18,6 +16,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -59,7 +60,7 @@ public class HeaderDecorationFilter implements Filter {
             String path = request.getPathInfo();
             String authorizationToken = request.getHeader("Authorization");
             CONSOLE.log(Level.INFO, "Procesando solicitud a [{0}] desde [{1}]",
-                    new Object[]{path, request.getRemoteAddr()});
+                    new Object[]{request.getMethod() + " " + path, request.getRemoteAddr()});
             CONSOLE.log(Level.FINE, "Validando token [{0}]", authorizationToken);
             if (appBean.isPathExcludedFromTokenValidation(path)) {
                 CONSOLE.log(Level.FINE, "La ruta solicitada no requiere validacion de token");
