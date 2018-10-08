@@ -23,22 +23,26 @@ public class PersistenceConf {
     @PersistenceContext(unitName = "MySQLPruebasPU")
     private EntityManager emWaliPruebas;
 
-    public EntityManager chooseSchema(String schemaName) {
-        switch (schemaName) {
-            case "IGB":
-                return emIGB;
-            case "VARROC":
-                return emVARROC;
-            case "IGBPruebas":
-                return emIGBPruebas;
-            case "VARROCPruebas":
-                return emVARROCPruebas;
-            case "MySQLPU":
-                return emWali;
-            case "MySQLPruebasPU":
+    public EntityManager chooseSchema(String companyName, String dbType) {
+        if (dbType.equalsIgnoreCase("mysql")) {
+            if (companyName.toLowerCase().contains("pruebas")) {
                 return emWaliPruebas;
-            default:
-                return null;
+            } else {
+                return emWali;
+            }
+        } else {
+            switch (companyName) {
+                case "IGB":
+                    return emIGB;
+                case "VARROC":
+                    return emVARROC;
+                case "IGBPruebas":
+                    return emIGBPruebas;
+                case "VARROCPruebas":
+                    return emVARROCPruebas;
+                default:
+                    return null;
+            }
         }
     }
 }

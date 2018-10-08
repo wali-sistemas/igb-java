@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 public class DeliveryNoteFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(DeliveryNoteFacade.class.getSimpleName());
+    private static final String DB_TYPE = "sap";
 
     @EJB
     private PersistenceConf persistenceConf;
@@ -30,7 +31,7 @@ public class DeliveryNoteFacade {
         sb.append("inner join dln1 det on det.docentry = enc.docentry where enc.docentry =");
         sb.append(deliveryDocEntry);
         try {
-            return persistenceConf.chooseSchema(companyName).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName,DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los datos de la entrega. ", e);
             return new ArrayList<>();

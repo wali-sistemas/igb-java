@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 public class StockTransferDetailFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(StockTransferDetailFacade.class.getSimpleName());
+    private static final String DB_TYPE = "sap";
 
     @EJB
     private PersistenceConf persistenceConf;
@@ -29,7 +30,7 @@ public class StockTransferDetailFacade {
     }
 
     public List<StockTransferDetail> findStockTransfer(Integer docEntry, String schema) {
-        EntityManager em = persistenceConf.chooseSchema(schema);
+        EntityManager em = persistenceConf.chooseSchema(schema,DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(StockTransferDetail.class);
         Root stock = cq.from(StockTransferDetail.class);

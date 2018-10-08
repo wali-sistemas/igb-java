@@ -15,12 +15,13 @@ import java.util.logging.Logger;
 public class InventoryDifferenceFacade extends AbstractFacade<InventoryDifference> {
 
     private static final Logger CONSOLE = Logger.getLogger(InventoryFacade.class.getSimpleName());
+    private static final String DB_TYPE = "mysql";
     @EJB
     private PersistenceConf persistenceConf;
 
     @Override
     protected EntityManager getEntityManager() {
-        return persistenceConf.chooseSchema("MySQLPU");
+        return persistenceConf.chooseSchema("MySQLPU", DB_TYPE);
     }
 
     public InventoryDifferenceFacade() {

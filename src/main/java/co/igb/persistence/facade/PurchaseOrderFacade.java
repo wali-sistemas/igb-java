@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 public class PurchaseOrderFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(PurchaseOrderFacade.class.getSimpleName());
+    private static final String DB_TYPE = "sap";
 
     @Inject
     private IGBApplicationBean applicationBean;
@@ -57,7 +58,7 @@ public class PurchaseOrderFacade {
 
         try {
             PurchaseOrderDTO dto = new PurchaseOrderDTO();
-            for (Object[] row : (List<Object[]>) persistenceConf.chooseSchema(schemaName).createNativeQuery(sb.toString()).getResultList()) {
+            for (Object[] row : (List<Object[]>) persistenceConf.chooseSchema(schemaName,DB_TYPE).createNativeQuery(sb.toString()).getResultList()) {
                 if (dto.getDocNum() == null) {
                     dto.setSeries((String) row[0]);
                     dto.setDocEntry(((Integer) row[1]).longValue());
@@ -102,7 +103,7 @@ public class PurchaseOrderFacade {
         sb.append(") and enc.docstatus = 'O' order by enc.docdate ");
         List<PurchaseOrderDTO> orders = new ArrayList<>();
         try {
-            for (Object[] row : (List<Object[]>) persistenceConf.chooseSchema(schemaName).createNativeQuery(sb.toString()).getResultList()) {
+            for (Object[] row : (List<Object[]>) persistenceConf.chooseSchema(schemaName,DB_TYPE).createNativeQuery(sb.toString()).getResultList()) {
                 PurchaseOrderDTO dto = new PurchaseOrderDTO();
                 dto.setSeries((String) row[0]);
                 dto.setDocNum((String) row[1]);

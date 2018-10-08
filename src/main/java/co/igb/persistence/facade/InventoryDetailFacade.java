@@ -17,13 +17,14 @@ import java.util.logging.Logger;
 public class InventoryDetailFacade extends AbstractFacade<InventoryDetail> {
 
     private static final Logger CONSOLE = Logger.getLogger(InventoryFacade.class.getSimpleName());
+    private static final String DB_TYPE = "mysql";
 
     @EJB
     private PersistenceConf persistenceConf;
 
     @Override
     protected EntityManager getEntityManager() {
-        return persistenceConf.chooseSchema("MySQLPU");
+        return persistenceConf.chooseSchema("MySQLPU", DB_TYPE);
     }
 
     public InventoryDetailFacade() {
@@ -39,7 +40,7 @@ public class InventoryDetailFacade extends AbstractFacade<InventoryDetail> {
         sb.append(idInventory);
 
         try {
-            return persistenceConf.chooseSchema(companyName).createNativeQuery(sb.toString(), InventoryDetail.class).getResultList();
+            return persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString(), InventoryDetail.class).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al obtener el detalle del inventario. ", e);
             return null;

@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 public class LocationLimitFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(LocationLimitFacade.class.getSimpleName());
+    private static final String DB_TYPE = "sap";
 
     @EJB
     private PersistenceConf persistenceConf;
@@ -31,7 +32,7 @@ public class LocationLimitFacade {
     }
 
     public List<LocationLimit> listLocationsLimits(String schema, String warehouseCode) {
-        EntityManager em = persistenceConf.chooseSchema(schema);
+        EntityManager em = persistenceConf.chooseSchema(schema, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(LocationLimit.class);
         Root limite = cq.from(LocationLimit.class);
@@ -47,7 +48,7 @@ public class LocationLimitFacade {
     }
 
     public void editLimit(String schema, LocationLimit limit) {
-        EntityManager em = persistenceConf.chooseSchema(schema);
+        EntityManager em = persistenceConf.chooseSchema(schema, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaUpdate cu = cb.createCriteriaUpdate(LocationLimit.class);
         Root limite = cu.from(LocationLimit.class);
@@ -77,14 +78,14 @@ public class LocationLimitFacade {
         sb.append(limit.getCantMaxima()).append(") ");
 
         try {
-            persistenceConf.chooseSchema(schema).createNativeQuery(sb.toString()).executeUpdate();
+            persistenceConf.chooseSchema(schema, DB_TYPE).createNativeQuery(sb.toString()).executeUpdate();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el nuevo limite de ubicacion. ", e);
         }
     }
 
     public void deleteLimit(String code, String schema) {
-        EntityManager em = persistenceConf.chooseSchema(schema);
+        EntityManager em = persistenceConf.chooseSchema(schema, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaDelete cd = cb.createCriteriaDelete(LocationLimit.class);
         Root limit = cd.from(LocationLimit.class);

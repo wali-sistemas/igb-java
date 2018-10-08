@@ -21,13 +21,14 @@ import java.util.logging.Logger;
 public class InventoryFacade extends AbstractFacade<Inventory> {
 
     private static final Logger CONSOLE = Logger.getLogger(InventoryFacade.class.getSimpleName());
+    private static final String DB_TYPE = "mysql";
 
     @EJB
     private PersistenceConf persistenceConf;
 
     @Override
     protected EntityManager getEntityManager() {
-        return persistenceConf.chooseSchema("MySQLPU");
+        return persistenceConf.chooseSchema("MySQLPU", DB_TYPE);
     }
 
     public InventoryFacade() {
@@ -35,7 +36,7 @@ public class InventoryFacade extends AbstractFacade<Inventory> {
     }
 
     public Inventory findLastInventoryOpen(String warehouse, String companyName) {
-        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName).getCriteriaBuilder();
+        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName, DB_TYPE).getCriteriaBuilder();
         CriteriaQuery<Inventory> cq = cb.createQuery(Inventory.class);
         Root<Inventory> inventory = cq.from(Inventory.class);
 
@@ -46,7 +47,7 @@ public class InventoryFacade extends AbstractFacade<Inventory> {
         cq.orderBy(cb.desc(inventory.get(Inventory_.id)));
 
         try {
-            return persistenceConf.chooseSchema(companyName).createQuery(cq).setMaxResults(1).getSingleResult();
+            return persistenceConf.chooseSchema(companyName, DB_TYPE).createQuery(cq).setMaxResults(1).getSingleResult();
         } catch (NoResultException e) {
             return null;
         } catch (Exception e) {
@@ -74,7 +75,7 @@ public class InventoryFacade extends AbstractFacade<Inventory> {
         sb.append("ORDER BY MAX(date)");
 
         try {
-            return persistenceConf.chooseSchema(companyName).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "", e);
             return null;

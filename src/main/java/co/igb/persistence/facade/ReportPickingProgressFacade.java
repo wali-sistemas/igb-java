@@ -20,13 +20,14 @@ import java.util.logging.Logger;
 public class ReportPickingProgressFacade extends AbstractFacade<ReportPickingProgress> {
 
     private static final Logger CONSOLE = Logger.getLogger(ReportPickingProgressFacade.class.getSimpleName());
+    private static final String DB_TYPE = "mysql";
 
     @EJB
     private PersistenceConf persistenceConf;
 
     @Override
     protected EntityManager getEntityManager() {
-        return persistenceConf.chooseSchema("MySQLPU");
+        return persistenceConf.chooseSchema("MySQLPU", DB_TYPE);
     }
 
     public ReportPickingProgressFacade() {
@@ -34,14 +35,14 @@ public class ReportPickingProgressFacade extends AbstractFacade<ReportPickingPro
     }
 
     public ReportPickingProgress obtainReportOrder(Integer orderNumber, String companyName) {
-        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName).getCriteriaBuilder();
+        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName, DB_TYPE).getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(ReportPickingProgress.class);
         Root report = cq.from(ReportPickingProgress.class);
 
         cq.where(cb.equal(report.get(ReportPickingProgress_.orderNumber), orderNumber));
 
         try {
-            return (ReportPickingProgress) persistenceConf.chooseSchema(companyName).createQuery(cq).getSingleResult();
+            return (ReportPickingProgress) persistenceConf.chooseSchema(companyName, DB_TYPE).createQuery(cq).getSingleResult();
         } catch (NoResultException e) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el reporte para una orden. ", e);

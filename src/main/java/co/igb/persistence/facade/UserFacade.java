@@ -12,12 +12,14 @@ import javax.persistence.EntityManager;
 @Stateless
 public class UserFacade extends AbstractFacade<User> {
 
+    private static final String DB_TYPE = "mysql";
+
     @EJB
     private PersistenceConf persistenceConf;
 
     @Override
     protected EntityManager getEntityManager() {
-        return persistenceConf.chooseSchema("MySQLPU");
+        return persistenceConf.chooseSchema("MySQLPU", DB_TYPE);
     }
 
     public UserFacade() {

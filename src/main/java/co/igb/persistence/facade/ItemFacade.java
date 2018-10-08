@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 @Stateless
 public class ItemFacade {
     private static final Logger CONSOLE = Logger.getLogger(ItemFacade.class.getSimpleName());
+    private static final String DB_TYPE = "sap";
 
     @Inject
     private IGBApplicationBean applicationBean;
@@ -28,7 +29,7 @@ public class ItemFacade {
         sb.append(itemCode);
         sb.append("'");
         try {
-            return (String) persistenceConf.chooseSchema(companyName).createNativeQuery(sb.toString()).getSingleResult();
+            return (String) persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el nombre del item " + itemCode, e);
             return null;

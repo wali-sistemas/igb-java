@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 @Stateless
 public class WarehouseFacade {
     private static final Logger CONSOLE = Logger.getLogger(WarehouseFacade.class.getSimpleName());
+    private static final String DB_TYPE = "sap";
 
     @EJB
     private PersistenceConf persistenceConf;
@@ -24,7 +25,7 @@ public class WarehouseFacade {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(whscode as varchar(5)) as code, cast(whsname as varchar(100)) as name from owhs where binactivat = 'Y'");
         try {
-            List<Object[]> results = persistenceConf.chooseSchema(companyName).createNativeQuery(sb.toString()).getResultList();
+            List<Object[]> results = persistenceConf.chooseSchema(companyName,DB_TYPE).createNativeQuery(sb.toString()).getResultList();
             List<WarehouseDTO> warehouses = new ArrayList<>();
             for (Object[] row : results) {
                 WarehouseDTO warehouse = new WarehouseDTO();
