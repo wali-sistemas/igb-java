@@ -42,6 +42,21 @@ public class SalesOrderFacade {
         }
     }
 
+    public String getOrderComment(Integer docNum, String shemaName) {
+        if (docNum != null && shemaName != null && !shemaName.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("select cast(comments as varchar(200)) comments from ORDR where DocNum = ");
+            sb.append(docNum);
+            try {
+                return (String) persistenceConf.chooseSchema(shemaName, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el comentario de la orden " + docNum + ".", e);
+                return null;
+            }
+        }
+        return null;
+    }
+
     public Integer getOrderDocEntry(Integer docNum, String schemaName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select DocEntry from ORDR where DocNum = ");
