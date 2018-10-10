@@ -292,12 +292,12 @@ public class PackingREST implements Serializable {
                 document.setCardCode(customerId);
                 String commentOV = salesOrderFacade.getOrderComment(orderNumber, companyName);
                 if (commentOV != null) {
-                    /*TODO: limitando caracteres no mayores a 254 por SAP*/
-                    if (commentOV.length() > 254) {
-                        commentOV.substring(0, 180);
-                        document.setComments(commentOV + "...Packing de la orden " + orderNumber + " creada por " + employee);
+                    /*TODO: limitando caracteres no mayores a 254 para que lo acepte SAP*/
+                    String commentWms = "Packing de la orden " + orderNumber + " creada por " + employee;
+                    if ((commentOV.length() + commentWms.length() - 254) > 0) {
+                        document.setComments(commentOV.substring(0, commentOV.length() - (commentOV.length() + commentWms.length() - 251)) + "..." + commentWms);
                     } else {
-                        document.setComments(commentOV + ".Packing de la orden " + orderNumber + " creada por " + employee);
+                        document.setComments(commentOV + "." + commentWms);
                     }
                 } else {
                     document.setComments("Packing de la orden " + orderNumber + " creada por " + employee);
