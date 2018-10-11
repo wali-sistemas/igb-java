@@ -290,7 +290,19 @@ public class PackingREST implements Serializable {
             if (orderDocEntry == null) {
                 document.setSeries(Long.parseLong(getPropertyValue(Constants.DELIVERY_NOTE_SERIES, companyName)));
                 document.setCardCode(customerId);
-                document.setComments("Proceso de packing para orden " + orderNumber + " realizado por " + employee);
+                String commentOV = salesOrderFacade.getOrderComment(orderNumber, companyName);
+                if (commentOV != null) {
+                    /*TODO: limitando caracteres no mayores a 254 para que lo acepte SAP*/
+                    String commentWms = "Packing de la orden " + orderNumber + " creada por " + employee;
+                    if ((commentOV.length() + commentWms.length() - 254) > 0) {
+                        document.setComments(commentOV.substring(0, commentOV.length() - (commentOV.length() + commentWms.length() - 251)) + "..." + commentWms);
+                    } else {
+                        document.setComments(commentOV + "." + commentWms);
+                    }
+                } else {
+                    document.setComments("Packing de la orden " + orderNumber + " creada por " + employee);
+                }
+                document.setUTOTCAJ(plFacade.getTotalBoxNumber(orderNumber, companyName).doubleValue());
                 orderDocEntry = salesOrderFacade.getOrderDocEntry(orderNumber, companyName);
                 if (orderDocEntry == null || orderDocEntry <= 0) {
                     return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "Ocurrió un error al consultar los datos de la orden. ")).build();
@@ -487,7 +499,7 @@ public class PackingREST implements Serializable {
             CONSOLE.log(Level.INFO, "Enviando correo al empleado {0} -> {1}", new Object[]{userDto.getCompleteName(), userDto.getEmail()});
             emailManager.sendWithAttachment(file.getAbsolutePath(), fileName + ".pdf", userDto.getCompleteName(), userDto.getEmail());
             //TODO: parametrizar ubicacion PDF
-        }catch (Exception e){
+        } catch (Exception e) {
             CONSOLE.log(Level.INFO, "Enviando correo a sistemas, ya que ocurrio un error al cargar los datos del empleado {0}", username);
             emailManager.sendWithAttachment(
                     file.getAbsolutePath(),
@@ -691,7 +703,7 @@ public class PackingREST implements Serializable {
             //enviar correo de notificacion a sistemas y logistica
             PackingOrder packingOrder = poFacade.find(idPackingOrder.longValue());
             emailManager.sendPackingErrorNotification(packingOrder.getOrderNumber(), username);
-        }catch (Exception e){
+        } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al cancelar el proceso de packing " + idPackingOrder, e);
         }
 
