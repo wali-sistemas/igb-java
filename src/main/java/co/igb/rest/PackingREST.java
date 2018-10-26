@@ -303,6 +303,7 @@ public class PackingREST implements Serializable {
                     document.setComments("Packing de la orden " + orderNumber + " creada por " + employee);
                 }
                 document.setUTOTCAJ(plFacade.getTotalBoxNumber(orderNumber, companyName).doubleValue());
+                document.setUVRDECLARADO(salesOrderFacade.getValorDeclarado(orderNumber, companyName).doubleValue());
                 orderDocEntry = salesOrderFacade.getOrderDocEntry(orderNumber, companyName);
                 if (orderDocEntry == null || orderDocEntry <= 0) {
                     return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "Ocurrió un error al consultar los datos de la orden. ")).build();
