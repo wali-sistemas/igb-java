@@ -7,6 +7,7 @@ import co.igb.ejb.IGBApplicationBean;
 import co.igb.ejb.IGBAuthLDAP;
 import co.igb.exception.IGBAuthenticationException;
 import co.igb.persistence.entity.User;
+import co.igb.persistence.facade.GroupAllowedFacade;
 import co.igb.persistence.facade.UserFacade;
 import co.igb.persistence.facade.WarehouseFacade;
 import com.auth0.jwt.JWT;
@@ -21,6 +22,7 @@ import javax.inject.Inject;
 import javax.persistence.NoResultException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -31,6 +33,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,6 +54,8 @@ public class UserREST {
     private WarehouseFacade warehouseFacade;
     @Inject
     private IGBApplicationBean applicationBean;
+    @EJB
+    private GroupAllowedFacade groupAllowedFacade;
 
     @POST
     @Path("login/")
@@ -198,6 +203,34 @@ public class UserREST {
             }
         }
         return Response.ok(new ResponseDTO(0, false)).build();
+    }
+
+    @GET
+    @Path("access/{username}/{module}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    public Response approveUserAccess(@PathParam("username") String username,
+                                      @PathParam("module")String module,
+                                      @HeaderParam("X-Company-Name") String companyName) {
+        CONSOLE.log(Level.INFO, "Validando si el usuario " + username + " puede acceder al modulo " + module);
+        //obtain ldap groups that can access to the module
+        List<String> allowedGroups = groupAllowedFacade.listAllowedGroups(module, companyName);
+        if (allowedGroups.isEmpty()) {
+            return Response.ok(new ResponseDTO(-1, "El módulo " + module + " no tiene configurado nigún grupo de LDAP para poder accederlo")).build();
+        }
+
+        //check if user belongs to any of them
+        for (String ldapGroup : allowedGroups) {
+            //listar empleados en el grupo
+            List<UserDTO> users = authenticator.listEmployeesInGroup(ldapGroup);
+            for (UserDTO user : users) {
+                if (user.getUsername().equalsIgnoreCase(username)) {
+                    CONSOLE.log(Level.INFO, "El usuario " + username + " puede acceder al modulo " + module + " porque pertenece al grupo " + ldapGroup);
+                    return Response.ok(new ResponseDTO(0, null)).build();
+                }
+            }
+        }
+        CONSOLE.log(Level.INFO, "El usuario " + username + " NO puede acceder al modulo " + module);
+        return Response.ok(new ResponseDTO(-1, "El usuario no tiene permiso para acceder al módulo")).build();
     }
 
     @GET
