@@ -44,6 +44,21 @@ public class PackingListRecordFacade extends AbstractFacade<PackingListRecord> {
         }
     }
 
+    public Integer getTotalBoxNumber(Integer orderNumber, String companyName) {
+        if (orderNumber != null && companyName != null && !companyName.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("select max(box_number) totalCaj from packing_list_record where order_number = ");
+            sb.append(orderNumber);
+            try {
+                return (Integer) persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al obtener el total de cajas de empaque para la orden " + orderNumber + ".", e);
+                return 0;
+            }
+        }
+        return 0;
+    }
+
     public List<Object[]> listOpenPackingRecords(String username, String companyName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from packing_list_record where status = 'open' and company_name = '");

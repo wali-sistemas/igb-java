@@ -29,6 +29,7 @@ import javax.ws.rs.core.Response;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
@@ -100,6 +101,8 @@ public class InvoiceREST implements Serializable {
             Long deliveryLineNum = ((Integer) row[6]).longValue();
             String deliveryItemCode = (String) row[7];
             Integer deliveryQuantity = (Integer) row[8];
+            Double deliveryValorDeclarado = ((BigDecimal) row[9]).doubleValue();
+            String deliveryComentario = (String) row[10];
 
             if (invoice.getSeries() == null) {
                 invoice.setSeries(Long.parseLong(getPropertyValue(Constants.INVOICE_SERIES, companyName)));
@@ -122,9 +125,9 @@ public class InvoiceREST implements Serializable {
                 }
 
                 invoice.setContactPersonCode(deliveryContactCode);
-                invoice.setComments("Creado automaticamente desde WALI por " + userName);
+                invoice.setComments(deliveryComentario);
                 invoice.setSalesPersonCode(deliverySalesPersonCode);
-
+                invoice.setUVRDECLARADO(deliveryValorDeclarado);
             }
 
             co.igb.b1ws.client.drafts.Document.DocumentLines.DocumentLine line = new co.igb.b1ws.client.drafts.Document.DocumentLines.DocumentLine();

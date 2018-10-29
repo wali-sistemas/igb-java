@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.NoResultException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -42,6 +43,34 @@ public class SalesOrderFacade {
         }
     }
 
+    public BigDecimal getValorDeclarado(Integer docNum, String schemaName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast((DocTotal + DiscSum + WtSum) - VatSum - TotalExpns - RoundDif AS numeric(18,2)) AS valorDeclarado ");
+        sb.append("from ORDR where DocNum = ");
+        sb.append(docNum);
+        try {
+            return (BigDecimal) persistenceConf.chooseSchema(schemaName, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el valor declarado para la orden " + docNum + ".", e);
+            return new BigDecimal(0);
+        }
+    }
+
+    public String getOrderComment(Integer docNum, String schemaName) {
+        if (docNum != null && schemaName != null && !schemaName.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("select cast(comments as varchar(254)) comments from ORDR where DocNum = ");
+            sb.append(docNum);
+            try {
+                return (String) persistenceConf.chooseSchema(schemaName, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el comentario de la orden " + docNum + ".", e);
+                return null;
+            }
+        }
+        return null;
+    }
+
     public Integer getOrderDocEntry(Integer docNum, String schemaName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select DocEntry from ORDR where DocNum = ");
@@ -62,7 +91,7 @@ public class SalesOrderFacade {
         sb.append("cast(enc.docdate as date) docdate, cast(enc.cardcode as varchar(20)) cardcode, ");
         sb.append("cast(enc.cardname as varchar(100)) cardname, cast(enc.confirmed as varchar(1)) confirmed, ");
         sb.append("(select count(1) from rdr1 det where det.docentry = enc.docentry and det.linestatus = 'O') items, ");
-        sb.append("cast(comments as varchar(200)) comments, cast(enc.address2 as varchar(200)) address, ");
+        sb.append("cast(comments as varchar(254)) comments, cast(enc.address2 as varchar(200)) address, ");
         sb.append("cast(enc.u_transp as varchar(4)) transp from ordr enc ");
         sb.append("inner join rdr1 det on det.docentry = enc.docentry and det.whscode = '");
         sb.append(warehouseCode);
