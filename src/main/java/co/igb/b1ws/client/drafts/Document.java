@@ -1,6 +1,7 @@
 
 package co.igb.b1ws.client.drafts;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -2660,7 +2661,7 @@ public class Document {
     @XmlElement(name = "U_OBSERVACION")
     protected String uobservacion;
     @XmlElement(name = "U_VR_DECLARADO")
-    protected Double uvrdeclarado;
+    protected BigDecimal uvrdeclarado;
     @XmlElement(name = "U_PUERTO_EMB")
     protected String upuertoemb;
     @XmlElement(name = "U_NAVIERA")
@@ -9454,10 +9455,10 @@ public class Document {
      * 
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *     
      */
-    public Double getUVRDECLARADO() {
+    public BigDecimal getUVRDECLARADO() {
         return uvrdeclarado;
     }
 
@@ -9466,10 +9467,10 @@ public class Document {
      * 
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *     
      */
-    public void setUVRDECLARADO(Double value) {
+    public void setUVRDECLARADO(BigDecimal value) {
         this.uvrdeclarado = value;
     }
 
