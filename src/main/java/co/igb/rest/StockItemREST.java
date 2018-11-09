@@ -29,32 +29,35 @@ public class StockItemREST implements Serializable {
     }
 
     @GET
-    @Path("consult/{parametro}")
+    @Path("find/{parametro}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     public Response consultarStockItem(@PathParam("parametro") String parametro,
                                        @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                        @HeaderParam("X-Company-Name") String companyName) {
-        if (parametro != null && !parametro.isEmpty()) {
-            String itemCode = "";
-            String binCode = "";
-
-            if (parametro.charAt(0) >= '0' && parametro.charAt(0) <= '9') {
-                binCode = parametro;
-                CONSOLE.log(Level.INFO, "Consultando stock para la ubicacion {0}", parametro);
-            } else {
-                itemCode = parametro;
-                CONSOLE.log(Level.INFO, "Consultando stock del item {0}", parametro);
-            }
-
-            List<Object[]> items = itemFacade.getItemStock(itemCode, binCode, warehouseCode, companyName);
-
-            if (items != null) {
-                return Response.ok(items).build();
-            } else {
-                CONSOLE.log(Level.INFO, "Ocurrio un error consultando stock del item {0}", parametro);
-                return Response.ok(new ResponseDTO(-1, "Ocurrio un error consultando el stock.")).build();
-            }
+        /*Parametro contiene ubicacion o item*/
+        if (parametro == null || parametro.isEmpty()) {
+            CONSOLE.log(Level.INFO, "No se recibieron datos para consultar el stock");
+            return Response.ok(new ResponseDTO(-1, "No se recibieron datos para consultar el stock.")).build();
         }
-        return Response.ok(new ResponseDTO(-1, "No se encontraron datos para consultar stock.")).build();
+        String itemCode = "";
+        String binCode = "";
+
+        /*Si los dos primeros caracteres son numericos es una ubicación, de lo contrario es un item*/
+        if (parametro.matches("[0-9]{2}.+")) {
+            binCode = parametro;
+            CONSOLE.log(Level.INFO, "Consultando stock para la ubicacion {0}", parametro);
+        } else {
+            itemCode = parametro;
+            CONSOLE.log(Level.INFO, "Consultando stock del item {0}", parametro);
+        }
+
+        List<Object[]> items = itemFacade.getItemStock(itemCode, binCode, warehouseCode, companyName);
+
+        if (items != null) {
+            return Response.ok(items).build();
+        } else {
+            CONSOLE.log(Level.INFO, "Ocurrio un error al consultar el stock del item {0}", parametro);
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error al consultar el stock.")).build();
+        }
     }
 }
