@@ -107,7 +107,7 @@ public class InvoiceREST implements Serializable {
             Long deliveryLineNum = ((Integer) row[6]).longValue();
             String deliveryItemCode = (String) row[7];
             Integer deliveryQuantity = (Integer) row[8];
-            Double deliveryValorDeclarado = ((BigDecimal) row[9]).doubleValue();
+            BigDecimal deliveryValorDeclarado = (BigDecimal) row[9];
             String deliveryComentario = (String) row[10];
 
             if (invoice.getSeries() == null) {
