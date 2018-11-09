@@ -54,18 +54,18 @@ public class IGBApplicationBean implements Serializable {
     private BinLocationFacade binFacade;
 
     @PostConstruct
-    private void initialize() {
+    private void initialize(boolean pruebas) {
         loadProperties();
-        consultarUbicacionesInventario();
-        consultarUbicacionesRecepcion();
+        consultarUbicacionesInventario(pruebas);
+        consultarUbicacionesRecepcion(pruebas);
     }
 
     @GET
     @Path("recargar/")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    public Response reloadConfig(@QueryParam("showprops") String showProps) {
-        initialize();
+    public Response reloadConfig(@QueryParam("showprops") String showProps, @QueryParam("pruebas") boolean pruebas) {
+        initialize(pruebas);
         if (StringUtils.isNotBlank(showProps) && showProps.equals("yes")) {
             return Response.ok(new ResponseDTO(0, props)).build();
         } else {
@@ -119,12 +119,12 @@ public class IGBApplicationBean implements Serializable {
         }
     }
 
-    private void consultarUbicacionesRecepcion() {
+    private void consultarUbicacionesRecepcion(boolean pruebas) {
         receptionLocations = new HashMap<>();
         String[] companies = props.getProperty(Constants.COMPANIES).split(";");
         for (String company : companies) {
             String databaseName = company.split(",")[0].trim();
-            List<Object[]> bins = binFacade.findReceptionLocations(databaseName);
+            List<Object[]> bins = binFacade.findReceptionLocations(databaseName, pruebas);
             if (bins != null) {
                 for (Object[] row : bins) {
                     String warehouseCode = (String) row[0];
@@ -141,12 +141,12 @@ public class IGBApplicationBean implements Serializable {
         CONSOLE.log(Level.INFO, "Se cargaron ubicaciones de recepcion para {0} empresas", companies.length);
     }
 
-    private void consultarUbicacionesInventario() {
+    private void consultarUbicacionesInventario(boolean pruebas) {
         inventoryLocations = new HashMap<>();
         String[] companies = props.getProperty(Constants.COMPANIES).split(";");
         for (String company : companies) {
             String databaseName = company.split(",")[0].trim();
-            List<Object[]> bins = binFacade.findInventoryLocationId(databaseName);
+            List<Object[]> bins = binFacade.findInventoryLocationId(databaseName, pruebas);
             if (bins != null) {
                 for (Object[] row : bins) {
                     String warehouseCode = (String) row[0];

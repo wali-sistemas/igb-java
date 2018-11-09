@@ -43,9 +43,10 @@ public class ResupplyREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listLocationsResupply(
             @HeaderParam("X-Company-Name") String companyName,
-            @HeaderParam("X-Warehouse-Code") String warehouseCode) {
+            @HeaderParam("X-Warehouse-Code") String warehouseCode,
+            @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Se estan consultando las ubicaciones pendientes por re-abastecer");
-        return Response.ok(new ResponseDTO(0, binLocationFacade.findLocationsResupply(warehouseCode, companyName))).build();
+        return Response.ok(new ResponseDTO(0, binLocationFacade.findLocationsResupply(warehouseCode, companyName, pruebas))).build();
     }
 
     @GET
@@ -55,9 +56,10 @@ public class ResupplyREST implements Serializable {
     public Response listItemsLocation(
             @PathParam("location") String location,
             @HeaderParam("X-Company-Name") String companyName,
-            @HeaderParam("X-Warehouse-Code") String warehouseCode) {
+            @HeaderParam("X-Warehouse-Code") String warehouseCode,
+            @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Se estan consultando las referencias que necesitan para re-abastecer de la ubicacion {0}", location);
-        return Response.ok(new ResponseDTO(0, binLocationFacade.findItemsLocationResupply(location, warehouseCode, companyName))).build();
+        return Response.ok(new ResponseDTO(0, binLocationFacade.findItemsLocationResupply(location, warehouseCode, companyName, pruebas))).build();
     }
 
     @GET
@@ -67,9 +69,10 @@ public class ResupplyREST implements Serializable {
     public Response listUbicationsStorage(
             @PathParam("itemCode") String itemCode,
             @HeaderParam("X-Company-Name") String companyName,
-            @HeaderParam("X-Warehouse-Code") String warehouseCode) {
+            @HeaderParam("X-Warehouse-Code") String warehouseCode,
+            @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Se estan consultando las ubicaciones tipo STORAGE, para poder re-abastecer el item {0}", itemCode);
-        return Response.ok(new ResponseDTO(0, binLocationFacade.listLocationsStorageResupply(itemCode, companyName, warehouseCode))).build();
+        return Response.ok(new ResponseDTO(0, binLocationFacade.listLocationsStorageResupply(itemCode, companyName, pruebas, warehouseCode))).build();
     }
 
     @GET
@@ -78,9 +81,10 @@ public class ResupplyREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listLocationLimits(
             @HeaderParam("X-Company-Name") String companyName,
-            @HeaderParam("X-Warehouse-Code") String warehouseCode) {
+            @HeaderParam("X-Warehouse-Code") String warehouseCode,
+            @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Se estan obteniendo los limites de ubicacion");
-        return Response.ok(new ResponseDTO(0, locationLimitFacade.listLocationsLimits(companyName, warehouseCode))).build();
+        return Response.ok(new ResponseDTO(0, locationLimitFacade.listLocationsLimits(companyName, pruebas, warehouseCode))).build();
     }
 
     @POST
@@ -91,7 +95,8 @@ public class ResupplyREST implements Serializable {
     public Response saveLocationLimit(
             LocationLimitDTO limit,
             @HeaderParam("X-Company-Name") String companyName,
-            @HeaderParam("X-Warehouse-Code") String warehouseCode) {
+            @HeaderParam("X-Warehouse-Code") String warehouseCode,
+            @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Se gestionara un limite de ubicacion");
         LocationLimit location = new LocationLimit();
 
@@ -104,13 +109,13 @@ public class ResupplyREST implements Serializable {
 
         if (limit.getCode() != null && !limit.getCode().isEmpty()) {
             try {
-                locationLimitFacade.editLimit(companyName, location);
+                locationLimitFacade.editLimit(companyName, pruebas, location);
             } catch (Exception e) {
                 return Response.ok(new ResponseDTO(-1, e.getMessage())).build();
             }
         } else {
             try {
-                locationLimitFacade.createLimit(companyName, location);
+                locationLimitFacade.createLimit(companyName, pruebas, location);
             } catch (Exception e) {
                 return Response.ok(new ResponseDTO(-1, e.getMessage())).build();
             }
@@ -126,9 +131,10 @@ public class ResupplyREST implements Serializable {
     public Response deleteLocationLimit(
             @PathParam("code") String code,
             @HeaderParam("X-Company-Name") String companyName,
-            @HeaderParam("X-Warehouse-Code") String warehouseCode) {
+            @HeaderParam("X-Warehouse-Code") String warehouseCode,
+            @HeaderParam("X-Pruebas") boolean pruebas) {
         try {
-            locationLimitFacade.deleteLimit(code, companyName);
+            locationLimitFacade.deleteLimit(code, companyName, pruebas);
             return Response.ok(new ResponseDTO(0, "Se elimino correctamente.")).build();
         } catch (Exception e) {
             return Response.ok(new ResponseDTO(-1, e.getMessage())).build();

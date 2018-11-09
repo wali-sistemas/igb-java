@@ -2,10 +2,10 @@ package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.PickingRecord;
 import co.igb.persistence.entity.PickingRecord_;
+import co.igb.util.Constants;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,24 +24,23 @@ import java.util.logging.Logger;
  * @author dbotero
  */
 @Stateless
-public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
+public class PickingRecordFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(PickingRecordFacade.class.getSimpleName());
-    private static final String DB_TYPE = "mysql";
+    private static final String DB_TYPE = Constants.DATABASE_TYPE_MYSQL;
 
     @EJB
     private PersistenceConf persistenceConf;
 
-    @Override
-    protected EntityManager getEntityManager() {
-        return persistenceConf.chooseSchema("MySQLPU", DB_TYPE);
-    }
-
     public PickingRecordFacade() {
-        super(PickingRecord.class);
+
     }
 
-    public List<String> listSkippedItems(Integer orderNumber, String companyName) {
+    public void create(PickingRecord pickingRecord, String companyName, boolean testing) {
+        persistenceConf.chooseSchema(companyName, testing, DB_TYPE).persist(pickingRecord);
+    }
+
+    public Set<String> listSkippedItems(Integer orderNumber, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select item_code from picking_record where order_number =");
         sb.append(orderNumber);
@@ -48,9 +49,9 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
         sb.append("' and expires is not null");
 
         try {
-            return persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return new TreeSet<String>(persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList());
         } catch (Exception e) {
-            return new ArrayList<>();
+            return new TreeSet<>();
         }
     }
 
@@ -59,7 +60,7 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
      * @param companyName
      * @return map with structure [orderNumber->[itemcode->quantity]]
      */
-    public Map<Integer, Map<String, Integer>> listPickedItems(List<Integer> orderNumbers, String companyName) {
+    public Map<Integer, Map<String, Integer>> listPickedItems(List<Integer> orderNumbers, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from picking_record where order_number in (");
         for (Integer orderNumber : orderNumbers) {
@@ -73,7 +74,7 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
         CONSOLE.log(Level.FINE, sb.toString());
         try {
             Map<Integer, Map<String, Integer>> pickedItems = new HashMap<>();
-            List<Object[]> results = persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            List<Object[]> results = persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
             for (Object[] row : results) {
                 Integer orderNumber = (Integer) row[1];
                 String itemCode = (String) row[2];
@@ -101,7 +102,8 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
      * @param companyName
      * @return map with structure [itemcode->[bin->quantity]]
      */
-    public Map<String, Map<Long, Integer>> listPickedItems(Integer orderNumber, Boolean excludeTemporary, String companyName) {
+    public Map<String, Map<Long, Integer>> listPickedItems(Integer orderNumber, Boolean excludeTemporary,
+                                                           String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from picking_record where order_number = ");
         sb.append(orderNumber);
@@ -114,7 +116,7 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
         CONSOLE.log(Level.FINE, sb.toString());
         try {
             Map<String, Map<Long, Integer>> pickedItems = new HashMap<>();
-            List<Object[]> results = persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            List<Object[]> results = persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
             for (Object[] row : results) {
                 String itemCode = (String) row[2];
                 Integer quantity = (Integer) row[3];
@@ -137,13 +139,13 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
         }
     }
 
-    public List<Integer> listPickingsRecords(String companyName) {
+    public List<Integer> listPickingsRecords(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("SELECT DISTINCT order_number AS order_number FROM igb.picking_record ");
 
         try {
-            return persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException e) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la lista de picking_record. ", e);
@@ -152,8 +154,8 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
     }
 
 
-    public List<PickingRecord> listPicking(Integer orderNumber, String companyName) {
-        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName, DB_TYPE).getCriteriaBuilder();
+    public List<PickingRecord> listPicking(Integer orderNumber, String companyName, boolean testing) {
+        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName, testing, DB_TYPE).getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(PickingRecord.class);
         Root picking = cq.from(PickingRecord.class);
 
@@ -163,7 +165,7 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
         ));
 
         try {
-            return persistenceConf.chooseSchema(companyName, DB_TYPE).createQuery(cq).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createQuery(cq).getResultList();
         } catch (NoResultException e) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los datos de la orden del picking_record. ", e);
@@ -171,13 +173,13 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
         return null;
     }
 
-    public List<Object[]> findTemporaryRecords(String companyName) {
+    public List<Object[]> findTemporaryRecords(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select idpicking_record, expires from picking_record where company_name = '");
         sb.append(companyName);
         sb.append("' and expires is not null");
         try {
-            return (List<Object[]>) persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return (List<Object[]>) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException e) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los registros de picking temporales. ", e);
@@ -185,13 +187,13 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
         return new ArrayList<>();
     }
 
-    public void deleteExpiredRecords(List<Integer> recordIds, String companyName) {
-        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName, DB_TYPE).getCriteriaBuilder();
+    public void deleteExpiredRecords(List<Integer> recordIds, String companyName, boolean testing) {
+        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName, testing, DB_TYPE).getCriteriaBuilder();
         CriteriaDelete<PickingRecord> cd = cb.createCriteriaDelete(PickingRecord.class);
         Root<PickingRecord> root = cd.from(PickingRecord.class);
         cd.where(root.get("id").in(recordIds));
         try {
-            persistenceConf.chooseSchema(companyName, DB_TYPE).createQuery(cd).executeUpdate();
+            persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createQuery(cd).executeUpdate();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al eliminar los picking records vencidos. ", e);
         }

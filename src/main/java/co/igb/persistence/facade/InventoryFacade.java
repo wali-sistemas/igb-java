@@ -2,10 +2,10 @@ package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.Inventory;
 import co.igb.persistence.entity.Inventory_;
+import co.igb.util.Constants;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -14,29 +14,33 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * @author YEIJARA
- */
 @Stateless
-public class InventoryFacade extends AbstractFacade<Inventory> {
+public class InventoryFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(InventoryFacade.class.getSimpleName());
-    private static final String DB_TYPE = "mysql";
+    private static final String DB_TYPE = Constants.DATABASE_TYPE_MYSQL;
 
     @EJB
     private PersistenceConf persistenceConf;
 
-    @Override
-    protected EntityManager getEntityManager() {
-        return persistenceConf.chooseSchema("MySQLPU", DB_TYPE);
-    }
-
     public InventoryFacade() {
-        super(Inventory.class);
+
     }
 
-    public Inventory findLastInventoryOpen(String warehouse, String companyName) {
-        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName, DB_TYPE).getCriteriaBuilder();
+    public void create(Inventory inventory, String companyName, boolean testing) {
+        persistenceConf.chooseSchema(companyName, testing, DB_TYPE).persist(inventory);
+    }
+
+    public Inventory edit(Inventory inventory, String companyName, boolean testing) {
+        return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).merge(inventory);
+    }
+
+    public Inventory find(Integer idInventory, String companyName, boolean testing) {
+        return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).find(Inventory.class, idInventory);
+    }
+
+    public Inventory findLastInventoryOpen(String warehouse, String companyName, boolean testing) {
+        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName, testing, DB_TYPE).getCriteriaBuilder();
         CriteriaQuery<Inventory> cq = cb.createQuery(Inventory.class);
         Root<Inventory> inventory = cq.from(Inventory.class);
 
@@ -47,7 +51,7 @@ public class InventoryFacade extends AbstractFacade<Inventory> {
         cq.orderBy(cb.desc(inventory.get(Inventory_.id)));
 
         try {
-            return persistenceConf.chooseSchema(companyName, DB_TYPE).createQuery(cq).setMaxResults(1).getSingleResult();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createQuery(cq).setMaxResults(1).getSingleResult();
         } catch (NoResultException e) {
             return null;
         } catch (Exception e) {
@@ -56,7 +60,7 @@ public class InventoryFacade extends AbstractFacade<Inventory> {
         }
     }
 
-    public List<Object[]> obtenerUltimosInventarios(String schema, List<String> locations, String companyName) {
+    public List<Object[]> obtenerUltimosInventarios(String schema, List<String> locations, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("SELECT location, MAX(date) ");
@@ -75,7 +79,7 @@ public class InventoryFacade extends AbstractFacade<Inventory> {
         sb.append("ORDER BY MAX(date)");
 
         try {
-            return persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "", e);
             return null;

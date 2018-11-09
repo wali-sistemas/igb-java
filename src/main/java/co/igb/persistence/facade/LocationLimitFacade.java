@@ -2,6 +2,7 @@ package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.LocationLimit;
 import co.igb.persistence.entity.LocationLimit_;
+import co.igb.util.Constants;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -23,7 +24,7 @@ import java.util.logging.Logger;
 public class LocationLimitFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(LocationLimitFacade.class.getSimpleName());
-    private static final String DB_TYPE = "sap";
+    private static final String DB_TYPE = Constants.DATABASE_TYPE_MSSQL;
 
     @EJB
     private PersistenceConf persistenceConf;
@@ -31,8 +32,8 @@ public class LocationLimitFacade {
     public LocationLimitFacade() {
     }
 
-    public List<LocationLimit> listLocationsLimits(String schema, String warehouseCode) {
-        EntityManager em = persistenceConf.chooseSchema(schema, DB_TYPE);
+    public List<LocationLimit> listLocationsLimits(String schema, boolean testing, String warehouseCode) {
+        EntityManager em = persistenceConf.chooseSchema(schema, testing, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(LocationLimit.class);
         Root limite = cq.from(LocationLimit.class);
@@ -47,8 +48,8 @@ public class LocationLimitFacade {
         return null;
     }
 
-    public void editLimit(String schema, LocationLimit limit) {
-        EntityManager em = persistenceConf.chooseSchema(schema, DB_TYPE);
+    public void editLimit(String schema, boolean testing, LocationLimit limit) {
+        EntityManager em = persistenceConf.chooseSchema(schema, testing, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaUpdate cu = cb.createCriteriaUpdate(LocationLimit.class);
         Root limite = cu.from(LocationLimit.class);
@@ -64,7 +65,7 @@ public class LocationLimitFacade {
         }
     }
 
-    public void createLimit(String schema, LocationLimit limit) {
+    public void createLimit(String schema, boolean testing, LocationLimit limit) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("INSERT INTO [dbo].[@LIMITES_UBICACION] ");
@@ -78,14 +79,14 @@ public class LocationLimitFacade {
         sb.append(limit.getCantMaxima()).append(") ");
 
         try {
-            persistenceConf.chooseSchema(schema, DB_TYPE).createNativeQuery(sb.toString()).executeUpdate();
+            persistenceConf.chooseSchema(schema, testing, DB_TYPE).createNativeQuery(sb.toString()).executeUpdate();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el nuevo limite de ubicacion. ", e);
         }
     }
 
-    public void deleteLimit(String code, String schema) {
-        EntityManager em = persistenceConf.chooseSchema(schema, DB_TYPE);
+    public void deleteLimit(String code, String schema, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(schema, testing, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaDelete cd = cb.createCriteriaDelete(LocationLimit.class);
         Root limit = cd.from(LocationLimit.class);

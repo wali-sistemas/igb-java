@@ -1,5 +1,7 @@
 package co.igb.persistence.facade;
 
+import co.igb.util.Constants;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.ArrayList;
@@ -14,7 +16,7 @@ import java.util.logging.Logger;
 public class DeliveryNoteFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(DeliveryNoteFacade.class.getSimpleName());
-    private static final String DB_TYPE = "sap";
+    private static final String DB_TYPE = Constants.DATABASE_TYPE_MSSQL;
 
     @EJB
     private PersistenceConf persistenceConf;
@@ -22,7 +24,7 @@ public class DeliveryNoteFacade {
     public DeliveryNoteFacade() {
     }
 
-    public List<Object[]> getDeliveryNoteData(Integer deliveryDocEntry, String companyName) {
+    public List<Object[]> getDeliveryNoteData(Integer deliveryDocEntry, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(enc.docentry as int) docentry, cast(enc.docnum as int) docnum, cast(enc.objtype as int) objtype, ");
         sb.append("cast(enc.cardcode as varchar(20)) cardcode, cast(enc.slpcode as int) slpcode, cast(enc.cntctcode as int) cntctcode, ");
@@ -31,7 +33,7 @@ public class DeliveryNoteFacade {
         sb.append("inner join dln1 det on det.docentry = enc.docentry where enc.docentry =");
         sb.append(deliveryDocEntry);
         try {
-            return persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los datos de la entrega. ", e);
             return new ArrayList<>();

@@ -45,10 +45,11 @@ public class BinLocationREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listPickingCarts(@HeaderParam("X-Company-Name") String companyName,
-                                     @HeaderParam("X-Warehouse-Code") String warehouseCode) {
+                                     @HeaderParam("X-Warehouse-Code") String warehouseCode,
+                                     @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Listando carritos de picking");
 
-        List response = blFacade.listPickingCarts(warehouseCode, companyName);
+        List response = blFacade.listPickingCarts(warehouseCode, companyName, pruebas);
         List<BinLocationDTO> pickingCarts = new ArrayList<>();
         for (Object row : response) {
             BinLocationDTO dto = new BinLocationDTO();
@@ -75,10 +76,11 @@ public class BinLocationREST implements Serializable {
     public Response getBinAbs(
             @PathParam("binCode") String binCode,
             @HeaderParam("X-Company-Name") String companyName,
-            @HeaderParam("X-Warehouse-Code") String warehouseCode) {
+            @HeaderParam("X-Warehouse-Code") String warehouseCode,
+            @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Obteniendo binabs para ubicacion " + binCode);
 
-        Integer binAbs = blFacade.getBinAbs(binCode, companyName);
+        Integer binAbs = blFacade.getBinAbs(binCode, companyName, pruebas);
         CONSOLE.log(Level.INFO, "Obtuvo el binAbs: {0}", binAbs);
 
         return Response.ok(new ResponseDTO(0, binAbs)).build();

@@ -37,9 +37,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * @author martin
- */
 @Stateless
 @Path("user")
 public class UserREST {
@@ -62,7 +59,9 @@ public class UserREST {
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response login(UserDTO user) {
+    public Response login(UserDTO user,
+                          @HeaderParam("X-Company-Name") String companyName,
+                          @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Se recibieron datos de usuario para login {0}", user);
         if (user == null || user.getUsername() == null || user.getUsername().trim().isEmpty()
                 || user.getPassword() == null || user.getPassword().trim().isEmpty()
@@ -75,7 +74,7 @@ public class UserREST {
         if (response.getCode() == 0) {
             user.setPassword(null);
             try {
-                User userData = userFacade.find(user.getUsername());
+                User userData = userFacade.find(user.getUsername(), companyName, pruebas);
                 if (userData == null) {
                     throw new NoResultException();
                 }
@@ -87,7 +86,7 @@ public class UserREST {
 
                 if (days > 3) {
                     try {
-                        user = getUserInfoFromLdap(user, false, user.getSelectedCompany());
+                        user = getUserInfoFromLdap(user, false, user.getSelectedCompany(), pruebas);
                     } catch (IGBAuthenticationException e) {
                         return Response.ok(new AuthenticationResponseDTO(1, "Ocurrio un error al autenticar al usuario (Post-LDAP). ")).build();
                     }
@@ -100,7 +99,7 @@ public class UserREST {
             } catch (NoResultException e) {
                 //No se tiene informacion del usuario. Consultar directorio activo y continuar
                 try {
-                    user = getUserInfoFromLdap(user, true, user.getSelectedCompany());
+                    user = getUserInfoFromLdap(user, true, user.getSelectedCompany(), pruebas);
                 } catch (IGBAuthenticationException ex) {
                     return Response.ok(new AuthenticationResponseDTO(1, "Ocurrio un error al autenticar al usuario (Post-LDAP). ")).build();
                 }
@@ -114,7 +113,7 @@ public class UserREST {
                 return Response.ok(new AuthenticationResponseDTO(1, "Ocurrio un error al autenticar al usuario (JWT). ")).build();
             }
             try {
-                user.setWarehouseCode(getWarehouseCode(user.getSelectedCompany()));
+                user.setWarehouseCode(getWarehouseCode(user.getSelectedCompany(), pruebas));
             } catch (Exception e) {
                 return Response.ok(new AuthenticationResponseDTO(1, "Ocurrio un error al obtener el código del almacén. ")).build();
             }
@@ -125,11 +124,11 @@ public class UserREST {
         return Response.ok(response).build();
     }
 
-    private String getWarehouseCode(String companyName) {
-        return warehouseFacade.listBinEnabledWarehouses(companyName).get(0).getCode();
+    private String getWarehouseCode(String companyName, boolean pruebas) {
+        return warehouseFacade.listBinEnabledWarehouses(companyName, pruebas).get(0).getCode();
     }
 
-    private UserDTO getUserInfoFromLdap(UserDTO user, boolean create, String companyName) throws IGBAuthenticationException {
+    private UserDTO getUserInfoFromLdap(UserDTO user, boolean create, String companyName, boolean pruebas) throws IGBAuthenticationException {
         UserDTO userDataLdap = authenticator.getUserInfo(user.getUsername());
         if (userDataLdap == null) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al obtener la informacion del usuario en LDAP (aunque ya se habia autenticado correctamente). ");
@@ -144,7 +143,7 @@ public class UserREST {
 
         if (create) {
             try {
-                userFacade.create(userDataSQL);
+                userFacade.create(userDataSQL, companyName, pruebas);
                 user = userDataLdap;
             } catch (Exception ex) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al guardar la informacion del usuario en MySQL. ", ex);
@@ -152,7 +151,7 @@ public class UserREST {
             }
         } else {
             try {
-                userFacade.edit(userDataSQL);
+                userFacade.edit(userDataSQL, companyName, pruebas);
                 user = userDataLdap;
             } catch (Exception ex) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al guardar la informacion del usuario en MySQL. ", ex);
@@ -210,10 +209,11 @@ public class UserREST {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     public Response approveUserAccess(@PathParam("username") String username,
                                       @PathParam("module")String module,
-                                      @HeaderParam("X-Company-Name") String companyName) {
+                                      @HeaderParam("X-Company-Name") String companyName,
+                                      @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Validando si el usuario " + username + " puede acceder al modulo " + module);
         //obtain ldap groups that can access to the module
-        List<String> allowedGroups = groupAllowedFacade.listAllowedGroups(module, companyName);
+        List<String> allowedGroups = groupAllowedFacade.listAllowedGroups(module, companyName, pruebas);
         if (allowedGroups.isEmpty()) {
             return Response.ok(new ResponseDTO(-1, "El módulo " + module + " no tiene configurado nigún grupo de LDAP para poder accederlo")).build();
         }

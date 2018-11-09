@@ -1,5 +1,7 @@
 package co.igb.persistence.facade;
 
+import co.igb.util.Constants;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,9 +25,10 @@ public class PersistenceConf {
     @PersistenceContext(unitName = "MySQLPruebasPU")
     private EntityManager emWaliPruebas;
 
-    public EntityManager chooseSchema(String companyName, String dbType) {
-        if (dbType.equalsIgnoreCase("mysql")) {
-            if (companyName.toLowerCase().contains("pruebas")) {
+    public EntityManager chooseSchema(String companyName, boolean testing, String dbType) {
+
+        if (dbType.equalsIgnoreCase(Constants.DATABASE_TYPE_MYSQL)) {
+            if (testing) {
                 return emWaliPruebas;
             } else {
                 return emWali;

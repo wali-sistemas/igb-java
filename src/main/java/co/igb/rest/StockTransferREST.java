@@ -136,7 +136,8 @@ public class StockTransferREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response createPickingTransferDocument(SingleItemTransferDTO itemTransfer,
                                                   @HeaderParam("X-Company-Name") String companyName,
-                                                  @HeaderParam("X-Warehouse-Code") String warehouseCode) {
+                                                  @HeaderParam("X-Warehouse-Code") String warehouseCode,
+                                                  @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Trasladando item a carrito de picking {0}", itemTransfer);
 
         //Validates received data
@@ -161,14 +162,14 @@ public class StockTransferREST implements Serializable {
         if (itemTransfer.getExpectedQuantity() < itemTransfer.getQuantity()) {
             CONSOLE.log(Level.INFO, "La cantidad tomada ({0}) es superior a la cantidad de la orden ({1}). Reajustando orden para acomodar nueva cantidad...",
                     new Object[]{itemTransfer.getQuantity(), itemTransfer.getExpectedQuantity()});
-            Integer orderDocEntry = salesOrderFacade.getOrderDocEntry(itemTransfer.getOrderNumber(), companyName);
+            Integer orderDocEntry = salesOrderFacade.getOrderDocEntry(itemTransfer.getOrderNumber(), companyName, pruebas);
             if (!modifySalesOrderQuantity(companyName, orderDocEntry, itemTransfer.getItemCode(), itemTransfer.getQuantity())) {
                 return Response.ok(new ResponseDTO(-1, "Ocurrio un error al modificar la cantidad de la orden. ")).build();
             }
         } else if (itemTransfer.getExpectedQuantity() > itemTransfer.getQuantity()) {
             CONSOLE.log(Level.INFO, "La cantidad tomada ({0}) es inferior a la cantidad de la orden ({1}). Realizando ajuste de inventario...",
                     new Object[]{itemTransfer.getQuantity(), itemTransfer.getExpectedQuantity()});
-            Integer expectedQuantity = binLocationFacade.getTotalQuantity(itemTransfer.getBinAbsFrom(), itemTransfer.getItemCode(), companyName);
+            Integer expectedQuantity = binLocationFacade.getTotalQuantity(itemTransfer.getBinAbsFrom(), itemTransfer.getItemCode(), companyName, pruebas);
             try {
                 //Trasladar la diferencia a la ubicacion de inconsistencias
                 Long docEntry = adjustMissingQuantity(itemTransfer, expectedQuantity, companyName, warehouseCode);
@@ -178,8 +179,12 @@ public class StockTransferREST implements Serializable {
             }
 
             //Enviar correo
-            mailManager.sendInventoryInconsistence(itemTransfer.getUsername(), binLocationFacade.getBinCodeAndName(itemTransfer.getBinAbsTo(), companyName),
-                    itemTransfer.getItemCode(), expectedQuantity, itemTransfer.getQuantity());
+            mailManager.sendInventoryInconsistence(
+                    itemTransfer.getUsername(),
+                    binLocationFacade.getBinCodeAndName(itemTransfer.getBinAbsTo(), companyName, pruebas),
+                    itemTransfer.getItemCode(),
+                    expectedQuantity,
+                    itemTransfer.getQuantity());
         }
 
         StockTransfer document = new StockTransfer();
@@ -231,7 +236,7 @@ public class StockTransferREST implements Serializable {
         String errorMessage = null;
         if (sessionId != null) {
             try {
-                if(!itemTransfer.getTemporary()){
+                if (!itemTransfer.getTemporary()) {
                     docEntry = createTransferDocument(document, sessionId);
                     CONSOLE.log(Level.INFO, "Se creo la transferencia docEntry={0}", docEntry);
                 }
@@ -262,10 +267,10 @@ public class StockTransferREST implements Serializable {
                     cal.add(Calendar.MINUTE, Integer.parseInt(appBean.obtenerValorPropiedad(Constants.TEMPORARY_PICKING_TTL)));
                     pickingRecord.setExpires(cal.getTime());
                     pickingRecord.setQuantity(0L);
-                }else{
+                } else {
                     pickingRecord.setQuantity(itemTransfer.getQuantity().longValue());
                 }
-                pickingRecordFacade.create(pickingRecord);
+                pickingRecordFacade.create(pickingRecord, companyName, pruebas);
                 return Response.ok(new ResponseDTO(0, pickingRecord)).build();
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "There was an error recording the operation to the MySQL database. ", e);
@@ -282,16 +287,17 @@ public class StockTransferREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response cleanLocation(@PathParam("warehouse") String warehouse, @PathParam("bincode") String binCode,
                                   @HeaderParam("X-Company-Name") String companyName,
-                                  @HeaderParam("X-Warehouse-Code") String warehouseCode) {
+                                  @HeaderParam("X-Warehouse-Code") String warehouseCode,
+                                  @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Borrando contenido de ubicacion {0}", binCode);
 
         if (warehouse == null || warehouse.trim().isEmpty()) {
             return Response.ok(new ResponseDTO(-1, "No se recibió el código del almacén. Se recomienda cerrar sesión, borrar cookies e historial de navegación de Wali y volver a intentar")).build();
         }
 
-        List<SaldoUbicacion> stock = binLocationFacade.findLocationBalance(binCode, warehouseCode, companyName);
+        List<SaldoUbicacion> stock = binLocationFacade.findLocationBalance(binCode, warehouseCode, companyName, pruebas);
         if (stock == null || stock.isEmpty()) {
-            return startCounting(binCode, warehouse, companyName, 0L);
+            return startCounting(binCode, warehouse, companyName, pruebas, 0L);
         }
 
         StockTransfer transfer = new StockTransfer();
@@ -371,10 +377,10 @@ public class StockTransferREST implements Serializable {
         sapFunctions.logout(sessionId);
 
         //4. Crear el registro en base de datos
-        return startCounting(binCode, warehouse, companyName, docEntry);
+        return startCounting(binCode, warehouse, companyName, pruebas, docEntry);
     }
 
-    private Response startCounting(String binCode, String warehouse, String companyName, Long docEntry) {
+    private Response startCounting(String binCode, String warehouse, String companyName, boolean pruebas, Long docEntry) {
         Inventory inventory = new Inventory();
 
         inventory.setDate(new Date());
@@ -385,7 +391,7 @@ public class StockTransferREST implements Serializable {
         inventory.setTransfer(docEntry.intValue());
 
         try {
-            inventoryFacade.create(inventory);
+            inventoryFacade.create(inventory, companyName, pruebas);
             CONSOLE.log(Level.INFO, "Se creo un inventario con id {0}", inventory.getId());
             return Response.ok(new ResponseDTO(0, inventory)).build();
         } catch (Exception e) {
@@ -401,13 +407,14 @@ public class StockTransferREST implements Serializable {
     public Response finishInventory(@PathParam("idInventory") Integer idInventory,
                                     @HeaderParam("X-Company-Name") String companyName,
                                     @HeaderParam("X-Warehouse-Code") String warehouseCode,
-                                    @HeaderParam("X-Employee") String employeeName) {
-        Inventory inventory = inventoryFacade.find(idInventory);
-        List<InventoryDetail> detail = inventoryDetailFacade.findInventoryDetail(idInventory, companyName);
+                                    @HeaderParam("X-Employee") String employeeName,
+                                    @HeaderParam("X-Pruebas") boolean pruebas) {
+        Inventory inventory = inventoryFacade.find(idInventory, companyName, pruebas);
+        List<InventoryDetail> detail = inventoryDetailFacade.findInventoryDetail(idInventory, companyName, pruebas);
         List<InventoryDifference> differences = new ArrayList<>();
 
         if (detail != null && !detail.isEmpty()) {
-            List<StockTransferDetail> stock = stockTransferDetailFacade.findStockTransfer(inventory.getTransfer(), companyName);
+            List<StockTransferDetail> stock = stockTransferDetailFacade.findStockTransfer(inventory.getTransfer(), companyName, pruebas);
             //List<SaldoUbicacion> stock = binLocationFacade.findLocationBalanceInventory(appBean.getInventoryBinId(companyName), companyName);
 
             if (stock != null && !stock.isEmpty()) {
@@ -456,7 +463,7 @@ public class StockTransferREST implements Serializable {
 
                             inOperation.setAllowNegativeQuantity("tNO");
                             inOperation.setBaseLineNumber(linea);
-                            inOperation.setBinAbsEntry(binLocationFacade.getBinAbs(inventory.getLocation(), companyName).longValue());
+                            inOperation.setBinAbsEntry(binLocationFacade.getBinAbs(inventory.getLocation(), companyName, pruebas).longValue());
                             inOperation.setBinActionType("batToWarehouse");
                             inOperation.setQuantity(line.getQuantity());
 
@@ -501,8 +508,8 @@ public class StockTransferREST implements Serializable {
 
             //4. Se registran las diferencias
             //4.1 Se registran las diferencias detectadas
-            for (InventoryDifference i : differences) {
-                inventoryDifferenceFacade.create(i);
+            for (InventoryDifference difference : differences) {
+                inventoryDifferenceFacade.create(difference, companyName, pruebas);
             }
 
             //4.2 Se registran los datos que no se encontraron
@@ -515,14 +522,14 @@ public class StockTransferREST implements Serializable {
                 difference.setIdInventory(idInventory);
                 difference.setItem(s.getItemCode());
 
-                inventoryDifferenceFacade.create(difference);
+                inventoryDifferenceFacade.create(difference, companyName, pruebas);
                 differences.add(difference);
             }
 
             inventory.setStatus("F");
 
             try {
-                inventoryFacade.edit(inventory);
+                inventoryFacade.edit(inventory, companyName, pruebas);
                 CONSOLE.log(Level.INFO, "Se marco el inventario con id {0} como finalizado", inventory.getId());
             } catch (Exception ignored) {
             }
