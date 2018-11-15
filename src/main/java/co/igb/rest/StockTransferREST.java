@@ -857,6 +857,92 @@ public class StockTransferREST implements Serializable {
         return Response.ok(new ResponseDTO(-1, "Metodo aun no implementado")).build();
     }
 
+    @POST
+    @Path("stock-transfer/between-warehouses")
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response createStockBetweenWarehousesTransferDocument(
+            StockTransferDTO stockTransfer,
+            @HeaderParam("X-Company-Name") String companyName,
+            @HeaderParam("X-Warehouse-Code") String warehouseCode) {
+        CONSOLE.log(Level.INFO, "Realizando traslado entre almacenes {0}", stockTransfer);
+
+        StockTransfer document = new StockTransfer();
+        document.setSeries(Long.parseLong(getPropertyValue(Constants.STOCK_TRANSFER_SERIES, companyName)));
+        document.setToWarehouse(stockTransfer.getWarehouseCode());
+        document.setFromWarehouse(stockTransfer.getFiller());
+        document.setComments("Traslado entre almacenes generado desde Wali por " + stockTransfer.getUsername());
+
+        StockTransfer.StockTransferLines documentLines = new StockTransfer.StockTransferLines();
+        long lineNum = 0L;
+        for (StockTransferLineDTO lineDTO : stockTransfer.getLines()) {
+            StockTransfer.StockTransferLines.StockTransferLine line = new StockTransfer.StockTransferLines.StockTransferLine();
+            line.setLineNum(lineNum++);
+            line.setItemCode(lineDTO.getItemCode());
+            line.setQuantity(lineDTO.getQuantity().doubleValue());
+            line.setWarehouseCode(stockTransfer.getWarehouseCode());
+            line.setFromWarehouseCode(stockTransfer.getFiller());
+
+            StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+            outOperation.setAllowNegativeQuantity("tNO");
+            outOperation.setBaseLineNumber(line.getLineNum());
+            outOperation.setBinAbsEntry(stockTransfer.getBinAbsFrom());
+            outOperation.setBinActionType("batFromWarehouse");
+            outOperation.setQuantity(lineDTO.getQuantity().doubleValue());
+
+            StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+            inOperation.setAllowNegativeQuantity("tNO");
+            inOperation.setBaseLineNumber(line.getLineNum());
+            inOperation.setBinAbsEntry(stockTransfer.getBinAbsTo());
+            inOperation.setBinActionType("batToWarehouse");
+            inOperation.setQuantity(lineDTO.getQuantity().doubleValue());
+
+            StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations binAllocations = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations();
+            binAllocations.getStockTransferLinesBinAllocation().add(inOperation);
+            binAllocations.getStockTransferLinesBinAllocation().add(outOperation);
+
+            line.setStockTransferLinesBinAllocations(binAllocations);
+            documentLines.getStockTransferLine().add(line);
+        }
+        document.setStockTransferLines(documentLines);
+
+        //1. Login
+        String sessionId = null;
+        try {
+            sessionId = sapFunctions.login(companyName);
+            CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+        } catch (Exception ignored) {
+        }
+        //2. Registrar documento
+        Long docEntry = -1L;
+        String errorMessage = null;
+        if (sessionId != null) {
+            try {
+                docEntry = createTransferDocument(document, sessionId);
+                CONSOLE.log(Level.INFO, "Se creo el traslado docEntry={0}", docEntry);
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el traslado. ", e);
+                errorMessage = e.getMessage();
+            }
+        }
+        //3. Logout
+        if (sessionId != null) {
+            sapFunctions.logout(sessionId);
+        }
+        //4. Validar y retornar
+        if (docEntry > 0) {
+            try {
+                return Response.ok(new ResponseDTO(0, docEntry)).build();
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "There was an error recording the operation to the MySQL database. ", e);
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ResponseDTO(-1, "Ocurrió un error al procesar la solicitud. Valida si el traslado entre almacenes se realizó correctamente en SAP y reinicia sesión en Wali")).build();
+            }
+        } else {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ResponseDTO(-1, "Ocurrio un error al crear el traslado. " + errorMessage)).build();
+        }
+    }
+
     private String getPropertyValue(String propertyName, String companyName) {
         return IGBUtils.getProperParameter(appBean.obtenerValorPropiedad(propertyName), companyName);
     }
