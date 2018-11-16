@@ -64,11 +64,4 @@ public class StockItemREST implements Serializable {
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error al consultar el stock.")).build();
         }
     }
-
-    @GET
-    @Path("test")
-    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    public Response consultarStockItem() {
-        return Response.ok(new ResponseDTO(0,"la prueba funciona")).build();
-    }
 }
