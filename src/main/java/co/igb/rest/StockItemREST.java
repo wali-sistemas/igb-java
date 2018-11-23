@@ -33,7 +33,8 @@ public class StockItemREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     public Response consultarStockItem(@PathParam("parametro") String parametro,
                                        @HeaderParam("X-Warehouse-Code") String warehouseCode,
-                                       @HeaderParam("X-Company-Name") String companyName) {
+                                       @HeaderParam("X-Company-Name") String companyName,
+                                       @HeaderParam("X-Pruebas") Boolean pruebas) {
         /*Parametro contiene ubicacion o item*/
         if (parametro == null || parametro.isEmpty()) {
             CONSOLE.log(Level.INFO, "No se recibieron datos para consultar el stock");
@@ -51,7 +52,7 @@ public class StockItemREST implements Serializable {
             CONSOLE.log(Level.INFO, "Consultando stock del item {0}", parametro);
         }
 
-        List<Object[]> items = itemFacade.getItemStock(itemCode, binCode, warehouseCode, companyName);
+        List<Object[]> items = itemFacade.getItemStock(itemCode, binCode, warehouseCode, companyName, pruebas);
 
         if (items != null) {
             return Response.ok(items).build();

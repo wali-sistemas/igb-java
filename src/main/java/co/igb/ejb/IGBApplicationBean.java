@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -54,10 +55,10 @@ public class IGBApplicationBean implements Serializable {
     private BinLocationFacade binFacade;
 
     @PostConstruct
-    private void initialize(boolean pruebas) {
+    private void initialize() {
         loadProperties();
-        consultarUbicacionesInventario(pruebas);
-        consultarUbicacionesRecepcion(pruebas);
+        consultarUbicacionesInventario();
+        consultarUbicacionesRecepcion();
     }
 
     @GET
@@ -65,7 +66,7 @@ public class IGBApplicationBean implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     public Response reloadConfig(@QueryParam("showprops") String showProps, @QueryParam("pruebas") boolean pruebas) {
-        initialize(pruebas);
+        initialize();
         if (StringUtils.isNotBlank(showProps) && showProps.equals("yes")) {
             return Response.ok(new ResponseDTO(0, props)).build();
         } else {
@@ -119,16 +120,18 @@ public class IGBApplicationBean implements Serializable {
         }
     }
 
-    private void consultarUbicacionesRecepcion(boolean pruebas) {
+    private void consultarUbicacionesRecepcion() {
         receptionLocations = new HashMap<>();
         String[] companies = props.getProperty(Constants.COMPANIES).split(";");
         for (String company : companies) {
-            String databaseName = company.split(",")[0].trim();
-            List<Object[]> bins = binFacade.findReceptionLocations(databaseName, pruebas);
+            String[] confParts = company.split(",");
+            String databaseName = confParts[0].trim();
+
+            List<Object[]> bins = binFacade.findReceptionLocations(databaseName, new Boolean(confParts[2].trim()));
             if (bins != null) {
                 for (Object[] row : bins) {
                     String warehouseCode = (String) row[0];
-                    if (receptionLocations.containsKey(warehouseCode)) {
+                    if (receptionLocations.containsKey(databaseName)) {
                         receptionLocations.get(databaseName).put(warehouseCode, (Integer) row[1]);
                     } else {
                         HashMap<String, Integer> entry = new HashMap<>();
@@ -138,19 +141,26 @@ public class IGBApplicationBean implements Serializable {
                 }
             }
         }
+        for (String databaseName : receptionLocations.keySet()) {
+            for (String whsCode : receptionLocations.get(databaseName).keySet()) {
+                CONSOLE.log(Level.INFO, String.format("{%s: {%s: %s}}", databaseName, whsCode, receptionLocations.get(databaseName).get(whsCode)));
+            }
+        }
         CONSOLE.log(Level.INFO, "Se cargaron ubicaciones de recepcion para {0} empresas", companies.length);
     }
 
-    private void consultarUbicacionesInventario(boolean pruebas) {
+    private void consultarUbicacionesInventario() {
         inventoryLocations = new HashMap<>();
         String[] companies = props.getProperty(Constants.COMPANIES).split(";");
         for (String company : companies) {
-            String databaseName = company.split(",")[0].trim();
-            List<Object[]> bins = binFacade.findInventoryLocationId(databaseName, pruebas);
+            String[] confParts = company.split(",");
+            String databaseName = confParts[0].trim();
+
+            List<Object[]> bins = binFacade.findInventoryLocationId(databaseName, new Boolean(confParts[2].trim()));
             if (bins != null) {
                 for (Object[] row : bins) {
                     String warehouseCode = (String) row[0];
-                    if (inventoryLocations.containsKey(warehouseCode)) {
+                    if (inventoryLocations.containsKey(databaseName)) {
                         inventoryLocations.get(databaseName).put(warehouseCode, (Integer) row[1]);
                     } else {
                         HashMap<String, Integer> entry = new HashMap<>();
@@ -158,6 +168,11 @@ public class IGBApplicationBean implements Serializable {
                         inventoryLocations.put(databaseName, entry);
                     }
                 }
+            }
+        }
+        for (String databaseName : inventoryLocations.keySet()) {
+            for (String whsCode : inventoryLocations.get(databaseName).keySet()) {
+                CONSOLE.log(Level.INFO, String.format("{%s: {%s: %s}}", databaseName, whsCode, inventoryLocations.get(databaseName).get(whsCode)));
             }
         }
         CONSOLE.log(Level.INFO, "Se cargaron ubicaciones de inventario para {0} empresas", companies.length);
@@ -210,10 +225,12 @@ public class IGBApplicationBean implements Serializable {
                 String[] strCompanyData = strCompany.split(",");
                 String companyId = strCompanyData[0].trim();
                 String companyName = strCompanyData[1].trim();
+                boolean testing = new Boolean(strCompanyData[2]);
 
-                companies.add(new CompanyDTO(companyId, companyName));
+                companies.add(new CompanyDTO(companyId, companyName, testing));
             }
         }
+        Collections.sort(companies);
         CONSOLE.log(Level.INFO, "Se encontraron las siguientes empresas {0}", companies);
         return companies;
     }

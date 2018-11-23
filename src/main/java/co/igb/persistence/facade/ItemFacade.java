@@ -38,7 +38,7 @@ public class ItemFacade {
         }
     }
 
-    public List<Object[]> getItemStock(String itemCode, String binCode, String whsCode, String companyName) {
+    public List<Object[]> getItemStock(String itemCode, String binCode, String whsCode, String companyName, boolean pruebas) {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT CAST(art.ItemCode AS varchar(20)) AS itemCode, CAST(art.ItemName AS varchar(200)) AS itemName, CAST(ubc.OnHandQty AS INT) AS Qty, ");
         sb.append("       CAST(ubc.WhsCode AS varchar(10)) AS whsCode, CAST(dub.BinCode AS varchar(22)) AS BinCode, CAST(pre.Price AS numeric(18,2)) AS Price ");
@@ -55,7 +55,7 @@ public class ItemFacade {
         sb.append(whsCode);
         sb.append("' ORDER BY dub.BinCode");
         try {
-            return (List<Object[]>) persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return (List<Object[]>) persistenceConf.chooseSchema(companyName, pruebas, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el stock del item " + itemCode + ".", e);
             return null;
