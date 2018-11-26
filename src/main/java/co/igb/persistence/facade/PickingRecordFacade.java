@@ -140,7 +140,7 @@ public class PickingRecordFacade extends AbstractFacade<PickingRecord> {
     public List<Integer> listPickingsRecords(String companyName) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("SELECT DISTINCT order_number AS order_number FROM igb.picking_record ");
+        sb.append("SELECT DISTINCT order_number AS order_number FROM picking_record ");
 
         try {
             return persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
