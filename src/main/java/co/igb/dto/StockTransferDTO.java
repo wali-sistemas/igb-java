@@ -1,8 +1,11 @@
 package co.igb.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class StockTransferDTO {
     private String username;
     private String binCodeFrom;
@@ -10,6 +13,7 @@ public class StockTransferDTO {
     private Long binAbsFrom;
     private Long binAbsTo;
     private String warehouseCode;
+    private String filler;
     private List<StockTransferLineDTO> lines;
 
     public StockTransferDTO() {
@@ -72,6 +76,14 @@ public class StockTransferDTO {
         this.username = username;
     }
 
+    public String getFiller() {
+        return filler;
+    }
+
+    public void setFiller(String filler) {
+        this.filler = filler;
+    }
+
     @Override
     public String toString() {
         return "StockTransferDTO{" +
@@ -81,6 +93,7 @@ public class StockTransferDTO {
                 ", binAbsFrom=" + binAbsFrom +
                 ", binAbsTo=" + binAbsTo +
                 ", warehouseCode='" + warehouseCode + '\'' +
+                ", filler='" + filler + '\'' +
                 ", lines=" + lines +
                 '}';
     }

@@ -4,6 +4,14 @@ public class WarehouseDTO {
     private String code;
     private String name;
 
+    public WarehouseDTO() {
+    }
+
+    public WarehouseDTO(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+
     public String getCode() {
         return code;
     }
@@ -20,4 +28,11 @@ public class WarehouseDTO {
         this.name = name;
     }
 
+    @Override
+    public String toString() {
+        return "WarehouseDTO{" +
+                "code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
