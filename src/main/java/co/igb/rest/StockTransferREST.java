@@ -231,7 +231,7 @@ public class StockTransferREST implements Serializable {
         String errorMessage = null;
         if (sessionId != null) {
             try {
-                if(!itemTransfer.getTemporary()){
+                if (!itemTransfer.getTemporary()) {
                     docEntry = createTransferDocument(document, sessionId);
                     CONSOLE.log(Level.INFO, "Se creo la transferencia docEntry={0}", docEntry);
                 }
@@ -262,7 +262,7 @@ public class StockTransferREST implements Serializable {
                     cal.add(Calendar.MINUTE, Integer.parseInt(appBean.obtenerValorPropiedad(Constants.TEMPORARY_PICKING_TTL)));
                     pickingRecord.setExpires(cal.getTime());
                     pickingRecord.setQuantity(0L);
-                }else{
+                } else {
                     pickingRecord.setQuantity(itemTransfer.getQuantity().longValue());
                 }
                 pickingRecordFacade.create(pickingRecord);
@@ -785,17 +785,17 @@ public class StockTransferREST implements Serializable {
             line.setFromWarehouseCode(stockTransfer.getWarehouseCode());
 
             StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
-            outOperation.setAllowNegativeQuantity("tNO");
+            outOperation.setAllowNegativeQuantity(Constants.SAP_STATUS_NO);
             outOperation.setBaseLineNumber(line.getLineNum());
             outOperation.setBinAbsEntry(stockTransfer.getBinAbsFrom());
-            outOperation.setBinActionType("batFromWarehouse");
+            outOperation.setBinActionType(Constants.BIN_ACTION_TYPE);
             outOperation.setQuantity(lineDTO.getQuantity().doubleValue());
 
             StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
-            inOperation.setAllowNegativeQuantity("tNO");
+            inOperation.setAllowNegativeQuantity(Constants.SAP_STATUS_NO);
             inOperation.setBaseLineNumber(line.getLineNum());
             inOperation.setBinAbsEntry(stockTransfer.getBinAbsTo());
-            inOperation.setBinActionType("batToWarehouse");
+            inOperation.setBinActionType(Constants.BIN_ACTION_TYPE);
             inOperation.setQuantity(lineDTO.getQuantity().doubleValue());
 
             StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations binAllocations = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations();
@@ -862,7 +862,7 @@ public class StockTransferREST implements Serializable {
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response createStockBetweenWarehousesTransferDocument(
+    public Response createStockTransferBetweenWarehouses(
             StockTransferDTO stockTransfer,
             @HeaderParam("X-Company-Name") String companyName,
             @HeaderParam("X-Warehouse-Code") String warehouseCode) {
@@ -885,17 +885,17 @@ public class StockTransferREST implements Serializable {
             line.setFromWarehouseCode(stockTransfer.getFiller());
 
             StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
-            outOperation.setAllowNegativeQuantity("tNO");
+            outOperation.setAllowNegativeQuantity(Constants.SAP_STATUS_NO);
             outOperation.setBaseLineNumber(line.getLineNum());
             outOperation.setBinAbsEntry(stockTransfer.getBinAbsFrom());
-            outOperation.setBinActionType("batFromWarehouse");
+            outOperation.setBinActionType(Constants.BIN_ACTION_TYPE);
             outOperation.setQuantity(lineDTO.getQuantity().doubleValue());
 
             StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
-            inOperation.setAllowNegativeQuantity("tNO");
+            inOperation.setAllowNegativeQuantity(Constants.SAP_STATUS_NO);
             inOperation.setBaseLineNumber(line.getLineNum());
             inOperation.setBinAbsEntry(stockTransfer.getBinAbsTo());
-            inOperation.setBinActionType("batToWarehouse");
+            inOperation.setBinActionType(Constants.BIN_ACTION_TYPE);
             inOperation.setQuantity(lineDTO.getQuantity().doubleValue());
 
             StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations binAllocations = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations();

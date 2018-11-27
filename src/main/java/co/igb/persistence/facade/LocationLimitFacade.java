@@ -37,7 +37,10 @@ public class LocationLimitFacade {
         sb.append("SELECT CONVERT(VARCHAR(30),Code) AS code, CONVERT(VARCHAR(30),Name) AS Name, ");
         sb.append("       CONVERT(VARCHAR(20),U_Ubicacion) AS U_Ubicacion, CONVERT(VARCHAR(20),U_Item) AS U_Item, ");
         sb.append("       CONVERT(INT,U_CantMinima) AS U_CantMinima, CONVERT(int,U_CantMaxima) AS U_CantMaxima ");
-        sb.append("FROM [@LIMITES_UBICACION]");
+        sb.append("FROM   [@LIMITES_UBICACION] ");
+        sb.append("WHERE  U_Ubicacion LIKE '");
+        sb.append(warehouseCode);
+        sb.append("%'");
 
         try {
             return em.createNativeQuery(sb.toString()).getResultList();

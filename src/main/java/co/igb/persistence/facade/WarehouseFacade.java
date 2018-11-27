@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * @author jguisao
+ */
 @Stateless
 public class WarehouseFacade {
     private static final Logger CONSOLE = Logger.getLogger(WarehouseFacade.class.getSimpleName());
@@ -24,7 +27,6 @@ public class WarehouseFacade {
     private PersistenceConf persistenceConf;
 
     public WarehouseFacade() {
-
     }
 
     public List<WarehouseDTO> listBinEnabledWarehouses(String companyName) {
@@ -46,7 +48,7 @@ public class WarehouseFacade {
         }
     }
 
-    public List<Warehouse> listActivesWarehouses(String companyName) {
+    public List<Warehouse> listActiveWarehouses(String companyName) {
         EntityManager em = persistenceConf.chooseSchema(companyName, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Warehouse> cq = cb.createQuery(Warehouse.class);

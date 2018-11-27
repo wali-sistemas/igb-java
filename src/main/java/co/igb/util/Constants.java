@@ -63,6 +63,7 @@ public class Constants {
     public static final String B1WS_LOGIN_SERVICE = "LoginService";
     public static final String B1WS_DELIVERY_NOTE_SERVICE = "DeliveryNotesService";
     public static final String BIN_TYPE_PICKING = "PICKING";
+    public static final String BIN_ACTION_TYPE = "batFromWarehouse";
 
 
     public static final String[] LDAP_ATTR_IDS = {"name", "givenName", "description", "sAMAccountname", "userPrincipalName", "sn", "distinguishedName", "cn", "mail", "memberOf"};
