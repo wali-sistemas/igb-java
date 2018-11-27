@@ -788,14 +788,14 @@ public class StockTransferREST implements Serializable {
             outOperation.setAllowNegativeQuantity(Constants.SAP_STATUS_NO);
             outOperation.setBaseLineNumber(line.getLineNum());
             outOperation.setBinAbsEntry(stockTransfer.getBinAbsFrom());
-            outOperation.setBinActionType(Constants.BIN_ACTION_TYPE);
+            outOperation.setBinActionType(Constants.BIN_ACTION_TYPE_FROM);
             outOperation.setQuantity(lineDTO.getQuantity().doubleValue());
 
             StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
             inOperation.setAllowNegativeQuantity(Constants.SAP_STATUS_NO);
             inOperation.setBaseLineNumber(line.getLineNum());
             inOperation.setBinAbsEntry(stockTransfer.getBinAbsTo());
-            inOperation.setBinActionType(Constants.BIN_ACTION_TYPE);
+            inOperation.setBinActionType(Constants.BIN_ACTION_TYPE_TO);
             inOperation.setQuantity(lineDTO.getQuantity().doubleValue());
 
             StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations binAllocations = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations();
@@ -888,14 +888,14 @@ public class StockTransferREST implements Serializable {
             outOperation.setAllowNegativeQuantity(Constants.SAP_STATUS_NO);
             outOperation.setBaseLineNumber(line.getLineNum());
             outOperation.setBinAbsEntry(stockTransfer.getBinAbsFrom());
-            outOperation.setBinActionType(Constants.BIN_ACTION_TYPE);
+            outOperation.setBinActionType(Constants.BIN_ACTION_TYPE_FROM);
             outOperation.setQuantity(lineDTO.getQuantity().doubleValue());
 
             StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
             inOperation.setAllowNegativeQuantity(Constants.SAP_STATUS_NO);
             inOperation.setBaseLineNumber(line.getLineNum());
             inOperation.setBinAbsEntry(stockTransfer.getBinAbsTo());
-            inOperation.setBinActionType(Constants.BIN_ACTION_TYPE);
+            inOperation.setBinActionType(Constants.BIN_ACTION_TYPE_TO);
             inOperation.setQuantity(lineDTO.getQuantity().doubleValue());
 
             StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations binAllocations = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations();
