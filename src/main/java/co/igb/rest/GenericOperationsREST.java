@@ -55,7 +55,8 @@ public class GenericOperationsREST {
     @GET
     @Path("warehouses/actives")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    public Response listActivesWarehouses(@HeaderParam("X-Company-Name") String companyName) {
-        return Response.ok(new ResponseDTO(0, warehouseFacade.listActiveWarehouses(companyName))).build();
+    public Response listActivesWarehouses(@HeaderParam("X-Company-Name") String companyName,
+                                          @HeaderParam("X-Pruebas") boolean pruebas) {
+        return Response.ok(new ResponseDTO(0, warehouseFacade.listActiveWarehouses(companyName, pruebas))).build();
     }
 }
