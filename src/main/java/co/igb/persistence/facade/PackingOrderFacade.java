@@ -267,9 +267,9 @@ public class PackingOrderFacade {
         StringBuilder sb = new StringBuilder();
 
         sb.append("SELECT ord.customer_id, ord.customer_name, ord.order_number, item.item_code, bin.bin_name, bin.bin_code, bin.bin_abs, bin.picked_qty, ord.idpacking_order ");
-        sb.append("FROM   igb.packing_order ord ");
-        sb.append("INNER  JOIN igb.packing_order_item item ON item.idpacking_order = ord.idpacking_order ");
-        sb.append("INNER  JOIN igb.packing_order_item_bin bin ON bin.idpacking_order_item = item.idpacking_order_item ");
+        sb.append("FROM   packing_order ord ");
+        sb.append("INNER  JOIN packing_order_item item ON item.idpacking_order = ord.idpacking_order ");
+        sb.append("INNER  JOIN packing_order_item_bin bin ON bin.idpacking_order_item = item.idpacking_order_item ");
         sb.append("WHERE  ord.status = 'open' ");
         sb.append("AND    bin.packed_qty < bin.picked_qty ");
         sb.append("AND    ord.company_name = '");

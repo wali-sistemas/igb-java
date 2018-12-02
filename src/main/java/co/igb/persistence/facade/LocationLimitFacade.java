@@ -10,7 +10,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 import java.util.List;
@@ -32,15 +31,19 @@ public class LocationLimitFacade {
     public LocationLimitFacade() {
     }
 
-    public List<LocationLimit> listLocationsLimits(String schema, boolean testing, String warehouseCode) {
-        EntityManager em = persistenceConf.chooseSchema(schema, testing, DB_TYPE);
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery cq = cb.createQuery(LocationLimit.class);
-        Root limite = cq.from(LocationLimit.class);
-        cq.where(cb.like(limite.get(LocationLimit_.ubicacion), warehouseCode));
+    public List<Object> listLocationsLimits(String schema, boolean pruebas, String warehouseCode) {
+        EntityManager em = persistenceConf.chooseSchema(schema, pruebas, DB_TYPE);
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT CONVERT(VARCHAR(30),Code) AS code, CONVERT(VARCHAR(30),Name) AS Name, ");
+        sb.append("       CONVERT(VARCHAR(20),U_Ubicacion) AS U_Ubicacion, CONVERT(VARCHAR(20),U_Item) AS U_Item, ");
+        sb.append("       CONVERT(INT,U_CantMinima) AS U_CantMinima, CONVERT(int,U_CantMaxima) AS U_CantMaxima ");
+        sb.append("FROM   [@LIMITES_UBICACION] ");
+        sb.append("WHERE  U_Ubicacion LIKE '");
+        sb.append(warehouseCode);
+        sb.append("%'");
 
         try {
-            return em.createQuery(cq).getResultList();
+            return em.createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException e) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al obtener los limites de las ubicaciones. ", e);

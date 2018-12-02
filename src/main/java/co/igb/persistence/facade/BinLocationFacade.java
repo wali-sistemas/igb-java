@@ -43,7 +43,7 @@ public class BinLocationFacade {
         sb.append(") saldo from obin ubic ");
         sb.append("where ubic.whscode = '");
         sb.append(whsCode);
-        sb.append("' and ubic.attr1val = 'CART' and ubic.disabled = 'N' ");
+        sb.append("' and ubic.attr1val = 'CART' and ubic.disabled = 'N' order by binCode asc");
 
         try {
             return persistenceConf.chooseSchema(schema, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();

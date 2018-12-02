@@ -64,7 +64,7 @@ public class InventoryFacade {
         StringBuilder sb = new StringBuilder();
 
         sb.append("SELECT location, MAX(date) ");
-        sb.append("FROM   igb.inventory ");
+        sb.append("FROM   inventory ");
         sb.append("WHERE  company = '");
         sb.append(schema);
         sb.append("' AND   location IN (");

@@ -65,6 +65,8 @@ public class Constants {
     public static final String BIN_TYPE_PICKING = "PICKING";
     public static final String DATABASE_TYPE_MYSQL = "myql";
     public static final String DATABASE_TYPE_MSSQL = "mssql";
+    public static final String BIN_ACTION_TYPE_FROM = "batFromWarehouse";
+    public static final String BIN_ACTION_TYPE_TO = "batToWarehouse";
 
     public static final String[] LDAP_ATTR_IDS = {"name", "givenName", "description", "sAMAccountname", "userPrincipalName", "sn", "distinguishedName", "cn", "mail", "memberOf"};
 }
