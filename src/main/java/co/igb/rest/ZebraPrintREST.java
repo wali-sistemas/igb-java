@@ -6,10 +6,7 @@ import co.igb.persistence.facade.PackingListRecordFacade;
 import co.igb.persistence.facade.PrinterFacade;
 import co.igb.persistence.facade.SalesOrderFacade;
 import co.igb.zebra.ZPLPrinter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -29,9 +26,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- *
  * @author dbotero
  */
 @Stateless
@@ -51,7 +51,10 @@ public class ZebraPrintREST {
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response printPackingList(Integer idPackingList, @PathParam("printer") String printerName, @HeaderParam("X-Company-Name") String companyName) {
+    public Response printPackingList(Integer idPackingList,
+                                     @PathParam("printer") String printerName,
+                                     @HeaderParam("X-Company-Name") String companyName,
+                                     @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Imprimiendo etiquetas para packingList #{0}", idPackingList);
 
         PrintService printService = getPrintService(printerName);
@@ -59,23 +62,23 @@ public class ZebraPrintREST {
             return Response.ok(new ResponseDTO(-1, "No se encontró la impresora [" + printerName + "] en el servidor.")).build();
         }
 
-        String orderNumbers = plFacade.listOrderNumbers(idPackingList, companyName);
+        String orderNumbers = plFacade.listOrderNumbers(idPackingList, companyName, pruebas);
         if (orderNumbers == null || orderNumbers.trim().isEmpty()) {
             return Response.ok(new ResponseDTO(-1, "Ocurrió un error al consultar los datos para imprimir la etiqueta. (Order Numbers)")).build();
         }
 
-        String numAtCards = soFacade.listNumAtCards(orderNumbers, companyName);
+        String numAtCards = soFacade.listNumAtCards(orderNumbers, companyName, pruebas);
         if (numAtCards == null || numAtCards.trim().isEmpty()) {
             return Response.ok(new ResponseDTO(-1, "Ocurrió un error al consultar los datos para imprimir la etiqueta. (NumAtCard)")).build();
         }
 
-        Object[] orderData = soFacade.retrieveStickerInfo(orderNumbers, companyName);
+        Object[] orderData = soFacade.retrieveStickerInfo(orderNumbers, companyName, pruebas);
         if (orderData == null || orderData.length == 0) {
             return Response.ok(new ResponseDTO(-1, "Ocurrió un error al consultar los datos para imprimir la etiqueta. (Order Data)")).build();
         }
 
         boolean allSucceeded = true;
-        Integer boxes = plFacade.obtainNumberOfBoxes(idPackingList, companyName);
+        Integer boxes = plFacade.obtainNumberOfBoxes(idPackingList, companyName, pruebas);
         for (int i = 1; i <= boxes; i++) {
             ZebraPrintDTO label = new ZebraPrintDTO();
             label.setBoxNumber(i);
@@ -102,7 +105,8 @@ public class ZebraPrintREST {
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response print(ZebraPrintDTO dto, @HeaderParam("X-Company-Name") String companyName) {
+    public Response print(ZebraPrintDTO dto,
+                          @HeaderParam("X-Company-Name") String companyName) {
         CONSOLE.log(Level.INFO, "Iniciando proceso de impresion {0}", dto);
         PrintService printService = getPrintService(dto.getPrinterName());
         if (printService == null) {
@@ -151,10 +155,11 @@ public class ZebraPrintREST {
     @GET
     @Path("enabled")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response listAppPrinters() {
+    public Response listAppPrinters(@HeaderParam("X-Company-Name") String companyName,
+                                    @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Listando impresoras habilitadas para web");
         try {
-            return Response.ok(new ResponseDTO(0, prFacade.findAll())).build();
+            return Response.ok(new ResponseDTO(0, prFacade.findAll(companyName, pruebas))).build();
         } catch (Exception e) {
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error al consultar las impresoras habilitadas para web. " + e.getMessage())).build();
         }

@@ -19,58 +19,64 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author dbotero
  */
 @Stateless
-public class AssignedOrderFacade extends AbstractFacade<AssignedOrder> {
+public class AssignedOrderFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(AssignedOrderFacade.class.getSimpleName());
-    private static final String DB_TYPE = "mysql";
+    private static final String DB_TYPE = Constants.DATABASE_TYPE_MYSQL;
 
     @EJB
     private PersistenceConf persistenceConf;
 
-    @Override
-    protected EntityManager getEntityManager() {
-        return persistenceConf.chooseSchema("MySQLPU", DB_TYPE);
-    }
-
     public AssignedOrderFacade() {
-        super(AssignedOrder.class);
+
     }
 
-    public List<AssignedOrder> listOpenAssignations(String companyName) {
-        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName, DB_TYPE).getCriteriaBuilder();
+    public void create(AssignedOrder assignation, String companyName, boolean testing) {
+        persistenceConf.chooseSchema(companyName, testing, DB_TYPE).persist(assignation);
+    }
+
+    public AssignedOrder edit(AssignedOrder assignation, String companyName, boolean testing) {
+        return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).merge(assignation);
+    }
+
+    public List<AssignedOrder> listOpenAssignations(String companyName, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<AssignedOrder> cq = cb.createQuery(AssignedOrder.class);
         Root<AssignedOrder> root = cq.from(AssignedOrder.class);
         Predicate statusOpen = cb.equal(root.get(AssignedOrder_.status), "open");
         Predicate statusWarning = cb.equal(root.get(AssignedOrder_.status), "warning");
         cq.where(cb.or(statusOpen, statusWarning), cb.equal(root.get(AssignedOrder_.company), companyName));
         try {
-            return persistenceConf.chooseSchema(companyName, DB_TYPE).createQuery(cq).getResultList();
+            return em.createQuery(cq).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ordenes de venta asignadas abiertas. ", e);
-            return new ArrayList();
+            return new ArrayList<>();
         }
     }
 
-    public List<AssignedOrder> listClosedAssignations(String companyName) {
-        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName, DB_TYPE).getCriteriaBuilder();
+    public List<AssignedOrder> listClosedAssignations(String companyName, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<AssignedOrder> cq = cb.createQuery(AssignedOrder.class);
         Root<AssignedOrder> root = cq.from(AssignedOrder.class);
         Predicate statusClosed = cb.equal(root.get(AssignedOrder_.status), Constants.STATUS_CLOSED);
         cq.where(statusClosed, cb.equal(root.get(AssignedOrder_.company), companyName));
         try {
-            return persistenceConf.chooseSchema(companyName, DB_TYPE).createQuery(cq).getResultList();
+            return em.createQuery(cq).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ordenes de venta asignadas cerradas. ", e);
-            return new ArrayList();
+            return new ArrayList<>();
         }
     }
 
-    public List<AssignedOrder> listOpenAssignationsByUserAndCompany(String username, Integer orderNumber, String company) {
-        CriteriaBuilder cb = persistenceConf.chooseSchema(company, DB_TYPE).getCriteriaBuilder();
+    public List<AssignedOrder> listOpenAssignationsByUserAndCompany(
+            String username, Integer orderNumber, String companyName, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<AssignedOrder> cq = cb.createQuery(AssignedOrder.class);
         Root<AssignedOrder> root = cq.from(AssignedOrder.class);
 
@@ -78,7 +84,7 @@ public class AssignedOrderFacade extends AbstractFacade<AssignedOrder> {
         //Predicate statusWarning = cb.equal(root.get(AssignedOrder_.status), "warning");
         //Predicate status = cb.or(statusOpen, statusWarning);
         Predicate userOwns = cb.equal(root.get(AssignedOrder_.empId), username);
-        Predicate companyFilter = cb.equal(root.get(AssignedOrder_.company), company);
+        Predicate companyFilter = cb.equal(root.get(AssignedOrder_.company), companyName);
 
         if (orderNumber != null && orderNumber > 0) {
             Predicate orderFilter = cb.equal(root.get(AssignedOrder_.orderNumber), orderNumber);
@@ -88,20 +94,21 @@ public class AssignedOrderFacade extends AbstractFacade<AssignedOrder> {
         }
 
         try {
-            return persistenceConf.chooseSchema(company, DB_TYPE).createQuery(cq).getResultList();
+            return em.createQuery(cq).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ordenes de venta asignadas abiertas. ", e);
-            return new ArrayList();
+            return new ArrayList<>();
         }
     }
 
-    public AssignedOrder findByOrderNumber(Integer orderNumber, String companyName) {
-        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName, DB_TYPE).getCriteriaBuilder();
+    public AssignedOrder findByOrderNumber(Integer orderNumber, String companyName, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<AssignedOrder> cq = cb.createQuery(AssignedOrder.class);
         Root<AssignedOrder> root = cq.from(AssignedOrder.class);
         cq.where(cb.equal(root.get(AssignedOrder_.orderNumber), orderNumber), cb.equal(root.get(AssignedOrder_.company), companyName));
         try {
-            return persistenceConf.chooseSchema(companyName, DB_TYPE).createQuery(cq).getSingleResult();
+            return em.createQuery(cq).getSingleResult();
         } catch (NoResultException e) {
             return null;
         } catch (Exception e) {
@@ -110,8 +117,9 @@ public class AssignedOrderFacade extends AbstractFacade<AssignedOrder> {
         }
     }
 
-    public Integer countOrderEmployeeAssigneed(String user, String companyName) {
-        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName, DB_TYPE).getCriteriaBuilder();
+    public Integer countOrderEmployeeAssigneed(String user, String companyName, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(Integer.class);
         Root root = cq.from(AssignedOrder.class);
 
@@ -119,22 +127,23 @@ public class AssignedOrderFacade extends AbstractFacade<AssignedOrder> {
         cq.select(cb.count(root.get(AssignedOrder_.id)));
 
         try {
-            return ((Long) persistenceConf.chooseSchema(companyName, DB_TYPE).createQuery(cq).getSingleResult()).intValue();
+            return ((Long) em.createQuery(cq).getSingleResult()).intValue();
         } catch (NoResultException e) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ordenes asignadas por empleado. ", e);
         }
         return 0;
     }
-  
-    public boolean enablePicking(Integer orderNumber, String companyName) {
-        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName, DB_TYPE).getCriteriaBuilder();
+
+    public boolean enablePicking(Integer orderNumber, String companyName, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaUpdate<AssignedOrder> cu = cb.createCriteriaUpdate(AssignedOrder.class);
         Root<AssignedOrder> root = cu.from(AssignedOrder.class);
         cu.set(root.get(AssignedOrder_.status), "open");
         cu.where(cb.equal(root.get(AssignedOrder_.orderNumber), orderNumber));
         try {
-            int rows = persistenceConf.chooseSchema(companyName, DB_TYPE).createQuery(cu).executeUpdate();
+            int rows = em.createQuery(cu).executeUpdate();
             if (rows == 1) {
                 return true;
             }

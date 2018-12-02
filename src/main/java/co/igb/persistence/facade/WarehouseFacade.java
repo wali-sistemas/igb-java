@@ -1,6 +1,7 @@
 package co.igb.persistence.facade;
 
 import co.igb.dto.WarehouseDTO;
+import co.igb.util.Constants;
 import co.igb.persistence.entity.Warehouse;
 import co.igb.persistence.entity.Warehouse_;
 
@@ -21,7 +22,7 @@ import java.util.logging.Logger;
 @Stateless
 public class WarehouseFacade {
     private static final Logger CONSOLE = Logger.getLogger(WarehouseFacade.class.getSimpleName());
-    private static final String DB_TYPE = "sap";
+    private static final String DB_TYPE = Constants.DATABASE_TYPE_MSSQL;
 
     @EJB
     private PersistenceConf persistenceConf;
@@ -29,11 +30,11 @@ public class WarehouseFacade {
     public WarehouseFacade() {
     }
 
-    public List<WarehouseDTO> listBinEnabledWarehouses(String companyName) {
+    public List<WarehouseDTO> listBinEnabledWarehouses(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(whscode as varchar(5)) as code, cast(whsname as varchar(100)) as name from owhs where binactivat = 'Y'");
         try {
-            List<Object[]> results = persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            List<Object[]> results = persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
             List<WarehouseDTO> warehouses = new ArrayList<>();
             for (Object[] row : results) {
                 WarehouseDTO warehouse = new WarehouseDTO();
@@ -48,8 +49,8 @@ public class WarehouseFacade {
         }
     }
 
-    public List<Warehouse> listActiveWarehouses(String companyName) {
-        EntityManager em = persistenceConf.chooseSchema(companyName, DB_TYPE);
+    public List<Warehouse> listActiveWarehouses(String companyName, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Warehouse> cq = cb.createQuery(Warehouse.class);
         Root<Warehouse> root = cq.from(Warehouse.class);

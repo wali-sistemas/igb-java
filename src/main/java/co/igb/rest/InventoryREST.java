@@ -49,8 +49,10 @@ public class InventoryREST {
     @Path("inventoryopen/{warehouse}")
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response findLastOpenInventory(@PathParam("warehouse") String warehouse, @HeaderParam("X-Company-Name") String companyName) {
-        Inventory inventory = inventoryFacade.findLastInventoryOpen(warehouse, companyName);
+    public Response findLastOpenInventory(@PathParam("warehouse") String warehouse,
+                                          @HeaderParam("X-Company-Name") String companyName,
+                                          @HeaderParam("X-Pruebas") boolean pruebas) {
+        Inventory inventory = inventoryFacade.findLastInventoryOpen(warehouse, companyName, pruebas);
 
         if (inventory != null && inventory.getId() != null && inventory.getId() != 0) {
             return Response.ok(inventory).build();
@@ -64,7 +66,9 @@ public class InventoryREST {
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response addItem(InventoryDTO inventory, @HeaderParam("X-Company-Name") String companyName) {
+    public Response addItem(InventoryDTO inventory,
+                            @HeaderParam("X-Company-Name") String companyName,
+                            @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Agregando item al inventario {0}", inventory);
 
         InventoryDetail detail = new InventoryDetail();
@@ -75,7 +79,7 @@ public class InventoryREST {
         detail.setQuantity(inventory.getQuantity());
 
         try {
-            inventoryDetailFacade.create(detail);
+            inventoryDetailFacade.addDetail(detail, companyName, pruebas);
             CONSOLE.log(Level.INFO, "Se agrego el detalle con id {0}", detail.getIdInventoryDetail());
             return Response.ok(0).build();
         } catch (Exception e) {
@@ -91,8 +95,9 @@ public class InventoryREST {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response findInventoryDetail(@PathParam("warehouse") String warehouse,
                                         @PathParam("idinventory") Integer idInventory,
-                                        @HeaderParam("X-Company-Name") String companyName) {
-        List<InventoryDetail> details = inventoryDetailFacade.findInventoryDetail(idInventory, companyName);
+                                        @HeaderParam("X-Company-Name") String companyName,
+                                        @HeaderParam("X-Pruebas") boolean pruebas) {
+        List<InventoryDetail> details = inventoryDetailFacade.findInventoryDetail(idInventory, companyName, pruebas);
 
         if (details != null && !details.isEmpty()) {
             return Response.ok(details).build();
@@ -105,12 +110,14 @@ public class InventoryREST {
     @Path("inventoryrandom/{warehouse}")
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response inventoryRandom(@PathParam("warehouse") String warehouse, @HeaderParam("X-Company-Name") String companyName) {
+    public Response inventoryRandom(@PathParam("warehouse") String warehouse,
+                                    @HeaderParam("X-Company-Name") String companyName,
+                                    @HeaderParam("X-Pruebas") boolean pruebas) {
         /*Se consultan las ubicaciones con saldo*/
-        List<String> locations = binLocationFacade.listBinLocations(companyName, warehouse);
+        List<String> locations = binLocationFacade.listBinLocations(companyName, pruebas, warehouse);
 
         if (locations != null && !locations.isEmpty()) {
-            List<Object[]> datos = inventoryFacade.obtenerUltimosInventarios(companyName, locations, companyName);
+            List<Object[]> datos = inventoryFacade.obtenerUltimosInventarios(companyName, locations, companyName, pruebas);
 
             if (datos != null && !datos.isEmpty()) {
                 for (Object[] o : datos) {

@@ -1,6 +1,7 @@
 package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.StockTransferDetail;
+import co.igb.util.Constants;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -14,14 +15,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author YEIJARA
  */
 @Stateless
 public class StockTransferDetailFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(StockTransferDetailFacade.class.getSimpleName());
-    private static final String DB_TYPE = "sap";
+    private static final String DB_TYPE = Constants.DATABASE_TYPE_MSSQL;
 
     @EJB
     private PersistenceConf persistenceConf;
@@ -29,8 +29,8 @@ public class StockTransferDetailFacade {
     public StockTransferDetailFacade() {
     }
 
-    public List<StockTransferDetail> findStockTransfer(Integer docEntry, String schema) {
-        EntityManager em = persistenceConf.chooseSchema(schema,DB_TYPE);
+    public List<StockTransferDetail> findStockTransfer(Integer docEntry, String schema, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(schema, testing, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(StockTransferDetail.class);
         Root stock = cq.from(StockTransferDetail.class);

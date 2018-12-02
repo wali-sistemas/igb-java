@@ -2,6 +2,7 @@ package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.SaldoUbicacion;
 import co.igb.persistence.entity.SaldoUbicacion_;
+import co.igb.util.Constants;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -22,7 +23,7 @@ import java.util.logging.Logger;
 public class BinLocationFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(BinLocationFacade.class.getSimpleName());
-    private static final String DB_TYPE = "sap";
+    private static final String DB_TYPE = Constants.DATABASE_TYPE_MSSQL;
 
     @EJB
     private PersistenceConf persistenceConf;
@@ -30,7 +31,7 @@ public class BinLocationFacade {
     public BinLocationFacade() {
     }
 
-    public List listPickingCarts(String whsCode, String schema) {
+    public List listPickingCarts(String whsCode, String schema, boolean testing) {
         CONSOLE.log(Level.INFO, "Listando carritos de picking para el almacen {0} y la empresa {1}", new Object[]{whsCode, schema});
 
         StringBuilder sb = new StringBuilder();
@@ -45,27 +46,27 @@ public class BinLocationFacade {
         sb.append("' and ubic.attr1val = 'CART' and ubic.disabled = 'N' order by binCode asc");
 
         try {
-            return persistenceConf.chooseSchema(schema, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(schema, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los carritos de picking. ", e);
             return new ArrayList();
         }
     }
 
-    public Object[] getBinCodeAndName(Long binAbs, String schema) {
+    public Object[] getBinCodeAndName(Long binAbs, String schema, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(BinCode as varchar(40)) BinCode, cast(Descr as varchar(45)) BinName from OBIN where AbsEntry = ");
         sb.append(binAbs);
         try {
-            return (Object[]) persistenceConf.chooseSchema(schema, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (Object[]) persistenceConf.chooseSchema(schema, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el codigo y nombre de la ubicacion. ", e);
             return null;
         }
     }
 
-    public List<SaldoUbicacion> findLocationBalance(String binCode, String whsCode, String schema) {
-        EntityManager em = persistenceConf.chooseSchema(schema, DB_TYPE);
+    public List<SaldoUbicacion> findLocationBalance(String binCode, String whsCode, String schema, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(schema, testing, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<SaldoUbicacion> cq = cb.createQuery(SaldoUbicacion.class);
         Root<SaldoUbicacion> saldo = cq.from(SaldoUbicacion.class);
@@ -84,8 +85,8 @@ public class BinLocationFacade {
         return null;
     }
 
-    public List<SaldoUbicacion> findLocationBalanceInventory(Integer absEntry, String whsCode, String schema) {
-        EntityManager em = persistenceConf.chooseSchema(schema, DB_TYPE);
+    public List<SaldoUbicacion> findLocationBalanceInventory(Integer absEntry, String whsCode, String schema, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(schema, testing, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<SaldoUbicacion> cq = cb.createQuery(SaldoUbicacion.class);
         Root<SaldoUbicacion> saldo = cq.from(SaldoUbicacion.class);
@@ -105,7 +106,7 @@ public class BinLocationFacade {
         return null;
     }
 
-    public Integer getBinAbs(String binCode, String schema) {
+    public Integer getBinAbs(String binCode, String schema, boolean testing) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("SELECT CAST(ubic.absentry AS INT) binAbs ");
@@ -115,42 +116,42 @@ public class BinLocationFacade {
         sb.append("'");
 
         try {
-            return (Integer) persistenceConf.chooseSchema(schema, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (Integer) persistenceConf.chooseSchema(schema, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el id de una ubicacion. ", e);
             return null;
         }
     }
 
-    public List<Object[]> findInventoryLocationId(String companyName) {
+    public List<Object[]> findInventoryLocationId(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(whscode as varchar(2)) whsCode, cast(absentry as int) absEntry from obin where attr1val = 'INVENTORY' and Disabled = 'N'");
         try {
-            return (List<Object[]>) persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return (List<Object[]>) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ubicaciones de inventario para la empresa " + companyName, e);
             return null;
         }
     }
 
-    public List<Object[]> findReceptionLocations(String companyName) {
+    public List<Object[]> findReceptionLocations(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select TOP 1 cast(whscode as varchar(2)) whsCode, cast(absentry as int) absEntry from obin where sl1code = 'RECEPTION' and Disabled = 'N'");
         try {
-            return (List<Object[]>) persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return (List<Object[]>) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ubicaciones de recepcion para la empresa " + companyName, e);
             return null;
         }
     }
 
-    public Long findPackingLocation(String warehouseCode, String companyName) {
+    public Long findPackingLocation(String warehouseCode, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select TOP 1 cast(absentry as int) absEntry from obin where sl1code = 'PACKING' and Disabled = 'N' and whscode = '");
         sb.append(warehouseCode);
         sb.append("'");
         try {
-            return (Long) persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (Long) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE,
                     "Ocurrio un error al consultar la ubicacion de packing para la empresa " + companyName +
@@ -159,7 +160,7 @@ public class BinLocationFacade {
         }
     }
 
-    public List<String> listBinLocations(String schema, String whsCode) {
+    public List<String> listBinLocations(String schema, boolean testing, String whsCode) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("SELECT CONVERT(VARCHAR(100), BinCode) AS ubicacion ");
@@ -172,28 +173,28 @@ public class BinLocationFacade {
         sb.append("ORDER BY t.saldo DESC ");
 
         try {
-            return persistenceConf.chooseSchema(schema, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(schema, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ubicaciones. ", e);
             return null;
         }
     }
 
-    public Integer getTotalQuantity(Long binAbs, String itemCode, String companyName) {
+    public Integer getTotalQuantity(Long binAbs, String itemCode, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(OnHandQty as int) qty from oibq where itemcode = '");
         sb.append(itemCode);
         sb.append("' and binabs = ");
         sb.append(binAbs);
         try {
-            return (Integer) persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el saldo de un item por ubicacion. ", e);
             return 0;
         }
     }
 
-    public List<Object[]> findLocationsResupply(String whsCode, String companyName) {
+    public List<Object[]> findLocationsResupply(String whsCode, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("SELECT DISTINCT CONVERT(INT, ubicacion.AbsEntry) AS absEntry, CONVERT(VARCHAR(50), ubicacion.BinCode) AS binCode ");
@@ -209,14 +210,14 @@ public class BinLocationFacade {
         sb.append("ORDER  BY binCode ");
 
         try {
-            return persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al obtener las ubicaciones para re-abastecer. ", e);
             return null;
         }
     }
 
-    public List<String> findItemsLocationResupply(String location, String whsCode, String companyName) {
+    public List<String> findItemsLocationResupply(String location, String whsCode, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("SELECT DISTINCT CONVERT(VARCHAR(50), saldo.ItemCode) AS itemCode, CONVERT(INT, limite.u_cantminima - saldo.OnHandQty) AS quantity, ");
@@ -235,14 +236,14 @@ public class BinLocationFacade {
         sb.append("' ");
 
         try {
-            return persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al obtener las ubicaciones para re-abastecer. ", e);
             return null;
         }
     }
 
-    public List<Object[]> listLocationsStorageResupply(String itemCode, String companyName, String whsCode) {
+    public List<Object[]> listLocationsStorageResupply(String itemCode, String companyName, boolean testing, String whsCode) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("SELECT CONVERT(INT, ubicacion.AbsEntry) AS absEntry, CONVERT(VARCHAR(50), ubicacion.BinCode) AS BinCode, CONVERT(INT, saldo.OnHandQty) AS OnHandQty ");
@@ -258,7 +259,7 @@ public class BinLocationFacade {
         sb.append("' ORDER  BY ubicacion.attr2val, ubicacion.attr3val ");
 
         try {
-            return persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException e) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ubicaciones para resurtir. ", e);
@@ -266,13 +267,13 @@ public class BinLocationFacade {
         return null;
     }
 
-    public String getBinWarehouse(Long binAbs, String companyName) {
+    public String getBinWarehouse(Long binAbs, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(whscode as varchar(2)) whscode from obin where absentry = ");
         sb.append(binAbs);
 
         try {
-            return (String) persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (String) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
             return null;
         }

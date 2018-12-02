@@ -58,9 +58,10 @@ public class ReportREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response obtainReportsOrders(@HeaderParam("X-Company-Name") String companyName,
-                                        @HeaderParam("X-Warehouse-Code") String warehouseCode) {
-        List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, companyName, warehouseCode);
-        List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations(companyName);
+                                        @HeaderParam("X-Warehouse-Code") String warehouseCode,
+                                        @HeaderParam("X-Pruebas") boolean pruebas) {
+        List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, companyName, pruebas, warehouseCode);
+        List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations(companyName, pruebas);
 
         Integer[] contador = new Integer[]{0, 0};
         for (SalesOrderDTO s : orders) {
@@ -89,12 +90,13 @@ public class ReportREST implements Serializable {
     @Path("reports-employee-assigned")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response obtainReportsEmployeeAssigned(@HeaderParam("X-Company-Name") String companyName) {
+    public Response obtainReportsEmployeeAssigned(@HeaderParam("X-Company-Name") String companyName,
+                                                  @HeaderParam("X-Pruebas") boolean pruebas) {
         List<UserDTO> users = authenticator.listEmployeesInGroup(applicationBean.obtenerValorPropiedad("igb.employee.group"));
 
         if (users != null && !users.isEmpty()) {
             for (UserDTO u : users) {
-                u.setOrdenesAsignadas(assignedOrderFacade.countOrderEmployeeAssigneed(u.getUsername(), companyName));
+                u.setOrdenesAsignadas(assignedOrderFacade.countOrderEmployeeAssigneed(u.getUsername(), companyName, pruebas));
             }
         }
 
@@ -105,15 +107,16 @@ public class ReportREST implements Serializable {
     @Path("reports-picking-progress")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response listPickingProgress(@HeaderParam("X-Company-Name") String companyName) {
+    public Response listPickingProgress(@HeaderParam("X-Company-Name") String companyName,
+                                        @HeaderParam("X-Pruebas") boolean pruebas) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd");
-        List<Integer> pickings = pickingRecordFacade.listPickingsRecords(companyName);
+        List<Integer> pickings = pickingRecordFacade.listPickingsRecords(companyName, pruebas);
         List<Object[]> ordenes = new ArrayList<>();
 
         if (pickings != null && !pickings.isEmpty()) {
             for (Integer l : pickings) {
                 // Validar si el registro ya no fue registrado
-                ReportPickingProgress rpp = reportPickingProgressFacade.obtainReportOrder(l, companyName);
+                ReportPickingProgress rpp = reportPickingProgressFacade.obtainReportOrder(l, companyName, pruebas);
 
                 if (rpp != null && rpp.getOrderNumber() != null && rpp.getOrderNumber() != 0) {
                     ordenes.add(new Object[]{l, rpp.getPromedio(), rpp.getTotalTiempo()});
@@ -126,7 +129,7 @@ public class ReportREST implements Serializable {
                     long time2;
                     double totalTiempo = 0.0;
                     double promedio = 0.0;
-                    List<PickingRecord> datos = pickingRecordFacade.listPicking(l, companyName);
+                    List<PickingRecord> datos = pickingRecordFacade.listPicking(l, companyName, pruebas);
 
                     if (datos != null && !datos.isEmpty()) {
                         for (int i = 0; i < datos.size(); i++) {
@@ -184,7 +187,7 @@ public class ReportREST implements Serializable {
                     }
 
                     // Si la orden ya esta cerrada se hace un registro en la base de datos
-                    AssignedOrder order = assignedOrderFacade.findByOrderNumber(l, companyName);
+                    AssignedOrder order = assignedOrderFacade.findByOrderNumber(l, companyName, pruebas);
 
                     if (order != null && order.getId() != null && order.getId() != 0 && order.getStatus().equals(Constants.STATUS_CLOSED)) {
                         ReportPickingProgress progress = new ReportPickingProgress();
@@ -198,7 +201,7 @@ public class ReportREST implements Serializable {
                         progress.setTotalTiempo(totalTiempo);
 
                         try {
-                            reportPickingProgressFacade.create(progress);
+                            reportPickingProgressFacade.create(progress, companyName, pruebas);
                         } catch (Exception ignored) {
                         }
                     }
@@ -214,9 +217,10 @@ public class ReportREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response obtainReportsOrdersByClient(@HeaderParam("X-Company-Name") String companyName,
-                                                @HeaderParam("X-Warehouse-Code") String warehouseCode) {
-        List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, companyName, warehouseCode);
-        List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations(companyName);
+                                                @HeaderParam("X-Warehouse-Code") String warehouseCode,
+                                                @HeaderParam("X-Pruebas") boolean pruebas) {
+        List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, companyName, pruebas, warehouseCode);
+        List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations(companyName, pruebas);
 
         List<Object[]> datos = new ArrayList<>();
         for (SalesOrderDTO s : orders) {
