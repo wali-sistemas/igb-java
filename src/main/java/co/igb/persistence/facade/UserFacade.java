@@ -1,29 +1,35 @@
 package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.User;
+import co.igb.util.Constants;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
 
 /**
  * @author dbotero
  */
 @Stateless
-public class UserFacade extends AbstractFacade<User> {
+public class UserFacade {
 
-    private static final String DB_TYPE = "mysql";
+    private static final String DB_TYPE = Constants.DATABASE_TYPE_MYSQL;
 
     @EJB
     private PersistenceConf persistenceConf;
 
-    @Override
-    protected EntityManager getEntityManager() {
-        return persistenceConf.chooseSchema("MySQLPU", DB_TYPE);
+    public UserFacade() {
     }
 
-    public UserFacade() {
-        super(User.class);
+    public void create(User user, String companyName, boolean testing) {
+        persistenceConf.chooseSchema(companyName, testing, DB_TYPE).persist(user);
+    }
+
+    public User edit(User user, String companyName, boolean testing) {
+        return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).merge(user);
+    }
+
+    public User find(String username, String companyName, boolean testing) {
+        return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).find(User.class, username);
     }
 
 }

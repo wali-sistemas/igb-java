@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 public class SalesOrderFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(SalesOrderFacade.class.getSimpleName());
-    private static final String DB_TYPE = "sap";
+    private static final String DB_TYPE = "mssql";
 
     @EJB
     private PersistenceConf persistenceConf;
@@ -31,38 +31,38 @@ public class SalesOrderFacade {
     public SalesOrderFacade() {
     }
 
-    public String getOrderStatus(Integer docNum, String schemaName) {
+    public String getOrderStatus(Integer docNum, String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(DocStatus as varchar(1)) docstatus from ORDR where DocNum = ");
         sb.append(docNum);
         try {
-            return (String) persistenceConf.chooseSchema(schemaName, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (String) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el estado de la orden " + docNum + ". ", e);
             return null;
         }
     }
 
-    public BigDecimal getValorDeclarado(Integer docNum, String schemaName) {
+    public BigDecimal getValorDeclarado(Integer docNum, String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast((DocTotal + DiscSum + WtSum) - VatSum - TotalExpns - RoundDif AS numeric(18,2)) AS valorDeclarado ");
         sb.append("from ORDR where DocNum = ");
         sb.append(docNum);
         try {
-            return (BigDecimal) persistenceConf.chooseSchema(schemaName, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (BigDecimal) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el valor declarado para la orden " + docNum + ".", e);
             return new BigDecimal(0);
         }
     }
 
-    public String getOrderComment(Integer docNum, String schemaName) {
+    public String getOrderComment(Integer docNum, String schemaName, boolean testing) {
         if (docNum != null && schemaName != null && !schemaName.isEmpty()) {
             StringBuilder sb = new StringBuilder();
             sb.append("select cast(comments as varchar(254)) comments from ORDR where DocNum = ");
             sb.append(docNum);
             try {
-                return (String) persistenceConf.chooseSchema(schemaName, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+                return (String) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el comentario de la orden " + docNum + ".", e);
                 return null;
@@ -71,12 +71,12 @@ public class SalesOrderFacade {
         return null;
     }
 
-    public Integer getOrderDocEntry(Integer docNum, String schemaName) {
+    public Integer getOrderDocEntry(Integer docNum, String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select DocEntry from ORDR where DocNum = ");
         sb.append(docNum);
         try {
-            return (Integer) persistenceConf.chooseSchema(schemaName, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (Integer) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el docentry de la orden. ", e);
             return -1;
@@ -84,7 +84,7 @@ public class SalesOrderFacade {
     }
 
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public List<SalesOrderDTO> findOpenOrders(boolean showAll, String schemaName, String warehouseCode) {
+    public List<SalesOrderDTO> findOpenOrders(boolean showAll, String schemaName, boolean testing, String warehouseCode) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("select distinct cast(enc.docnum as varchar(10)) docnum, ");
@@ -103,7 +103,7 @@ public class SalesOrderFacade {
 
         List<SalesOrderDTO> orders = new ArrayList<>();
         try {
-            for (Object[] row : (List<Object[]>) persistenceConf.chooseSchema(schemaName, DB_TYPE).createNativeQuery(sb.toString()).getResultList()) {
+            for (Object[] row : (List<Object[]>) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList()) {
                 SalesOrderDTO order = new SalesOrderDTO();
                 order.setDocNum((String) row[0]);
                 order.setDocDate((Date) row[1]);
@@ -123,7 +123,8 @@ public class SalesOrderFacade {
         return orders;
     }
 
-    public List<Object[]> findOrdersStockAvailability(Integer orderNumber, List<String> itemCodes, String warehouseCode, String schemaName) {
+    public List<Object[]> findOrdersStockAvailability(Integer orderNumber, List<String> itemCodes, String warehouseCode,
+                                                      String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(detalle.itemCode as varchar(20)) itemCode, cast(detalle.openQty as int) openQuantity, cast(detalle.quantity as int) quantity, ");
         sb.append("cast(saldo.binabs as int) binAbs, cast(saldo.onhandqty as int) available, cast(ubicacion.bincode as varchar(50)) binCode, ");
@@ -150,14 +151,14 @@ public class SalesOrderFacade {
 
         CONSOLE.log(Level.FINE, sb.toString());
         try {
-            return persistenceConf.chooseSchema(schemaName, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar el inventario para lis items de las ordenes asignadas. ", e);
             return new ArrayList();
         }
     }
 
-    public List<Object[]> findOrdersById(List<Integer> orderIds, String schemaName) {
+    public List<Object[]> findOrdersById(List<Integer> orderIds, String schemaName, boolean testing) {
         if (orderIds == null || orderIds.isEmpty()) {
             return new ArrayList();
         }
@@ -173,14 +174,14 @@ public class SalesOrderFacade {
         sb.deleteCharAt(sb.length() - 1);
         sb.append(")");
         try {
-            return persistenceConf.chooseSchema(schemaName, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al buscar ordenes por id. ", e);
             return new ArrayList();
         }
     }
 
-    public Map<String, Integer> listPendingItems(Integer orderNumber, String schemaName) {
+    public Map<String, Integer> listPendingItems(Integer orderNumber, String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(det.ItemCode as varchar(20)) itemcode, cast(sum(det.OpenQty) as int) pendingQuantity ");
         sb.append("from ORDR enc inner join RDR1 det on det.docentry = enc.docentry and det.OpenQty > 0 ");
@@ -190,7 +191,7 @@ public class SalesOrderFacade {
         CONSOLE.log(Level.FINE, sb.toString());
         try {
             Map<String, Integer> results = new HashMap<>();
-            List<Object[]> rows = (List<Object[]>) persistenceConf.chooseSchema(schemaName, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            List<Object[]> rows = (List<Object[]>) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
             for (Object[] col : rows) {
                 results.put((String) col[0], (Integer) col[1]);
             }
@@ -204,20 +205,20 @@ public class SalesOrderFacade {
         }
     }
 
-    public Object queryCustomer(Integer orderNumber, String schemaName) {
+    public Object queryCustomer(Integer orderNumber, String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(cardcode as varchar(20)) cardcode, cast(cardname as varchar(100)) cardname ");
         sb.append("from ORDR where docnum = ");
         sb.append(orderNumber);
         try {
-            return persistenceConf.chooseSchema(schemaName, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el cliente para la orden. ", e);
             return null;
         }
     }
 
-    public Long getLineNum(Integer orderNumber, String itemcode, String companyName) {
+    public Long getLineNum(Integer orderNumber, String itemcode, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select top 1 det.linenum from ordr enc inner join rdr1 det on det.docentry = enc.docentry ");
         sb.append("where enc.docnum = ");
@@ -226,14 +227,14 @@ public class SalesOrderFacade {
         sb.append(itemcode);
         sb.append("' and linestatus = 'O'");
         try {
-            return ((Integer) persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult()).longValue();
+            return ((Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult()).longValue();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el numero de linea de una orden. ", e);
             return -1L;
         }
     }
 
-    public List<Object[]> listRemainingStock(Integer orderNumber, String warehouseCode, String companyName) {
+    public List<Object[]> listRemainingStock(Integer orderNumber, String warehouseCode, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(detalle.itemCode as varchar(20)) itemCode, cast(detalle.openQty as int) openQuantity ");
         sb.append(", cast(detalle.quantity as int) quantity, cast(detalle.Dscription as varchar(100)) itemName ");
@@ -248,14 +249,14 @@ public class SalesOrderFacade {
         sb.append("' and detalle.itemcode = saldo.itemcode where orden.docnum = ");
         sb.append(orderNumber);
         try {
-            return persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el saldo disponible para la orden. ", e);
             return new ArrayList<>();
         }
     }
 
-    public Object[] retrieveStickerInfo(String orderNumbers, String companyName) {
+    public Object[] retrieveStickerInfo(String orderNumbers, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select distinct cast(o.cardname as varchar(100)) cardname, cast(o.address2 as varchar(220)) address, ");
         sb.append("cast(transp.name as varchar(50)) trans from ordr o inner join [@transp] transp on transp.code = o.u_transp ");
@@ -263,20 +264,20 @@ public class SalesOrderFacade {
         sb.append(orderNumbers);
         sb.append(")");
         try {
-            return (Object[]) persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (Object[]) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los datos para imprimir la etiqueta de packing. ", e);
             return null;
         }
     }
 
-    public String listNumAtCards(String orderNumbers, String companyName) {
+    public String listNumAtCards(String orderNumbers, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(numatcard as varchar(10)) from ordr where docnum in (");
         sb.append(orderNumbers);
         sb.append(") and numatcard is not null");
         try {
-            List<String> numAtCardList = (List<String>) persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            List<String> numAtCardList = (List<String>) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
             StringBuilder numAtCardText = new StringBuilder();
             for (String numAtCard : numAtCardList) {
                 numAtCardText.append(numAtCard);

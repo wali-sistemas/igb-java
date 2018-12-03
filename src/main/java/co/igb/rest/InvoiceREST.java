@@ -60,16 +60,19 @@ public class InvoiceREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response createInvoiceDocument(Integer deliveryDocEntry, @HeaderParam("X-Company-Name") String companyName, @HeaderParam("X-Employee") String userName) {
+    public Response createInvoiceDocument(Integer deliveryDocEntry,
+                                          @HeaderParam("X-Company-Name") String companyName,
+                                          @HeaderParam("X-Employee") String userName,
+                                          @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Creando factura para deliveryNoteDocEntry={0}", deliveryDocEntry);
 
         ResponseDTO responseInvoice = null;
         String documentType = IGBUtils.getProperParameter(appBean.obtenerValorPropiedad("igb.invoice.type"), companyName);
         CONSOLE.log(Level.INFO, "La empresa {0} usa el tipo de document {1}", new Object[]{companyName, documentType});
         if (documentType.equals("invoice")) {
-            responseInvoice = (ResponseDTO) createInvoice(deliveryDocEntry, companyName, userName).getEntity();
+            responseInvoice = (ResponseDTO) createInvoice(deliveryDocEntry, companyName, userName, pruebas).getEntity();
         } else {
-            responseInvoice = (ResponseDTO) createDraft(deliveryDocEntry, companyName, userName).getEntity();
+            responseInvoice = (ResponseDTO) createDraft(deliveryDocEntry, companyName, userName, pruebas).getEntity();
         }
         return Response.ok(responseInvoice).build();
     }
@@ -79,10 +82,13 @@ public class InvoiceREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response createDraft(Integer deliveryDocEntry, @HeaderParam("X-Company-Name") String companyName, @HeaderParam("X-Employee") String userName) {
+    public Response createDraft(Integer deliveryDocEntry,
+                                @HeaderParam("X-Company-Name") String companyName,
+                                @HeaderParam("X-Employee") String userName,
+                                @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Creando borrador de factura para deliveryNoteDocEntry={0}", deliveryDocEntry);
         //Consultar entrega
-        List<Object[]> deliveryData = dnFacade.getDeliveryNoteData(deliveryDocEntry, companyName);
+        List<Object[]> deliveryData = dnFacade.getDeliveryNoteData(deliveryDocEntry, companyName, pruebas);
         if (deliveryData.isEmpty()) {
             return Response.ok(new ResponseDTO(-1, "No se encontraron datos de entrega para facturar")).build();
         }
@@ -119,7 +125,7 @@ public class InvoiceREST implements Serializable {
 
                 try {
                     GregorianCalendar date = new GregorianCalendar();
-                    date.add(Calendar.DATE, customerFacade.getCustomerCreditDays(cardCode, companyName));
+                    date.add(Calendar.DATE, customerFacade.getCustomerCreditDays(cardCode, companyName, pruebas));
                     invoice.setDocDueDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(date));
                 } catch (Exception e) {
                 }
@@ -180,10 +186,13 @@ public class InvoiceREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response createInvoice(Integer deliveryDocEntry, @HeaderParam("X-Company-Name") String companyName, @HeaderParam("X-Employee") String userName) {
+    public Response createInvoice(Integer deliveryDocEntry,
+                                  @HeaderParam("X-Company-Name") String companyName,
+                                  @HeaderParam("X-Employee") String userName,
+                                  @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Creando factura para deliveryNoteDocEntry={0}", deliveryDocEntry);
         //Consultar entrega
-        List<Object[]> deliveryData = dnFacade.getDeliveryNoteData(deliveryDocEntry, companyName);
+        List<Object[]> deliveryData = dnFacade.getDeliveryNoteData(deliveryDocEntry, companyName, pruebas);
         if (deliveryData.isEmpty()) {
             return Response.ok(new ResponseDTO(-1, "No se encontraron datos de entrega para facturar")).build();
         }
@@ -215,7 +224,7 @@ public class InvoiceREST implements Serializable {
 
                 try {
                     GregorianCalendar date = new GregorianCalendar();
-                    date.add(Calendar.DATE, customerFacade.getCustomerCreditDays(cardCode, companyName));
+                    date.add(Calendar.DATE, customerFacade.getCustomerCreditDays(cardCode, companyName, pruebas));
                     invoice.setDocDueDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(date));
                 } catch (Exception e) {
                 }

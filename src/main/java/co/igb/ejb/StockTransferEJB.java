@@ -39,10 +39,10 @@ public class StockTransferEJB {
     @EJB
     private PickingRecordFacade prFacade;
 
-    public void transferClosedPickingToPackingArea(Integer orderNumber, String companyName) {
+    public void transferClosedPickingToPackingArea(Integer orderNumber, String companyName, boolean pruebas) {
 
         //1. validar que la orden se encuentre cerrada
-        AssignedOrder assignedOrder = aoFacade.findByOrderNumber(orderNumber, companyName);
+        AssignedOrder assignedOrder = aoFacade.findByOrderNumber(orderNumber, companyName, pruebas);
         if (assignedOrder == null) {
             throw new WaliRuntimeException("No se encontró la orden de venta");
         }
@@ -51,7 +51,7 @@ public class StockTransferEJB {
         }
 
         //2. obtener picking records para la orden
-        List<PickingRecord> pickedItems = prFacade.listPicking(orderNumber, companyName);
+        List<PickingRecord> pickedItems = prFacade.listPicking(orderNumber, companyName, pruebas);
 
         //3. recorrer cada registro, agregando lineas al traslado
         StockTransfer document = new StockTransfer();
@@ -62,12 +62,12 @@ public class StockTransferEJB {
         for (PickingRecord record : pickedItems) {
             //Si no se ha configurado el almacen de origen y destino, lo hace
             if (document.getToWarehouse() == null) {
-                String whsCode = blFacade.getBinWarehouse(record.getBinFrom(), companyName);
+                String whsCode = blFacade.getBinWarehouse(record.getBinFrom(), companyName, pruebas);
                 if (whsCode == null) {
                     throw new WaliRuntimeException("Ocurrió un error al consultar el almacén para la ubicación con binabs=" + record.getBinFrom());
                 }
                 if (packingBinAbs == 0) {
-                    packingBinAbs = blFacade.findPackingLocation(whsCode, companyName);
+                    packingBinAbs = blFacade.findPackingLocation(whsCode, companyName, pruebas);
                 }
 
                 document.setToWarehouse(whsCode);

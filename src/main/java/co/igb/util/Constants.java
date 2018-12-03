@@ -5,7 +5,7 @@ public class Constants {
     public static final String STOCK_TRANSFER_SERIES = "igb.stock-transfer.series";
     public static final String SALES_ORDER_SERIES = "igb.sales.order.series";
     public static final String DELIVERY_NOTE_SERIES = "igb.delivery.note.series";
-    public static final String WAREHOUSE_CODE = "igb.warehouse.code";
+    //public static final String WAREHOUSE_CODE = "igb.warehouse.code";
     public static final String COMPANIES = "igb.login.companies";
     public static final String INITIAL_CONTEXT_FACTORY = "initial.context.factory";
     public static final String PROVIDER_URL = "provider.url";
@@ -63,6 +63,8 @@ public class Constants {
     public static final String B1WS_LOGIN_SERVICE = "LoginService";
     public static final String B1WS_DELIVERY_NOTE_SERVICE = "DeliveryNotesService";
     public static final String BIN_TYPE_PICKING = "PICKING";
+    public static final String DATABASE_TYPE_MYSQL = "mysql";
+    public static final String DATABASE_TYPE_MSSQL = "mssql";
     public static final String BIN_ACTION_TYPE_FROM = "batFromWarehouse";
     public static final String BIN_ACTION_TYPE_TO = "batToWarehouse";
 

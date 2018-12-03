@@ -2,6 +2,7 @@ package co.igb.persistence.facade;
 
 import co.igb.dto.PurchaseOrderDTO;
 import co.igb.ejb.IGBApplicationBean;
+import co.igb.util.Constants;
 import co.igb.util.IGBUtils;
 
 import javax.ejb.EJB;
@@ -17,14 +18,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author dbotero
  */
 @Stateless
 public class PurchaseOrderFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(PurchaseOrderFacade.class.getSimpleName());
-    private static final String DB_TYPE = "sap";
+    private static final String DB_TYPE = Constants.DATABASE_TYPE_MSSQL;
 
     @Inject
     private IGBApplicationBean applicationBean;
@@ -36,7 +36,7 @@ public class PurchaseOrderFacade {
 
     }
 
-    public PurchaseOrderDTO find(String docNum, String schemaName) {
+    public PurchaseOrderDTO find(String docNum, String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("select cast(enc.series as varchar(4)) series ");
@@ -58,7 +58,7 @@ public class PurchaseOrderFacade {
 
         try {
             PurchaseOrderDTO dto = new PurchaseOrderDTO();
-            for (Object[] row : (List<Object[]>) persistenceConf.chooseSchema(schemaName,DB_TYPE).createNativeQuery(sb.toString()).getResultList()) {
+            for (Object[] row : (List<Object[]>) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList()) {
                 if (dto.getDocNum() == null) {
                     dto.setSeries((String) row[0]);
                     dto.setDocEntry(((Integer) row[1]).longValue());
@@ -92,7 +92,7 @@ public class PurchaseOrderFacade {
     }
 
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public List<PurchaseOrderDTO> findOpenOrders(String schemaName) {
+    public List<PurchaseOrderDTO> findOpenOrders(String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("select cast(enc.series as varchar(4)) series, cast(enc.DocNum as varchar(10)) docnum, ");
@@ -103,7 +103,7 @@ public class PurchaseOrderFacade {
         sb.append(") and enc.docstatus = 'O' order by enc.docdate ");
         List<PurchaseOrderDTO> orders = new ArrayList<>();
         try {
-            for (Object[] row : (List<Object[]>) persistenceConf.chooseSchema(schemaName,DB_TYPE).createNativeQuery(sb.toString()).getResultList()) {
+            for (Object[] row : (List<Object[]>) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList()) {
                 PurchaseOrderDTO dto = new PurchaseOrderDTO();
                 dto.setSeries((String) row[0]);
                 dto.setDocNum((String) row[1]);

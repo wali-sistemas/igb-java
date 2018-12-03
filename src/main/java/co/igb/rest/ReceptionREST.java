@@ -51,10 +51,11 @@ public class ReceptionREST implements Serializable {
     @GET
     @Path("list/orders")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    public Response listOpenOrders(@HeaderParam("X-Company-Name") String companyName) {
+    public Response listOpenOrders(@HeaderParam("X-Company-Name") String companyName,
+                                   @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Consultando ordenes abiertas");
         try {
-            return Response.ok(poFacade.findOpenOrders(companyName)).build();
+            return Response.ok(poFacade.findOpenOrders(companyName, pruebas)).build();
         } catch (Exception e) {
             return Response.serverError().build();
         }
@@ -63,9 +64,11 @@ public class ReceptionREST implements Serializable {
     @GET
     @Path("load/order/{docNum}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    public Response loadOrder(@PathParam("docNum") String docNum, @HeaderParam("X-Company-Name") String companyName) {
+    public Response loadOrder(@PathParam("docNum") String docNum,
+                              @HeaderParam("X-Company-Name") String companyName,
+                              @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Consultando orden #{0}", docNum);
-        return Response.ok(poFacade.find(docNum, companyName)).build();
+        return Response.ok(poFacade.find(docNum, companyName, pruebas)).build();
     }
 
     @POST

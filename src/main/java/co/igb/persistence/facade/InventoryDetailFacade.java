@@ -1,10 +1,10 @@
 package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.InventoryDetail;
+import co.igb.util.Constants;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,24 +14,22 @@ import java.util.logging.Logger;
  * @author YEIJARA
  */
 @Stateless
-public class InventoryDetailFacade extends AbstractFacade<InventoryDetail> {
+public class InventoryDetailFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(InventoryFacade.class.getSimpleName());
-    private static final String DB_TYPE = "mysql";
+    private static final String DB_TYPE = Constants.DATABASE_TYPE_MYSQL;
 
     @EJB
     private PersistenceConf persistenceConf;
 
-    @Override
-    protected EntityManager getEntityManager() {
-        return persistenceConf.chooseSchema("MySQLPU", DB_TYPE);
+    public InventoryDetailFacade(){
     }
 
-    public InventoryDetailFacade() {
-        super(InventoryDetail.class);
+    public void addDetail(InventoryDetail detail, String companyName, boolean testing) {
+        persistenceConf.chooseSchema(companyName, testing, DB_TYPE).persist(detail);
     }
 
-    public List<InventoryDetail> findInventoryDetail(Integer idInventory, String companyName) {
+    public List<InventoryDetail> findInventoryDetail(Integer idInventory, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("SELECT * ");
@@ -40,7 +38,8 @@ public class InventoryDetailFacade extends AbstractFacade<InventoryDetail> {
         sb.append(idInventory);
 
         try {
-            return persistenceConf.chooseSchema(companyName, DB_TYPE).createNativeQuery(sb.toString(), InventoryDetail.class).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE)
+                    .createNativeQuery(sb.toString(), InventoryDetail.class).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al obtener el detalle del inventario. ", e);
             return null;

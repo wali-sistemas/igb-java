@@ -36,6 +36,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -71,10 +72,11 @@ public class PickingREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response deleteTemporaryRecords(@HeaderParam("X-Company-Name") String companyName,
-                                           @HeaderParam("X-Warehouse-Code") String warehouseCode) {
+                                           @HeaderParam("X-Warehouse-Code") String warehouseCode,
+                                           @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Ejecutando proceso para eliminar registros de picking temporales. Empresa: {0}, Bodega: {1}",
                 new Object[]{companyName, warehouseCode});
-        List<Object[]> records = prFacade.findTemporaryRecords(companyName);
+        List<Object[]> records = prFacade.findTemporaryRecords(companyName, pruebas);
         CONSOLE.log(Level.INFO, "Se encontraron {0} registros temporales para {1}-{2}",
                 new Object[]{records.size(), companyName, warehouseCode});
         Date now = new Date();
@@ -88,7 +90,7 @@ public class PickingREST implements Serializable {
         }
         if (!expiredRecords.isEmpty()) {
             CONSOLE.log(Level.INFO, "Eliminando {0} registros vencidos", expiredRecords);
-            prFacade.deleteExpiredRecords(expiredRecords, companyName);
+            prFacade.deleteExpiredRecords(expiredRecords, companyName, pruebas);
         }
         return Response.ok(new ResponseDTO(0, expiredRecords)).build();
     }
@@ -97,14 +99,14 @@ public class PickingREST implements Serializable {
         return now.getTime() > expires.getTime();
     }
 
-    private Object[] processPickingStatus(Integer orderNumber, Boolean excludeTemporary, String companyName) {
-        Map<String, Map<Long, Integer>> pickedItems = prFacade.listPickedItems(orderNumber, excludeTemporary, companyName);
+    private Object[] processPickingStatus(Integer orderNumber, Boolean excludeTemporary, String companyName, boolean pruebas) {
+        Map<String, Map<Long, Integer>> pickedItems = prFacade.listPickedItems(orderNumber, excludeTemporary, companyName, pruebas);
 
         //consultar los items pendientes por entregar de cada orden
-        Map<String, Integer> pendingItems = soFacade.listPendingItems(orderNumber, companyName);
+        Map<String, Integer> pendingItems = soFacade.listPendingItems(orderNumber, companyName, pruebas);
 
         //si un item existe en la lista de picking pero no en la de pendientes, no se tiene en cuenta
-        for (int i = 0; i < pendingItems.keySet().toArray().length; i++) {
+        for (int i = 0; i < pendingItems.keySet().size(); i++) {
             String itemCode = (String) pendingItems.keySet().toArray()[i];
             if (pickedItems.containsKey(itemCode)) {
                 int totalPicked = 0;
@@ -121,7 +123,7 @@ public class PickingREST implements Serializable {
             }
         }
 
-        List<String> skippedItems = prFacade.listSkippedItems(orderNumber, companyName);
+        Set<String> skippedItems = prFacade.listSkippedItems(orderNumber, companyName, pruebas);
         return new Object[]{pendingItems, pickedItems, skippedItems};
     }
 
@@ -134,11 +136,12 @@ public class PickingREST implements Serializable {
             @PathParam("username") String username,
             @QueryParam("orderNumber") Integer orderNumber,
             @HeaderParam("X-Company-Name") String companyName,
-            @HeaderParam("X-Warehouse-Code") String warehouseCode) {
+            @HeaderParam("X-Warehouse-Code") String warehouseCode,
+            @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Buscando siguiente item para packing para el usuario {0} ", username);
 
         //buscar ordenes asignadas en estado open para el empleado en la empresa seleccionada
-        List<AssignedOrder> orders = aoFacade.listOpenAssignationsByUserAndCompany(username, orderNumber, companyName);
+        List<AssignedOrder> orders = aoFacade.listOpenAssignationsByUserAndCompany(username, orderNumber, companyName, pruebas);
 
         //si no hay ordenes pendientes, mostrar alerta con mensaje de error
         if (orders == null || orders.isEmpty()) {
@@ -150,15 +153,15 @@ public class PickingREST implements Serializable {
         boolean skippedItems = false;
         TreeSet<SortedStockDTO> sortedStock = new TreeSet<>();
         for (AssignedOrder order : orders) {
-            Object[] pickingStatus = processPickingStatus(order.getOrderNumber(), false, companyName);
+            Object[] pickingStatus = processPickingStatus(order.getOrderNumber(), false, companyName, pruebas);
             Map<String, Integer> pendingItems = (Map<String, Integer>) pickingStatus[0];
             Map<String, Map<Long, Integer>> pickedItems = (Map<String, Map<Long, Integer>>) pickingStatus[1];
-            List<String> skipped = (List<String>) pickingStatus[2];
+            TreeSet<String> skipped = (TreeSet<String>) pickingStatus[2];
 
             if (pendingItems == null || pendingItems.isEmpty()) {
                 if (skipped.isEmpty()) {
                     CONSOLE.log(Level.WARNING, "La orden {0} no tiene items pendientes por despachar y se marca como cerrada. ", order.getOrderNumber());
-                    closeAndPack(order, pickedItems, companyName);
+                    closeAndPack(order, pickedItems, companyName, pruebas);
                     continue;
                 } else {
                     CONSOLE.log(Level.INFO, "La orden {0} no tiene mas items pendientes por picking, pero tiene skipped items ", order.getOrderNumber());
@@ -173,7 +176,8 @@ public class PickingREST implements Serializable {
                         order.getOrderNumber(),
                         new ArrayList<>(pendingItems.keySet()),
                         warehouseCode,
-                        companyName);
+                        companyName,
+                        pruebas);
                 //Agregar el inventario de la orden al set de stock
                 for (Object[] row : orderStock) {
                     SortedStockDTO sorted = new SortedStockDTO(row);
@@ -184,9 +188,9 @@ public class PickingREST implements Serializable {
                         continue;
                     }
 
-                    if (pendingItems.containsKey(sorted.getItemCode()) && pendingItems.get(sorted.getItemCode()) > 0) {
-                        //si el item se salto durante el picking, solo se deben agregar registros de ubicaciones tipo storage
-                        sorted.setPendingQuantity(pendingItems.get(row[0]));
+                    Integer pendingQuantity = pendingItems.get(sorted.getItemCode());
+                    if (pendingItems.containsKey(sorted.getItemCode()) && pendingQuantity > 0) {
+                        sorted.setPendingQuantity(pendingQuantity);
                         sortedStock.add(sorted);
                     }
                 }
@@ -204,7 +208,7 @@ public class PickingREST implements Serializable {
         }
     }
 
-    private boolean avoidBin(List<String> skippedItems, String itemCode, String binType, String binTypeToAvoid) {
+    private boolean avoidBin(TreeSet<String> skippedItems, String itemCode, String binType, String binTypeToAvoid) {
         return skippedItems != null && skippedItems.contains(itemCode) && binType != null && binType.equals(binTypeToAvoid);
     }
 
@@ -213,12 +217,14 @@ public class PickingREST implements Serializable {
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response closeOrders(@PathParam("username") String username, @QueryParam("orderNumber") Integer orderNumber,
-                                @HeaderParam("X-Company-Name") String companyName) {
+    public Response closeOrders(@PathParam("username") String username,
+                                @QueryParam("orderNumber") Integer orderNumber,
+                                @HeaderParam("X-Company-Name") String companyName,
+                                @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Procesando solicitud de cierre de orden {0}", orderNumber != null ? orderNumber : "multiple");
 
         //buscar ordenes asignadas en estado open para el empleado en la empresa seleccionada
-        List<AssignedOrder> orders = aoFacade.listOpenAssignationsByUserAndCompany(username, orderNumber, companyName);
+        List<AssignedOrder> orders = aoFacade.listOpenAssignationsByUserAndCompany(username, orderNumber, companyName, pruebas);
 
         //si no hay ordenes pendientes, mostrar alerta con mensaje de error
         if (orders == null || orders.isEmpty()) {
@@ -228,7 +234,7 @@ public class PickingREST implements Serializable {
 
         for (AssignedOrder order : orders) {
             CONSOLE.log(Level.INFO, "Procesando estado de picking para {0}", order.toString());
-            Object[] pickingStatus = processPickingStatus(order.getOrderNumber(), true, companyName);
+            Object[] pickingStatus = processPickingStatus(order.getOrderNumber(), true, companyName, pruebas);
             Map<String, Integer> pendingItems = (Map<String, Integer>) pickingStatus[0];
             Map<String, Map<Long, Integer>> pickedItems = (Map<String, Map<Long, Integer>>) pickingStatus[1];
 
@@ -243,7 +249,7 @@ public class PickingREST implements Serializable {
                 }
             }
 
-            closeAndPack(order, pickedItems, companyName);
+            closeAndPack(order, pickedItems, companyName, pruebas);
             /*
             try {
                 moveItemsToPackingArea(order.getOrderNumber(), companyName);
@@ -259,7 +265,7 @@ public class PickingREST implements Serializable {
         return Response.ok(new ResponseDTO(0, "")).build();
     }
 
-    private void closeAndPack(AssignedOrder order, Map<String, Map<Long, Integer>> pickedItems, String companyName) {
+    private void closeAndPack(AssignedOrder order, Map<String, Map<Long, Integer>> pickedItems, String companyName, boolean pruebas) {
         try {
             HashMap<Long, String[]> bins = new HashMap<>();
             PackingOrder packingOrder = new PackingOrder();
@@ -277,7 +283,7 @@ public class PickingREST implements Serializable {
                     PackingOrderItemBin bin = new PackingOrderItemBin();
                     bin.setBinAbs(binAbs);
                     if (!bins.containsKey(binAbs)) {
-                        Object[] binAndName = blFacade.getBinCodeAndName(binAbs, companyName);
+                        Object[] binAndName = blFacade.getBinCodeAndName(binAbs, companyName, pruebas);
                         bins.put(binAbs, Arrays.copyOf(binAndName, binAndName.length, String[].class));
                     }
 
@@ -291,18 +297,18 @@ public class PickingREST implements Serializable {
                 }
                 packingOrder.getItems().add(packingItem);
             }
-            poFacade.create(packingOrder);
+            poFacade.create(packingOrder, companyName, pruebas);
             CONSOLE.log(Level.INFO, "Se creo la orden de packing para la orden {0}", order.getOrderNumber());
 
             order.setStatus(Constants.STATUS_CLOSED);
-            aoFacade.edit(order);
+            aoFacade.edit(order, companyName, pruebas);
             CONSOLE.log(Level.INFO, "Cerro la asignacion de picking para la orden {0}", order.getOrderNumber());
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el estado de la asignacion de picking. ", e);
         }
     }
 
-    private void moveItemsToPackingArea(Integer orderNumber, String companyName) {
-        stockTransferEJB.transferClosedPickingToPackingArea(orderNumber, companyName);
+    private void moveItemsToPackingArea(Integer orderNumber, String companyName, boolean pruebas) {
+        stockTransferEJB.transferClosedPickingToPackingArea(orderNumber, companyName, pruebas);
     }
 }

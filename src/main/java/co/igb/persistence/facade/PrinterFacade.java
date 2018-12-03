@@ -1,28 +1,32 @@
 package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.Printer;
+import co.igb.util.Constants;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
+import java.util.List;
 
 /**
  * @author dbotero
  */
 @Stateless
-public class PrinterFacade extends AbstractFacade<Printer> {
+public class PrinterFacade {
 
-    private static final String DB_TYPE = "mysql";
+    private static final String DB_TYPE = Constants.DATABASE_TYPE_MYSQL;
 
     @EJB
     private PersistenceConf persistenceConf;
 
-    @Override
-    protected EntityManager getEntityManager() {
-        return persistenceConf.chooseSchema("MySQLPU", DB_TYPE);
+    public PrinterFacade() {
     }
 
-    public PrinterFacade() {
-        super(Printer.class);
+    public List<Printer> findAll(String companyName, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+        cq.select(cq.from(Printer.class));
+        return em.createQuery(cq).getResultList();
     }
 }
