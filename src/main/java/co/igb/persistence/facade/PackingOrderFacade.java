@@ -37,7 +37,7 @@ public class PackingOrderFacade {
     }
 
     public void create(PackingOrder packingOrder, String companyName, boolean testing) {
-        persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        persistenceConf.chooseSchema(companyName, testing, DB_TYPE).persist(packingOrder);
     }
 
     public PackingOrder edit(PackingOrder packingOrder, String companyName, boolean testing) {
