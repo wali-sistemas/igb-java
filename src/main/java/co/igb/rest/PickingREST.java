@@ -192,6 +192,7 @@ public class PickingREST implements Serializable {
                     if (pendingItems.containsKey(sorted.getItemCode()) && pendingQuantity > 0) {
                         sorted.setPendingQuantity(pendingQuantity);
                         sortedStock.add(sorted);
+                        break;
                     }
                 }
             }
