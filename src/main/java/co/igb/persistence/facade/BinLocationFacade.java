@@ -278,4 +278,19 @@ public class BinLocationFacade {
             return null;
         }
     }
+
+    public Integer getTotalQuantityInStorage(String itemcode, String warehouse, String companyName, boolean pruebas) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(isnull(sum(onhandqty),0) as int) saldoTotal from oibq saldo ");
+        sb.append("inner join obin ubicacion on ubicacion.absentry = saldo.binabs where saldo.itemcode = '");
+        sb.append(itemcode);
+        sb.append("' and saldo.OnHandQty > 0 and ubicacion.attr1val = 'STORAGE' and ubicacion.whscode = '");
+        sb.append(warehouse);
+        sb.append("' ");
+        try {
+            return (Integer)persistenceConf.chooseSchema(companyName, pruebas, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (NoResultException e) {
+            return 0;
+        }
+    }
 }

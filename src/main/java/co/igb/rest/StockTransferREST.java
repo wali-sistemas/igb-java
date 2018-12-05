@@ -157,6 +157,8 @@ public class StockTransferREST implements Serializable {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "No se recibió el usuario que realiza el picking")).build();
         } else if (itemTransfer.getWarehouseCode() == null || itemTransfer.getWarehouseCode().trim().isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "No se recibió el código de la bodega")).build();
+        } else if (itemTransfer.getTemporary() && noStockInStorageLocations(itemTransfer.getItemCode(), itemTransfer.getExpectedQuantity(), warehouseCode, companyName, pruebas)) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-2, "No se puede saltar esta ubicación porque no hay saldo suficiente en almacenamiento")).build();
         }
 
         if (itemTransfer.getExpectedQuantity() < itemTransfer.getQuantity()) {
@@ -279,6 +281,14 @@ public class StockTransferREST implements Serializable {
         } else {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ResponseDTO(-1, "Ocurrio un error al crear la transferencia. " + errorMessage)).build();
         }
+    }
+
+    private boolean noStockInStorageLocations(String itemcode, Integer requiredQuantity, String warehouseCode, String companyName, boolean pruebas) {
+        int unitsInStorage = binLocationFacade.getTotalQuantityInStorage(itemcode, warehouseCode, companyName, pruebas);
+        if (unitsInStorage >= requiredQuantity) {
+            return false;
+        }
+        return true;
     }
 
     @GET

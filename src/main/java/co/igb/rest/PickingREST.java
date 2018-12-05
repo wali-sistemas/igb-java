@@ -159,15 +159,9 @@ public class PickingREST implements Serializable {
             TreeSet<String> skipped = (TreeSet<String>) pickingStatus[2];
 
             if (pendingItems == null || pendingItems.isEmpty()) {
-                if (skipped.isEmpty()) {
-                    CONSOLE.log(Level.WARNING, "La orden {0} no tiene items pendientes por despachar y se marca como cerrada. ", order.getOrderNumber());
-                    closeAndPack(order, pickedItems, companyName, pruebas);
-                    continue;
-                } else {
-                    CONSOLE.log(Level.INFO, "La orden {0} no tiene mas items pendientes por picking, pero tiene skipped items ", order.getOrderNumber());
-                    skippedItems = true;
-                    continue;
-                }
+                CONSOLE.log(Level.WARNING, "La orden {0} no tiene items pendientes por despachar y se marca como cerrada. ", order.getOrderNumber());
+                closeAndPack(order, pickedItems, companyName, pruebas);
+                continue;
             }
 
             //Si hay items pendientes por picking, consulta su saldo y lo retorna organizado por velocidad y secuencia.
