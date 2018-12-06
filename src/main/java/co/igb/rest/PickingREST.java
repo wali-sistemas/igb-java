@@ -3,6 +3,7 @@ package co.igb.rest;
 import co.igb.dto.ResponseDTO;
 import co.igb.dto.SortedStockDTO;
 import co.igb.ejb.IGBApplicationBean;
+import co.igb.ejb.SalesOrderEJB;
 import co.igb.ejb.StockTransferEJB;
 import co.igb.persistence.entity.AssignedOrder;
 import co.igb.persistence.entity.PackingOrder;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -61,6 +63,8 @@ public class PickingREST implements Serializable {
     private PackingOrderFacade poFacade;
     @EJB
     private StockTransferEJB stockTransferEJB;
+    @EJB
+    private SalesOrderEJB salesOrderEJB;
     @Inject
     private IGBApplicationBean appBean;
 
@@ -152,7 +156,11 @@ public class PickingREST implements Serializable {
         boolean warning = false;
         boolean skippedItems = false;
         TreeSet<SortedStockDTO> sortedStock = new TreeSet<>();
-        for (AssignedOrder order : orders) {
+        for (int i = 0; i < orders.size(); i++) {
+            AssignedOrder order = orders.get(i);
+            CONSOLE.log(Level.INFO, "Procesando nextPickingItem para orden {0}", order.toString());
+
+            Integer orderDocEntry = soFacade.getOrderDocEntry(order.getOrderNumber(), companyName, pruebas);
             Object[] pickingStatus = processPickingStatus(order.getOrderNumber(), false, companyName, pruebas);
             Map<String, Integer> pendingItems = (Map<String, Integer>) pickingStatus[0];
             Map<String, Map<Long, Integer>> pickedItems = (Map<String, Map<Long, Integer>>) pickingStatus[1];
@@ -165,32 +173,49 @@ public class PickingREST implements Serializable {
             }
 
             //Si hay items pendientes por picking, consulta su saldo y lo retorna organizado por velocidad y secuencia.
-            if (!pendingItems.isEmpty()) {
-                List<Object[]> orderStock = soFacade.findOrdersStockAvailability(
-                        order.getOrderNumber(),
-                        new ArrayList<>(pendingItems.keySet()),
-                        warehouseCode,
-                        companyName,
-                        pruebas);
-                //Agregar el inventario de la orden al set de stock
-                for (Object[] row : orderStock) {
-                    SortedStockDTO sorted = new SortedStockDTO(row);
-                    if (avoidBin(skipped, sorted.getItemCode(), (String) row[10], Constants.BIN_TYPE_PICKING)) {
-                        //No agrega el registro de saldo a la lista si el item solo debe ser tomado de zona de almacenamiento
-                        CONSOLE.log(Level.INFO, "No se tiene el cuenta para picking el inventario en la ubicacion {0} para el item {1} porque la ubicacion NO es de almacenamiento",
-                                new Object[]{sorted.getBinCode(), sorted.getItemCode()});
-                        continue;
-                    }
+            List<Object[]> orderStock = soFacade.findOrdersStockAvailability(
+                    order.getOrderNumber(),
+                    new ArrayList<>(pendingItems.keySet()),
+                    warehouseCode,
+                    companyName,
+                    pruebas);
 
-                    Integer pendingQuantity = pendingItems.get(sorted.getItemCode());
-                    if (pendingItems.containsKey(sorted.getItemCode()) && pendingQuantity > 0) {
-                        sorted.setPendingQuantity(pendingQuantity);
-                        sortedStock.add(sorted);
-                        break;
-                    }
+            HashMap<String, List<Object[]>> availableStock = parseOrderAvailableStock(orderStock);
+            HashSet<String> itemsMissing = new HashSet<>();
+            for (String pendingItemcode : pendingItems.keySet()) {
+                //Si no hay inventario para la referencia, la agrega a la lista de lineas para cerrar en la orden
+                if (!availableStock.containsKey(pendingItemcode)) {
+                    itemsMissing.add(pendingItemcode);
+                }
+            }
+
+            if (!itemsMissing.isEmpty()) {
+                //Marcar lineas de orden cerradas para items sin saldo
+                salesOrderEJB.closeOrderLines(companyName, orderDocEntry, itemsMissing);
+                //TODO: notificar cierre de lineas
+                i--;
+                continue;
+            }
+
+            //Agregar el inventario de la orden al set de stock
+            for (Object[] row : orderStock) {
+                SortedStockDTO sorted = new SortedStockDTO(row);
+                if (avoidBin(skipped, sorted.getItemCode(), (String) row[10], Constants.BIN_TYPE_PICKING)) {
+                    //No agrega el registro de saldo a la lista si el item solo debe ser tomado de zona de almacenamiento
+                    CONSOLE.log(Level.INFO, "No se tiene el cuenta para picking el inventario en la ubicacion {0} para el item {1} porque la ubicacion NO es de almacenamiento",
+                            new Object[]{sorted.getBinCode(), sorted.getItemCode()});
+                    continue;
+                }
+
+                Integer pendingQuantity = pendingItems.get(sorted.getItemCode());
+                if (pendingItems.containsKey(sorted.getItemCode()) && pendingQuantity > 0) {
+                    sorted.setPendingQuantity(pendingQuantity);
+                    sortedStock.add(sorted);
+                    break;
                 }
             }
         }
+
         //seleccionar y retornar el siguiente item para picking
         if (sortedStock.isEmpty() && !warning) {
             return Response.ok(new ResponseDTO(-1, "No hay más items pendientes por picking")).build();
@@ -201,6 +226,21 @@ public class PickingREST implements Serializable {
         } else {
             return Response.ok(new ResponseDTO(0, sortedStock.first())).build();
         }
+    }
+
+    private HashMap<String, List<Object[]>> parseOrderAvailableStock(List<Object[]> stock) {
+        HashMap<String, List<Object[]>> availableStock = new HashMap<>();
+        for (Object[] row : stock) {
+            String itemcode = (String) row[0];
+            if (availableStock.containsKey(itemcode)) {
+                availableStock.get(itemcode).add(row);
+            } else {
+                List<Object[]> data = new ArrayList<>();
+                data.add(row);
+                availableStock.put(itemcode, data);
+            }
+        }
+        return availableStock;
     }
 
     private boolean avoidBin(TreeSet<String> skippedItems, String itemCode, String binType, String binTypeToAvoid) {
