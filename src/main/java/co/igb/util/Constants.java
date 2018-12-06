@@ -62,6 +62,7 @@ public class Constants {
     public static final String B1WS_LICENSE_SERVER = "igb.b1ws.licenseServer";
     public static final String B1WS_LOGIN_SERVICE = "LoginService";
     public static final String B1WS_DELIVERY_NOTE_SERVICE = "DeliveryNotesService";
+    public static final String B1WS_ORDERS_SERVICE = "OrdersService";
     public static final String BIN_TYPE_PICKING = "PICKING";
     public static final String DATABASE_TYPE_MYSQL = "mysql";
     public static final String DATABASE_TYPE_MSSQL = "mssql";
