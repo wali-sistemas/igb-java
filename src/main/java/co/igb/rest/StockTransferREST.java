@@ -1,12 +1,5 @@
 package co.igb.rest;
 
-import co.igb.b1ws.client.order.Document;
-import co.igb.b1ws.client.order.DocumentParams;
-import co.igb.b1ws.client.order.GetByParams;
-import co.igb.b1ws.client.order.GetByParamsResponse;
-import co.igb.b1ws.client.order.OrdersService;
-import co.igb.b1ws.client.order.Update;
-import co.igb.b1ws.client.order.UpdateResponse;
 import co.igb.b1ws.client.stocktransfer.Add;
 import co.igb.b1ws.client.stocktransfer.AddResponse;
 import co.igb.b1ws.client.stocktransfer.MsgHeader;
@@ -19,6 +12,7 @@ import co.igb.dto.StockTransferDTO;
 import co.igb.dto.StockTransferLineDTO;
 import co.igb.ejb.EmailManager;
 import co.igb.ejb.IGBApplicationBean;
+import co.igb.ejb.SalesOrderEJB;
 import co.igb.persistence.entity.Inventory;
 import co.igb.persistence.entity.InventoryDetail;
 import co.igb.persistence.entity.InventoryDifference;
@@ -85,6 +79,8 @@ public class StockTransferREST implements Serializable {
     private SalesOrderFacade salesOrderFacade;
     @EJB
     private StockTransferDetailFacade stockTransferDetailFacade;
+    @EJB
+    private SalesOrderEJB salesOrderEJB;
     @Inject
     private IGBApplicationBean appBean;
     @Inject
@@ -93,41 +89,7 @@ public class StockTransferREST implements Serializable {
     public StockTransferREST() {
     }
 
-    private boolean modifySalesOrderQuantity(String companyName, Integer orderEntry, String itemCode, Integer newQuantity) {
-        boolean success = false;
-        //1. Login
-        String sessionId = null;
-        try {
-            sessionId = sapFunctions.login(companyName);
-            CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
-        } catch (Exception ignored) {
-        }
 
-        //2. Procesar documento
-        Long docEntry = -1L;
-        if (sessionId != null) {
-            try {
-                Document doc = retrieveOrderDocument(orderEntry.longValue(), sessionId);
-                List<Document.DocumentLines.DocumentLine> lines = doc.getDocumentLines().getDocumentLine();
-                for (Document.DocumentLines.DocumentLine line : lines) {
-                    if (line.getItemCode().equals(itemCode)) {
-                        line.setQuantity(newQuantity.doubleValue());
-                        break;
-                    }
-                }
-                success = modifyOrderDocument(doc, sessionId);
-                CONSOLE.log(Level.INFO, "Se modifico la orden satisfactoriamente", docEntry);
-            } catch (Exception e) {
-                CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
-            }
-        }
-
-        //3. Logout
-        if (sessionId != null) {
-            sapFunctions.logout(sessionId);
-        }
-        return success;
-    }
 
     @POST
     @Path("picking")
@@ -165,7 +127,7 @@ public class StockTransferREST implements Serializable {
             CONSOLE.log(Level.INFO, "La cantidad tomada ({0}) es superior a la cantidad de la orden ({1}). Reajustando orden para acomodar nueva cantidad...",
                     new Object[]{itemTransfer.getQuantity(), itemTransfer.getExpectedQuantity()});
             Integer orderDocEntry = salesOrderFacade.getOrderDocEntry(itemTransfer.getOrderNumber(), companyName, pruebas);
-            if (!modifySalesOrderQuantity(companyName, orderDocEntry, itemTransfer.getItemCode(), itemTransfer.getQuantity())) {
+            if (!salesOrderEJB.modifySalesOrderQuantity(companyName, orderDocEntry, itemTransfer.getItemCode(), itemTransfer.getQuantity())) {
                 return Response.ok(new ResponseDTO(-1, "Ocurrio un error al modificar la cantidad de la orden. ")).build();
             }
         } else if (itemTransfer.getExpectedQuantity() > itemTransfer.getQuantity()) {
@@ -187,6 +149,11 @@ public class StockTransferREST implements Serializable {
                     itemTransfer.getItemCode(),
                     expectedQuantity,
                     itemTransfer.getQuantity());
+
+            if(itemTransfer.getQuantity() == 0) {
+                CONSOLE.log(Level.INFO, "Se reporto la inconsistencia de inventario, no se hace traslado ya que la cantidad encontrada fue cero");
+                return Response.ok(new ResponseDTO(0, "Inconsistencia de inventario reportada")).build();
+            }
         }
 
         StockTransfer document = new StockTransfer();
@@ -671,42 +638,6 @@ public class StockTransferREST implements Serializable {
         header.setSessionID(sessionId);
         AddResponse response = service.getStockTransferServiceSoap12().add(add, header);
         return response.getStockTransferParams().getDocEntry();
-    }
-
-    private Document retrieveOrderDocument(Long docEntry, String sessionId) throws MalformedURLException {
-        OrdersService service = new OrdersService(new URL(String.format(appBean.obtenerValorPropiedad(Constants.B1WS_WSDL_URL), "OrdersService")));
-        co.igb.b1ws.client.order.MsgHeader header = new co.igb.b1ws.client.order.MsgHeader();
-        header.setServiceName("OrdersService");
-        header.setSessionID(sessionId);
-
-        DocumentParams docParams = new DocumentParams();
-        docParams.setDocEntry(docEntry);
-
-        GetByParams params = new GetByParams();
-        params.setDocumentParams(docParams);
-
-        GetByParamsResponse response = service.getOrdersServiceSoap12().getByParams(params, header);
-        return response.getDocument();
-    }
-
-    private boolean modifyOrderDocument(Document document, String sessionId) throws MalformedURLException {
-        OrdersService service = new OrdersService(new URL(String.format(appBean.obtenerValorPropiedad(Constants.B1WS_WSDL_URL), "OrdersService")));
-        co.igb.b1ws.client.order.MsgHeader header = new co.igb.b1ws.client.order.MsgHeader();
-        header.setServiceName("OrdersService");
-        header.setSessionID(sessionId);
-
-        Update params = new Update();
-        params.setDocument(document);
-
-        try {
-            UpdateResponse resp = service.getOrdersServiceSoap12().update(params, header);
-            if (resp != null) {
-                return true;
-            }
-        } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al modificar la cantidad de la orden. ", e);
-        }
-        return false;
     }
 
     private Long adjustMissingQuantity(SingleItemTransferDTO itemTransfer, Integer expectedQuantity,
