@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,20 +59,27 @@ public class SalesOrderEJB {
         String sessionId = getSessionId(companyName);
 
         //2. Procesar documento
-        Long docEntry = -1L;
-        if (sessionId != null) {
-            try {
-                Document doc = retrieveOrderDocument(orderEntry.longValue(), sessionId);
-                List<Document.DocumentLines.DocumentLine> lines = doc.getDocumentLines().getDocumentLine();
-                for (Document.DocumentLines.DocumentLine line : lines) {
-                    if (items.contains(line.getItemCode())) {
-                        line.setLineStatus("C");
+        Iterator<String> itemsIterator = items.iterator();
+        while(itemsIterator.hasNext()) {
+            String missingItem = itemsIterator.next();
+
+            Long docEntry = -1L;
+            if (sessionId != null) {
+                try {
+                    Document doc = retrieveOrderDocument(orderEntry.longValue(), sessionId);
+                    List<Document.DocumentLines.DocumentLine> lines = doc.getDocumentLines().getDocumentLine();
+                    for (Document.DocumentLines.DocumentLine line : lines) {
+                        if (line.getItemCode().equalsIgnoreCase(missingItem)) {
+                            line.setLineStatus("C");
+                            items.remove(line.getItemCode());
+                            break;
+                        }
                     }
+                    modifyOrderDocument(doc, sessionId);
+                    CONSOLE.log(Level.INFO, "Se modifico la orden satisfactoriamente", docEntry);
+                } catch (Exception e) {
+                    CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar lineas en la orden. ", e);
                 }
-                modifyOrderDocument(doc, sessionId);
-                CONSOLE.log(Level.INFO, "Se modifico la orden satisfactoriamente", docEntry);
-            } catch (Exception e) {
-                CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar lineas en la orden. ", e);
             }
         }
 
