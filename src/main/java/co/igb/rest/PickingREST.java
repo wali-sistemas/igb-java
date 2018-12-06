@@ -193,8 +193,8 @@ public class PickingREST implements Serializable {
                 //Marcar lineas de orden cerradas para items sin saldo
                 salesOrderEJB.closeOrderLines(companyName, orderDocEntry, itemsMissing);
                 //TODO: notificar cierre de lineas
-                i--;
-                continue;
+                //i--;
+                //continue;
             }
 
             //Agregar el inventario de la orden al set de stock
