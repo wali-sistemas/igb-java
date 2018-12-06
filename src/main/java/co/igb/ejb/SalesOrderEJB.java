@@ -51,6 +51,9 @@ public class SalesOrderEJB {
     }
 
     public void closeOrderLines(String companyName, Integer orderEntry, HashSet<String> items) {
+        if(items.isEmpty()) {
+            return;
+        }
         //1. Login
         String sessionId = getSessionId(companyName);
 

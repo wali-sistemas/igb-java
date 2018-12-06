@@ -340,7 +340,7 @@ public class PackingREST implements Serializable {
                 try {
                     Long baseLineNum = salesOrderFacade.getLineNum(orderNumber, itemCode, companyName, pruebas);
                     if (baseLineNum < 0) {
-                        return Response.ok(new ResponseDTO(-1, "Ocurrio un error al consultar el numero de linea de la orden (baseLine). Es posible que la orden de compra ya se haya cerrado")).build();
+                        return Response.ok(new ResponseDTO(-1, "Ocurrio un error al consultar el numero de linea de la orden (baseLine). Es posible que la orden de venta ya se haya cerrado")).build();
                     }
                     line.setBaseLine(baseLineNum);
                 } catch (Exception e) {
