@@ -64,12 +64,12 @@ public class SalesOrderEJB {
                     if (items.contains(line.getItemCode())) {
                         line.setLineStatus("C");
                     }
-                }
-                success = modifyOrderDocument(doc, sessionId);
-                if (success) {
-                    CONSOLE.log(Level.INFO, "Se modifico la orden satisfactoriamente");
-                } else {
-                    CONSOLE.log(Level.WARNING, "Ocurrió un problema al modificar la orden");
+                    success = modifyOrderDocument(doc, sessionId);
+                    if (success) {
+                        CONSOLE.log(Level.INFO, "Se modifico la orden satisfactoriamente");
+                    } else {
+                        CONSOLE.log(Level.WARNING, "Ocurrió un problema al modificar la orden");
+                    }
                 }
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar lineas en la orden. ", e);
