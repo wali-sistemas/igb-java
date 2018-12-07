@@ -17,7 +17,6 @@ import javax.inject.Inject;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,35 +50,29 @@ public class SalesOrderEJB {
         return response.getDocument();
     }
 
-    public void closeOrderLines(String companyName, Integer orderEntry, HashSet<String> items) {
-        if(items.isEmpty()) {
-            return;
-        }
+    public boolean closeOrderLines(String companyName, Integer orderEntry, HashSet<String> items) {
         //1. Login
         String sessionId = getSessionId(companyName);
 
         //2. Procesar documento
-        Iterator<String> itemsIterator = items.iterator();
-        while(itemsIterator.hasNext()) {
-            String missingItem = itemsIterator.next();
-
-            Long docEntry = -1L;
-            if (sessionId != null) {
-                try {
-                    Document doc = retrieveOrderDocument(orderEntry.longValue(), sessionId);
-                    List<Document.DocumentLines.DocumentLine> lines = doc.getDocumentLines().getDocumentLine();
-                    for (Document.DocumentLines.DocumentLine line : lines) {
-                        if (line.getItemCode().equalsIgnoreCase(missingItem)) {
-                            line.setLineStatus("C");
-                            items.remove(line.getItemCode());
-                            break;
-                        }
+        boolean success = false;
+        if (sessionId != null) {
+            try {
+                Document doc = retrieveOrderDocument(orderEntry.longValue(), sessionId);
+                List<Document.DocumentLines.DocumentLine> lines = doc.getDocumentLines().getDocumentLine();
+                for (Document.DocumentLines.DocumentLine line : lines) {
+                    if (items.contains(line.getItemCode())) {
+                        line.setLineStatus("C");
                     }
-                    modifyOrderDocument(doc, sessionId);
-                    CONSOLE.log(Level.INFO, "Se modifico la orden satisfactoriamente", docEntry);
-                } catch (Exception e) {
-                    CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar lineas en la orden. ", e);
+                    success = modifyOrderDocument(doc, sessionId);
+                    if (success) {
+                        CONSOLE.log(Level.INFO, "Se modifico la orden satisfactoriamente");
+                    } else {
+                        CONSOLE.log(Level.WARNING, "Ocurrió un problema al modificar la orden");
+                    }
                 }
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar lineas en la orden. ", e);
             }
         }
 
@@ -87,6 +80,7 @@ public class SalesOrderEJB {
         if (sessionId != null) {
             sapFunctions.logout(sessionId);
         }
+        return success;
     }
 
     public boolean modifySalesOrderQuantity(String companyName, Integer orderEntry, String itemCode, Integer newQuantity) {
@@ -95,7 +89,6 @@ public class SalesOrderEJB {
         String sessionId = getSessionId(companyName);
 
         //2. Procesar documento
-        Long docEntry = -1L;
         if (sessionId != null) {
             try {
                 Document doc = retrieveOrderDocument(orderEntry.longValue(), sessionId);
@@ -107,7 +100,11 @@ public class SalesOrderEJB {
                     }
                 }
                 success = modifyOrderDocument(doc, sessionId);
-                CONSOLE.log(Level.INFO, "Se modifico la orden satisfactoriamente", docEntry);
+                if (success) {
+                    CONSOLE.log(Level.INFO, "Se modifico la orden satisfactoriamente");
+                } else {
+                    CONSOLE.log(Level.WARNING, "Ocurrió un problema al modificar la orden");
+                }
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al modificar la cantidad de la orden. ", e);
             }

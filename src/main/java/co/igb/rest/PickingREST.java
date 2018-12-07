@@ -1,5 +1,6 @@
 package co.igb.rest;
 
+import co.igb.dto.PickingWarningDTO;
 import co.igb.dto.ResponseDTO;
 import co.igb.dto.SortedStockDTO;
 import co.igb.ejb.IGBApplicationBean;
@@ -143,6 +144,7 @@ public class PickingREST implements Serializable {
             @HeaderParam("X-Warehouse-Code") String warehouseCode,
             @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Buscando siguiente item para packing para el usuario {0} ", username);
+        List<PickingWarningDTO> warnings = new ArrayList<>();
 
         //buscar ordenes asignadas en estado open para el empleado en la empresa seleccionada
         List<AssignedOrder> orders = aoFacade.listOpenAssignationsByUserAndCompany(username, orderNumber, companyName, pruebas);
@@ -190,7 +192,19 @@ public class PickingREST implements Serializable {
 
             if (!itemsMissing.isEmpty()) {
                 //Marcar lineas de orden cerradas para items sin saldo
-                salesOrderEJB.closeOrderLines(companyName, orderDocEntry, itemsMissing);
+                boolean success = salesOrderEJB.closeOrderLines(companyName, orderDocEntry, itemsMissing);
+                if(!success) {
+                    PickingWarningDTO warning = new PickingWarningDTO();
+                    warning.setItems(new ArrayList<>(itemsMissing));
+                    warning.setMessage(
+                            String.format(
+                                    "Ocurrió un error al cerrar las líneas de la órden %s para los productos que no tienen saldo: %s",
+                                    orderNumber,
+                                    Arrays.toString(itemsMissing.toArray())));
+                    warning.setOrderNumber(orderNumber);
+                    warnings.add(warning);
+                }
+
                 //TODO: notificar cierre de lineas
 
                 if(itemsMissing.size() == pendingItems.size()) {
@@ -222,7 +236,7 @@ public class PickingREST implements Serializable {
 
         //seleccionar y retornar el siguiente item para picking
         if (sortedStock.isEmpty()) {
-            return Response.ok(new ResponseDTO(-1, "No hay más items pendientes por picking")).build();
+            return Response.ok(new ResponseDTO(-1, warnings)).build();
         } else {
             return Response.ok(new ResponseDTO(0, sortedStock.first())).build();
         }
