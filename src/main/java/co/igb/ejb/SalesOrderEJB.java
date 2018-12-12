@@ -50,12 +50,12 @@ public class SalesOrderEJB {
         return response.getDocument();
     }
 
-    public void closeOrderLines(String companyName, Integer orderEntry, HashSet<String> items) {
+    public boolean closeOrderLines(String companyName, Integer orderEntry, HashSet<String> items) {
         //1. Login
         String sessionId = getSessionId(companyName);
 
         //2. Procesar documento
-        Long docEntry = -1L;
+        boolean success = false;
         if (sessionId != null) {
             try {
                 Document doc = retrieveOrderDocument(orderEntry.longValue(), sessionId);
@@ -64,9 +64,13 @@ public class SalesOrderEJB {
                     if (items.contains(line.getItemCode())) {
                         line.setLineStatus("C");
                     }
+                    success = modifyOrderDocument(doc, sessionId);
+                    if (success) {
+                        CONSOLE.log(Level.INFO, "Se modifico la orden satisfactoriamente");
+                    } else {
+                        CONSOLE.log(Level.WARNING, "Ocurrió un problema al modificar la orden");
+                    }
                 }
-                modifyOrderDocument(doc, sessionId);
-                CONSOLE.log(Level.INFO, "Se modifico la orden satisfactoriamente", docEntry);
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar lineas en la orden. ", e);
             }
@@ -76,6 +80,7 @@ public class SalesOrderEJB {
         if (sessionId != null) {
             sapFunctions.logout(sessionId);
         }
+        return success;
     }
 
     public boolean modifySalesOrderQuantity(String companyName, Integer orderEntry, String itemCode, Integer newQuantity) {
@@ -84,7 +89,6 @@ public class SalesOrderEJB {
         String sessionId = getSessionId(companyName);
 
         //2. Procesar documento
-        Long docEntry = -1L;
         if (sessionId != null) {
             try {
                 Document doc = retrieveOrderDocument(orderEntry.longValue(), sessionId);
@@ -96,7 +100,11 @@ public class SalesOrderEJB {
                     }
                 }
                 success = modifyOrderDocument(doc, sessionId);
-                CONSOLE.log(Level.INFO, "Se modifico la orden satisfactoriamente", docEntry);
+                if (success) {
+                    CONSOLE.log(Level.INFO, "Se modifico la orden satisfactoriamente");
+                } else {
+                    CONSOLE.log(Level.WARNING, "Ocurrió un problema al modificar la orden");
+                }
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al modificar la cantidad de la orden. ", e);
             }

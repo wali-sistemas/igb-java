@@ -54,6 +54,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Document.WithholdingTaxDataWTXCollection }
+     * 
+     */
+    public Document.WithholdingTaxDataWTXCollection createDocumentWithholdingTaxDataWTXCollection() {
+        return new Document.WithholdingTaxDataWTXCollection();
+    }
+
+    /**
      * Create an instance of {@link Document.DocumentAdditionalExpenses }
      * 
      */
@@ -75,6 +83,14 @@ public class ObjectFactory {
      */
     public Document.DocumentAdditionalExpenses.DocumentAdditionalExpense.DocExpenseTaxJurisdictions createDocumentDocumentAdditionalExpensesDocumentAdditionalExpenseDocExpenseTaxJurisdictions() {
         return new Document.DocumentAdditionalExpenses.DocumentAdditionalExpense.DocExpenseTaxJurisdictions();
+    }
+
+    /**
+     * Create an instance of {@link Document.ElectronicProtocols }
+     * 
+     */
+    public Document.ElectronicProtocols createDocumentElectronicProtocols() {
+        return new Document.ElectronicProtocols();
     }
 
     /**
@@ -422,11 +438,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Document.WithholdingTaxDataWTXCollection.WithholdingTaxDataWTX }
+     * 
+     */
+    public Document.WithholdingTaxDataWTXCollection.WithholdingTaxDataWTX createDocumentWithholdingTaxDataWTXCollectionWithholdingTaxDataWTX() {
+        return new Document.WithholdingTaxDataWTXCollection.WithholdingTaxDataWTX();
+    }
+
+    /**
      * Create an instance of {@link Document.DocumentAdditionalExpenses.DocumentAdditionalExpense.DocExpenseTaxJurisdictions.DocExpenseTaxJurisdiction }
      * 
      */
     public Document.DocumentAdditionalExpenses.DocumentAdditionalExpense.DocExpenseTaxJurisdictions.DocExpenseTaxJurisdiction createDocumentDocumentAdditionalExpensesDocumentAdditionalExpenseDocExpenseTaxJurisdictionsDocExpenseTaxJurisdiction() {
         return new Document.DocumentAdditionalExpenses.DocumentAdditionalExpense.DocExpenseTaxJurisdictions.DocExpenseTaxJurisdiction();
+    }
+
+    /**
+     * Create an instance of {@link Document.ElectronicProtocols.ElectronicProtocol }
+     * 
+     */
+    public Document.ElectronicProtocols.ElectronicProtocol createDocumentElectronicProtocolsElectronicProtocol() {
+        return new Document.ElectronicProtocols.ElectronicProtocol();
     }
 
     /**
