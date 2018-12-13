@@ -9,7 +9,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import org.apache.commons.io.IOUtils;
 
 import javax.inject.Inject;
 import javax.servlet.Filter;
@@ -23,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
@@ -77,11 +75,12 @@ public class HeaderDecorationFilter implements Filter {
         entry.setPath(request.getPathInfo());
         entry.setMethod(request.getMethod());
 
+        /*
         if(entry.getMethod().equals("POST") || entry.getMethod().equals("PUT")) {
             try {
                 entry.setBody(IOUtils.toString(request.getReader()));
             } catch(IOException e) {}
-        }
+        }*/
 
         Enumeration<String> headerNames = request.getHeaderNames();
         while(headerNames.hasMoreElements()){
