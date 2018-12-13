@@ -184,16 +184,23 @@ public class PickingREST implements Serializable {
             HashMap<String, List<Object[]>> availableStock = parseOrderAvailableStock(orderStock);
             HashSet<String> itemsMissing = new HashSet<>();
             for (String pendingItemcode : pendingItems.keySet()) {
-                //Si no hay inventario para la referencia, la agrega a la lista de lineas para cerrar en la orden
-                if (!availableStock.containsKey(pendingItemcode)) {
+                //Si no hay inventario y no se ha hecho picking para la referencia, la agrega a la lista de lineas para cerrar en la orden
+                if (!availableStock.containsKey(pendingItemcode) && !pickedItems.containsKey(pendingItemcode)) {
                     itemsMissing.add(pendingItemcode);
+                } else if (!availableStock.containsKey(pendingItemcode) && pickedItems.containsKey(pendingItemcode)) {
+                    //TODO: reprocesar orden para que se genere cierre si no hay mas items pendientes
+                    salesOrderEJB.modifySalesOrderQuantity(
+                            companyName,
+                            orderDocEntry,
+                            pendingItemcode,
+                            getTotalPicked(pickedItems.get(pendingItemcode)));
                 }
             }
 
             if (!itemsMissing.isEmpty()) {
                 //Marcar lineas de orden cerradas para items sin saldo
                 boolean success = salesOrderEJB.closeOrderLines(companyName, orderDocEntry, itemsMissing);
-                if(!success) {
+                if (!success) {
                     PickingWarningDTO warning = new PickingWarningDTO();
                     warning.setItems(new ArrayList<>(itemsMissing));
                     warning.setMessage(
@@ -207,7 +214,7 @@ public class PickingREST implements Serializable {
 
                 //TODO: notificar cierre de lineas
 
-                if(itemsMissing.size() == pendingItems.size()) {
+                if (itemsMissing.size() == pendingItems.size()) {
                     //Finaliza la orden de picking ya que no quedan items pendientes
                     CONSOLE.log(Level.WARNING, "La orden {0} no tiene saldo en picking para los items pendientes por despachar y se marca como cerrada. ", order.getOrderNumber());
                     closeAndPack(order, pickedItems, companyName, pruebas);
@@ -255,6 +262,14 @@ public class PickingREST implements Serializable {
             }
         }
         return availableStock;
+    }
+
+    private Integer getTotalPicked(Map<Long, Integer> picked) {
+        int sum = 0;
+        for (Integer quantity : picked.values()) {
+            sum += quantity;
+        }
+        return sum;
     }
 
     private boolean avoidBin(TreeSet<String> skippedItems, String itemCode, String binType, String binTypeToAvoid) {
@@ -346,8 +361,10 @@ public class PickingREST implements Serializable {
                 }
                 packingOrder.getItems().add(packingItem);
             }
-            poFacade.create(packingOrder, companyName, pruebas);
-            CONSOLE.log(Level.INFO, "Se creo la orden de packing para la orden {0}", order.getOrderNumber());
+            if (!pickedItems.isEmpty()) {
+                poFacade.create(packingOrder, companyName, pruebas);
+                CONSOLE.log(Level.INFO, "Se creo la orden de packing para la orden {0}", order.getOrderNumber());
+            }
 
             order.setStatus(Constants.STATUS_CLOSED);
             aoFacade.edit(order, companyName, pruebas);
