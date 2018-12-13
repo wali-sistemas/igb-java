@@ -206,7 +206,7 @@ public class PickingREST implements Serializable {
                     warning.setMessage(
                             String.format(
                                     "Ocurrió un error al cerrar las líneas de la órden %s para los productos que no tienen saldo: %s",
-                                    orderNumber,
+                                    order.getOrderNumber(),
                                     Arrays.toString(itemsMissing.toArray())));
                     warning.setOrderNumber(orderNumber);
                     warnings.add(warning);
