@@ -44,6 +44,10 @@ public class HeaderDecorationFilter implements Filter {
         ((HttpServletResponse) response).addHeader("Access-Control-Allow-Origin", "*");
         ((HttpServletResponse) response).addHeader("Access-Control-Allow-Headers", ALLOWED_HEADERS);
         ((HttpServletResponse) response).addHeader("Access-Control-Allow-Methods", ALLOWED_METHODS);
+        ((HttpServletResponse) response).addHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        ((HttpServletResponse) response).addHeader("Pragma", "no-cache");
+        ((HttpServletResponse) response).addHeader("Expires", "0");
+
         HttpServletRequest req = (HttpServletRequest) request;
         CONSOLE.log(Level.FINE, "Processing {0} method", req.getMethod());
         if (req.getMethod().equals("OPTIONS") || validateAuthorizationToken(req)) {
