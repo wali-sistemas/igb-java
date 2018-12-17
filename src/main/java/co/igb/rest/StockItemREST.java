@@ -61,8 +61,30 @@ public class StockItemREST implements Serializable {
         if (items != null) {
             return Response.ok(items).build();
         } else {
-            CONSOLE.log(Level.INFO, "Ocurrio un error al consultar el stock del item {0}", parametro);
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el stock del item {0}", parametro);
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error al consultar el stock.")).build();
+        }
+    }
+
+    @GET
+    @Path("checkoutStock/{item}/{location}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    public Response confirmarStockItem(@PathParam("item") String itemCode,
+                                       @PathParam("location") String location,
+                                       @HeaderParam("X-Warehouse-Code") String warehouseCode,
+                                       @HeaderParam("X-Company-Name") String companyName,
+                                       @HeaderParam("X-Pruebas") Boolean pruebas) {
+        if (itemCode == null || itemCode.isEmpty() || location == null || location.isEmpty()) {
+            CONSOLE.log(Level.SEVERE, "No se encontraron datos para validar el stock.");
+            return Response.ok(new ResponseDTO(-1, "No se encontraron datos para validar el stock.")).build();
+        }
+
+        Object obj = itemFacade.getCheckOutStockItem(itemCode, location, companyName, pruebas);
+        if (obj != null) {
+            return Response.ok(obj).build();
+        } else {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al revisar el stock del item [" + itemCode + "] para la ubicacion [" + location + "]");
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error al revisar el stock del item [" + itemCode + "] para la ubicacion [" + location + "]")).build();
         }
     }
 }

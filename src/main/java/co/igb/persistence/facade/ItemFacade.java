@@ -6,10 +6,14 @@ import co.igb.util.Constants;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * @author jguisao
+ */
 @Stateless
 public class ItemFacade {
     private static final Logger CONSOLE = Logger.getLogger(ItemFacade.class.getSimpleName());
@@ -58,6 +62,25 @@ public class ItemFacade {
             return (List<Object[]>) persistenceConf.chooseSchema(companyName, pruebas, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el stock del item " + itemCode + ".", e);
+            return null;
+        }
+    }
+
+    public Object getCheckOutStockItem(String itemCode, String location, String companyName, boolean pruebas) {
+        EntityManager em = persistenceConf.chooseSchema(companyName, pruebas, DB_TYPE);
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT CAST(oi.ItemCode AS varchar(20)) AS itemCode, CAST(oi.WhsCode AS varchar(10)) AS whsCode, CAST(oi.OnHandQty AS INT) AS stockLoc ");
+        sb.append("FROM   OBIN ob ");
+        sb.append("INNER  JOIN OIBQ oi ON ob.AbsEntry = oi.BinAbs ");
+        sb.append("WHERE  ob.BinCode = '");
+        sb.append(location);
+        sb.append("' AND oi.ItemCode = '");
+        sb.append(itemCode);
+        sb.append("'");
+        try {
+            return (Object) em.createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE,"Ocurrio un error al revisar el stock del item [" + itemCode + "] para la ubicacion [" + location + "]");
             return null;
         }
     }
