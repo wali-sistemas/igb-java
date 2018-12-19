@@ -51,7 +51,13 @@ public class ItemFacade {
         sb.append("INNER  JOIN ITM1 pre ON pre.ItemCode = art.ItemCode ");
         sb.append("INNER  JOIN OIBQ ubc ON ubc.ItemCode = sal.ItemCode AND ubc.WhsCode = sal.WhsCode ");
         sb.append("INNER  JOIN OBIN dub ON dub.AbsEntry = ubc.BinAbs ");
-        sb.append("WHERE  sal.OnHand > 0 AND ubc.OnHandQty > 0 AND pre.PriceList = 1 AND (art.ItemCode = '");
+        sb.append("WHERE  sal.OnHand > 0 AND ubc.OnHandQty > 0 AND pre.PriceList = ");
+        if(companyName.contains("VARROC")){
+            sb.append("1 ");
+        } else {
+            sb.append("4 ");
+        }
+        sb.append("AND (art.ItemCode = '");
         sb.append(itemCode);
         sb.append("' OR dub.BinCode = '");
         sb.append(binCode);

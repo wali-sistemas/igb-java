@@ -87,9 +87,13 @@ public class PackingOrderFacade {
 
     public List<Object[]> listCustomersWithOpenRecords(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select distinct customer_id, customer_name from packing_order where company_name = '");
+        sb.append("select distinct o.customer_id, o.customer_name, ");
+        sb.append("(select GROUP_CONCAT(DISTINCT od.order_number) from packing_order od where od.customer_id = o.customer_id and o.company_name = '");
         sb.append(companyName);
-        sb.append("' and status = 'open' order by customer_name");
+        sb.append("' and status = 'open') AS order_numbers ");
+        sb.append("from packing_order o where o.company_name = '");
+        sb.append(companyName);
+        sb.append("' and status = 'open' order by customer_name;");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
