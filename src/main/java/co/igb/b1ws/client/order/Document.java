@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class Document {
     @XmlElement(name = "NumAtCard")
     protected String numAtCard;
     @XmlElement(name = "DocTotal")
-    protected Double docTotal;
+    protected BigDecimal docTotal;
     @XmlElement(name = "AttachmentEntry")
     protected Long attachmentEntry;
     @XmlElement(name = "DocCurrency")
@@ -1008,7 +1009,7 @@ public class Document {
      *     {@link Double }
      *
      */
-    public Double getDocTotal() {
+    public BigDecimal getDocTotal() {
         return docTotal;
     }
 
@@ -1020,7 +1021,7 @@ public class Document {
      *     {@link Double }
      *
      */
-    public void setDocTotal(Double value) {
+    public void setDocTotal(BigDecimal value) {
         this.docTotal = value;
     }
 
@@ -10061,7 +10062,7 @@ public class Document {
             @XmlElement(name = "ExpenseCode")
             protected Long expenseCode;
             @XmlElement(name = "LineTotal")
-            protected Double lineTotal;
+            protected BigDecimal lineTotal;
             @XmlElement(name = "LineTotalFC")
             protected Double lineTotalFC;
             @XmlElement(name = "LineTotalSys")
@@ -10195,7 +10196,7 @@ public class Document {
              *     {@link Double }
              *     
              */
-            public Double getLineTotal() {
+            public BigDecimal getLineTotal() {
                 return lineTotal;
             }
 
@@ -10207,7 +10208,7 @@ public class Document {
              *     {@link Double }
              *     
              */
-            public void setLineTotal(Double value) {
+            public void setLineTotal(BigDecimal value) {
                 this.lineTotal = value;
             }
 
@@ -13567,7 +13568,7 @@ public class Document {
             @XmlElement(name = "UnitsOfMeasurment")
             protected Double unitsOfMeasurment;
             @XmlElement(name = "LineTotal")
-            protected Double lineTotal;
+            protected BigDecimal lineTotal;
             @XmlElement(name = "TaxPercentagePerRow")
             protected Double taxPercentagePerRow;
             @XmlElement(name = "TaxTotal")
@@ -13649,7 +13650,7 @@ public class Document {
             @XmlElement(name = "GrossBase")
             protected Long grossBase;
             @XmlElement(name = "GrossProfitTotalBasePrice")
-            protected Double grossProfitTotalBasePrice;
+            protected BigDecimal grossProfitTotalBasePrice;
             @XmlElement(name = "CostingCode2")
             protected String costingCode2;
             @XmlElement(name = "CostingCode3")
@@ -13765,7 +13766,7 @@ public class Document {
             @XmlElement(name = "GrossPrice")
             protected Double grossPrice;
             @XmlElement(name = "GrossTotal")
-            protected Double grossTotal;
+            protected BigDecimal grossTotal;
             @XmlElement(name = "GrossTotalFC")
             protected Double grossTotalFC;
             @XmlElement(name = "GrossTotalSC")
@@ -15748,7 +15749,7 @@ public class Document {
              *     {@link Double }
              *     
              */
-            public Double getLineTotal() {
+            public BigDecimal getLineTotal() {
                 return lineTotal;
             }
 
@@ -15760,7 +15761,7 @@ public class Document {
              *     {@link Double }
              *     
              */
-            public void setLineTotal(Double value) {
+            public void setLineTotal(BigDecimal value) {
                 this.lineTotal = value;
             }
 
@@ -16732,7 +16733,7 @@ public class Document {
              *     {@link Double }
              *     
              */
-            public Double getGrossProfitTotalBasePrice() {
+            public BigDecimal getGrossProfitTotalBasePrice() {
                 return grossProfitTotalBasePrice;
             }
 
@@ -16744,7 +16745,7 @@ public class Document {
              *     {@link Double }
              *     
              */
-            public void setGrossProfitTotalBasePrice(Double value) {
+            public void setGrossProfitTotalBasePrice(BigDecimal value) {
                 this.grossProfitTotalBasePrice = value;
             }
 
@@ -18100,7 +18101,7 @@ public class Document {
              *     {@link Double }
              *     
              */
-            public Double getGrossTotal() {
+            public BigDecimal getGrossTotal() {
                 return grossTotal;
             }
 
@@ -18112,7 +18113,7 @@ public class Document {
              *     {@link Double }
              *     
              */
-            public void setGrossTotal(Double value) {
+            public void setGrossTotal(BigDecimal value) {
                 this.grossTotal = value;
             }
 
@@ -19757,7 +19758,7 @@ public class Document {
                     @XmlElement(name = "ExpenseCode")
                     protected Long expenseCode;
                     @XmlElement(name = "LineTotal")
-                    protected Double lineTotal;
+                    protected BigDecimal lineTotal;
                     @XmlElement(name = "LineTotalFC")
                     protected Double lineTotalFC;
                     @XmlElement(name = "LineTotalSys")
@@ -19911,7 +19912,7 @@ public class Document {
                      *     {@link Double }
                      *     
                      */
-                    public Double getLineTotal() {
+                    public BigDecimal getLineTotal() {
                         return lineTotal;
                     }
 
@@ -19923,7 +19924,7 @@ public class Document {
                      *     {@link Double }
                      *     
                      */
-                    public void setLineTotal(Double value) {
+                    public void setLineTotal(BigDecimal value) {
                         this.lineTotal = value;
                     }
 
@@ -23558,7 +23559,7 @@ public class Document {
             @XmlElement(name = "Freight3SC")
             protected Double freight3SC;
             @XmlElement(name = "GrossTotal")
-            protected Double grossTotal;
+            protected BigDecimal grossTotal;
             @XmlElement(name = "GrossTotalFC")
             protected Double grossTotalFC;
             @XmlElement(name = "GrossTotalSC")
@@ -24052,7 +24053,7 @@ public class Document {
              *     {@link Double }
              *     
              */
-            public Double getGrossTotal() {
+            public BigDecimal getGrossTotal() {
                 return grossTotal;
             }
 
@@ -24064,7 +24065,7 @@ public class Document {
              *     {@link Double }
              *     
              */
-            public void setGrossTotal(Double value) {
+            public void setGrossTotal(BigDecimal value) {
                 this.grossTotal = value;
             }
 
