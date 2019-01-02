@@ -20,6 +20,9 @@ public class Warehouse implements Serializable {
     @Basic(optional = false)
     @Column(name = "Inactive")
     private Character inactive;
+    @Basic(optional = false)
+    @Column(name = "DftBinAbs")
+    private Integer dftBinAbs;
 
     public Warehouse() {
     }
@@ -52,6 +55,14 @@ public class Warehouse implements Serializable {
         this.inactive = inactive;
     }
 
+    public Integer getDftBinAbs() {
+        return dftBinAbs;
+    }
+
+    public void setDftBinAbs(Integer dftBinAbs) {
+        this.dftBinAbs = dftBinAbs;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -75,6 +86,7 @@ public class Warehouse implements Serializable {
                 "whsCode='" + whsCode + '\'' +
                 ", whsName='" + whsName + '\'' +
                 ", inactive=" + inactive +
+                ", dftBinAbs=" + dftBinAbs +
                 '}';
     }
 }
