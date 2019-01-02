@@ -92,7 +92,7 @@ public class SalesOrderFacade {
         sb.append("cast(enc.cardname as varchar(100)) cardname, cast(enc.confirmed as varchar(1)) confirmed, ");
         sb.append("(select count(1) from rdr1 det where det.docentry = enc.docentry and det.linestatus = 'O') items, ");
         sb.append("cast(comments as varchar(254)) comments, cast(enc.address2 as varchar(200)) address, ");
-        sb.append("cast(enc.u_transp as varchar(4)) transp from ordr enc ");
+        sb.append("isnull(cast(enc.u_transp as varchar(4)),'') transp from ordr enc ");
         sb.append("inner join rdr1 det on det.docentry = enc.docentry and det.whscode = '");
         sb.append(warehouseCode);
         sb.append("' where enc.DocStatus = 'O' ");

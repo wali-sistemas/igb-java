@@ -340,7 +340,7 @@ public class PackingREST implements Serializable {
                 try {
                     Long baseLineNum = salesOrderFacade.getLineNum(orderNumber, itemCode, companyName, pruebas);
                     if (baseLineNum < 0) {
-                        return Response.ok(new ResponseDTO(-1, "Ocurrio un error al consultar el numero de linea de la orden (baseLine). Es posible que la orden de venta ya se haya cerrado")).build();
+                        return Response.ok(new ResponseDTO(-1, "Ocurrio un error al consultar el numero de linea de la orden (baseLine) para el ítem [" + itemCode +"]. Es posible que la orden de compra ya se haya cerrado")).build();
                     }
                     line.setBaseLine(baseLineNum);
                 } catch (Exception e) {
@@ -736,5 +736,29 @@ public class PackingREST implements Serializable {
         }
 
         return Response.ok(new ResponseDTO(0, "")).build();
+    }
+
+    @GET
+    @Path("cancel-packing-order/{idPackingOrder}")
+    @Produces({MediaType.APPLICATION_JSON + ";chaset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response cancelPackingOrder(@PathParam("idPackingOrder") Integer idPackingOrder,
+                                       @HeaderParam("X-Company-Name") String companyName,
+                                       @HeaderParam("X-Pruebas") boolean pruebas,
+                                       @HeaderParam("X-Employee") String username) {
+        try {
+            List<Integer> items = poFacade.listIdOrderItems(idPackingOrder.longValue(), companyName, false);
+            for (Integer id : items) {
+                //reiniciar el packedQty a 0
+                poFacade.updatePackedQty(id.longValue(), companyName, false);
+                //Cierra los registros de packing abiertos
+                plFacade.closePackingOrder(username, companyName, false);
+            }
+
+            return Response.ok(new ResponseDTO(0, "Ok")).build();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al cancelar el proceso de packing " + idPackingOrder, e);
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error al cancelar el proceso de packing.")).build();
+        }
     }
 }

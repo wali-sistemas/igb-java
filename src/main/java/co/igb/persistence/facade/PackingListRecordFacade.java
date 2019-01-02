@@ -138,7 +138,7 @@ public class PackingListRecordFacade {
 
     public Integer obtainNumberOfBoxes(Integer idPackingList, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select max(box_number) from packing_list_record where idpacking_list = ");
+        sb.append("select max(box_number) from packing_list_record where idpacking_order = ");
         sb.append(idPackingList);
         sb.append(" and company_name = '");
         sb.append(companyName);
@@ -157,7 +157,7 @@ public class PackingListRecordFacade {
         sb.append(idPackingList);
         sb.append(" and company_name = '");
         sb.append(companyName);
-        sb.append("'");
+        sb.append("' and status = 'open'");
         try {
             List<Integer> orderNumberList = (List<Integer>) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
             StringBuilder orderNumberText = new StringBuilder();

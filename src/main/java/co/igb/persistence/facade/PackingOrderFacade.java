@@ -87,14 +87,32 @@ public class PackingOrderFacade {
 
     public List<Object[]> listCustomersWithOpenRecords(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select distinct customer_id, customer_name from packing_order where company_name = '");
+        sb.append("select distinct o.customer_id, o.customer_name, ");
+        sb.append("(select GROUP_CONCAT(DISTINCT od.order_number) from packing_order od where od.customer_id = o.customer_id and o.company_name = '");
         sb.append(companyName);
-        sb.append("' and status = 'open' order by customer_name");
+        sb.append("' and status = 'open') AS order_numbers ");
+        sb.append("from packing_order o where o.company_name = '");
+        sb.append(companyName);
+        sb.append("' and status = 'open' order by customer_name;");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los clientes con ordenes de empaque abiertas. ", e);
             return new ArrayList<>();
+        }
+    }
+
+    public Integer OrderNumber(Integer idPackingList, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select distinct order_number order_number from packing_order where company_name = '");
+        sb.append(companyName);
+        sb.append("' and idpacking_order =");
+        sb.append(idPackingList);
+        try {
+            return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la orden.", e);
+            return null;
         }
     }
 
@@ -286,6 +304,48 @@ public class PackingOrderFacade {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar las ordenes de packing. ", e);
             return new ArrayList<>();
+        }
+    }
+
+    public List<Integer> listIdOrderItems(Long idPackingOrder, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select bin.idpacking_order_item ");
+        sb.append("from packing_order ord inner join packing_order_item itm on itm.idpacking_order = ord.idpacking_order ");
+        sb.append("inner join packing_order_item_bin bin on bin.idpacking_order_item = itm.idpacking_order_item where ord.company_name = '");
+        sb.append(companyName);
+        sb.append("' and ord.idpacking_order =");
+        sb.append(idPackingOrder);
+        sb.append(" order by bin_code, item_code");
+        try {
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la orden de empaque. ", e);
+            return new ArrayList<>();
+        }
+    }
+
+    public void updatePackedQty(Long idPackingOrderItem, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("update packing_order_item_bin set packed_qty = 0 where idpacking_order_item = ");
+        sb.append(idPackingOrderItem);
+        try {
+            persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).executeUpdate();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el packedQty.", e);
+        }
+    }
+
+    public void closePackingOrder(String username, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("update packing_list_record set status = 'closed' where employee = '");
+        sb.append(username);
+        sb.append("' and status = 'open' and company_name = '");
+        sb.append(companyName);
+        sb.append("' and idpacking_list_record <> 0");
+        try {
+            persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).executeUpdate();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la orden de packing. ", e);
         }
     }
 }
