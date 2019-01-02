@@ -1,6 +1,10 @@
 package co.igb.dto;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class WarehouseDTO {
+    private Integer dftBinAbs;
     private String code;
     private String name;
 
@@ -10,6 +14,14 @@ public class WarehouseDTO {
     public WarehouseDTO(String code, String name) {
         this.code = code;
         this.name = name;
+    }
+
+    public Integer getDftBinAbs() {
+        return dftBinAbs;
+    }
+
+    public void setDftBinAbs(Integer dftBinAbs) {
+        this.dftBinAbs = dftBinAbs;
     }
 
     public String getCode() {
@@ -31,7 +43,8 @@ public class WarehouseDTO {
     @Override
     public String toString() {
         return "WarehouseDTO{" +
-                "code='" + code + '\'' +
+                "dftBinAbs=" + dftBinAbs +
+                ", code='" + code + '\'' +
                 ", name='" + name + '\'' +
                 '}';
     }

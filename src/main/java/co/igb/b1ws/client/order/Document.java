@@ -50,7 +50,7 @@ public class Document {
     @XmlElement(name = "DocCurrency")
     protected String docCurrency;
     @XmlElement(name = "DocRate")
-    protected Double docRate;
+    protected BigDecimal docRate;
     @XmlElement(name = "Reference1")
     protected String reference1;
     @XmlElement(name = "Reference2")
@@ -94,7 +94,7 @@ public class Document {
     @XmlElement(name = "FederalTaxID")
     protected String federalTaxID;
     @XmlElement(name = "DiscountPercent")
-    protected Double discountPercent;
+    protected BigDecimal discountPercent;
     @XmlElement(name = "PaymentReference")
     protected String paymentReference;
     @XmlElement(name = "CreationDate")
@@ -108,17 +108,17 @@ public class Document {
     @XmlElement(name = "TransNum")
     protected Long transNum;
     @XmlElement(name = "VatSum")
-    protected Double vatSum;
+    protected BigDecimal vatSum;
     @XmlElement(name = "VatSumSys")
-    protected Double vatSumSys;
+    protected BigDecimal vatSumSys;
     @XmlElement(name = "VatSumFc")
-    protected Double vatSumFc;
+    protected BigDecimal vatSumFc;
     @XmlElement(name = "NetProcedure")
     protected String netProcedure;
     @XmlElement(name = "DocTotalFc")
-    protected Double docTotalFc;
+    protected BigDecimal docTotalFc;
     @XmlElement(name = "DocTotalSys")
-    protected Double docTotalSys;
+    protected BigDecimal docTotalSys;
     @XmlElement(name = "Form1099")
     protected Long form1099;
     @XmlElement(name = "Box1099")
@@ -176,49 +176,49 @@ public class Document {
     @XmlElement(name = "TaxExemptionLetterNum")
     protected String taxExemptionLetterNum;
     @XmlElement(name = "WTApplied")
-    protected Double wtApplied;
+    protected BigDecimal wtApplied;
     @XmlElement(name = "WTAppliedFC")
-    protected Double wtAppliedFC;
+    protected BigDecimal wtAppliedFC;
     @XmlElement(name = "BillOfExchangeReserved")
     protected String billOfExchangeReserved;
     @XmlElement(name = "AgentCode")
     protected String agentCode;
     @XmlElement(name = "WTAppliedSC")
-    protected Double wtAppliedSC;
+    protected BigDecimal wtAppliedSC;
     @XmlElement(name = "TotalEqualizationTax")
-    protected Double totalEqualizationTax;
+    protected BigDecimal totalEqualizationTax;
     @XmlElement(name = "TotalEqualizationTaxFC")
-    protected Double totalEqualizationTaxFC;
+    protected BigDecimal totalEqualizationTaxFC;
     @XmlElement(name = "TotalEqualizationTaxSC")
-    protected Double totalEqualizationTaxSC;
+    protected BigDecimal totalEqualizationTaxSC;
     @XmlElement(name = "NumberOfInstallments")
     protected Long numberOfInstallments;
     @XmlElement(name = "ApplyTaxOnFirstInstallment")
     protected String applyTaxOnFirstInstallment;
     @XmlElement(name = "WTNonSubjectAmount")
-    protected Double wtNonSubjectAmount;
+    protected BigDecimal wtNonSubjectAmount;
     @XmlElement(name = "WTNonSubjectAmountSC")
-    protected Double wtNonSubjectAmountSC;
+    protected BigDecimal wtNonSubjectAmountSC;
     @XmlElement(name = "WTNonSubjectAmountFC")
-    protected Double wtNonSubjectAmountFC;
+    protected BigDecimal wtNonSubjectAmountFC;
     @XmlElement(name = "WTExemptedAmount")
-    protected Double wtExemptedAmount;
+    protected BigDecimal wtExemptedAmount;
     @XmlElement(name = "WTExemptedAmountSC")
-    protected Double wtExemptedAmountSC;
+    protected BigDecimal wtExemptedAmountSC;
     @XmlElement(name = "WTExemptedAmountFC")
-    protected Double wtExemptedAmountFC;
+    protected BigDecimal wtExemptedAmountFC;
     @XmlElement(name = "BaseAmount")
-    protected Double baseAmount;
+    protected BigDecimal baseAmount;
     @XmlElement(name = "BaseAmountSC")
-    protected Double baseAmountSC;
+    protected BigDecimal baseAmountSC;
     @XmlElement(name = "BaseAmountFC")
-    protected Double baseAmountFC;
+    protected BigDecimal baseAmountFC;
     @XmlElement(name = "WTAmount")
-    protected Double wtAmount;
+    protected BigDecimal wtAmount;
     @XmlElement(name = "WTAmountSC")
-    protected Double wtAmountSC;
+    protected BigDecimal wtAmountSC;
     @XmlElement(name = "WTAmountFC")
-    protected Double wtAmountFC;
+    protected BigDecimal wtAmountFC;
     @XmlElement(name = "VatDate")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar vatDate;
@@ -259,7 +259,7 @@ public class Document {
     @XmlElement(name = "BPL_IDAssignedToInvoice")
     protected Long bplidAssignedToInvoice;
     @XmlElement(name = "DownPayment")
-    protected Double downPayment;
+    protected BigDecimal downPayment;
     @XmlElement(name = "ReserveInvoice")
     protected String reserveInvoice;
     @XmlElement(name = "LanguageCode")
@@ -284,31 +284,31 @@ public class Document {
     @XmlElement(name = "UseCorrectionVATGroup")
     protected String useCorrectionVATGroup;
     @XmlElement(name = "TotalDiscount")
-    protected Double totalDiscount;
+    protected BigDecimal totalDiscount;
     @XmlElement(name = "DownPaymentAmount")
-    protected Double downPaymentAmount;
+    protected BigDecimal downPaymentAmount;
     @XmlElement(name = "DownPaymentPercentage")
-    protected Double downPaymentPercentage;
+    protected BigDecimal downPaymentPercentage;
     @XmlElement(name = "DownPaymentType")
     protected String downPaymentType;
     @XmlElement(name = "DownPaymentAmountSC")
-    protected Double downPaymentAmountSC;
+    protected BigDecimal downPaymentAmountSC;
     @XmlElement(name = "DownPaymentAmountFC")
-    protected Double downPaymentAmountFC;
+    protected BigDecimal downPaymentAmountFC;
     @XmlElement(name = "VatPercent")
-    protected Double vatPercent;
+    protected BigDecimal vatPercent;
     @XmlElement(name = "ServiceGrossProfitPercent")
-    protected Double serviceGrossProfitPercent;
+    protected BigDecimal serviceGrossProfitPercent;
     @XmlElement(name = "OpeningRemarks")
     protected String openingRemarks;
     @XmlElement(name = "ClosingRemarks")
     protected String closingRemarks;
     @XmlElement(name = "RoundingDiffAmount")
-    protected Double roundingDiffAmount;
+    protected BigDecimal roundingDiffAmount;
     @XmlElement(name = "RoundingDiffAmountFC")
-    protected Double roundingDiffAmountFC;
+    protected BigDecimal roundingDiffAmountFC;
     @XmlElement(name = "RoundingDiffAmountSC")
-    protected Double roundingDiffAmountSC;
+    protected BigDecimal roundingDiffAmountSC;
     @XmlElement(name = "Cancelled")
     protected String cancelled;
     @XmlElement(name = "SignatureInputMessage")
@@ -391,9 +391,9 @@ public class Document {
     @XmlElement(name = "AuthorizationStatus")
     protected String authorizationStatus;
     @XmlElement(name = "TotalDiscountFC")
-    protected Double totalDiscountFC;
+    protected BigDecimal totalDiscountFC;
     @XmlElement(name = "TotalDiscountSC")
-    protected Double totalDiscountSC;
+    protected BigDecimal totalDiscountSC;
     @XmlElement(name = "RelevantToGTS")
     protected String relevantToGTS;
     @XmlElement(name = "BPLName")
@@ -548,17 +548,17 @@ public class Document {
     @XmlElement(name = "U_ANT_REALIZ")
     protected String uantrealiz;
     @XmlElement(name = "U_TOT_CAJ")
-    protected Double utotcaj;
+    protected BigDecimal utotcaj;
     @XmlElement(name = "U_TOT_BUL")
-    protected Double utotbul;
+    protected BigDecimal utotbul;
     @XmlElement(name = "U_TOT_LIOS")
-    protected Double utotlios;
+    protected BigDecimal utotlios;
     @XmlElement(name = "U_VLR_FLE")
-    protected Double uvlrfle;
+    protected BigDecimal uvlrfle;
     @XmlElement(name = "U_VLR_SEG")
-    protected Double uvlrseg;
+    protected BigDecimal uvlrseg;
     @XmlElement(name = "U_TOT_FLE")
-    protected Double utotfle;
+    protected BigDecimal utotfle;
     @XmlElement(name = "U_HORA_INI")
     @XmlSchemaType(name = "time")
     protected XMLGregorianCalendar uhoraini;
@@ -566,7 +566,7 @@ public class Document {
     @XmlSchemaType(name = "time")
     protected XMLGregorianCalendar uhorafin;
     @XmlElement(name = "U_PESO_BRUTO")
-    protected Double upesobruto;
+    protected BigDecimal upesobruto;
     @XmlElement(name = "U_AUT_PRECIO")
     protected String uautprecio;
     @XmlElement(name = "U_TipoNota")
@@ -581,7 +581,7 @@ public class Document {
     @XmlElement(name = "U_TRANSP_IMP")
     protected String utranspimp;
     @XmlElement(name = "U_TIEMPO_ESTIMADO")
-    protected Double utiempoestimado;
+    protected BigDecimal utiempoestimado;
     @XmlElement(name = "U_FEC_INI")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar ufecini;
@@ -608,15 +608,15 @@ public class Document {
     @XmlElement(name = "U_TIPO_EMPAQUE")
     protected String utipoempaque;
     @XmlElement(name = "U_VR_ANTICIPO")
-    protected Double uvranticipo;
+    protected BigDecimal uvranticipo;
     @XmlElement(name = "U_VR_TOTAL")
-    protected Double uvrtotal;
+    protected BigDecimal uvrtotal;
     @XmlElement(name = "U_VR_IMPUESTO")
-    protected Double uvrimpuesto;
+    protected BigDecimal uvrimpuesto;
     @XmlElement(name = "U_OBSERVACION")
     protected String uobservacion;
     @XmlElement(name = "U_VR_DECLARADO")
-    protected Double uvrdeclarado;
+    protected BigDecimal uvrdeclarado;
     @XmlElement(name = "U_PUERTO_EMB")
     protected String upuertoemb;
     @XmlElement(name = "U_NAVIERA")
@@ -668,7 +668,7 @@ public class Document {
     @XmlElement(name = "U_nwr_Tag")
     protected String uNwrTag;
     @XmlElement(name = "U_nwr_Frgt")
-    protected Double uNwrFrgt;
+    protected BigDecimal uNwrFrgt;
     @XmlElement(name = "U_NWR_NORM")
     protected String unwrnorm;
     @XmlElement(name = "U_TypeExped")
@@ -694,7 +694,7 @@ public class Document {
     @XmlElement(name = "U_OK1_IFRS")
     protected String uok1IFRS;
     @XmlElement(name = "U_TOT_FLE_CLIE")
-    protected Double utotfleclie;
+    protected BigDecimal utotfleclie;
     @XmlElement(name = "U_SHIPPING")
     protected String ushipping;
     @XmlElement(name = "U_EsIndep")
@@ -713,11 +713,11 @@ public class Document {
     @XmlElement(name = "U_Bodega")
     protected String uBodega;
     @XmlElement(name = "U_AIU_ADMIN")
-    protected Double uaiuadmin;
+    protected BigDecimal uaiuadmin;
     @XmlElement(name = "U_AIU_IMPRE")
-    protected Double uaiuimpre;
+    protected BigDecimal uaiuimpre;
     @XmlElement(name = "U_AIU_UTIL")
-    protected Double uaiuutil;
+    protected BigDecimal uaiuutil;
     @XmlElement(name = "Document_ApprovalRequests")
     protected Document.DocumentApprovalRequests documentApprovalRequests;
     @XmlElement(name = "DocumentLines")
@@ -1006,7 +1006,7 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
     public BigDecimal getDocTotal() {
@@ -1018,7 +1018,7 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
     public void setDocTotal(BigDecimal value) {
@@ -1078,10 +1078,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getDocRate() {
+    public BigDecimal getDocRate() {
         return docRate;
     }
 
@@ -1090,10 +1090,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setDocRate(Double value) {
+    public void setDocRate(BigDecimal value) {
         this.docRate = value;
     }
 
@@ -1582,10 +1582,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getDiscountPercent() {
+    public BigDecimal getDiscountPercent() {
         return discountPercent;
     }
 
@@ -1594,10 +1594,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setDiscountPercent(Double value) {
+    public void setDiscountPercent(BigDecimal value) {
         this.discountPercent = value;
     }
 
@@ -1726,10 +1726,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getVatSum() {
+    public BigDecimal getVatSum() {
         return vatSum;
     }
 
@@ -1738,10 +1738,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setVatSum(Double value) {
+    public void setVatSum(BigDecimal value) {
         this.vatSum = value;
     }
 
@@ -1750,10 +1750,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getVatSumSys() {
+    public BigDecimal getVatSumSys() {
         return vatSumSys;
     }
 
@@ -1762,10 +1762,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setVatSumSys(Double value) {
+    public void setVatSumSys(BigDecimal value) {
         this.vatSumSys = value;
     }
 
@@ -1774,10 +1774,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getVatSumFc() {
+    public BigDecimal getVatSumFc() {
         return vatSumFc;
     }
 
@@ -1786,10 +1786,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setVatSumFc(Double value) {
+    public void setVatSumFc(BigDecimal value) {
         this.vatSumFc = value;
     }
 
@@ -1822,10 +1822,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getDocTotalFc() {
+    public BigDecimal getDocTotalFc() {
         return docTotalFc;
     }
 
@@ -1834,10 +1834,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setDocTotalFc(Double value) {
+    public void setDocTotalFc(BigDecimal value) {
         this.docTotalFc = value;
     }
 
@@ -1846,10 +1846,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getDocTotalSys() {
+    public BigDecimal getDocTotalSys() {
         return docTotalSys;
     }
 
@@ -1858,10 +1858,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setDocTotalSys(Double value) {
+    public void setDocTotalSys(BigDecimal value) {
         this.docTotalSys = value;
     }
 
@@ -2494,10 +2494,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getWTApplied() {
+    public BigDecimal getWTApplied() {
         return wtApplied;
     }
 
@@ -2506,10 +2506,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setWTApplied(Double value) {
+    public void setWTApplied(BigDecimal value) {
         this.wtApplied = value;
     }
 
@@ -2518,10 +2518,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getWTAppliedFC() {
+    public BigDecimal getWTAppliedFC() {
         return wtAppliedFC;
     }
 
@@ -2530,10 +2530,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setWTAppliedFC(Double value) {
+    public void setWTAppliedFC(BigDecimal value) {
         this.wtAppliedFC = value;
     }
 
@@ -2590,10 +2590,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getWTAppliedSC() {
+    public BigDecimal getWTAppliedSC() {
         return wtAppliedSC;
     }
 
@@ -2602,10 +2602,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setWTAppliedSC(Double value) {
+    public void setWTAppliedSC(BigDecimal value) {
         this.wtAppliedSC = value;
     }
 
@@ -2614,10 +2614,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getTotalEqualizationTax() {
+    public BigDecimal getTotalEqualizationTax() {
         return totalEqualizationTax;
     }
 
@@ -2626,10 +2626,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setTotalEqualizationTax(Double value) {
+    public void setTotalEqualizationTax(BigDecimal value) {
         this.totalEqualizationTax = value;
     }
 
@@ -2638,10 +2638,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getTotalEqualizationTaxFC() {
+    public BigDecimal getTotalEqualizationTaxFC() {
         return totalEqualizationTaxFC;
     }
 
@@ -2650,10 +2650,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setTotalEqualizationTaxFC(Double value) {
+    public void setTotalEqualizationTaxFC(BigDecimal value) {
         this.totalEqualizationTaxFC = value;
     }
 
@@ -2662,10 +2662,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getTotalEqualizationTaxSC() {
+    public BigDecimal getTotalEqualizationTaxSC() {
         return totalEqualizationTaxSC;
     }
 
@@ -2674,10 +2674,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setTotalEqualizationTaxSC(Double value) {
+    public void setTotalEqualizationTaxSC(BigDecimal value) {
         this.totalEqualizationTaxSC = value;
     }
 
@@ -2734,10 +2734,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getWTNonSubjectAmount() {
+    public BigDecimal getWTNonSubjectAmount() {
         return wtNonSubjectAmount;
     }
 
@@ -2746,10 +2746,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setWTNonSubjectAmount(Double value) {
+    public void setWTNonSubjectAmount(BigDecimal value) {
         this.wtNonSubjectAmount = value;
     }
 
@@ -2758,10 +2758,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getWTNonSubjectAmountSC() {
+    public BigDecimal getWTNonSubjectAmountSC() {
         return wtNonSubjectAmountSC;
     }
 
@@ -2770,10 +2770,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setWTNonSubjectAmountSC(Double value) {
+    public void setWTNonSubjectAmountSC(BigDecimal value) {
         this.wtNonSubjectAmountSC = value;
     }
 
@@ -2782,10 +2782,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getWTNonSubjectAmountFC() {
+    public BigDecimal getWTNonSubjectAmountFC() {
         return wtNonSubjectAmountFC;
     }
 
@@ -2794,10 +2794,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setWTNonSubjectAmountFC(Double value) {
+    public void setWTNonSubjectAmountFC(BigDecimal value) {
         this.wtNonSubjectAmountFC = value;
     }
 
@@ -2806,10 +2806,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getWTExemptedAmount() {
+    public BigDecimal getWTExemptedAmount() {
         return wtExemptedAmount;
     }
 
@@ -2818,10 +2818,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setWTExemptedAmount(Double value) {
+    public void setWTExemptedAmount(BigDecimal value) {
         this.wtExemptedAmount = value;
     }
 
@@ -2830,10 +2830,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getWTExemptedAmountSC() {
+    public BigDecimal getWTExemptedAmountSC() {
         return wtExemptedAmountSC;
     }
 
@@ -2842,10 +2842,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setWTExemptedAmountSC(Double value) {
+    public void setWTExemptedAmountSC(BigDecimal value) {
         this.wtExemptedAmountSC = value;
     }
 
@@ -2854,10 +2854,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getWTExemptedAmountFC() {
+    public BigDecimal getWTExemptedAmountFC() {
         return wtExemptedAmountFC;
     }
 
@@ -2866,10 +2866,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setWTExemptedAmountFC(Double value) {
+    public void setWTExemptedAmountFC(BigDecimal value) {
         this.wtExemptedAmountFC = value;
     }
 
@@ -2878,10 +2878,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getBaseAmount() {
+    public BigDecimal getBaseAmount() {
         return baseAmount;
     }
 
@@ -2890,10 +2890,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setBaseAmount(Double value) {
+    public void setBaseAmount(BigDecimal value) {
         this.baseAmount = value;
     }
 
@@ -2902,10 +2902,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getBaseAmountSC() {
+    public BigDecimal getBaseAmountSC() {
         return baseAmountSC;
     }
 
@@ -2914,10 +2914,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setBaseAmountSC(Double value) {
+    public void setBaseAmountSC(BigDecimal value) {
         this.baseAmountSC = value;
     }
 
@@ -2926,10 +2926,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getBaseAmountFC() {
+    public BigDecimal getBaseAmountFC() {
         return baseAmountFC;
     }
 
@@ -2938,10 +2938,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setBaseAmountFC(Double value) {
+    public void setBaseAmountFC(BigDecimal value) {
         this.baseAmountFC = value;
     }
 
@@ -2950,10 +2950,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getWTAmount() {
+    public BigDecimal getWTAmount() {
         return wtAmount;
     }
 
@@ -2962,10 +2962,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setWTAmount(Double value) {
+    public void setWTAmount(BigDecimal value) {
         this.wtAmount = value;
     }
 
@@ -2974,10 +2974,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getWTAmountSC() {
+    public BigDecimal getWTAmountSC() {
         return wtAmountSC;
     }
 
@@ -2986,10 +2986,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setWTAmountSC(Double value) {
+    public void setWTAmountSC(BigDecimal value) {
         this.wtAmountSC = value;
     }
 
@@ -2998,10 +2998,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getWTAmountFC() {
+    public BigDecimal getWTAmountFC() {
         return wtAmountFC;
     }
 
@@ -3010,10 +3010,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setWTAmountFC(Double value) {
+    public void setWTAmountFC(BigDecimal value) {
         this.wtAmountFC = value;
     }
 
@@ -3478,10 +3478,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getDownPayment() {
+    public BigDecimal getDownPayment() {
         return downPayment;
     }
 
@@ -3490,10 +3490,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setDownPayment(Double value) {
+    public void setDownPayment(BigDecimal value) {
         this.downPayment = value;
     }
 
@@ -3766,10 +3766,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getTotalDiscount() {
+    public BigDecimal getTotalDiscount() {
         return totalDiscount;
     }
 
@@ -3778,10 +3778,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setTotalDiscount(Double value) {
+    public void setTotalDiscount(BigDecimal value) {
         this.totalDiscount = value;
     }
 
@@ -3790,10 +3790,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getDownPaymentAmount() {
+    public BigDecimal getDownPaymentAmount() {
         return downPaymentAmount;
     }
 
@@ -3802,10 +3802,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setDownPaymentAmount(Double value) {
+    public void setDownPaymentAmount(BigDecimal value) {
         this.downPaymentAmount = value;
     }
 
@@ -3814,10 +3814,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getDownPaymentPercentage() {
+    public BigDecimal getDownPaymentPercentage() {
         return downPaymentPercentage;
     }
 
@@ -3826,10 +3826,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setDownPaymentPercentage(Double value) {
+    public void setDownPaymentPercentage(BigDecimal value) {
         this.downPaymentPercentage = value;
     }
 
@@ -3862,10 +3862,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getDownPaymentAmountSC() {
+    public BigDecimal getDownPaymentAmountSC() {
         return downPaymentAmountSC;
     }
 
@@ -3874,10 +3874,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setDownPaymentAmountSC(Double value) {
+    public void setDownPaymentAmountSC(BigDecimal value) {
         this.downPaymentAmountSC = value;
     }
 
@@ -3886,10 +3886,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getDownPaymentAmountFC() {
+    public BigDecimal getDownPaymentAmountFC() {
         return downPaymentAmountFC;
     }
 
@@ -3898,10 +3898,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setDownPaymentAmountFC(Double value) {
+    public void setDownPaymentAmountFC(BigDecimal value) {
         this.downPaymentAmountFC = value;
     }
 
@@ -3910,10 +3910,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getVatPercent() {
+    public BigDecimal getVatPercent() {
         return vatPercent;
     }
 
@@ -3922,10 +3922,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setVatPercent(Double value) {
+    public void setVatPercent(BigDecimal value) {
         this.vatPercent = value;
     }
 
@@ -3934,10 +3934,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getServiceGrossProfitPercent() {
+    public BigDecimal getServiceGrossProfitPercent() {
         return serviceGrossProfitPercent;
     }
 
@@ -3946,10 +3946,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setServiceGrossProfitPercent(Double value) {
+    public void setServiceGrossProfitPercent(BigDecimal value) {
         this.serviceGrossProfitPercent = value;
     }
 
@@ -4006,10 +4006,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getRoundingDiffAmount() {
+    public BigDecimal getRoundingDiffAmount() {
         return roundingDiffAmount;
     }
 
@@ -4018,10 +4018,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setRoundingDiffAmount(Double value) {
+    public void setRoundingDiffAmount(BigDecimal value) {
         this.roundingDiffAmount = value;
     }
 
@@ -4030,10 +4030,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getRoundingDiffAmountFC() {
+    public BigDecimal getRoundingDiffAmountFC() {
         return roundingDiffAmountFC;
     }
 
@@ -4042,10 +4042,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setRoundingDiffAmountFC(Double value) {
+    public void setRoundingDiffAmountFC(BigDecimal value) {
         this.roundingDiffAmountFC = value;
     }
 
@@ -4054,10 +4054,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getRoundingDiffAmountSC() {
+    public BigDecimal getRoundingDiffAmountSC() {
         return roundingDiffAmountSC;
     }
 
@@ -4066,10 +4066,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setRoundingDiffAmountSC(Double value) {
+    public void setRoundingDiffAmountSC(BigDecimal value) {
         this.roundingDiffAmountSC = value;
     }
 
@@ -5038,10 +5038,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getTotalDiscountFC() {
+    public BigDecimal getTotalDiscountFC() {
         return totalDiscountFC;
     }
 
@@ -5050,10 +5050,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setTotalDiscountFC(Double value) {
+    public void setTotalDiscountFC(BigDecimal value) {
         this.totalDiscountFC = value;
     }
 
@@ -5062,10 +5062,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getTotalDiscountSC() {
+    public BigDecimal getTotalDiscountSC() {
         return totalDiscountSC;
     }
 
@@ -5074,10 +5074,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setTotalDiscountSC(Double value) {
+    public void setTotalDiscountSC(BigDecimal value) {
         this.totalDiscountSC = value;
     }
 
@@ -6766,10 +6766,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getUTOTCAJ() {
+    public BigDecimal getUTOTCAJ() {
         return utotcaj;
     }
 
@@ -6778,10 +6778,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setUTOTCAJ(Double value) {
+    public void setUTOTCAJ(BigDecimal value) {
         this.utotcaj = value;
     }
 
@@ -6790,10 +6790,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getUTOTBUL() {
+    public BigDecimal getUTOTBUL() {
         return utotbul;
     }
 
@@ -6802,10 +6802,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setUTOTBUL(Double value) {
+    public void setUTOTBUL(BigDecimal value) {
         this.utotbul = value;
     }
 
@@ -6814,10 +6814,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getUTOTLIOS() {
+    public BigDecimal getUTOTLIOS() {
         return utotlios;
     }
 
@@ -6826,10 +6826,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setUTOTLIOS(Double value) {
+    public void setUTOTLIOS(BigDecimal value) {
         this.utotlios = value;
     }
 
@@ -6838,10 +6838,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getUVLRFLE() {
+    public BigDecimal getUVLRFLE() {
         return uvlrfle;
     }
 
@@ -6850,10 +6850,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setUVLRFLE(Double value) {
+    public void setUVLRFLE(BigDecimal value) {
         this.uvlrfle = value;
     }
 
@@ -6862,10 +6862,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getUVLRSEG() {
+    public BigDecimal getUVLRSEG() {
         return uvlrseg;
     }
 
@@ -6874,10 +6874,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setUVLRSEG(Double value) {
+    public void setUVLRSEG(BigDecimal value) {
         this.uvlrseg = value;
     }
 
@@ -6886,10 +6886,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getUTOTFLE() {
+    public BigDecimal getUTOTFLE() {
         return utotfle;
     }
 
@@ -6898,10 +6898,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setUTOTFLE(Double value) {
+    public void setUTOTFLE(BigDecimal value) {
         this.utotfle = value;
     }
 
@@ -6958,10 +6958,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getUPESOBRUTO() {
+    public BigDecimal getUPESOBRUTO() {
         return upesobruto;
     }
 
@@ -6970,10 +6970,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setUPESOBRUTO(Double value) {
+    public void setUPESOBRUTO(BigDecimal value) {
         this.upesobruto = value;
     }
 
@@ -7126,10 +7126,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getUTIEMPOESTIMADO() {
+    public BigDecimal getUTIEMPOESTIMADO() {
         return utiempoestimado;
     }
 
@@ -7138,10 +7138,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setUTIEMPOESTIMADO(Double value) {
+    public void setUTIEMPOESTIMADO(BigDecimal value) {
         this.utiempoestimado = value;
     }
 
@@ -7414,10 +7414,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getUVRANTICIPO() {
+    public BigDecimal getUVRANTICIPO() {
         return uvranticipo;
     }
 
@@ -7426,10 +7426,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setUVRANTICIPO(Double value) {
+    public void setUVRANTICIPO(BigDecimal value) {
         this.uvranticipo = value;
     }
 
@@ -7438,10 +7438,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getUVRTOTAL() {
+    public BigDecimal getUVRTOTAL() {
         return uvrtotal;
     }
 
@@ -7450,10 +7450,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setUVRTOTAL(Double value) {
+    public void setUVRTOTAL(BigDecimal value) {
         this.uvrtotal = value;
     }
 
@@ -7462,10 +7462,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getUVRIMPUESTO() {
+    public BigDecimal getUVRIMPUESTO() {
         return uvrimpuesto;
     }
 
@@ -7474,10 +7474,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setUVRIMPUESTO(Double value) {
+    public void setUVRIMPUESTO(BigDecimal value) {
         this.uvrimpuesto = value;
     }
 
@@ -7510,10 +7510,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getUVRDECLARADO() {
+    public BigDecimal getUVRDECLARADO() {
         return uvrdeclarado;
     }
 
@@ -7522,10 +7522,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setUVRDECLARADO(Double value) {
+    public void setUVRDECLARADO(BigDecimal value) {
         this.uvrdeclarado = value;
     }
 
@@ -8134,10 +8134,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getUNwrFrgt() {
+    public BigDecimal getUNwrFrgt() {
         return uNwrFrgt;
     }
 
@@ -8146,10 +8146,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setUNwrFrgt(Double value) {
+    public void setUNwrFrgt(BigDecimal value) {
         this.uNwrFrgt = value;
     }
 
@@ -8398,10 +8398,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getUTOTFLECLIE() {
+    public BigDecimal getUTOTFLECLIE() {
         return utotfleclie;
     }
 
@@ -8410,10 +8410,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setUTOTFLECLIE(Double value) {
+    public void setUTOTFLECLIE(BigDecimal value) {
         this.utotfleclie = value;
     }
 
@@ -8614,10 +8614,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getUAIUADMIN() {
+    public BigDecimal getUAIUADMIN() {
         return uaiuadmin;
     }
 
@@ -8626,10 +8626,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setUAIUADMIN(Double value) {
+    public void setUAIUADMIN(BigDecimal value) {
         this.uaiuadmin = value;
     }
 
@@ -8638,10 +8638,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getUAIUIMPRE() {
+    public BigDecimal getUAIUIMPRE() {
         return uaiuimpre;
     }
 
@@ -8650,10 +8650,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setUAIUIMPRE(Double value) {
+    public void setUAIUIMPRE(BigDecimal value) {
         this.uaiuimpre = value;
     }
 
@@ -8662,10 +8662,10 @@ public class Document {
      *
      * @return
      *     possible object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public Double getUAIUUTIL() {
+    public BigDecimal getUAIUUTIL() {
         return uaiuutil;
     }
 
@@ -8674,10 +8674,10 @@ public class Document {
      *
      * @param value
      *     allowed object is
-     *     {@link Double }
+     *     {@link BigDecimal }
      *
      */
-    public void setUAIUUTIL(Double value) {
+    public void setUAIUUTIL(BigDecimal value) {
         this.uaiuutil = value;
     }
 
@@ -8900,9 +8900,9 @@ public class Document {
 
     /**
      * <p>Clase Java para anonymous complex type.
-     * 
+     *
      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-     * 
+     *
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -8941,8 +8941,8 @@ public class Document {
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
@@ -9009,11 +9009,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad shipToStreet.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getShipToStreet() {
             return shipToStreet;
@@ -9021,11 +9021,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad shipToStreet.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setShipToStreet(String value) {
             this.shipToStreet = value;
@@ -9033,11 +9033,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad shipToStreetNo.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getShipToStreetNo() {
             return shipToStreetNo;
@@ -9045,11 +9045,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad shipToStreetNo.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setShipToStreetNo(String value) {
             this.shipToStreetNo = value;
@@ -9057,11 +9057,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad shipToBlock.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getShipToBlock() {
             return shipToBlock;
@@ -9069,11 +9069,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad shipToBlock.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setShipToBlock(String value) {
             this.shipToBlock = value;
@@ -9081,11 +9081,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad shipToBuilding.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getShipToBuilding() {
             return shipToBuilding;
@@ -9093,11 +9093,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad shipToBuilding.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setShipToBuilding(String value) {
             this.shipToBuilding = value;
@@ -9105,11 +9105,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad shipToCity.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getShipToCity() {
             return shipToCity;
@@ -9117,11 +9117,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad shipToCity.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setShipToCity(String value) {
             this.shipToCity = value;
@@ -9129,11 +9129,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad shipToZipCode.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getShipToZipCode() {
             return shipToZipCode;
@@ -9141,11 +9141,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad shipToZipCode.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setShipToZipCode(String value) {
             this.shipToZipCode = value;
@@ -9153,11 +9153,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad shipToCounty.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getShipToCounty() {
             return shipToCounty;
@@ -9165,11 +9165,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad shipToCounty.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setShipToCounty(String value) {
             this.shipToCounty = value;
@@ -9177,11 +9177,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad shipToState.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getShipToState() {
             return shipToState;
@@ -9189,11 +9189,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad shipToState.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setShipToState(String value) {
             this.shipToState = value;
@@ -9201,11 +9201,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad shipToCountry.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getShipToCountry() {
             return shipToCountry;
@@ -9213,11 +9213,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad shipToCountry.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setShipToCountry(String value) {
             this.shipToCountry = value;
@@ -9225,11 +9225,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad shipToAddressType.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getShipToAddressType() {
             return shipToAddressType;
@@ -9237,11 +9237,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad shipToAddressType.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setShipToAddressType(String value) {
             this.shipToAddressType = value;
@@ -9249,11 +9249,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad billToStreet.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getBillToStreet() {
             return billToStreet;
@@ -9261,11 +9261,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad billToStreet.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setBillToStreet(String value) {
             this.billToStreet = value;
@@ -9273,11 +9273,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad billToStreetNo.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getBillToStreetNo() {
             return billToStreetNo;
@@ -9285,11 +9285,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad billToStreetNo.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setBillToStreetNo(String value) {
             this.billToStreetNo = value;
@@ -9297,11 +9297,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad billToBlock.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getBillToBlock() {
             return billToBlock;
@@ -9309,11 +9309,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad billToBlock.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setBillToBlock(String value) {
             this.billToBlock = value;
@@ -9321,11 +9321,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad billToBuilding.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getBillToBuilding() {
             return billToBuilding;
@@ -9333,11 +9333,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad billToBuilding.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setBillToBuilding(String value) {
             this.billToBuilding = value;
@@ -9345,11 +9345,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad billToCity.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getBillToCity() {
             return billToCity;
@@ -9357,11 +9357,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad billToCity.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setBillToCity(String value) {
             this.billToCity = value;
@@ -9369,11 +9369,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad billToZipCode.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getBillToZipCode() {
             return billToZipCode;
@@ -9381,11 +9381,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad billToZipCode.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setBillToZipCode(String value) {
             this.billToZipCode = value;
@@ -9393,11 +9393,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad billToCounty.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getBillToCounty() {
             return billToCounty;
@@ -9405,11 +9405,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad billToCounty.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setBillToCounty(String value) {
             this.billToCounty = value;
@@ -9417,11 +9417,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad billToState.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getBillToState() {
             return billToState;
@@ -9429,11 +9429,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad billToState.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setBillToState(String value) {
             this.billToState = value;
@@ -9441,11 +9441,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad billToCountry.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getBillToCountry() {
             return billToCountry;
@@ -9453,11 +9453,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad billToCountry.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setBillToCountry(String value) {
             this.billToCountry = value;
@@ -9465,11 +9465,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad billToAddressType.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getBillToAddressType() {
             return billToAddressType;
@@ -9477,11 +9477,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad billToAddressType.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setBillToAddressType(String value) {
             this.billToAddressType = value;
@@ -9489,11 +9489,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad shipToGlobalLocationNumber.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getShipToGlobalLocationNumber() {
             return shipToGlobalLocationNumber;
@@ -9501,11 +9501,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad shipToGlobalLocationNumber.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setShipToGlobalLocationNumber(String value) {
             this.shipToGlobalLocationNumber = value;
@@ -9513,11 +9513,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad billToGlobalLocationNumber.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getBillToGlobalLocationNumber() {
             return billToGlobalLocationNumber;
@@ -9525,11 +9525,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad billToGlobalLocationNumber.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setBillToGlobalLocationNumber(String value) {
             this.billToGlobalLocationNumber = value;
@@ -9537,11 +9537,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad shipToAddress2.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getShipToAddress2() {
             return shipToAddress2;
@@ -9549,11 +9549,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad shipToAddress2.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setShipToAddress2(String value) {
             this.shipToAddress2 = value;
@@ -9561,11 +9561,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad shipToAddress3.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getShipToAddress3() {
             return shipToAddress3;
@@ -9573,11 +9573,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad shipToAddress3.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setShipToAddress3(String value) {
             this.shipToAddress3 = value;
@@ -9585,11 +9585,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad billToAddress2.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getBillToAddress2() {
             return billToAddress2;
@@ -9597,11 +9597,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad billToAddress2.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setBillToAddress2(String value) {
             this.billToAddress2 = value;
@@ -9609,11 +9609,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad billToAddress3.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getBillToAddress3() {
             return billToAddress3;
@@ -9621,11 +9621,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad billToAddress3.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setBillToAddress3(String value) {
             this.billToAddress3 = value;
@@ -9633,11 +9633,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad placeOfSupply.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getPlaceOfSupply() {
             return placeOfSupply;
@@ -9645,11 +9645,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad placeOfSupply.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setPlaceOfSupply(String value) {
             this.placeOfSupply = value;
@@ -9657,11 +9657,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad purchasePlaceOfSupply.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getPurchasePlaceOfSupply() {
             return purchasePlaceOfSupply;
@@ -9669,11 +9669,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad purchasePlaceOfSupply.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setPurchasePlaceOfSupply(String value) {
             this.purchasePlaceOfSupply = value;
@@ -9684,9 +9684,9 @@ public class Document {
 
     /**
      * <p>Clase Java para anonymous complex type.
-     * 
+     *
      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-     * 
+     *
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -9698,12 +9698,12 @@ public class Document {
      *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *                 &lt;all>
      *                   &lt;element name="ExpenseCode" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                   &lt;element name="LineTotal" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="LineTotalFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="LineTotalSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="PaidToDate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="PaidToDateFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="PaidToDateSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="LineTotal" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="LineTotalFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="LineTotalSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="PaidToDate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="PaidToDateFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="PaidToDateSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="Remarks" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="DistributionMethod" minOccurs="0">
      *                     &lt;simpleType>
@@ -9726,13 +9726,13 @@ public class Document {
      *                     &lt;/simpleType>
      *                   &lt;/element>
      *                   &lt;element name="VatGroup" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="TaxPercent" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TaxSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TaxSumFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TaxSumSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="DeductibleTaxSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="DeductibleTaxSumFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="DeductibleTaxSumSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="TaxPercent" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TaxSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TaxSumFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TaxSumSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="DeductibleTaxSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="DeductibleTaxSumFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="DeductibleTaxSumSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="AquisitionTax" minOccurs="0">
      *                     &lt;simpleType>
      *                       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -9751,16 +9751,16 @@ public class Document {
      *                       &lt;/restriction>
      *                     &lt;/simpleType>
      *                   &lt;/element>
-     *                   &lt;element name="TaxPaid" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TaxPaidFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TaxPaidSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="EqualizationTaxPercent" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="EqualizationTaxSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="EqualizationTaxFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="EqualizationTaxSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TaxTotalSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TaxTotalSumFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TaxTotalSumSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="TaxPaid" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TaxPaidFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TaxPaidSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="EqualizationTaxPercent" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="EqualizationTaxSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="EqualizationTaxFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="EqualizationTaxSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TaxTotalSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TaxTotalSumFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TaxTotalSumSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="BaseDocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="BaseDocLine" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="BaseDocType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -9808,9 +9808,9 @@ public class Document {
      *                   &lt;element name="DistributionRule3" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="DistributionRule4" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="DistributionRule5" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="LineGross" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="LineGrossSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="LineGrossFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="LineGross" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="LineGrossSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="LineGrossFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="DocExpenseTaxJurisdictions" minOccurs="0">
      *                     &lt;complexType>
      *                       &lt;complexContent>
@@ -9823,10 +9823,10 @@ public class Document {
      *                                     &lt;all>
      *                                       &lt;element name="JurisdictionCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                                       &lt;element name="JurisdictionType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                                       &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                                       &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                                       &lt;element name="DocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                                       &lt;element name="LineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                                       &lt;element name="RowSequence" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -9850,12 +9850,12 @@ public class Document {
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "documentAdditionalExpense"
+            "documentAdditionalExpense"
     })
     public static class DocumentAdditionalExpenses {
 
@@ -9864,25 +9864,25 @@ public class Document {
 
         /**
          * Gets the value of the documentAdditionalExpense property.
-         * 
+         *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the documentAdditionalExpense property.
-         * 
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getDocumentAdditionalExpense().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link Document.DocumentAdditionalExpenses.DocumentAdditionalExpense }
-         * 
-         * 
+         *
+         *
          */
         public List<Document.DocumentAdditionalExpenses.DocumentAdditionalExpense> getDocumentAdditionalExpense() {
             if (documentAdditionalExpense == null) {
@@ -9894,21 +9894,21 @@ public class Document {
 
         /**
          * <p>Clase Java para anonymous complex type.
-         * 
+         *
          * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-         * 
+         *
          * <pre>
          * &lt;complexType>
          *   &lt;complexContent>
          *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
          *       &lt;all>
          *         &lt;element name="ExpenseCode" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *         &lt;element name="LineTotal" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="LineTotalFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="LineTotalSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="PaidToDate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="PaidToDateFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="PaidToDateSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="LineTotal" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="LineTotalFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="LineTotalSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="PaidToDate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="PaidToDateFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="PaidToDateSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="Remarks" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="DistributionMethod" minOccurs="0">
          *           &lt;simpleType>
@@ -9931,13 +9931,13 @@ public class Document {
          *           &lt;/simpleType>
          *         &lt;/element>
          *         &lt;element name="VatGroup" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="TaxPercent" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TaxSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TaxSumFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TaxSumSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="DeductibleTaxSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="DeductibleTaxSumFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="DeductibleTaxSumSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="TaxPercent" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TaxSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TaxSumFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TaxSumSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="DeductibleTaxSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="DeductibleTaxSumFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="DeductibleTaxSumSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="AquisitionTax" minOccurs="0">
          *           &lt;simpleType>
          *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -9956,16 +9956,16 @@ public class Document {
          *             &lt;/restriction>
          *           &lt;/simpleType>
          *         &lt;/element>
-         *         &lt;element name="TaxPaid" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TaxPaidFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TaxPaidSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="EqualizationTaxPercent" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="EqualizationTaxSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="EqualizationTaxFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="EqualizationTaxSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TaxTotalSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TaxTotalSumFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TaxTotalSumSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="TaxPaid" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TaxPaidFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TaxPaidSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="EqualizationTaxPercent" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="EqualizationTaxSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="EqualizationTaxFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="EqualizationTaxSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TaxTotalSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TaxTotalSumFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TaxTotalSumSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="BaseDocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="BaseDocLine" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="BaseDocType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -10013,9 +10013,9 @@ public class Document {
          *         &lt;element name="DistributionRule3" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="DistributionRule4" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="DistributionRule5" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="LineGross" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="LineGrossSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="LineGrossFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="LineGross" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="LineGrossSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="LineGrossFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="DocExpenseTaxJurisdictions" minOccurs="0">
          *           &lt;complexType>
          *             &lt;complexContent>
@@ -10028,10 +10028,10 @@ public class Document {
          *                           &lt;all>
          *                             &lt;element name="JurisdictionCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *                             &lt;element name="JurisdictionType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *                             &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *                             &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *                             &lt;element name="DocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *                             &lt;element name="LineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *                             &lt;element name="RowSequence" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -10050,8 +10050,8 @@ public class Document {
          *   &lt;/complexContent>
          * &lt;/complexType>
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -10064,15 +10064,15 @@ public class Document {
             @XmlElement(name = "LineTotal")
             protected BigDecimal lineTotal;
             @XmlElement(name = "LineTotalFC")
-            protected Double lineTotalFC;
+            protected BigDecimal lineTotalFC;
             @XmlElement(name = "LineTotalSys")
-            protected Double lineTotalSys;
+            protected BigDecimal lineTotalSys;
             @XmlElement(name = "PaidToDate")
-            protected Double paidToDate;
+            protected BigDecimal paidToDate;
             @XmlElement(name = "PaidToDateFC")
-            protected Double paidToDateFC;
+            protected BigDecimal paidToDateFC;
             @XmlElement(name = "PaidToDateSys")
-            protected Double paidToDateSys;
+            protected BigDecimal paidToDateSys;
             @XmlElement(name = "Remarks")
             protected String remarks;
             @XmlElement(name = "DistributionMethod")
@@ -10082,19 +10082,19 @@ public class Document {
             @XmlElement(name = "VatGroup")
             protected String vatGroup;
             @XmlElement(name = "TaxPercent")
-            protected Double taxPercent;
+            protected BigDecimal taxPercent;
             @XmlElement(name = "TaxSum")
-            protected Double taxSum;
+            protected BigDecimal taxSum;
             @XmlElement(name = "TaxSumFC")
-            protected Double taxSumFC;
+            protected BigDecimal taxSumFC;
             @XmlElement(name = "TaxSumSys")
-            protected Double taxSumSys;
+            protected BigDecimal taxSumSys;
             @XmlElement(name = "DeductibleTaxSum")
-            protected Double deductibleTaxSum;
+            protected BigDecimal deductibleTaxSum;
             @XmlElement(name = "DeductibleTaxSumFC")
-            protected Double deductibleTaxSumFC;
+            protected BigDecimal deductibleTaxSumFC;
             @XmlElement(name = "DeductibleTaxSumSys")
-            protected Double deductibleTaxSumSys;
+            protected BigDecimal deductibleTaxSumSys;
             @XmlElement(name = "AquisitionTax")
             protected String aquisitionTax;
             @XmlElement(name = "TaxCode")
@@ -10102,25 +10102,25 @@ public class Document {
             @XmlElement(name = "TaxType")
             protected String taxType;
             @XmlElement(name = "TaxPaid")
-            protected Double taxPaid;
+            protected BigDecimal taxPaid;
             @XmlElement(name = "TaxPaidFC")
-            protected Double taxPaidFC;
+            protected BigDecimal taxPaidFC;
             @XmlElement(name = "TaxPaidSys")
-            protected Double taxPaidSys;
+            protected BigDecimal taxPaidSys;
             @XmlElement(name = "EqualizationTaxPercent")
-            protected Double equalizationTaxPercent;
+            protected BigDecimal equalizationTaxPercent;
             @XmlElement(name = "EqualizationTaxSum")
-            protected Double equalizationTaxSum;
+            protected BigDecimal equalizationTaxSum;
             @XmlElement(name = "EqualizationTaxFC")
-            protected Double equalizationTaxFC;
+            protected BigDecimal equalizationTaxFC;
             @XmlElement(name = "EqualizationTaxSys")
-            protected Double equalizationTaxSys;
+            protected BigDecimal equalizationTaxSys;
             @XmlElement(name = "TaxTotalSum")
-            protected Double taxTotalSum;
+            protected BigDecimal taxTotalSum;
             @XmlElement(name = "TaxTotalSumFC")
-            protected Double taxTotalSumFC;
+            protected BigDecimal taxTotalSumFC;
             @XmlElement(name = "TaxTotalSumSys")
-            protected Double taxTotalSumSys;
+            protected BigDecimal taxTotalSumSys;
             @XmlElement(name = "BaseDocEntry")
             protected Long baseDocEntry;
             @XmlElement(name = "BaseDocLine")
@@ -10156,21 +10156,21 @@ public class Document {
             @XmlElement(name = "DistributionRule5")
             protected String distributionRule5;
             @XmlElement(name = "LineGross")
-            protected Double lineGross;
+            protected BigDecimal lineGross;
             @XmlElement(name = "LineGrossSys")
-            protected Double lineGrossSys;
+            protected BigDecimal lineGrossSys;
             @XmlElement(name = "LineGrossFC")
-            protected Double lineGrossFC;
+            protected BigDecimal lineGrossFC;
             @XmlElement(name = "DocExpenseTaxJurisdictions")
             protected Document.DocumentAdditionalExpenses.DocumentAdditionalExpense.DocExpenseTaxJurisdictions docExpenseTaxJurisdictions;
 
             /**
              * Obtiene el valor de la propiedad expenseCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getExpenseCode() {
                 return expenseCode;
@@ -10178,11 +10178,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad expenseCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setExpenseCode(Long value) {
                 this.expenseCode = value;
@@ -10190,11 +10190,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad lineTotal.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
             public BigDecimal getLineTotal() {
                 return lineTotal;
@@ -10202,11 +10202,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad lineTotal.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
             public void setLineTotal(BigDecimal value) {
                 this.lineTotal = value;
@@ -10214,131 +10214,131 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad lineTotalFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getLineTotalFC() {
+            public BigDecimal getLineTotalFC() {
                 return lineTotalFC;
             }
 
             /**
              * Define el valor de la propiedad lineTotalFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setLineTotalFC(Double value) {
+            public void setLineTotalFC(BigDecimal value) {
                 this.lineTotalFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad lineTotalSys.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getLineTotalSys() {
+            public BigDecimal getLineTotalSys() {
                 return lineTotalSys;
             }
 
             /**
              * Define el valor de la propiedad lineTotalSys.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setLineTotalSys(Double value) {
+            public void setLineTotalSys(BigDecimal value) {
                 this.lineTotalSys = value;
             }
 
             /**
              * Obtiene el valor de la propiedad paidToDate.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getPaidToDate() {
+            public BigDecimal getPaidToDate() {
                 return paidToDate;
             }
 
             /**
              * Define el valor de la propiedad paidToDate.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setPaidToDate(Double value) {
+            public void setPaidToDate(BigDecimal value) {
                 this.paidToDate = value;
             }
 
             /**
              * Obtiene el valor de la propiedad paidToDateFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getPaidToDateFC() {
+            public BigDecimal getPaidToDateFC() {
                 return paidToDateFC;
             }
 
             /**
              * Define el valor de la propiedad paidToDateFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setPaidToDateFC(Double value) {
+            public void setPaidToDateFC(BigDecimal value) {
                 this.paidToDateFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad paidToDateSys.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getPaidToDateSys() {
+            public BigDecimal getPaidToDateSys() {
                 return paidToDateSys;
             }
 
             /**
              * Define el valor de la propiedad paidToDateSys.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setPaidToDateSys(Double value) {
+            public void setPaidToDateSys(BigDecimal value) {
                 this.paidToDateSys = value;
             }
 
             /**
              * Obtiene el valor de la propiedad remarks.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getRemarks() {
                 return remarks;
@@ -10346,11 +10346,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad remarks.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setRemarks(String value) {
                 this.remarks = value;
@@ -10358,11 +10358,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad distributionMethod.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getDistributionMethod() {
                 return distributionMethod;
@@ -10370,11 +10370,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad distributionMethod.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setDistributionMethod(String value) {
                 this.distributionMethod = value;
@@ -10382,11 +10382,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad taxLiable.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getTaxLiable() {
                 return taxLiable;
@@ -10394,11 +10394,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad taxLiable.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setTaxLiable(String value) {
                 this.taxLiable = value;
@@ -10406,11 +10406,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad vatGroup.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getVatGroup() {
                 return vatGroup;
@@ -10418,11 +10418,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad vatGroup.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setVatGroup(String value) {
                 this.vatGroup = value;
@@ -10430,179 +10430,179 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad taxPercent.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxPercent() {
+            public BigDecimal getTaxPercent() {
                 return taxPercent;
             }
 
             /**
              * Define el valor de la propiedad taxPercent.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxPercent(Double value) {
+            public void setTaxPercent(BigDecimal value) {
                 this.taxPercent = value;
             }
 
             /**
              * Obtiene el valor de la propiedad taxSum.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxSum() {
+            public BigDecimal getTaxSum() {
                 return taxSum;
             }
 
             /**
              * Define el valor de la propiedad taxSum.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxSum(Double value) {
+            public void setTaxSum(BigDecimal value) {
                 this.taxSum = value;
             }
 
             /**
              * Obtiene el valor de la propiedad taxSumFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxSumFC() {
+            public BigDecimal getTaxSumFC() {
                 return taxSumFC;
             }
 
             /**
              * Define el valor de la propiedad taxSumFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxSumFC(Double value) {
+            public void setTaxSumFC(BigDecimal value) {
                 this.taxSumFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad taxSumSys.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxSumSys() {
+            public BigDecimal getTaxSumSys() {
                 return taxSumSys;
             }
 
             /**
              * Define el valor de la propiedad taxSumSys.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxSumSys(Double value) {
+            public void setTaxSumSys(BigDecimal value) {
                 this.taxSumSys = value;
             }
 
             /**
              * Obtiene el valor de la propiedad deductibleTaxSum.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getDeductibleTaxSum() {
+            public BigDecimal getDeductibleTaxSum() {
                 return deductibleTaxSum;
             }
 
             /**
              * Define el valor de la propiedad deductibleTaxSum.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setDeductibleTaxSum(Double value) {
+            public void setDeductibleTaxSum(BigDecimal value) {
                 this.deductibleTaxSum = value;
             }
 
             /**
              * Obtiene el valor de la propiedad deductibleTaxSumFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getDeductibleTaxSumFC() {
+            public BigDecimal getDeductibleTaxSumFC() {
                 return deductibleTaxSumFC;
             }
 
             /**
              * Define el valor de la propiedad deductibleTaxSumFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setDeductibleTaxSumFC(Double value) {
+            public void setDeductibleTaxSumFC(BigDecimal value) {
                 this.deductibleTaxSumFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad deductibleTaxSumSys.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getDeductibleTaxSumSys() {
+            public BigDecimal getDeductibleTaxSumSys() {
                 return deductibleTaxSumSys;
             }
 
             /**
              * Define el valor de la propiedad deductibleTaxSumSys.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setDeductibleTaxSumSys(Double value) {
+            public void setDeductibleTaxSumSys(BigDecimal value) {
                 this.deductibleTaxSumSys = value;
             }
 
             /**
              * Obtiene el valor de la propiedad aquisitionTax.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getAquisitionTax() {
                 return aquisitionTax;
@@ -10610,11 +10610,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad aquisitionTax.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setAquisitionTax(String value) {
                 this.aquisitionTax = value;
@@ -10622,11 +10622,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad taxCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getTaxCode() {
                 return taxCode;
@@ -10634,11 +10634,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad taxCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setTaxCode(String value) {
                 this.taxCode = value;
@@ -10646,11 +10646,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad taxType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getTaxType() {
                 return taxType;
@@ -10658,11 +10658,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad taxType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setTaxType(String value) {
                 this.taxType = value;
@@ -10670,251 +10670,251 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad taxPaid.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxPaid() {
+            public BigDecimal getTaxPaid() {
                 return taxPaid;
             }
 
             /**
              * Define el valor de la propiedad taxPaid.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxPaid(Double value) {
+            public void setTaxPaid(BigDecimal value) {
                 this.taxPaid = value;
             }
 
             /**
              * Obtiene el valor de la propiedad taxPaidFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxPaidFC() {
+            public BigDecimal getTaxPaidFC() {
                 return taxPaidFC;
             }
 
             /**
              * Define el valor de la propiedad taxPaidFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxPaidFC(Double value) {
+            public void setTaxPaidFC(BigDecimal value) {
                 this.taxPaidFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad taxPaidSys.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxPaidSys() {
+            public BigDecimal getTaxPaidSys() {
                 return taxPaidSys;
             }
 
             /**
              * Define el valor de la propiedad taxPaidSys.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxPaidSys(Double value) {
+            public void setTaxPaidSys(BigDecimal value) {
                 this.taxPaidSys = value;
             }
 
             /**
              * Obtiene el valor de la propiedad equalizationTaxPercent.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getEqualizationTaxPercent() {
+            public BigDecimal getEqualizationTaxPercent() {
                 return equalizationTaxPercent;
             }
 
             /**
              * Define el valor de la propiedad equalizationTaxPercent.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setEqualizationTaxPercent(Double value) {
+            public void setEqualizationTaxPercent(BigDecimal value) {
                 this.equalizationTaxPercent = value;
             }
 
             /**
              * Obtiene el valor de la propiedad equalizationTaxSum.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getEqualizationTaxSum() {
+            public BigDecimal getEqualizationTaxSum() {
                 return equalizationTaxSum;
             }
 
             /**
              * Define el valor de la propiedad equalizationTaxSum.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setEqualizationTaxSum(Double value) {
+            public void setEqualizationTaxSum(BigDecimal value) {
                 this.equalizationTaxSum = value;
             }
 
             /**
              * Obtiene el valor de la propiedad equalizationTaxFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getEqualizationTaxFC() {
+            public BigDecimal getEqualizationTaxFC() {
                 return equalizationTaxFC;
             }
 
             /**
              * Define el valor de la propiedad equalizationTaxFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setEqualizationTaxFC(Double value) {
+            public void setEqualizationTaxFC(BigDecimal value) {
                 this.equalizationTaxFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad equalizationTaxSys.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getEqualizationTaxSys() {
+            public BigDecimal getEqualizationTaxSys() {
                 return equalizationTaxSys;
             }
 
             /**
              * Define el valor de la propiedad equalizationTaxSys.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setEqualizationTaxSys(Double value) {
+            public void setEqualizationTaxSys(BigDecimal value) {
                 this.equalizationTaxSys = value;
             }
 
             /**
              * Obtiene el valor de la propiedad taxTotalSum.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxTotalSum() {
+            public BigDecimal getTaxTotalSum() {
                 return taxTotalSum;
             }
 
             /**
              * Define el valor de la propiedad taxTotalSum.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxTotalSum(Double value) {
+            public void setTaxTotalSum(BigDecimal value) {
                 this.taxTotalSum = value;
             }
 
             /**
              * Obtiene el valor de la propiedad taxTotalSumFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxTotalSumFC() {
+            public BigDecimal getTaxTotalSumFC() {
                 return taxTotalSumFC;
             }
 
             /**
              * Define el valor de la propiedad taxTotalSumFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxTotalSumFC(Double value) {
+            public void setTaxTotalSumFC(BigDecimal value) {
                 this.taxTotalSumFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad taxTotalSumSys.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxTotalSumSys() {
+            public BigDecimal getTaxTotalSumSys() {
                 return taxTotalSumSys;
             }
 
             /**
              * Define el valor de la propiedad taxTotalSumSys.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxTotalSumSys(Double value) {
+            public void setTaxTotalSumSys(BigDecimal value) {
                 this.taxTotalSumSys = value;
             }
 
             /**
              * Obtiene el valor de la propiedad baseDocEntry.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getBaseDocEntry() {
                 return baseDocEntry;
@@ -10922,11 +10922,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad baseDocEntry.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setBaseDocEntry(Long value) {
                 this.baseDocEntry = value;
@@ -10934,11 +10934,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad baseDocLine.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getBaseDocLine() {
                 return baseDocLine;
@@ -10946,11 +10946,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad baseDocLine.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setBaseDocLine(Long value) {
                 this.baseDocLine = value;
@@ -10958,11 +10958,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad baseDocType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getBaseDocType() {
                 return baseDocType;
@@ -10970,11 +10970,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad baseDocType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setBaseDocType(Long value) {
                 this.baseDocType = value;
@@ -10982,11 +10982,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad baseDocumentReference.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getBaseDocumentReference() {
                 return baseDocumentReference;
@@ -10994,11 +10994,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad baseDocumentReference.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setBaseDocumentReference(Long value) {
                 this.baseDocumentReference = value;
@@ -11006,11 +11006,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad lineNum.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getLineNum() {
                 return lineNum;
@@ -11018,11 +11018,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad lineNum.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setLineNum(Long value) {
                 this.lineNum = value;
@@ -11030,11 +11030,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad lastPurchasePrice.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getLastPurchasePrice() {
                 return lastPurchasePrice;
@@ -11042,11 +11042,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad lastPurchasePrice.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setLastPurchasePrice(String value) {
                 this.lastPurchasePrice = value;
@@ -11054,11 +11054,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad status.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getStatus() {
                 return status;
@@ -11066,11 +11066,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad status.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setStatus(String value) {
                 this.status = value;
@@ -11078,11 +11078,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad stock.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getStock() {
                 return stock;
@@ -11090,11 +11090,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad stock.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setStock(String value) {
                 this.stock = value;
@@ -11102,11 +11102,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad targetAbsEntry.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getTargetAbsEntry() {
                 return targetAbsEntry;
@@ -11114,11 +11114,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad targetAbsEntry.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setTargetAbsEntry(Long value) {
                 this.targetAbsEntry = value;
@@ -11126,11 +11126,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad targetType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getTargetType() {
                 return targetType;
@@ -11138,11 +11138,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad targetType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setTargetType(Long value) {
                 this.targetType = value;
@@ -11150,11 +11150,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad wtLiable.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getWTLiable() {
                 return wtLiable;
@@ -11162,11 +11162,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad wtLiable.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setWTLiable(String value) {
                 this.wtLiable = value;
@@ -11174,11 +11174,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad distributionRule.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getDistributionRule() {
                 return distributionRule;
@@ -11186,11 +11186,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad distributionRule.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setDistributionRule(String value) {
                 this.distributionRule = value;
@@ -11198,11 +11198,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad project.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getProject() {
                 return project;
@@ -11210,11 +11210,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad project.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setProject(String value) {
                 this.project = value;
@@ -11222,11 +11222,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad distributionRule2.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getDistributionRule2() {
                 return distributionRule2;
@@ -11234,11 +11234,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad distributionRule2.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setDistributionRule2(String value) {
                 this.distributionRule2 = value;
@@ -11246,11 +11246,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad distributionRule3.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getDistributionRule3() {
                 return distributionRule3;
@@ -11258,11 +11258,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad distributionRule3.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setDistributionRule3(String value) {
                 this.distributionRule3 = value;
@@ -11270,11 +11270,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad distributionRule4.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getDistributionRule4() {
                 return distributionRule4;
@@ -11282,11 +11282,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad distributionRule4.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setDistributionRule4(String value) {
                 this.distributionRule4 = value;
@@ -11294,11 +11294,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad distributionRule5.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getDistributionRule5() {
                 return distributionRule5;
@@ -11306,11 +11306,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad distributionRule5.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setDistributionRule5(String value) {
                 this.distributionRule5 = value;
@@ -11318,83 +11318,83 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad lineGross.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getLineGross() {
+            public BigDecimal getLineGross() {
                 return lineGross;
             }
 
             /**
              * Define el valor de la propiedad lineGross.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setLineGross(Double value) {
+            public void setLineGross(BigDecimal value) {
                 this.lineGross = value;
             }
 
             /**
              * Obtiene el valor de la propiedad lineGrossSys.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getLineGrossSys() {
+            public BigDecimal getLineGrossSys() {
                 return lineGrossSys;
             }
 
             /**
              * Define el valor de la propiedad lineGrossSys.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setLineGrossSys(Double value) {
+            public void setLineGrossSys(BigDecimal value) {
                 this.lineGrossSys = value;
             }
 
             /**
              * Obtiene el valor de la propiedad lineGrossFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getLineGrossFC() {
+            public BigDecimal getLineGrossFC() {
                 return lineGrossFC;
             }
 
             /**
              * Define el valor de la propiedad lineGrossFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setLineGrossFC(Double value) {
+            public void setLineGrossFC(BigDecimal value) {
                 this.lineGrossFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad docExpenseTaxJurisdictions.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Document.DocumentAdditionalExpenses.DocumentAdditionalExpense.DocExpenseTaxJurisdictions }
-             *     
+             *
              */
             public Document.DocumentAdditionalExpenses.DocumentAdditionalExpense.DocExpenseTaxJurisdictions getDocExpenseTaxJurisdictions() {
                 return docExpenseTaxJurisdictions;
@@ -11402,11 +11402,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad docExpenseTaxJurisdictions.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Document.DocumentAdditionalExpenses.DocumentAdditionalExpense.DocExpenseTaxJurisdictions }
-             *     
+             *
              */
             public void setDocExpenseTaxJurisdictions(Document.DocumentAdditionalExpenses.DocumentAdditionalExpense.DocExpenseTaxJurisdictions value) {
                 this.docExpenseTaxJurisdictions = value;
@@ -11415,9 +11415,9 @@ public class Document {
 
             /**
              * <p>Clase Java para anonymous complex type.
-             * 
+             *
              * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-             * 
+             *
              * <pre>
              * &lt;complexType>
              *   &lt;complexContent>
@@ -11430,10 +11430,10 @@ public class Document {
              *                 &lt;all>
              *                   &lt;element name="JurisdictionCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
              *                   &lt;element name="JurisdictionType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-             *                   &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+             *                   &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
              *                   &lt;element name="DocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
              *                   &lt;element name="LineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
              *                   &lt;element name="RowSequence" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -11447,12 +11447,12 @@ public class Document {
              *   &lt;/complexContent>
              * &lt;/complexType>
              * </pre>
-             * 
-             * 
+             *
+             *
              */
             @XmlAccessorType(XmlAccessType.FIELD)
             @XmlType(name = "", propOrder = {
-                "docExpenseTaxJurisdiction"
+                    "docExpenseTaxJurisdiction"
             })
             public static class DocExpenseTaxJurisdictions {
 
@@ -11461,25 +11461,25 @@ public class Document {
 
                 /**
                  * Gets the value of the docExpenseTaxJurisdiction property.
-                 * 
+                 *
                  * <p>
                  * This accessor method returns a reference to the live list,
                  * not a snapshot. Therefore any modification you make to the
                  * returned list will be present inside the JAXB object.
                  * This is why there is not a <CODE>set</CODE> method for the docExpenseTaxJurisdiction property.
-                 * 
+                 *
                  * <p>
                  * For example, to add a new item, do as follows:
                  * <pre>
                  *    getDocExpenseTaxJurisdiction().add(newItem);
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  * <p>
                  * Objects of the following type(s) are allowed in the list
                  * {@link Document.DocumentAdditionalExpenses.DocumentAdditionalExpense.DocExpenseTaxJurisdictions.DocExpenseTaxJurisdiction }
-                 * 
-                 * 
+                 *
+                 *
                  */
                 public List<Document.DocumentAdditionalExpenses.DocumentAdditionalExpense.DocExpenseTaxJurisdictions.DocExpenseTaxJurisdiction> getDocExpenseTaxJurisdiction() {
                     if (docExpenseTaxJurisdiction == null) {
@@ -11491,9 +11491,9 @@ public class Document {
 
                 /**
                  * <p>Clase Java para anonymous complex type.
-                 * 
+                 *
                  * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-                 * 
+                 *
                  * <pre>
                  * &lt;complexType>
                  *   &lt;complexContent>
@@ -11501,10 +11501,10 @@ public class Document {
                  *       &lt;all>
                  *         &lt;element name="JurisdictionCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
                  *         &lt;element name="JurisdictionType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-                 *         &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+                 *         &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
                  *         &lt;element name="DocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
                  *         &lt;element name="LineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
                  *         &lt;element name="RowSequence" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -11513,8 +11513,8 @@ public class Document {
                  *   &lt;/complexContent>
                  * &lt;/complexType>
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  */
                 @XmlAccessorType(XmlAccessType.FIELD)
                 @XmlType(name = "", propOrder = {
@@ -11527,13 +11527,13 @@ public class Document {
                     @XmlElement(name = "JurisdictionType")
                     protected Long jurisdictionType;
                     @XmlElement(name = "TaxAmount")
-                    protected Double taxAmount;
+                    protected BigDecimal taxAmount;
                     @XmlElement(name = "TaxAmountSC")
-                    protected Double taxAmountSC;
+                    protected BigDecimal taxAmountSC;
                     @XmlElement(name = "TaxAmountFC")
-                    protected Double taxAmountFC;
+                    protected BigDecimal taxAmountFC;
                     @XmlElement(name = "TaxRate")
-                    protected Double taxRate;
+                    protected BigDecimal taxRate;
                     @XmlElement(name = "DocEntry")
                     protected Long docEntry;
                     @XmlElement(name = "LineNumber")
@@ -11543,11 +11543,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad jurisdictionCode.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getJurisdictionCode() {
                         return jurisdictionCode;
@@ -11555,11 +11555,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad jurisdictionCode.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setJurisdictionCode(String value) {
                         this.jurisdictionCode = value;
@@ -11567,11 +11567,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad jurisdictionType.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getJurisdictionType() {
                         return jurisdictionType;
@@ -11579,11 +11579,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad jurisdictionType.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setJurisdictionType(Long value) {
                         this.jurisdictionType = value;
@@ -11591,107 +11591,107 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad taxAmount.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getTaxAmount() {
+                    public BigDecimal getTaxAmount() {
                         return taxAmount;
                     }
 
                     /**
                      * Define el valor de la propiedad taxAmount.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setTaxAmount(Double value) {
+                    public void setTaxAmount(BigDecimal value) {
                         this.taxAmount = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad taxAmountSC.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getTaxAmountSC() {
+                    public BigDecimal getTaxAmountSC() {
                         return taxAmountSC;
                     }
 
                     /**
                      * Define el valor de la propiedad taxAmountSC.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setTaxAmountSC(Double value) {
+                    public void setTaxAmountSC(BigDecimal value) {
                         this.taxAmountSC = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad taxAmountFC.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getTaxAmountFC() {
+                    public BigDecimal getTaxAmountFC() {
                         return taxAmountFC;
                     }
 
                     /**
                      * Define el valor de la propiedad taxAmountFC.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setTaxAmountFC(Double value) {
+                    public void setTaxAmountFC(BigDecimal value) {
                         this.taxAmountFC = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad taxRate.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getTaxRate() {
+                    public BigDecimal getTaxRate() {
                         return taxRate;
                     }
 
                     /**
                      * Define el valor de la propiedad taxRate.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setTaxRate(Double value) {
+                    public void setTaxRate(BigDecimal value) {
                         this.taxRate = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad docEntry.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getDocEntry() {
                         return docEntry;
@@ -11699,11 +11699,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad docEntry.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setDocEntry(Long value) {
                         this.docEntry = value;
@@ -11711,11 +11711,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad lineNumber.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getLineNumber() {
                         return lineNumber;
@@ -11723,11 +11723,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad lineNumber.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setLineNumber(Long value) {
                         this.lineNumber = value;
@@ -11735,11 +11735,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad rowSequence.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getRowSequence() {
                         return rowSequence;
@@ -11747,11 +11747,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad rowSequence.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setRowSequence(Long value) {
                         this.rowSequence = value;
@@ -11768,9 +11768,9 @@ public class Document {
 
     /**
      * <p>Clase Java para anonymous complex type.
-     * 
+     *
      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-     * 
+     *
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -11793,12 +11793,12 @@ public class Document {
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "documentApprovalRequest"
+            "documentApprovalRequest"
     })
     public static class DocumentApprovalRequests {
 
@@ -11807,25 +11807,25 @@ public class Document {
 
         /**
          * Gets the value of the documentApprovalRequest property.
-         * 
+         *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the documentApprovalRequest property.
-         * 
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getDocumentApprovalRequest().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link Document.DocumentApprovalRequests.DocumentApprovalRequest }
-         * 
-         * 
+         *
+         *
          */
         public List<Document.DocumentApprovalRequests.DocumentApprovalRequest> getDocumentApprovalRequest() {
             if (documentApprovalRequest == null) {
@@ -11837,9 +11837,9 @@ public class Document {
 
         /**
          * <p>Clase Java para anonymous complex type.
-         * 
+         *
          * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-         * 
+         *
          * <pre>
          * &lt;complexType>
          *   &lt;complexContent>
@@ -11852,8 +11852,8 @@ public class Document {
          *   &lt;/complexContent>
          * &lt;/complexType>
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -11868,11 +11868,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad approvalTemplatesID.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getApprovalTemplatesID() {
                 return approvalTemplatesID;
@@ -11880,11 +11880,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad approvalTemplatesID.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setApprovalTemplatesID(Long value) {
                 this.approvalTemplatesID = value;
@@ -11892,11 +11892,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad remarks.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getRemarks() {
                 return remarks;
@@ -11904,11 +11904,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad remarks.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setRemarks(String value) {
                 this.remarks = value;
@@ -11921,9 +11921,9 @@ public class Document {
 
     /**
      * <p>Clase Java para anonymous complex type.
-     * 
+     *
      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-     * 
+     *
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -11937,18 +11937,18 @@ public class Document {
      *                   &lt;element name="LineNum" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="ItemCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="ItemDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="ShipDate" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/>
-     *                   &lt;element name="Price" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="PriceAfterVAT" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="Price" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="PriceAfterVAT" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="Currency" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="Rate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="DiscountPercent" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="Rate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="DiscountPercent" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="VendorNum" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="SerialNum" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="WarehouseCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="SalesPersonCode" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                   &lt;element name="CommisionPercent" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="CommisionPercent" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="TreeType" minOccurs="0">
      *                     &lt;simpleType>
      *                       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -11975,30 +11975,30 @@ public class Document {
      *                   &lt;element name="ProjectCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="BarCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="VatGroup" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="Height1" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="Height1" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="Hight1Unit" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                   &lt;element name="Height2" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="Height2" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="Height2Unit" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                   &lt;element name="Lengh1" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="Lengh1" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="Lengh1Unit" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                   &lt;element name="Lengh2" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="Lengh2" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="Lengh2Unit" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                   &lt;element name="Weight1" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="Weight1" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="Weight1Unit" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                   &lt;element name="Weight2" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="Weight2" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="Weight2Unit" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                   &lt;element name="Factor1" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="Factor2" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="Factor3" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="Factor4" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="Factor1" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="Factor2" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="Factor3" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="Factor4" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="BaseType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="BaseEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="BaseLine" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                   &lt;element name="Volume" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="Volume" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="VolumeUnit" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                   &lt;element name="Width1" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="Width1" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="Width1Unit" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                   &lt;element name="Width2" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="Width2" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="Width2Unit" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="Address" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="TaxCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -12028,7 +12028,7 @@ public class Document {
      *                       &lt;/restriction>
      *                     &lt;/simpleType>
      *                   &lt;/element>
-     *                   &lt;element name="PickQuantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="PickQuantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="PickListIdNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="OriginalItem" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="BackOrder" minOccurs="0">
@@ -12052,11 +12052,11 @@ public class Document {
      *                       &lt;/restriction>
      *                     &lt;/simpleType>
      *                   &lt;/element>
-     *                   &lt;element name="CorrInvAmountToStock" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="CorrInvAmountToDiffAcct" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="AppliedTax" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="AppliedTaxFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="AppliedTaxSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="CorrInvAmountToStock" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="CorrInvAmountToDiffAcct" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="AppliedTax" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="AppliedTaxFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="AppliedTaxSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="WTLiable" minOccurs="0">
      *                     &lt;simpleType>
      *                       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -12073,18 +12073,18 @@ public class Document {
      *                       &lt;/restriction>
      *                     &lt;/simpleType>
      *                   &lt;/element>
-     *                   &lt;element name="EqualizationTaxPercent" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TotalEqualizationTax" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TotalEqualizationTaxFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TotalEqualizationTaxSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="NetTaxAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="NetTaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="NetTaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="EqualizationTaxPercent" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TotalEqualizationTax" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TotalEqualizationTaxFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TotalEqualizationTaxSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="NetTaxAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="NetTaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="NetTaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="MeasureUnit" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="UnitsOfMeasurment" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="LineTotal" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TaxPercentagePerRow" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TaxTotal" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="UnitsOfMeasurment" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="LineTotal" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TaxPercentagePerRow" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TaxTotal" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="ConsumerSalesForecast" minOccurs="0">
      *                     &lt;simpleType>
      *                       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -12093,9 +12093,9 @@ public class Document {
      *                       &lt;/restriction>
      *                     &lt;/simpleType>
      *                   &lt;/element>
-     *                   &lt;element name="ExciseAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TaxPerUnit" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TotalInclTax" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="ExciseAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TaxPerUnit" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TotalInclTax" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="CountryOrg" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="SWW" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="TransactionType" minOccurs="0">
@@ -12114,16 +12114,16 @@ public class Document {
      *                       &lt;/restriction>
      *                     &lt;/simpleType>
      *                   &lt;/element>
-     *                   &lt;element name="RowTotalFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="RowTotalSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="LastBuyInmPrice" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="LastBuyDistributeSumFc" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="LastBuyDistributeSumSc" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="LastBuyDistributeSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="StockDistributesumForeign" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="StockDistributesumSystem" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="StockDistributesum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="StockInmPrice" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="RowTotalFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="RowTotalSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="LastBuyInmPrice" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="LastBuyDistributeSumFc" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="LastBuyDistributeSumSc" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="LastBuyDistributeSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="StockDistributesumForeign" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="StockDistributesumSystem" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="StockDistributesum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="StockInmPrice" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="PickStatusEx" minOccurs="0">
      *                     &lt;simpleType>
      *                       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -12134,9 +12134,9 @@ public class Document {
      *                       &lt;/restriction>
      *                     &lt;/simpleType>
      *                   &lt;/element>
-     *                   &lt;element name="TaxBeforeDPM" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TaxBeforeDPMFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TaxBeforeDPMSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="TaxBeforeDPM" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TaxBeforeDPMFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TaxBeforeDPMSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="CFOPCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="CSTCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="Usage" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -12149,8 +12149,8 @@ public class Document {
      *                     &lt;/simpleType>
      *                   &lt;/element>
      *                   &lt;element name="VisualOrder" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                   &lt;element name="BaseOpenQuantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="UnitPrice" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="BaseOpenQuantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="UnitPrice" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="LineStatus" minOccurs="0">
      *                     &lt;simpleType>
      *                       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -12161,7 +12161,7 @@ public class Document {
      *                       &lt;/restriction>
      *                     &lt;/simpleType>
      *                   &lt;/element>
-     *                   &lt;element name="PackageQuantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="PackageQuantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="Text" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="LineType" minOccurs="0">
      *                     &lt;simpleType>
@@ -12174,9 +12174,9 @@ public class Document {
      *                   &lt;element name="COGSCostingCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="COGSAccountCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="ChangeAssemlyBoMWarehouse" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="GrossBuyPrice" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="GrossBuyPrice" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="GrossBase" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                   &lt;element name="GrossProfitTotalBasePrice" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="GrossProfitTotalBasePrice" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="CostingCode2" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="CostingCode3" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="CostingCode4" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -12184,13 +12184,13 @@ public class Document {
      *                   &lt;element name="ItemDetails" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="LocationCode" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="ActualDeliveryDate" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/>
-     *                   &lt;element name="RemainingOpenQuantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="OpenAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="OpenAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="OpenAmountSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="RemainingOpenQuantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="OpenAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="OpenAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="OpenAmountSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="ExLineNo" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="RequiredDate" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/>
-     *                   &lt;element name="RequiredQuantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="RequiredQuantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="COGSCostingCode2" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="COGSCostingCode3" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="COGSCostingCode4" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -12212,9 +12212,9 @@ public class Document {
      *                   &lt;element name="ActualBaseEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="ActualBaseLine" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="DocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                   &lt;element name="Surpluses" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="DefectAndBreakup" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="Shortages" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="Surpluses" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="DefectAndBreakup" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="Shortages" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="ConsiderQuantity" minOccurs="0">
      *                     &lt;simpleType>
      *                       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -12231,8 +12231,8 @@ public class Document {
      *                       &lt;/restriction>
      *                     &lt;/simpleType>
      *                   &lt;/element>
-     *                   &lt;element name="RetirementQuantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="RetirementAPC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="RetirementQuantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="RetirementAPC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="ThirdParty" minOccurs="0">
      *                     &lt;simpleType>
      *                       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -12259,8 +12259,8 @@ public class Document {
      *                   &lt;element name="StgDesc" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="UoMEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="UoMCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="InventoryQuantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="RemainingOpenInventoryQuantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="InventoryQuantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="RemainingOpenInventoryQuantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="ParentLineNum" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="Incoterms" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="TransportMode" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -12290,37 +12290,37 @@ public class Document {
      *                   &lt;/element>
      *                   &lt;element name="SACEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="HSNEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                   &lt;element name="GrossPrice" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="GrossTotal" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="GrossTotalFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="GrossTotalSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="GrossPrice" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="GrossTotal" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="GrossTotalFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="GrossTotalSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="NCMCode" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="ShipToCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="ShipToDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="U_PREC_LIS" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="U_DIF_PREC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="U_PREC_LIS" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="U_DIF_PREC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="U_COSTOIMP" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="U_BANCO" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="U_UBICACION" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="U_CHEQUE" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="U_VAL_PRECIO" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="U_CAUSAL_DEV" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="U_STOCK_ALM" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="U_DISPONIBLE_ALM" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="U_STOCK_ALM" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="U_DISPONIBLE_ALM" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="U_BLD_LyID" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="U_BLD_NCps" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="U_Referencia" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="U_Diferencia" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="U_Precio_Cotizacion" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="U_Precio_Cotizacion" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="U_IVCDone" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="U_NWR_Base" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="U_CustDate" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/>
      *                   &lt;element name="U_DocNumBase" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="U_ObjType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="U_NWR_QtyAllocated" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="U_ReclamQty" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="U_NWR_QtyAllocated" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="U_ReclamQty" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="U_QAMark" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="U_IncomingQty" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="U_IncomingQty" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="U_NWR_Bin" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="U_TransitWHSCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="U_CalcAIU" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -12336,10 +12336,10 @@ public class Document {
      *                                     &lt;all>
      *                                       &lt;element name="JurisdictionCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                                       &lt;element name="JurisdictionType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                                       &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                                       &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                                       &lt;element name="DocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                                       &lt;element name="LineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                                       &lt;element name="RowSequence" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -12366,12 +12366,12 @@ public class Document {
      *                                       &lt;element name="LineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                                       &lt;element name="GroupCode" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                                       &lt;element name="ExpenseCode" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                                       &lt;element name="LineTotal" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="LineTotalFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="LineTotalSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="PaidToDate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="PaidToDateFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="PaidToDateSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                                       &lt;element name="LineTotal" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="LineTotalFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="LineTotalSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="PaidToDate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="PaidToDateFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="PaidToDateSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                                       &lt;element name="TaxLiable" minOccurs="0">
      *                                         &lt;simpleType>
      *                                           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -12381,13 +12381,13 @@ public class Document {
      *                                         &lt;/simpleType>
      *                                       &lt;/element>
      *                                       &lt;element name="VatGroup" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                                       &lt;element name="TaxPercent" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="TaxSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="TaxSumFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="TaxSumSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="DeductibleTaxSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="DeductibleTaxSumFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="DeductibleTaxSumSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                                       &lt;element name="TaxPercent" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="TaxSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="TaxSumFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="TaxSumSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="DeductibleTaxSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="DeductibleTaxSumFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="DeductibleTaxSumSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                                       &lt;element name="AquisitionTax" minOccurs="0">
      *                                         &lt;simpleType>
      *                                           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -12406,16 +12406,16 @@ public class Document {
      *                                           &lt;/restriction>
      *                                         &lt;/simpleType>
      *                                       &lt;/element>
-     *                                       &lt;element name="TaxPaid" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="TaxPaidFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="TaxPaidSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="EqualizationTaxPercent" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="EqualizationTaxSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="EqualizationTaxFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="EqualizationTaxSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="TaxTotalSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="TaxTotalSumFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="TaxTotalSumSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                                       &lt;element name="TaxPaid" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="TaxPaidFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="TaxPaidSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="EqualizationTaxPercent" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="EqualizationTaxSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="EqualizationTaxFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="EqualizationTaxSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="TaxTotalSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="TaxTotalSumFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="TaxTotalSumSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                                       &lt;element name="WTLiable" minOccurs="0">
      *                                         &lt;simpleType>
      *                                           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -12443,10 +12443,10 @@ public class Document {
      *                                                         &lt;all>
      *                                                           &lt;element name="JurisdictionCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                                                           &lt;element name="JurisdictionType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                                                           &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                                           &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                                           &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                                           &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                                                           &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                                           &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                                           &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                                           &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                                                           &lt;element name="DocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                                                           &lt;element name="LineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                                                           &lt;element name="RowSequence" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -12481,21 +12481,21 @@ public class Document {
      *                                   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *                                     &lt;all>
      *                                       &lt;element name="WTCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                                       &lt;element name="WTAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="WTAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="WTAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                                       &lt;element name="WTAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="WTAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="WTAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                                       &lt;element name="WithholdingType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                                       &lt;element name="TaxableAmountinSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="TaxableAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="TaxableAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                                       &lt;element name="TaxableAmountinSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="TaxableAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="TaxableAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                                       &lt;element name="RoundingType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                                       &lt;element name="Rate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                                       &lt;element name="Rate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                                       &lt;element name="Criteria" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                                       &lt;element name="Category" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                                       &lt;element name="BaseType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                                       &lt;element name="AppliedWTAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="AppliedWTAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="AppliedWTAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                                       &lt;element name="AppliedWTAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="AppliedWTAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="AppliedWTAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                                       &lt;element name="GLAccount" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                                       &lt;element name="LineNum" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                                       &lt;element name="BaseDocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -12516,14 +12516,14 @@ public class Document {
      *                                       &lt;element name="TargetDocumentType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                                       &lt;element name="CSTCodeIncoming" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                                       &lt;element name="CSTCodeOutgoing" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                                       &lt;element name="U_Base_ML" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="U_Base_MS" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="U_Base_ME" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="U_Tarifa" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                                       &lt;element name="U_Base_ML" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="U_Base_MS" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="U_Base_ME" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="U_Tarifa" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                                       &lt;element name="U_Fuente" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                                       &lt;element name="U_Ret_ML" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="U_Ret_MS" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                                       &lt;element name="U_Ret_ME" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                                       &lt;element name="U_Ret_ML" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="U_Ret_MS" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                                       &lt;element name="U_Ret_ME" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                                     &lt;/all>
      *                                   &lt;/restriction>
      *                                 &lt;/complexContent>
@@ -12556,7 +12556,7 @@ public class Document {
      *                                       &lt;element name="BatchID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                                       &lt;element name="SystemSerialNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                                       &lt;element name="BaseLineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                                       &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                                       &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                                       &lt;element name="TrackingNote" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                                       &lt;element name="TrackingNoteLine" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                                     &lt;/all>
@@ -12587,7 +12587,7 @@ public class Document {
      *                                       &lt;element name="AddmisionDate" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/>
      *                                       &lt;element name="Location" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                                       &lt;element name="Notes" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                                       &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                                       &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                                       &lt;element name="BaseLineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                                       &lt;element name="TrackingNote" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                                       &lt;element name="TrackingNoteLine" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -12612,7 +12612,7 @@ public class Document {
      *                                   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *                                     &lt;all>
      *                                       &lt;element name="BinAbsEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                                       &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                                       &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                                       &lt;element name="AllowNegativeQuantity" minOccurs="0">
      *                                         &lt;simpleType>
      *                                           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -12643,12 +12643,12 @@ public class Document {
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "documentLine"
+            "documentLine"
     })
     public static class DocumentLines {
 
@@ -12657,25 +12657,25 @@ public class Document {
 
         /**
          * Gets the value of the documentLine property.
-         * 
+         *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the documentLine property.
-         * 
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getDocumentLine().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link Document.DocumentLines.DocumentLine }
-         * 
-         * 
+         *
+         *
          */
         public List<Document.DocumentLines.DocumentLine> getDocumentLine() {
             if (documentLine == null) {
@@ -12687,9 +12687,9 @@ public class Document {
 
         /**
          * <p>Clase Java para anonymous complex type.
-         * 
+         *
          * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-         * 
+         *
          * <pre>
          * &lt;complexType>
          *   &lt;complexContent>
@@ -12698,18 +12698,18 @@ public class Document {
          *         &lt;element name="LineNum" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="ItemCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="ItemDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="ShipDate" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/>
-         *         &lt;element name="Price" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="PriceAfterVAT" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="Price" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="PriceAfterVAT" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="Currency" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="Rate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="DiscountPercent" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="Rate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="DiscountPercent" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="VendorNum" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="SerialNum" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="WarehouseCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="SalesPersonCode" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *         &lt;element name="CommisionPercent" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="CommisionPercent" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="TreeType" minOccurs="0">
          *           &lt;simpleType>
          *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -12736,30 +12736,30 @@ public class Document {
          *         &lt;element name="ProjectCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="BarCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="VatGroup" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="Height1" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="Height1" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="Hight1Unit" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *         &lt;element name="Height2" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="Height2" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="Height2Unit" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *         &lt;element name="Lengh1" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="Lengh1" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="Lengh1Unit" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *         &lt;element name="Lengh2" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="Lengh2" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="Lengh2Unit" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *         &lt;element name="Weight1" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="Weight1" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="Weight1Unit" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *         &lt;element name="Weight2" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="Weight2" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="Weight2Unit" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *         &lt;element name="Factor1" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="Factor2" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="Factor3" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="Factor4" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="Factor1" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="Factor2" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="Factor3" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="Factor4" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="BaseType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="BaseEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="BaseLine" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *         &lt;element name="Volume" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="Volume" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="VolumeUnit" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *         &lt;element name="Width1" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="Width1" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="Width1Unit" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *         &lt;element name="Width2" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="Width2" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="Width2Unit" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="Address" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="TaxCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -12789,7 +12789,7 @@ public class Document {
          *             &lt;/restriction>
          *           &lt;/simpleType>
          *         &lt;/element>
-         *         &lt;element name="PickQuantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="PickQuantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="PickListIdNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="OriginalItem" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="BackOrder" minOccurs="0">
@@ -12813,11 +12813,11 @@ public class Document {
          *             &lt;/restriction>
          *           &lt;/simpleType>
          *         &lt;/element>
-         *         &lt;element name="CorrInvAmountToStock" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="CorrInvAmountToDiffAcct" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="AppliedTax" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="AppliedTaxFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="AppliedTaxSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="CorrInvAmountToStock" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="CorrInvAmountToDiffAcct" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="AppliedTax" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="AppliedTaxFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="AppliedTaxSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="WTLiable" minOccurs="0">
          *           &lt;simpleType>
          *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -12834,18 +12834,18 @@ public class Document {
          *             &lt;/restriction>
          *           &lt;/simpleType>
          *         &lt;/element>
-         *         &lt;element name="EqualizationTaxPercent" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TotalEqualizationTax" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TotalEqualizationTaxFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TotalEqualizationTaxSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="NetTaxAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="NetTaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="NetTaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="EqualizationTaxPercent" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TotalEqualizationTax" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TotalEqualizationTaxFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TotalEqualizationTaxSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="NetTaxAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="NetTaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="NetTaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="MeasureUnit" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="UnitsOfMeasurment" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="LineTotal" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TaxPercentagePerRow" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TaxTotal" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="UnitsOfMeasurment" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="LineTotal" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TaxPercentagePerRow" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TaxTotal" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="ConsumerSalesForecast" minOccurs="0">
          *           &lt;simpleType>
          *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -12854,9 +12854,9 @@ public class Document {
          *             &lt;/restriction>
          *           &lt;/simpleType>
          *         &lt;/element>
-         *         &lt;element name="ExciseAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TaxPerUnit" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TotalInclTax" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="ExciseAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TaxPerUnit" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TotalInclTax" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="CountryOrg" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="SWW" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="TransactionType" minOccurs="0">
@@ -12875,16 +12875,16 @@ public class Document {
          *             &lt;/restriction>
          *           &lt;/simpleType>
          *         &lt;/element>
-         *         &lt;element name="RowTotalFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="RowTotalSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="LastBuyInmPrice" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="LastBuyDistributeSumFc" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="LastBuyDistributeSumSc" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="LastBuyDistributeSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="StockDistributesumForeign" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="StockDistributesumSystem" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="StockDistributesum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="StockInmPrice" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="RowTotalFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="RowTotalSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="LastBuyInmPrice" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="LastBuyDistributeSumFc" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="LastBuyDistributeSumSc" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="LastBuyDistributeSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="StockDistributesumForeign" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="StockDistributesumSystem" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="StockDistributesum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="StockInmPrice" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="PickStatusEx" minOccurs="0">
          *           &lt;simpleType>
          *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -12895,9 +12895,9 @@ public class Document {
          *             &lt;/restriction>
          *           &lt;/simpleType>
          *         &lt;/element>
-         *         &lt;element name="TaxBeforeDPM" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TaxBeforeDPMFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TaxBeforeDPMSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="TaxBeforeDPM" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TaxBeforeDPMFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TaxBeforeDPMSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="CFOPCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="CSTCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="Usage" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -12910,8 +12910,8 @@ public class Document {
          *           &lt;/simpleType>
          *         &lt;/element>
          *         &lt;element name="VisualOrder" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *         &lt;element name="BaseOpenQuantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="UnitPrice" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="BaseOpenQuantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="UnitPrice" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="LineStatus" minOccurs="0">
          *           &lt;simpleType>
          *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -12922,7 +12922,7 @@ public class Document {
          *             &lt;/restriction>
          *           &lt;/simpleType>
          *         &lt;/element>
-         *         &lt;element name="PackageQuantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="PackageQuantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="Text" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="LineType" minOccurs="0">
          *           &lt;simpleType>
@@ -12935,9 +12935,9 @@ public class Document {
          *         &lt;element name="COGSCostingCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="COGSAccountCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="ChangeAssemlyBoMWarehouse" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="GrossBuyPrice" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="GrossBuyPrice" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="GrossBase" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *         &lt;element name="GrossProfitTotalBasePrice" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="GrossProfitTotalBasePrice" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="CostingCode2" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="CostingCode3" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="CostingCode4" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -12945,13 +12945,13 @@ public class Document {
          *         &lt;element name="ItemDetails" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="LocationCode" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="ActualDeliveryDate" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/>
-         *         &lt;element name="RemainingOpenQuantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="OpenAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="OpenAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="OpenAmountSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="RemainingOpenQuantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="OpenAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="OpenAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="OpenAmountSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="ExLineNo" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="RequiredDate" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/>
-         *         &lt;element name="RequiredQuantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="RequiredQuantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="COGSCostingCode2" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="COGSCostingCode3" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="COGSCostingCode4" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -12973,9 +12973,9 @@ public class Document {
          *         &lt;element name="ActualBaseEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="ActualBaseLine" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="DocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *         &lt;element name="Surpluses" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="DefectAndBreakup" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="Shortages" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="Surpluses" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="DefectAndBreakup" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="Shortages" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="ConsiderQuantity" minOccurs="0">
          *           &lt;simpleType>
          *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -12992,8 +12992,8 @@ public class Document {
          *             &lt;/restriction>
          *           &lt;/simpleType>
          *         &lt;/element>
-         *         &lt;element name="RetirementQuantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="RetirementAPC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="RetirementQuantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="RetirementAPC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="ThirdParty" minOccurs="0">
          *           &lt;simpleType>
          *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -13020,8 +13020,8 @@ public class Document {
          *         &lt;element name="StgDesc" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="UoMEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="UoMCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="InventoryQuantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="RemainingOpenInventoryQuantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="InventoryQuantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="RemainingOpenInventoryQuantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="ParentLineNum" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="Incoterms" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="TransportMode" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -13051,37 +13051,37 @@ public class Document {
          *         &lt;/element>
          *         &lt;element name="SACEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="HSNEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *         &lt;element name="GrossPrice" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="GrossTotal" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="GrossTotalFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="GrossTotalSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="GrossPrice" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="GrossTotal" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="GrossTotalFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="GrossTotalSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="NCMCode" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="ShipToCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="ShipToDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="U_PREC_LIS" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="U_DIF_PREC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="U_PREC_LIS" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="U_DIF_PREC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="U_COSTOIMP" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="U_BANCO" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="U_UBICACION" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="U_CHEQUE" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="U_VAL_PRECIO" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="U_CAUSAL_DEV" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="U_STOCK_ALM" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="U_DISPONIBLE_ALM" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="U_STOCK_ALM" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="U_DISPONIBLE_ALM" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="U_BLD_LyID" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="U_BLD_NCps" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="U_Referencia" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="U_Diferencia" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="U_Precio_Cotizacion" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="U_Precio_Cotizacion" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="U_IVCDone" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="U_NWR_Base" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="U_CustDate" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/>
          *         &lt;element name="U_DocNumBase" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="U_ObjType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="U_NWR_QtyAllocated" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="U_ReclamQty" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="U_NWR_QtyAllocated" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="U_ReclamQty" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="U_QAMark" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="U_IncomingQty" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="U_IncomingQty" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="U_NWR_Bin" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="U_TransitWHSCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="U_CalcAIU" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -13097,10 +13097,10 @@ public class Document {
          *                           &lt;all>
          *                             &lt;element name="JurisdictionCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *                             &lt;element name="JurisdictionType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *                             &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *                             &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *                             &lt;element name="DocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *                             &lt;element name="LineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *                             &lt;element name="RowSequence" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -13127,12 +13127,12 @@ public class Document {
          *                             &lt;element name="LineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *                             &lt;element name="GroupCode" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *                             &lt;element name="ExpenseCode" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *                             &lt;element name="LineTotal" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="LineTotalFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="LineTotalSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="PaidToDate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="PaidToDateFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="PaidToDateSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *                             &lt;element name="LineTotal" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="LineTotalFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="LineTotalSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="PaidToDate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="PaidToDateFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="PaidToDateSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *                             &lt;element name="TaxLiable" minOccurs="0">
          *                               &lt;simpleType>
          *                                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -13142,13 +13142,13 @@ public class Document {
          *                               &lt;/simpleType>
          *                             &lt;/element>
          *                             &lt;element name="VatGroup" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *                             &lt;element name="TaxPercent" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="TaxSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="TaxSumFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="TaxSumSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="DeductibleTaxSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="DeductibleTaxSumFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="DeductibleTaxSumSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *                             &lt;element name="TaxPercent" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="TaxSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="TaxSumFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="TaxSumSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="DeductibleTaxSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="DeductibleTaxSumFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="DeductibleTaxSumSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *                             &lt;element name="AquisitionTax" minOccurs="0">
          *                               &lt;simpleType>
          *                                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -13167,16 +13167,16 @@ public class Document {
          *                                 &lt;/restriction>
          *                               &lt;/simpleType>
          *                             &lt;/element>
-         *                             &lt;element name="TaxPaid" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="TaxPaidFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="TaxPaidSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="EqualizationTaxPercent" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="EqualizationTaxSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="EqualizationTaxFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="EqualizationTaxSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="TaxTotalSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="TaxTotalSumFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="TaxTotalSumSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *                             &lt;element name="TaxPaid" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="TaxPaidFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="TaxPaidSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="EqualizationTaxPercent" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="EqualizationTaxSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="EqualizationTaxFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="EqualizationTaxSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="TaxTotalSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="TaxTotalSumFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="TaxTotalSumSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *                             &lt;element name="WTLiable" minOccurs="0">
          *                               &lt;simpleType>
          *                                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -13204,10 +13204,10 @@ public class Document {
          *                                               &lt;all>
          *                                                 &lt;element name="JurisdictionCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *                                                 &lt;element name="JurisdictionType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *                                                 &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                                                 &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                                                 &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                                                 &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *                                                 &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                                                 &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                                                 &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                                                 &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *                                                 &lt;element name="DocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *                                                 &lt;element name="LineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *                                                 &lt;element name="RowSequence" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -13242,21 +13242,21 @@ public class Document {
          *                         &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
          *                           &lt;all>
          *                             &lt;element name="WTCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *                             &lt;element name="WTAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="WTAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="WTAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *                             &lt;element name="WTAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="WTAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="WTAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *                             &lt;element name="WithholdingType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *                             &lt;element name="TaxableAmountinSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="TaxableAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="TaxableAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *                             &lt;element name="TaxableAmountinSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="TaxableAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="TaxableAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *                             &lt;element name="RoundingType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *                             &lt;element name="Rate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *                             &lt;element name="Rate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *                             &lt;element name="Criteria" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *                             &lt;element name="Category" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *                             &lt;element name="BaseType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *                             &lt;element name="AppliedWTAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="AppliedWTAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="AppliedWTAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *                             &lt;element name="AppliedWTAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="AppliedWTAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="AppliedWTAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *                             &lt;element name="GLAccount" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *                             &lt;element name="LineNum" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *                             &lt;element name="BaseDocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -13277,14 +13277,14 @@ public class Document {
          *                             &lt;element name="TargetDocumentType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *                             &lt;element name="CSTCodeIncoming" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *                             &lt;element name="CSTCodeOutgoing" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *                             &lt;element name="U_Base_ML" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="U_Base_MS" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="U_Base_ME" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="U_Tarifa" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *                             &lt;element name="U_Base_ML" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="U_Base_MS" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="U_Base_ME" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="U_Tarifa" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *                             &lt;element name="U_Fuente" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *                             &lt;element name="U_Ret_ML" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="U_Ret_MS" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *                             &lt;element name="U_Ret_ME" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *                             &lt;element name="U_Ret_ML" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="U_Ret_MS" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *                             &lt;element name="U_Ret_ME" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *                           &lt;/all>
          *                         &lt;/restriction>
          *                       &lt;/complexContent>
@@ -13317,7 +13317,7 @@ public class Document {
          *                             &lt;element name="BatchID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *                             &lt;element name="SystemSerialNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *                             &lt;element name="BaseLineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *                             &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *                             &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *                             &lt;element name="TrackingNote" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *                             &lt;element name="TrackingNoteLine" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *                           &lt;/all>
@@ -13348,7 +13348,7 @@ public class Document {
          *                             &lt;element name="AddmisionDate" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/>
          *                             &lt;element name="Location" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *                             &lt;element name="Notes" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *                             &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *                             &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *                             &lt;element name="BaseLineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *                             &lt;element name="TrackingNote" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *                             &lt;element name="TrackingNoteLine" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -13373,7 +13373,7 @@ public class Document {
          *                         &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
          *                           &lt;all>
          *                             &lt;element name="BinAbsEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *                             &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *                             &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *                             &lt;element name="AllowNegativeQuantity" minOccurs="0">
          *                               &lt;simpleType>
          *                                 &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -13399,8 +13399,8 @@ public class Document {
          *   &lt;/complexContent>
          * &lt;/complexType>
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -13420,15 +13420,15 @@ public class Document {
             @XmlSchemaType(name = "date")
             protected XMLGregorianCalendar shipDate;
             @XmlElement(name = "Price")
-            protected Double price;
+            protected BigDecimal price;
             @XmlElement(name = "PriceAfterVAT")
-            protected Double priceAfterVAT;
+            protected BigDecimal priceAfterVAT;
             @XmlElement(name = "Currency")
             protected String currency;
             @XmlElement(name = "Rate")
-            protected Double rate;
+            protected BigDecimal rate;
             @XmlElement(name = "DiscountPercent")
-            protected Double discountPercent;
+            protected BigDecimal discountPercent;
             @XmlElement(name = "VendorNum")
             protected String vendorNum;
             @XmlElement(name = "SerialNum")
@@ -13438,7 +13438,7 @@ public class Document {
             @XmlElement(name = "SalesPersonCode")
             protected Long salesPersonCode;
             @XmlElement(name = "CommisionPercent")
-            protected Double commisionPercent;
+            protected BigDecimal commisionPercent;
             @XmlElement(name = "TreeType")
             protected String treeType;
             @XmlElement(name = "AccountCode")
@@ -13456,37 +13456,37 @@ public class Document {
             @XmlElement(name = "VatGroup")
             protected String vatGroup;
             @XmlElement(name = "Height1")
-            protected Double height1;
+            protected BigDecimal height1;
             @XmlElement(name = "Hight1Unit")
             protected Long hight1Unit;
             @XmlElement(name = "Height2")
-            protected Double height2;
+            protected BigDecimal height2;
             @XmlElement(name = "Height2Unit")
             protected Long height2Unit;
             @XmlElement(name = "Lengh1")
-            protected Double lengh1;
+            protected BigDecimal lengh1;
             @XmlElement(name = "Lengh1Unit")
             protected Long lengh1Unit;
             @XmlElement(name = "Lengh2")
-            protected Double lengh2;
+            protected BigDecimal lengh2;
             @XmlElement(name = "Lengh2Unit")
             protected Long lengh2Unit;
             @XmlElement(name = "Weight1")
-            protected Double weight1;
+            protected BigDecimal weight1;
             @XmlElement(name = "Weight1Unit")
             protected Long weight1Unit;
             @XmlElement(name = "Weight2")
-            protected Double weight2;
+            protected BigDecimal weight2;
             @XmlElement(name = "Weight2Unit")
             protected Long weight2Unit;
             @XmlElement(name = "Factor1")
-            protected Double factor1;
+            protected BigDecimal factor1;
             @XmlElement(name = "Factor2")
-            protected Double factor2;
+            protected BigDecimal factor2;
             @XmlElement(name = "Factor3")
-            protected Double factor3;
+            protected BigDecimal factor3;
             @XmlElement(name = "Factor4")
-            protected Double factor4;
+            protected BigDecimal factor4;
             @XmlElement(name = "BaseType")
             protected Long baseType;
             @XmlElement(name = "BaseEntry")
@@ -13494,15 +13494,15 @@ public class Document {
             @XmlElement(name = "BaseLine")
             protected Long baseLine;
             @XmlElement(name = "Volume")
-            protected Double volume;
+            protected BigDecimal volume;
             @XmlElement(name = "VolumeUnit")
             protected Long volumeUnit;
             @XmlElement(name = "Width1")
-            protected Double width1;
+            protected BigDecimal width1;
             @XmlElement(name = "Width1Unit")
             protected Long width1Unit;
             @XmlElement(name = "Width2")
-            protected Double width2;
+            protected BigDecimal width2;
             @XmlElement(name = "Width2Unit")
             protected Long width2Unit;
             @XmlElement(name = "Address")
@@ -13516,7 +13516,7 @@ public class Document {
             @XmlElement(name = "PickStatus")
             protected String pickStatus;
             @XmlElement(name = "PickQuantity")
-            protected Double pickQuantity;
+            protected BigDecimal pickQuantity;
             @XmlElement(name = "PickListIdNumber")
             protected Long pickListIdNumber;
             @XmlElement(name = "OriginalItem")
@@ -13536,51 +13536,51 @@ public class Document {
             @XmlElement(name = "CorrectionInvoiceItem")
             protected String correctionInvoiceItem;
             @XmlElement(name = "CorrInvAmountToStock")
-            protected Double corrInvAmountToStock;
+            protected BigDecimal corrInvAmountToStock;
             @XmlElement(name = "CorrInvAmountToDiffAcct")
-            protected Double corrInvAmountToDiffAcct;
+            protected BigDecimal corrInvAmountToDiffAcct;
             @XmlElement(name = "AppliedTax")
-            protected Double appliedTax;
+            protected BigDecimal appliedTax;
             @XmlElement(name = "AppliedTaxFC")
-            protected Double appliedTaxFC;
+            protected BigDecimal appliedTaxFC;
             @XmlElement(name = "AppliedTaxSC")
-            protected Double appliedTaxSC;
+            protected BigDecimal appliedTaxSC;
             @XmlElement(name = "WTLiable")
             protected String wtLiable;
             @XmlElement(name = "DeferredTax")
             protected String deferredTax;
             @XmlElement(name = "EqualizationTaxPercent")
-            protected Double equalizationTaxPercent;
+            protected BigDecimal equalizationTaxPercent;
             @XmlElement(name = "TotalEqualizationTax")
-            protected Double totalEqualizationTax;
+            protected BigDecimal totalEqualizationTax;
             @XmlElement(name = "TotalEqualizationTaxFC")
-            protected Double totalEqualizationTaxFC;
+            protected BigDecimal totalEqualizationTaxFC;
             @XmlElement(name = "TotalEqualizationTaxSC")
-            protected Double totalEqualizationTaxSC;
+            protected BigDecimal totalEqualizationTaxSC;
             @XmlElement(name = "NetTaxAmount")
-            protected Double netTaxAmount;
+            protected BigDecimal netTaxAmount;
             @XmlElement(name = "NetTaxAmountFC")
-            protected Double netTaxAmountFC;
+            protected BigDecimal netTaxAmountFC;
             @XmlElement(name = "NetTaxAmountSC")
-            protected Double netTaxAmountSC;
+            protected BigDecimal netTaxAmountSC;
             @XmlElement(name = "MeasureUnit")
             protected String measureUnit;
             @XmlElement(name = "UnitsOfMeasurment")
-            protected Double unitsOfMeasurment;
+            protected BigDecimal unitsOfMeasurment;
             @XmlElement(name = "LineTotal")
             protected BigDecimal lineTotal;
             @XmlElement(name = "TaxPercentagePerRow")
-            protected Double taxPercentagePerRow;
+            protected BigDecimal taxPercentagePerRow;
             @XmlElement(name = "TaxTotal")
-            protected Double taxTotal;
+            protected BigDecimal taxTotal;
             @XmlElement(name = "ConsumerSalesForecast")
             protected String consumerSalesForecast;
             @XmlElement(name = "ExciseAmount")
-            protected Double exciseAmount;
+            protected BigDecimal exciseAmount;
             @XmlElement(name = "TaxPerUnit")
-            protected Double taxPerUnit;
+            protected BigDecimal taxPerUnit;
             @XmlElement(name = "TotalInclTax")
-            protected Double totalInclTax;
+            protected BigDecimal totalInclTax;
             @XmlElement(name = "CountryOrg")
             protected String countryOrg;
             @XmlElement(name = "SWW")
@@ -13590,33 +13590,33 @@ public class Document {
             @XmlElement(name = "DistributeExpense")
             protected String distributeExpense;
             @XmlElement(name = "RowTotalFC")
-            protected Double rowTotalFC;
+            protected BigDecimal rowTotalFC;
             @XmlElement(name = "RowTotalSC")
-            protected Double rowTotalSC;
+            protected BigDecimal rowTotalSC;
             @XmlElement(name = "LastBuyInmPrice")
-            protected Double lastBuyInmPrice;
+            protected BigDecimal lastBuyInmPrice;
             @XmlElement(name = "LastBuyDistributeSumFc")
-            protected Double lastBuyDistributeSumFc;
+            protected BigDecimal lastBuyDistributeSumFc;
             @XmlElement(name = "LastBuyDistributeSumSc")
-            protected Double lastBuyDistributeSumSc;
+            protected BigDecimal lastBuyDistributeSumSc;
             @XmlElement(name = "LastBuyDistributeSum")
-            protected Double lastBuyDistributeSum;
+            protected BigDecimal lastBuyDistributeSum;
             @XmlElement(name = "StockDistributesumForeign")
-            protected Double stockDistributesumForeign;
+            protected BigDecimal stockDistributesumForeign;
             @XmlElement(name = "StockDistributesumSystem")
-            protected Double stockDistributesumSystem;
+            protected BigDecimal stockDistributesumSystem;
             @XmlElement(name = "StockDistributesum")
-            protected Double stockDistributesum;
+            protected BigDecimal stockDistributesum;
             @XmlElement(name = "StockInmPrice")
-            protected Double stockInmPrice;
+            protected BigDecimal stockInmPrice;
             @XmlElement(name = "PickStatusEx")
             protected String pickStatusEx;
             @XmlElement(name = "TaxBeforeDPM")
-            protected Double taxBeforeDPM;
+            protected BigDecimal taxBeforeDPM;
             @XmlElement(name = "TaxBeforeDPMFC")
-            protected Double taxBeforeDPMFC;
+            protected BigDecimal taxBeforeDPMFC;
             @XmlElement(name = "TaxBeforeDPMSC")
-            protected Double taxBeforeDPMSC;
+            protected BigDecimal taxBeforeDPMSC;
             @XmlElement(name = "CFOPCode")
             protected String cfopCode;
             @XmlElement(name = "CSTCode")
@@ -13628,13 +13628,13 @@ public class Document {
             @XmlElement(name = "VisualOrder")
             protected Long visualOrder;
             @XmlElement(name = "BaseOpenQuantity")
-            protected Double baseOpenQuantity;
+            protected BigDecimal baseOpenQuantity;
             @XmlElement(name = "UnitPrice")
-            protected Double unitPrice;
+            protected BigDecimal unitPrice;
             @XmlElement(name = "LineStatus")
             protected String lineStatus;
             @XmlElement(name = "PackageQuantity")
-            protected Double packageQuantity;
+            protected BigDecimal packageQuantity;
             @XmlElement(name = "Text")
             protected String text;
             @XmlElement(name = "LineType")
@@ -13646,7 +13646,7 @@ public class Document {
             @XmlElement(name = "ChangeAssemlyBoMWarehouse")
             protected String changeAssemlyBoMWarehouse;
             @XmlElement(name = "GrossBuyPrice")
-            protected Double grossBuyPrice;
+            protected BigDecimal grossBuyPrice;
             @XmlElement(name = "GrossBase")
             protected Long grossBase;
             @XmlElement(name = "GrossProfitTotalBasePrice")
@@ -13667,20 +13667,20 @@ public class Document {
             @XmlSchemaType(name = "date")
             protected XMLGregorianCalendar actualDeliveryDate;
             @XmlElement(name = "RemainingOpenQuantity")
-            protected Double remainingOpenQuantity;
+            protected BigDecimal remainingOpenQuantity;
             @XmlElement(name = "OpenAmount")
-            protected Double openAmount;
+            protected BigDecimal openAmount;
             @XmlElement(name = "OpenAmountFC")
-            protected Double openAmountFC;
+            protected BigDecimal openAmountFC;
             @XmlElement(name = "OpenAmountSC")
-            protected Double openAmountSC;
+            protected BigDecimal openAmountSC;
             @XmlElement(name = "ExLineNo")
             protected String exLineNo;
             @XmlElement(name = "RequiredDate")
             @XmlSchemaType(name = "date")
             protected XMLGregorianCalendar requiredDate;
             @XmlElement(name = "RequiredQuantity")
-            protected Double requiredQuantity;
+            protected BigDecimal requiredQuantity;
             @XmlElement(name = "COGSCostingCode2")
             protected String cogsCostingCode2;
             @XmlElement(name = "COGSCostingCode3")
@@ -13710,19 +13710,19 @@ public class Document {
             @XmlElement(name = "DocEntry")
             protected Long docEntry;
             @XmlElement(name = "Surpluses")
-            protected Double surpluses;
+            protected BigDecimal surpluses;
             @XmlElement(name = "DefectAndBreakup")
-            protected Double defectAndBreakup;
+            protected BigDecimal defectAndBreakup;
             @XmlElement(name = "Shortages")
-            protected Double shortages;
+            protected BigDecimal shortages;
             @XmlElement(name = "ConsiderQuantity")
             protected String considerQuantity;
             @XmlElement(name = "PartialRetirement")
             protected String partialRetirement;
             @XmlElement(name = "RetirementQuantity")
-            protected Double retirementQuantity;
+            protected BigDecimal retirementQuantity;
             @XmlElement(name = "RetirementAPC")
-            protected Double retirementAPC;
+            protected BigDecimal retirementAPC;
             @XmlElement(name = "ThirdParty")
             protected String thirdParty;
             @XmlElement(name = "ExpenseType")
@@ -13744,9 +13744,9 @@ public class Document {
             @XmlElement(name = "UoMCode")
             protected String uoMCode;
             @XmlElement(name = "InventoryQuantity")
-            protected Double inventoryQuantity;
+            protected BigDecimal inventoryQuantity;
             @XmlElement(name = "RemainingOpenInventoryQuantity")
-            protected Double remainingOpenInventoryQuantity;
+            protected BigDecimal remainingOpenInventoryQuantity;
             @XmlElement(name = "ParentLineNum")
             protected Long parentLineNum;
             @XmlElement(name = "Incoterms")
@@ -13764,13 +13764,13 @@ public class Document {
             @XmlElement(name = "HSNEntry")
             protected Long hsnEntry;
             @XmlElement(name = "GrossPrice")
-            protected Double grossPrice;
+            protected BigDecimal grossPrice;
             @XmlElement(name = "GrossTotal")
             protected BigDecimal grossTotal;
             @XmlElement(name = "GrossTotalFC")
-            protected Double grossTotalFC;
+            protected BigDecimal grossTotalFC;
             @XmlElement(name = "GrossTotalSC")
-            protected Double grossTotalSC;
+            protected BigDecimal grossTotalSC;
             @XmlElement(name = "NCMCode")
             protected Long ncmCode;
             @XmlElement(name = "ShipToCode")
@@ -13778,9 +13778,9 @@ public class Document {
             @XmlElement(name = "ShipToDescription")
             protected String shipToDescription;
             @XmlElement(name = "U_PREC_LIS")
-            protected Double upreclis;
+            protected BigDecimal upreclis;
             @XmlElement(name = "U_DIF_PREC")
-            protected Double udifprec;
+            protected BigDecimal udifprec;
             @XmlElement(name = "U_COSTOIMP")
             protected String ucostoimp;
             @XmlElement(name = "U_BANCO")
@@ -13794,9 +13794,9 @@ public class Document {
             @XmlElement(name = "U_CAUSAL_DEV")
             protected String ucausaldev;
             @XmlElement(name = "U_STOCK_ALM")
-            protected Double ustockalm;
+            protected BigDecimal ustockalm;
             @XmlElement(name = "U_DISPONIBLE_ALM")
-            protected Double udisponiblealm;
+            protected BigDecimal udisponiblealm;
             @XmlElement(name = "U_BLD_LyID")
             protected Long ubldLyID;
             @XmlElement(name = "U_BLD_NCps")
@@ -13806,7 +13806,7 @@ public class Document {
             @XmlElement(name = "U_Diferencia")
             protected String uDiferencia;
             @XmlElement(name = "U_Precio_Cotizacion")
-            protected Double uPrecioCotizacion;
+            protected BigDecimal uPrecioCotizacion;
             @XmlElement(name = "U_IVCDone")
             protected String uivcDone;
             @XmlElement(name = "U_NWR_Base")
@@ -13819,13 +13819,13 @@ public class Document {
             @XmlElement(name = "U_ObjType")
             protected String uObjType;
             @XmlElement(name = "U_NWR_QtyAllocated")
-            protected Double unwrQtyAllocated;
+            protected BigDecimal unwrQtyAllocated;
             @XmlElement(name = "U_ReclamQty")
-            protected Double uReclamQty;
+            protected BigDecimal uReclamQty;
             @XmlElement(name = "U_QAMark")
             protected String uqaMark;
             @XmlElement(name = "U_IncomingQty")
-            protected Double uIncomingQty;
+            protected BigDecimal uIncomingQty;
             @XmlElement(name = "U_NWR_Bin")
             protected String unwrBin;
             @XmlElement(name = "U_TransitWHSCode")
@@ -13847,11 +13847,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad lineNum.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getLineNum() {
                 return lineNum;
@@ -13859,11 +13859,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad lineNum.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setLineNum(Long value) {
                 this.lineNum = value;
@@ -13871,11 +13871,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad itemCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getItemCode() {
                 return itemCode;
@@ -13883,11 +13883,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad itemCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setItemCode(String value) {
                 this.itemCode = value;
@@ -13895,11 +13895,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad itemDescription.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getItemDescription() {
                 return itemDescription;
@@ -13907,11 +13907,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad itemDescription.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setItemDescription(String value) {
                 this.itemDescription = value;
@@ -13919,11 +13919,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad quantity.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getQuantity() {
                 return quantity;
@@ -13931,11 +13931,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad quantity.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setQuantity(Double value) {
                 this.quantity = value;
@@ -13943,11 +13943,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad shipDate.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public XMLGregorianCalendar getShipDate() {
                 return shipDate;
@@ -13955,11 +13955,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad shipDate.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public void setShipDate(XMLGregorianCalendar value) {
                 this.shipDate = value;
@@ -13967,59 +13967,59 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad price.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getPrice() {
+            public BigDecimal getPrice() {
                 return price;
             }
 
             /**
              * Define el valor de la propiedad price.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setPrice(Double value) {
+            public void setPrice(BigDecimal value) {
                 this.price = value;
             }
 
             /**
              * Obtiene el valor de la propiedad priceAfterVAT.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getPriceAfterVAT() {
+            public BigDecimal getPriceAfterVAT() {
                 return priceAfterVAT;
             }
 
             /**
              * Define el valor de la propiedad priceAfterVAT.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setPriceAfterVAT(Double value) {
+            public void setPriceAfterVAT(BigDecimal value) {
                 this.priceAfterVAT = value;
             }
 
             /**
              * Obtiene el valor de la propiedad currency.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCurrency() {
                 return currency;
@@ -14027,11 +14027,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad currency.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCurrency(String value) {
                 this.currency = value;
@@ -14039,59 +14039,59 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad rate.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getRate() {
+            public BigDecimal getRate() {
                 return rate;
             }
 
             /**
              * Define el valor de la propiedad rate.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setRate(Double value) {
+            public void setRate(BigDecimal value) {
                 this.rate = value;
             }
 
             /**
              * Obtiene el valor de la propiedad discountPercent.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getDiscountPercent() {
+            public BigDecimal getDiscountPercent() {
                 return discountPercent;
             }
 
             /**
              * Define el valor de la propiedad discountPercent.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setDiscountPercent(Double value) {
+            public void setDiscountPercent(BigDecimal value) {
                 this.discountPercent = value;
             }
 
             /**
              * Obtiene el valor de la propiedad vendorNum.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getVendorNum() {
                 return vendorNum;
@@ -14099,11 +14099,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad vendorNum.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setVendorNum(String value) {
                 this.vendorNum = value;
@@ -14111,11 +14111,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad serialNum.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getSerialNum() {
                 return serialNum;
@@ -14123,11 +14123,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad serialNum.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setSerialNum(String value) {
                 this.serialNum = value;
@@ -14135,11 +14135,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad warehouseCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getWarehouseCode() {
                 return warehouseCode;
@@ -14147,11 +14147,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad warehouseCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setWarehouseCode(String value) {
                 this.warehouseCode = value;
@@ -14159,11 +14159,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad salesPersonCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getSalesPersonCode() {
                 return salesPersonCode;
@@ -14171,11 +14171,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad salesPersonCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setSalesPersonCode(Long value) {
                 this.salesPersonCode = value;
@@ -14183,35 +14183,35 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad commisionPercent.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getCommisionPercent() {
+            public BigDecimal getCommisionPercent() {
                 return commisionPercent;
             }
 
             /**
              * Define el valor de la propiedad commisionPercent.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setCommisionPercent(Double value) {
+            public void setCommisionPercent(BigDecimal value) {
                 this.commisionPercent = value;
             }
 
             /**
              * Obtiene el valor de la propiedad treeType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getTreeType() {
                 return treeType;
@@ -14219,11 +14219,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad treeType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setTreeType(String value) {
                 this.treeType = value;
@@ -14231,11 +14231,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad accountCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getAccountCode() {
                 return accountCode;
@@ -14243,11 +14243,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad accountCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setAccountCode(String value) {
                 this.accountCode = value;
@@ -14255,11 +14255,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad useBaseUnits.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUseBaseUnits() {
                 return useBaseUnits;
@@ -14267,11 +14267,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad useBaseUnits.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUseBaseUnits(String value) {
                 this.useBaseUnits = value;
@@ -14279,11 +14279,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad supplierCatNum.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getSupplierCatNum() {
                 return supplierCatNum;
@@ -14291,11 +14291,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad supplierCatNum.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setSupplierCatNum(String value) {
                 this.supplierCatNum = value;
@@ -14303,11 +14303,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad costingCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCostingCode() {
                 return costingCode;
@@ -14315,11 +14315,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad costingCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCostingCode(String value) {
                 this.costingCode = value;
@@ -14327,11 +14327,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad projectCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getProjectCode() {
                 return projectCode;
@@ -14339,11 +14339,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad projectCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setProjectCode(String value) {
                 this.projectCode = value;
@@ -14351,11 +14351,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad barCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getBarCode() {
                 return barCode;
@@ -14363,11 +14363,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad barCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setBarCode(String value) {
                 this.barCode = value;
@@ -14375,11 +14375,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad vatGroup.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getVatGroup() {
                 return vatGroup;
@@ -14387,11 +14387,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad vatGroup.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setVatGroup(String value) {
                 this.vatGroup = value;
@@ -14399,35 +14399,35 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad height1.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getHeight1() {
+            public BigDecimal getHeight1() {
                 return height1;
             }
 
             /**
              * Define el valor de la propiedad height1.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setHeight1(Double value) {
+            public void setHeight1(BigDecimal value) {
                 this.height1 = value;
             }
 
             /**
              * Obtiene el valor de la propiedad hight1Unit.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getHight1Unit() {
                 return hight1Unit;
@@ -14435,11 +14435,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad hight1Unit.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setHight1Unit(Long value) {
                 this.hight1Unit = value;
@@ -14447,35 +14447,35 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad height2.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getHeight2() {
+            public BigDecimal getHeight2() {
                 return height2;
             }
 
             /**
              * Define el valor de la propiedad height2.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setHeight2(Double value) {
+            public void setHeight2(BigDecimal value) {
                 this.height2 = value;
             }
 
             /**
              * Obtiene el valor de la propiedad height2Unit.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getHeight2Unit() {
                 return height2Unit;
@@ -14483,11 +14483,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad height2Unit.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setHeight2Unit(Long value) {
                 this.height2Unit = value;
@@ -14495,35 +14495,35 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad lengh1.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getLengh1() {
+            public BigDecimal getLengh1() {
                 return lengh1;
             }
 
             /**
              * Define el valor de la propiedad lengh1.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setLengh1(Double value) {
+            public void setLengh1(BigDecimal value) {
                 this.lengh1 = value;
             }
 
             /**
              * Obtiene el valor de la propiedad lengh1Unit.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getLengh1Unit() {
                 return lengh1Unit;
@@ -14531,11 +14531,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad lengh1Unit.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setLengh1Unit(Long value) {
                 this.lengh1Unit = value;
@@ -14543,35 +14543,35 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad lengh2.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getLengh2() {
+            public BigDecimal getLengh2() {
                 return lengh2;
             }
 
             /**
              * Define el valor de la propiedad lengh2.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setLengh2(Double value) {
+            public void setLengh2(BigDecimal value) {
                 this.lengh2 = value;
             }
 
             /**
              * Obtiene el valor de la propiedad lengh2Unit.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getLengh2Unit() {
                 return lengh2Unit;
@@ -14579,11 +14579,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad lengh2Unit.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setLengh2Unit(Long value) {
                 this.lengh2Unit = value;
@@ -14591,35 +14591,35 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad weight1.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getWeight1() {
+            public BigDecimal getWeight1() {
                 return weight1;
             }
 
             /**
              * Define el valor de la propiedad weight1.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setWeight1(Double value) {
+            public void setWeight1(BigDecimal value) {
                 this.weight1 = value;
             }
 
             /**
              * Obtiene el valor de la propiedad weight1Unit.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getWeight1Unit() {
                 return weight1Unit;
@@ -14627,11 +14627,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad weight1Unit.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setWeight1Unit(Long value) {
                 this.weight1Unit = value;
@@ -14639,35 +14639,35 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad weight2.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getWeight2() {
+            public BigDecimal getWeight2() {
                 return weight2;
             }
 
             /**
              * Define el valor de la propiedad weight2.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setWeight2(Double value) {
+            public void setWeight2(BigDecimal value) {
                 this.weight2 = value;
             }
 
             /**
              * Obtiene el valor de la propiedad weight2Unit.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getWeight2Unit() {
                 return weight2Unit;
@@ -14675,11 +14675,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad weight2Unit.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setWeight2Unit(Long value) {
                 this.weight2Unit = value;
@@ -14687,107 +14687,107 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad factor1.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getFactor1() {
+            public BigDecimal getFactor1() {
                 return factor1;
             }
 
             /**
              * Define el valor de la propiedad factor1.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setFactor1(Double value) {
+            public void setFactor1(BigDecimal value) {
                 this.factor1 = value;
             }
 
             /**
              * Obtiene el valor de la propiedad factor2.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getFactor2() {
+            public BigDecimal getFactor2() {
                 return factor2;
             }
 
             /**
              * Define el valor de la propiedad factor2.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setFactor2(Double value) {
+            public void setFactor2(BigDecimal value) {
                 this.factor2 = value;
             }
 
             /**
              * Obtiene el valor de la propiedad factor3.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getFactor3() {
+            public BigDecimal getFactor3() {
                 return factor3;
             }
 
             /**
              * Define el valor de la propiedad factor3.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setFactor3(Double value) {
+            public void setFactor3(BigDecimal value) {
                 this.factor3 = value;
             }
 
             /**
              * Obtiene el valor de la propiedad factor4.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getFactor4() {
+            public BigDecimal getFactor4() {
                 return factor4;
             }
 
             /**
              * Define el valor de la propiedad factor4.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setFactor4(Double value) {
+            public void setFactor4(BigDecimal value) {
                 this.factor4 = value;
             }
 
             /**
              * Obtiene el valor de la propiedad baseType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getBaseType() {
                 return baseType;
@@ -14795,11 +14795,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad baseType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setBaseType(Long value) {
                 this.baseType = value;
@@ -14807,11 +14807,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad baseEntry.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getBaseEntry() {
                 return baseEntry;
@@ -14819,11 +14819,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad baseEntry.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setBaseEntry(Long value) {
                 this.baseEntry = value;
@@ -14831,11 +14831,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad baseLine.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getBaseLine() {
                 return baseLine;
@@ -14843,11 +14843,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad baseLine.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setBaseLine(Long value) {
                 this.baseLine = value;
@@ -14855,35 +14855,35 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad volume.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getVolume() {
+            public BigDecimal getVolume() {
                 return volume;
             }
 
             /**
              * Define el valor de la propiedad volume.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setVolume(Double value) {
+            public void setVolume(BigDecimal value) {
                 this.volume = value;
             }
 
             /**
              * Obtiene el valor de la propiedad volumeUnit.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getVolumeUnit() {
                 return volumeUnit;
@@ -14891,11 +14891,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad volumeUnit.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setVolumeUnit(Long value) {
                 this.volumeUnit = value;
@@ -14903,35 +14903,35 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad width1.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getWidth1() {
+            public BigDecimal getWidth1() {
                 return width1;
             }
 
             /**
              * Define el valor de la propiedad width1.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setWidth1(Double value) {
+            public void setWidth1(BigDecimal value) {
                 this.width1 = value;
             }
 
             /**
              * Obtiene el valor de la propiedad width1Unit.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getWidth1Unit() {
                 return width1Unit;
@@ -14939,11 +14939,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad width1Unit.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setWidth1Unit(Long value) {
                 this.width1Unit = value;
@@ -14951,35 +14951,35 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad width2.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getWidth2() {
+            public BigDecimal getWidth2() {
                 return width2;
             }
 
             /**
              * Define el valor de la propiedad width2.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setWidth2(Double value) {
+            public void setWidth2(BigDecimal value) {
                 this.width2 = value;
             }
 
             /**
              * Obtiene el valor de la propiedad width2Unit.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getWidth2Unit() {
                 return width2Unit;
@@ -14987,11 +14987,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad width2Unit.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setWidth2Unit(Long value) {
                 this.width2Unit = value;
@@ -14999,11 +14999,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad address.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getAddress() {
                 return address;
@@ -15011,11 +15011,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad address.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setAddress(String value) {
                 this.address = value;
@@ -15023,11 +15023,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad taxCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getTaxCode() {
                 return taxCode;
@@ -15035,11 +15035,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad taxCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setTaxCode(String value) {
                 this.taxCode = value;
@@ -15047,11 +15047,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad taxType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getTaxType() {
                 return taxType;
@@ -15059,11 +15059,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad taxType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setTaxType(String value) {
                 this.taxType = value;
@@ -15071,11 +15071,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad taxLiable.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getTaxLiable() {
                 return taxLiable;
@@ -15083,11 +15083,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad taxLiable.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setTaxLiable(String value) {
                 this.taxLiable = value;
@@ -15095,11 +15095,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad pickStatus.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getPickStatus() {
                 return pickStatus;
@@ -15107,11 +15107,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad pickStatus.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setPickStatus(String value) {
                 this.pickStatus = value;
@@ -15119,35 +15119,35 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad pickQuantity.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getPickQuantity() {
+            public BigDecimal getPickQuantity() {
                 return pickQuantity;
             }
 
             /**
              * Define el valor de la propiedad pickQuantity.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setPickQuantity(Double value) {
+            public void setPickQuantity(BigDecimal value) {
                 this.pickQuantity = value;
             }
 
             /**
              * Obtiene el valor de la propiedad pickListIdNumber.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getPickListIdNumber() {
                 return pickListIdNumber;
@@ -15155,11 +15155,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad pickListIdNumber.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setPickListIdNumber(Long value) {
                 this.pickListIdNumber = value;
@@ -15167,11 +15167,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad originalItem.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getOriginalItem() {
                 return originalItem;
@@ -15179,11 +15179,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad originalItem.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setOriginalItem(String value) {
                 this.originalItem = value;
@@ -15191,11 +15191,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad backOrder.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getBackOrder() {
                 return backOrder;
@@ -15203,11 +15203,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad backOrder.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setBackOrder(String value) {
                 this.backOrder = value;
@@ -15215,11 +15215,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad freeText.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getFreeText() {
                 return freeText;
@@ -15227,11 +15227,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad freeText.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setFreeText(String value) {
                 this.freeText = value;
@@ -15239,11 +15239,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad shippingMethod.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getShippingMethod() {
                 return shippingMethod;
@@ -15251,11 +15251,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad shippingMethod.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setShippingMethod(Long value) {
                 this.shippingMethod = value;
@@ -15263,11 +15263,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad poTargetNum.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getPOTargetNum() {
                 return poTargetNum;
@@ -15275,11 +15275,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad poTargetNum.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setPOTargetNum(Long value) {
                 this.poTargetNum = value;
@@ -15287,11 +15287,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad poTargetEntry.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getPOTargetEntry() {
                 return poTargetEntry;
@@ -15299,11 +15299,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad poTargetEntry.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setPOTargetEntry(String value) {
                 this.poTargetEntry = value;
@@ -15311,11 +15311,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad poTargetRowNum.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getPOTargetRowNum() {
                 return poTargetRowNum;
@@ -15323,11 +15323,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad poTargetRowNum.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setPOTargetRowNum(Long value) {
                 this.poTargetRowNum = value;
@@ -15335,11 +15335,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad correctionInvoiceItem.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCorrectionInvoiceItem() {
                 return correctionInvoiceItem;
@@ -15347,11 +15347,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad correctionInvoiceItem.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCorrectionInvoiceItem(String value) {
                 this.correctionInvoiceItem = value;
@@ -15359,131 +15359,131 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad corrInvAmountToStock.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getCorrInvAmountToStock() {
+            public BigDecimal getCorrInvAmountToStock() {
                 return corrInvAmountToStock;
             }
 
             /**
              * Define el valor de la propiedad corrInvAmountToStock.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setCorrInvAmountToStock(Double value) {
+            public void setCorrInvAmountToStock(BigDecimal value) {
                 this.corrInvAmountToStock = value;
             }
 
             /**
              * Obtiene el valor de la propiedad corrInvAmountToDiffAcct.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getCorrInvAmountToDiffAcct() {
+            public BigDecimal getCorrInvAmountToDiffAcct() {
                 return corrInvAmountToDiffAcct;
             }
 
             /**
              * Define el valor de la propiedad corrInvAmountToDiffAcct.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setCorrInvAmountToDiffAcct(Double value) {
+            public void setCorrInvAmountToDiffAcct(BigDecimal value) {
                 this.corrInvAmountToDiffAcct = value;
             }
 
             /**
              * Obtiene el valor de la propiedad appliedTax.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getAppliedTax() {
+            public BigDecimal getAppliedTax() {
                 return appliedTax;
             }
 
             /**
              * Define el valor de la propiedad appliedTax.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setAppliedTax(Double value) {
+            public void setAppliedTax(BigDecimal value) {
                 this.appliedTax = value;
             }
 
             /**
              * Obtiene el valor de la propiedad appliedTaxFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getAppliedTaxFC() {
+            public BigDecimal getAppliedTaxFC() {
                 return appliedTaxFC;
             }
 
             /**
              * Define el valor de la propiedad appliedTaxFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setAppliedTaxFC(Double value) {
+            public void setAppliedTaxFC(BigDecimal value) {
                 this.appliedTaxFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad appliedTaxSC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getAppliedTaxSC() {
+            public BigDecimal getAppliedTaxSC() {
                 return appliedTaxSC;
             }
 
             /**
              * Define el valor de la propiedad appliedTaxSC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setAppliedTaxSC(Double value) {
+            public void setAppliedTaxSC(BigDecimal value) {
                 this.appliedTaxSC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad wtLiable.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getWTLiable() {
                 return wtLiable;
@@ -15491,11 +15491,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad wtLiable.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setWTLiable(String value) {
                 this.wtLiable = value;
@@ -15503,11 +15503,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad deferredTax.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getDeferredTax() {
                 return deferredTax;
@@ -15515,11 +15515,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad deferredTax.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setDeferredTax(String value) {
                 this.deferredTax = value;
@@ -15527,179 +15527,179 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad equalizationTaxPercent.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getEqualizationTaxPercent() {
+            public BigDecimal getEqualizationTaxPercent() {
                 return equalizationTaxPercent;
             }
 
             /**
              * Define el valor de la propiedad equalizationTaxPercent.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setEqualizationTaxPercent(Double value) {
+            public void setEqualizationTaxPercent(BigDecimal value) {
                 this.equalizationTaxPercent = value;
             }
 
             /**
              * Obtiene el valor de la propiedad totalEqualizationTax.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTotalEqualizationTax() {
+            public BigDecimal getTotalEqualizationTax() {
                 return totalEqualizationTax;
             }
 
             /**
              * Define el valor de la propiedad totalEqualizationTax.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTotalEqualizationTax(Double value) {
+            public void setTotalEqualizationTax(BigDecimal value) {
                 this.totalEqualizationTax = value;
             }
 
             /**
              * Obtiene el valor de la propiedad totalEqualizationTaxFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTotalEqualizationTaxFC() {
+            public BigDecimal getTotalEqualizationTaxFC() {
                 return totalEqualizationTaxFC;
             }
 
             /**
              * Define el valor de la propiedad totalEqualizationTaxFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTotalEqualizationTaxFC(Double value) {
+            public void setTotalEqualizationTaxFC(BigDecimal value) {
                 this.totalEqualizationTaxFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad totalEqualizationTaxSC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTotalEqualizationTaxSC() {
+            public BigDecimal getTotalEqualizationTaxSC() {
                 return totalEqualizationTaxSC;
             }
 
             /**
              * Define el valor de la propiedad totalEqualizationTaxSC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTotalEqualizationTaxSC(Double value) {
+            public void setTotalEqualizationTaxSC(BigDecimal value) {
                 this.totalEqualizationTaxSC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad netTaxAmount.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getNetTaxAmount() {
+            public BigDecimal getNetTaxAmount() {
                 return netTaxAmount;
             }
 
             /**
              * Define el valor de la propiedad netTaxAmount.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setNetTaxAmount(Double value) {
+            public void setNetTaxAmount(BigDecimal value) {
                 this.netTaxAmount = value;
             }
 
             /**
              * Obtiene el valor de la propiedad netTaxAmountFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getNetTaxAmountFC() {
+            public BigDecimal getNetTaxAmountFC() {
                 return netTaxAmountFC;
             }
 
             /**
              * Define el valor de la propiedad netTaxAmountFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setNetTaxAmountFC(Double value) {
+            public void setNetTaxAmountFC(BigDecimal value) {
                 this.netTaxAmountFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad netTaxAmountSC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getNetTaxAmountSC() {
+            public BigDecimal getNetTaxAmountSC() {
                 return netTaxAmountSC;
             }
 
             /**
              * Define el valor de la propiedad netTaxAmountSC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setNetTaxAmountSC(Double value) {
+            public void setNetTaxAmountSC(BigDecimal value) {
                 this.netTaxAmountSC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad measureUnit.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getMeasureUnit() {
                 return measureUnit;
@@ -15707,11 +15707,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad measureUnit.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setMeasureUnit(String value) {
                 this.measureUnit = value;
@@ -15719,35 +15719,35 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad unitsOfMeasurment.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getUnitsOfMeasurment() {
+            public BigDecimal getUnitsOfMeasurment() {
                 return unitsOfMeasurment;
             }
 
             /**
              * Define el valor de la propiedad unitsOfMeasurment.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setUnitsOfMeasurment(Double value) {
+            public void setUnitsOfMeasurment(BigDecimal value) {
                 this.unitsOfMeasurment = value;
             }
 
             /**
              * Obtiene el valor de la propiedad lineTotal.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
             public BigDecimal getLineTotal() {
                 return lineTotal;
@@ -15755,11 +15755,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad lineTotal.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
             public void setLineTotal(BigDecimal value) {
                 this.lineTotal = value;
@@ -15767,59 +15767,59 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad taxPercentagePerRow.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxPercentagePerRow() {
+            public BigDecimal getTaxPercentagePerRow() {
                 return taxPercentagePerRow;
             }
 
             /**
              * Define el valor de la propiedad taxPercentagePerRow.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxPercentagePerRow(Double value) {
+            public void setTaxPercentagePerRow(BigDecimal value) {
                 this.taxPercentagePerRow = value;
             }
 
             /**
              * Obtiene el valor de la propiedad taxTotal.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxTotal() {
+            public BigDecimal getTaxTotal() {
                 return taxTotal;
             }
 
             /**
              * Define el valor de la propiedad taxTotal.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxTotal(Double value) {
+            public void setTaxTotal(BigDecimal value) {
                 this.taxTotal = value;
             }
 
             /**
              * Obtiene el valor de la propiedad consumerSalesForecast.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getConsumerSalesForecast() {
                 return consumerSalesForecast;
@@ -15827,11 +15827,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad consumerSalesForecast.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setConsumerSalesForecast(String value) {
                 this.consumerSalesForecast = value;
@@ -15839,83 +15839,83 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad exciseAmount.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getExciseAmount() {
+            public BigDecimal getExciseAmount() {
                 return exciseAmount;
             }
 
             /**
              * Define el valor de la propiedad exciseAmount.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setExciseAmount(Double value) {
+            public void setExciseAmount(BigDecimal value) {
                 this.exciseAmount = value;
             }
 
             /**
              * Obtiene el valor de la propiedad taxPerUnit.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxPerUnit() {
+            public BigDecimal getTaxPerUnit() {
                 return taxPerUnit;
             }
 
             /**
              * Define el valor de la propiedad taxPerUnit.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxPerUnit(Double value) {
+            public void setTaxPerUnit(BigDecimal value) {
                 this.taxPerUnit = value;
             }
 
             /**
              * Obtiene el valor de la propiedad totalInclTax.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTotalInclTax() {
+            public BigDecimal getTotalInclTax() {
                 return totalInclTax;
             }
 
             /**
              * Define el valor de la propiedad totalInclTax.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTotalInclTax(Double value) {
+            public void setTotalInclTax(BigDecimal value) {
                 this.totalInclTax = value;
             }
 
             /**
              * Obtiene el valor de la propiedad countryOrg.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCountryOrg() {
                 return countryOrg;
@@ -15923,11 +15923,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad countryOrg.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCountryOrg(String value) {
                 this.countryOrg = value;
@@ -15935,11 +15935,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad sww.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getSWW() {
                 return sww;
@@ -15947,11 +15947,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad sww.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setSWW(String value) {
                 this.sww = value;
@@ -15959,11 +15959,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad transactionType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getTransactionType() {
                 return transactionType;
@@ -15971,11 +15971,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad transactionType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setTransactionType(String value) {
                 this.transactionType = value;
@@ -15983,11 +15983,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad distributeExpense.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getDistributeExpense() {
                 return distributeExpense;
@@ -15995,11 +15995,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad distributeExpense.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setDistributeExpense(String value) {
                 this.distributeExpense = value;
@@ -16007,251 +16007,251 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad rowTotalFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getRowTotalFC() {
+            public BigDecimal getRowTotalFC() {
                 return rowTotalFC;
             }
 
             /**
              * Define el valor de la propiedad rowTotalFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setRowTotalFC(Double value) {
+            public void setRowTotalFC(BigDecimal value) {
                 this.rowTotalFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad rowTotalSC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getRowTotalSC() {
+            public BigDecimal getRowTotalSC() {
                 return rowTotalSC;
             }
 
             /**
              * Define el valor de la propiedad rowTotalSC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setRowTotalSC(Double value) {
+            public void setRowTotalSC(BigDecimal value) {
                 this.rowTotalSC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad lastBuyInmPrice.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getLastBuyInmPrice() {
+            public BigDecimal getLastBuyInmPrice() {
                 return lastBuyInmPrice;
             }
 
             /**
              * Define el valor de la propiedad lastBuyInmPrice.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setLastBuyInmPrice(Double value) {
+            public void setLastBuyInmPrice(BigDecimal value) {
                 this.lastBuyInmPrice = value;
             }
 
             /**
              * Obtiene el valor de la propiedad lastBuyDistributeSumFc.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getLastBuyDistributeSumFc() {
+            public BigDecimal getLastBuyDistributeSumFc() {
                 return lastBuyDistributeSumFc;
             }
 
             /**
              * Define el valor de la propiedad lastBuyDistributeSumFc.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setLastBuyDistributeSumFc(Double value) {
+            public void setLastBuyDistributeSumFc(BigDecimal value) {
                 this.lastBuyDistributeSumFc = value;
             }
 
             /**
              * Obtiene el valor de la propiedad lastBuyDistributeSumSc.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getLastBuyDistributeSumSc() {
+            public BigDecimal getLastBuyDistributeSumSc() {
                 return lastBuyDistributeSumSc;
             }
 
             /**
              * Define el valor de la propiedad lastBuyDistributeSumSc.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setLastBuyDistributeSumSc(Double value) {
+            public void setLastBuyDistributeSumSc(BigDecimal value) {
                 this.lastBuyDistributeSumSc = value;
             }
 
             /**
              * Obtiene el valor de la propiedad lastBuyDistributeSum.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getLastBuyDistributeSum() {
+            public BigDecimal getLastBuyDistributeSum() {
                 return lastBuyDistributeSum;
             }
 
             /**
              * Define el valor de la propiedad lastBuyDistributeSum.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setLastBuyDistributeSum(Double value) {
+            public void setLastBuyDistributeSum(BigDecimal value) {
                 this.lastBuyDistributeSum = value;
             }
 
             /**
              * Obtiene el valor de la propiedad stockDistributesumForeign.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getStockDistributesumForeign() {
+            public BigDecimal getStockDistributesumForeign() {
                 return stockDistributesumForeign;
             }
 
             /**
              * Define el valor de la propiedad stockDistributesumForeign.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setStockDistributesumForeign(Double value) {
+            public void setStockDistributesumForeign(BigDecimal value) {
                 this.stockDistributesumForeign = value;
             }
 
             /**
              * Obtiene el valor de la propiedad stockDistributesumSystem.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getStockDistributesumSystem() {
+            public BigDecimal getStockDistributesumSystem() {
                 return stockDistributesumSystem;
             }
 
             /**
              * Define el valor de la propiedad stockDistributesumSystem.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setStockDistributesumSystem(Double value) {
+            public void setStockDistributesumSystem(BigDecimal value) {
                 this.stockDistributesumSystem = value;
             }
 
             /**
              * Obtiene el valor de la propiedad stockDistributesum.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getStockDistributesum() {
+            public BigDecimal getStockDistributesum() {
                 return stockDistributesum;
             }
 
             /**
              * Define el valor de la propiedad stockDistributesum.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setStockDistributesum(Double value) {
+            public void setStockDistributesum(BigDecimal value) {
                 this.stockDistributesum = value;
             }
 
             /**
              * Obtiene el valor de la propiedad stockInmPrice.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getStockInmPrice() {
+            public BigDecimal getStockInmPrice() {
                 return stockInmPrice;
             }
 
             /**
              * Define el valor de la propiedad stockInmPrice.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setStockInmPrice(Double value) {
+            public void setStockInmPrice(BigDecimal value) {
                 this.stockInmPrice = value;
             }
 
             /**
              * Obtiene el valor de la propiedad pickStatusEx.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getPickStatusEx() {
                 return pickStatusEx;
@@ -16259,11 +16259,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad pickStatusEx.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setPickStatusEx(String value) {
                 this.pickStatusEx = value;
@@ -16271,83 +16271,83 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad taxBeforeDPM.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxBeforeDPM() {
+            public BigDecimal getTaxBeforeDPM() {
                 return taxBeforeDPM;
             }
 
             /**
              * Define el valor de la propiedad taxBeforeDPM.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxBeforeDPM(Double value) {
+            public void setTaxBeforeDPM(BigDecimal value) {
                 this.taxBeforeDPM = value;
             }
 
             /**
              * Obtiene el valor de la propiedad taxBeforeDPMFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxBeforeDPMFC() {
+            public BigDecimal getTaxBeforeDPMFC() {
                 return taxBeforeDPMFC;
             }
 
             /**
              * Define el valor de la propiedad taxBeforeDPMFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxBeforeDPMFC(Double value) {
+            public void setTaxBeforeDPMFC(BigDecimal value) {
                 this.taxBeforeDPMFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad taxBeforeDPMSC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxBeforeDPMSC() {
+            public BigDecimal getTaxBeforeDPMSC() {
                 return taxBeforeDPMSC;
             }
 
             /**
              * Define el valor de la propiedad taxBeforeDPMSC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxBeforeDPMSC(Double value) {
+            public void setTaxBeforeDPMSC(BigDecimal value) {
                 this.taxBeforeDPMSC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad cfopCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCFOPCode() {
                 return cfopCode;
@@ -16355,11 +16355,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad cfopCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCFOPCode(String value) {
                 this.cfopCode = value;
@@ -16367,11 +16367,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad cstCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCSTCode() {
                 return cstCode;
@@ -16379,11 +16379,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad cstCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCSTCode(String value) {
                 this.cstCode = value;
@@ -16391,11 +16391,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad usage.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getUsage() {
                 return usage;
@@ -16403,11 +16403,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad usage.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setUsage(Long value) {
                 this.usage = value;
@@ -16415,11 +16415,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad taxOnly.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getTaxOnly() {
                 return taxOnly;
@@ -16427,11 +16427,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad taxOnly.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setTaxOnly(String value) {
                 this.taxOnly = value;
@@ -16439,11 +16439,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad visualOrder.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getVisualOrder() {
                 return visualOrder;
@@ -16451,11 +16451,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad visualOrder.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setVisualOrder(Long value) {
                 this.visualOrder = value;
@@ -16463,59 +16463,59 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad baseOpenQuantity.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getBaseOpenQuantity() {
+            public BigDecimal getBaseOpenQuantity() {
                 return baseOpenQuantity;
             }
 
             /**
              * Define el valor de la propiedad baseOpenQuantity.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setBaseOpenQuantity(Double value) {
+            public void setBaseOpenQuantity(BigDecimal value) {
                 this.baseOpenQuantity = value;
             }
 
             /**
              * Obtiene el valor de la propiedad unitPrice.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getUnitPrice() {
+            public BigDecimal getUnitPrice() {
                 return unitPrice;
             }
 
             /**
              * Define el valor de la propiedad unitPrice.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setUnitPrice(Double value) {
+            public void setUnitPrice(BigDecimal value) {
                 this.unitPrice = value;
             }
 
             /**
              * Obtiene el valor de la propiedad lineStatus.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getLineStatus() {
                 return lineStatus;
@@ -16523,11 +16523,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad lineStatus.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setLineStatus(String value) {
                 this.lineStatus = value;
@@ -16535,35 +16535,35 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad packageQuantity.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getPackageQuantity() {
+            public BigDecimal getPackageQuantity() {
                 return packageQuantity;
             }
 
             /**
              * Define el valor de la propiedad packageQuantity.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setPackageQuantity(Double value) {
+            public void setPackageQuantity(BigDecimal value) {
                 this.packageQuantity = value;
             }
 
             /**
              * Obtiene el valor de la propiedad text.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getText() {
                 return text;
@@ -16571,11 +16571,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad text.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setText(String value) {
                 this.text = value;
@@ -16583,11 +16583,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad lineType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getLineType() {
                 return lineType;
@@ -16595,11 +16595,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad lineType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setLineType(String value) {
                 this.lineType = value;
@@ -16607,11 +16607,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad cogsCostingCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCOGSCostingCode() {
                 return cogsCostingCode;
@@ -16619,11 +16619,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad cogsCostingCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCOGSCostingCode(String value) {
                 this.cogsCostingCode = value;
@@ -16631,11 +16631,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad cogsAccountCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCOGSAccountCode() {
                 return cogsAccountCode;
@@ -16643,11 +16643,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad cogsAccountCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCOGSAccountCode(String value) {
                 this.cogsAccountCode = value;
@@ -16655,11 +16655,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad changeAssemlyBoMWarehouse.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getChangeAssemlyBoMWarehouse() {
                 return changeAssemlyBoMWarehouse;
@@ -16667,11 +16667,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad changeAssemlyBoMWarehouse.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setChangeAssemlyBoMWarehouse(String value) {
                 this.changeAssemlyBoMWarehouse = value;
@@ -16679,35 +16679,35 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad grossBuyPrice.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getGrossBuyPrice() {
+            public BigDecimal getGrossBuyPrice() {
                 return grossBuyPrice;
             }
 
             /**
              * Define el valor de la propiedad grossBuyPrice.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setGrossBuyPrice(Double value) {
+            public void setGrossBuyPrice(BigDecimal value) {
                 this.grossBuyPrice = value;
             }
 
             /**
              * Obtiene el valor de la propiedad grossBase.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getGrossBase() {
                 return grossBase;
@@ -16715,11 +16715,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad grossBase.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setGrossBase(Long value) {
                 this.grossBase = value;
@@ -16727,11 +16727,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad grossProfitTotalBasePrice.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
             public BigDecimal getGrossProfitTotalBasePrice() {
                 return grossProfitTotalBasePrice;
@@ -16739,11 +16739,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad grossProfitTotalBasePrice.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
             public void setGrossProfitTotalBasePrice(BigDecimal value) {
                 this.grossProfitTotalBasePrice = value;
@@ -16751,11 +16751,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad costingCode2.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCostingCode2() {
                 return costingCode2;
@@ -16763,11 +16763,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad costingCode2.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCostingCode2(String value) {
                 this.costingCode2 = value;
@@ -16775,11 +16775,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad costingCode3.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCostingCode3() {
                 return costingCode3;
@@ -16787,11 +16787,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad costingCode3.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCostingCode3(String value) {
                 this.costingCode3 = value;
@@ -16799,11 +16799,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad costingCode4.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCostingCode4() {
                 return costingCode4;
@@ -16811,11 +16811,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad costingCode4.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCostingCode4(String value) {
                 this.costingCode4 = value;
@@ -16823,11 +16823,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad costingCode5.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCostingCode5() {
                 return costingCode5;
@@ -16835,11 +16835,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad costingCode5.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCostingCode5(String value) {
                 this.costingCode5 = value;
@@ -16847,11 +16847,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad itemDetails.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getItemDetails() {
                 return itemDetails;
@@ -16859,11 +16859,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad itemDetails.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setItemDetails(String value) {
                 this.itemDetails = value;
@@ -16871,11 +16871,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad locationCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getLocationCode() {
                 return locationCode;
@@ -16883,11 +16883,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad locationCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setLocationCode(Long value) {
                 this.locationCode = value;
@@ -16895,11 +16895,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad actualDeliveryDate.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public XMLGregorianCalendar getActualDeliveryDate() {
                 return actualDeliveryDate;
@@ -16907,11 +16907,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad actualDeliveryDate.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public void setActualDeliveryDate(XMLGregorianCalendar value) {
                 this.actualDeliveryDate = value;
@@ -16919,107 +16919,107 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad remainingOpenQuantity.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getRemainingOpenQuantity() {
+            public BigDecimal getRemainingOpenQuantity() {
                 return remainingOpenQuantity;
             }
 
             /**
              * Define el valor de la propiedad remainingOpenQuantity.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setRemainingOpenQuantity(Double value) {
+            public void setRemainingOpenQuantity(BigDecimal value) {
                 this.remainingOpenQuantity = value;
             }
 
             /**
              * Obtiene el valor de la propiedad openAmount.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getOpenAmount() {
+            public BigDecimal getOpenAmount() {
                 return openAmount;
             }
 
             /**
              * Define el valor de la propiedad openAmount.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setOpenAmount(Double value) {
+            public void setOpenAmount(BigDecimal value) {
                 this.openAmount = value;
             }
 
             /**
              * Obtiene el valor de la propiedad openAmountFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getOpenAmountFC() {
+            public BigDecimal getOpenAmountFC() {
                 return openAmountFC;
             }
 
             /**
              * Define el valor de la propiedad openAmountFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setOpenAmountFC(Double value) {
+            public void setOpenAmountFC(BigDecimal value) {
                 this.openAmountFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad openAmountSC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getOpenAmountSC() {
+            public BigDecimal getOpenAmountSC() {
                 return openAmountSC;
             }
 
             /**
              * Define el valor de la propiedad openAmountSC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setOpenAmountSC(Double value) {
+            public void setOpenAmountSC(BigDecimal value) {
                 this.openAmountSC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad exLineNo.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getExLineNo() {
                 return exLineNo;
@@ -17027,11 +17027,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad exLineNo.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setExLineNo(String value) {
                 this.exLineNo = value;
@@ -17039,11 +17039,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad requiredDate.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public XMLGregorianCalendar getRequiredDate() {
                 return requiredDate;
@@ -17051,11 +17051,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad requiredDate.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public void setRequiredDate(XMLGregorianCalendar value) {
                 this.requiredDate = value;
@@ -17063,35 +17063,35 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad requiredQuantity.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getRequiredQuantity() {
+            public BigDecimal getRequiredQuantity() {
                 return requiredQuantity;
             }
 
             /**
              * Define el valor de la propiedad requiredQuantity.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setRequiredQuantity(Double value) {
+            public void setRequiredQuantity(BigDecimal value) {
                 this.requiredQuantity = value;
             }
 
             /**
              * Obtiene el valor de la propiedad cogsCostingCode2.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCOGSCostingCode2() {
                 return cogsCostingCode2;
@@ -17099,11 +17099,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad cogsCostingCode2.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCOGSCostingCode2(String value) {
                 this.cogsCostingCode2 = value;
@@ -17111,11 +17111,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad cogsCostingCode3.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCOGSCostingCode3() {
                 return cogsCostingCode3;
@@ -17123,11 +17123,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad cogsCostingCode3.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCOGSCostingCode3(String value) {
                 this.cogsCostingCode3 = value;
@@ -17135,11 +17135,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad cogsCostingCode4.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCOGSCostingCode4() {
                 return cogsCostingCode4;
@@ -17147,11 +17147,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad cogsCostingCode4.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCOGSCostingCode4(String value) {
                 this.cogsCostingCode4 = value;
@@ -17159,11 +17159,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad cogsCostingCode5.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCOGSCostingCode5() {
                 return cogsCostingCode5;
@@ -17171,11 +17171,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad cogsCostingCode5.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCOGSCostingCode5(String value) {
                 this.cogsCostingCode5 = value;
@@ -17183,11 +17183,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad csTforIPI.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCSTforIPI() {
                 return csTforIPI;
@@ -17195,11 +17195,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad csTforIPI.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCSTforIPI(String value) {
                 this.csTforIPI = value;
@@ -17207,11 +17207,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad csTforPIS.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCSTforPIS() {
                 return csTforPIS;
@@ -17219,11 +17219,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad csTforPIS.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCSTforPIS(String value) {
                 this.csTforPIS = value;
@@ -17231,11 +17231,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad csTforCOFINS.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCSTforCOFINS() {
                 return csTforCOFINS;
@@ -17243,11 +17243,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad csTforCOFINS.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCSTforCOFINS(String value) {
                 this.csTforCOFINS = value;
@@ -17255,11 +17255,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad creditOriginCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCreditOriginCode() {
                 return creditOriginCode;
@@ -17267,11 +17267,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad creditOriginCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCreditOriginCode(String value) {
                 this.creditOriginCode = value;
@@ -17279,11 +17279,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad withoutInventoryMovement.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getWithoutInventoryMovement() {
                 return withoutInventoryMovement;
@@ -17291,11 +17291,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad withoutInventoryMovement.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setWithoutInventoryMovement(String value) {
                 this.withoutInventoryMovement = value;
@@ -17303,11 +17303,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad agreementNo.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getAgreementNo() {
                 return agreementNo;
@@ -17315,11 +17315,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad agreementNo.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setAgreementNo(Long value) {
                 this.agreementNo = value;
@@ -17327,11 +17327,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad agreementRowNumber.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getAgreementRowNumber() {
                 return agreementRowNumber;
@@ -17339,11 +17339,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad agreementRowNumber.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setAgreementRowNumber(Long value) {
                 this.agreementRowNumber = value;
@@ -17351,11 +17351,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad actualBaseEntry.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getActualBaseEntry() {
                 return actualBaseEntry;
@@ -17363,11 +17363,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad actualBaseEntry.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setActualBaseEntry(Long value) {
                 this.actualBaseEntry = value;
@@ -17375,11 +17375,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad actualBaseLine.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getActualBaseLine() {
                 return actualBaseLine;
@@ -17387,11 +17387,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad actualBaseLine.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setActualBaseLine(Long value) {
                 this.actualBaseLine = value;
@@ -17399,11 +17399,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad docEntry.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getDocEntry() {
                 return docEntry;
@@ -17411,11 +17411,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad docEntry.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setDocEntry(Long value) {
                 this.docEntry = value;
@@ -17423,83 +17423,83 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad surpluses.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getSurpluses() {
+            public BigDecimal getSurpluses() {
                 return surpluses;
             }
 
             /**
              * Define el valor de la propiedad surpluses.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setSurpluses(Double value) {
+            public void setSurpluses(BigDecimal value) {
                 this.surpluses = value;
             }
 
             /**
              * Obtiene el valor de la propiedad defectAndBreakup.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getDefectAndBreakup() {
+            public BigDecimal getDefectAndBreakup() {
                 return defectAndBreakup;
             }
 
             /**
              * Define el valor de la propiedad defectAndBreakup.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setDefectAndBreakup(Double value) {
+            public void setDefectAndBreakup(BigDecimal value) {
                 this.defectAndBreakup = value;
             }
 
             /**
              * Obtiene el valor de la propiedad shortages.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getShortages() {
+            public BigDecimal getShortages() {
                 return shortages;
             }
 
             /**
              * Define el valor de la propiedad shortages.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setShortages(Double value) {
+            public void setShortages(BigDecimal value) {
                 this.shortages = value;
             }
 
             /**
              * Obtiene el valor de la propiedad considerQuantity.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getConsiderQuantity() {
                 return considerQuantity;
@@ -17507,11 +17507,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad considerQuantity.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setConsiderQuantity(String value) {
                 this.considerQuantity = value;
@@ -17519,11 +17519,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad partialRetirement.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getPartialRetirement() {
                 return partialRetirement;
@@ -17531,11 +17531,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad partialRetirement.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setPartialRetirement(String value) {
                 this.partialRetirement = value;
@@ -17543,59 +17543,59 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad retirementQuantity.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getRetirementQuantity() {
+            public BigDecimal getRetirementQuantity() {
                 return retirementQuantity;
             }
 
             /**
              * Define el valor de la propiedad retirementQuantity.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setRetirementQuantity(Double value) {
+            public void setRetirementQuantity(BigDecimal value) {
                 this.retirementQuantity = value;
             }
 
             /**
              * Obtiene el valor de la propiedad retirementAPC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getRetirementAPC() {
+            public BigDecimal getRetirementAPC() {
                 return retirementAPC;
             }
 
             /**
              * Define el valor de la propiedad retirementAPC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setRetirementAPC(Double value) {
+            public void setRetirementAPC(BigDecimal value) {
                 this.retirementAPC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad thirdParty.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getThirdParty() {
                 return thirdParty;
@@ -17603,11 +17603,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad thirdParty.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setThirdParty(String value) {
                 this.thirdParty = value;
@@ -17615,11 +17615,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad expenseType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getExpenseType() {
                 return expenseType;
@@ -17627,11 +17627,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad expenseType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setExpenseType(String value) {
                 this.expenseType = value;
@@ -17639,11 +17639,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad receiptNumber.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getReceiptNumber() {
                 return receiptNumber;
@@ -17651,11 +17651,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad receiptNumber.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setReceiptNumber(String value) {
                 this.receiptNumber = value;
@@ -17663,11 +17663,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad expenseOperationType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getExpenseOperationType() {
                 return expenseOperationType;
@@ -17675,11 +17675,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad expenseOperationType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setExpenseOperationType(String value) {
                 this.expenseOperationType = value;
@@ -17687,11 +17687,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad federalTaxID.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getFederalTaxID() {
                 return federalTaxID;
@@ -17699,11 +17699,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad federalTaxID.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setFederalTaxID(String value) {
                 this.federalTaxID = value;
@@ -17711,11 +17711,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad stgSeqNum.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getStgSeqNum() {
                 return stgSeqNum;
@@ -17723,11 +17723,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad stgSeqNum.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setStgSeqNum(Long value) {
                 this.stgSeqNum = value;
@@ -17735,11 +17735,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad stgEntry.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getStgEntry() {
                 return stgEntry;
@@ -17747,11 +17747,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad stgEntry.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setStgEntry(Long value) {
                 this.stgEntry = value;
@@ -17759,11 +17759,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad stgDesc.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getStgDesc() {
                 return stgDesc;
@@ -17771,11 +17771,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad stgDesc.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setStgDesc(String value) {
                 this.stgDesc = value;
@@ -17783,11 +17783,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad uoMEntry.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getUoMEntry() {
                 return uoMEntry;
@@ -17795,11 +17795,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad uoMEntry.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setUoMEntry(Long value) {
                 this.uoMEntry = value;
@@ -17807,11 +17807,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad uoMCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUoMCode() {
                 return uoMCode;
@@ -17819,11 +17819,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad uoMCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUoMCode(String value) {
                 this.uoMCode = value;
@@ -17831,59 +17831,59 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad inventoryQuantity.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getInventoryQuantity() {
+            public BigDecimal getInventoryQuantity() {
                 return inventoryQuantity;
             }
 
             /**
              * Define el valor de la propiedad inventoryQuantity.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setInventoryQuantity(Double value) {
+            public void setInventoryQuantity(BigDecimal value) {
                 this.inventoryQuantity = value;
             }
 
             /**
              * Obtiene el valor de la propiedad remainingOpenInventoryQuantity.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getRemainingOpenInventoryQuantity() {
+            public BigDecimal getRemainingOpenInventoryQuantity() {
                 return remainingOpenInventoryQuantity;
             }
 
             /**
              * Define el valor de la propiedad remainingOpenInventoryQuantity.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setRemainingOpenInventoryQuantity(Double value) {
+            public void setRemainingOpenInventoryQuantity(BigDecimal value) {
                 this.remainingOpenInventoryQuantity = value;
             }
 
             /**
              * Obtiene el valor de la propiedad parentLineNum.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getParentLineNum() {
                 return parentLineNum;
@@ -17891,11 +17891,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad parentLineNum.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setParentLineNum(Long value) {
                 this.parentLineNum = value;
@@ -17903,11 +17903,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad incoterms.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getIncoterms() {
                 return incoterms;
@@ -17915,11 +17915,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad incoterms.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setIncoterms(Long value) {
                 this.incoterms = value;
@@ -17927,11 +17927,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad transportMode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getTransportMode() {
                 return transportMode;
@@ -17939,11 +17939,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad transportMode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setTransportMode(Long value) {
                 this.transportMode = value;
@@ -17951,11 +17951,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad itemType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getItemType() {
                 return itemType;
@@ -17963,11 +17963,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad itemType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setItemType(String value) {
                 this.itemType = value;
@@ -17975,11 +17975,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad changeInventoryQuantityIndependently.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getChangeInventoryQuantityIndependently() {
                 return changeInventoryQuantityIndependently;
@@ -17987,11 +17987,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad changeInventoryQuantityIndependently.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setChangeInventoryQuantityIndependently(String value) {
                 this.changeInventoryQuantityIndependently = value;
@@ -17999,11 +17999,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad freeOfChargeBP.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getFreeOfChargeBP() {
                 return freeOfChargeBP;
@@ -18011,11 +18011,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad freeOfChargeBP.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setFreeOfChargeBP(String value) {
                 this.freeOfChargeBP = value;
@@ -18023,11 +18023,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad sacEntry.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getSACEntry() {
                 return sacEntry;
@@ -18035,11 +18035,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad sacEntry.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setSACEntry(Long value) {
                 this.sacEntry = value;
@@ -18047,11 +18047,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad hsnEntry.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getHSNEntry() {
                 return hsnEntry;
@@ -18059,11 +18059,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad hsnEntry.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setHSNEntry(Long value) {
                 this.hsnEntry = value;
@@ -18071,35 +18071,35 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad grossPrice.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getGrossPrice() {
+            public BigDecimal getGrossPrice() {
                 return grossPrice;
             }
 
             /**
              * Define el valor de la propiedad grossPrice.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setGrossPrice(Double value) {
+            public void setGrossPrice(BigDecimal value) {
                 this.grossPrice = value;
             }
 
             /**
              * Obtiene el valor de la propiedad grossTotal.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
             public BigDecimal getGrossTotal() {
                 return grossTotal;
@@ -18107,11 +18107,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad grossTotal.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
             public void setGrossTotal(BigDecimal value) {
                 this.grossTotal = value;
@@ -18119,59 +18119,59 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad grossTotalFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getGrossTotalFC() {
+            public BigDecimal getGrossTotalFC() {
                 return grossTotalFC;
             }
 
             /**
              * Define el valor de la propiedad grossTotalFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setGrossTotalFC(Double value) {
+            public void setGrossTotalFC(BigDecimal value) {
                 this.grossTotalFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad grossTotalSC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getGrossTotalSC() {
+            public BigDecimal getGrossTotalSC() {
                 return grossTotalSC;
             }
 
             /**
              * Define el valor de la propiedad grossTotalSC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setGrossTotalSC(Double value) {
+            public void setGrossTotalSC(BigDecimal value) {
                 this.grossTotalSC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad ncmCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getNCMCode() {
                 return ncmCode;
@@ -18179,11 +18179,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad ncmCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setNCMCode(Long value) {
                 this.ncmCode = value;
@@ -18191,11 +18191,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad shipToCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getShipToCode() {
                 return shipToCode;
@@ -18203,11 +18203,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad shipToCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setShipToCode(String value) {
                 this.shipToCode = value;
@@ -18215,11 +18215,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad shipToDescription.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getShipToDescription() {
                 return shipToDescription;
@@ -18227,11 +18227,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad shipToDescription.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setShipToDescription(String value) {
                 this.shipToDescription = value;
@@ -18239,59 +18239,59 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad upreclis.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getUPRECLIS() {
+            public BigDecimal getUPRECLIS() {
                 return upreclis;
             }
 
             /**
              * Define el valor de la propiedad upreclis.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setUPRECLIS(Double value) {
+            public void setUPRECLIS(BigDecimal value) {
                 this.upreclis = value;
             }
 
             /**
              * Obtiene el valor de la propiedad udifprec.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getUDIFPREC() {
+            public BigDecimal getUDIFPREC() {
                 return udifprec;
             }
 
             /**
              * Define el valor de la propiedad udifprec.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setUDIFPREC(Double value) {
+            public void setUDIFPREC(BigDecimal value) {
                 this.udifprec = value;
             }
 
             /**
              * Obtiene el valor de la propiedad ucostoimp.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUCOSTOIMP() {
                 return ucostoimp;
@@ -18299,11 +18299,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad ucostoimp.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUCOSTOIMP(String value) {
                 this.ucostoimp = value;
@@ -18311,11 +18311,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad ubanco.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUBANCO() {
                 return ubanco;
@@ -18323,11 +18323,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad ubanco.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUBANCO(String value) {
                 this.ubanco = value;
@@ -18335,11 +18335,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad uubicacion.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUUBICACION() {
                 return uubicacion;
@@ -18347,11 +18347,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad uubicacion.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUUBICACION(String value) {
                 this.uubicacion = value;
@@ -18359,11 +18359,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad ucheque.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getUCHEQUE() {
                 return ucheque;
@@ -18371,11 +18371,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad ucheque.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setUCHEQUE(Long value) {
                 this.ucheque = value;
@@ -18383,11 +18383,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad uvalprecio.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUVALPRECIO() {
                 return uvalprecio;
@@ -18395,11 +18395,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad uvalprecio.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUVALPRECIO(String value) {
                 this.uvalprecio = value;
@@ -18407,11 +18407,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad ucausaldev.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUCAUSALDEV() {
                 return ucausaldev;
@@ -18419,11 +18419,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad ucausaldev.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUCAUSALDEV(String value) {
                 this.ucausaldev = value;
@@ -18431,59 +18431,59 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad ustockalm.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getUSTOCKALM() {
+            public BigDecimal getUSTOCKALM() {
                 return ustockalm;
             }
 
             /**
              * Define el valor de la propiedad ustockalm.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setUSTOCKALM(Double value) {
+            public void setUSTOCKALM(BigDecimal value) {
                 this.ustockalm = value;
             }
 
             /**
              * Obtiene el valor de la propiedad udisponiblealm.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getUDISPONIBLEALM() {
+            public BigDecimal getUDISPONIBLEALM() {
                 return udisponiblealm;
             }
 
             /**
              * Define el valor de la propiedad udisponiblealm.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setUDISPONIBLEALM(Double value) {
+            public void setUDISPONIBLEALM(BigDecimal value) {
                 this.udisponiblealm = value;
             }
 
             /**
              * Obtiene el valor de la propiedad ubldLyID.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getUBLDLyID() {
                 return ubldLyID;
@@ -18491,11 +18491,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad ubldLyID.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setUBLDLyID(Long value) {
                 this.ubldLyID = value;
@@ -18503,11 +18503,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad ubldnCps.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getUBLDNCps() {
                 return ubldnCps;
@@ -18515,11 +18515,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad ubldnCps.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setUBLDNCps(Long value) {
                 this.ubldnCps = value;
@@ -18527,11 +18527,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad uReferencia.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUReferencia() {
                 return uReferencia;
@@ -18539,11 +18539,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad uReferencia.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUReferencia(String value) {
                 this.uReferencia = value;
@@ -18551,11 +18551,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad uDiferencia.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUDiferencia() {
                 return uDiferencia;
@@ -18563,11 +18563,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad uDiferencia.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUDiferencia(String value) {
                 this.uDiferencia = value;
@@ -18575,35 +18575,35 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad uPrecioCotizacion.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getUPrecioCotizacion() {
+            public BigDecimal getUPrecioCotizacion() {
                 return uPrecioCotizacion;
             }
 
             /**
              * Define el valor de la propiedad uPrecioCotizacion.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setUPrecioCotizacion(Double value) {
+            public void setUPrecioCotizacion(BigDecimal value) {
                 this.uPrecioCotizacion = value;
             }
 
             /**
              * Obtiene el valor de la propiedad uivcDone.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUIVCDone() {
                 return uivcDone;
@@ -18611,11 +18611,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad uivcDone.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUIVCDone(String value) {
                 this.uivcDone = value;
@@ -18623,11 +18623,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad unwrBase.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUNWRBase() {
                 return unwrBase;
@@ -18635,11 +18635,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad unwrBase.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUNWRBase(String value) {
                 this.unwrBase = value;
@@ -18647,11 +18647,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad uCustDate.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public XMLGregorianCalendar getUCustDate() {
                 return uCustDate;
@@ -18659,11 +18659,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad uCustDate.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public void setUCustDate(XMLGregorianCalendar value) {
                 this.uCustDate = value;
@@ -18671,11 +18671,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad uDocNumBase.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUDocNumBase() {
                 return uDocNumBase;
@@ -18683,11 +18683,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad uDocNumBase.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUDocNumBase(String value) {
                 this.uDocNumBase = value;
@@ -18695,11 +18695,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad uObjType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUObjType() {
                 return uObjType;
@@ -18707,11 +18707,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad uObjType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUObjType(String value) {
                 this.uObjType = value;
@@ -18719,59 +18719,59 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad unwrQtyAllocated.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getUNWRQtyAllocated() {
+            public BigDecimal getUNWRQtyAllocated() {
                 return unwrQtyAllocated;
             }
 
             /**
              * Define el valor de la propiedad unwrQtyAllocated.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setUNWRQtyAllocated(Double value) {
+            public void setUNWRQtyAllocated(BigDecimal value) {
                 this.unwrQtyAllocated = value;
             }
 
             /**
              * Obtiene el valor de la propiedad uReclamQty.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getUReclamQty() {
+            public BigDecimal getUReclamQty() {
                 return uReclamQty;
             }
 
             /**
              * Define el valor de la propiedad uReclamQty.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setUReclamQty(Double value) {
+            public void setUReclamQty(BigDecimal value) {
                 this.uReclamQty = value;
             }
 
             /**
              * Obtiene el valor de la propiedad uqaMark.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUQAMark() {
                 return uqaMark;
@@ -18779,11 +18779,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad uqaMark.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUQAMark(String value) {
                 this.uqaMark = value;
@@ -18791,35 +18791,35 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad uIncomingQty.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getUIncomingQty() {
+            public BigDecimal getUIncomingQty() {
                 return uIncomingQty;
             }
 
             /**
              * Define el valor de la propiedad uIncomingQty.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setUIncomingQty(Double value) {
+            public void setUIncomingQty(BigDecimal value) {
                 this.uIncomingQty = value;
             }
 
             /**
              * Obtiene el valor de la propiedad unwrBin.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUNWRBin() {
                 return unwrBin;
@@ -18827,11 +18827,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad unwrBin.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUNWRBin(String value) {
                 this.unwrBin = value;
@@ -18839,11 +18839,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad uTransitWHSCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUTransitWHSCode() {
                 return uTransitWHSCode;
@@ -18851,11 +18851,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad uTransitWHSCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUTransitWHSCode(String value) {
                 this.uTransitWHSCode = value;
@@ -18863,11 +18863,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad uCalcAIU.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUCalcAIU() {
                 return uCalcAIU;
@@ -18875,11 +18875,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad uCalcAIU.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUCalcAIU(String value) {
                 this.uCalcAIU = value;
@@ -18887,11 +18887,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad lineTaxJurisdictions.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Document.DocumentLines.DocumentLine.LineTaxJurisdictions }
-             *     
+             *
              */
             public Document.DocumentLines.DocumentLine.LineTaxJurisdictions getLineTaxJurisdictions() {
                 return lineTaxJurisdictions;
@@ -18899,11 +18899,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad lineTaxJurisdictions.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Document.DocumentLines.DocumentLine.LineTaxJurisdictions }
-             *     
+             *
              */
             public void setLineTaxJurisdictions(Document.DocumentLines.DocumentLine.LineTaxJurisdictions value) {
                 this.lineTaxJurisdictions = value;
@@ -18911,11 +18911,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad documentLineAdditionalExpenses.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Document.DocumentLines.DocumentLine.DocumentLineAdditionalExpenses }
-             *     
+             *
              */
             public Document.DocumentLines.DocumentLine.DocumentLineAdditionalExpenses getDocumentLineAdditionalExpenses() {
                 return documentLineAdditionalExpenses;
@@ -18923,11 +18923,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad documentLineAdditionalExpenses.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Document.DocumentLines.DocumentLine.DocumentLineAdditionalExpenses }
-             *     
+             *
              */
             public void setDocumentLineAdditionalExpenses(Document.DocumentLines.DocumentLine.DocumentLineAdditionalExpenses value) {
                 this.documentLineAdditionalExpenses = value;
@@ -18935,11 +18935,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad withholdingTaxLines.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Document.DocumentLines.DocumentLine.WithholdingTaxLines }
-             *     
+             *
              */
             public Document.DocumentLines.DocumentLine.WithholdingTaxLines getWithholdingTaxLines() {
                 return withholdingTaxLines;
@@ -18947,11 +18947,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad withholdingTaxLines.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Document.DocumentLines.DocumentLine.WithholdingTaxLines }
-             *     
+             *
              */
             public void setWithholdingTaxLines(Document.DocumentLines.DocumentLine.WithholdingTaxLines value) {
                 this.withholdingTaxLines = value;
@@ -18959,11 +18959,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad serialNumbers.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Document.DocumentLines.DocumentLine.SerialNumbers }
-             *     
+             *
              */
             public Document.DocumentLines.DocumentLine.SerialNumbers getSerialNumbers() {
                 return serialNumbers;
@@ -18971,11 +18971,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad serialNumbers.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Document.DocumentLines.DocumentLine.SerialNumbers }
-             *     
+             *
              */
             public void setSerialNumbers(Document.DocumentLines.DocumentLine.SerialNumbers value) {
                 this.serialNumbers = value;
@@ -18983,11 +18983,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad batchNumbers.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Document.DocumentLines.DocumentLine.BatchNumbers }
-             *     
+             *
              */
             public Document.DocumentLines.DocumentLine.BatchNumbers getBatchNumbers() {
                 return batchNumbers;
@@ -18995,11 +18995,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad batchNumbers.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Document.DocumentLines.DocumentLine.BatchNumbers }
-             *     
+             *
              */
             public void setBatchNumbers(Document.DocumentLines.DocumentLine.BatchNumbers value) {
                 this.batchNumbers = value;
@@ -19007,11 +19007,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad documentLinesBinAllocations.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations }
-             *     
+             *
              */
             public Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations getDocumentLinesBinAllocations() {
                 return documentLinesBinAllocations;
@@ -19019,11 +19019,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad documentLinesBinAllocations.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations }
-             *     
+             *
              */
             public void setDocumentLinesBinAllocations(Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations value) {
                 this.documentLinesBinAllocations = value;
@@ -19032,9 +19032,9 @@ public class Document {
 
             /**
              * <p>Clase Java para anonymous complex type.
-             * 
+             *
              * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-             * 
+             *
              * <pre>
              * &lt;complexType>
              *   &lt;complexContent>
@@ -19053,7 +19053,7 @@ public class Document {
              *                   &lt;element name="AddmisionDate" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/>
              *                   &lt;element name="Location" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
              *                   &lt;element name="Notes" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-             *                   &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+             *                   &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
              *                   &lt;element name="BaseLineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
              *                   &lt;element name="TrackingNote" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
              *                   &lt;element name="TrackingNoteLine" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -19067,12 +19067,12 @@ public class Document {
              *   &lt;/complexContent>
              * &lt;/complexType>
              * </pre>
-             * 
-             * 
+             *
+             *
              */
             @XmlAccessorType(XmlAccessType.FIELD)
             @XmlType(name = "", propOrder = {
-                "batchNumber"
+                    "batchNumber"
             })
             public static class BatchNumbers {
 
@@ -19081,25 +19081,25 @@ public class Document {
 
                 /**
                  * Gets the value of the batchNumber property.
-                 * 
+                 *
                  * <p>
                  * This accessor method returns a reference to the live list,
                  * not a snapshot. Therefore any modification you make to the
                  * returned list will be present inside the JAXB object.
                  * This is why there is not a <CODE>set</CODE> method for the batchNumber property.
-                 * 
+                 *
                  * <p>
                  * For example, to add a new item, do as follows:
                  * <pre>
                  *    getBatchNumber().add(newItem);
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  * <p>
                  * Objects of the following type(s) are allowed in the list
                  * {@link Document.DocumentLines.DocumentLine.BatchNumbers.BatchNumber }
-                 * 
-                 * 
+                 *
+                 *
                  */
                 public List<Document.DocumentLines.DocumentLine.BatchNumbers.BatchNumber> getBatchNumber() {
                     if (batchNumber == null) {
@@ -19111,9 +19111,9 @@ public class Document {
 
                 /**
                  * <p>Clase Java para anonymous complex type.
-                 * 
+                 *
                  * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-                 * 
+                 *
                  * <pre>
                  * &lt;complexType>
                  *   &lt;complexContent>
@@ -19127,7 +19127,7 @@ public class Document {
                  *         &lt;element name="AddmisionDate" type="{http://www.w3.org/2001/XMLSchema}date" minOccurs="0"/>
                  *         &lt;element name="Location" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
                  *         &lt;element name="Notes" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-                 *         &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+                 *         &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
                  *         &lt;element name="BaseLineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
                  *         &lt;element name="TrackingNote" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
                  *         &lt;element name="TrackingNoteLine" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -19136,8 +19136,8 @@ public class Document {
                  *   &lt;/complexContent>
                  * &lt;/complexType>
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  */
                 @XmlAccessorType(XmlAccessType.FIELD)
                 @XmlType(name = "", propOrder = {
@@ -19165,7 +19165,7 @@ public class Document {
                     @XmlElement(name = "Notes")
                     protected String notes;
                     @XmlElement(name = "Quantity")
-                    protected Double quantity;
+                    protected BigDecimal quantity;
                     @XmlElement(name = "BaseLineNumber")
                     protected Long baseLineNumber;
                     @XmlElement(name = "TrackingNote")
@@ -19175,11 +19175,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad batchNumber.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getBatchNumber() {
                         return batchNumber;
@@ -19187,11 +19187,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad batchNumber.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setBatchNumber(String value) {
                         this.batchNumber = value;
@@ -19199,11 +19199,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad manufacturerSerialNumber.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getManufacturerSerialNumber() {
                         return manufacturerSerialNumber;
@@ -19211,11 +19211,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad manufacturerSerialNumber.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setManufacturerSerialNumber(String value) {
                         this.manufacturerSerialNumber = value;
@@ -19223,11 +19223,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad internalSerialNumber.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getInternalSerialNumber() {
                         return internalSerialNumber;
@@ -19235,11 +19235,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad internalSerialNumber.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setInternalSerialNumber(String value) {
                         this.internalSerialNumber = value;
@@ -19247,11 +19247,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad expiryDate.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link XMLGregorianCalendar }
-                     *     
+                     *
                      */
                     public XMLGregorianCalendar getExpiryDate() {
                         return expiryDate;
@@ -19259,11 +19259,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad expiryDate.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link XMLGregorianCalendar }
-                     *     
+                     *
                      */
                     public void setExpiryDate(XMLGregorianCalendar value) {
                         this.expiryDate = value;
@@ -19271,11 +19271,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad manufacturingDate.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link XMLGregorianCalendar }
-                     *     
+                     *
                      */
                     public XMLGregorianCalendar getManufacturingDate() {
                         return manufacturingDate;
@@ -19283,11 +19283,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad manufacturingDate.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link XMLGregorianCalendar }
-                     *     
+                     *
                      */
                     public void setManufacturingDate(XMLGregorianCalendar value) {
                         this.manufacturingDate = value;
@@ -19295,11 +19295,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad addmisionDate.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link XMLGregorianCalendar }
-                     *     
+                     *
                      */
                     public XMLGregorianCalendar getAddmisionDate() {
                         return addmisionDate;
@@ -19307,11 +19307,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad addmisionDate.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link XMLGregorianCalendar }
-                     *     
+                     *
                      */
                     public void setAddmisionDate(XMLGregorianCalendar value) {
                         this.addmisionDate = value;
@@ -19319,11 +19319,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad location.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getLocation() {
                         return location;
@@ -19331,11 +19331,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad location.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setLocation(String value) {
                         this.location = value;
@@ -19343,11 +19343,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad notes.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getNotes() {
                         return notes;
@@ -19355,11 +19355,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad notes.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setNotes(String value) {
                         this.notes = value;
@@ -19367,35 +19367,35 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad quantity.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getQuantity() {
+                    public BigDecimal getQuantity() {
                         return quantity;
                     }
 
                     /**
                      * Define el valor de la propiedad quantity.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setQuantity(Double value) {
+                    public void setQuantity(BigDecimal value) {
                         this.quantity = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad baseLineNumber.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getBaseLineNumber() {
                         return baseLineNumber;
@@ -19403,11 +19403,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad baseLineNumber.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setBaseLineNumber(Long value) {
                         this.baseLineNumber = value;
@@ -19415,11 +19415,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad trackingNote.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getTrackingNote() {
                         return trackingNote;
@@ -19427,11 +19427,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad trackingNote.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setTrackingNote(Long value) {
                         this.trackingNote = value;
@@ -19439,11 +19439,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad trackingNoteLine.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getTrackingNoteLine() {
                         return trackingNoteLine;
@@ -19451,11 +19451,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad trackingNoteLine.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setTrackingNoteLine(Long value) {
                         this.trackingNoteLine = value;
@@ -19468,9 +19468,9 @@ public class Document {
 
             /**
              * <p>Clase Java para anonymous complex type.
-             * 
+             *
              * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-             * 
+             *
              * <pre>
              * &lt;complexType>
              *   &lt;complexContent>
@@ -19484,12 +19484,12 @@ public class Document {
              *                   &lt;element name="LineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
              *                   &lt;element name="GroupCode" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
              *                   &lt;element name="ExpenseCode" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-             *                   &lt;element name="LineTotal" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="LineTotalFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="LineTotalSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="PaidToDate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="PaidToDateFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="PaidToDateSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+             *                   &lt;element name="LineTotal" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="LineTotalFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="LineTotalSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="PaidToDate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="PaidToDateFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="PaidToDateSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
              *                   &lt;element name="TaxLiable" minOccurs="0">
              *                     &lt;simpleType>
              *                       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -19499,13 +19499,13 @@ public class Document {
              *                     &lt;/simpleType>
              *                   &lt;/element>
              *                   &lt;element name="VatGroup" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-             *                   &lt;element name="TaxPercent" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="TaxSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="TaxSumFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="TaxSumSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="DeductibleTaxSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="DeductibleTaxSumFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="DeductibleTaxSumSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+             *                   &lt;element name="TaxPercent" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="TaxSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="TaxSumFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="TaxSumSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="DeductibleTaxSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="DeductibleTaxSumFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="DeductibleTaxSumSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
              *                   &lt;element name="AquisitionTax" minOccurs="0">
              *                     &lt;simpleType>
              *                       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -19524,16 +19524,16 @@ public class Document {
              *                       &lt;/restriction>
              *                     &lt;/simpleType>
              *                   &lt;/element>
-             *                   &lt;element name="TaxPaid" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="TaxPaidFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="TaxPaidSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="EqualizationTaxPercent" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="EqualizationTaxSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="EqualizationTaxFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="EqualizationTaxSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="TaxTotalSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="TaxTotalSumFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="TaxTotalSumSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+             *                   &lt;element name="TaxPaid" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="TaxPaidFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="TaxPaidSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="EqualizationTaxPercent" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="EqualizationTaxSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="EqualizationTaxFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="EqualizationTaxSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="TaxTotalSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="TaxTotalSumFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="TaxTotalSumSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
              *                   &lt;element name="WTLiable" minOccurs="0">
              *                     &lt;simpleType>
              *                       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -19561,10 +19561,10 @@ public class Document {
              *                                     &lt;all>
              *                                       &lt;element name="JurisdictionCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
              *                                       &lt;element name="JurisdictionType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-             *                                       &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                                       &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                                       &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                                       &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+             *                                       &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                                       &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                                       &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                                       &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
              *                                       &lt;element name="DocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
              *                                       &lt;element name="LineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
              *                                       &lt;element name="RowSequence" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -19588,12 +19588,12 @@ public class Document {
              *   &lt;/complexContent>
              * &lt;/complexType>
              * </pre>
-             * 
-             * 
+             *
+             *
              */
             @XmlAccessorType(XmlAccessType.FIELD)
             @XmlType(name = "", propOrder = {
-                "documentLineAdditionalExpense"
+                    "documentLineAdditionalExpense"
             })
             public static class DocumentLineAdditionalExpenses {
 
@@ -19602,25 +19602,25 @@ public class Document {
 
                 /**
                  * Gets the value of the documentLineAdditionalExpense property.
-                 * 
+                 *
                  * <p>
                  * This accessor method returns a reference to the live list,
                  * not a snapshot. Therefore any modification you make to the
                  * returned list will be present inside the JAXB object.
                  * This is why there is not a <CODE>set</CODE> method for the documentLineAdditionalExpense property.
-                 * 
+                 *
                  * <p>
                  * For example, to add a new item, do as follows:
                  * <pre>
                  *    getDocumentLineAdditionalExpense().add(newItem);
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  * <p>
                  * Objects of the following type(s) are allowed in the list
                  * {@link Document.DocumentLines.DocumentLine.DocumentLineAdditionalExpenses.DocumentLineAdditionalExpense }
-                 * 
-                 * 
+                 *
+                 *
                  */
                 public List<Document.DocumentLines.DocumentLine.DocumentLineAdditionalExpenses.DocumentLineAdditionalExpense> getDocumentLineAdditionalExpense() {
                     if (documentLineAdditionalExpense == null) {
@@ -19632,9 +19632,9 @@ public class Document {
 
                 /**
                  * <p>Clase Java para anonymous complex type.
-                 * 
+                 *
                  * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-                 * 
+                 *
                  * <pre>
                  * &lt;complexType>
                  *   &lt;complexContent>
@@ -19643,12 +19643,12 @@ public class Document {
                  *         &lt;element name="LineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
                  *         &lt;element name="GroupCode" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
                  *         &lt;element name="ExpenseCode" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-                 *         &lt;element name="LineTotal" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="LineTotalFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="LineTotalSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="PaidToDate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="PaidToDateFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="PaidToDateSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+                 *         &lt;element name="LineTotal" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="LineTotalFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="LineTotalSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="PaidToDate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="PaidToDateFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="PaidToDateSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
                  *         &lt;element name="TaxLiable" minOccurs="0">
                  *           &lt;simpleType>
                  *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -19658,13 +19658,13 @@ public class Document {
                  *           &lt;/simpleType>
                  *         &lt;/element>
                  *         &lt;element name="VatGroup" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-                 *         &lt;element name="TaxPercent" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="TaxSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="TaxSumFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="TaxSumSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="DeductibleTaxSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="DeductibleTaxSumFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="DeductibleTaxSumSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+                 *         &lt;element name="TaxPercent" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="TaxSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="TaxSumFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="TaxSumSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="DeductibleTaxSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="DeductibleTaxSumFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="DeductibleTaxSumSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
                  *         &lt;element name="AquisitionTax" minOccurs="0">
                  *           &lt;simpleType>
                  *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -19683,16 +19683,16 @@ public class Document {
                  *             &lt;/restriction>
                  *           &lt;/simpleType>
                  *         &lt;/element>
-                 *         &lt;element name="TaxPaid" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="TaxPaidFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="TaxPaidSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="EqualizationTaxPercent" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="EqualizationTaxSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="EqualizationTaxFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="EqualizationTaxSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="TaxTotalSum" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="TaxTotalSumFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="TaxTotalSumSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+                 *         &lt;element name="TaxPaid" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="TaxPaidFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="TaxPaidSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="EqualizationTaxPercent" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="EqualizationTaxSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="EqualizationTaxFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="EqualizationTaxSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="TaxTotalSum" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="TaxTotalSumFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="TaxTotalSumSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
                  *         &lt;element name="WTLiable" minOccurs="0">
                  *           &lt;simpleType>
                  *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -19720,10 +19720,10 @@ public class Document {
                  *                           &lt;all>
                  *                             &lt;element name="JurisdictionCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
                  *                             &lt;element name="JurisdictionType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-                 *                             &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *                             &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *                             &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *                             &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+                 *                             &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *                             &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *                             &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *                             &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
                  *                             &lt;element name="DocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
                  *                             &lt;element name="LineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
                  *                             &lt;element name="RowSequence" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -19742,8 +19742,8 @@ public class Document {
                  *   &lt;/complexContent>
                  * &lt;/complexType>
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  */
                 @XmlAccessorType(XmlAccessType.FIELD)
                 @XmlType(name = "", propOrder = {
@@ -19760,33 +19760,33 @@ public class Document {
                     @XmlElement(name = "LineTotal")
                     protected BigDecimal lineTotal;
                     @XmlElement(name = "LineTotalFC")
-                    protected Double lineTotalFC;
+                    protected BigDecimal lineTotalFC;
                     @XmlElement(name = "LineTotalSys")
-                    protected Double lineTotalSys;
+                    protected BigDecimal lineTotalSys;
                     @XmlElement(name = "PaidToDate")
-                    protected Double paidToDate;
+                    protected BigDecimal paidToDate;
                     @XmlElement(name = "PaidToDateFC")
-                    protected Double paidToDateFC;
+                    protected BigDecimal paidToDateFC;
                     @XmlElement(name = "PaidToDateSys")
-                    protected Double paidToDateSys;
+                    protected BigDecimal paidToDateSys;
                     @XmlElement(name = "TaxLiable")
                     protected String taxLiable;
                     @XmlElement(name = "VatGroup")
                     protected String vatGroup;
                     @XmlElement(name = "TaxPercent")
-                    protected Double taxPercent;
+                    protected BigDecimal taxPercent;
                     @XmlElement(name = "TaxSum")
-                    protected Double taxSum;
+                    protected BigDecimal taxSum;
                     @XmlElement(name = "TaxSumFC")
-                    protected Double taxSumFC;
+                    protected BigDecimal taxSumFC;
                     @XmlElement(name = "TaxSumSys")
-                    protected Double taxSumSys;
+                    protected BigDecimal taxSumSys;
                     @XmlElement(name = "DeductibleTaxSum")
-                    protected Double deductibleTaxSum;
+                    protected BigDecimal deductibleTaxSum;
                     @XmlElement(name = "DeductibleTaxSumFC")
-                    protected Double deductibleTaxSumFC;
+                    protected BigDecimal deductibleTaxSumFC;
                     @XmlElement(name = "DeductibleTaxSumSys")
-                    protected Double deductibleTaxSumSys;
+                    protected BigDecimal deductibleTaxSumSys;
                     @XmlElement(name = "AquisitionTax")
                     protected String aquisitionTax;
                     @XmlElement(name = "TaxCode")
@@ -19794,25 +19794,25 @@ public class Document {
                     @XmlElement(name = "TaxType")
                     protected String taxType;
                     @XmlElement(name = "TaxPaid")
-                    protected Double taxPaid;
+                    protected BigDecimal taxPaid;
                     @XmlElement(name = "TaxPaidFC")
-                    protected Double taxPaidFC;
+                    protected BigDecimal taxPaidFC;
                     @XmlElement(name = "TaxPaidSys")
-                    protected Double taxPaidSys;
+                    protected BigDecimal taxPaidSys;
                     @XmlElement(name = "EqualizationTaxPercent")
-                    protected Double equalizationTaxPercent;
+                    protected BigDecimal equalizationTaxPercent;
                     @XmlElement(name = "EqualizationTaxSum")
-                    protected Double equalizationTaxSum;
+                    protected BigDecimal equalizationTaxSum;
                     @XmlElement(name = "EqualizationTaxFC")
-                    protected Double equalizationTaxFC;
+                    protected BigDecimal equalizationTaxFC;
                     @XmlElement(name = "EqualizationTaxSys")
-                    protected Double equalizationTaxSys;
+                    protected BigDecimal equalizationTaxSys;
                     @XmlElement(name = "TaxTotalSum")
-                    protected Double taxTotalSum;
+                    protected BigDecimal taxTotalSum;
                     @XmlElement(name = "TaxTotalSumFC")
-                    protected Double taxTotalSumFC;
+                    protected BigDecimal taxTotalSumFC;
                     @XmlElement(name = "TaxTotalSumSys")
-                    protected Double taxTotalSumSys;
+                    protected BigDecimal taxTotalSumSys;
                     @XmlElement(name = "WTLiable")
                     protected String wtLiable;
                     @XmlElement(name = "BaseGroup")
@@ -19834,11 +19834,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad lineNumber.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getLineNumber() {
                         return lineNumber;
@@ -19846,11 +19846,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad lineNumber.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setLineNumber(Long value) {
                         this.lineNumber = value;
@@ -19858,11 +19858,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad groupCode.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getGroupCode() {
                         return groupCode;
@@ -19870,11 +19870,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad groupCode.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setGroupCode(Long value) {
                         this.groupCode = value;
@@ -19882,11 +19882,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad expenseCode.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getExpenseCode() {
                         return expenseCode;
@@ -19894,11 +19894,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad expenseCode.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setExpenseCode(Long value) {
                         this.expenseCode = value;
@@ -19906,11 +19906,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad lineTotal.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
                     public BigDecimal getLineTotal() {
                         return lineTotal;
@@ -19918,11 +19918,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad lineTotal.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
                     public void setLineTotal(BigDecimal value) {
                         this.lineTotal = value;
@@ -19930,131 +19930,131 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad lineTotalFC.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getLineTotalFC() {
+                    public BigDecimal getLineTotalFC() {
                         return lineTotalFC;
                     }
 
                     /**
                      * Define el valor de la propiedad lineTotalFC.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setLineTotalFC(Double value) {
+                    public void setLineTotalFC(BigDecimal value) {
                         this.lineTotalFC = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad lineTotalSys.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getLineTotalSys() {
+                    public BigDecimal getLineTotalSys() {
                         return lineTotalSys;
                     }
 
                     /**
                      * Define el valor de la propiedad lineTotalSys.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setLineTotalSys(Double value) {
+                    public void setLineTotalSys(BigDecimal value) {
                         this.lineTotalSys = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad paidToDate.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getPaidToDate() {
+                    public BigDecimal getPaidToDate() {
                         return paidToDate;
                     }
 
                     /**
                      * Define el valor de la propiedad paidToDate.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setPaidToDate(Double value) {
+                    public void setPaidToDate(BigDecimal value) {
                         this.paidToDate = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad paidToDateFC.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getPaidToDateFC() {
+                    public BigDecimal getPaidToDateFC() {
                         return paidToDateFC;
                     }
 
                     /**
                      * Define el valor de la propiedad paidToDateFC.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setPaidToDateFC(Double value) {
+                    public void setPaidToDateFC(BigDecimal value) {
                         this.paidToDateFC = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad paidToDateSys.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getPaidToDateSys() {
+                    public BigDecimal getPaidToDateSys() {
                         return paidToDateSys;
                     }
 
                     /**
                      * Define el valor de la propiedad paidToDateSys.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setPaidToDateSys(Double value) {
+                    public void setPaidToDateSys(BigDecimal value) {
                         this.paidToDateSys = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad taxLiable.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getTaxLiable() {
                         return taxLiable;
@@ -20062,11 +20062,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad taxLiable.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setTaxLiable(String value) {
                         this.taxLiable = value;
@@ -20074,11 +20074,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad vatGroup.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getVatGroup() {
                         return vatGroup;
@@ -20086,11 +20086,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad vatGroup.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setVatGroup(String value) {
                         this.vatGroup = value;
@@ -20098,179 +20098,179 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad taxPercent.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getTaxPercent() {
+                    public BigDecimal getTaxPercent() {
                         return taxPercent;
                     }
 
                     /**
                      * Define el valor de la propiedad taxPercent.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setTaxPercent(Double value) {
+                    public void setTaxPercent(BigDecimal value) {
                         this.taxPercent = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad taxSum.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getTaxSum() {
+                    public BigDecimal getTaxSum() {
                         return taxSum;
                     }
 
                     /**
                      * Define el valor de la propiedad taxSum.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setTaxSum(Double value) {
+                    public void setTaxSum(BigDecimal value) {
                         this.taxSum = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad taxSumFC.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getTaxSumFC() {
+                    public BigDecimal getTaxSumFC() {
                         return taxSumFC;
                     }
 
                     /**
                      * Define el valor de la propiedad taxSumFC.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setTaxSumFC(Double value) {
+                    public void setTaxSumFC(BigDecimal value) {
                         this.taxSumFC = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad taxSumSys.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getTaxSumSys() {
+                    public BigDecimal getTaxSumSys() {
                         return taxSumSys;
                     }
 
                     /**
                      * Define el valor de la propiedad taxSumSys.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setTaxSumSys(Double value) {
+                    public void setTaxSumSys(BigDecimal value) {
                         this.taxSumSys = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad deductibleTaxSum.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getDeductibleTaxSum() {
+                    public BigDecimal getDeductibleTaxSum() {
                         return deductibleTaxSum;
                     }
 
                     /**
                      * Define el valor de la propiedad deductibleTaxSum.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setDeductibleTaxSum(Double value) {
+                    public void setDeductibleTaxSum(BigDecimal value) {
                         this.deductibleTaxSum = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad deductibleTaxSumFC.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getDeductibleTaxSumFC() {
+                    public BigDecimal getDeductibleTaxSumFC() {
                         return deductibleTaxSumFC;
                     }
 
                     /**
                      * Define el valor de la propiedad deductibleTaxSumFC.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setDeductibleTaxSumFC(Double value) {
+                    public void setDeductibleTaxSumFC(BigDecimal value) {
                         this.deductibleTaxSumFC = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad deductibleTaxSumSys.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getDeductibleTaxSumSys() {
+                    public BigDecimal getDeductibleTaxSumSys() {
                         return deductibleTaxSumSys;
                     }
 
                     /**
                      * Define el valor de la propiedad deductibleTaxSumSys.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setDeductibleTaxSumSys(Double value) {
+                    public void setDeductibleTaxSumSys(BigDecimal value) {
                         this.deductibleTaxSumSys = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad aquisitionTax.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getAquisitionTax() {
                         return aquisitionTax;
@@ -20278,11 +20278,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad aquisitionTax.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setAquisitionTax(String value) {
                         this.aquisitionTax = value;
@@ -20290,11 +20290,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad taxCode.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getTaxCode() {
                         return taxCode;
@@ -20302,11 +20302,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad taxCode.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setTaxCode(String value) {
                         this.taxCode = value;
@@ -20314,11 +20314,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad taxType.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getTaxType() {
                         return taxType;
@@ -20326,11 +20326,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad taxType.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setTaxType(String value) {
                         this.taxType = value;
@@ -20338,251 +20338,251 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad taxPaid.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getTaxPaid() {
+                    public BigDecimal getTaxPaid() {
                         return taxPaid;
                     }
 
                     /**
                      * Define el valor de la propiedad taxPaid.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setTaxPaid(Double value) {
+                    public void setTaxPaid(BigDecimal value) {
                         this.taxPaid = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad taxPaidFC.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getTaxPaidFC() {
+                    public BigDecimal getTaxPaidFC() {
                         return taxPaidFC;
                     }
 
                     /**
                      * Define el valor de la propiedad taxPaidFC.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setTaxPaidFC(Double value) {
+                    public void setTaxPaidFC(BigDecimal value) {
                         this.taxPaidFC = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad taxPaidSys.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getTaxPaidSys() {
+                    public BigDecimal getTaxPaidSys() {
                         return taxPaidSys;
                     }
 
                     /**
                      * Define el valor de la propiedad taxPaidSys.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setTaxPaidSys(Double value) {
+                    public void setTaxPaidSys(BigDecimal value) {
                         this.taxPaidSys = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad equalizationTaxPercent.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getEqualizationTaxPercent() {
+                    public BigDecimal getEqualizationTaxPercent() {
                         return equalizationTaxPercent;
                     }
 
                     /**
                      * Define el valor de la propiedad equalizationTaxPercent.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setEqualizationTaxPercent(Double value) {
+                    public void setEqualizationTaxPercent(BigDecimal value) {
                         this.equalizationTaxPercent = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad equalizationTaxSum.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getEqualizationTaxSum() {
+                    public BigDecimal getEqualizationTaxSum() {
                         return equalizationTaxSum;
                     }
 
                     /**
                      * Define el valor de la propiedad equalizationTaxSum.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setEqualizationTaxSum(Double value) {
+                    public void setEqualizationTaxSum(BigDecimal value) {
                         this.equalizationTaxSum = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad equalizationTaxFC.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getEqualizationTaxFC() {
+                    public BigDecimal getEqualizationTaxFC() {
                         return equalizationTaxFC;
                     }
 
                     /**
                      * Define el valor de la propiedad equalizationTaxFC.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setEqualizationTaxFC(Double value) {
+                    public void setEqualizationTaxFC(BigDecimal value) {
                         this.equalizationTaxFC = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad equalizationTaxSys.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getEqualizationTaxSys() {
+                    public BigDecimal getEqualizationTaxSys() {
                         return equalizationTaxSys;
                     }
 
                     /**
                      * Define el valor de la propiedad equalizationTaxSys.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setEqualizationTaxSys(Double value) {
+                    public void setEqualizationTaxSys(BigDecimal value) {
                         this.equalizationTaxSys = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad taxTotalSum.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getTaxTotalSum() {
+                    public BigDecimal getTaxTotalSum() {
                         return taxTotalSum;
                     }
 
                     /**
                      * Define el valor de la propiedad taxTotalSum.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setTaxTotalSum(Double value) {
+                    public void setTaxTotalSum(BigDecimal value) {
                         this.taxTotalSum = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad taxTotalSumFC.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getTaxTotalSumFC() {
+                    public BigDecimal getTaxTotalSumFC() {
                         return taxTotalSumFC;
                     }
 
                     /**
                      * Define el valor de la propiedad taxTotalSumFC.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setTaxTotalSumFC(Double value) {
+                    public void setTaxTotalSumFC(BigDecimal value) {
                         this.taxTotalSumFC = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad taxTotalSumSys.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getTaxTotalSumSys() {
+                    public BigDecimal getTaxTotalSumSys() {
                         return taxTotalSumSys;
                     }
 
                     /**
                      * Define el valor de la propiedad taxTotalSumSys.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setTaxTotalSumSys(Double value) {
+                    public void setTaxTotalSumSys(BigDecimal value) {
                         this.taxTotalSumSys = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad wtLiable.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getWTLiable() {
                         return wtLiable;
@@ -20590,11 +20590,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad wtLiable.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setWTLiable(String value) {
                         this.wtLiable = value;
@@ -20602,11 +20602,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad baseGroup.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getBaseGroup() {
                         return baseGroup;
@@ -20614,11 +20614,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad baseGroup.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setBaseGroup(Long value) {
                         this.baseGroup = value;
@@ -20626,11 +20626,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad distributionRule.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getDistributionRule() {
                         return distributionRule;
@@ -20638,11 +20638,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad distributionRule.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setDistributionRule(String value) {
                         this.distributionRule = value;
@@ -20650,11 +20650,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad project.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getProject() {
                         return project;
@@ -20662,11 +20662,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad project.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setProject(String value) {
                         this.project = value;
@@ -20674,11 +20674,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad distributionRule2.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getDistributionRule2() {
                         return distributionRule2;
@@ -20686,11 +20686,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad distributionRule2.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setDistributionRule2(String value) {
                         this.distributionRule2 = value;
@@ -20698,11 +20698,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad distributionRule3.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getDistributionRule3() {
                         return distributionRule3;
@@ -20710,11 +20710,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad distributionRule3.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setDistributionRule3(String value) {
                         this.distributionRule3 = value;
@@ -20722,11 +20722,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad distributionRule4.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getDistributionRule4() {
                         return distributionRule4;
@@ -20734,11 +20734,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad distributionRule4.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setDistributionRule4(String value) {
                         this.distributionRule4 = value;
@@ -20746,11 +20746,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad distributionRule5.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getDistributionRule5() {
                         return distributionRule5;
@@ -20758,11 +20758,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad distributionRule5.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setDistributionRule5(String value) {
                         this.distributionRule5 = value;
@@ -20770,11 +20770,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad lineExpenseTaxJurisdictions.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Document.DocumentLines.DocumentLine.DocumentLineAdditionalExpenses.DocumentLineAdditionalExpense.LineExpenseTaxJurisdictions }
-                     *     
+                     *
                      */
                     public Document.DocumentLines.DocumentLine.DocumentLineAdditionalExpenses.DocumentLineAdditionalExpense.LineExpenseTaxJurisdictions getLineExpenseTaxJurisdictions() {
                         return lineExpenseTaxJurisdictions;
@@ -20782,11 +20782,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad lineExpenseTaxJurisdictions.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Document.DocumentLines.DocumentLine.DocumentLineAdditionalExpenses.DocumentLineAdditionalExpense.LineExpenseTaxJurisdictions }
-                     *     
+                     *
                      */
                     public void setLineExpenseTaxJurisdictions(Document.DocumentLines.DocumentLine.DocumentLineAdditionalExpenses.DocumentLineAdditionalExpense.LineExpenseTaxJurisdictions value) {
                         this.lineExpenseTaxJurisdictions = value;
@@ -20795,9 +20795,9 @@ public class Document {
 
                     /**
                      * <p>Clase Java para anonymous complex type.
-                     * 
+                     *
                      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-                     * 
+                     *
                      * <pre>
                      * &lt;complexType>
                      *   &lt;complexContent>
@@ -20810,10 +20810,10 @@ public class Document {
                      *                 &lt;all>
                      *                   &lt;element name="JurisdictionCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
                      *                   &lt;element name="JurisdictionType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-                     *                   &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                     *                   &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                     *                   &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                     *                   &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+                     *                   &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                     *                   &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                     *                   &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                     *                   &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
                      *                   &lt;element name="DocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
                      *                   &lt;element name="LineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
                      *                   &lt;element name="RowSequence" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -20827,12 +20827,12 @@ public class Document {
                      *   &lt;/complexContent>
                      * &lt;/complexType>
                      * </pre>
-                     * 
-                     * 
+                     *
+                     *
                      */
                     @XmlAccessorType(XmlAccessType.FIELD)
                     @XmlType(name = "", propOrder = {
-                        "lineExpenseTaxJurisdiction"
+                            "lineExpenseTaxJurisdiction"
                     })
                     public static class LineExpenseTaxJurisdictions {
 
@@ -20841,25 +20841,25 @@ public class Document {
 
                         /**
                          * Gets the value of the lineExpenseTaxJurisdiction property.
-                         * 
+                         *
                          * <p>
                          * This accessor method returns a reference to the live list,
                          * not a snapshot. Therefore any modification you make to the
                          * returned list will be present inside the JAXB object.
                          * This is why there is not a <CODE>set</CODE> method for the lineExpenseTaxJurisdiction property.
-                         * 
+                         *
                          * <p>
                          * For example, to add a new item, do as follows:
                          * <pre>
                          *    getLineExpenseTaxJurisdiction().add(newItem);
                          * </pre>
-                         * 
-                         * 
+                         *
+                         *
                          * <p>
                          * Objects of the following type(s) are allowed in the list
                          * {@link Document.DocumentLines.DocumentLine.DocumentLineAdditionalExpenses.DocumentLineAdditionalExpense.LineExpenseTaxJurisdictions.LineExpenseTaxJurisdiction }
-                         * 
-                         * 
+                         *
+                         *
                          */
                         public List<LineExpenseTaxJurisdiction> getLineExpenseTaxJurisdiction() {
                             if (lineExpenseTaxJurisdiction == null) {
@@ -20871,9 +20871,9 @@ public class Document {
 
                         /**
                          * <p>Clase Java para anonymous complex type.
-                         * 
+                         *
                          * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-                         * 
+                         *
                          * <pre>
                          * &lt;complexType>
                          *   &lt;complexContent>
@@ -20881,10 +20881,10 @@ public class Document {
                          *       &lt;all>
                          *         &lt;element name="JurisdictionCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
                          *         &lt;element name="JurisdictionType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-                         *         &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                         *         &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                         *         &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                         *         &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+                         *         &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                         *         &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                         *         &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                         *         &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
                          *         &lt;element name="DocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
                          *         &lt;element name="LineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
                          *         &lt;element name="RowSequence" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -20893,8 +20893,8 @@ public class Document {
                          *   &lt;/complexContent>
                          * &lt;/complexType>
                          * </pre>
-                         * 
-                         * 
+                         *
+                         *
                          */
                         @XmlAccessorType(XmlAccessType.FIELD)
                         @XmlType(name = "", propOrder = {
@@ -20907,13 +20907,13 @@ public class Document {
                             @XmlElement(name = "JurisdictionType")
                             protected Long jurisdictionType;
                             @XmlElement(name = "TaxAmount")
-                            protected Double taxAmount;
+                            protected BigDecimal taxAmount;
                             @XmlElement(name = "TaxAmountSC")
-                            protected Double taxAmountSC;
+                            protected BigDecimal taxAmountSC;
                             @XmlElement(name = "TaxAmountFC")
-                            protected Double taxAmountFC;
+                            protected BigDecimal taxAmountFC;
                             @XmlElement(name = "TaxRate")
-                            protected Double taxRate;
+                            protected BigDecimal taxRate;
                             @XmlElement(name = "DocEntry")
                             protected Long docEntry;
                             @XmlElement(name = "LineNumber")
@@ -20923,11 +20923,11 @@ public class Document {
 
                             /**
                              * Obtiene el valor de la propiedad jurisdictionCode.
-                             * 
+                             *
                              * @return
                              *     possible object is
                              *     {@link String }
-                             *     
+                             *
                              */
                             public String getJurisdictionCode() {
                                 return jurisdictionCode;
@@ -20935,11 +20935,11 @@ public class Document {
 
                             /**
                              * Define el valor de la propiedad jurisdictionCode.
-                             * 
+                             *
                              * @param value
                              *     allowed object is
                              *     {@link String }
-                             *     
+                             *
                              */
                             public void setJurisdictionCode(String value) {
                                 this.jurisdictionCode = value;
@@ -20947,11 +20947,11 @@ public class Document {
 
                             /**
                              * Obtiene el valor de la propiedad jurisdictionType.
-                             * 
+                             *
                              * @return
                              *     possible object is
                              *     {@link Long }
-                             *     
+                             *
                              */
                             public Long getJurisdictionType() {
                                 return jurisdictionType;
@@ -20959,11 +20959,11 @@ public class Document {
 
                             /**
                              * Define el valor de la propiedad jurisdictionType.
-                             * 
+                             *
                              * @param value
                              *     allowed object is
                              *     {@link Long }
-                             *     
+                             *
                              */
                             public void setJurisdictionType(Long value) {
                                 this.jurisdictionType = value;
@@ -20971,107 +20971,107 @@ public class Document {
 
                             /**
                              * Obtiene el valor de la propiedad taxAmount.
-                             * 
+                             *
                              * @return
                              *     possible object is
-                             *     {@link Double }
-                             *     
+                             *     {@link BigDecimal }
+                             *
                              */
-                            public Double getTaxAmount() {
+                            public BigDecimal getTaxAmount() {
                                 return taxAmount;
                             }
 
                             /**
                              * Define el valor de la propiedad taxAmount.
-                             * 
+                             *
                              * @param value
                              *     allowed object is
-                             *     {@link Double }
-                             *     
+                             *     {@link BigDecimal }
+                             *
                              */
-                            public void setTaxAmount(Double value) {
+                            public void setTaxAmount(BigDecimal value) {
                                 this.taxAmount = value;
                             }
 
                             /**
                              * Obtiene el valor de la propiedad taxAmountSC.
-                             * 
+                             *
                              * @return
                              *     possible object is
-                             *     {@link Double }
-                             *     
+                             *     {@link BigDecimal }
+                             *
                              */
-                            public Double getTaxAmountSC() {
+                            public BigDecimal getTaxAmountSC() {
                                 return taxAmountSC;
                             }
 
                             /**
                              * Define el valor de la propiedad taxAmountSC.
-                             * 
+                             *
                              * @param value
                              *     allowed object is
-                             *     {@link Double }
-                             *     
+                             *     {@link BigDecimal }
+                             *
                              */
-                            public void setTaxAmountSC(Double value) {
+                            public void setTaxAmountSC(BigDecimal value) {
                                 this.taxAmountSC = value;
                             }
 
                             /**
                              * Obtiene el valor de la propiedad taxAmountFC.
-                             * 
+                             *
                              * @return
                              *     possible object is
-                             *     {@link Double }
-                             *     
+                             *     {@link BigDecimal }
+                             *
                              */
-                            public Double getTaxAmountFC() {
+                            public BigDecimal getTaxAmountFC() {
                                 return taxAmountFC;
                             }
 
                             /**
                              * Define el valor de la propiedad taxAmountFC.
-                             * 
+                             *
                              * @param value
                              *     allowed object is
-                             *     {@link Double }
-                             *     
+                             *     {@link BigDecimal }
+                             *
                              */
-                            public void setTaxAmountFC(Double value) {
+                            public void setTaxAmountFC(BigDecimal value) {
                                 this.taxAmountFC = value;
                             }
 
                             /**
                              * Obtiene el valor de la propiedad taxRate.
-                             * 
+                             *
                              * @return
                              *     possible object is
-                             *     {@link Double }
-                             *     
+                             *     {@link BigDecimal }
+                             *
                              */
-                            public Double getTaxRate() {
+                            public BigDecimal getTaxRate() {
                                 return taxRate;
                             }
 
                             /**
                              * Define el valor de la propiedad taxRate.
-                             * 
+                             *
                              * @param value
                              *     allowed object is
-                             *     {@link Double }
-                             *     
+                             *     {@link BigDecimal }
+                             *
                              */
-                            public void setTaxRate(Double value) {
+                            public void setTaxRate(BigDecimal value) {
                                 this.taxRate = value;
                             }
 
                             /**
                              * Obtiene el valor de la propiedad docEntry.
-                             * 
+                             *
                              * @return
                              *     possible object is
                              *     {@link Long }
-                             *     
+                             *
                              */
                             public Long getDocEntry() {
                                 return docEntry;
@@ -21079,11 +21079,11 @@ public class Document {
 
                             /**
                              * Define el valor de la propiedad docEntry.
-                             * 
+                             *
                              * @param value
                              *     allowed object is
                              *     {@link Long }
-                             *     
+                             *
                              */
                             public void setDocEntry(Long value) {
                                 this.docEntry = value;
@@ -21091,11 +21091,11 @@ public class Document {
 
                             /**
                              * Obtiene el valor de la propiedad lineNumber.
-                             * 
+                             *
                              * @return
                              *     possible object is
                              *     {@link Long }
-                             *     
+                             *
                              */
                             public Long getLineNumber() {
                                 return lineNumber;
@@ -21103,11 +21103,11 @@ public class Document {
 
                             /**
                              * Define el valor de la propiedad lineNumber.
-                             * 
+                             *
                              * @param value
                              *     allowed object is
                              *     {@link Long }
-                             *     
+                             *
                              */
                             public void setLineNumber(Long value) {
                                 this.lineNumber = value;
@@ -21115,11 +21115,11 @@ public class Document {
 
                             /**
                              * Obtiene el valor de la propiedad rowSequence.
-                             * 
+                             *
                              * @return
                              *     possible object is
                              *     {@link Long }
-                             *     
+                             *
                              */
                             public Long getRowSequence() {
                                 return rowSequence;
@@ -21127,11 +21127,11 @@ public class Document {
 
                             /**
                              * Define el valor de la propiedad rowSequence.
-                             * 
+                             *
                              * @param value
                              *     allowed object is
                              *     {@link Long }
-                             *     
+                             *
                              */
                             public void setRowSequence(Long value) {
                                 this.rowSequence = value;
@@ -21148,9 +21148,9 @@ public class Document {
 
             /**
              * <p>Clase Java para anonymous complex type.
-             * 
+             *
              * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-             * 
+             *
              * <pre>
              * &lt;complexType>
              *   &lt;complexContent>
@@ -21162,7 +21162,7 @@ public class Document {
              *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
              *                 &lt;all>
              *                   &lt;element name="BinAbsEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-             *                   &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+             *                   &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
              *                   &lt;element name="AllowNegativeQuantity" minOccurs="0">
              *                     &lt;simpleType>
              *                       &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -21183,12 +21183,12 @@ public class Document {
              *   &lt;/complexContent>
              * &lt;/complexType>
              * </pre>
-             * 
-             * 
+             *
+             *
              */
             @XmlAccessorType(XmlAccessType.FIELD)
             @XmlType(name = "", propOrder = {
-                "documentLinesBinAllocation"
+                    "documentLinesBinAllocation"
             })
             public static class DocumentLinesBinAllocations {
 
@@ -21197,25 +21197,25 @@ public class Document {
 
                 /**
                  * Gets the value of the documentLinesBinAllocation property.
-                 * 
+                 *
                  * <p>
                  * This accessor method returns a reference to the live list,
                  * not a snapshot. Therefore any modification you make to the
                  * returned list will be present inside the JAXB object.
                  * This is why there is not a <CODE>set</CODE> method for the documentLinesBinAllocation property.
-                 * 
+                 *
                  * <p>
                  * For example, to add a new item, do as follows:
                  * <pre>
                  *    getDocumentLinesBinAllocation().add(newItem);
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  * <p>
                  * Objects of the following type(s) are allowed in the list
                  * {@link Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation }
-                 * 
-                 * 
+                 *
+                 *
                  */
                 public List<Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation> getDocumentLinesBinAllocation() {
                     if (documentLinesBinAllocation == null) {
@@ -21227,16 +21227,16 @@ public class Document {
 
                 /**
                  * <p>Clase Java para anonymous complex type.
-                 * 
+                 *
                  * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-                 * 
+                 *
                  * <pre>
                  * &lt;complexType>
                  *   &lt;complexContent>
                  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
                  *       &lt;all>
                  *         &lt;element name="BinAbsEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-                 *         &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+                 *         &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
                  *         &lt;element name="AllowNegativeQuantity" minOccurs="0">
                  *           &lt;simpleType>
                  *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
@@ -21252,8 +21252,8 @@ public class Document {
                  *   &lt;/complexContent>
                  * &lt;/complexType>
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  */
                 @XmlAccessorType(XmlAccessType.FIELD)
                 @XmlType(name = "", propOrder = {
@@ -21264,7 +21264,7 @@ public class Document {
                     @XmlElement(name = "BinAbsEntry")
                     protected Long binAbsEntry;
                     @XmlElement(name = "Quantity")
-                    protected Double quantity;
+                    protected BigDecimal quantity;
                     @XmlElement(name = "AllowNegativeQuantity")
                     protected String allowNegativeQuantity;
                     @XmlElement(name = "SerialAndBatchNumbersBaseLine")
@@ -21274,11 +21274,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad binAbsEntry.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getBinAbsEntry() {
                         return binAbsEntry;
@@ -21286,11 +21286,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad binAbsEntry.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setBinAbsEntry(Long value) {
                         this.binAbsEntry = value;
@@ -21298,35 +21298,35 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad quantity.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getQuantity() {
+                    public BigDecimal getQuantity() {
                         return quantity;
                     }
 
                     /**
                      * Define el valor de la propiedad quantity.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setQuantity(Double value) {
+                    public void setQuantity(BigDecimal value) {
                         this.quantity = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad allowNegativeQuantity.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getAllowNegativeQuantity() {
                         return allowNegativeQuantity;
@@ -21334,11 +21334,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad allowNegativeQuantity.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setAllowNegativeQuantity(String value) {
                         this.allowNegativeQuantity = value;
@@ -21346,11 +21346,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad serialAndBatchNumbersBaseLine.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getSerialAndBatchNumbersBaseLine() {
                         return serialAndBatchNumbersBaseLine;
@@ -21358,11 +21358,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad serialAndBatchNumbersBaseLine.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setSerialAndBatchNumbersBaseLine(Long value) {
                         this.serialAndBatchNumbersBaseLine = value;
@@ -21370,11 +21370,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad baseLineNumber.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getBaseLineNumber() {
                         return baseLineNumber;
@@ -21382,11 +21382,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad baseLineNumber.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setBaseLineNumber(Long value) {
                         this.baseLineNumber = value;
@@ -21399,9 +21399,9 @@ public class Document {
 
             /**
              * <p>Clase Java para anonymous complex type.
-             * 
+             *
              * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-             * 
+             *
              * <pre>
              * &lt;complexType>
              *   &lt;complexContent>
@@ -21414,10 +21414,10 @@ public class Document {
              *                 &lt;all>
              *                   &lt;element name="JurisdictionCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
              *                   &lt;element name="JurisdictionType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-             *                   &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+             *                   &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
              *                   &lt;element name="DocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
              *                   &lt;element name="LineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
              *                   &lt;element name="RowSequence" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -21431,12 +21431,12 @@ public class Document {
              *   &lt;/complexContent>
              * &lt;/complexType>
              * </pre>
-             * 
-             * 
+             *
+             *
              */
             @XmlAccessorType(XmlAccessType.FIELD)
             @XmlType(name = "", propOrder = {
-                "lineTaxJurisdiction"
+                    "lineTaxJurisdiction"
             })
             public static class LineTaxJurisdictions {
 
@@ -21445,25 +21445,25 @@ public class Document {
 
                 /**
                  * Gets the value of the lineTaxJurisdiction property.
-                 * 
+                 *
                  * <p>
                  * This accessor method returns a reference to the live list,
                  * not a snapshot. Therefore any modification you make to the
                  * returned list will be present inside the JAXB object.
                  * This is why there is not a <CODE>set</CODE> method for the lineTaxJurisdiction property.
-                 * 
+                 *
                  * <p>
                  * For example, to add a new item, do as follows:
                  * <pre>
                  *    getLineTaxJurisdiction().add(newItem);
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  * <p>
                  * Objects of the following type(s) are allowed in the list
                  * {@link Document.DocumentLines.DocumentLine.LineTaxJurisdictions.LineTaxJurisdiction }
-                 * 
-                 * 
+                 *
+                 *
                  */
                 public List<Document.DocumentLines.DocumentLine.LineTaxJurisdictions.LineTaxJurisdiction> getLineTaxJurisdiction() {
                     if (lineTaxJurisdiction == null) {
@@ -21475,9 +21475,9 @@ public class Document {
 
                 /**
                  * <p>Clase Java para anonymous complex type.
-                 * 
+                 *
                  * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-                 * 
+                 *
                  * <pre>
                  * &lt;complexType>
                  *   &lt;complexContent>
@@ -21485,10 +21485,10 @@ public class Document {
                  *       &lt;all>
                  *         &lt;element name="JurisdictionCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
                  *         &lt;element name="JurisdictionType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-                 *         &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+                 *         &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="TaxRate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
                  *         &lt;element name="DocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
                  *         &lt;element name="LineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
                  *         &lt;element name="RowSequence" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -21497,8 +21497,8 @@ public class Document {
                  *   &lt;/complexContent>
                  * &lt;/complexType>
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  */
                 @XmlAccessorType(XmlAccessType.FIELD)
                 @XmlType(name = "", propOrder = {
@@ -21511,13 +21511,13 @@ public class Document {
                     @XmlElement(name = "JurisdictionType")
                     protected Long jurisdictionType;
                     @XmlElement(name = "TaxAmount")
-                    protected Double taxAmount;
+                    protected BigDecimal taxAmount;
                     @XmlElement(name = "TaxAmountSC")
-                    protected Double taxAmountSC;
+                    protected BigDecimal taxAmountSC;
                     @XmlElement(name = "TaxAmountFC")
-                    protected Double taxAmountFC;
+                    protected BigDecimal taxAmountFC;
                     @XmlElement(name = "TaxRate")
-                    protected Double taxRate;
+                    protected BigDecimal taxRate;
                     @XmlElement(name = "DocEntry")
                     protected Long docEntry;
                     @XmlElement(name = "LineNumber")
@@ -21527,11 +21527,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad jurisdictionCode.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getJurisdictionCode() {
                         return jurisdictionCode;
@@ -21539,11 +21539,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad jurisdictionCode.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setJurisdictionCode(String value) {
                         this.jurisdictionCode = value;
@@ -21551,11 +21551,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad jurisdictionType.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getJurisdictionType() {
                         return jurisdictionType;
@@ -21563,11 +21563,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad jurisdictionType.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setJurisdictionType(Long value) {
                         this.jurisdictionType = value;
@@ -21575,107 +21575,107 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad taxAmount.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getTaxAmount() {
+                    public BigDecimal getTaxAmount() {
                         return taxAmount;
                     }
 
                     /**
                      * Define el valor de la propiedad taxAmount.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setTaxAmount(Double value) {
+                    public void setTaxAmount(BigDecimal value) {
                         this.taxAmount = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad taxAmountSC.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getTaxAmountSC() {
+                    public BigDecimal getTaxAmountSC() {
                         return taxAmountSC;
                     }
 
                     /**
                      * Define el valor de la propiedad taxAmountSC.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setTaxAmountSC(Double value) {
+                    public void setTaxAmountSC(BigDecimal value) {
                         this.taxAmountSC = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad taxAmountFC.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getTaxAmountFC() {
+                    public BigDecimal getTaxAmountFC() {
                         return taxAmountFC;
                     }
 
                     /**
                      * Define el valor de la propiedad taxAmountFC.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setTaxAmountFC(Double value) {
+                    public void setTaxAmountFC(BigDecimal value) {
                         this.taxAmountFC = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad taxRate.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getTaxRate() {
+                    public BigDecimal getTaxRate() {
                         return taxRate;
                     }
 
                     /**
                      * Define el valor de la propiedad taxRate.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setTaxRate(Double value) {
+                    public void setTaxRate(BigDecimal value) {
                         this.taxRate = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad docEntry.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getDocEntry() {
                         return docEntry;
@@ -21683,11 +21683,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad docEntry.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setDocEntry(Long value) {
                         this.docEntry = value;
@@ -21695,11 +21695,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad lineNumber.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getLineNumber() {
                         return lineNumber;
@@ -21707,11 +21707,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad lineNumber.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setLineNumber(Long value) {
                         this.lineNumber = value;
@@ -21719,11 +21719,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad rowSequence.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getRowSequence() {
                         return rowSequence;
@@ -21731,11 +21731,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad rowSequence.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setRowSequence(Long value) {
                         this.rowSequence = value;
@@ -21748,9 +21748,9 @@ public class Document {
 
             /**
              * <p>Clase Java para anonymous complex type.
-             * 
+             *
              * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-             * 
+             *
              * <pre>
              * &lt;complexType>
              *   &lt;complexContent>
@@ -21773,7 +21773,7 @@ public class Document {
              *                   &lt;element name="BatchID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
              *                   &lt;element name="SystemSerialNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
              *                   &lt;element name="BaseLineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-             *                   &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+             *                   &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
              *                   &lt;element name="TrackingNote" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
              *                   &lt;element name="TrackingNoteLine" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
              *                 &lt;/all>
@@ -21786,12 +21786,12 @@ public class Document {
              *   &lt;/complexContent>
              * &lt;/complexType>
              * </pre>
-             * 
-             * 
+             *
+             *
              */
             @XmlAccessorType(XmlAccessType.FIELD)
             @XmlType(name = "", propOrder = {
-                "serialNumber"
+                    "serialNumber"
             })
             public static class SerialNumbers {
 
@@ -21800,25 +21800,25 @@ public class Document {
 
                 /**
                  * Gets the value of the serialNumber property.
-                 * 
+                 *
                  * <p>
                  * This accessor method returns a reference to the live list,
                  * not a snapshot. Therefore any modification you make to the
                  * returned list will be present inside the JAXB object.
                  * This is why there is not a <CODE>set</CODE> method for the serialNumber property.
-                 * 
+                 *
                  * <p>
                  * For example, to add a new item, do as follows:
                  * <pre>
                  *    getSerialNumber().add(newItem);
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  * <p>
                  * Objects of the following type(s) are allowed in the list
                  * {@link Document.DocumentLines.DocumentLine.SerialNumbers.SerialNumber }
-                 * 
-                 * 
+                 *
+                 *
                  */
                 public List<Document.DocumentLines.DocumentLine.SerialNumbers.SerialNumber> getSerialNumber() {
                     if (serialNumber == null) {
@@ -21830,9 +21830,9 @@ public class Document {
 
                 /**
                  * <p>Clase Java para anonymous complex type.
-                 * 
+                 *
                  * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-                 * 
+                 *
                  * <pre>
                  * &lt;complexType>
                  *   &lt;complexContent>
@@ -21850,7 +21850,7 @@ public class Document {
                  *         &lt;element name="BatchID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
                  *         &lt;element name="SystemSerialNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
                  *         &lt;element name="BaseLineNumber" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-                 *         &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+                 *         &lt;element name="Quantity" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
                  *         &lt;element name="TrackingNote" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
                  *         &lt;element name="TrackingNoteLine" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
                  *       &lt;/all>
@@ -21858,8 +21858,8 @@ public class Document {
                  *   &lt;/complexContent>
                  * &lt;/complexType>
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  */
                 @XmlAccessorType(XmlAccessType.FIELD)
                 @XmlType(name = "", propOrder = {
@@ -21897,7 +21897,7 @@ public class Document {
                     @XmlElement(name = "BaseLineNumber")
                     protected Long baseLineNumber;
                     @XmlElement(name = "Quantity")
-                    protected Double quantity;
+                    protected BigDecimal quantity;
                     @XmlElement(name = "TrackingNote")
                     protected Long trackingNote;
                     @XmlElement(name = "TrackingNoteLine")
@@ -21905,11 +21905,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad manufacturerSerialNumber.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getManufacturerSerialNumber() {
                         return manufacturerSerialNumber;
@@ -21917,11 +21917,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad manufacturerSerialNumber.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setManufacturerSerialNumber(String value) {
                         this.manufacturerSerialNumber = value;
@@ -21929,11 +21929,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad internalSerialNumber.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getInternalSerialNumber() {
                         return internalSerialNumber;
@@ -21941,11 +21941,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad internalSerialNumber.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setInternalSerialNumber(String value) {
                         this.internalSerialNumber = value;
@@ -21953,11 +21953,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad expiryDate.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link XMLGregorianCalendar }
-                     *     
+                     *
                      */
                     public XMLGregorianCalendar getExpiryDate() {
                         return expiryDate;
@@ -21965,11 +21965,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad expiryDate.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link XMLGregorianCalendar }
-                     *     
+                     *
                      */
                     public void setExpiryDate(XMLGregorianCalendar value) {
                         this.expiryDate = value;
@@ -21977,11 +21977,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad manufactureDate.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link XMLGregorianCalendar }
-                     *     
+                     *
                      */
                     public XMLGregorianCalendar getManufactureDate() {
                         return manufactureDate;
@@ -21989,11 +21989,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad manufactureDate.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link XMLGregorianCalendar }
-                     *     
+                     *
                      */
                     public void setManufactureDate(XMLGregorianCalendar value) {
                         this.manufactureDate = value;
@@ -22001,11 +22001,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad receptionDate.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link XMLGregorianCalendar }
-                     *     
+                     *
                      */
                     public XMLGregorianCalendar getReceptionDate() {
                         return receptionDate;
@@ -22013,11 +22013,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad receptionDate.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link XMLGregorianCalendar }
-                     *     
+                     *
                      */
                     public void setReceptionDate(XMLGregorianCalendar value) {
                         this.receptionDate = value;
@@ -22025,11 +22025,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad warrantyStart.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link XMLGregorianCalendar }
-                     *     
+                     *
                      */
                     public XMLGregorianCalendar getWarrantyStart() {
                         return warrantyStart;
@@ -22037,11 +22037,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad warrantyStart.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link XMLGregorianCalendar }
-                     *     
+                     *
                      */
                     public void setWarrantyStart(XMLGregorianCalendar value) {
                         this.warrantyStart = value;
@@ -22049,11 +22049,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad warrantyEnd.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link XMLGregorianCalendar }
-                     *     
+                     *
                      */
                     public XMLGregorianCalendar getWarrantyEnd() {
                         return warrantyEnd;
@@ -22061,11 +22061,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad warrantyEnd.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link XMLGregorianCalendar }
-                     *     
+                     *
                      */
                     public void setWarrantyEnd(XMLGregorianCalendar value) {
                         this.warrantyEnd = value;
@@ -22073,11 +22073,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad location.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getLocation() {
                         return location;
@@ -22085,11 +22085,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad location.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setLocation(String value) {
                         this.location = value;
@@ -22097,11 +22097,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad notes.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getNotes() {
                         return notes;
@@ -22109,11 +22109,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad notes.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setNotes(String value) {
                         this.notes = value;
@@ -22121,11 +22121,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad batchID.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getBatchID() {
                         return batchID;
@@ -22133,11 +22133,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad batchID.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setBatchID(String value) {
                         this.batchID = value;
@@ -22145,11 +22145,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad systemSerialNumber.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getSystemSerialNumber() {
                         return systemSerialNumber;
@@ -22157,11 +22157,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad systemSerialNumber.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setSystemSerialNumber(Long value) {
                         this.systemSerialNumber = value;
@@ -22169,11 +22169,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad baseLineNumber.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getBaseLineNumber() {
                         return baseLineNumber;
@@ -22181,11 +22181,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad baseLineNumber.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setBaseLineNumber(Long value) {
                         this.baseLineNumber = value;
@@ -22193,35 +22193,35 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad quantity.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getQuantity() {
+                    public BigDecimal getQuantity() {
                         return quantity;
                     }
 
                     /**
                      * Define el valor de la propiedad quantity.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setQuantity(Double value) {
+                    public void setQuantity(BigDecimal value) {
                         this.quantity = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad trackingNote.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getTrackingNote() {
                         return trackingNote;
@@ -22229,11 +22229,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad trackingNote.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setTrackingNote(Long value) {
                         this.trackingNote = value;
@@ -22241,11 +22241,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad trackingNoteLine.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getTrackingNoteLine() {
                         return trackingNoteLine;
@@ -22253,11 +22253,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad trackingNoteLine.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setTrackingNoteLine(Long value) {
                         this.trackingNoteLine = value;
@@ -22270,9 +22270,9 @@ public class Document {
 
             /**
              * <p>Clase Java para anonymous complex type.
-             * 
+             *
              * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-             * 
+             *
              * <pre>
              * &lt;complexType>
              *   &lt;complexContent>
@@ -22284,21 +22284,21 @@ public class Document {
              *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
              *                 &lt;all>
              *                   &lt;element name="WTCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-             *                   &lt;element name="WTAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="WTAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="WTAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+             *                   &lt;element name="WTAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="WTAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="WTAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
              *                   &lt;element name="WithholdingType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-             *                   &lt;element name="TaxableAmountinSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="TaxableAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="TaxableAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+             *                   &lt;element name="TaxableAmountinSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="TaxableAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="TaxableAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
              *                   &lt;element name="RoundingType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-             *                   &lt;element name="Rate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+             *                   &lt;element name="Rate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
              *                   &lt;element name="Criteria" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
              *                   &lt;element name="Category" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
              *                   &lt;element name="BaseType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-             *                   &lt;element name="AppliedWTAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="AppliedWTAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="AppliedWTAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+             *                   &lt;element name="AppliedWTAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="AppliedWTAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="AppliedWTAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
              *                   &lt;element name="GLAccount" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
              *                   &lt;element name="LineNum" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
              *                   &lt;element name="BaseDocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -22319,14 +22319,14 @@ public class Document {
              *                   &lt;element name="TargetDocumentType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
              *                   &lt;element name="CSTCodeIncoming" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
              *                   &lt;element name="CSTCodeOutgoing" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-             *                   &lt;element name="U_Base_ML" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="U_Base_MS" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="U_Base_ME" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="U_Tarifa" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+             *                   &lt;element name="U_Base_ML" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="U_Base_MS" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="U_Base_ME" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="U_Tarifa" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
              *                   &lt;element name="U_Fuente" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-             *                   &lt;element name="U_Ret_ML" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="U_Ret_MS" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-             *                   &lt;element name="U_Ret_ME" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+             *                   &lt;element name="U_Ret_ML" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="U_Ret_MS" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+             *                   &lt;element name="U_Ret_ME" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
              *                 &lt;/all>
              *               &lt;/restriction>
              *             &lt;/complexContent>
@@ -22337,12 +22337,12 @@ public class Document {
              *   &lt;/complexContent>
              * &lt;/complexType>
              * </pre>
-             * 
-             * 
+             *
+             *
              */
             @XmlAccessorType(XmlAccessType.FIELD)
             @XmlType(name = "", propOrder = {
-                "withholdingTaxLine"
+                    "withholdingTaxLine"
             })
             public static class WithholdingTaxLines {
 
@@ -22351,25 +22351,25 @@ public class Document {
 
                 /**
                  * Gets the value of the withholdingTaxLine property.
-                 * 
+                 *
                  * <p>
                  * This accessor method returns a reference to the live list,
                  * not a snapshot. Therefore any modification you make to the
                  * returned list will be present inside the JAXB object.
                  * This is why there is not a <CODE>set</CODE> method for the withholdingTaxLine property.
-                 * 
+                 *
                  * <p>
                  * For example, to add a new item, do as follows:
                  * <pre>
                  *    getWithholdingTaxLine().add(newItem);
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  * <p>
                  * Objects of the following type(s) are allowed in the list
                  * {@link Document.DocumentLines.DocumentLine.WithholdingTaxLines.WithholdingTaxLine }
-                 * 
-                 * 
+                 *
+                 *
                  */
                 public List<Document.DocumentLines.DocumentLine.WithholdingTaxLines.WithholdingTaxLine> getWithholdingTaxLine() {
                     if (withholdingTaxLine == null) {
@@ -22381,30 +22381,30 @@ public class Document {
 
                 /**
                  * <p>Clase Java para anonymous complex type.
-                 * 
+                 *
                  * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-                 * 
+                 *
                  * <pre>
                  * &lt;complexType>
                  *   &lt;complexContent>
                  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
                  *       &lt;all>
                  *         &lt;element name="WTCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-                 *         &lt;element name="WTAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="WTAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="WTAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+                 *         &lt;element name="WTAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="WTAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="WTAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
                  *         &lt;element name="WithholdingType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-                 *         &lt;element name="TaxableAmountinSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="TaxableAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="TaxableAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+                 *         &lt;element name="TaxableAmountinSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="TaxableAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="TaxableAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
                  *         &lt;element name="RoundingType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-                 *         &lt;element name="Rate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+                 *         &lt;element name="Rate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
                  *         &lt;element name="Criteria" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
                  *         &lt;element name="Category" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
                  *         &lt;element name="BaseType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-                 *         &lt;element name="AppliedWTAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="AppliedWTAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="AppliedWTAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+                 *         &lt;element name="AppliedWTAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="AppliedWTAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="AppliedWTAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
                  *         &lt;element name="GLAccount" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
                  *         &lt;element name="LineNum" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
                  *         &lt;element name="BaseDocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -22425,21 +22425,21 @@ public class Document {
                  *         &lt;element name="TargetDocumentType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
                  *         &lt;element name="CSTCodeIncoming" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
                  *         &lt;element name="CSTCodeOutgoing" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-                 *         &lt;element name="U_Base_ML" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="U_Base_MS" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="U_Base_ME" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="U_Tarifa" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+                 *         &lt;element name="U_Base_ML" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="U_Base_MS" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="U_Base_ME" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="U_Tarifa" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
                  *         &lt;element name="U_Fuente" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-                 *         &lt;element name="U_Ret_ML" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="U_Ret_MS" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-                 *         &lt;element name="U_Ret_ME" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+                 *         &lt;element name="U_Ret_ML" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="U_Ret_MS" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+                 *         &lt;element name="U_Ret_ME" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
                  *       &lt;/all>
                  *     &lt;/restriction>
                  *   &lt;/complexContent>
                  * &lt;/complexType>
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  */
                 @XmlAccessorType(XmlAccessType.FIELD)
                 @XmlType(name = "", propOrder = {
@@ -22450,23 +22450,23 @@ public class Document {
                     @XmlElement(name = "WTCode")
                     protected String wtCode;
                     @XmlElement(name = "WTAmountSys")
-                    protected Double wtAmountSys;
+                    protected BigDecimal wtAmountSys;
                     @XmlElement(name = "WTAmountFC")
-                    protected Double wtAmountFC;
+                    protected BigDecimal wtAmountFC;
                     @XmlElement(name = "WTAmount")
-                    protected Double wtAmount;
+                    protected BigDecimal wtAmount;
                     @XmlElement(name = "WithholdingType")
                     protected String withholdingType;
                     @XmlElement(name = "TaxableAmountinSys")
-                    protected Double taxableAmountinSys;
+                    protected BigDecimal taxableAmountinSys;
                     @XmlElement(name = "TaxableAmountFC")
-                    protected Double taxableAmountFC;
+                    protected BigDecimal taxableAmountFC;
                     @XmlElement(name = "TaxableAmount")
-                    protected Double taxableAmount;
+                    protected BigDecimal taxableAmount;
                     @XmlElement(name = "RoundingType")
                     protected String roundingType;
                     @XmlElement(name = "Rate")
-                    protected Double rate;
+                    protected BigDecimal rate;
                     @XmlElement(name = "Criteria")
                     protected String criteria;
                     @XmlElement(name = "Category")
@@ -22474,11 +22474,11 @@ public class Document {
                     @XmlElement(name = "BaseType")
                     protected String baseType;
                     @XmlElement(name = "AppliedWTAmountSys")
-                    protected Double appliedWTAmountSys;
+                    protected BigDecimal appliedWTAmountSys;
                     @XmlElement(name = "AppliedWTAmountFC")
-                    protected Double appliedWTAmountFC;
+                    protected BigDecimal appliedWTAmountFC;
                     @XmlElement(name = "AppliedWTAmount")
-                    protected Double appliedWTAmount;
+                    protected BigDecimal appliedWTAmount;
                     @XmlElement(name = "GLAccount")
                     protected String glAccount;
                     @XmlElement(name = "LineNum")
@@ -22502,29 +22502,29 @@ public class Document {
                     @XmlElement(name = "CSTCodeOutgoing")
                     protected String cstCodeOutgoing;
                     @XmlElement(name = "U_Base_ML")
-                    protected Double uBaseML;
+                    protected BigDecimal uBaseML;
                     @XmlElement(name = "U_Base_MS")
-                    protected Double uBaseMS;
+                    protected BigDecimal uBaseMS;
                     @XmlElement(name = "U_Base_ME")
-                    protected Double uBaseME;
+                    protected BigDecimal uBaseME;
                     @XmlElement(name = "U_Tarifa")
-                    protected Double uTarifa;
+                    protected BigDecimal uTarifa;
                     @XmlElement(name = "U_Fuente")
                     protected String uFuente;
                     @XmlElement(name = "U_Ret_ML")
-                    protected Double uRetML;
+                    protected BigDecimal uRetML;
                     @XmlElement(name = "U_Ret_MS")
-                    protected Double uRetMS;
+                    protected BigDecimal uRetMS;
                     @XmlElement(name = "U_Ret_ME")
-                    protected Double uRetME;
+                    protected BigDecimal uRetME;
 
                     /**
                      * Obtiene el valor de la propiedad wtCode.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getWTCode() {
                         return wtCode;
@@ -22532,11 +22532,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad wtCode.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setWTCode(String value) {
                         this.wtCode = value;
@@ -22544,83 +22544,83 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad wtAmountSys.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getWTAmountSys() {
+                    public BigDecimal getWTAmountSys() {
                         return wtAmountSys;
                     }
 
                     /**
                      * Define el valor de la propiedad wtAmountSys.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setWTAmountSys(Double value) {
+                    public void setWTAmountSys(BigDecimal value) {
                         this.wtAmountSys = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad wtAmountFC.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getWTAmountFC() {
+                    public BigDecimal getWTAmountFC() {
                         return wtAmountFC;
                     }
 
                     /**
                      * Define el valor de la propiedad wtAmountFC.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setWTAmountFC(Double value) {
+                    public void setWTAmountFC(BigDecimal value) {
                         this.wtAmountFC = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad wtAmount.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getWTAmount() {
+                    public BigDecimal getWTAmount() {
                         return wtAmount;
                     }
 
                     /**
                      * Define el valor de la propiedad wtAmount.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setWTAmount(Double value) {
+                    public void setWTAmount(BigDecimal value) {
                         this.wtAmount = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad withholdingType.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getWithholdingType() {
                         return withholdingType;
@@ -22628,11 +22628,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad withholdingType.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setWithholdingType(String value) {
                         this.withholdingType = value;
@@ -22640,83 +22640,83 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad taxableAmountinSys.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getTaxableAmountinSys() {
+                    public BigDecimal getTaxableAmountinSys() {
                         return taxableAmountinSys;
                     }
 
                     /**
                      * Define el valor de la propiedad taxableAmountinSys.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setTaxableAmountinSys(Double value) {
+                    public void setTaxableAmountinSys(BigDecimal value) {
                         this.taxableAmountinSys = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad taxableAmountFC.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getTaxableAmountFC() {
+                    public BigDecimal getTaxableAmountFC() {
                         return taxableAmountFC;
                     }
 
                     /**
                      * Define el valor de la propiedad taxableAmountFC.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setTaxableAmountFC(Double value) {
+                    public void setTaxableAmountFC(BigDecimal value) {
                         this.taxableAmountFC = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad taxableAmount.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getTaxableAmount() {
+                    public BigDecimal getTaxableAmount() {
                         return taxableAmount;
                     }
 
                     /**
                      * Define el valor de la propiedad taxableAmount.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setTaxableAmount(Double value) {
+                    public void setTaxableAmount(BigDecimal value) {
                         this.taxableAmount = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad roundingType.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getRoundingType() {
                         return roundingType;
@@ -22724,11 +22724,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad roundingType.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setRoundingType(String value) {
                         this.roundingType = value;
@@ -22736,35 +22736,35 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad rate.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getRate() {
+                    public BigDecimal getRate() {
                         return rate;
                     }
 
                     /**
                      * Define el valor de la propiedad rate.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setRate(Double value) {
+                    public void setRate(BigDecimal value) {
                         this.rate = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad criteria.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getCriteria() {
                         return criteria;
@@ -22772,11 +22772,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad criteria.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setCriteria(String value) {
                         this.criteria = value;
@@ -22784,11 +22784,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad category.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getCategory() {
                         return category;
@@ -22796,11 +22796,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad category.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setCategory(String value) {
                         this.category = value;
@@ -22808,11 +22808,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad baseType.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getBaseType() {
                         return baseType;
@@ -22820,11 +22820,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad baseType.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setBaseType(String value) {
                         this.baseType = value;
@@ -22832,83 +22832,83 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad appliedWTAmountSys.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getAppliedWTAmountSys() {
+                    public BigDecimal getAppliedWTAmountSys() {
                         return appliedWTAmountSys;
                     }
 
                     /**
                      * Define el valor de la propiedad appliedWTAmountSys.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setAppliedWTAmountSys(Double value) {
+                    public void setAppliedWTAmountSys(BigDecimal value) {
                         this.appliedWTAmountSys = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad appliedWTAmountFC.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getAppliedWTAmountFC() {
+                    public BigDecimal getAppliedWTAmountFC() {
                         return appliedWTAmountFC;
                     }
 
                     /**
                      * Define el valor de la propiedad appliedWTAmountFC.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setAppliedWTAmountFC(Double value) {
+                    public void setAppliedWTAmountFC(BigDecimal value) {
                         this.appliedWTAmountFC = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad appliedWTAmount.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getAppliedWTAmount() {
+                    public BigDecimal getAppliedWTAmount() {
                         return appliedWTAmount;
                     }
 
                     /**
                      * Define el valor de la propiedad appliedWTAmount.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setAppliedWTAmount(Double value) {
+                    public void setAppliedWTAmount(BigDecimal value) {
                         this.appliedWTAmount = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad glAccount.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getGLAccount() {
                         return glAccount;
@@ -22916,11 +22916,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad glAccount.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setGLAccount(String value) {
                         this.glAccount = value;
@@ -22928,11 +22928,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad lineNum.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getLineNum() {
                         return lineNum;
@@ -22940,11 +22940,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad lineNum.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setLineNum(Long value) {
                         this.lineNum = value;
@@ -22952,11 +22952,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad baseDocEntry.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getBaseDocEntry() {
                         return baseDocEntry;
@@ -22964,11 +22964,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad baseDocEntry.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setBaseDocEntry(Long value) {
                         this.baseDocEntry = value;
@@ -22976,11 +22976,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad baseDocLine.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getBaseDocLine() {
                         return baseDocLine;
@@ -22988,11 +22988,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad baseDocLine.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setBaseDocLine(Long value) {
                         this.baseDocLine = value;
@@ -23000,11 +23000,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad baseDocType.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getBaseDocType() {
                         return baseDocType;
@@ -23012,11 +23012,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad baseDocType.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setBaseDocType(Long value) {
                         this.baseDocType = value;
@@ -23024,11 +23024,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad baseDocumentReference.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getBaseDocumentReference() {
                         return baseDocumentReference;
@@ -23036,11 +23036,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad baseDocumentReference.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setBaseDocumentReference(Long value) {
                         this.baseDocumentReference = value;
@@ -23048,11 +23048,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad status.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getStatus() {
                         return status;
@@ -23060,11 +23060,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad status.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setStatus(String value) {
                         this.status = value;
@@ -23072,11 +23072,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad targetAbsEntry.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getTargetAbsEntry() {
                         return targetAbsEntry;
@@ -23084,11 +23084,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad targetAbsEntry.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setTargetAbsEntry(Long value) {
                         this.targetAbsEntry = value;
@@ -23096,11 +23096,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad targetDocumentType.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getTargetDocumentType() {
                         return targetDocumentType;
@@ -23108,11 +23108,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad targetDocumentType.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setTargetDocumentType(Long value) {
                         this.targetDocumentType = value;
@@ -23120,11 +23120,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad cstCodeIncoming.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getCSTCodeIncoming() {
                         return cstCodeIncoming;
@@ -23132,11 +23132,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad cstCodeIncoming.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setCSTCodeIncoming(String value) {
                         this.cstCodeIncoming = value;
@@ -23144,11 +23144,11 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad cstCodeOutgoing.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getCSTCodeOutgoing() {
                         return cstCodeOutgoing;
@@ -23156,11 +23156,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad cstCodeOutgoing.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setCSTCodeOutgoing(String value) {
                         this.cstCodeOutgoing = value;
@@ -23168,107 +23168,107 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad uBaseML.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getUBaseML() {
+                    public BigDecimal getUBaseML() {
                         return uBaseML;
                     }
 
                     /**
                      * Define el valor de la propiedad uBaseML.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setUBaseML(Double value) {
+                    public void setUBaseML(BigDecimal value) {
                         this.uBaseML = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad uBaseMS.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getUBaseMS() {
+                    public BigDecimal getUBaseMS() {
                         return uBaseMS;
                     }
 
                     /**
                      * Define el valor de la propiedad uBaseMS.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setUBaseMS(Double value) {
+                    public void setUBaseMS(BigDecimal value) {
                         this.uBaseMS = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad uBaseME.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getUBaseME() {
+                    public BigDecimal getUBaseME() {
                         return uBaseME;
                     }
 
                     /**
                      * Define el valor de la propiedad uBaseME.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setUBaseME(Double value) {
+                    public void setUBaseME(BigDecimal value) {
                         this.uBaseME = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad uTarifa.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getUTarifa() {
+                    public BigDecimal getUTarifa() {
                         return uTarifa;
                     }
 
                     /**
                      * Define el valor de la propiedad uTarifa.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setUTarifa(Double value) {
+                    public void setUTarifa(BigDecimal value) {
                         this.uTarifa = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad uFuente.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getUFuente() {
                         return uFuente;
@@ -23276,11 +23276,11 @@ public class Document {
 
                     /**
                      * Define el valor de la propiedad uFuente.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setUFuente(String value) {
                         this.uFuente = value;
@@ -23288,73 +23288,73 @@ public class Document {
 
                     /**
                      * Obtiene el valor de la propiedad uRetML.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getURetML() {
+                    public BigDecimal getURetML() {
                         return uRetML;
                     }
 
                     /**
                      * Define el valor de la propiedad uRetML.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setURetML(Double value) {
+                    public void setURetML(BigDecimal value) {
                         this.uRetML = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad uRetMS.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getURetMS() {
+                    public BigDecimal getURetMS() {
                         return uRetMS;
                     }
 
                     /**
                      * Define el valor de la propiedad uRetMS.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setURetMS(Double value) {
+                    public void setURetMS(BigDecimal value) {
                         this.uRetMS = value;
                     }
 
                     /**
                      * Obtiene el valor de la propiedad uRetME.
-                     * 
+                     *
                      * @return
                      *     possible object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public Double getURetME() {
+                    public BigDecimal getURetME() {
                         return uRetME;
                     }
 
                     /**
                      * Define el valor de la propiedad uRetME.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
-                     *     {@link Double }
-                     *     
+                     *     {@link BigDecimal }
+                     *
                      */
-                    public void setURetME(Double value) {
+                    public void setURetME(BigDecimal value) {
                         this.uRetME = value;
                     }
 
@@ -23369,9 +23369,9 @@ public class Document {
 
     /**
      * <p>Clase Java para anonymous complex type.
-     * 
+     *
      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-     * 
+     *
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -23393,25 +23393,25 @@ public class Document {
      *                       &lt;/restriction>
      *                     &lt;/simpleType>
      *                   &lt;/element>
-     *                   &lt;element name="Subtotal" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="Subtotal" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="LineText" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="SubtotalFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="SubtotalSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="Freight1" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="Freight1FC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="Freight1SC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="Freight2" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="Freight2FC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="Freight2SC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="Freight3" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="Freight3FC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="Freight3SC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="GrossTotal" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="GrossTotalFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="GrossTotalSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="SubtotalFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="SubtotalSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="Freight1" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="Freight1FC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="Freight1SC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="Freight2" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="Freight2FC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="Freight2SC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="Freight3" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="Freight3FC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="Freight3SC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="GrossTotal" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="GrossTotalFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="GrossTotalSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                 &lt;/all>
      *               &lt;/restriction>
      *             &lt;/complexContent>
@@ -23422,12 +23422,12 @@ public class Document {
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "documentSpecialLine"
+            "documentSpecialLine"
     })
     public static class DocumentSpecialLines {
 
@@ -23436,25 +23436,25 @@ public class Document {
 
         /**
          * Gets the value of the documentSpecialLine property.
-         * 
+         *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the documentSpecialLine property.
-         * 
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getDocumentSpecialLine().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link Document.DocumentSpecialLines.DocumentSpecialLine }
-         * 
-         * 
+         *
+         *
          */
         public List<Document.DocumentSpecialLines.DocumentSpecialLine> getDocumentSpecialLine() {
             if (documentSpecialLine == null) {
@@ -23466,9 +23466,9 @@ public class Document {
 
         /**
          * <p>Clase Java para anonymous complex type.
-         * 
+         *
          * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-         * 
+         *
          * <pre>
          * &lt;complexType>
          *   &lt;complexContent>
@@ -23485,32 +23485,32 @@ public class Document {
          *             &lt;/restriction>
          *           &lt;/simpleType>
          *         &lt;/element>
-         *         &lt;element name="Subtotal" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="Subtotal" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="LineText" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="SubtotalFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="SubtotalSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="Freight1" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="Freight1FC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="Freight1SC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="Freight2" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="Freight2FC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="Freight2SC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="Freight3" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="Freight3FC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="Freight3SC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="GrossTotal" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="GrossTotalFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="GrossTotalSC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="SubtotalFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="SubtotalSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TaxAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TaxAmountSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="Freight1" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="Freight1FC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="Freight1SC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="Freight2" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="Freight2FC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="Freight2SC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="Freight3" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="Freight3FC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="Freight3SC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="GrossTotal" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="GrossTotalFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="GrossTotalSC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *       &lt;/all>
          *     &lt;/restriction>
          *   &lt;/complexContent>
          * &lt;/complexType>
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -23527,51 +23527,51 @@ public class Document {
             @XmlElement(name = "LineType")
             protected String lineType;
             @XmlElement(name = "Subtotal")
-            protected Double subtotal;
+            protected BigDecimal subtotal;
             @XmlElement(name = "LineText")
             protected String lineText;
             @XmlElement(name = "SubtotalFC")
-            protected Double subtotalFC;
+            protected BigDecimal subtotalFC;
             @XmlElement(name = "SubtotalSC")
-            protected Double subtotalSC;
+            protected BigDecimal subtotalSC;
             @XmlElement(name = "TaxAmount")
-            protected Double taxAmount;
+            protected BigDecimal taxAmount;
             @XmlElement(name = "TaxAmountFC")
-            protected Double taxAmountFC;
+            protected BigDecimal taxAmountFC;
             @XmlElement(name = "TaxAmountSC")
-            protected Double taxAmountSC;
+            protected BigDecimal taxAmountSC;
             @XmlElement(name = "Freight1")
-            protected Double freight1;
+            protected BigDecimal freight1;
             @XmlElement(name = "Freight1FC")
-            protected Double freight1FC;
+            protected BigDecimal freight1FC;
             @XmlElement(name = "Freight1SC")
-            protected Double freight1SC;
+            protected BigDecimal freight1SC;
             @XmlElement(name = "Freight2")
-            protected Double freight2;
+            protected BigDecimal freight2;
             @XmlElement(name = "Freight2FC")
-            protected Double freight2FC;
+            protected BigDecimal freight2FC;
             @XmlElement(name = "Freight2SC")
-            protected Double freight2SC;
+            protected BigDecimal freight2SC;
             @XmlElement(name = "Freight3")
-            protected Double freight3;
+            protected BigDecimal freight3;
             @XmlElement(name = "Freight3FC")
-            protected Double freight3FC;
+            protected BigDecimal freight3FC;
             @XmlElement(name = "Freight3SC")
-            protected Double freight3SC;
+            protected BigDecimal freight3SC;
             @XmlElement(name = "GrossTotal")
             protected BigDecimal grossTotal;
             @XmlElement(name = "GrossTotalFC")
-            protected Double grossTotalFC;
+            protected BigDecimal grossTotalFC;
             @XmlElement(name = "GrossTotalSC")
-            protected Double grossTotalSC;
+            protected BigDecimal grossTotalSC;
 
             /**
              * Obtiene el valor de la propiedad lineNum.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getLineNum() {
                 return lineNum;
@@ -23579,11 +23579,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad lineNum.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setLineNum(Long value) {
                 this.lineNum = value;
@@ -23591,11 +23591,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad afterLineNumber.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getAfterLineNumber() {
                 return afterLineNumber;
@@ -23603,11 +23603,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad afterLineNumber.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setAfterLineNumber(Long value) {
                 this.afterLineNumber = value;
@@ -23615,11 +23615,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad orderNumber.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getOrderNumber() {
                 return orderNumber;
@@ -23627,11 +23627,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad orderNumber.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setOrderNumber(Long value) {
                 this.orderNumber = value;
@@ -23639,11 +23639,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad lineType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getLineType() {
                 return lineType;
@@ -23651,11 +23651,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad lineType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setLineType(String value) {
                 this.lineType = value;
@@ -23663,35 +23663,35 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad subtotal.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getSubtotal() {
+            public BigDecimal getSubtotal() {
                 return subtotal;
             }
 
             /**
              * Define el valor de la propiedad subtotal.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setSubtotal(Double value) {
+            public void setSubtotal(BigDecimal value) {
                 this.subtotal = value;
             }
 
             /**
              * Obtiene el valor de la propiedad lineText.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getLineText() {
                 return lineText;
@@ -23699,11 +23699,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad lineText.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setLineText(String value) {
                 this.lineText = value;
@@ -23711,347 +23711,347 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad subtotalFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getSubtotalFC() {
+            public BigDecimal getSubtotalFC() {
                 return subtotalFC;
             }
 
             /**
              * Define el valor de la propiedad subtotalFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setSubtotalFC(Double value) {
+            public void setSubtotalFC(BigDecimal value) {
                 this.subtotalFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad subtotalSC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getSubtotalSC() {
+            public BigDecimal getSubtotalSC() {
                 return subtotalSC;
             }
 
             /**
              * Define el valor de la propiedad subtotalSC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setSubtotalSC(Double value) {
+            public void setSubtotalSC(BigDecimal value) {
                 this.subtotalSC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad taxAmount.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxAmount() {
+            public BigDecimal getTaxAmount() {
                 return taxAmount;
             }
 
             /**
              * Define el valor de la propiedad taxAmount.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxAmount(Double value) {
+            public void setTaxAmount(BigDecimal value) {
                 this.taxAmount = value;
             }
 
             /**
              * Obtiene el valor de la propiedad taxAmountFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxAmountFC() {
+            public BigDecimal getTaxAmountFC() {
                 return taxAmountFC;
             }
 
             /**
              * Define el valor de la propiedad taxAmountFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxAmountFC(Double value) {
+            public void setTaxAmountFC(BigDecimal value) {
                 this.taxAmountFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad taxAmountSC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxAmountSC() {
+            public BigDecimal getTaxAmountSC() {
                 return taxAmountSC;
             }
 
             /**
              * Define el valor de la propiedad taxAmountSC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxAmountSC(Double value) {
+            public void setTaxAmountSC(BigDecimal value) {
                 this.taxAmountSC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad freight1.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getFreight1() {
+            public BigDecimal getFreight1() {
                 return freight1;
             }
 
             /**
              * Define el valor de la propiedad freight1.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setFreight1(Double value) {
+            public void setFreight1(BigDecimal value) {
                 this.freight1 = value;
             }
 
             /**
              * Obtiene el valor de la propiedad freight1FC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getFreight1FC() {
+            public BigDecimal getFreight1FC() {
                 return freight1FC;
             }
 
             /**
              * Define el valor de la propiedad freight1FC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setFreight1FC(Double value) {
+            public void setFreight1FC(BigDecimal value) {
                 this.freight1FC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad freight1SC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getFreight1SC() {
+            public BigDecimal getFreight1SC() {
                 return freight1SC;
             }
 
             /**
              * Define el valor de la propiedad freight1SC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setFreight1SC(Double value) {
+            public void setFreight1SC(BigDecimal value) {
                 this.freight1SC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad freight2.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getFreight2() {
+            public BigDecimal getFreight2() {
                 return freight2;
             }
 
             /**
              * Define el valor de la propiedad freight2.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setFreight2(Double value) {
+            public void setFreight2(BigDecimal value) {
                 this.freight2 = value;
             }
 
             /**
              * Obtiene el valor de la propiedad freight2FC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getFreight2FC() {
+            public BigDecimal getFreight2FC() {
                 return freight2FC;
             }
 
             /**
              * Define el valor de la propiedad freight2FC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setFreight2FC(Double value) {
+            public void setFreight2FC(BigDecimal value) {
                 this.freight2FC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad freight2SC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getFreight2SC() {
+            public BigDecimal getFreight2SC() {
                 return freight2SC;
             }
 
             /**
              * Define el valor de la propiedad freight2SC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setFreight2SC(Double value) {
+            public void setFreight2SC(BigDecimal value) {
                 this.freight2SC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad freight3.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getFreight3() {
+            public BigDecimal getFreight3() {
                 return freight3;
             }
 
             /**
              * Define el valor de la propiedad freight3.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setFreight3(Double value) {
+            public void setFreight3(BigDecimal value) {
                 this.freight3 = value;
             }
 
             /**
              * Obtiene el valor de la propiedad freight3FC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getFreight3FC() {
+            public BigDecimal getFreight3FC() {
                 return freight3FC;
             }
 
             /**
              * Define el valor de la propiedad freight3FC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setFreight3FC(Double value) {
+            public void setFreight3FC(BigDecimal value) {
                 this.freight3FC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad freight3SC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getFreight3SC() {
+            public BigDecimal getFreight3SC() {
                 return freight3SC;
             }
 
             /**
              * Define el valor de la propiedad freight3SC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setFreight3SC(Double value) {
+            public void setFreight3SC(BigDecimal value) {
                 this.freight3SC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad grossTotal.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
             public BigDecimal getGrossTotal() {
                 return grossTotal;
@@ -24059,11 +24059,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad grossTotal.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
             public void setGrossTotal(BigDecimal value) {
                 this.grossTotal = value;
@@ -24071,49 +24071,49 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad grossTotalFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getGrossTotalFC() {
+            public BigDecimal getGrossTotalFC() {
                 return grossTotalFC;
             }
 
             /**
              * Define el valor de la propiedad grossTotalFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setGrossTotalFC(Double value) {
+            public void setGrossTotalFC(BigDecimal value) {
                 this.grossTotalFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad grossTotalSC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getGrossTotalSC() {
+            public BigDecimal getGrossTotalSC() {
                 return grossTotalSC;
             }
 
             /**
              * Define el valor de la propiedad grossTotalSC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setGrossTotalSC(Double value) {
+            public void setGrossTotalSC(BigDecimal value) {
                 this.grossTotalSC = value;
             }
 
@@ -24124,9 +24124,9 @@ public class Document {
 
     /**
      * <p>Clase Java para anonymous complex type.
-     * 
+     *
      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-     * 
+     *
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -24175,12 +24175,12 @@ public class Document {
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "electronicProtocol"
+            "electronicProtocol"
     })
     public static class ElectronicProtocols {
 
@@ -24189,25 +24189,25 @@ public class Document {
 
         /**
          * Gets the value of the electronicProtocol property.
-         * 
+         *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the electronicProtocol property.
-         * 
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getElectronicProtocol().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link Document.ElectronicProtocols.ElectronicProtocol }
-         * 
-         * 
+         *
+         *
          */
         public List<Document.ElectronicProtocols.ElectronicProtocol> getElectronicProtocol() {
             if (electronicProtocol == null) {
@@ -24219,9 +24219,9 @@ public class Document {
 
         /**
          * <p>Clase Java para anonymous complex type.
-         * 
+         *
          * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-         * 
+         *
          * <pre>
          * &lt;complexType>
          *   &lt;complexContent>
@@ -24260,8 +24260,8 @@ public class Document {
          *   &lt;/complexContent>
          * &lt;/complexType>
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -24280,11 +24280,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad protocolCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getProtocolCode() {
                 return protocolCode;
@@ -24292,11 +24292,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad protocolCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setProtocolCode(String value) {
                 this.protocolCode = value;
@@ -24304,11 +24304,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad generationType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getGenerationType() {
                 return generationType;
@@ -24316,11 +24316,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad generationType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setGenerationType(String value) {
                 this.generationType = value;
@@ -24328,11 +24328,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad mappingID.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getMappingID() {
                 return mappingID;
@@ -24340,11 +24340,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad mappingID.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setMappingID(Long value) {
                 this.mappingID = value;
@@ -24352,11 +24352,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad testingMode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getTestingMode() {
                 return testingMode;
@@ -24364,11 +24364,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad testingMode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setTestingMode(String value) {
                 this.testingMode = value;
@@ -24381,9 +24381,9 @@ public class Document {
 
     /**
      * <p>Clase Java para anonymous complex type.
-     * 
+     *
      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-     * 
+     *
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -24410,8 +24410,8 @@ public class Document {
      *         &lt;element name="PackDescription" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *         &lt;element name="Brand" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *         &lt;element name="ShipUnitNo" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *         &lt;element name="NetWeight" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *         &lt;element name="GrossWeight" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *         &lt;element name="NetWeight" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *         &lt;element name="GrossWeight" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *         &lt;element name="StreetS" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *         &lt;element name="BlockS" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *         &lt;element name="BuildingS" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -24461,8 +24461,8 @@ public class Document {
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
@@ -24513,9 +24513,9 @@ public class Document {
         @XmlElement(name = "ShipUnitNo")
         protected Long shipUnitNo;
         @XmlElement(name = "NetWeight")
-        protected Double netWeight;
+        protected BigDecimal netWeight;
         @XmlElement(name = "GrossWeight")
-        protected Double grossWeight;
+        protected BigDecimal grossWeight;
         @XmlElement(name = "StreetS")
         protected String streetS;
         @XmlElement(name = "BlockS")
@@ -24577,11 +24577,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad taxId0.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getTaxId0() {
             return taxId0;
@@ -24589,11 +24589,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad taxId0.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setTaxId0(String value) {
             this.taxId0 = value;
@@ -24601,11 +24601,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad taxId1.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getTaxId1() {
             return taxId1;
@@ -24613,11 +24613,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad taxId1.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setTaxId1(String value) {
             this.taxId1 = value;
@@ -24625,11 +24625,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad taxId2.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getTaxId2() {
             return taxId2;
@@ -24637,11 +24637,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad taxId2.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setTaxId2(String value) {
             this.taxId2 = value;
@@ -24649,11 +24649,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad taxId3.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getTaxId3() {
             return taxId3;
@@ -24661,11 +24661,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad taxId3.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setTaxId3(String value) {
             this.taxId3 = value;
@@ -24673,11 +24673,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad taxId4.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getTaxId4() {
             return taxId4;
@@ -24685,11 +24685,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad taxId4.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setTaxId4(String value) {
             this.taxId4 = value;
@@ -24697,11 +24697,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad taxId5.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getTaxId5() {
             return taxId5;
@@ -24709,11 +24709,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad taxId5.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setTaxId5(String value) {
             this.taxId5 = value;
@@ -24721,11 +24721,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad taxId6.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getTaxId6() {
             return taxId6;
@@ -24733,11 +24733,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad taxId6.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setTaxId6(String value) {
             this.taxId6 = value;
@@ -24745,11 +24745,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad taxId7.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getTaxId7() {
             return taxId7;
@@ -24757,11 +24757,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad taxId7.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setTaxId7(String value) {
             this.taxId7 = value;
@@ -24769,11 +24769,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad taxId8.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getTaxId8() {
             return taxId8;
@@ -24781,11 +24781,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad taxId8.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setTaxId8(String value) {
             this.taxId8 = value;
@@ -24793,11 +24793,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad taxId9.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getTaxId9() {
             return taxId9;
@@ -24805,11 +24805,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad taxId9.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setTaxId9(String value) {
             this.taxId9 = value;
@@ -24817,11 +24817,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad state.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getState() {
             return state;
@@ -24829,11 +24829,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad state.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setState(String value) {
             this.state = value;
@@ -24841,11 +24841,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad county.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getCounty() {
             return county;
@@ -24853,11 +24853,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad county.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setCounty(String value) {
             this.county = value;
@@ -24865,11 +24865,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad incoterms.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getIncoterms() {
             return incoterms;
@@ -24877,11 +24877,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad incoterms.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setIncoterms(String value) {
             this.incoterms = value;
@@ -24889,11 +24889,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad vehicle.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getVehicle() {
             return vehicle;
@@ -24901,11 +24901,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad vehicle.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setVehicle(String value) {
             this.vehicle = value;
@@ -24913,11 +24913,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad vehicleState.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getVehicleState() {
             return vehicleState;
@@ -24925,11 +24925,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad vehicleState.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setVehicleState(String value) {
             this.vehicleState = value;
@@ -24937,11 +24937,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad nfRef.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getNFRef() {
             return nfRef;
@@ -24949,11 +24949,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad nfRef.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setNFRef(String value) {
             this.nfRef = value;
@@ -24961,11 +24961,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad carrier.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getCarrier() {
             return carrier;
@@ -24973,11 +24973,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad carrier.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setCarrier(String value) {
             this.carrier = value;
@@ -24985,11 +24985,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad packQuantity.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link Long }
-         *     
+         *
          */
         public Long getPackQuantity() {
             return packQuantity;
@@ -24997,11 +24997,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad packQuantity.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link Long }
-         *     
+         *
          */
         public void setPackQuantity(Long value) {
             this.packQuantity = value;
@@ -25009,11 +25009,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad packDescription.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getPackDescription() {
             return packDescription;
@@ -25021,11 +25021,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad packDescription.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setPackDescription(String value) {
             this.packDescription = value;
@@ -25033,11 +25033,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad brand.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getBrand() {
             return brand;
@@ -25045,11 +25045,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad brand.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setBrand(String value) {
             this.brand = value;
@@ -25057,11 +25057,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad shipUnitNo.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link Long }
-         *     
+         *
          */
         public Long getShipUnitNo() {
             return shipUnitNo;
@@ -25069,11 +25069,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad shipUnitNo.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link Long }
-         *     
+         *
          */
         public void setShipUnitNo(Long value) {
             this.shipUnitNo = value;
@@ -25081,59 +25081,59 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad netWeight.
-         * 
+         *
          * @return
          *     possible object is
-         *     {@link Double }
-         *     
+         *     {@link BigDecimal }
+         *
          */
-        public Double getNetWeight() {
+        public BigDecimal getNetWeight() {
             return netWeight;
         }
 
         /**
          * Define el valor de la propiedad netWeight.
-         * 
+         *
          * @param value
          *     allowed object is
-         *     {@link Double }
-         *     
+         *     {@link BigDecimal }
+         *
          */
-        public void setNetWeight(Double value) {
+        public void setNetWeight(BigDecimal value) {
             this.netWeight = value;
         }
 
         /**
          * Obtiene el valor de la propiedad grossWeight.
-         * 
+         *
          * @return
          *     possible object is
-         *     {@link Double }
-         *     
+         *     {@link BigDecimal }
+         *
          */
-        public Double getGrossWeight() {
+        public BigDecimal getGrossWeight() {
             return grossWeight;
         }
 
         /**
          * Define el valor de la propiedad grossWeight.
-         * 
+         *
          * @param value
          *     allowed object is
-         *     {@link Double }
-         *     
+         *     {@link BigDecimal }
+         *
          */
-        public void setGrossWeight(Double value) {
+        public void setGrossWeight(BigDecimal value) {
             this.grossWeight = value;
         }
 
         /**
          * Obtiene el valor de la propiedad streetS.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getStreetS() {
             return streetS;
@@ -25141,11 +25141,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad streetS.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setStreetS(String value) {
             this.streetS = value;
@@ -25153,11 +25153,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad blockS.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getBlockS() {
             return blockS;
@@ -25165,11 +25165,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad blockS.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setBlockS(String value) {
             this.blockS = value;
@@ -25177,11 +25177,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad buildingS.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getBuildingS() {
             return buildingS;
@@ -25189,11 +25189,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad buildingS.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setBuildingS(String value) {
             this.buildingS = value;
@@ -25201,11 +25201,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad cityS.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getCityS() {
             return cityS;
@@ -25213,11 +25213,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad cityS.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setCityS(String value) {
             this.cityS = value;
@@ -25225,11 +25225,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad zipCodeS.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getZipCodeS() {
             return zipCodeS;
@@ -25237,11 +25237,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad zipCodeS.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setZipCodeS(String value) {
             this.zipCodeS = value;
@@ -25249,11 +25249,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad countyS.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getCountyS() {
             return countyS;
@@ -25261,11 +25261,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad countyS.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setCountyS(String value) {
             this.countyS = value;
@@ -25273,11 +25273,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad stateS.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getStateS() {
             return stateS;
@@ -25285,11 +25285,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad stateS.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setStateS(String value) {
             this.stateS = value;
@@ -25297,11 +25297,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad countryS.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getCountryS() {
             return countryS;
@@ -25309,11 +25309,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad countryS.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setCountryS(String value) {
             this.countryS = value;
@@ -25321,11 +25321,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad streetB.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getStreetB() {
             return streetB;
@@ -25333,11 +25333,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad streetB.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setStreetB(String value) {
             this.streetB = value;
@@ -25345,11 +25345,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad blockB.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getBlockB() {
             return blockB;
@@ -25357,11 +25357,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad blockB.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setBlockB(String value) {
             this.blockB = value;
@@ -25369,11 +25369,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad buildingB.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getBuildingB() {
             return buildingB;
@@ -25381,11 +25381,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad buildingB.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setBuildingB(String value) {
             this.buildingB = value;
@@ -25393,11 +25393,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad cityB.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getCityB() {
             return cityB;
@@ -25405,11 +25405,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad cityB.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setCityB(String value) {
             this.cityB = value;
@@ -25417,11 +25417,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad zipCodeB.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getZipCodeB() {
             return zipCodeB;
@@ -25429,11 +25429,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad zipCodeB.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setZipCodeB(String value) {
             this.zipCodeB = value;
@@ -25441,11 +25441,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad countyB.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getCountyB() {
             return countyB;
@@ -25453,11 +25453,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad countyB.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setCountyB(String value) {
             this.countyB = value;
@@ -25465,11 +25465,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad stateB.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getStateB() {
             return stateB;
@@ -25477,11 +25477,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad stateB.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setStateB(String value) {
             this.stateB = value;
@@ -25489,11 +25489,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad countryB.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getCountryB() {
             return countryB;
@@ -25501,11 +25501,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad countryB.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setCountryB(String value) {
             this.countryB = value;
@@ -25513,11 +25513,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad importOrExport.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getImportOrExport() {
             return importOrExport;
@@ -25525,11 +25525,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad importOrExport.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setImportOrExport(String value) {
             this.importOrExport = value;
@@ -25537,11 +25537,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad mainUsage.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link Long }
-         *     
+         *
          */
         public Long getMainUsage() {
             return mainUsage;
@@ -25549,11 +25549,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad mainUsage.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link Long }
-         *     
+         *
          */
         public void setMainUsage(Long value) {
             this.mainUsage = value;
@@ -25561,11 +25561,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad globalLocationNumberS.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getGlobalLocationNumberS() {
             return globalLocationNumberS;
@@ -25573,11 +25573,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad globalLocationNumberS.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setGlobalLocationNumberS(String value) {
             this.globalLocationNumberS = value;
@@ -25585,11 +25585,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad globalLocationNumberB.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getGlobalLocationNumberB() {
             return globalLocationNumberB;
@@ -25597,11 +25597,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad globalLocationNumberB.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setGlobalLocationNumberB(String value) {
             this.globalLocationNumberB = value;
@@ -25609,11 +25609,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad taxId12.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getTaxId12() {
             return taxId12;
@@ -25621,11 +25621,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad taxId12.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setTaxId12(String value) {
             this.taxId12 = value;
@@ -25633,11 +25633,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad taxId13.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getTaxId13() {
             return taxId13;
@@ -25645,11 +25645,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad taxId13.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setTaxId13(String value) {
             this.taxId13 = value;
@@ -25657,11 +25657,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad billOfEntryNo.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getBillOfEntryNo() {
             return billOfEntryNo;
@@ -25669,11 +25669,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad billOfEntryNo.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setBillOfEntryNo(String value) {
             this.billOfEntryNo = value;
@@ -25681,11 +25681,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad billOfEntryDate.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link XMLGregorianCalendar }
-         *     
+         *
          */
         public XMLGregorianCalendar getBillOfEntryDate() {
             return billOfEntryDate;
@@ -25693,11 +25693,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad billOfEntryDate.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link XMLGregorianCalendar }
-         *     
+         *
          */
         public void setBillOfEntryDate(XMLGregorianCalendar value) {
             this.billOfEntryDate = value;
@@ -25705,11 +25705,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad originalBillOfEntryNo.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getOriginalBillOfEntryNo() {
             return originalBillOfEntryNo;
@@ -25717,11 +25717,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad originalBillOfEntryNo.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setOriginalBillOfEntryNo(String value) {
             this.originalBillOfEntryNo = value;
@@ -25729,11 +25729,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad originalBillOfEntryDate.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link XMLGregorianCalendar }
-         *     
+         *
          */
         public XMLGregorianCalendar getOriginalBillOfEntryDate() {
             return originalBillOfEntryDate;
@@ -25741,11 +25741,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad originalBillOfEntryDate.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link XMLGregorianCalendar }
-         *     
+         *
          */
         public void setOriginalBillOfEntryDate(XMLGregorianCalendar value) {
             this.originalBillOfEntryDate = value;
@@ -25753,11 +25753,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad importOrExportType.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getImportOrExportType() {
             return importOrExportType;
@@ -25765,11 +25765,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad importOrExportType.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setImportOrExportType(String value) {
             this.importOrExportType = value;
@@ -25777,11 +25777,11 @@ public class Document {
 
         /**
          * Obtiene el valor de la propiedad portCode.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getPortCode() {
             return portCode;
@@ -25789,11 +25789,11 @@ public class Document {
 
         /**
          * Define el valor de la propiedad portCode.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setPortCode(String value) {
             this.portCode = value;
@@ -25804,9 +25804,9 @@ public class Document {
 
     /**
      * <p>Clase Java para anonymous complex type.
-     * 
+     *
      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-     * 
+     *
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -25818,21 +25818,21 @@ public class Document {
      *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *                 &lt;all>
      *                   &lt;element name="WTCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="WTAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="WTAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="WTAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="WTAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="WTAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="WTAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="WithholdingType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="TaxableAmountinSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TaxableAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TaxableAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="TaxableAmountinSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TaxableAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TaxableAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="RoundingType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="Rate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="Rate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="Criteria" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="Category" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="BaseType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="AppliedWTAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="AppliedWTAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="AppliedWTAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="AppliedWTAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="AppliedWTAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="AppliedWTAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="GLAccount" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="LineNum" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="BaseDocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -25851,14 +25851,14 @@ public class Document {
      *                   &lt;/element>
      *                   &lt;element name="TargetAbsEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="TargetDocumentType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-     *                   &lt;element name="U_Base_ML" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="U_Base_MS" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="U_Base_ME" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="U_Tarifa" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="U_Base_ML" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="U_Base_MS" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="U_Base_ME" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="U_Tarifa" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="U_Fuente" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="U_Ret_ML" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="U_Ret_MS" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="U_Ret_ME" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="U_Ret_ML" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="U_Ret_MS" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="U_Ret_ME" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                 &lt;/all>
      *               &lt;/restriction>
      *             &lt;/complexContent>
@@ -25869,12 +25869,12 @@ public class Document {
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "withholdingTaxData"
+            "withholdingTaxData"
     })
     public static class WithholdingTaxDataCollection {
 
@@ -25883,25 +25883,25 @@ public class Document {
 
         /**
          * Gets the value of the withholdingTaxData property.
-         * 
+         *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the withholdingTaxData property.
-         * 
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getWithholdingTaxData().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link Document.WithholdingTaxDataCollection.WithholdingTaxData }
-         * 
-         * 
+         *
+         *
          */
         public List<Document.WithholdingTaxDataCollection.WithholdingTaxData> getWithholdingTaxData() {
             if (withholdingTaxData == null) {
@@ -25913,30 +25913,30 @@ public class Document {
 
         /**
          * <p>Clase Java para anonymous complex type.
-         * 
+         *
          * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-         * 
+         *
          * <pre>
          * &lt;complexType>
          *   &lt;complexContent>
          *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
          *       &lt;all>
          *         &lt;element name="WTCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="WTAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="WTAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="WTAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="WTAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="WTAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="WTAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="WithholdingType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="TaxableAmountinSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TaxableAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TaxableAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="TaxableAmountinSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TaxableAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TaxableAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="RoundingType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="Rate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="Rate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="Criteria" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="Category" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="BaseType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="AppliedWTAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="AppliedWTAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="AppliedWTAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="AppliedWTAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="AppliedWTAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="AppliedWTAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="GLAccount" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="LineNum" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="BaseDocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -25955,21 +25955,21 @@ public class Document {
          *         &lt;/element>
          *         &lt;element name="TargetAbsEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="TargetDocumentType" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
-         *         &lt;element name="U_Base_ML" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="U_Base_MS" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="U_Base_ME" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="U_Tarifa" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="U_Base_ML" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="U_Base_MS" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="U_Base_ME" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="U_Tarifa" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="U_Fuente" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="U_Ret_ML" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="U_Ret_MS" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="U_Ret_ME" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="U_Ret_ML" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="U_Ret_MS" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="U_Ret_ME" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *       &lt;/all>
          *     &lt;/restriction>
          *   &lt;/complexContent>
          * &lt;/complexType>
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -25980,23 +25980,23 @@ public class Document {
             @XmlElement(name = "WTCode")
             protected String wtCode;
             @XmlElement(name = "WTAmountSys")
-            protected Double wtAmountSys;
+            protected BigDecimal wtAmountSys;
             @XmlElement(name = "WTAmountFC")
-            protected Double wtAmountFC;
+            protected BigDecimal wtAmountFC;
             @XmlElement(name = "WTAmount")
-            protected Double wtAmount;
+            protected BigDecimal wtAmount;
             @XmlElement(name = "WithholdingType")
             protected String withholdingType;
             @XmlElement(name = "TaxableAmountinSys")
-            protected Double taxableAmountinSys;
+            protected BigDecimal taxableAmountinSys;
             @XmlElement(name = "TaxableAmountFC")
-            protected Double taxableAmountFC;
+            protected BigDecimal taxableAmountFC;
             @XmlElement(name = "TaxableAmount")
-            protected Double taxableAmount;
+            protected BigDecimal taxableAmount;
             @XmlElement(name = "RoundingType")
             protected String roundingType;
             @XmlElement(name = "Rate")
-            protected Double rate;
+            protected BigDecimal rate;
             @XmlElement(name = "Criteria")
             protected String criteria;
             @XmlElement(name = "Category")
@@ -26004,11 +26004,11 @@ public class Document {
             @XmlElement(name = "BaseType")
             protected String baseType;
             @XmlElement(name = "AppliedWTAmountSys")
-            protected Double appliedWTAmountSys;
+            protected BigDecimal appliedWTAmountSys;
             @XmlElement(name = "AppliedWTAmountFC")
-            protected Double appliedWTAmountFC;
+            protected BigDecimal appliedWTAmountFC;
             @XmlElement(name = "AppliedWTAmount")
-            protected Double appliedWTAmount;
+            protected BigDecimal appliedWTAmount;
             @XmlElement(name = "GLAccount")
             protected String glAccount;
             @XmlElement(name = "LineNum")
@@ -26028,29 +26028,29 @@ public class Document {
             @XmlElement(name = "TargetDocumentType")
             protected Long targetDocumentType;
             @XmlElement(name = "U_Base_ML")
-            protected Double uBaseML;
+            protected BigDecimal uBaseML;
             @XmlElement(name = "U_Base_MS")
-            protected Double uBaseMS;
+            protected BigDecimal uBaseMS;
             @XmlElement(name = "U_Base_ME")
-            protected Double uBaseME;
+            protected BigDecimal uBaseME;
             @XmlElement(name = "U_Tarifa")
-            protected Double uTarifa;
+            protected BigDecimal uTarifa;
             @XmlElement(name = "U_Fuente")
             protected String uFuente;
             @XmlElement(name = "U_Ret_ML")
-            protected Double uRetML;
+            protected BigDecimal uRetML;
             @XmlElement(name = "U_Ret_MS")
-            protected Double uRetMS;
+            protected BigDecimal uRetMS;
             @XmlElement(name = "U_Ret_ME")
-            protected Double uRetME;
+            protected BigDecimal uRetME;
 
             /**
              * Obtiene el valor de la propiedad wtCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getWTCode() {
                 return wtCode;
@@ -26058,11 +26058,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad wtCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setWTCode(String value) {
                 this.wtCode = value;
@@ -26070,83 +26070,83 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad wtAmountSys.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getWTAmountSys() {
+            public BigDecimal getWTAmountSys() {
                 return wtAmountSys;
             }
 
             /**
              * Define el valor de la propiedad wtAmountSys.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setWTAmountSys(Double value) {
+            public void setWTAmountSys(BigDecimal value) {
                 this.wtAmountSys = value;
             }
 
             /**
              * Obtiene el valor de la propiedad wtAmountFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getWTAmountFC() {
+            public BigDecimal getWTAmountFC() {
                 return wtAmountFC;
             }
 
             /**
              * Define el valor de la propiedad wtAmountFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setWTAmountFC(Double value) {
+            public void setWTAmountFC(BigDecimal value) {
                 this.wtAmountFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad wtAmount.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getWTAmount() {
+            public BigDecimal getWTAmount() {
                 return wtAmount;
             }
 
             /**
              * Define el valor de la propiedad wtAmount.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setWTAmount(Double value) {
+            public void setWTAmount(BigDecimal value) {
                 this.wtAmount = value;
             }
 
             /**
              * Obtiene el valor de la propiedad withholdingType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getWithholdingType() {
                 return withholdingType;
@@ -26154,11 +26154,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad withholdingType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setWithholdingType(String value) {
                 this.withholdingType = value;
@@ -26166,83 +26166,83 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad taxableAmountinSys.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxableAmountinSys() {
+            public BigDecimal getTaxableAmountinSys() {
                 return taxableAmountinSys;
             }
 
             /**
              * Define el valor de la propiedad taxableAmountinSys.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxableAmountinSys(Double value) {
+            public void setTaxableAmountinSys(BigDecimal value) {
                 this.taxableAmountinSys = value;
             }
 
             /**
              * Obtiene el valor de la propiedad taxableAmountFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxableAmountFC() {
+            public BigDecimal getTaxableAmountFC() {
                 return taxableAmountFC;
             }
 
             /**
              * Define el valor de la propiedad taxableAmountFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxableAmountFC(Double value) {
+            public void setTaxableAmountFC(BigDecimal value) {
                 this.taxableAmountFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad taxableAmount.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxableAmount() {
+            public BigDecimal getTaxableAmount() {
                 return taxableAmount;
             }
 
             /**
              * Define el valor de la propiedad taxableAmount.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxableAmount(Double value) {
+            public void setTaxableAmount(BigDecimal value) {
                 this.taxableAmount = value;
             }
 
             /**
              * Obtiene el valor de la propiedad roundingType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getRoundingType() {
                 return roundingType;
@@ -26250,11 +26250,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad roundingType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setRoundingType(String value) {
                 this.roundingType = value;
@@ -26262,35 +26262,35 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad rate.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getRate() {
+            public BigDecimal getRate() {
                 return rate;
             }
 
             /**
              * Define el valor de la propiedad rate.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setRate(Double value) {
+            public void setRate(BigDecimal value) {
                 this.rate = value;
             }
 
             /**
              * Obtiene el valor de la propiedad criteria.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCriteria() {
                 return criteria;
@@ -26298,11 +26298,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad criteria.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCriteria(String value) {
                 this.criteria = value;
@@ -26310,11 +26310,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad category.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCategory() {
                 return category;
@@ -26322,11 +26322,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad category.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCategory(String value) {
                 this.category = value;
@@ -26334,11 +26334,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad baseType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getBaseType() {
                 return baseType;
@@ -26346,11 +26346,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad baseType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setBaseType(String value) {
                 this.baseType = value;
@@ -26358,83 +26358,83 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad appliedWTAmountSys.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getAppliedWTAmountSys() {
+            public BigDecimal getAppliedWTAmountSys() {
                 return appliedWTAmountSys;
             }
 
             /**
              * Define el valor de la propiedad appliedWTAmountSys.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setAppliedWTAmountSys(Double value) {
+            public void setAppliedWTAmountSys(BigDecimal value) {
                 this.appliedWTAmountSys = value;
             }
 
             /**
              * Obtiene el valor de la propiedad appliedWTAmountFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getAppliedWTAmountFC() {
+            public BigDecimal getAppliedWTAmountFC() {
                 return appliedWTAmountFC;
             }
 
             /**
              * Define el valor de la propiedad appliedWTAmountFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setAppliedWTAmountFC(Double value) {
+            public void setAppliedWTAmountFC(BigDecimal value) {
                 this.appliedWTAmountFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad appliedWTAmount.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getAppliedWTAmount() {
+            public BigDecimal getAppliedWTAmount() {
                 return appliedWTAmount;
             }
 
             /**
              * Define el valor de la propiedad appliedWTAmount.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setAppliedWTAmount(Double value) {
+            public void setAppliedWTAmount(BigDecimal value) {
                 this.appliedWTAmount = value;
             }
 
             /**
              * Obtiene el valor de la propiedad glAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getGLAccount() {
                 return glAccount;
@@ -26442,11 +26442,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad glAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setGLAccount(String value) {
                 this.glAccount = value;
@@ -26454,11 +26454,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad lineNum.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getLineNum() {
                 return lineNum;
@@ -26466,11 +26466,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad lineNum.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setLineNum(Long value) {
                 this.lineNum = value;
@@ -26478,11 +26478,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad baseDocEntry.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getBaseDocEntry() {
                 return baseDocEntry;
@@ -26490,11 +26490,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad baseDocEntry.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setBaseDocEntry(Long value) {
                 this.baseDocEntry = value;
@@ -26502,11 +26502,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad baseDocLine.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getBaseDocLine() {
                 return baseDocLine;
@@ -26514,11 +26514,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad baseDocLine.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setBaseDocLine(Long value) {
                 this.baseDocLine = value;
@@ -26526,11 +26526,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad baseDocType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getBaseDocType() {
                 return baseDocType;
@@ -26538,11 +26538,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad baseDocType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setBaseDocType(Long value) {
                 this.baseDocType = value;
@@ -26550,11 +26550,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad baseDocumentReference.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getBaseDocumentReference() {
                 return baseDocumentReference;
@@ -26562,11 +26562,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad baseDocumentReference.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setBaseDocumentReference(Long value) {
                 this.baseDocumentReference = value;
@@ -26574,11 +26574,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad status.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getStatus() {
                 return status;
@@ -26586,11 +26586,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad status.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setStatus(String value) {
                 this.status = value;
@@ -26598,11 +26598,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad targetAbsEntry.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getTargetAbsEntry() {
                 return targetAbsEntry;
@@ -26610,11 +26610,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad targetAbsEntry.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setTargetAbsEntry(Long value) {
                 this.targetAbsEntry = value;
@@ -26622,11 +26622,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad targetDocumentType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getTargetDocumentType() {
                 return targetDocumentType;
@@ -26634,11 +26634,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad targetDocumentType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setTargetDocumentType(Long value) {
                 this.targetDocumentType = value;
@@ -26646,107 +26646,107 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad uBaseML.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getUBaseML() {
+            public BigDecimal getUBaseML() {
                 return uBaseML;
             }
 
             /**
              * Define el valor de la propiedad uBaseML.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setUBaseML(Double value) {
+            public void setUBaseML(BigDecimal value) {
                 this.uBaseML = value;
             }
 
             /**
              * Obtiene el valor de la propiedad uBaseMS.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getUBaseMS() {
+            public BigDecimal getUBaseMS() {
                 return uBaseMS;
             }
 
             /**
              * Define el valor de la propiedad uBaseMS.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setUBaseMS(Double value) {
+            public void setUBaseMS(BigDecimal value) {
                 this.uBaseMS = value;
             }
 
             /**
              * Obtiene el valor de la propiedad uBaseME.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getUBaseME() {
+            public BigDecimal getUBaseME() {
                 return uBaseME;
             }
 
             /**
              * Define el valor de la propiedad uBaseME.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setUBaseME(Double value) {
+            public void setUBaseME(BigDecimal value) {
                 this.uBaseME = value;
             }
 
             /**
              * Obtiene el valor de la propiedad uTarifa.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getUTarifa() {
+            public BigDecimal getUTarifa() {
                 return uTarifa;
             }
 
             /**
              * Define el valor de la propiedad uTarifa.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setUTarifa(Double value) {
+            public void setUTarifa(BigDecimal value) {
                 this.uTarifa = value;
             }
 
             /**
              * Obtiene el valor de la propiedad uFuente.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUFuente() {
                 return uFuente;
@@ -26754,11 +26754,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad uFuente.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUFuente(String value) {
                 this.uFuente = value;
@@ -26766,73 +26766,73 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad uRetML.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getURetML() {
+            public BigDecimal getURetML() {
                 return uRetML;
             }
 
             /**
              * Define el valor de la propiedad uRetML.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setURetML(Double value) {
+            public void setURetML(BigDecimal value) {
                 this.uRetML = value;
             }
 
             /**
              * Obtiene el valor de la propiedad uRetMS.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getURetMS() {
+            public BigDecimal getURetMS() {
                 return uRetMS;
             }
 
             /**
              * Define el valor de la propiedad uRetMS.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setURetMS(Double value) {
+            public void setURetMS(BigDecimal value) {
                 this.uRetMS = value;
             }
 
             /**
              * Obtiene el valor de la propiedad uRetME.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getURetME() {
+            public BigDecimal getURetME() {
                 return uRetME;
             }
 
             /**
              * Define el valor de la propiedad uRetME.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setURetME(Double value) {
+            public void setURetME(BigDecimal value) {
                 this.uRetME = value;
             }
 
@@ -26843,9 +26843,9 @@ public class Document {
 
     /**
      * <p>Clase Java para anonymous complex type.
-     * 
+     *
      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-     * 
+     *
      * <pre>
      * &lt;complexType>
      *   &lt;complexContent>
@@ -26856,38 +26856,38 @@ public class Document {
      *             &lt;complexContent>
      *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *                 &lt;all>
-     *                   &lt;element name="WTAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="WTAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="WTAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="WTAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="WTAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="WTAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="WithholdingType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="TaxableAmountinSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TaxableAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="TaxableAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="Rate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="TaxableAmountinSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TaxableAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="TaxableAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="Rate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="Category" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="BaseType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="AppliedWTAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="AppliedWTAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="AppliedWTAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="AppliedWTAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="AppliedWTAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="AppliedWTAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                   &lt;element name="GLAccount" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="LineNum" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="BaseDocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="BaseDocLine" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
      *                   &lt;element name="BaseDocType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
      *                   &lt;element name="WTAbsId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-     *                   &lt;element name="ExemptRate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="BaseNetAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="BaseNetAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="BaseNetAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="BaseVatmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="BaseVatmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="BaseVatmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="AccumBaseAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="AccumBaseAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="AccumBaseAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="AccumWTaxAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="AccumWTaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-     *                   &lt;element name="AccumWTaxAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+     *                   &lt;element name="ExemptRate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="BaseNetAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="BaseNetAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="BaseNetAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="BaseVatmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="BaseVatmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="BaseVatmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="AccumBaseAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="AccumBaseAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="AccumBaseAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="AccumWTaxAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="AccumWTaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+     *                   &lt;element name="AccumWTaxAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
      *                 &lt;/all>
      *               &lt;/restriction>
      *             &lt;/complexContent>
@@ -26898,12 +26898,12 @@ public class Document {
      *   &lt;/complexContent>
      * &lt;/complexType>
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "withholdingTaxDataWTX"
+            "withholdingTaxDataWTX"
     })
     public static class WithholdingTaxDataWTXCollection {
 
@@ -26912,25 +26912,25 @@ public class Document {
 
         /**
          * Gets the value of the withholdingTaxDataWTX property.
-         * 
+         *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the withholdingTaxDataWTX property.
-         * 
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getWithholdingTaxDataWTX().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link Document.WithholdingTaxDataWTXCollection.WithholdingTaxDataWTX }
-         * 
-         * 
+         *
+         *
          */
         public List<Document.WithholdingTaxDataWTXCollection.WithholdingTaxDataWTX> getWithholdingTaxDataWTX() {
             if (withholdingTaxDataWTX == null) {
@@ -26942,53 +26942,53 @@ public class Document {
 
         /**
          * <p>Clase Java para anonymous complex type.
-         * 
+         *
          * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-         * 
+         *
          * <pre>
          * &lt;complexType>
          *   &lt;complexContent>
          *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
          *       &lt;all>
-         *         &lt;element name="WTAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="WTAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="WTAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="WTAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="WTAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="WTAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="WithholdingType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="TaxableAmountinSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TaxableAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="TaxableAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="Rate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="TaxableAmountinSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TaxableAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="TaxableAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="Rate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="Category" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="BaseType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="AppliedWTAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="AppliedWTAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="AppliedWTAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="AppliedWTAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="AppliedWTAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="AppliedWTAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *         &lt;element name="GLAccount" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="LineNum" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="BaseDocEntry" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="BaseDocLine" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
          *         &lt;element name="BaseDocType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
          *         &lt;element name="WTAbsId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
-         *         &lt;element name="ExemptRate" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="BaseNetAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="BaseNetAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="BaseNetAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="BaseVatmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="BaseVatmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="BaseVatmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="AccumBaseAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="AccumBaseAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="AccumBaseAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="AccumWTaxAmountSys" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="AccumWTaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
-         *         &lt;element name="AccumWTaxAmount" type="{http://www.w3.org/2001/XMLSchema}double" minOccurs="0"/>
+         *         &lt;element name="ExemptRate" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="BaseNetAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="BaseNetAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="BaseNetAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="BaseVatmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="BaseVatmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="BaseVatmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="AccumBaseAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="AccumBaseAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="AccumBaseAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="AccumWTaxAmountSys" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="AccumWTaxAmountFC" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
+         *         &lt;element name="AccumWTaxAmount" type="{http://www.w3.org/2001/XMLSchema}BigDecimal" minOccurs="0"/>
          *       &lt;/all>
          *     &lt;/restriction>
          *   &lt;/complexContent>
          * &lt;/complexType>
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -26997,31 +26997,31 @@ public class Document {
         public static class WithholdingTaxDataWTX {
 
             @XmlElement(name = "WTAmountSys")
-            protected Double wtAmountSys;
+            protected BigDecimal wtAmountSys;
             @XmlElement(name = "WTAmountFC")
-            protected Double wtAmountFC;
+            protected BigDecimal wtAmountFC;
             @XmlElement(name = "WTAmount")
-            protected Double wtAmount;
+            protected BigDecimal wtAmount;
             @XmlElement(name = "WithholdingType")
             protected String withholdingType;
             @XmlElement(name = "TaxableAmountinSys")
-            protected Double taxableAmountinSys;
+            protected BigDecimal taxableAmountinSys;
             @XmlElement(name = "TaxableAmountFC")
-            protected Double taxableAmountFC;
+            protected BigDecimal taxableAmountFC;
             @XmlElement(name = "TaxableAmount")
-            protected Double taxableAmount;
+            protected BigDecimal taxableAmount;
             @XmlElement(name = "Rate")
-            protected Double rate;
+            protected BigDecimal rate;
             @XmlElement(name = "Category")
             protected String category;
             @XmlElement(name = "BaseType")
             protected String baseType;
             @XmlElement(name = "AppliedWTAmountSys")
-            protected Double appliedWTAmountSys;
+            protected BigDecimal appliedWTAmountSys;
             @XmlElement(name = "AppliedWTAmountFC")
-            protected Double appliedWTAmountFC;
+            protected BigDecimal appliedWTAmountFC;
             @XmlElement(name = "AppliedWTAmount")
-            protected Double appliedWTAmount;
+            protected BigDecimal appliedWTAmount;
             @XmlElement(name = "GLAccount")
             protected String glAccount;
             @XmlElement(name = "LineNum")
@@ -27035,111 +27035,111 @@ public class Document {
             @XmlElement(name = "WTAbsId")
             protected String wtAbsId;
             @XmlElement(name = "ExemptRate")
-            protected Double exemptRate;
+            protected BigDecimal exemptRate;
             @XmlElement(name = "BaseNetAmountSys")
-            protected Double baseNetAmountSys;
+            protected BigDecimal baseNetAmountSys;
             @XmlElement(name = "BaseNetAmountFC")
-            protected Double baseNetAmountFC;
+            protected BigDecimal baseNetAmountFC;
             @XmlElement(name = "BaseNetAmount")
-            protected Double baseNetAmount;
+            protected BigDecimal baseNetAmount;
             @XmlElement(name = "BaseVatmountSys")
-            protected Double baseVatmountSys;
+            protected BigDecimal baseVatmountSys;
             @XmlElement(name = "BaseVatmountFC")
-            protected Double baseVatmountFC;
+            protected BigDecimal baseVatmountFC;
             @XmlElement(name = "BaseVatmount")
-            protected Double baseVatmount;
+            protected BigDecimal baseVatmount;
             @XmlElement(name = "AccumBaseAmountSys")
-            protected Double accumBaseAmountSys;
+            protected BigDecimal accumBaseAmountSys;
             @XmlElement(name = "AccumBaseAmountFC")
-            protected Double accumBaseAmountFC;
+            protected BigDecimal accumBaseAmountFC;
             @XmlElement(name = "AccumBaseAmount")
-            protected Double accumBaseAmount;
+            protected BigDecimal accumBaseAmount;
             @XmlElement(name = "AccumWTaxAmountSys")
-            protected Double accumWTaxAmountSys;
+            protected BigDecimal accumWTaxAmountSys;
             @XmlElement(name = "AccumWTaxAmountFC")
-            protected Double accumWTaxAmountFC;
+            protected BigDecimal accumWTaxAmountFC;
             @XmlElement(name = "AccumWTaxAmount")
-            protected Double accumWTaxAmount;
+            protected BigDecimal accumWTaxAmount;
 
             /**
              * Obtiene el valor de la propiedad wtAmountSys.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getWTAmountSys() {
+            public BigDecimal getWTAmountSys() {
                 return wtAmountSys;
             }
 
             /**
              * Define el valor de la propiedad wtAmountSys.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setWTAmountSys(Double value) {
+            public void setWTAmountSys(BigDecimal value) {
                 this.wtAmountSys = value;
             }
 
             /**
              * Obtiene el valor de la propiedad wtAmountFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getWTAmountFC() {
+            public BigDecimal getWTAmountFC() {
                 return wtAmountFC;
             }
 
             /**
              * Define el valor de la propiedad wtAmountFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setWTAmountFC(Double value) {
+            public void setWTAmountFC(BigDecimal value) {
                 this.wtAmountFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad wtAmount.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getWTAmount() {
+            public BigDecimal getWTAmount() {
                 return wtAmount;
             }
 
             /**
              * Define el valor de la propiedad wtAmount.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setWTAmount(Double value) {
+            public void setWTAmount(BigDecimal value) {
                 this.wtAmount = value;
             }
 
             /**
              * Obtiene el valor de la propiedad withholdingType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getWithholdingType() {
                 return withholdingType;
@@ -27147,11 +27147,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad withholdingType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setWithholdingType(String value) {
                 this.withholdingType = value;
@@ -27159,107 +27159,107 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad taxableAmountinSys.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxableAmountinSys() {
+            public BigDecimal getTaxableAmountinSys() {
                 return taxableAmountinSys;
             }
 
             /**
              * Define el valor de la propiedad taxableAmountinSys.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxableAmountinSys(Double value) {
+            public void setTaxableAmountinSys(BigDecimal value) {
                 this.taxableAmountinSys = value;
             }
 
             /**
              * Obtiene el valor de la propiedad taxableAmountFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxableAmountFC() {
+            public BigDecimal getTaxableAmountFC() {
                 return taxableAmountFC;
             }
 
             /**
              * Define el valor de la propiedad taxableAmountFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxableAmountFC(Double value) {
+            public void setTaxableAmountFC(BigDecimal value) {
                 this.taxableAmountFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad taxableAmount.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getTaxableAmount() {
+            public BigDecimal getTaxableAmount() {
                 return taxableAmount;
             }
 
             /**
              * Define el valor de la propiedad taxableAmount.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setTaxableAmount(Double value) {
+            public void setTaxableAmount(BigDecimal value) {
                 this.taxableAmount = value;
             }
 
             /**
              * Obtiene el valor de la propiedad rate.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getRate() {
+            public BigDecimal getRate() {
                 return rate;
             }
 
             /**
              * Define el valor de la propiedad rate.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setRate(Double value) {
+            public void setRate(BigDecimal value) {
                 this.rate = value;
             }
 
             /**
              * Obtiene el valor de la propiedad category.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCategory() {
                 return category;
@@ -27267,11 +27267,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad category.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCategory(String value) {
                 this.category = value;
@@ -27279,11 +27279,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad baseType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getBaseType() {
                 return baseType;
@@ -27291,11 +27291,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad baseType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setBaseType(String value) {
                 this.baseType = value;
@@ -27303,83 +27303,83 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad appliedWTAmountSys.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getAppliedWTAmountSys() {
+            public BigDecimal getAppliedWTAmountSys() {
                 return appliedWTAmountSys;
             }
 
             /**
              * Define el valor de la propiedad appliedWTAmountSys.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setAppliedWTAmountSys(Double value) {
+            public void setAppliedWTAmountSys(BigDecimal value) {
                 this.appliedWTAmountSys = value;
             }
 
             /**
              * Obtiene el valor de la propiedad appliedWTAmountFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getAppliedWTAmountFC() {
+            public BigDecimal getAppliedWTAmountFC() {
                 return appliedWTAmountFC;
             }
 
             /**
              * Define el valor de la propiedad appliedWTAmountFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setAppliedWTAmountFC(Double value) {
+            public void setAppliedWTAmountFC(BigDecimal value) {
                 this.appliedWTAmountFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad appliedWTAmount.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getAppliedWTAmount() {
+            public BigDecimal getAppliedWTAmount() {
                 return appliedWTAmount;
             }
 
             /**
              * Define el valor de la propiedad appliedWTAmount.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setAppliedWTAmount(Double value) {
+            public void setAppliedWTAmount(BigDecimal value) {
                 this.appliedWTAmount = value;
             }
 
             /**
              * Obtiene el valor de la propiedad glAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getGLAccount() {
                 return glAccount;
@@ -27387,11 +27387,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad glAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setGLAccount(String value) {
                 this.glAccount = value;
@@ -27399,11 +27399,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad lineNum.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getLineNum() {
                 return lineNum;
@@ -27411,11 +27411,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad lineNum.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setLineNum(Long value) {
                 this.lineNum = value;
@@ -27423,11 +27423,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad baseDocEntry.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getBaseDocEntry() {
                 return baseDocEntry;
@@ -27435,11 +27435,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad baseDocEntry.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setBaseDocEntry(Long value) {
                 this.baseDocEntry = value;
@@ -27447,11 +27447,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad baseDocLine.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getBaseDocLine() {
                 return baseDocLine;
@@ -27459,11 +27459,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad baseDocLine.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setBaseDocLine(Long value) {
                 this.baseDocLine = value;
@@ -27471,11 +27471,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad baseDocType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getBaseDocType() {
                 return baseDocType;
@@ -27483,11 +27483,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad baseDocType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setBaseDocType(String value) {
                 this.baseDocType = value;
@@ -27495,11 +27495,11 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad wtAbsId.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getWTAbsId() {
                 return wtAbsId;
@@ -27507,11 +27507,11 @@ public class Document {
 
             /**
              * Define el valor de la propiedad wtAbsId.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setWTAbsId(String value) {
                 this.wtAbsId = value;
@@ -27519,313 +27519,313 @@ public class Document {
 
             /**
              * Obtiene el valor de la propiedad exemptRate.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getExemptRate() {
+            public BigDecimal getExemptRate() {
                 return exemptRate;
             }
 
             /**
              * Define el valor de la propiedad exemptRate.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setExemptRate(Double value) {
+            public void setExemptRate(BigDecimal value) {
                 this.exemptRate = value;
             }
 
             /**
              * Obtiene el valor de la propiedad baseNetAmountSys.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getBaseNetAmountSys() {
+            public BigDecimal getBaseNetAmountSys() {
                 return baseNetAmountSys;
             }
 
             /**
              * Define el valor de la propiedad baseNetAmountSys.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setBaseNetAmountSys(Double value) {
+            public void setBaseNetAmountSys(BigDecimal value) {
                 this.baseNetAmountSys = value;
             }
 
             /**
              * Obtiene el valor de la propiedad baseNetAmountFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getBaseNetAmountFC() {
+            public BigDecimal getBaseNetAmountFC() {
                 return baseNetAmountFC;
             }
 
             /**
              * Define el valor de la propiedad baseNetAmountFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setBaseNetAmountFC(Double value) {
+            public void setBaseNetAmountFC(BigDecimal value) {
                 this.baseNetAmountFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad baseNetAmount.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getBaseNetAmount() {
+            public BigDecimal getBaseNetAmount() {
                 return baseNetAmount;
             }
 
             /**
              * Define el valor de la propiedad baseNetAmount.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setBaseNetAmount(Double value) {
+            public void setBaseNetAmount(BigDecimal value) {
                 this.baseNetAmount = value;
             }
 
             /**
              * Obtiene el valor de la propiedad baseVatmountSys.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getBaseVatmountSys() {
+            public BigDecimal getBaseVatmountSys() {
                 return baseVatmountSys;
             }
 
             /**
              * Define el valor de la propiedad baseVatmountSys.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setBaseVatmountSys(Double value) {
+            public void setBaseVatmountSys(BigDecimal value) {
                 this.baseVatmountSys = value;
             }
 
             /**
              * Obtiene el valor de la propiedad baseVatmountFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getBaseVatmountFC() {
+            public BigDecimal getBaseVatmountFC() {
                 return baseVatmountFC;
             }
 
             /**
              * Define el valor de la propiedad baseVatmountFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setBaseVatmountFC(Double value) {
+            public void setBaseVatmountFC(BigDecimal value) {
                 this.baseVatmountFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad baseVatmount.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getBaseVatmount() {
+            public BigDecimal getBaseVatmount() {
                 return baseVatmount;
             }
 
             /**
              * Define el valor de la propiedad baseVatmount.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setBaseVatmount(Double value) {
+            public void setBaseVatmount(BigDecimal value) {
                 this.baseVatmount = value;
             }
 
             /**
              * Obtiene el valor de la propiedad accumBaseAmountSys.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getAccumBaseAmountSys() {
+            public BigDecimal getAccumBaseAmountSys() {
                 return accumBaseAmountSys;
             }
 
             /**
              * Define el valor de la propiedad accumBaseAmountSys.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setAccumBaseAmountSys(Double value) {
+            public void setAccumBaseAmountSys(BigDecimal value) {
                 this.accumBaseAmountSys = value;
             }
 
             /**
              * Obtiene el valor de la propiedad accumBaseAmountFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getAccumBaseAmountFC() {
+            public BigDecimal getAccumBaseAmountFC() {
                 return accumBaseAmountFC;
             }
 
             /**
              * Define el valor de la propiedad accumBaseAmountFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setAccumBaseAmountFC(Double value) {
+            public void setAccumBaseAmountFC(BigDecimal value) {
                 this.accumBaseAmountFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad accumBaseAmount.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getAccumBaseAmount() {
+            public BigDecimal getAccumBaseAmount() {
                 return accumBaseAmount;
             }
 
             /**
              * Define el valor de la propiedad accumBaseAmount.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setAccumBaseAmount(Double value) {
+            public void setAccumBaseAmount(BigDecimal value) {
                 this.accumBaseAmount = value;
             }
 
             /**
              * Obtiene el valor de la propiedad accumWTaxAmountSys.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getAccumWTaxAmountSys() {
+            public BigDecimal getAccumWTaxAmountSys() {
                 return accumWTaxAmountSys;
             }
 
             /**
              * Define el valor de la propiedad accumWTaxAmountSys.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setAccumWTaxAmountSys(Double value) {
+            public void setAccumWTaxAmountSys(BigDecimal value) {
                 this.accumWTaxAmountSys = value;
             }
 
             /**
              * Obtiene el valor de la propiedad accumWTaxAmountFC.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getAccumWTaxAmountFC() {
+            public BigDecimal getAccumWTaxAmountFC() {
                 return accumWTaxAmountFC;
             }
 
             /**
              * Define el valor de la propiedad accumWTaxAmountFC.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setAccumWTaxAmountFC(Double value) {
+            public void setAccumWTaxAmountFC(BigDecimal value) {
                 this.accumWTaxAmountFC = value;
             }
 
             /**
              * Obtiene el valor de la propiedad accumWTaxAmount.
-             * 
+             *
              * @return
              *     possible object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public Double getAccumWTaxAmount() {
+            public BigDecimal getAccumWTaxAmount() {
                 return accumWTaxAmount;
             }
 
             /**
              * Define el valor de la propiedad accumWTaxAmount.
-             * 
+             *
              * @param value
              *     allowed object is
-             *     {@link Double }
-             *     
+             *     {@link BigDecimal }
+             *
              */
-            public void setAccumWTaxAmount(Double value) {
+            public void setAccumWTaxAmount(BigDecimal value) {
                 this.accumWTaxAmount = value;
             }
 

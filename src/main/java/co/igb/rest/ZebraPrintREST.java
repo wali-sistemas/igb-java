@@ -3,6 +3,7 @@ package co.igb.rest;
 import co.igb.dto.ResponseDTO;
 import co.igb.dto.ZebraPrintDTO;
 import co.igb.persistence.facade.PackingListRecordFacade;
+import co.igb.persistence.facade.PackingOrderFacade;
 import co.igb.persistence.facade.PrinterFacade;
 import co.igb.persistence.facade.SalesOrderFacade;
 import co.igb.zebra.ZPLPrinter;
@@ -42,6 +43,8 @@ public class ZebraPrintREST {
     @EJB
     private PackingListRecordFacade plFacade;
     @EJB
+    private PackingOrderFacade poFacade;
+    @EJB
     private SalesOrderFacade soFacade;
     @EJB
     private PrinterFacade prFacade;
@@ -62,17 +65,17 @@ public class ZebraPrintREST {
             return Response.ok(new ResponseDTO(-1, "No se encontró la impresora [" + printerName + "] en el servidor.")).build();
         }
 
-        String orderNumbers = plFacade.listOrderNumbers(idPackingList, companyName, pruebas);
-        if (orderNumbers == null || orderNumbers.trim().isEmpty()) {
+        Integer orderNumbers = poFacade.OrderNumber(idPackingList, companyName, pruebas);
+        if (orderNumbers == null /*|| orderNumbers.trim().isEmpty()*/) {
             return Response.ok(new ResponseDTO(-1, "Ocurrió un error al consultar los datos para imprimir la etiqueta. (Order Numbers)")).build();
         }
 
-        String numAtCards = soFacade.listNumAtCards(orderNumbers, companyName, pruebas);
+        String numAtCards = soFacade.listNumAtCards(orderNumbers.toString(), companyName, pruebas);
         if (numAtCards == null || numAtCards.trim().isEmpty()) {
             return Response.ok(new ResponseDTO(-1, "Ocurrió un error al consultar los datos para imprimir la etiqueta. (NumAtCard)")).build();
         }
 
-        Object[] orderData = soFacade.retrieveStickerInfo(orderNumbers, companyName, pruebas);
+        Object[] orderData = soFacade.retrieveStickerInfo(orderNumbers.toString(), companyName, pruebas);
         if (orderData == null || orderData.length == 0) {
             return Response.ok(new ResponseDTO(-1, "Ocurrió un error al consultar los datos para imprimir la etiqueta. (Order Data)")).build();
         }
@@ -84,7 +87,7 @@ public class ZebraPrintREST {
             label.setBoxNumber(i);
             label.setPackageTo((String) orderData[0]);
             label.setAddress((String) orderData[1]);
-            label.setSalesOrderNumbers(orderNumbers);
+            label.setSalesOrderNumbers(orderNumbers.toString());
             label.setCarrier((String) orderData[2]);
             label.setTotalBoxes(boxes);
             label.setNumAtCards(numAtCards);
