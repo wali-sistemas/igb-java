@@ -99,7 +99,7 @@ public class SalesOrderFacade {
         sb.append("isnull(cast(enc.u_transp as varchar(4)),'') as transp from ordr enc ");
         sb.append("inner join rdr1 det on det.docentry = enc.docentry and det.whscode = '");
         sb.append(warehouseCode);
-        sb.append("' where enc.DocStatus = 'O' ");
+        sb.append("' where enc.DocStatus = 'O' and enc.U_SEPARADOR IN ('APROBADO','PREPAGO','SEDE BOGOTA') ");
         if (!showAll) {
             sb.append("and enc.confirmed = 'Y' ");
         }
