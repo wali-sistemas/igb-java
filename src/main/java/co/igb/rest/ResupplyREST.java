@@ -108,20 +108,22 @@ public class ResupplyREST implements Serializable {
         location.setCantMaxima(limit.getCantMaxima());
 
         if (limit.getCode() != null && !limit.getCode().isEmpty()) {
-            try {
-                locationLimitFacade.editLimit(companyName, pruebas, location);
-            } catch (Exception e) {
-                return Response.ok(new ResponseDTO(-1, e.getMessage())).build();
+            if (locationLimitFacade.editLimit(companyName, pruebas, location)) {
+                return Response.ok(new ResponseDTO(0, location)).build();
+            } else {
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error al actualizar el límite de ubicación.")).build();
             }
         } else {
-            try {
-                locationLimitFacade.createLimit(companyName, pruebas, location);
-            } catch (Exception e) {
-                return Response.ok(new ResponseDTO(-1, e.getMessage())).build();
+            //TODO: consultar si ya esta registrada la ubicación fija. Solo puede existir una ubicacion fija para un item.
+            if ((locationLimitFacade.findLocationFixed(limit.getItem(), companyName, pruebas)) != null) {
+                return Response.ok(new ResponseDTO(-1, "Ya existe una ubicación fija para este ítem.")).build();
+            }
+            if (locationLimitFacade.createLimit(companyName, pruebas, location)) {
+                return Response.ok(new ResponseDTO(0, location)).build();
+            } else {
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error, el límite de ubicación ya existe.")).build();
             }
         }
-
-        return Response.ok(new ResponseDTO(0, location)).build();
     }
 
     @DELETE

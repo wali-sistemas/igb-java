@@ -4,6 +4,7 @@ import co.igb.dto.BinLocationDTO;
 import co.igb.dto.ResponseDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.facade.BinLocationFacade;
+import co.igb.persistence.facade.LocationLimitFacade;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -34,6 +35,8 @@ public class BinLocationREST implements Serializable {
 
     @EJB
     private BinLocationFacade blFacade;
+    @EJB
+    private LocationLimitFacade locationLimitFacade;
     @Inject
     private IGBApplicationBean applicationBean;
 
@@ -84,5 +87,20 @@ public class BinLocationREST implements Serializable {
         CONSOLE.log(Level.INFO, "Obtuvo el binAbs: {0}", binAbs);
 
         return Response.ok(new ResponseDTO(0, binAbs)).build();
+    }
+
+    @GET
+    @Path("locationFixed/{itemcode}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response getLocationFixed(@PathParam("itemcode") String itemCode,
+                                     @HeaderParam("X-Company-Name") String companyName,
+                                     @HeaderParam("X-Warehouse-Code") String warehouseCode,
+                                     @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Consultando la ubicacion fija para el item [" + itemCode + "]");
+        if (itemCode == null || itemCode.isEmpty()) {
+            return Response.ok(new ResponseDTO(-1, "No se encontraron datos para validar.")).build();
+        }
+        return Response.ok(new ResponseDTO(0, locationLimitFacade.findLocationFixed(itemCode, companyName, pruebas))).build();
     }
 }

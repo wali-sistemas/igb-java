@@ -1,5 +1,6 @@
 package co.igb.rest;
 
+import co.igb.dto.RePrintDTO;
 import co.igb.dto.ResponseDTO;
 import co.igb.dto.ZebraPrintDTO;
 import co.igb.persistence.facade.PackingListRecordFacade;
@@ -166,5 +167,58 @@ public class ZebraPrintREST {
         } catch (Exception e) {
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error al consultar las impresoras habilitadas para web. " + e.getMessage())).build();
         }
+    }
+
+    @POST
+    @Path("Order/re-print")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response reprintOrder(RePrintDTO dto,
+                                 @HeaderParam("X-Company-Name") String companyName,
+                                 @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Re-Imprimiendo etiquetas para la orden #{0}", dto.getOrderNumber());
+
+        PrintService printService = getPrintService(dto.getPrinterName());
+        if (printService == null) {
+            return Response.ok(new ResponseDTO(-1, "No se encontró la impresora [" + dto.getPrinterName() + "] en el servidor.")).build();
+        }
+
+        if (dto.getOrderNumber() == null) {
+            return Response.ok(new ResponseDTO(-1, "Ocurrió un error al consultar los datos para imprimir la etiqueta. (Order Numbers)")).build();
+        }
+
+        String numAtCards = soFacade.listNumAtCards(dto.getOrderNumber().toString(), companyName, pruebas);
+        if (numAtCards == null || numAtCards.trim().isEmpty()) {
+            return Response.ok(new ResponseDTO(-1, "Ocurrió un error al consultar los datos para imprimir la etiqueta. (NumAtCard)")).build();
+        }
+
+        Object[] orderData = soFacade.retrieveStickerInfo(dto.getOrderNumber().toString(), companyName, pruebas);
+        if (orderData == null || orderData.length == 0) {
+            return Response.ok(new ResponseDTO(-1, "Ocurrió un error al consultar los datos para imprimir la etiqueta. (Order Data)")).build();
+        }
+
+        boolean allSucceeded = true;
+        for (int i = 1; i <= dto.getBoxNumber(); i++) {
+            ZebraPrintDTO label = new ZebraPrintDTO();
+            label.setBoxNumber(i);
+            label.setPackageTo((String) orderData[0]);
+            label.setAddress((String) orderData[1]);
+            label.setSalesOrderNumbers(dto.getOrderNumber().toString());
+            label.setCarrier((String) orderData[2]);
+            label.setTotalBoxes(dto.getBoxNumber());
+            label.setNumAtCards(numAtCards);
+            label.setPrinterName(dto.getPrinterName());
+
+            DocPrintJob job = printService.createPrintJob();
+            Doc doc = new SimpleDoc(ZPLPrinter.getPrintData(label, companyName), DocFlavor.BYTE_ARRAY.AUTOSENSE, null);
+            try {
+                job.print(doc, null);
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al Re-imprimir las etiquetas para la orden " + dto.getOrderNumber(), e);
+                allSucceeded = false;
+            }
+        }
+        return Response.ok(new ResponseDTO(0, allSucceeded)).build();
     }
 }
