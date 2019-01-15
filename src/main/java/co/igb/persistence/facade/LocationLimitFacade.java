@@ -8,10 +8,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,7 +48,7 @@ public class LocationLimitFacade {
         return null;
     }
 
-    public void editLimit(String schema, boolean testing, LocationLimit limit) {
+    public boolean editLimit(String schema, boolean testing, LocationLimit limit) {
         EntityManager em = persistenceConf.chooseSchema(schema, testing, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaUpdate cu = cb.createCriteriaUpdate(LocationLimit.class);
@@ -63,12 +60,14 @@ public class LocationLimitFacade {
 
         try {
             em.createQuery(cu).executeUpdate();
+            return true;
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar los limites de ubicacion. ", e);
+            return false;
         }
     }
 
-    public void createLimit(String schema, boolean testing, LocationLimit limit) {
+    public boolean createLimit(String schema, boolean testing, LocationLimit limit) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("INSERT INTO [dbo].[@LIMITES_UBICACION] ");
@@ -83,8 +82,10 @@ public class LocationLimitFacade {
 
         try {
             persistenceConf.chooseSchema(schema, testing, DB_TYPE).createNativeQuery(sb.toString()).executeUpdate();
+            return true;
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el nuevo limite de ubicacion. ", e);
+            return false;
         }
     }
 
@@ -100,6 +101,22 @@ public class LocationLimitFacade {
             em.createQuery(cd).executeUpdate();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al eliminar el limite de ubicacion. ", e);
+        }
+    }
+
+    public String findLocationFixed(String itemCode, String schema, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(schema, testing, DB_TYPE);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<String> cq = cb.createQuery(String.class);
+        Root<LocationLimit> root = cq.from(LocationLimit.class);
+        cq.select(root.get(LocationLimit_.ubicacion));
+        cq.where(cb.equal(root.get(LocationLimit_.item), itemCode));
+
+        try {
+            return em.createQuery(cq).getSingleResult();
+        } catch (Exception e){
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la ubicacion fija.", e);
+            return null;
         }
     }
 }
