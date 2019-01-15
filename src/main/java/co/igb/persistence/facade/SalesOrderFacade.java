@@ -8,6 +8,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.NoResultException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -84,22 +85,29 @@ public class SalesOrderFacade {
     }
 
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public List<SalesOrderDTO> findOpenOrders(boolean showAll, String schemaName, boolean testing, String warehouseCode) {
+    public List<SalesOrderDTO> findOpenOrders(boolean showAll, boolean filterGroup, String schemaName, boolean testing, String warehouseCode) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("select distinct cast(enc.docnum as varchar(10)) docnum, ");
-        sb.append("cast(enc.docdate as date) docdate, cast(enc.cardcode as varchar(20)) cardcode, ");
-        sb.append("cast(enc.cardname as varchar(100)) cardname, cast(enc.confirmed as varchar(1)) confirmed, ");
-        sb.append("(select count(1) from rdr1 det where det.docentry = enc.docentry and det.linestatus = 'O') items, ");
-        sb.append("cast(comments as varchar(254)) comments, cast(enc.address2 as varchar(200)) address, ");
-        sb.append("isnull(cast(enc.u_transp as varchar(4)),'') transp from ordr enc ");
+        sb.append("select j.docnum, j.docdate, j.cardcode, j.cardname, j.confirmed, j.items, j.comments, j.address, j.transp ");
+        sb.append("from (select f.*, COUNT(f.grupo) OVER (PARTITION BY f.cardcode) as contGrupo from ( ");
+        sb.append("select t.*, ROW_NUMBER() OVER (PARTITION BY t.cardcode order by t.cardcode) as grupo from ( ");
+        sb.append("select distinct cast(enc.docnum as varchar(10)) as docnum, ");
+        sb.append("cast(enc.docdate as date) as docdate, cast(enc.cardcode as varchar(20)) as cardcode, ");
+        sb.append("cast(enc.cardname as varchar(100)) as cardname, cast(enc.confirmed as varchar(1)) as confirmed, ");
+        sb.append("(select count(1) from rdr1 det where det.docentry = enc.docentry and det.linestatus = 'O') as items, ");
+        sb.append("cast(comments as varchar(254)) as comments, cast(enc.address2 as varchar(200)) as address, ");
+        sb.append("isnull(cast(enc.u_transp as varchar(4)),'') as transp from ordr enc ");
         sb.append("inner join rdr1 det on det.docentry = enc.docentry and det.whscode = '");
         sb.append(warehouseCode);
-        sb.append("' where enc.DocStatus = 'O' ");
+        sb.append("' where enc.DocStatus = 'O' and enc.U_SEPARADOR IN ('APROBADO','PREPAGO','SEDE BOGOTA') ");
         if (!showAll) {
             sb.append("and enc.confirmed = 'Y' ");
         }
-        sb.append("order by docdate, docnum ");
+        sb.append(") as t ) as f ) as j ");
+        if(filterGroup){
+            sb.append("where j.contGrupo > 1 ");
+        }
+        sb.append("order by j.docdate, j.docnum");
 
         List<SalesOrderDTO> orders = new ArrayList<>();
         try {

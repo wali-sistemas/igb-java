@@ -58,21 +58,23 @@ public class SalesOrdersREST implements Serializable {
     private IGBApplicationBean appBean;
 
     @GET
-    @Path("list/orders")
+    @Path("list/orders/{showAll}/{filterGroup}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response listOpenOrders(@QueryParam("showAll") Boolean showAll,
+    public Response listOpenOrders(@PathParam("showAll") Boolean showAll,
+                                   @PathParam("filterGroup") Boolean filterGroup,
                                    @HeaderParam("X-Company-Name") String companyName,
                                    @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                    @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Listando ordenes de compra abiertas. mostrar no autorizadas? {0}", showAll);
         CONSOLE.log(Level.INFO, "en pruebas? {0}", pruebas);
         try {
-            List<SalesOrderDTO> orders = soFacade.findOpenOrders(showAll, companyName, pruebas, warehouseCode);
+            List<SalesOrderDTO> orders = soFacade.findOpenOrders(showAll, filterGroup,companyName, pruebas, warehouseCode);
             List<AssignedOrder> assignations = aoFacade.listOpenAssignations(companyName, pruebas);
             List<AssignedOrder> closedAssignations = aoFacade.listClosedAssignations(companyName, pruebas);
             CONSOLE.log(Level.INFO, "{0} ordenes abiertas encontradas...", orders.size());
-            for (AssignedOrder assignation : closedAssignations) {
+            //TODO: Se comenta código hasta no generra la vista de paginado
+            /*for (AssignedOrder assignation : closedAssignations) {
                 int orderIndex = -1;
                 for (int i = 0; i < orders.size(); i++) {
                     SalesOrderDTO order = orders.get(i);
@@ -84,7 +86,7 @@ public class SalesOrdersREST implements Serializable {
                 if (orderIndex >= 0) {
                     orders.remove(orderIndex);
                 }
-            }
+            }*/
             CONSOLE.log(Level.INFO, "{0} ordenes no han sido procesadas", orders.size());
             for (AssignedOrder assignation : assignations) {
                 for (SalesOrderDTO orderDto : orders) {

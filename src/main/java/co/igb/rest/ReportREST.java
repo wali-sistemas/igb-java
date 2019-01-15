@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- *
  * @author YEIJARA
  */
 @Stateless
@@ -60,7 +59,7 @@ public class ReportREST implements Serializable {
     public Response obtainReportsOrders(@HeaderParam("X-Company-Name") String companyName,
                                         @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                         @HeaderParam("X-Pruebas") boolean pruebas) {
-        List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, companyName, pruebas, warehouseCode);
+        List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, false, companyName, pruebas, warehouseCode);
         List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations(companyName, pruebas);
 
         Integer[] contador = new Integer[]{0, 0};
@@ -219,7 +218,7 @@ public class ReportREST implements Serializable {
     public Response obtainReportsOrdersByClient(@HeaderParam("X-Company-Name") String companyName,
                                                 @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                                 @HeaderParam("X-Pruebas") boolean pruebas) {
-        List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, companyName, pruebas, warehouseCode);
+        List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, false, companyName, pruebas, warehouseCode);
         List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations(companyName, pruebas);
 
         List<Object[]> datos = new ArrayList<>();
