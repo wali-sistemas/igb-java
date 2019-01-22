@@ -67,7 +67,7 @@ public class ZebraPrintREST {
         }
 
         Integer orderNumbers = poFacade.OrderNumber(idPackingList, companyName, pruebas);
-        if (orderNumbers == null /*|| orderNumbers.trim().isEmpty()*/) {
+        if (orderNumbers == null) {
             return Response.ok(new ResponseDTO(-1, "Ocurrió un error al consultar los datos para imprimir la etiqueta. (Order Numbers)")).build();
         }
 
