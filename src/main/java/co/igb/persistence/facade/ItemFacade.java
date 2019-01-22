@@ -61,9 +61,9 @@ public class ItemFacade {
         sb.append(itemCode);
         sb.append("' OR dub.BinCode = '");
         sb.append(binCode);
-        sb.append("') AND sal.WhsCode = '");
-        sb.append(whsCode);
-        sb.append("' ORDER BY dub.BinCode");
+        //sb.append("') AND sal.WhsCode = '");
+        //sb.append(whsCode);
+        sb.append("') ORDER BY dub.BinCode");
         try {
             return (List<Object[]>) persistenceConf.chooseSchema(companyName, pruebas, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
