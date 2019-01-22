@@ -242,7 +242,7 @@ public class StockTransferREST implements Serializable {
                 pickingRecordFacade.create(pickingRecord, companyName, pruebas);
                 return Response.ok(new ResponseDTO(0, pickingRecord)).build();
             } catch (Exception e) {
-                CONSOLE.log(Level.SEVERE, "There was an error recording the operation to the MySQL database. ", e);
+                CONSOLE.log(Level.SEVERE, "Se produjo un error al grabar la operación en la base de datos MySQL. ", e);
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ResponseDTO(-1, "Ocurrió un error al procesar la solicitud. Valida si el traslado se realizó correctamente en SAP y reinicia sesión en Wali")).build();
             }
         } else {
