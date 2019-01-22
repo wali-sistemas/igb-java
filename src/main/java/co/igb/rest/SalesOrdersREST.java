@@ -73,8 +73,8 @@ public class SalesOrdersREST implements Serializable {
             List<AssignedOrder> assignations = aoFacade.listOpenAssignations(companyName, pruebas);
             List<AssignedOrder> closedAssignations = aoFacade.listClosedAssignations(companyName, pruebas);
             CONSOLE.log(Level.INFO, "{0} ordenes abiertas encontradas...", orders.size());
-            //TODO: Se comenta código hasta no generra la vista de paginado
-            /*for (AssignedOrder assignation : closedAssignations) {
+
+            for (AssignedOrder assignation : closedAssignations) {
                 int orderIndex = -1;
                 for (int i = 0; i < orders.size(); i++) {
                     SalesOrderDTO order = orders.get(i);
@@ -86,7 +86,7 @@ public class SalesOrdersREST implements Serializable {
                 if (orderIndex >= 0) {
                     orders.remove(orderIndex);
                 }
-            }*/
+            }
             CONSOLE.log(Level.INFO, "{0} ordenes no han sido procesadas", orders.size());
             for (AssignedOrder assignation : assignations) {
                 for (SalesOrderDTO orderDto : orders) {
