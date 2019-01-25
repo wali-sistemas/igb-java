@@ -340,7 +340,7 @@ public class PackingREST implements Serializable {
                 try {
                     Long baseLineNum = salesOrderFacade.getLineNum(orderNumber, itemCode, companyName, pruebas);
                     if (baseLineNum < 0) {
-                        return Response.ok(new ResponseDTO(-1, "Ocurrio un error al consultar el numero de linea de la orden (baseLine) para el ítem [" + itemCode +"]. Es posible que la orden de compra ya se haya cerrado")).build();
+                        return Response.ok(new ResponseDTO(-1, "Ocurrio un error al consultar el numero de linea de la orden (baseLine) para el ítem [" + itemCode + "]. Es posible que la orden de compra ya se haya cerrado")).build();
                     }
                     line.setBaseLine(baseLineNum);
                 } catch (Exception e) {
@@ -494,8 +494,11 @@ public class PackingREST implements Serializable {
                                       @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Cerrando packing orden {0}", username);
         //Cierra los registros de packing abiertos
-        plFacade.closePackingOrder(username, companyName, pruebas);
+        plFacade.closePackingOrder(idPackingOrder, companyName, pruebas);
         boolean orderComplete = poFacade.isPackingOrderComplete(idPackingOrder, companyName, pruebas);
+        if (!orderComplete) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar si la orden de packing se encuentra completa.");
+        }
         //Se cierra la orden de packing
         poFacade.closePackingOrder(idPackingOrder, companyName, pruebas);
 
@@ -747,12 +750,12 @@ public class PackingREST implements Serializable {
                                        @HeaderParam("X-Pruebas") boolean pruebas,
                                        @HeaderParam("X-Employee") String username) {
         try {
-            List<Integer> items = poFacade.listIdOrderItems(idPackingOrder.longValue(), companyName, false);
+            List<Integer> items = poFacade.listIdOrderItems(idPackingOrder.longValue(), companyName, pruebas);
             for (Integer id : items) {
                 //reiniciar el packedQty a 0
-                poFacade.updatePackedQty(id.longValue(), companyName, false);
+                poFacade.updatePackedQty(id, companyName, pruebas);
                 //Cierra los registros de packing abiertos
-                plFacade.closePackingOrder(username, companyName, false);
+                plFacade.closePackingOrder(idPackingOrder, companyName, pruebas);
             }
 
             return Response.ok(new ResponseDTO(0, "Ok")).build();

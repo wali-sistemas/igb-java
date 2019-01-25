@@ -1,7 +1,6 @@
 package co.igb.dto;
 
 /**
- *
  * @author dbotero
  */
 public class ZebraPrintDTO {
@@ -14,6 +13,9 @@ public class ZebraPrintDTO {
     private String address;
     private String salesOrderNumbers;
     private String numAtCards;
+    private String employee;
+    private String city;
+    private String state;
 
     public void setAddress(String address) {
         this.address = address;
@@ -117,6 +119,30 @@ public class ZebraPrintDTO {
         return packageTo.substring(43, 86);
     }
 
+    public String getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(String employee) {
+        this.employee = employee;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
     public void setPackageTo(String packageTo) {
         this.packageTo = packageTo;
     }
@@ -151,8 +177,13 @@ public class ZebraPrintDTO {
         sb.append(this.getAddressLine3());
         sb.append(", addressLine4: ");
         sb.append(this.getAddressLine4());
+        sb.append(", employee: ");
+        sb.append(this.getEmployee());
+        sb.append(", city: ");
+        sb.append(this.getCity());
+        sb.append(", state: ");
+        sb.append(this.getState());
         sb.append("}");
         return sb.toString();
     }
-
 }
