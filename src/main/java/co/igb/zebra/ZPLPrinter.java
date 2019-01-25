@@ -37,6 +37,8 @@ public class ZPLPrinter {
             context.put("address2", dto.getAddressLine2());
             context.put("address3", dto.getAddressLine3());
             context.put("address4", dto.getAddressLine4());
+            context.put("employee", dto.getEmployee());
+            context.put("city", dto.getCity() + '-' + dto.getState());
             StringWriter writer = new StringWriter();
             Velocity.evaluate(context, writer, "TemplateName", templateText);
             return writer.toString().getBytes();
@@ -45,5 +47,4 @@ public class ZPLPrinter {
             return null;
         }
     }
-
 }
