@@ -32,7 +32,7 @@ public class WarehouseFacade {
 
     public List<WarehouseDTO> listBinEnabledWarehouses(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(whscode as varchar(5)) as code, cast(whsname as varchar(100)) as name, cast(DftBinAbs as int) as dftBinAbs from owhs where binactivat = 'Y'");
+        sb.append("select cast(whscode as varchar(15)) as code, cast(whsname as varchar(100)) as name, cast(DftBinAbs as int) as dftBinAbs from owhs where binactivat = 'Y'");
         try {
             List<Object[]> results = persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
             List<WarehouseDTO> warehouses = new ArrayList<>();

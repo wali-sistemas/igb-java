@@ -88,7 +88,7 @@ public class PackingOrderFacade {
     public List<Object[]> listCustomersWithOpenRecords(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select distinct o.customer_id, o.customer_name, ");
-        sb.append("(select GROUP_CONCAT(DISTINCT od.order_number) from packing_order od where od.customer_id = o.customer_id and o.company_name = '");
+        sb.append("(select GROUP_CONCAT(DISTINCT od.order_number) from packing_order od where od.customer_id = o.customer_id and od.company_name = '");
         sb.append(companyName);
         sb.append("' and status = 'open') AS order_numbers ");
         sb.append("from packing_order o where o.company_name = '");
@@ -324,7 +324,7 @@ public class PackingOrderFacade {
         }
     }
 
-    public void updatePackedQty(Long idPackingOrderItem, String companyName, boolean testing) {
+    public void updatePackedQty(Integer idPackingOrderItem, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("update packing_order_item_bin set packed_qty = 0 where idpacking_order_item = ");
         sb.append(idPackingOrderItem);
@@ -332,20 +332,6 @@ public class PackingOrderFacade {
             persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).executeUpdate();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el packedQty.", e);
-        }
-    }
-
-    public void closePackingOrder(String username, String companyName, boolean testing) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("update packing_list_record set status = 'closed' where employee = '");
-        sb.append(username);
-        sb.append("' and status = 'open' and company_name = '");
-        sb.append(companyName);
-        sb.append("' and idpacking_list_record <> 0");
-        try {
-            persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).executeUpdate();
-        } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la orden de packing. ", e);
         }
     }
 }
