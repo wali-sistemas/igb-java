@@ -58,7 +58,8 @@ public class ZebraPrintREST {
     public Response printPackingList(Integer idPackingList,
                                      @PathParam("printer") String printerName,
                                      @HeaderParam("X-Company-Name") String companyName,
-                                     @HeaderParam("X-Pruebas") boolean pruebas) {
+                                     @HeaderParam("X-Pruebas") boolean pruebas,
+                                     @HeaderParam("X-Employee") String username) {
         CONSOLE.log(Level.INFO, "Imprimiendo etiquetas para packingList #{0}", idPackingList);
 
         PrintService printService = getPrintService(printerName);
@@ -93,6 +94,9 @@ public class ZebraPrintREST {
             label.setTotalBoxes(boxes);
             label.setNumAtCards(numAtCards);
             label.setPrinterName(printerName);
+            label.setEmployee(username);
+            label.setCity((String) orderData[3]);
+            label.setState((String) orderData[4]);
 
             DocPrintJob job = printService.createPrintJob();
             Doc doc = new SimpleDoc(ZPLPrinter.getPrintData(label, companyName), DocFlavor.BYTE_ARRAY.AUTOSENSE, null);
@@ -176,7 +180,8 @@ public class ZebraPrintREST {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response reprintOrder(RePrintDTO dto,
                                  @HeaderParam("X-Company-Name") String companyName,
-                                 @HeaderParam("X-Pruebas") boolean pruebas) {
+                                 @HeaderParam("X-Pruebas") boolean pruebas,
+                                 @HeaderParam("X-Employee") String username) {
         CONSOLE.log(Level.INFO, "Re-Imprimiendo etiquetas para la orden #{0}", dto.getOrderNumber());
 
         PrintService printService = getPrintService(dto.getPrinterName());
@@ -209,6 +214,9 @@ public class ZebraPrintREST {
             label.setTotalBoxes(dto.getBoxNumber());
             label.setNumAtCards(numAtCards);
             label.setPrinterName(dto.getPrinterName());
+            label.setEmployee(username);
+            label.setCity((String) orderData[3]);
+            label.setState((String) orderData[4]);
 
             DocPrintJob job = printService.createPrintJob();
             Doc doc = new SimpleDoc(ZPLPrinter.getPrintData(label, companyName), DocFlavor.BYTE_ARRAY.AUTOSENSE, null);

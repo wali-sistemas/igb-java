@@ -45,12 +45,14 @@ public class ItemFacade {
     public List<Object[]> getItemStock(String itemCode, String binCode, String whsCode, String companyName, boolean pruebas) {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT CAST(art.ItemCode AS varchar(20)) AS itemCode, CAST(art.ItemName AS varchar(200)) AS itemName, CAST(ubc.OnHandQty AS INT) AS Qty, ");
-        sb.append("       CAST(ubc.WhsCode AS varchar(10)) AS whsCode, CAST(dub.BinCode AS varchar(22)) AS BinCode, CAST(pre.Price AS numeric(18,2)) AS Price ");
+        sb.append("       CAST(ubc.WhsCode AS varchar(10)) AS whsCode, CAST(dub.BinCode AS varchar(22)) AS BinCode, CAST(pre.Price AS numeric(18,2)) AS Price, ");
+        sb.append("       CAST(alm.WhsName AS varchar(30)) AS whsName ");
         sb.append("FROM   OITM art ");
         sb.append("INNER  JOIN OITW sal ON sal.ItemCode = art.ItemCode ");
         sb.append("INNER  JOIN ITM1 pre ON pre.ItemCode = art.ItemCode ");
         sb.append("INNER  JOIN OIBQ ubc ON ubc.ItemCode = sal.ItemCode AND ubc.WhsCode = sal.WhsCode ");
         sb.append("INNER  JOIN OBIN dub ON dub.AbsEntry = ubc.BinAbs ");
+        sb.append("INNER  JOIN OWHS alm ON alm.WhsCode = sal.WhsCode ");
         sb.append("WHERE  sal.OnHand > 0 AND ubc.OnHandQty > 0 AND pre.PriceList = ");
         if(companyName.contains("VARROC")){
             sb.append("1 ");
@@ -61,9 +63,9 @@ public class ItemFacade {
         sb.append(itemCode);
         sb.append("' OR dub.BinCode = '");
         sb.append(binCode);
-        //sb.append("') AND sal.WhsCode = '");
-        //sb.append(whsCode);
-        sb.append("') ORDER BY dub.BinCode");
+        sb.append("') AND sal.WhsCode = '");
+        sb.append(whsCode);
+        sb.append("' ORDER BY dub.BinCode");
         try {
             return (List<Object[]>) persistenceConf.chooseSchema(companyName, pruebas, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
