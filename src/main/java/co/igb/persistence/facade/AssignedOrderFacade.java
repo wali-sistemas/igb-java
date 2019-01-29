@@ -8,11 +8,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -151,5 +147,24 @@ public class AssignedOrderFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al cambiar el estado de la asignacion de picking. ", e);
         }
         return false;
+    }
+
+    public boolean deleteAssignedOrder(Integer orderNumber, String companyName, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaDelete<AssignedOrder> cd = cb.createCriteriaDelete(AssignedOrder.class);
+        Root<AssignedOrder> root = cd.from(AssignedOrder.class);
+        cd.where(cb.equal(root.get(AssignedOrder_.orderNumber), orderNumber));
+        try {
+            int rows = em.createQuery(cd).executeUpdate();
+            if (rows == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            CONSOLE.log(Level.INFO, "Ocurrio un error al des-asignar la orden. ", e);
+            return false;
+        }
     }
 }
