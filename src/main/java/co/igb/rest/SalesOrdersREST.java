@@ -16,15 +16,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.Serializable;
@@ -69,7 +61,7 @@ public class SalesOrdersREST implements Serializable {
         CONSOLE.log(Level.INFO, "Listando ordenes de compra abiertas. mostrar no autorizadas? {0}", showAll);
         CONSOLE.log(Level.INFO, "en pruebas? {0}", pruebas);
         try {
-            List<SalesOrderDTO> orders = soFacade.findOpenOrders(showAll, filterGroup,companyName, pruebas, warehouseCode);
+            List<SalesOrderDTO> orders = soFacade.findOpenOrders(showAll, filterGroup, companyName, pruebas, warehouseCode);
             List<AssignedOrder> assignations = aoFacade.listOpenAssignations(companyName, pruebas);
             List<AssignedOrder> closedAssignations = aoFacade.listClosedAssignations(companyName, pruebas);
             CONSOLE.log(Level.INFO, "{0} ordenes abiertas encontradas...", orders.size());
@@ -207,5 +199,19 @@ public class SalesOrdersREST implements Serializable {
         CONSOLE.log(Level.INFO, "Habilitando asignacion de picking para orden: {0}", orderNumber);
         boolean success = aoFacade.enablePicking(orderNumber, companyName, pruebas);
         return Response.ok(new ResponseDTO(success ? 0 : -1, null)).build();
+    }
+
+    @DELETE
+    @Path("reset-assigned/{orderNumber}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Response deleteAssignedOrder(@PathParam("orderNumber") Integer orderNumber,
+                                        @HeaderParam("X-Company-Name") String companyName,
+                                        @HeaderParam("X-Pruebas") boolean pruebas) {
+        if (orderNumber == null) {
+            return Response.ok(new ResponseDTO(-1, "Sin datos para des-asignar la orden.")).build();
+        }
+        CONSOLE.log(Level.INFO, "Des-asignando orden [" + orderNumber + ']');
+        return Response.ok(new ResponseDTO(aoFacade.deleteAssignedOrder(orderNumber, companyName, pruebas) ? 0 : 1, null)).build();
     }
 }
