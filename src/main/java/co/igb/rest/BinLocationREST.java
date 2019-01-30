@@ -90,7 +90,7 @@ public class BinLocationREST implements Serializable {
     }
 
     @GET
-    @Path("locationFixed/{itemcode}")
+    @Path("location-fixed/{itemcode}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response getLocationFixed(@PathParam("itemcode") String itemCode,
@@ -101,6 +101,23 @@ public class BinLocationREST implements Serializable {
         if (itemCode == null || itemCode.isEmpty()) {
             return Response.ok(new ResponseDTO(-1, "No se encontraron datos para validar.")).build();
         }
-        return Response.ok(new ResponseDTO(0, locationLimitFacade.findLocationFixed(itemCode, companyName, pruebas))).build();
+        String res = locationLimitFacade.findLocationFixed(itemCode, companyName, pruebas);
+        return Response.ok(new ResponseDTO(res == null ? -1 : 0, res)).build();
+    }
+
+    @GET
+    @Path("attributes/{bincode}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response getLocationAttributes(@PathParam("bincode") String binCode,
+                                          @HeaderParam("X-Company-Name") String companyName,
+                                          @HeaderParam("X-Warehouse-Code") String warehouseCode,
+                                          @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Consultando los atributos de la ubicacion [" + binCode + "]");
+        if (binCode == null || binCode.isEmpty()) {
+            return Response.ok(new ResponseDTO(-1, "No se encontraron datos para consultar.")).build();
+        }
+        Object attr = blFacade.getLocationAttributes(binCode, warehouseCode, companyName, pruebas);
+        return Response.ok(new ResponseDTO(0, attr)).build();
     }
 }

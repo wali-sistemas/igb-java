@@ -288,9 +288,30 @@ public class BinLocationFacade {
         sb.append(warehouse);
         sb.append("' ");
         try {
-            return (Integer)persistenceConf.chooseSchema(companyName, pruebas, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (Integer) persistenceConf.chooseSchema(companyName, pruebas, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException e) {
             return 0;
+        }
+    }
+
+    public Object getLocationAttributes(String binCode, String warehouse, String companyName, boolean pruebas) {
+        EntityManager em = persistenceConf.chooseSchema(companyName, pruebas, DB_TYPE);
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT CAST(AbsEntry AS int) AS AbsEntry, CAST(BinCode AS varchar(20)) AS BinCode, ");
+        sb.append("       CAST(Attr1Abs AS int) AS Attr1Abs, CAST(Attr1Val AS varchar(20)) AS Attr1Val, ");
+        sb.append("       CAST(Attr2Abs AS int) AS Attr2Abs, CAST(Attr2Val AS varchar(20)) AS Attr2Val, ");
+        sb.append("       CAST(Attr3Abs AS int) AS Attr3Abs, CAST(Attr3Val AS varchar(20)) AS Attr3Val ");
+        sb.append("FROM   OBIN ");
+        sb.append("WHERE  BinCode = '");
+        sb.append(binCode);
+        sb.append("' AND WhsCode =");
+        sb.append(warehouse);
+
+        try {
+            return em.createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los atributos de la ubicacion. ", e);
+            return null;
         }
     }
 }
