@@ -270,8 +270,8 @@ public class SalesOrderFacade {
         sb.append("       cast(transp.name as varchar(50)) AS trans, cast(dir.CityS as varchar(100)) AS city, ISNULL(cast(dep.Name as varchar(100)),'') AS depart ");
         sb.append("FROM  ORDR o ");
         sb.append("INNER JOIN RDR12 dir ON o.DocEntry = dir.DocEntry ");
-        sb.append("INNER JOIN [@BPCO_DEP] dep ON dep.Code = dir.StateS ");
-        sb.append("LEFT JOIN [@transp] transp ON transp.code = o.u_transp ");
+        sb.append("LEFT JOIN [@BPCO_DEP] dep ON dep.Code = dir.StateS ");
+        sb.append("INNER JOIN [@transp] transp ON transp.code = o.u_transp ");
         sb.append("WHERE o.docnum IN (");
         sb.append(orderNumbers);
         sb.append(")");
