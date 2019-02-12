@@ -227,7 +227,7 @@ public class PickingREST implements Serializable {
                 SortedStockDTO sorted = new SortedStockDTO(row);
                 if (avoidBin(skipped, sorted.getItemCode(), (String) row[10], Constants.BIN_TYPE_PICKING)) {
                     //No agrega el registro de saldo a la lista si el item solo debe ser tomado de zona de almacenamiento
-                    CONSOLE.log(Level.INFO, "No se tiene el cuenta para picking el inventario en la ubicacion {0} para el item {1} porque la ubicacion NO es de almacenamiento",
+                    CONSOLE.log(Level.INFO, "No se tiene en cuenta para picking el inventario en la ubicacion {0} para el item {1} porque la ubicacion NO es de almacenamiento",
                             new Object[]{sorted.getBinCode(), sorted.getItemCode()});
                     continue;
                 }
@@ -236,7 +236,7 @@ public class PickingREST implements Serializable {
                 if (pendingItems.containsKey(sorted.getItemCode()) && pendingQuantity > 0) {
                     sorted.setPendingQuantity(pendingQuantity);
                     sortedStock.add(sorted);
-                    break;
+                    //break;
                 }
             }
         }
@@ -245,7 +245,8 @@ public class PickingREST implements Serializable {
         if (sortedStock.isEmpty()) {
             return Response.ok(new ResponseDTO(-1, warnings)).build();
         } else {
-            return Response.ok(new ResponseDTO(0, sortedStock.first())).build();
+            //return Response.ok(new ResponseDTO(0, sortedStock.first())).build();
+            return Response.ok(new ResponseDTO(0, sortedStock)).build();
         }
     }
 
