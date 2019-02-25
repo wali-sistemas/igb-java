@@ -193,7 +193,7 @@ public class StockTransferREST implements Serializable {
         //1. Login
         SessionPoolManagerClient SessionClient = new SessionPoolManagerClient(appBean.obtenerValorPropiedad("igb.manager.rest"));
         GenericRESTResponseDTO respREST = null;
-        String sessionId = null;
+        sessionId = null;
         String errorMessage = null;
         try {
             respREST = SessionClient.pollSession(companyName);
