@@ -25,7 +25,7 @@ public class SessionPoolManagerClient {
         webTarget = client.target(BASE_URI).path(path);
     }
 
-    public GenericRESTResponseDTO pollSession(String companyName) {
+    public GenericRESTResponseDTO getSession(String companyName) {
         return webTarget.path("session").path(companyName).request(MediaType.APPLICATION_JSON).get(GenericRESTResponseDTO.class);
     }
 

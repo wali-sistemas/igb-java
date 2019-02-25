@@ -196,7 +196,7 @@ public class StockTransferREST implements Serializable {
         sessionId = null;
         String errorMessage = null;
         try {
-            respREST = SessionClient.pollSession(companyName);
+            respREST = SessionClient.getSession(companyName);
             if (respREST.getEstado() == 0) {
                 sessionId = respREST.getContent().toString();
                 CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
