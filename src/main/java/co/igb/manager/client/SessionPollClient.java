@@ -1,7 +1,6 @@
 package co.igb.manager.client;
 
 import co.igb.dto.GenericRESTResponseDTO;
-import co.igb.dto.SessionDTO;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
