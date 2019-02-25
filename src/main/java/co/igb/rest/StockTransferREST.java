@@ -5,14 +5,11 @@ import co.igb.b1ws.client.stocktransfer.AddResponse;
 import co.igb.b1ws.client.stocktransfer.MsgHeader;
 import co.igb.b1ws.client.stocktransfer.StockTransfer;
 import co.igb.b1ws.client.stocktransfer.StockTransferService;
-import co.igb.dto.InventoryInconsistency;
-import co.igb.dto.ResponseDTO;
-import co.igb.dto.SingleItemTransferDTO;
-import co.igb.dto.StockTransferDTO;
-import co.igb.dto.StockTransferLineDTO;
+import co.igb.dto.*;
 import co.igb.ejb.EmailManager;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.ejb.SalesOrderEJB;
+import co.igb.manager.client.SessionPollClient;
 import co.igb.persistence.entity.Inventory;
 import co.igb.persistence.entity.InventoryDetail;
 import co.igb.persistence.entity.InventoryDifference;
@@ -63,6 +60,7 @@ public class StockTransferREST implements Serializable {
 
     private static final Logger CONSOLE = Logger.getLogger(StockTransferREST.class.getSimpleName());
 
+    private String sessionId;
     @EJB
     private BasicSAPFunctions sapFunctions;
     @EJB
@@ -88,7 +86,6 @@ public class StockTransferREST implements Serializable {
 
     public StockTransferREST() {
     }
-
 
 
     @POST
@@ -150,7 +147,7 @@ public class StockTransferREST implements Serializable {
                     expectedQuantity,
                     itemTransfer.getQuantity());
 
-            if(itemTransfer.getQuantity() == 0) {
+            if (itemTransfer.getQuantity() == 0) {
                 CONSOLE.log(Level.INFO, "Se reporto la inconsistencia de inventario, no se hace traslado ya que la cantidad encontrada fue cero");
                 return Response.ok(new ResponseDTO(0, "Inconsistencia de inventario reportada")).build();
             }
@@ -194,15 +191,24 @@ public class StockTransferREST implements Serializable {
         document.setStockTransferLines(documentLines);
 
         //1. Login
+        SessionPollClient SessionClient = new SessionPollClient(appBean.obtenerValorPropiedad("igb.manager.rest"));
+        GenericRESTResponseDTO respREST = null;
         String sessionId = null;
+        String errorMessage = null;
         try {
-            sessionId = sapFunctions.login(companyName);
-            CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+            respREST = SessionClient.pollSession(companyName);
+            if (respREST.getEstado() == 0) {
+                sessionId = respREST.getContent().toString();
+                CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error al iniciar sesion en el DI Server.")).build();
+            }
         } catch (Exception ignored) {
         }
         //2. Registrar documento
         Long docEntry = -1L;
-        String errorMessage = null;
+        errorMessage = null;
         if (sessionId != null) {
             try {
                 if (!itemTransfer.getTemporary()) {
@@ -216,7 +222,14 @@ public class StockTransferREST implements Serializable {
         }
         //3. Logout
         if (sessionId != null) {
-            sapFunctions.logout(sessionId);
+            //respREST = client.returnSession(sessionId, errorMessage != null ? true : false);
+            respREST = SessionClient.returnSession(sessionId);
+            if (respREST.getEstado() == 0) {
+                CONSOLE.log(Level.INFO, "Se cerro la sesion [{0}] de DI Server correctamente", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la sesion de DI Server.")).build();
+            }
         }
         //4. Validar y retornar
         if (docEntry > 0 || itemTransfer.getTemporary()) {
