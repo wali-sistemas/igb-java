@@ -11,16 +11,16 @@ import javax.ws.rs.core.MediaType;
 /**
  * @author jguisao
  */
-public class SessionPollClient {
+public class SessionPoolManagerClient {
     private WebTarget webTarget;
     private Client client;
 
-    public SessionPollClient(String BASE_URI) {
+    public SessionPoolManagerClient(String BASE_URI) {
         client = ClientBuilder.newClient();
         webTarget = client.target(BASE_URI).path("pool");
     }
 
-    public SessionPollClient(String BASE_URI, String path) {
+    public SessionPoolManagerClient(String BASE_URI, String path) {
         client = ClientBuilder.newClient();
         webTarget = client.target(BASE_URI).path(path);
     }

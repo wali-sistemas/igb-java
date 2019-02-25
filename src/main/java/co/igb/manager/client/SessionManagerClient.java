@@ -11,17 +11,17 @@ import javax.ws.rs.core.MediaType;
 /**
  * @author jguisao
  */
-public class SessionClient {
+public class SessionManagerClient {
 
     private WebTarget webTarget;
     private Client client;
 
-    public SessionClient(String BASE_URI) {
+    public SessionManagerClient(String BASE_URI) {
         client = ClientBuilder.newClient();
         webTarget = client.target(BASE_URI).path("session");
     }
 
-    public SessionClient(String BASE_URI, String path) {
+    public SessionManagerClient(String BASE_URI, String path) {
         client = ClientBuilder.newClient();
         webTarget = client.target(BASE_URI).path(path);
     }

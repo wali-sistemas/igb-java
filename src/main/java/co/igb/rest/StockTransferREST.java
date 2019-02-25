@@ -9,7 +9,7 @@ import co.igb.dto.*;
 import co.igb.ejb.EmailManager;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.ejb.SalesOrderEJB;
-import co.igb.manager.client.SessionPollClient;
+import co.igb.manager.client.SessionPoolManagerClient;
 import co.igb.persistence.entity.Inventory;
 import co.igb.persistence.entity.InventoryDetail;
 import co.igb.persistence.entity.InventoryDifference;
@@ -191,7 +191,7 @@ public class StockTransferREST implements Serializable {
         document.setStockTransferLines(documentLines);
 
         //1. Login
-        SessionPollClient SessionClient = new SessionPollClient(appBean.obtenerValorPropiedad("igb.manager.rest"));
+        SessionPoolManagerClient SessionClient = new SessionPoolManagerClient(appBean.obtenerValorPropiedad("igb.manager.rest"));
         GenericRESTResponseDTO respREST = null;
         String sessionId = null;
         String errorMessage = null;
