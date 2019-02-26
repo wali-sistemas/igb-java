@@ -150,6 +150,9 @@ public class StockTransferEJB {
         MsgHeader header = new MsgHeader();
         header.setServiceName("StockTransferService");
         header.setSessionID(sessionId);
+        
+        CONSOLE.log(Level.INFO, "Creando traslado en SAP con sessionId [{0}]", sessionId);
+        
         AddResponse response = service.getStockTransferServiceSoap12().add(add, header);
         return response.getStockTransferParams().getDocEntry();
     }
