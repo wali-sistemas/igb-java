@@ -61,7 +61,6 @@ public class SalesOrderEJB {
                 CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
             } else {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
-                return false;
             }
         } catch (Exception ignored) {
         }
@@ -94,7 +93,6 @@ public class SalesOrderEJB {
                 CONSOLE.log(Level.INFO, "Se cerro la sesion [{0}] de DI Server correctamente", sessionId);
             } else {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
-                return false;
             }
         }
         return success;
@@ -110,7 +108,6 @@ public class SalesOrderEJB {
                 CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
             } else {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
-                return false;
             }
         } catch (Exception ignored) {
         }
@@ -143,7 +140,6 @@ public class SalesOrderEJB {
                 CONSOLE.log(Level.INFO, "Se cerro la sesion [{0}] de DI Server correctamente", sessionId);
             } else {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
-                return false;
             }
         }
         return success;
