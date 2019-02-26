@@ -169,14 +169,10 @@ public class ReceptionREST implements Serializable {
         document.setDocumentLines(docLines);
 
         //1. Login
-        SessionPoolManagerClient SessionClient = new SessionPoolManagerClient(appBean.obtenerValorPropiedad("igb.manager.rest"));
-        GenericRESTResponseDTO respREST = null;
         String sessionId = null;
-        String errorMessage = null;
         try {
-            respREST = SessionClient.getSession(companyName);
-            if (respREST.getEstado() == 0) {
-                sessionId = respREST.getContent().toString();
+            sessionId = sapFunctions.getSessionId(companyName);
+            if (sessionId != null) {
                 CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
             } else {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
@@ -186,7 +182,7 @@ public class ReceptionREST implements Serializable {
         }
         //2. Registrar documento
         Long docEntry = -1L;
-        errorMessage = null;
+        String errorMessage = null;
         if (sessionId != null) {
             try {
                 docEntry = createPurchaseDeliveryNote(document, sessionId);
@@ -198,8 +194,8 @@ public class ReceptionREST implements Serializable {
         }
         //3. Logout
         if (sessionId != null) {
-            respREST = SessionClient.returnSession(sessionId);
-            if (respREST.getEstado() == 0) {
+            boolean resp = sapFunctions.returnSession(sessionId);
+            if (resp) {
                 CONSOLE.log(Level.INFO, "Se cerro la sesion [{0}] de DI Server correctamente", sessionId);
             } else {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
