@@ -8,6 +8,8 @@ import co.igb.b1ws.client.order.MsgHeader;
 import co.igb.b1ws.client.order.OrdersService;
 import co.igb.b1ws.client.order.Update;
 import co.igb.b1ws.client.order.UpdateResponse;
+import co.igb.dto.GenericRESTResponseDTO;
+import co.igb.manager.client.SessionPoolManagerClient;
 import co.igb.rest.BasicSAPFunctions;
 import co.igb.util.Constants;
 
@@ -52,8 +54,16 @@ public class SalesOrderEJB {
 
     public boolean closeOrderLines(String companyName, Integer orderEntry, HashSet<String> items) {
         //1. Login
-        String sessionId = getSessionId(companyName);
-
+        String sessionId = null;
+        try {
+            sessionId = sapFunctions.getSessionId(companyName);
+            if (sessionId != null) {
+                CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
+            }
+        } catch (Exception ignored) {
+        }
         //2. Procesar documento
         boolean success = false;
         if (sessionId != null) {
@@ -78,7 +88,12 @@ public class SalesOrderEJB {
 
         //3. Logout
         if (sessionId != null) {
-            sapFunctions.logout(sessionId);
+            boolean resp = sapFunctions.returnSession(sessionId);
+            if (resp) {
+                CONSOLE.log(Level.INFO, "Se cerro la sesion [{0}] de DI Server correctamente", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
+            }
         }
         return success;
     }
@@ -86,8 +101,16 @@ public class SalesOrderEJB {
     public boolean modifySalesOrderQuantity(String companyName, Integer orderEntry, String itemCode, Integer newQuantity) {
         boolean success = false;
         //1. Login
-        String sessionId = getSessionId(companyName);
-
+        String sessionId = null;
+        try {
+            sessionId = sapFunctions.getSessionId(companyName);
+            if (sessionId != null) {
+                CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
+            }
+        } catch (Exception ignored) {
+        }
         //2. Procesar documento
         if (sessionId != null) {
             try {
@@ -112,7 +135,12 @@ public class SalesOrderEJB {
 
         //3. Logout
         if (sessionId != null) {
-            sapFunctions.logout(sessionId);
+            boolean resp = sapFunctions.returnSession(sessionId);
+            if (resp) {
+                CONSOLE.log(Level.INFO, "Se cerro la sesion [{0}] de DI Server correctamente", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
+            }
         }
         return success;
     }
@@ -139,6 +167,8 @@ public class SalesOrderEJB {
 
         Update params = new Update();
         params.setDocument(document);
+
+        CONSOLE.log(Level.INFO, "Modificando orden de venta en SAP con sessionId [{0}]", sessionId);
 
         try {
             UpdateResponse resp = service.getOrdersServiceSoap12().update(params, header);

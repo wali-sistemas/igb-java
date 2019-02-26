@@ -60,7 +60,6 @@ public class StockTransferREST implements Serializable {
 
     private static final Logger CONSOLE = Logger.getLogger(StockTransferREST.class.getSimpleName());
 
-    private String sessionId;
     @EJB
     private BasicSAPFunctions sapFunctions;
     @EJB
@@ -191,14 +190,10 @@ public class StockTransferREST implements Serializable {
         document.setStockTransferLines(documentLines);
 
         //1. Login
-        SessionPoolManagerClient SessionClient = new SessionPoolManagerClient(appBean.obtenerValorPropiedad("igb.manager.rest"));
-        GenericRESTResponseDTO respREST = null;
-        sessionId = null;
-        String errorMessage = null;
+        String sessionId = null;
         try {
-            respREST = SessionClient.getSession(companyName);
-            if (respREST.getEstado() == 0) {
-                sessionId = respREST.getContent().toString();
+            sessionId = sapFunctions.getSessionId(companyName);
+            if (sessionId != null) {
                 CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
             } else {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
@@ -208,7 +203,7 @@ public class StockTransferREST implements Serializable {
         }
         //2. Registrar documento
         Long docEntry = -1L;
-        errorMessage = null;
+        String errorMessage = null;
         if (sessionId != null) {
             try {
                 if (!itemTransfer.getTemporary()) {
@@ -222,9 +217,8 @@ public class StockTransferREST implements Serializable {
         }
         //3. Logout
         if (sessionId != null) {
-            //respREST = client.returnSession(sessionId, errorMessage != null ? true : false);
-            respREST = SessionClient.returnSession(sessionId);
-            if (respREST.getEstado() == 0) {
+            boolean resp = sapFunctions.returnSession(sessionId);
+            if (resp) {
                 CONSOLE.log(Level.INFO, "Se cerro la sesion [{0}] de DI Server correctamente", sessionId);
             } else {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
@@ -342,14 +336,16 @@ public class StockTransferREST implements Serializable {
 
         //1. Login
         String sessionId = null;
-        String errorMessage = null;
         try {
-            sessionId = sapFunctions.login(companyName);
-            CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
-        } catch (Exception e) {
-            errorMessage = e.getMessage();
+            sessionId = sapFunctions.getSessionId(companyName);
+            if (sessionId != null) {
+                CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error al iniciar sesion en el DI Server.")).build();
+            }
+        } catch (Exception ignored) {
         }
-
         //2. Registrar documento
         Long docEntry = -1L;
         if (sessionId != null) {
@@ -359,13 +355,17 @@ public class StockTransferREST implements Serializable {
             } catch (MalformedURLException e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
             }
-        } else {
-            return Response.ok(new ResponseDTO(-1, "Ocurrió un error al crear el traslado. " + errorMessage)).build();
         }
-
         //3. Logout
-        sapFunctions.logout(sessionId);
-
+        if (sessionId != null) {
+            boolean resp = sapFunctions.returnSession(sessionId);
+            if (resp) {
+                CONSOLE.log(Level.INFO, "Se cerro la sesion [{0}] de DI Server correctamente", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la sesion de DI Server.")).build();
+            }
+        }
         //4. Crear el registro en base de datos
         return startCounting(binCode, warehouse, companyName, pruebas, docEntry);
     }
@@ -476,8 +476,13 @@ public class StockTransferREST implements Serializable {
                 //1. Login
                 String sessionId = null;
                 try {
-                    sessionId = sapFunctions.login(companyName);
-                    CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+                    sessionId = sapFunctions.getSessionId(companyName);
+                    if (sessionId != null) {
+                        CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+                    } else {
+                        CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
+                        return Response.ok(new ResponseDTO(-1, "Ocurrio un error al iniciar sesion en el DI Server.")).build();
+                    }
                 } catch (Exception ignored) {
                 }
                 //2. Registrar documento
@@ -492,10 +497,15 @@ public class StockTransferREST implements Serializable {
                 }
                 //3. Logout
                 if (sessionId != null) {
-                    sapFunctions.logout(sessionId);
+                    boolean resp = sapFunctions.returnSession(sessionId);
+                    if (resp) {
+                        CONSOLE.log(Level.INFO, "Se cerro la sesion [{0}] de DI Server correctamente", sessionId);
+                    } else {
+                        CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
+                        return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la sesion de DI Server.")).build();
+                    }
                 }
             }
-
             //4. Se registran las diferencias
             //4.1 Se registran las diferencias detectadas
             for (InventoryDifference difference : differences) {
@@ -608,8 +618,13 @@ public class StockTransferREST implements Serializable {
         //1. Login
         String sessionId = null;
         try {
-            sessionId = sapFunctions.login(companyName);
-            CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+            sessionId = sapFunctions.getSessionId(companyName);
+            if (sessionId != null) {
+                CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error al iniciar sesion en el DI Server.")).build();
+            }
         } catch (Exception ignored) {
         }
         //2. Registrar documento
@@ -626,7 +641,13 @@ public class StockTransferREST implements Serializable {
         }
         //3. Logout
         if (sessionId != null) {
-            sapFunctions.logout(sessionId);
+            boolean resp = sapFunctions.returnSession(sessionId);
+            if (resp) {
+                CONSOLE.log(Level.INFO, "Se cerro la sesion [{0}] de DI Server correctamente", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la sesion de DI Server.")).build();
+            }
         }
         //4. Validar y retornar
         if (docEntry > 0) {
@@ -649,6 +670,7 @@ public class StockTransferREST implements Serializable {
         MsgHeader header = new MsgHeader();
         header.setServiceName("StockTransferService");
         header.setSessionID(sessionId);
+        CONSOLE.log(Level.INFO, "Creando traslado en SAP con sessionId [{0}]", sessionId);
         AddResponse response = service.getStockTransferServiceSoap12().add(add, header);
         return response.getStockTransferParams().getDocEntry();
     }
@@ -695,8 +717,12 @@ public class StockTransferREST implements Serializable {
         //1. Login
         String sessionId = null;
         try {
-            sessionId = sapFunctions.login(companyName);
-            CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+            sessionId = sapFunctions.getSessionId(companyName);
+            if (sessionId != null) {
+                CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
+            }
         } catch (Exception ignored) {
         }
         //2. Registrar documento
@@ -712,7 +738,12 @@ public class StockTransferREST implements Serializable {
         }
         //3. Logout
         if (sessionId != null) {
-            sapFunctions.logout(sessionId);
+            boolean resp = sapFunctions.returnSession(sessionId);
+            if (resp) {
+                CONSOLE.log(Level.INFO, "Se cerro la sesion [{0}] de DI Server correctamente", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
+            }
         }
 
         return docEntry;
@@ -771,8 +802,13 @@ public class StockTransferREST implements Serializable {
         //1. Login
         String sessionId = null;
         try {
-            sessionId = sapFunctions.login(companyName);
-            CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+            sessionId = sapFunctions.getSessionId(companyName);
+            if (sessionId != null) {
+                CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error al iniciar sesion en el DI Server.")).build();
+            }
         } catch (Exception ignored) {
         }
         //2. Registrar documento
@@ -789,7 +825,13 @@ public class StockTransferREST implements Serializable {
         }
         //3. Logout
         if (sessionId != null) {
-            sapFunctions.logout(sessionId);
+            boolean resp = sapFunctions.returnSession(sessionId);
+            if (resp) {
+                CONSOLE.log(Level.INFO, "Se cerro la sesion [{0}] de DI Server correctamente", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la sesion de DI Server.")).build();
+            }
         }
         //4. Validar y retornar
         if (docEntry > 0) {
@@ -871,8 +913,13 @@ public class StockTransferREST implements Serializable {
         //1. Login
         String sessionId = null;
         try {
-            sessionId = sapFunctions.login(companyName);
-            CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+            sessionId = sapFunctions.getSessionId(companyName);
+            if (sessionId != null) {
+                CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error al iniciar sesion en el DI Server.")).build();
+            }
         } catch (Exception ignored) {
         }
         //2. Registrar documento
@@ -889,7 +936,13 @@ public class StockTransferREST implements Serializable {
         }
         //3. Logout
         if (sessionId != null) {
-            sapFunctions.logout(sessionId);
+            boolean resp = sapFunctions.returnSession(sessionId);
+            if (resp) {
+                CONSOLE.log(Level.INFO, "Se cerro la sesion [{0}] de DI Server correctamente", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la sesion de DI Server.")).build();
+            }
         }
         //4. Validar y retornar
         if (docEntry > 0) {
