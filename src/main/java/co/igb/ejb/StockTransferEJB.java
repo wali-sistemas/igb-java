@@ -5,8 +5,11 @@ import co.igb.b1ws.client.stocktransfer.AddResponse;
 import co.igb.b1ws.client.stocktransfer.MsgHeader;
 import co.igb.b1ws.client.stocktransfer.StockTransfer;
 import co.igb.b1ws.client.stocktransfer.StockTransferService;
+import co.igb.dto.GenericRESTResponseDTO;
+import co.igb.dto.ResponseDTO;
 import co.igb.exception.SAPSessionException;
 import co.igb.exception.WaliRuntimeException;
+import co.igb.manager.client.SessionPoolManagerClient;
 import co.igb.persistence.entity.AssignedOrder;
 import co.igb.persistence.entity.PickingRecord;
 import co.igb.persistence.facade.AssignedOrderFacade;
@@ -19,6 +22,7 @@ import co.igb.util.IGBUtils;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.ws.rs.core.Response;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -113,16 +117,21 @@ public class StockTransferEJB {
 
     private void processSAPTransaction(StockTransfer document, String companyName) {
         //1. Login
-        String sessionId;
+        SessionPoolManagerClient SessionClient = new SessionPoolManagerClient(appBean.obtenerValorPropiedad("igb.manager.rest"));
+        GenericRESTResponseDTO respREST = null;
+        String sessionId = null;
         try {
-            sessionId = sapFunctions.login(companyName);
-            CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
-        } catch (Exception e) {
-            throw new SAPSessionException("Ocurrió un error al iniciar sesión en SAPB1. ", e);
+            respREST = SessionClient.getSession(companyName);
+            if (respREST.getEstado() == 0) {
+                sessionId = respREST.getContent().toString();
+                CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
+            }
+        } catch (Exception ignored) {
         }
         //2. Registrar documento
         long docEntry = -1L;
-        String errorMessage = null;
         if (sessionId != null) {
             try {
                 docEntry = createTransferDocument(document, sessionId);
@@ -135,7 +144,14 @@ public class StockTransferEJB {
             throw new SAPSessionException("Ocurrió un error al iniciar sesión en SAPB1");
         }
         //3. Logout
-        sapFunctions.logout(sessionId);
+        if (sessionId != null) {
+            respREST = SessionClient.returnSession(sessionId);
+            if (respREST.getEstado() == 0) {
+                CONSOLE.log(Level.INFO, "Se cerro la sesion [{0}] de DI Server correctamente", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
+            }
+        }
         //4. Validar y retornar
         if (docEntry <= 0) {
             throw new WaliRuntimeException("Ocurrió un error al crear la transferencia. ");

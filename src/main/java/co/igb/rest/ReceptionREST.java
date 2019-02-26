@@ -4,10 +4,12 @@ import co.igb.b1ws.client.purchasedeliverynote.Add;
 import co.igb.b1ws.client.purchasedeliverynote.AddResponse;
 import co.igb.b1ws.client.purchasedeliverynote.Document;
 import co.igb.b1ws.client.purchasedeliverynote.PurchaseDeliveryNotesService;
+import co.igb.dto.GenericRESTResponseDTO;
 import co.igb.dto.PurchaseOrderDTO;
 import co.igb.dto.PurchaseOrderLineDTO;
 import co.igb.dto.ResponseDTO;
 import co.igb.ejb.IGBApplicationBean;
+import co.igb.manager.client.SessionPoolManagerClient;
 import co.igb.persistence.facade.PurchaseOrderFacade;
 import co.igb.util.IGBUtils;
 
@@ -167,15 +169,24 @@ public class ReceptionREST implements Serializable {
         document.setDocumentLines(docLines);
 
         //1. Login
+        SessionPoolManagerClient SessionClient = new SessionPoolManagerClient(appBean.obtenerValorPropiedad("igb.manager.rest"));
+        GenericRESTResponseDTO respREST = null;
         String sessionId = null;
+        String errorMessage = null;
         try {
-            sessionId = sapFunctions.login(companyName);
-            CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
-        } catch (Exception e) {
+            respREST = SessionClient.getSession(companyName);
+            if (respREST.getEstado() == 0) {
+                sessionId = respREST.getContent().toString();
+                CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error al iniciar sesion en el DI Server.")).build();
+            }
+        } catch (Exception ignored) {
         }
         //2. Registrar documento
         Long docEntry = -1L;
-        String errorMessage = null;
+        errorMessage = null;
         if (sessionId != null) {
             try {
                 docEntry = createPurchaseDeliveryNote(document, sessionId);
@@ -187,7 +198,13 @@ public class ReceptionREST implements Serializable {
         }
         //3. Logout
         if (sessionId != null) {
-            sapFunctions.logout(sessionId);
+            respREST = SessionClient.returnSession(sessionId);
+            if (respREST.getEstado() == 0) {
+                CONSOLE.log(Level.INFO, "Se cerro la sesion [{0}] de DI Server correctamente", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la sesion de DI Server.")).build();
+            }
         }
         if (docEntry > 0) {
             return Response.ok(new ResponseDTO(0, docEntry)).build();
@@ -204,6 +221,7 @@ public class ReceptionREST implements Serializable {
         co.igb.b1ws.client.purchasedeliverynote.MsgHeader header = new co.igb.b1ws.client.purchasedeliverynote.MsgHeader();
         header.setServiceName("PurchaseDeliveryNotesService");
         header.setSessionID(sessionId);
+        CONSOLE.log(Level.INFO, "Creando entrada de mercancia en SAP con sessionId [{0}]", sessionId);
         AddResponse response = service.getPurchaseDeliveryNotesServiceSoap12().add(add, header);
         return response.getDocumentParams().getDocEntry();
 

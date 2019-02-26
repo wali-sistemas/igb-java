@@ -7,8 +7,10 @@ import co.igb.b1ws.client.invoice.Document.DocumentLines;
 import co.igb.b1ws.client.invoice.Document.DocumentLines.DocumentLine;
 import co.igb.b1ws.client.invoice.InvoicesService;
 import co.igb.b1ws.client.invoice.MsgHeader;
+import co.igb.dto.GenericRESTResponseDTO;
 import co.igb.dto.ResponseDTO;
 import co.igb.ejb.IGBApplicationBean;
+import co.igb.manager.client.SessionPoolManagerClient;
 import co.igb.persistence.facade.CustomerFacade;
 import co.igb.persistence.facade.DeliveryNoteFacade;
 import co.igb.util.Constants;
@@ -150,16 +152,24 @@ public class InvoiceREST implements Serializable {
         invoice.setDocumentLines(lines);
 
         //1. Login
+        SessionPoolManagerClient SessionClient = new SessionPoolManagerClient(appBean.obtenerValorPropiedad("igb.manager.rest"));
+        GenericRESTResponseDTO respREST = null;
         String sessionId = null;
+        String errorMessage = null;
         try {
-            sessionId = sapFunctions.login(companyName);
-            CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
-        } catch (Exception e) {
-            return Response.ok(new ResponseDTO(-1, "Ocurrio un error al iniciar sesion en SAP. " + e.getMessage())).build();
+            respREST = SessionClient.getSession(companyName);
+            if (respREST.getEstado() == 0) {
+                sessionId = respREST.getContent().toString();
+                CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error al iniciar sesion en el DI Server.")).build();
+            }
+        } catch (Exception ignored) {
         }
         //2. Registrar documento
         Long docEntry = -1L;
-        String errorMessage = null;
+        errorMessage = null;
         if (sessionId != null) {
             try {
                 docEntry = createDraft(invoice, sessionId);
@@ -171,7 +181,13 @@ public class InvoiceREST implements Serializable {
         }
         //3. Logout
         if (sessionId != null) {
-            sapFunctions.logout(sessionId);
+            respREST = SessionClient.returnSession(sessionId);
+            if (respREST.getEstado() == 0) {
+                CONSOLE.log(Level.INFO, "Se cerro la sesion [{0}] de DI Server correctamente", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la sesion de DI Server.")).build();
+            }
         }
         //4. Validar y retornar
         if (docEntry > 0) {
@@ -249,16 +265,24 @@ public class InvoiceREST implements Serializable {
         invoice.setDocumentLines(lines);
 
         //1. Login
+        SessionPoolManagerClient SessionClient = new SessionPoolManagerClient(appBean.obtenerValorPropiedad("igb.manager.rest"));
+        GenericRESTResponseDTO respREST = null;
         String sessionId = null;
+        String errorMessage = null;
         try {
-            sessionId = sapFunctions.login(companyName);
-            CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
-        } catch (Exception e) {
-            return Response.ok(new ResponseDTO(-1, "Ocurrio un error al iniciar sesion en SAP. " + e.getMessage())).build();
+            respREST = SessionClient.getSession(companyName);
+            if (respREST.getEstado() == 0) {
+                sessionId = respREST.getContent().toString();
+                CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error al iniciar sesion en el DI Server.")).build();
+            }
+        } catch (Exception ignored) {
         }
         //2. Registrar documento
         Long docEntry = -1L;
-        String errorMessage = null;
+        errorMessage = null;
         if (sessionId != null) {
             try {
                 docEntry = createInvoice(invoice, sessionId);
@@ -270,7 +294,13 @@ public class InvoiceREST implements Serializable {
         }
         //3. Logout
         if (sessionId != null) {
-            sapFunctions.logout(sessionId);
+            respREST = SessionClient.returnSession(sessionId);
+            if (respREST.getEstado() == 0) {
+                CONSOLE.log(Level.INFO, "Se cerro la sesion [{0}] de DI Server correctamente", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la sesion de DI Server.")).build();
+            }
         }
         //4. Validar y retornar
         if (docEntry > 0) {
@@ -288,6 +318,7 @@ public class InvoiceREST implements Serializable {
         co.igb.b1ws.client.drafts.MsgHeader header = new co.igb.b1ws.client.drafts.MsgHeader();
         header.setServiceName("DraftsService");
         header.setSessionID(sessionId);
+        CONSOLE.log(Level.INFO, "Creando FV preliminar en SAP con sessionId [{0}]", sessionId);
         co.igb.b1ws.client.drafts.AddResponse response = service.getDraftsServiceSoap12().add(add, header);
         return response.getDocumentParams().getDocEntry();
     }
@@ -300,6 +331,7 @@ public class InvoiceREST implements Serializable {
         MsgHeader header = new MsgHeader();
         header.setServiceName("InvoicesService");
         header.setSessionID(sessionId);
+        CONSOLE.log(Level.INFO, "Creando factura en SAP con sessionId [{0}]", sessionId);
         AddResponse response = service.getInvoicesServiceSoap12().add(add, header);
         return response.getDocumentParams().getDocEntry();
     }
