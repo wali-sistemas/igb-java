@@ -394,8 +394,13 @@ public class PackingREST implements Serializable {
         //1. Login
         String sessionId = null;
         try {
-            sessionId = sapFunctions.login(companyName);
-            CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+            sessionId = sapFunctions.getSessionId(companyName);
+            if (sessionId != null) {
+                CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error al iniciar sesion en el DI Server.")).build();
+            }
         } catch (Exception ignored) {
         }
         //2. Registrar documento
@@ -412,7 +417,13 @@ public class PackingREST implements Serializable {
         }
         //3. Logout
         if (sessionId != null) {
-            sapFunctions.logout(sessionId);
+            boolean resp = sapFunctions.returnSession(sessionId);
+            if (resp) {
+                CONSOLE.log(Level.INFO, "Se cerro la sesion [{0}] de DI Server correctamente", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la sesion de DI Server.")).build();
+            }
         }
         //4. Validar y retornar
         if (docEntry > 0) {

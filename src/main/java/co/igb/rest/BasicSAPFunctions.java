@@ -3,7 +3,9 @@ package co.igb.rest;
 import co.igb.b1ws.client.login.LoginService;
 import co.igb.b1ws.client.login.Logout;
 import co.igb.b1ws.client.login.MsgHeader;
+import co.igb.dto.GenericRESTResponseDTO;
 import co.igb.ejb.IGBApplicationBean;
+import co.igb.manager.client.SessionPoolManagerClient;
 import co.igb.util.Constants;
 import co.igb.util.IGBUtils;
 
@@ -51,6 +53,33 @@ public class BasicSAPFunctions {
             CONSOLE.log(Level.INFO, "Sesion {0} finalizada con exito", sessionId);
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al finalizar la sesion " + sessionId, e);
+        }
+    }
+
+    public String getSessionId(String companyName) {
+        SessionPoolManagerClient SessionClient = new SessionPoolManagerClient(appBean.obtenerValorPropiedad("igb.manager.rest"));
+        String sessionId = null;
+        GenericRESTResponseDTO respREST = null;
+        try {
+            respREST = SessionClient.getSession(companyName);
+            if (respREST.getEstado() == 0) {
+                sessionId = respREST.getContent().toString();
+            } else {
+                return null;
+            }
+        } catch (Exception ignored) {
+        }
+        return sessionId;
+    }
+
+    public boolean returnSession(String sessionId) {
+        SessionPoolManagerClient SessionClient = new SessionPoolManagerClient(appBean.obtenerValorPropiedad("igb.manager.rest"));
+        GenericRESTResponseDTO respREST = null;
+        respREST = SessionClient.returnSession(sessionId);
+        if (respREST.getEstado() == 0) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
