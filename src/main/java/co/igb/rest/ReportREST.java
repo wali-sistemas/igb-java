@@ -1,5 +1,6 @@
 package co.igb.rest;
 
+import co.igb.dto.PrintReportDTO;
 import co.igb.dto.ResponseDTO;
 import co.igb.dto.SalesOrderDTO;
 import co.igb.dto.UserDTO;
@@ -13,22 +14,30 @@ import co.igb.persistence.facade.PickingRecordFacade;
 import co.igb.persistence.facade.ReportPickingProgressFacade;
 import co.igb.persistence.facade.SalesOrderFacade;
 import co.igb.util.Constants;
+import net.sf.jasperreports.engine.*;
+import org.apache.pdfbox.pdmodel.PDDocument;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.awt.print.PrinterException;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -258,4 +267,97 @@ public class ReportREST implements Serializable {
 
         return Response.ok(new ResponseDTO(0, datos)).build();
     }
+
+    @POST
+    @Path("generate-report/")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public ResponseDTO generateReport(PrintReportDTO dto) throws Exception {
+        String reportName = null;
+        String report = null;
+        String rutaArchivo = "";
+
+        switch (dto.getDocumento()) {
+            case "delivery":
+                rutaArchivo = "C:\\wildfly-10.1.0.Final\\standalone\\deployments\\shared.war\\";
+                reportName = dto.getId() + ".pdf";
+                report = JasperCompileManager.compileReportToFile("C:\\wildfly-10.1.0.Final\\standalone\\jasper\\" + dto.getCompanyName() + "\\delivery\\entrega.jrxml");
+                rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + dto.getDocumento() + File.separator + reportName;
+                break;
+            case "packingList":
+                rutaArchivo = "C:\\wildfly-10.1.0.Final\\standalone\\deployments\\shared.war\\";
+                reportName = dto.getId() + ".pdf";
+                report = JasperCompileManager.compileReportToFile("C:\\wildfly-10.1.0.Final\\standalone\\jasper\\" + dto.getCompanyName() + "\\packingList\\packingList.jrxml");
+                rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + dto.getDocumento() + File.separator + reportName;
+                break;
+            default:
+                reportName = "";
+                break;
+        }
+
+        //TODO: Se crea la coneccion con la base de datos
+        String cn = null;
+        InitialContext initialContext = new InitialContext();
+        if (dto.getOrigen().equals("S")) {
+            if (dto.getCompanyName().equals("IGB")) {
+                cn = "java:/IGBDS";
+            } else {
+                cn = "java:/VARROCDS";
+            }
+        } else {
+            cn = "java:/MySQLDS";
+        }
+        DataSource dataSource = (DataSource) initialContext.lookup(cn);
+        Connection connection = dataSource.getConnection();
+
+        //TODO: Se mandan los parametros al Jasper
+        Map<String, Object> mapa = new HashMap<>();
+        if (dto.getId() != 0) {
+            mapa.put("id", dto.getId());
+        }
+        generarInforme(report, rutaArchivo, dto, mapa, connection);
+        connection.close();
+        return new ResponseDTO(0, rutaArchivo);
+    }
+
+    private void generarInforme(String report, String rutaArchivo, PrintReportDTO dto, Map<String, Object> mapa, Connection connection) throws JRException, IOException, PrinterException {
+        JasperPrint jasperPrint = JasperFillManager.fillReport(report, mapa, connection);
+        JasperExportManager.exportReportToPdfFile(jasperPrint, rutaArchivo);
+        PDDocument document = PDDocument.load(new File(rutaArchivo));
+        CONSOLE.log(Level.INFO, "Se guardo el documento {0} numero {1}", new Object[]{dto.getDocumento(), dto.getId()});
+
+        //TODO: Configurar para imprimir automaticamente
+        /*if (dto.isImprimir()) {
+            Impresora printer = impresoraFacade.obtenerImpresoraSucursal(dto.getSucursal(), "DOC");
+
+            if (printer != null && printer.getIdImpresora() != null && printer.getIdImpresora() != 0) {
+            PrintService myPrintService = findPrintService("RICOH Aficio MP 2851 PCL 5e"/*printer.getNombreImpresoraServidor());
+
+            PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
+            pras.add(Sides.DUPLEX);
+            pras.add(OrientationRequested.PORTRAIT);
+
+            PrinterJob printerJob = PrinterJob.getPrinterJob();
+
+            if (myPrintService != null) {
+                CONSOLE.log(Level.INFO, "Impresora seleccionada: {0}", myPrintService.getName());
+                printerJob.setPageable(new PDFPageable(document));
+                printerJob.setPrintService(myPrintService);
+                printerJob.print(pras);
+                CONSOLE.log(Level.INFO, "Se mando a imprimir el documento {0} numero {2} a la impresora {1}",
+                        new Object[]{dto.getDocumento(), myPrintService.getName(), dto.getId()});
+            }
+        }*/
+        document.close();
+    }
+
+    /*private static PrintService findPrintService(String printerName) {
+        PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+        for (PrintService printService : printServices) {
+            if (printService.getName().trim().equals(printerName)) {
+                return printService;
+            }
+        }
+        return null;
+    }*/
 }
