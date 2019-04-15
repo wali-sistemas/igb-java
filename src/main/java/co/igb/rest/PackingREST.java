@@ -6,11 +6,9 @@ import co.igb.b1ws.client.deliverynote.DeliveryNotesService;
 import co.igb.b1ws.client.deliverynote.Document;
 import co.igb.b1ws.client.deliverynote.MsgHeader;
 import co.igb.dto.AutoPackDTO;
-import co.igb.dto.CompanyDTO;
 import co.igb.dto.PackingDTO;
 import co.igb.dto.PackingListRecordDTO;
 import co.igb.dto.ResponseDTO;
-import co.igb.dto.UserDTO;
 import co.igb.dto.ValidatePackingItemResponseDTO;
 import co.igb.ejb.EmailManager;
 import co.igb.ejb.IGBApplicationBean;
@@ -20,12 +18,7 @@ import co.igb.persistence.entity.PackingListRecord;
 import co.igb.persistence.entity.PackingOrder;
 import co.igb.persistence.entity.PackingOrderItem;
 import co.igb.persistence.entity.PackingOrderItemBin;
-import co.igb.persistence.facade.BinLocationFacade;
-import co.igb.persistence.facade.CustomerFacade;
-import co.igb.persistence.facade.ItemFacade;
-import co.igb.persistence.facade.PackingListRecordFacade;
-import co.igb.persistence.facade.PackingOrderFacade;
-import co.igb.persistence.facade.SalesOrderFacade;
+import co.igb.persistence.facade.*;
 import co.igb.util.Constants;
 import co.igb.util.IGBUtils;
 
@@ -44,16 +37,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.File;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -88,6 +75,8 @@ public class PackingREST implements Serializable {
     private ItemFacade itemFacade;
     @EJB
     private IGBAuthLDAP ldapUtil;
+    @EJB
+    private DeliveryNoteFacade deliveryNoteFacade;
     @Inject
     private IGBApplicationBean appBean;
     @Inject
@@ -257,10 +246,38 @@ public class PackingREST implements Serializable {
     public Response listPackingOrderItems(@PathParam("idPackingOrder") Long idPackingOrder,
                                           @HeaderParam("X-Company-Name") String companyName,
                                           @HeaderParam("X-Pruebas") boolean pruebas) {
-        CONSOLE.log(Level.INFO, "Retornando items para la packing order #{0}", idPackingOrder);
-        List<Object[]> items = poFacade.listOrderItems(idPackingOrder, companyName, pruebas);
-        CONSOLE.log(Level.INFO, "Se encontraron {0} items para la packing list", items.size());
-        return Response.ok(new ResponseDTO(0, items)).build();
+        PackingOrder po = poFacade.find(idPackingOrder, companyName, pruebas);
+        if (po != null) {
+            //Validando si la orden ya tiene entrega en SAP
+            if (deliveryNoteFacade.getCountDeliveryNote(po.getOrderNumber(), companyName, pruebas) > 0) {
+                //Se procede a cerrar el packing list en MySql
+                poFacade.closePackingOrder(idPackingOrder.intValue(), companyName, pruebas);
+                CONSOLE.log(Level.WARNING, "Ya existe una entrega en SAP para la orden #{0}", po.getOrderNumber());
+                return Response.ok(new ResponseDTO(0, "Ya existe una entrega en SAP para la orden #" + po.getOrderNumber())).build();
+            } else {
+                //Validando si la orden se encuentra cerrada
+                if (salesOrderFacade.getOrderStatus(po.getOrderNumber(), companyName, pruebas).equals('C')) {
+                    //Se procede a cerrar el packing list en MySql
+                    poFacade.closePackingOrder(idPackingOrder.intValue(), companyName, pruebas);
+                    CONSOLE.log(Level.WARNING, "La orden #{0} ya se encuentra cerrada en SAP.", po.getOrderNumber());
+                    return Response.ok(new ResponseDTO(0, "La orden " + po.getOrderNumber() + "ya se encuentra cerrada en SAP")).build();
+                } else {
+                    CONSOLE.log(Level.INFO, "Retornando items para la packing order #{0}", idPackingOrder);
+                    List<Object[]> items = poFacade.listOrderItems(idPackingOrder, companyName, pruebas);
+                    List<Object[]> listItems = new ArrayList<>();
+                    for (Object[] obj : items) {
+                        Object[] attributes = itemFacade.getItemAttributes((String) obj[3], companyName, pruebas);
+                        listItems.add(new Object[]{obj[0], obj[1], obj[2], obj[3], obj[4], obj[5], obj[6], attributes[0], attributes[1]});
+                    }
+
+                    CONSOLE.log(Level.INFO, "Se encontraron {0} items para la packing list", items.size());
+                    return Response.ok(new ResponseDTO(1, listItems)).build();
+                }
+            }
+        } else {
+            CONSOLE.log(Level.SEVERE, "No se encontraron datos para la packing list " + idPackingOrder);
+            return Response.ok(new ResponseDTO(-1, null)).build();
+        }
     }
 
     @POST
@@ -498,7 +515,8 @@ public class PackingREST implements Serializable {
 
     @PUT
     @Path("close/{username}/{idPackingOrder}")
-    @Produces("application/pdf")
+    //@Produces("application/pdf")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public Response closePackingOrder(@PathParam("username") String username,
                                       @PathParam("idPackingOrder") Integer idPackingOrder,
                                       @HeaderParam("X-Company-Name") String companyName,
@@ -513,8 +531,7 @@ public class PackingREST implements Serializable {
         //Se cierra la orden de packing
         poFacade.closePackingOrder(idPackingOrder, companyName, pruebas);
 
-        List<PackingListRecordDTO> records = parseRecords(
-                plFacade.listRecords(idPackingOrder, companyName, pruebas, false));
+        /*List<PackingListRecordDTO> records = parseRecords(plFacade.listRecords(idPackingOrder, companyName, pruebas, false));
 
         String companyReportName = null;
         List<CompanyDTO> companies = appBean.listCompanies();
@@ -525,7 +542,7 @@ public class PackingREST implements Serializable {
             }
         }
 
-        String fileName = String.valueOf(System.currentTimeMillis());
+        String fileName = String.valueOf(poFacade.OrderNumber(idPackingOrder, companyName, pruebas));String.valueOf(System.currentTimeMillis());
         File file = pdfManager.createPackingListPdf(idPackingOrder.toString(), fileName, companyReportName, records);
 
         try {
@@ -543,9 +560,30 @@ public class PackingREST implements Serializable {
         }
 
         Response.ResponseBuilder response = Response.ok(file);
-        response.header("Content-Disposition", "attachment; filename=" + fileName + ".pdf");
-        return response.build();
+        response.header("Content-Disposition", "attachment; filename=" + fileName + ".pdf");*/
+        return Response.ok().build();/*response.build();*/
     }
+
+    /*@GET
+    @Path("pdf/{username}/{idPackingOrder}")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public Response getUrlPackingList(@PathParam("username") String username,
+                                      @PathParam("idPackingOrder") Integer idPackingOrder,
+                                      @HeaderParam("X-Company-Name") String companyName,
+                                      @HeaderParam("X-Pruebas") boolean pruebas) {
+        List<PackingListRecordDTO> records = parseRecords(plFacade.listRecords(idPackingOrder, companyName, pruebas, false));
+        String companyReportName = null;
+        List<CompanyDTO> companies = appBean.listCompanies();
+        for (CompanyDTO company : companies) {
+            if (company.getCompanyId().equals(companyName)) {
+                companyReportName = company.getCompanyName();
+                break;
+            }
+        }
+        File file = pdfManager.createPackingListPdf(String.valueOf(poFacade.OrderNumber(idPackingOrder, companyName, pruebas)), companyReportName, records);
+        return Response.ok(file.exists()).build();
+    }*/
+
 
     private List<PackingListRecordDTO> parseRecords(List<Object[]> rows) {
         List<PackingListRecordDTO> records = new ArrayList<>();
@@ -765,8 +803,8 @@ public class PackingREST implements Serializable {
             for (Integer id : items) {
                 //reiniciar el packedQty a 0
                 poFacade.updatePackedQty(id, companyName, pruebas);
-                //Cierra los registros de packing abiertos
-                plFacade.closePackingOrder(idPackingOrder, companyName, pruebas);
+                //eliminar los registros de packing abiertos
+                plFacade.deletePackingOrder(idPackingOrder, companyName, pruebas);
             }
 
             return Response.ok(new ResponseDTO(0, "Ok")).build();
