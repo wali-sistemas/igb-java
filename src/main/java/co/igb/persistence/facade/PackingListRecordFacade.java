@@ -121,6 +121,19 @@ public class PackingListRecordFacade {
         }
     }
 
+    public void deletePackingOrder(Integer idPackingOrder, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("delete from packing_list_record where company_name = '");
+        sb.append(companyName);
+        sb.append("' and idpacking_order = ");
+        sb.append(idPackingOrder);
+        try {
+            persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).executeUpdate();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al eliminar el registro de la orden de packing. ", e);
+        }
+    }
+
     public Integer obtainNumberOfBoxes(Integer idPackingList, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select max(box_number) from packing_list_record where idpacking_order = ");

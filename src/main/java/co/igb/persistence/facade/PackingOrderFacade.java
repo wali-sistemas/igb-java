@@ -173,8 +173,7 @@ public class PackingOrderFacade {
         }
     }
 
-    public void updatePackedQuantity(String binCode, String itemCode, Integer orderNumber, Integer additionalQuantity,
-                                     String companyName, boolean testing) {
+    public void updatePackedQuantity(String binCode, String itemCode, Integer orderNumber, Integer additionalQuantity, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("update packing_order_item_bin set packed_qty = packed_qty + ");
         sb.append(additionalQuantity);
@@ -186,7 +185,9 @@ public class PackingOrderFacade {
         sb.append(itemCode);
         sb.append("' and ord.order_number = ");
         sb.append(orderNumber);
-        sb.append(")");
+        sb.append(" and company_name = '");
+        sb.append(companyName);
+        sb.append("')");
         try {
             int result = persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).executeUpdate();
             CONSOLE.log(Level.INFO, "Se actualizaron {0} filas", result);
@@ -197,13 +198,27 @@ public class PackingOrderFacade {
 
     public List<Object[]> listOrderItems(Long idPackingOrder, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select bin.bin_code, bin.bin_name, bin.picked_qty - bin.packed_qty missing_quantity, itm.item_code ");
+        /*sb.append("select bin.bin_code, bin.bin_name, bin.picked_qty - bin.packed_qty AS missing_quantity, itm.item_code, bin.picked_qty, bin.packed_qty ");
         sb.append("from packing_order ord inner join packing_order_item itm on itm.idpacking_order = ord.idpacking_order ");
         sb.append("inner join packing_order_item_bin bin on bin.idpacking_order_item = itm.idpacking_order_item where ord.company_name = '");
         sb.append(companyName);
-        sb.append("' and ord.idpacking_order =");
+        sb.append("' and ord.idpacking_order = ");
         sb.append(idPackingOrder);
-        sb.append(" and bin.picked_qty - bin.packed_qty > 0 order by bin_code, item_code");
+        //sb.append(" and bin.picked_qty - bin.packed_qty > 0 ");
+        sb.append(" order by bin_code, item_code");*/
+
+        sb.append("select bin.bin_code, bin.bin_name, bin.picked_qty - bin.packed_qty AS missing_quantity, itm.item_code, bin.picked_qty, bin.packed_qty, IFNULL(rec.box_number, 0) AS box_number ");
+        sb.append("from  packing_order ord ");
+        sb.append("inner join packing_order_item itm on itm.idpacking_order = ord.idpacking_order ");
+        sb.append("inner join packing_order_item_bin bin on bin.idpacking_order_item = itm.idpacking_order_item ");
+        sb.append("left  join packing_list_record rec on rec.idpacking_order = ord.idpacking_order and rec.item_code = itm.item_code ");
+        sb.append("where ord.company_name = '");
+        sb.append(companyName);
+        sb.append("' and ord.idpacking_order = ");
+        sb.append(idPackingOrder);
+        //sb.append(" and bin.picked_qty - bin.packed_qty > 0 ");
+        sb.append(" order by bin_code, item_code");
+
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {

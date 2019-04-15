@@ -8,8 +8,7 @@ import co.igb.b1ws.client.order.MsgHeader;
 import co.igb.b1ws.client.order.OrdersService;
 import co.igb.b1ws.client.order.Update;
 import co.igb.b1ws.client.order.UpdateResponse;
-import co.igb.dto.GenericRESTResponseDTO;
-import co.igb.manager.client.SessionPoolManagerClient;
+import co.igb.dto.ResponseDTO;
 import co.igb.rest.BasicSAPFunctions;
 import co.igb.util.Constants;
 
@@ -52,7 +51,8 @@ public class SalesOrderEJB {
         return response.getDocument();
     }
 
-    public boolean closeOrderLines(String companyName, Integer orderEntry, HashSet<String> items) {
+    public ResponseDTO closeOrderLines(String companyName, Integer orderEntry, HashSet<String> items) {
+        ResponseDTO res = null;
         //1. Login
         String sessionId = null;
         try {
@@ -61,11 +61,11 @@ public class SalesOrderEJB {
                 CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
             } else {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
+                return new ResponseDTO(-1, "Ocurrio un error al iniciar sesion en el DI Server.");
             }
         } catch (Exception ignored) {
         }
         //2. Procesar documento
-        boolean success = false;
         if (sessionId != null) {
             try {
                 Document doc = retrieveOrderDocument(orderEntry.longValue(), sessionId);
@@ -75,11 +75,12 @@ public class SalesOrderEJB {
                         line.setLineStatus("C");
                     }
                 }
-                success = modifyOrderDocument(doc, sessionId);
-                if (success) {
+                res = modifyOrderDocument(doc, sessionId);
+                if (res.getCode() == 0) {
                     CONSOLE.log(Level.INFO, "Se cerraron lineas de la orden satisfactoriamente");
                 } else {
                     CONSOLE.log(Level.WARNING, "Ocurrio un problema al cerrar lineas de la orden");
+                    return new ResponseDTO(-1, res.getContent());
                 }
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar lineas en la orden. ", e);
@@ -95,11 +96,11 @@ public class SalesOrderEJB {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
             }
         }
-        return success;
+        return new ResponseDTO(0, res.getContent());
     }
 
-    public boolean modifySalesOrderQuantity(String companyName, Integer orderEntry, String itemCode, Integer newQuantity) {
-        boolean success = false;
+    public ResponseDTO modifySalesOrderQuantity(String companyName, Integer orderEntry, String itemCode, Integer newQuantity) {
+        ResponseDTO res = null;
         //1. Login
         String sessionId = null;
         try {
@@ -108,6 +109,7 @@ public class SalesOrderEJB {
                 CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
             } else {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
+                return new ResponseDTO(-1, "Ocurrio un error al iniciar sesion en el DI Server.");
             }
         } catch (Exception ignored) {
         }
@@ -122,14 +124,16 @@ public class SalesOrderEJB {
                         break;
                     }
                 }
-                success = modifyOrderDocument(doc, sessionId);
-                if (success) {
+                res = modifyOrderDocument(doc, sessionId);
+                if (res.getCode() == 0) {
                     CONSOLE.log(Level.INFO, "Se modifico la orden satisfactoriamente");
                 } else {
-                    CONSOLE.log(Level.WARNING, "Ocurrió un problema al modificar la orden");
+                    CONSOLE.log(Level.WARNING, "Ocurrió un problema al modificar la orden " + res.getContent());
+                    return new ResponseDTO(-1, res.getContent());
                 }
             } catch (Exception e) {
-                CONSOLE.log(Level.SEVERE, "Ocurrio un error al modificar la cantidad de la orden. ", e);
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al modificar la cantidad de la orden ", e);
+                return new ResponseDTO(-1, e);
             }
         }
 
@@ -142,7 +146,7 @@ public class SalesOrderEJB {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
             }
         }
-        return success;
+        return new ResponseDTO(0, res.getContent());
     }
 
     private String getSessionId(String companyName) {
@@ -155,7 +159,8 @@ public class SalesOrderEJB {
         return sessionId;
     }
 
-    private boolean modifyOrderDocument(Document document, String sessionId) throws MalformedURLException {
+    private ResponseDTO modifyOrderDocument(Document document, String sessionId) throws MalformedURLException {
+        String errorMessage = null;
         OrdersService service = new OrdersService(
                 new URL(String.format(
                         appBean.obtenerValorPropiedad(Constants.B1WS_WSDL_URL),
@@ -173,11 +178,12 @@ public class SalesOrderEJB {
         try {
             UpdateResponse resp = service.getOrdersServiceSoap12().update(params, header);
             if (resp != null) {
-                return true;
+                return new ResponseDTO(0, resp);
             }
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al modificar la cantidad de la orden. ", e);
+            errorMessage = e.getMessage();
         }
-        return false;
+        return new ResponseDTO(-1, errorMessage);
     }
 }

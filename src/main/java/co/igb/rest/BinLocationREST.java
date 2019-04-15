@@ -83,7 +83,7 @@ public class BinLocationREST implements Serializable {
             @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Obteniendo binabs para ubicacion " + binCode);
 
-        Integer binAbs = blFacade.getBinAbs(binCode, companyName, pruebas);
+        Integer binAbs = blFacade.getBinAbs(binCode.trim(), companyName, pruebas);
         CONSOLE.log(Level.INFO, "Obtuvo el binAbs: {0}", binAbs);
 
         return Response.ok(new ResponseDTO(0, binAbs)).build();
@@ -101,7 +101,7 @@ public class BinLocationREST implements Serializable {
         if (itemCode == null || itemCode.isEmpty()) {
             return Response.ok(new ResponseDTO(-1, "No se encontraron datos para validar.")).build();
         }
-        String res = locationLimitFacade.findLocationFixed(itemCode, companyName, pruebas);
+        String res = locationLimitFacade.findLocationFixed(itemCode.trim(), companyName, pruebas);
         return Response.ok(new ResponseDTO(res == null ? -1 : 0, res)).build();
     }
 
@@ -113,11 +113,11 @@ public class BinLocationREST implements Serializable {
                                           @HeaderParam("X-Company-Name") String companyName,
                                           @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                           @HeaderParam("X-Pruebas") boolean pruebas) {
-        CONSOLE.log(Level.INFO, "Consultando los atributos de la ubicacion [" + binCode + "]");
-        if (binCode == null || binCode.isEmpty()) {
+        CONSOLE.log(Level.INFO, "Consultando los atributos de la ubicacion [" + binCode.trim() + "]");
+        if (binCode.trim() == null || binCode.trim().isEmpty()) {
             return Response.ok(new ResponseDTO(-1, "No se encontraron datos para consultar.")).build();
         }
-        Object attr = blFacade.getLocationAttributes(binCode, warehouseCode, companyName, pruebas);
+        Object attr = blFacade.getLocationAttributes(binCode.trim(), warehouseCode, companyName, pruebas);
         return Response.ok(new ResponseDTO(0, attr)).build();
     }
 }

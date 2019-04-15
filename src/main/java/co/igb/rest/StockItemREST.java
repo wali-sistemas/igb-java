@@ -75,7 +75,7 @@ public class StockItemREST implements Serializable {
             return Response.ok(new ResponseDTO(-1, "No se encontraron datos para validar el stock.")).build();
         }
 
-        Object obj = itemFacade.getCheckOutStockItem(itemCode, location, companyName, pruebas);
+        Object obj = itemFacade.getCheckOutStockItem(itemCode.trim(), location.trim(), companyName, pruebas);
         if (obj != null) {
             return Response.ok(obj).build();
         } else {
