@@ -266,11 +266,11 @@ public class PackingREST implements Serializable {
                 return Response.ok(new ResponseDTO(0, "Ya existe una entrega en SAP para la orden #" + po.getOrderNumber())).build();
             } else {
                 //Validando si la orden se encuentra cerrada
-                if (salesOrderFacade.getOrderStatus(po.getOrderNumber(), companyName, pruebas).equals('C')) {
+                if (salesOrderFacade.getOrderStatus(po.getOrderNumber(), companyName, pruebas).equals("C")) {
                     //Se procede a cerrar el packing list en MySql
                     poFacade.closePackingOrder(idPackingOrder.intValue(), companyName, pruebas);
                     CONSOLE.log(Level.WARNING, "La orden #{0} ya se encuentra cerrada en SAP.", po.getOrderNumber());
-                    return Response.ok(new ResponseDTO(0, "La orden " + po.getOrderNumber() + "ya se encuentra cerrada en SAP")).build();
+                    return Response.ok(new ResponseDTO(0, "La orden " + po.getOrderNumber() + " ya se encuentra cerrada en SAP")).build();
                 } else {
                     CONSOLE.log(Level.INFO, "Retornando items para la packing order #{0}", idPackingOrder);
                     List<Object[]> items = poFacade.listOrderItems(idPackingOrder, companyName, pruebas);
