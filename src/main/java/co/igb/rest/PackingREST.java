@@ -240,6 +240,16 @@ public class PackingREST implements Serializable {
     }
 
     @GET
+    @Path("list-boxes/{username}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response listBoxesUsed(@PathParam("username") String username,
+                                  @HeaderParam("X-Company-Name") String companyName,
+                                  @HeaderParam("X-Pruebas") boolean pruebas) {
+        return Response.ok(new ResponseDTO(0, plFacade.listBoxesUsedPackingRecords(username, companyName, pruebas))).build();
+    }
+
+    @GET
     @Path("items/{idPackingOrder}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
