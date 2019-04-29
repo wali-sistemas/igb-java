@@ -9,7 +9,6 @@ import co.igb.dto.*;
 import co.igb.ejb.EmailManager;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.ejb.SalesOrderEJB;
-import co.igb.manager.client.SessionPoolManagerClient;
 import co.igb.persistence.entity.Inventory;
 import co.igb.persistence.entity.InventoryDetail;
 import co.igb.persistence.entity.InventoryDifference;
@@ -123,8 +122,9 @@ public class StockTransferREST implements Serializable {
             CONSOLE.log(Level.INFO, "La cantidad tomada ({0}) es superior a la cantidad de la orden ({1}). Reajustando orden para acomodar nueva cantidad...",
                     new Object[]{itemTransfer.getQuantity(), itemTransfer.getExpectedQuantity()});
             Integer orderDocEntry = salesOrderFacade.getOrderDocEntry(itemTransfer.getOrderNumber(), companyName, pruebas);
-            if (!salesOrderEJB.modifySalesOrderQuantity(companyName, orderDocEntry, itemTransfer.getItemCode(), itemTransfer.getQuantity())) {
-                return Response.ok(new ResponseDTO(-1, "Ocurrio un error al modificar la cantidad de la orden. ")).build();
+            ResponseDTO res = salesOrderEJB.modifySalesOrderQuantity(companyName, orderDocEntry, itemTransfer.getItemCode(), itemTransfer.getQuantity());
+            if (res.getCode() < 0) {
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error al modificar la cantidad de la orden. " + res.getContent())).build();
             }
         } else if (itemTransfer.getExpectedQuantity() > itemTransfer.getQuantity()) {
             CONSOLE.log(Level.INFO, "La cantidad tomada ({0}) es inferior a la cantidad de la orden ({1}). Realizando ajuste de inventario...",
@@ -154,7 +154,6 @@ public class StockTransferREST implements Serializable {
 
         StockTransfer document = new StockTransfer();
         document.setSeries(Long.parseLong(getPropertyValue(Constants.STOCK_TRANSFER_SERIES, companyName)));
-        //document.setCardCode(itemTransfer.get);
         document.setToWarehouse(itemTransfer.getWarehouseCode());
         document.setFromWarehouse(itemTransfer.getWarehouseCode());
         document.setComments("Proceso de picking orden #" + itemTransfer.getOrderNumber());

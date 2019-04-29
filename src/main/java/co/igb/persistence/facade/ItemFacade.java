@@ -42,6 +42,22 @@ public class ItemFacade {
         }
     }
 
+    public Object[] getItemAttributes(String itemCode, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(o.itemname as varchar(200)) as itemname, cast(m.Name as varchar(50)) as marca ");
+        sb.append("from oitm o ");
+        sb.append("left join [@MARCAS] m ON m.Code = o.U_Marca where itemcode = '");
+        sb.append(itemCode);
+        sb.append("'");
+
+        try {
+            return (Object[]) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los atributos del item [" + itemCode + "]", e);
+            return null;
+        }
+    }
+
     public List<Object[]> getItemStock(String itemCode, String binCode, String whsCode, String companyName, boolean pruebas) {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT CAST(art.ItemCode AS varchar(20)) AS itemCode, CAST(art.ItemName AS varchar(200)) AS itemName, CAST(ubc.OnHandQty AS INT) AS Qty, ");
@@ -54,7 +70,7 @@ public class ItemFacade {
         sb.append("INNER  JOIN OBIN dub ON dub.AbsEntry = ubc.BinAbs ");
         sb.append("INNER  JOIN OWHS alm ON alm.WhsCode = sal.WhsCode ");
         sb.append("WHERE  sal.OnHand > 0 AND ubc.OnHandQty > 0 AND pre.PriceList = ");
-        if(companyName.contains("VARROC")){
+        if (companyName.contains("VARROC")) {
             sb.append("1 ");
         } else {
             sb.append("4 ");
@@ -88,7 +104,7 @@ public class ItemFacade {
         try {
             return (Object) em.createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE,"Ocurrio un error al revisar el stock del item [" + itemCode + "] para la ubicacion [" + location + "]");
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al revisar el stock del item [" + itemCode + "] para la ubicacion [" + location + "]");
             return null;
         }
     }

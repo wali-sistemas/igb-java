@@ -73,6 +73,23 @@ public class PackingListRecordFacade {
         return new ArrayList<>();
     }
 
+    public List<String> listBoxesUsedPackingRecords(String username, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select distinct box_number ");
+        sb.append("from igb.packing_list_record where status = 'open' and company_name = '");
+        sb.append(companyName);
+        sb.append("' and employee = '");
+        sb.append(username);
+        sb.append("' order by box_number");
+        try {
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+        } catch (NoResultException e) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el listado de cajas usadas. ", e);
+        }
+        return null;
+    }
+
     public List<Object[]> listRecords(Integer idPackingOrder, String companyName, boolean testing, boolean openRecordsOnly) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from packing_list_record where idpacking_order = ");
@@ -118,6 +135,19 @@ public class PackingListRecordFacade {
             persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).executeUpdate();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la orden de packing. ", e);
+        }
+    }
+
+    public void deletePackingOrder(Integer idPackingOrder, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("delete from packing_list_record where company_name = '");
+        sb.append(companyName);
+        sb.append("' and idpacking_order = ");
+        sb.append(idPackingOrder);
+        try {
+            persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).executeUpdate();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al eliminar el registro de la orden de packing. ", e);
         }
     }
 

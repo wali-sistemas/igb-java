@@ -39,4 +39,19 @@ public class DeliveryNoteFacade {
             return new ArrayList<>();
         }
     }
+
+    public Integer getCountDeliveryNote(Integer orderNumber, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select CAST(COUNT(e.DocNum) AS int) AS entrega ");
+        sb.append("from ODLN e ");
+        sb.append("inner Join DLN1 d On e.DocEntry = d.DocEntry ");
+        sb.append("where d.BaseRef = ");
+        sb.append(orderNumber);
+        try {
+            return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el documento de entrega. ", e);
+            return null;
+        }
+    }
 }
