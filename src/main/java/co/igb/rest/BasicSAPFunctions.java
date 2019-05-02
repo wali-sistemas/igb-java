@@ -57,11 +57,11 @@ public class BasicSAPFunctions {
     }
 
     public String getSessionId(String companyName) {
-        SessionPoolManagerClient SessionClient = new SessionPoolManagerClient(appBean.obtenerValorPropiedad("igb.manager.rest"));
+        SessionPoolManagerClient sessionClient = new SessionPoolManagerClient(appBean.obtenerValorPropiedad("igb.manager.rest"));
         String sessionId = null;
         GenericRESTResponseDTO respREST = null;
         try {
-            respREST = SessionClient.getSession(companyName);
+            respREST = sessionClient.getSession(companyName);
             if (respREST.getEstado() == 0) {
                 sessionId = respREST.getContent().toString();
             } else {
@@ -73,9 +73,9 @@ public class BasicSAPFunctions {
     }
 
     public boolean returnSession(String sessionId) {
-        SessionPoolManagerClient SessionClient = new SessionPoolManagerClient(appBean.obtenerValorPropiedad("igb.manager.rest"));
+        SessionPoolManagerClient sessionClient = new SessionPoolManagerClient(appBean.obtenerValorPropiedad("igb.manager.rest"));
         GenericRESTResponseDTO respREST = null;
-        respREST = SessionClient.returnSession(sessionId);
+        respREST = sessionClient.returnSession(sessionId);
         if (respREST.getEstado() == 0) {
             return true;
         } else {
