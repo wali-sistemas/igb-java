@@ -76,7 +76,7 @@ public class PackingListRecordFacade {
     public List<String> listBoxesUsedPackingRecords(String username, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select distinct box_number ");
-        sb.append("from igb.packing_list_record where status = 'open' and company_name = '");
+        sb.append("from packing_list_record where status = 'open' and company_name = '");
         sb.append(companyName);
         sb.append("' and employee = '");
         sb.append(username);
