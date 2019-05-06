@@ -456,7 +456,8 @@ public class PackingREST implements Serializable {
         if (docEntry > 0) {
             return Response.ok(new ResponseDTO(0, docEntry)).build();
         } else {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ResponseDTO(-1, "Ocurrio un error al crear la entrega. " + errorMessage)).build();
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error al crear la entrega. " + errorMessage)).build();
+            //return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ResponseDTO(-1, "Ocurrio un error al crear la entrega. " + errorMessage)).build();
         }
     }
 

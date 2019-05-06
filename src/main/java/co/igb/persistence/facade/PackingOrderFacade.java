@@ -216,6 +216,7 @@ public class PackingOrderFacade {
         sb.append(companyName);
         sb.append("' and ord.idpacking_order = ");
         sb.append(idPackingOrder);
+        sb.append(" and bin.picked_qty > 0 ");
         //sb.append(" and bin.picked_qty - bin.packed_qty > 0 ");
         sb.append(" order by bin_code, item_code");
 
