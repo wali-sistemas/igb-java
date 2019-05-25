@@ -54,4 +54,20 @@ public class DeliveryNoteFacade {
             return null;
         }
     }
+
+    public List getDetailDeliveryNoteData(Integer DocNum, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(d.itemcode as varchar(20)) itemcode, cast(d.quantity as int) quantity ");
+        sb.append("from ODLN e ");
+        sb.append("inner join DLN1 d ON d.DocEntry = e.DocEntry ");
+        sb.append("where e.DocNum = '");
+        sb.append(DocNum);
+        sb.append("'");
+        try {
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el detalle de la entrega " + DocNum);
+            return null;
+        }
+    }
 }
