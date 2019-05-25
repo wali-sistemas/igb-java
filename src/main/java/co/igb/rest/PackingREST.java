@@ -5,11 +5,7 @@ import co.igb.b1ws.client.deliverynote.AddResponse;
 import co.igb.b1ws.client.deliverynote.DeliveryNotesService;
 import co.igb.b1ws.client.deliverynote.Document;
 import co.igb.b1ws.client.deliverynote.MsgHeader;
-import co.igb.dto.AutoPackDTO;
-import co.igb.dto.PackingDTO;
-import co.igb.dto.PackingListRecordDTO;
-import co.igb.dto.ResponseDTO;
-import co.igb.dto.ValidatePackingItemResponseDTO;
+import co.igb.dto.*;
 import co.igb.ejb.EmailManager;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.ejb.IGBAuthLDAP;
@@ -823,5 +819,25 @@ public class PackingREST implements Serializable {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al cancelar el proceso de packing " + idPackingOrder, e);
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error al cancelar el proceso de packing.")).build();
         }
+    }
+
+    @GET
+    @Path("get-detail-delivery/{entrega}")
+    @Produces({MediaType.APPLICATION_JSON + ";chaset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response getDeatilDelivery(@PathParam("entrega") Integer docNum,
+                                      @HeaderParam("X-Company-Name") String companyName,
+                                      @HeaderParam("X-Pruebas") boolean pruebas) {
+        List list = deliveryNoteFacade.getDetailDeliveryNoteData(docNum, companyName, pruebas);
+
+        List<DeliveryNoteDTO.DeliveryNoteLineDTO> deliveryNoteLineDTO = new ArrayList<>();
+        for(Object row : list){
+            DeliveryNoteDTO.DeliveryNoteLineDTO dto = new DeliveryNoteDTO.DeliveryNoteLineDTO();
+            dto.setItemCode((String) ((Object[]) row)[0]);
+            dto.setQuantity((Integer) ((Object[]) row)[1]);
+
+            deliveryNoteLineDTO.add(dto);
+        }
+        return Response.ok(deliveryNoteLineDTO).build();
     }
 }
