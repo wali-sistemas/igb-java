@@ -10,10 +10,7 @@ import co.igb.ejb.EmailManager;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.ejb.IGBAuthLDAP;
 import co.igb.ejb.PDFManager;
-import co.igb.persistence.entity.PackingListRecord;
-import co.igb.persistence.entity.PackingOrder;
-import co.igb.persistence.entity.PackingOrderItem;
-import co.igb.persistence.entity.PackingOrderItemBin;
+import co.igb.persistence.entity.*;
 import co.igb.persistence.facade.*;
 import co.igb.util.Constants;
 import co.igb.util.IGBUtils;
@@ -73,6 +70,8 @@ public class PackingREST implements Serializable {
     private IGBAuthLDAP ldapUtil;
     @EJB
     private DeliveryNoteFacade deliveryNoteFacade;
+    @EJB
+    private CheckOutOrderFacade checkOutOrderFacade;
     @Inject
     private IGBApplicationBean appBean;
     @Inject
@@ -831,13 +830,67 @@ public class PackingREST implements Serializable {
         List list = deliveryNoteFacade.getDetailDeliveryNoteData(docNum, companyName, pruebas);
 
         List<DeliveryNoteDTO.DeliveryNoteLineDTO> deliveryNoteLineDTO = new ArrayList<>();
-        for(Object row : list){
+
+        for (Object row : list) {
             DeliveryNoteDTO.DeliveryNoteLineDTO dto = new DeliveryNoteDTO.DeliveryNoteLineDTO();
             dto.setItemCode((String) ((Object[]) row)[0]);
             dto.setQuantity((Integer) ((Object[]) row)[1]);
-
+            dto.setOrderNumber((Integer) ((Object[]) row)[2]);
             deliveryNoteLineDTO.add(dto);
         }
         return Response.ok(deliveryNoteLineDTO).build();
+    }
+
+    @POST
+    @Path("add-checkout-order")
+    @Produces({MediaType.APPLICATION_JSON + ";chaset=utf-8"})
+    @Consumes({MediaType.APPLICATION_JSON + ";chaset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response addCheckOutOrder(CheckOutDTO dto,
+                                     @HeaderParam("X-Company-Name") String companyName,
+                                     @HeaderParam("X-Pruebas") boolean pruebas) {
+        if (dto.getOrderNumber() == null || dto.getOrderNumber() == 0) {
+            CONSOLE.log(Level.SEVERE, "Numero de orden es obligatorio");
+            return Response.ok(new ResponseDTO(-1, "Número de orden es obligatorio.")).build();
+        }
+        if (dto.getItemCode() == null || dto.getItemCode().isEmpty()) {
+            CONSOLE.log(Level.SEVERE, "Codigo de articulo es obligatorio");
+            return Response.ok(new ResponseDTO(-1, "Código de artículo es obligatorio.")).build();
+        }
+
+        CheckOutOrder checkOutOrder = new CheckOutOrder();
+        checkOutOrder.setOrderNumber(dto.getOrderNumber());
+        checkOutOrder.setDeliveryNumber(dto.getDeliveryNumber());
+        checkOutOrder.setItemCode(dto.getItemCode());
+        checkOutOrder.setQtyOrder(dto.getQtyOrder().longValue());
+        checkOutOrder.setQtyScan(dto.getQtyScan().longValue());
+        checkOutOrder.setStatus(Constants.STATUS_OPEN);
+        checkOutOrder.setEmpId(dto.getEmpId());
+        checkOutOrder.setDatetime_checkout(new Date());
+        checkOutOrder.setBoxNumber(dto.getBoxNumber());
+        checkOutOrder.setCompanyName(companyName);
+
+        try {
+            checkOutOrderFacade.create(checkOutOrder, companyName, pruebas);
+            CONSOLE.log(Level.INFO, "confirmado el checkout para la orden #", dto.getOrderNumber());
+            return Response.ok(new ResponseDTO(0, "CheckOut confirmado exitosamente.")).build();
+        } catch (Exception e) {
+            CONSOLE.log(Level.INFO, "Ocurrio un error confirmando el checkout para la orden #", dto.getOrderNumber());
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error confirmando el checkout.")).build();
+        }
+    }
+
+    @GET
+    @Path("find-checkout/{orderNumber}")
+    @Produces({MediaType.APPLICATION_JSON + ";chaset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response findCheckOut(@PathParam("orderNumber") String orderNumber,
+                                 @HeaderParam("X-Company-Name") String companyName,
+                                 @HeaderParam("X-Pruebas") boolean pruebas) {
+        if (orderNumber == null || orderNumber.isEmpty()) {
+            return Response.ok(new ResponseDTO(-1, "Sin datos para validar check-out.")).build();
+        }
+        Integer idCheckOut = checkOutOrderFacade.getIdCheckOut(orderNumber, companyName, pruebas);
+        return Response.ok(new ResponseDTO(idCheckOut == 0 ? -1 : 0, idCheckOut)).build();
     }
 }
