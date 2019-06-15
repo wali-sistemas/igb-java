@@ -830,12 +830,12 @@ public class PackingREST implements Serializable {
         List list = deliveryNoteFacade.getDetailDeliveryNoteData(docNum, companyName, pruebas);
 
         List<DeliveryNoteDTO.DeliveryNoteLineDTO> deliveryNoteLineDTO = new ArrayList<>();
+
         for (Object row : list) {
             DeliveryNoteDTO.DeliveryNoteLineDTO dto = new DeliveryNoteDTO.DeliveryNoteLineDTO();
             dto.setItemCode((String) ((Object[]) row)[0]);
             dto.setQuantity((Integer) ((Object[]) row)[1]);
             dto.setOrderNumber((Integer) ((Object[]) row)[2]);
-
             deliveryNoteLineDTO.add(dto);
         }
         return Response.ok(deliveryNoteLineDTO).build();
