@@ -198,14 +198,6 @@ public class PackingOrderFacade {
 
     public List<Object[]> listOrderItems(Long idPackingOrder, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        /*sb.append("select bin.bin_code, bin.bin_name, bin.picked_qty - bin.packed_qty AS missing_quantity, itm.item_code, bin.picked_qty, bin.packed_qty ");
-        sb.append("from packing_order ord inner join packing_order_item itm on itm.idpacking_order = ord.idpacking_order ");
-        sb.append("inner join packing_order_item_bin bin on bin.idpacking_order_item = itm.idpacking_order_item where ord.company_name = '");
-        sb.append(companyName);
-        sb.append("' and ord.idpacking_order = ");
-        sb.append(idPackingOrder);
-        //sb.append(" and bin.picked_qty - bin.packed_qty > 0 ");
-        sb.append(" order by bin_code, item_code");*/
 
         sb.append("select bin.bin_code, bin.bin_name, bin.picked_qty - bin.packed_qty AS missing_quantity, itm.item_code, bin.picked_qty, bin.packed_qty, IFNULL(rec.box_number, 0) AS box_number ");
         sb.append("from  packing_order ord ");

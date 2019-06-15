@@ -85,7 +85,6 @@ public class StockTransferREST implements Serializable {
     public StockTransferREST() {
     }
 
-
     @POST
     @Path("picking")
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
@@ -94,6 +93,7 @@ public class StockTransferREST implements Serializable {
     public Response createPickingTransferDocument(SingleItemTransferDTO itemTransfer,
                                                   @HeaderParam("X-Company-Name") String companyName,
                                                   @HeaderParam("X-Warehouse-Code") String warehouseCode,
+                                                  @HeaderParam("X-Employee") String employeeName,
                                                   @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Trasladando item a carrito de picking {0}", itemTransfer);
 
@@ -156,7 +156,7 @@ public class StockTransferREST implements Serializable {
         document.setSeries(Long.parseLong(getPropertyValue(Constants.STOCK_TRANSFER_SERIES, companyName)));
         document.setToWarehouse(itemTransfer.getWarehouseCode());
         document.setFromWarehouse(itemTransfer.getWarehouseCode());
-        document.setComments("Proceso de picking orden #" + itemTransfer.getOrderNumber());
+        document.setComments("Proceso de picking orden #" + itemTransfer.getOrderNumber() + " creado por " + employeeName);
 
         StockTransfer.StockTransferLines.StockTransferLine line = new StockTransfer.StockTransferLines.StockTransferLine();
         line.setLineNum(0L);
