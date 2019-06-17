@@ -57,7 +57,7 @@ public class DeliveryNoteFacade {
 
     public List getDetailDeliveryNoteData(Integer DocNum, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(d.itemcode as varchar(20)) itemcode, cast(d.quantity as int) quantity ");
+        sb.append("select cast(d.itemcode as varchar(20)) itemcode, cast(d.quantity as int) quantity, cast(d.BaseRef as int) BaseRef ");
         sb.append("from ODLN e ");
         sb.append("inner join DLN1 d ON d.DocEntry = e.DocEntry ");
         sb.append("where e.DocNum = '");
