@@ -821,24 +821,33 @@ public class PackingREST implements Serializable {
     }
 
     @GET
-    @Path("get-detail-delivery/{entrega}")
+    @Path("get-detail-delivery/{orderNumber}")
     @Produces({MediaType.APPLICATION_JSON + ";chaset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response getDeatilDelivery(@PathParam("entrega") Integer docNum,
+    public Response getDeatilDelivery(@PathParam("orderNumber") Integer orderNumber,
                                       @HeaderParam("X-Company-Name") String companyName,
                                       @HeaderParam("X-Pruebas") boolean pruebas) {
-        List list = deliveryNoteFacade.getDetailDeliveryNoteData(docNum, companyName, pruebas);
+        Integer delivery = deliveryNoteFacade.getDocNumDeliveryNote(orderNumber, companyName, pruebas);
+        if (delivery != null) {
+            DeliveryNoteDTO deliveryNoteDTO = new DeliveryNoteDTO();
+            deliveryNoteDTO.setDocNum(delivery);
 
-        List<DeliveryNoteDTO.DeliveryNoteLineDTO> deliveryNoteLineDTO = new ArrayList<>();
+            List detailDelivery = deliveryNoteFacade.getDetailDeliveryNoteData(delivery, companyName, pruebas);
+            List<DeliveryNoteDTO.DeliveryNoteLineDTO> deliveryNoteLineDTO = new ArrayList<>();
 
-        for (Object row : list) {
-            DeliveryNoteDTO.DeliveryNoteLineDTO dto = new DeliveryNoteDTO.DeliveryNoteLineDTO();
-            dto.setItemCode((String) ((Object[]) row)[0]);
-            dto.setQuantity((Integer) ((Object[]) row)[1]);
-            dto.setOrderNumber((Integer) ((Object[]) row)[2]);
-            deliveryNoteLineDTO.add(dto);
+            for (Object row : detailDelivery) {
+                DeliveryNoteDTO.DeliveryNoteLineDTO dto = new DeliveryNoteDTO.DeliveryNoteLineDTO();
+                dto.setItemCode((String) ((Object[]) row)[0]);
+                dto.setQuantity((Integer) ((Object[]) row)[1]);
+                dto.setOrderNumber((Integer) ((Object[]) row)[2]);
+                deliveryNoteLineDTO.add(dto);
+            }
+
+            deliveryNoteDTO.setLines(deliveryNoteLineDTO);
+
+            return Response.ok(deliveryNoteDTO).build();
         }
-        return Response.ok(deliveryNoteLineDTO).build();
+        return Response.ok(new ResponseDTO(-1, "Ocurrio un error consultando el número de la entrega.")).build();
     }
 
     @POST

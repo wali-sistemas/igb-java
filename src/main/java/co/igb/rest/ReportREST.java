@@ -292,6 +292,13 @@ public class ReportREST implements Serializable {
                         + File.separator + dto.getDocumento() + ".jrxml");
                 rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + dto.getDocumento() + File.separator + reportName;
                 break;
+            case "checkOut":
+                rutaArchivo = applicationBean.obtenerValorPropiedad("url.archivo");
+                reportName = dto.getId() + ".pdf";
+                report = JasperCompileManager.compileReportToFile(applicationBean.obtenerValorPropiedad("url.jasper") + dto.getCompanyName() + File.separator + dto.getDocumento()
+                        + File.separator + dto.getDocumento() + ".jrxml");
+                rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + dto.getDocumento() + File.separator + reportName;
+                break;
             default:
                 reportName = "";
                 break;

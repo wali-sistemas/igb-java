@@ -33,7 +33,7 @@ public class CheckOutOrderFacade {
         sb.append("select idcheckout_order from checkout_order ");
         sb.append("where company_name = '");
         sb.append(companyName);
-        sb.append("' and delivery_number = ");
+        sb.append("' and order_number = ");
         sb.append(orderNumber);
         sb.append(" LIMIT 1");
         try {
