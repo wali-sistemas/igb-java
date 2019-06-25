@@ -66,7 +66,20 @@ public class DeliveryNoteFacade {
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el detalle de la entrega " + DocNum);
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el detalle de la entrega #" + DocNum);
+            return null;
+        }
+    }
+
+    public Integer getDocNumDeliveryNote(Integer orderNumber, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select DISTINCT cast(d.DocEntry as int) DocEntry ");
+        sb.append("from DLN1 d where d.BaseRef =");
+        sb.append(orderNumber);
+        try {
+            return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el numero de la entrega", e);
             return null;
         }
     }

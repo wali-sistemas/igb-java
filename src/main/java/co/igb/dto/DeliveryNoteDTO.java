@@ -10,6 +10,7 @@ import java.util.List;
 public class DeliveryNoteDTO {
 
     private String cardCode;
+    private Integer DocNum;
     private List<DeliveryNoteLineDTO> lines;
 
     public DeliveryNoteDTO() {
@@ -22,6 +23,14 @@ public class DeliveryNoteDTO {
 
     public void setCardCode(String cardCode) {
         this.cardCode = cardCode;
+    }
+
+    public Integer getDocNum() {
+        return DocNum;
+    }
+
+    public void setDocNum(Integer docNum) {
+        DocNum = docNum;
     }
 
     public List<DeliveryNoteLineDTO> getLines() {
@@ -124,13 +133,22 @@ public class DeliveryNoteDTO {
 
         @Override
         public String toString() {
-            return "DeliveryNoteLineDTO{" + "itemCode=" + itemCode + ", orderNumber=" + orderNumber + ", quantity=" + quantity + ", warehouseCode=" + warehouseCode + ", binAllocation=" + binAllocation + '}';
+            return "DeliveryNoteLineDTO{" +
+                    "itemCode='" + itemCode + '\'' +
+                    ", quantity=" + quantity +
+                    ", warehouseCode='" + warehouseCode + '\'' +
+                    ", orderNumber=" + orderNumber +
+                    ", binAllocation=" + binAllocation +
+                    '}';
         }
     }
 
     @Override
     public String toString() {
-        return "DeliveryNoteDTO{" + "cardCode=" + cardCode + ", lines=" + lines + '}';
+        return "DeliveryNoteDTO{" +
+                "cardCode='" + cardCode + '\'' +
+                ", DocNum=" + DocNum +
+                ", lines=" + lines +
+                '}';
     }
-
 }
