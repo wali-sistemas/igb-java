@@ -266,7 +266,7 @@ public class SalesOrderFacade {
 
     public Object[] retrieveStickerInfo(String orderNumbers, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT DISTINCT cast(o.cardname as varchar(100)) AS cardname, cast(dir.StreetS as varchar(220)) AS address, ");
+        sb.append("SELECT DISTINCT cast(o.cardname as varchar(100)) AS cardname, cast(ISNULL(dir.StreetS, ISNULL(dir.Address2S, ISNULL(dir.Address3S,''))) as varchar(220)) AS address, ");
         sb.append("       cast(transp.name as varchar(50)) AS trans, cast(dir.CityS as varchar(100)) AS city, ISNULL(cast(dep.Name as varchar(100)),'') AS depart ");
         sb.append("FROM  ORDR o ");
         sb.append("INNER JOIN RDR12 dir ON o.DocEntry = dir.DocEntry ");

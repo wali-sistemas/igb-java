@@ -50,11 +50,17 @@ public class CheckOutOrder implements Serializable {
     @Basic(optional = false)
     @Column(name = "company_name")
     private String companyName;
+    @Basic(optional = false)
+    @Column(name = "start_time")
+    private String startTime;
+    @Basic(optional = false)
+    @Column(name = "end_time")
+    private String endTime;
 
     public CheckOutOrder() {
     }
 
-    public CheckOutOrder(Long id, Integer orderNumber, Integer deliveryNumber, String itemCode, Long qtyOrder, Long qtyScan, String status, String empId, Date datetime_checkout, Integer boxNumber, String companyName) {
+    public CheckOutOrder(Long id, Integer orderNumber, Integer deliveryNumber, String itemCode, Long qtyOrder, Long qtyScan, String status, String empId, Date datetime_checkout, Integer boxNumber, String companyName, String startTime, String endTime) {
         this.id = id;
         this.orderNumber = orderNumber;
         this.deliveryNumber = deliveryNumber;
@@ -66,6 +72,8 @@ public class CheckOutOrder implements Serializable {
         this.datetime_checkout = datetime_checkout;
         this.boxNumber = boxNumber;
         this.companyName = companyName;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     public Long getId() {
@@ -156,6 +164,22 @@ public class CheckOutOrder implements Serializable {
         this.companyName = companyName;
     }
 
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -195,6 +219,8 @@ public class CheckOutOrder implements Serializable {
                 ", datetime_checkout=" + datetime_checkout +
                 ", boxNumber=" + boxNumber +
                 ", companyName='" + companyName + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
                 '}';
     }
 }

@@ -289,7 +289,6 @@ public class PackingREST implements Serializable {
     @Path("delivery")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    @SuppressWarnings("null")
     public Response createDeliveryNote(Integer idPackingOrder,
                                        @HeaderParam("X-Company-Name") String companyName,
                                        @HeaderParam("X-Pruebas") boolean pruebas) {
@@ -878,6 +877,8 @@ public class PackingREST implements Serializable {
         checkOutOrder.setDatetime_checkout(new Date());
         checkOutOrder.setBoxNumber(dto.getBoxNumber());
         checkOutOrder.setCompanyName(companyName);
+        checkOutOrder.setStartTime(dto.getStartTime());
+        checkOutOrder.setEndTime(dto.getEndTime());
 
         try {
             checkOutOrderFacade.create(checkOutOrder, companyName, pruebas);

@@ -1846,435 +1846,435 @@ import javax.xml.datatype.XMLGregorianCalendar;
 @XmlRootElement(name = "Document")
 public class Document {
 
-    @XmlElement(name = "DocEntry")
+    @XmlElement(namespace = "", name = "DocEntry")
     protected Long docEntry;
-    @XmlElement(name = "DocNum")
+    @XmlElement(namespace = "", name = "DocNum")
     protected Long docNum;
-    @XmlElement(name = "DocType")
+    @XmlElement(namespace = "", name = "DocType")
     protected String docType;
-    @XmlElement(name = "HandWritten")
+    @XmlElement(namespace = "", name = "HandWritten")
     protected String handWritten;
-    @XmlElement(name = "Printed")
+    @XmlElement(namespace = "", name = "Printed")
     protected String printed;
-    @XmlElement(name = "DocDate")
+    @XmlElement(namespace = "", name = "DocDate")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar docDate;
-    @XmlElement(name = "DocDueDate")
+    @XmlElement(namespace = "", name = "DocDueDate")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar docDueDate;
-    @XmlElement(name = "CardCode")
+    @XmlElement(namespace = "", name = "CardCode")
     protected String cardCode;
-    @XmlElement(name = "CardName")
+    @XmlElement(namespace = "", name = "CardName")
     protected String cardName;
-    @XmlElement(name = "Address")
+    @XmlElement(namespace = "", name = "Address")
     protected String address;
-    @XmlElement(name = "NumAtCard")
+    @XmlElement(namespace = "", name = "NumAtCard")
     protected String numAtCard;
-    @XmlElement(name = "DocTotal")
+    @XmlElement(namespace = "", name = "DocTotal")
     protected Double docTotal;
-    @XmlElement(name = "AttachmentEntry")
+    @XmlElement(namespace = "", name = "AttachmentEntry")
     protected Long attachmentEntry;
-    @XmlElement(name = "DocCurrency")
+    @XmlElement(namespace = "", name = "DocCurrency")
     protected String docCurrency;
-    @XmlElement(name = "DocRate")
+    @XmlElement(namespace = "", name = "DocRate")
     protected Double docRate;
-    @XmlElement(name = "Reference1")
+    @XmlElement(namespace = "", name = "Reference1")
     protected String reference1;
-    @XmlElement(name = "Reference2")
+    @XmlElement(namespace = "", name = "Reference2")
     protected String reference2;
-    @XmlElement(name = "Comments")
+    @XmlElement(namespace = "", name = "Comments")
     protected String comments;
-    @XmlElement(name = "JournalMemo")
+    @XmlElement(namespace = "", name = "JournalMemo")
     protected String journalMemo;
-    @XmlElement(name = "PaymentGroupCode")
+    @XmlElement(namespace = "", name = "PaymentGroupCode")
     protected Long paymentGroupCode;
-    @XmlElement(name = "DocTime")
+    @XmlElement(namespace = "", name = "DocTime")
     @XmlSchemaType(name = "time")
     protected XMLGregorianCalendar docTime;
-    @XmlElement(name = "SalesPersonCode")
+    @XmlElement(namespace = "", name = "SalesPersonCode")
     protected Long salesPersonCode;
-    @XmlElement(name = "TransportationCode")
+    @XmlElement(namespace = "", name = "TransportationCode")
     protected Long transportationCode;
-    @XmlElement(name = "Confirmed")
+    @XmlElement(namespace = "", name = "Confirmed")
     protected String confirmed;
-    @XmlElement(name = "ImportFileNum")
+    @XmlElement(namespace = "", name = "ImportFileNum")
     protected Long importFileNum;
-    @XmlElement(name = "SummeryType")
+    @XmlElement(namespace = "", name = "SummeryType")
     protected String summeryType;
-    @XmlElement(name = "ContactPersonCode")
+    @XmlElement(namespace = "", name = "ContactPersonCode")
     protected Long contactPersonCode;
-    @XmlElement(name = "ShowSCN")
+    @XmlElement(namespace = "", name = "ShowSCN")
     protected String showSCN;
-    @XmlElement(name = "Series")
+    @XmlElement(namespace = "", name = "Series")
     protected Long series;
-    @XmlElement(name = "TaxDate")
+    @XmlElement(namespace = "", name = "TaxDate")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar taxDate;
-    @XmlElement(name = "PartialSupply")
+    @XmlElement(namespace = "", name = "PartialSupply")
     protected String partialSupply;
-    @XmlElement(name = "DocObjectCode")
+    @XmlElement(namespace = "", name = "DocObjectCode")
     protected String docObjectCode;
-    @XmlElement(name = "ShipToCode")
+    @XmlElement(namespace = "", name = "ShipToCode")
     protected String shipToCode;
-    @XmlElement(name = "Indicator")
+    @XmlElement(namespace = "", name = "Indicator")
     protected String indicator;
-    @XmlElement(name = "FederalTaxID")
+    @XmlElement(namespace = "", name = "FederalTaxID")
     protected String federalTaxID;
-    @XmlElement(name = "DiscountPercent")
+    @XmlElement(namespace = "", name = "DiscountPercent")
     protected Double discountPercent;
-    @XmlElement(name = "PaymentReference")
+    @XmlElement(namespace = "", name = "PaymentReference")
     protected String paymentReference;
-    @XmlElement(name = "CreationDate")
+    @XmlElement(namespace = "", name = "CreationDate")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar creationDate;
-    @XmlElement(name = "UpdateDate")
+    @XmlElement(namespace = "", name = "UpdateDate")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar updateDate;
-    @XmlElement(name = "FinancialPeriod")
+    @XmlElement(namespace = "", name = "FinancialPeriod")
     protected Long financialPeriod;
-    @XmlElement(name = "TransNum")
+    @XmlElement(namespace = "", name = "TransNum")
     protected Long transNum;
-    @XmlElement(name = "VatSum")
+    @XmlElement(namespace = "", name = "VatSum")
     protected Double vatSum;
-    @XmlElement(name = "VatSumSys")
+    @XmlElement(namespace = "", name = "VatSumSys")
     protected Double vatSumSys;
-    @XmlElement(name = "VatSumFc")
+    @XmlElement(namespace = "", name = "VatSumFc")
     protected Double vatSumFc;
-    @XmlElement(name = "NetProcedure")
+    @XmlElement(namespace = "", name = "NetProcedure")
     protected String netProcedure;
-    @XmlElement(name = "DocTotalFc")
+    @XmlElement(namespace = "", name = "DocTotalFc")
     protected Double docTotalFc;
-    @XmlElement(name = "DocTotalSys")
+    @XmlElement(namespace = "", name = "DocTotalSys")
     protected Double docTotalSys;
-    @XmlElement(name = "Form1099")
+    @XmlElement(namespace = "", name = "Form1099")
     protected Long form1099;
-    @XmlElement(name = "Box1099")
+    @XmlElement(namespace = "", name = "Box1099")
     protected String box1099;
-    @XmlElement(name = "RevisionPo")
+    @XmlElement(namespace = "", name = "RevisionPo")
     protected String revisionPo;
-    @XmlElement(name = "RequriedDate")
+    @XmlElement(namespace = "", name = "RequriedDate")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar requriedDate;
-    @XmlElement(name = "CancelDate")
+    @XmlElement(namespace = "", name = "CancelDate")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar cancelDate;
-    @XmlElement(name = "BlockDunning")
+    @XmlElement(namespace = "", name = "BlockDunning")
     protected String blockDunning;
-    @XmlElement(name = "Submitted")
+    @XmlElement(namespace = "", name = "Submitted")
     protected String submitted;
-    @XmlElement(name = "Segment")
+    @XmlElement(namespace = "", name = "Segment")
     protected Long segment;
-    @XmlElement(name = "PickStatus")
+    @XmlElement(namespace = "", name = "PickStatus")
     protected String pickStatus;
-    @XmlElement(name = "Pick")
+    @XmlElement(namespace = "", name = "Pick")
     protected String pick;
-    @XmlElement(name = "PaymentMethod")
+    @XmlElement(namespace = "", name = "PaymentMethod")
     protected String paymentMethod;
-    @XmlElement(name = "PaymentBlock")
+    @XmlElement(namespace = "", name = "PaymentBlock")
     protected String paymentBlock;
-    @XmlElement(name = "PaymentBlockEntry")
+    @XmlElement(namespace = "", name = "PaymentBlockEntry")
     protected Long paymentBlockEntry;
-    @XmlElement(name = "CentralBankIndicator")
+    @XmlElement(namespace = "", name = "CentralBankIndicator")
     protected String centralBankIndicator;
-    @XmlElement(name = "MaximumCashDiscount")
+    @XmlElement(namespace = "", name = "MaximumCashDiscount")
     protected String maximumCashDiscount;
-    @XmlElement(name = "Reserve")
+    @XmlElement(namespace = "", name = "Reserve")
     protected String reserve;
-    @XmlElement(name = "Project")
+    @XmlElement(namespace = "", name = "Project")
     protected String project;
-    @XmlElement(name = "ExemptionValidityDateFrom")
+    @XmlElement(namespace = "", name = "ExemptionValidityDateFrom")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar exemptionValidityDateFrom;
-    @XmlElement(name = "ExemptionValidityDateTo")
+    @XmlElement(namespace = "", name = "ExemptionValidityDateTo")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar exemptionValidityDateTo;
-    @XmlElement(name = "WareHouseUpdateType")
+    @XmlElement(namespace = "", name = "WareHouseUpdateType")
     protected String wareHouseUpdateType;
-    @XmlElement(name = "Rounding")
+    @XmlElement(namespace = "", name = "Rounding")
     protected String rounding;
-    @XmlElement(name = "ExternalCorrectedDocNum")
+    @XmlElement(namespace = "", name = "ExternalCorrectedDocNum")
     protected String externalCorrectedDocNum;
-    @XmlElement(name = "InternalCorrectedDocNum")
+    @XmlElement(namespace = "", name = "InternalCorrectedDocNum")
     protected Long internalCorrectedDocNum;
-    @XmlElement(name = "NextCorrectingDocument")
+    @XmlElement(namespace = "", name = "NextCorrectingDocument")
     protected Long nextCorrectingDocument;
-    @XmlElement(name = "DeferredTax")
+    @XmlElement(namespace = "", name = "DeferredTax")
     protected String deferredTax;
-    @XmlElement(name = "TaxExemptionLetterNum")
+    @XmlElement(namespace = "", name = "TaxExemptionLetterNum")
     protected String taxExemptionLetterNum;
-    @XmlElement(name = "WTApplied")
+    @XmlElement(namespace = "", name = "WTApplied")
     protected Double wtApplied;
-    @XmlElement(name = "WTAppliedFC")
+    @XmlElement(namespace = "", name = "WTAppliedFC")
     protected Double wtAppliedFC;
-    @XmlElement(name = "BillOfExchangeReserved")
+    @XmlElement(namespace = "", name = "BillOfExchangeReserved")
     protected String billOfExchangeReserved;
-    @XmlElement(name = "AgentCode")
+    @XmlElement(namespace = "", name = "AgentCode")
     protected String agentCode;
-    @XmlElement(name = "WTAppliedSC")
+    @XmlElement(namespace = "", name = "WTAppliedSC")
     protected Double wtAppliedSC;
-    @XmlElement(name = "TotalEqualizationTax")
+    @XmlElement(namespace = "", name = "TotalEqualizationTax")
     protected Double totalEqualizationTax;
-    @XmlElement(name = "TotalEqualizationTaxFC")
+    @XmlElement(namespace = "", name = "TotalEqualizationTaxFC")
     protected Double totalEqualizationTaxFC;
-    @XmlElement(name = "TotalEqualizationTaxSC")
+    @XmlElement(namespace = "", name = "TotalEqualizationTaxSC")
     protected Double totalEqualizationTaxSC;
-    @XmlElement(name = "NumberOfInstallments")
+    @XmlElement(namespace = "", name = "NumberOfInstallments")
     protected Long numberOfInstallments;
-    @XmlElement(name = "ApplyTaxOnFirstInstallment")
+    @XmlElement(namespace = "", name = "ApplyTaxOnFirstInstallment")
     protected String applyTaxOnFirstInstallment;
-    @XmlElement(name = "WTNonSubjectAmount")
+    @XmlElement(namespace = "", name = "WTNonSubjectAmount")
     protected Double wtNonSubjectAmount;
-    @XmlElement(name = "WTNonSubjectAmountSC")
+    @XmlElement(namespace = "", name = "WTNonSubjectAmountSC")
     protected Double wtNonSubjectAmountSC;
-    @XmlElement(name = "WTNonSubjectAmountFC")
+    @XmlElement(namespace = "", name = "WTNonSubjectAmountFC")
     protected Double wtNonSubjectAmountFC;
-    @XmlElement(name = "WTExemptedAmount")
+    @XmlElement(namespace = "", name = "WTExemptedAmount")
     protected Double wtExemptedAmount;
-    @XmlElement(name = "WTExemptedAmountSC")
+    @XmlElement(namespace = "", name = "WTExemptedAmountSC")
     protected Double wtExemptedAmountSC;
-    @XmlElement(name = "WTExemptedAmountFC")
+    @XmlElement(namespace = "", name = "WTExemptedAmountFC")
     protected Double wtExemptedAmountFC;
-    @XmlElement(name = "BaseAmount")
+    @XmlElement(namespace = "", name = "BaseAmount")
     protected Double baseAmount;
-    @XmlElement(name = "BaseAmountSC")
+    @XmlElement(namespace = "", name = "BaseAmountSC")
     protected Double baseAmountSC;
-    @XmlElement(name = "BaseAmountFC")
+    @XmlElement(namespace = "", name = "BaseAmountFC")
     protected Double baseAmountFC;
-    @XmlElement(name = "WTAmount")
+    @XmlElement(namespace = "", name = "WTAmount")
     protected Double wtAmount;
-    @XmlElement(name = "WTAmountSC")
+    @XmlElement(namespace = "", name = "WTAmountSC")
     protected Double wtAmountSC;
-    @XmlElement(name = "WTAmountFC")
+    @XmlElement(namespace = "", name = "WTAmountFC")
     protected Double wtAmountFC;
-    @XmlElement(name = "VatDate")
+    @XmlElement(namespace = "", name = "VatDate")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar vatDate;
-    @XmlElement(name = "DocumentsOwner")
+    @XmlElement(namespace = "", name = "DocumentsOwner")
     protected Long documentsOwner;
-    @XmlElement(name = "FolioPrefixString")
+    @XmlElement(namespace = "", name = "FolioPrefixString")
     protected String folioPrefixString;
-    @XmlElement(name = "FolioNumber")
+    @XmlElement(namespace = "", name = "FolioNumber")
     protected Long folioNumber;
-    @XmlElement(name = "DocumentSubType")
+    @XmlElement(namespace = "", name = "DocumentSubType")
     protected String documentSubType;
-    @XmlElement(name = "BPChannelCode")
+    @XmlElement(namespace = "", name = "BPChannelCode")
     protected String bpChannelCode;
-    @XmlElement(name = "BPChannelContact")
+    @XmlElement(namespace = "", name = "BPChannelContact")
     protected Long bpChannelContact;
-    @XmlElement(name = "Address2")
+    @XmlElement(namespace = "", name = "Address2")
     protected String address2;
-    @XmlElement(name = "DocumentStatus")
+    @XmlElement(namespace = "", name = "DocumentStatus")
     protected String documentStatus;
-    @XmlElement(name = "PeriodIndicator")
+    @XmlElement(namespace = "", name = "PeriodIndicator")
     protected String periodIndicator;
-    @XmlElement(name = "PayToCode")
+    @XmlElement(namespace = "", name = "PayToCode")
     protected String payToCode;
-    @XmlElement(name = "ManualNumber")
+    @XmlElement(namespace = "", name = "ManualNumber")
     protected String manualNumber;
-    @XmlElement(name = "UseShpdGoodsAct")
+    @XmlElement(namespace = "", name = "UseShpdGoodsAct")
     protected String useShpdGoodsAct;
-    @XmlElement(name = "IsPayToBank")
+    @XmlElement(namespace = "", name = "IsPayToBank")
     protected String isPayToBank;
-    @XmlElement(name = "PayToBankCountry")
+    @XmlElement(namespace = "", name = "PayToBankCountry")
     protected String payToBankCountry;
-    @XmlElement(name = "PayToBankCode")
+    @XmlElement(namespace = "", name = "PayToBankCode")
     protected String payToBankCode;
-    @XmlElement(name = "PayToBankAccountNo")
+    @XmlElement(namespace = "", name = "PayToBankAccountNo")
     protected String payToBankAccountNo;
-    @XmlElement(name = "PayToBankBranch")
+    @XmlElement(namespace = "", name = "PayToBankBranch")
     protected String payToBankBranch;
-    @XmlElement(name = "BPL_IDAssignedToInvoice")
+    @XmlElement(namespace = "", name = "BPL_IDAssignedToInvoice")
     protected Long bplidAssignedToInvoice;
-    @XmlElement(name = "DownPayment")
+    @XmlElement(namespace = "", name = "DownPayment")
     protected Double downPayment;
-    @XmlElement(name = "ReserveInvoice")
+    @XmlElement(namespace = "", name = "ReserveInvoice")
     protected String reserveInvoice;
-    @XmlElement(name = "LanguageCode")
+    @XmlElement(namespace = "", name = "LanguageCode")
     protected Long languageCode;
-    @XmlElement(name = "TrackingNumber")
+    @XmlElement(namespace = "", name = "TrackingNumber")
     protected String trackingNumber;
-    @XmlElement(name = "PickRemark")
+    @XmlElement(namespace = "", name = "PickRemark")
     protected String pickRemark;
-    @XmlElement(name = "ClosingDate")
+    @XmlElement(namespace = "", name = "ClosingDate")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar closingDate;
-    @XmlElement(name = "SequenceCode")
+    @XmlElement(namespace = "", name = "SequenceCode")
     protected Long sequenceCode;
-    @XmlElement(name = "SequenceSerial")
+    @XmlElement(namespace = "", name = "SequenceSerial")
     protected Long sequenceSerial;
-    @XmlElement(name = "SeriesString")
+    @XmlElement(namespace = "", name = "SeriesString")
     protected String seriesString;
-    @XmlElement(name = "SubSeriesString")
+    @XmlElement(namespace = "", name = "SubSeriesString")
     protected String subSeriesString;
-    @XmlElement(name = "SequenceModel")
+    @XmlElement(namespace = "", name = "SequenceModel")
     protected String sequenceModel;
-    @XmlElement(name = "UseCorrectionVATGroup")
+    @XmlElement(namespace = "", name = "UseCorrectionVATGroup")
     protected String useCorrectionVATGroup;
-    @XmlElement(name = "TotalDiscount")
+    @XmlElement(namespace = "", name = "TotalDiscount")
     protected Double totalDiscount;
-    @XmlElement(name = "DownPaymentAmount")
+    @XmlElement(namespace = "", name = "DownPaymentAmount")
     protected Double downPaymentAmount;
-    @XmlElement(name = "DownPaymentPercentage")
+    @XmlElement(namespace = "", name = "DownPaymentPercentage")
     protected Double downPaymentPercentage;
-    @XmlElement(name = "DownPaymentType")
+    @XmlElement(namespace = "", name = "DownPaymentType")
     protected String downPaymentType;
-    @XmlElement(name = "DownPaymentAmountSC")
+    @XmlElement(namespace = "", name = "DownPaymentAmountSC")
     protected Double downPaymentAmountSC;
-    @XmlElement(name = "DownPaymentAmountFC")
+    @XmlElement(namespace = "", name = "DownPaymentAmountFC")
     protected Double downPaymentAmountFC;
-    @XmlElement(name = "VatPercent")
+    @XmlElement(namespace = "", name = "VatPercent")
     protected Double vatPercent;
-    @XmlElement(name = "ServiceGrossProfitPercent")
+    @XmlElement(namespace = "", name = "ServiceGrossProfitPercent")
     protected Double serviceGrossProfitPercent;
-    @XmlElement(name = "OpeningRemarks")
+    @XmlElement(namespace = "", name = "OpeningRemarks")
     protected String openingRemarks;
-    @XmlElement(name = "ClosingRemarks")
+    @XmlElement(namespace = "", name = "ClosingRemarks")
     protected String closingRemarks;
-    @XmlElement(name = "RoundingDiffAmount")
+    @XmlElement(namespace = "", name = "RoundingDiffAmount")
     protected Double roundingDiffAmount;
-    @XmlElement(name = "RoundingDiffAmountFC")
+    @XmlElement(namespace = "", name = "RoundingDiffAmountFC")
     protected Double roundingDiffAmountFC;
-    @XmlElement(name = "RoundingDiffAmountSC")
+    @XmlElement(namespace = "", name = "RoundingDiffAmountSC")
     protected Double roundingDiffAmountSC;
-    @XmlElement(name = "Cancelled")
+    @XmlElement(namespace = "", name = "Cancelled")
     protected String cancelled;
-    @XmlElement(name = "SignatureInputMessage")
+    @XmlElement(namespace = "", name = "SignatureInputMessage")
     protected String signatureInputMessage;
-    @XmlElement(name = "SignatureDigest")
+    @XmlElement(namespace = "", name = "SignatureDigest")
     protected String signatureDigest;
-    @XmlElement(name = "CertificationNumber")
+    @XmlElement(namespace = "", name = "CertificationNumber")
     protected String certificationNumber;
-    @XmlElement(name = "PrivateKeyVersion")
+    @XmlElement(namespace = "", name = "PrivateKeyVersion")
     protected Long privateKeyVersion;
-    @XmlElement(name = "ControlAccount")
+    @XmlElement(namespace = "", name = "ControlAccount")
     protected String controlAccount;
-    @XmlElement(name = "InsuranceOperation347")
+    @XmlElement(namespace = "", name = "InsuranceOperation347")
     protected String insuranceOperation347;
-    @XmlElement(name = "ArchiveNonremovableSalesQuotation")
+    @XmlElement(namespace = "", name = "ArchiveNonremovableSalesQuotation")
     protected String archiveNonremovableSalesQuotation;
-    @XmlElement(name = "GTSChecker")
+    @XmlElement(namespace = "", name = "GTSChecker")
     protected Long gtsChecker;
-    @XmlElement(name = "GTSPayee")
+    @XmlElement(namespace = "", name = "GTSPayee")
     protected Long gtsPayee;
-    @XmlElement(name = "ExtraMonth")
+    @XmlElement(namespace = "", name = "ExtraMonth")
     protected Long extraMonth;
-    @XmlElement(name = "ExtraDays")
+    @XmlElement(namespace = "", name = "ExtraDays")
     protected Long extraDays;
-    @XmlElement(name = "CashDiscountDateOffset")
+    @XmlElement(namespace = "", name = "CashDiscountDateOffset")
     protected Long cashDiscountDateOffset;
-    @XmlElement(name = "StartFrom")
+    @XmlElement(namespace = "", name = "StartFrom")
     protected String startFrom;
-    @XmlElement(name = "NTSApproved")
+    @XmlElement(namespace = "", name = "NTSApproved")
     protected String ntsApproved;
-    @XmlElement(name = "ETaxWebSite")
+    @XmlElement(namespace = "", name = "ETaxWebSite")
     protected Long eTaxWebSite;
-    @XmlElement(name = "ETaxNumber")
+    @XmlElement(namespace = "", name = "ETaxNumber")
     protected String eTaxNumber;
-    @XmlElement(name = "NTSApprovedNumber")
+    @XmlElement(namespace = "", name = "NTSApprovedNumber")
     protected String ntsApprovedNumber;
-    @XmlElement(name = "EDocGenerationType")
+    @XmlElement(namespace = "", name = "EDocGenerationType")
     protected String eDocGenerationType;
-    @XmlElement(name = "EDocSeries")
+    @XmlElement(namespace = "", name = "EDocSeries")
     protected Long eDocSeries;
-    @XmlElement(name = "EDocNum")
+    @XmlElement(namespace = "", name = "EDocNum")
     protected String eDocNum;
-    @XmlElement(name = "EDocExportFormat")
+    @XmlElement(namespace = "", name = "EDocExportFormat")
     protected Long eDocExportFormat;
-    @XmlElement(name = "EDocStatus")
+    @XmlElement(namespace = "", name = "EDocStatus")
     protected String eDocStatus;
-    @XmlElement(name = "EDocErrorCode")
+    @XmlElement(namespace = "", name = "EDocErrorCode")
     protected String eDocErrorCode;
-    @XmlElement(name = "EDocErrorMessage")
+    @XmlElement(namespace = "", name = "EDocErrorMessage")
     protected String eDocErrorMessage;
-    @XmlElement(name = "DownPaymentStatus")
+    @XmlElement(namespace = "", name = "DownPaymentStatus")
     protected String downPaymentStatus;
-    @XmlElement(name = "GroupSeries")
+    @XmlElement(namespace = "", name = "GroupSeries")
     protected Long groupSeries;
-    @XmlElement(name = "GroupNumber")
+    @XmlElement(namespace = "", name = "GroupNumber")
     protected Long groupNumber;
-    @XmlElement(name = "GroupHandWritten")
+    @XmlElement(namespace = "", name = "GroupHandWritten")
     protected String groupHandWritten;
-    @XmlElement(name = "ReopenOriginalDocument")
+    @XmlElement(namespace = "", name = "ReopenOriginalDocument")
     protected String reopenOriginalDocument;
-    @XmlElement(name = "ReopenManuallyClosedOrCanceledDocument")
+    @XmlElement(namespace = "", name = "ReopenManuallyClosedOrCanceledDocument")
     protected String reopenManuallyClosedOrCanceledDocument;
-    @XmlElement(name = "CreateOnlineQuotation")
+    @XmlElement(namespace = "", name = "CreateOnlineQuotation")
     protected String createOnlineQuotation;
-    @XmlElement(name = "POSEquipmentNumber")
+    @XmlElement(namespace = "", name = "POSEquipmentNumber")
     protected String posEquipmentNumber;
-    @XmlElement(name = "POSManufacturerSerialNumber")
+    @XmlElement(namespace = "", name = "POSManufacturerSerialNumber")
     protected String posManufacturerSerialNumber;
-    @XmlElement(name = "POSCashierNumber")
+    @XmlElement(namespace = "", name = "POSCashierNumber")
     protected Long posCashierNumber;
-    @XmlElement(name = "ApplyCurrentVATRatesForDownPaymentsToDraw")
+    @XmlElement(namespace = "", name = "ApplyCurrentVATRatesForDownPaymentsToDraw")
     protected String applyCurrentVATRatesForDownPaymentsToDraw;
-    @XmlElement(name = "ClosingOption")
+    @XmlElement(namespace = "", name = "ClosingOption")
     protected String closingOption;
-    @XmlElement(name = "SpecifiedClosingDate")
+    @XmlElement(namespace = "", name = "SpecifiedClosingDate")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar specifiedClosingDate;
-    @XmlElement(name = "OpenForLandedCosts")
+    @XmlElement(namespace = "", name = "OpenForLandedCosts")
     protected String openForLandedCosts;
-    @XmlElement(name = "AuthorizationStatus")
+    @XmlElement(namespace = "", name = "AuthorizationStatus")
     protected String authorizationStatus;
-    @XmlElement(name = "TotalDiscountFC")
+    @XmlElement(namespace = "", name = "TotalDiscountFC")
     protected Double totalDiscountFC;
-    @XmlElement(name = "TotalDiscountSC")
+    @XmlElement(namespace = "", name = "TotalDiscountSC")
     protected Double totalDiscountSC;
-    @XmlElement(name = "RelevantToGTS")
+    @XmlElement(namespace = "", name = "RelevantToGTS")
     protected String relevantToGTS;
-    @XmlElement(name = "BPLName")
+    @XmlElement(namespace = "", name = "BPLName")
     protected String bplName;
-    @XmlElement(name = "VATRegNum")
+    @XmlElement(namespace = "", name = "VATRegNum")
     protected String vatRegNum;
-    @XmlElement(name = "AnnualInvoiceDeclarationReference")
+    @XmlElement(namespace = "", name = "AnnualInvoiceDeclarationReference")
     protected Long annualInvoiceDeclarationReference;
-    @XmlElement(name = "Supplier")
+    @XmlElement(namespace = "", name = "Supplier")
     protected String supplier;
-    @XmlElement(name = "Releaser")
+    @XmlElement(namespace = "", name = "Releaser")
     protected Long releaser;
-    @XmlElement(name = "Receiver")
+    @XmlElement(namespace = "", name = "Receiver")
     protected Long receiver;
-    @XmlElement(name = "BlanketAgreementNumber")
+    @XmlElement(namespace = "", name = "BlanketAgreementNumber")
     protected Long blanketAgreementNumber;
-    @XmlElement(name = "IsAlteration")
+    @XmlElement(namespace = "", name = "IsAlteration")
     protected String isAlteration;
-    @XmlElement(name = "CancelStatus")
+    @XmlElement(namespace = "", name = "CancelStatus")
     protected String cancelStatus;
-    @XmlElement(name = "AssetValueDate")
+    @XmlElement(namespace = "", name = "AssetValueDate")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar assetValueDate;
-    @XmlElement(name = "DocumentDelivery")
+    @XmlElement(namespace = "", name = "DocumentDelivery")
     protected String documentDelivery;
-    @XmlElement(name = "ReuseDocumentNum")
+    @XmlElement(namespace = "", name = "ReuseDocumentNum")
     protected String reuseDocumentNum;
-    @XmlElement(name = "ReuseNotaFiscalNum")
+    @XmlElement(namespace = "", name = "ReuseNotaFiscalNum")
     protected String reuseNotaFiscalNum;
-    @XmlElement(name = "U_SourceCompany")
+    @XmlElement(namespace = "", name = "U_SourceCompany")
     protected String uSourceCompany;
-    @XmlElement(name = "U_SourceEntry")
+    @XmlElement(namespace = "", name = "U_SourceEntry")
     protected String uSourceEntry;
-    @XmlElement(name = "U_QCRefNo")
+    @XmlElement(namespace = "", name = "U_QCRefNo")
     protected Long uqcRefNo;
-    @XmlElement(name = "Document_ApprovalRequests")
+    @XmlElement(namespace = "", name = "Document_ApprovalRequests")
     protected Document.DocumentApprovalRequests documentApprovalRequests;
-    @XmlElement(name = "DocumentLines")
+    @XmlElement(namespace = "", name = "DocumentLines")
     protected Document.DocumentLines documentLines;
-    @XmlElement(name = "DocumentAdditionalExpenses")
+    @XmlElement(namespace = "", name = "DocumentAdditionalExpenses")
     protected Document.DocumentAdditionalExpenses documentAdditionalExpenses;
-    @XmlElement(name = "WithholdingTaxDataCollection")
+    @XmlElement(namespace = "", name = "WithholdingTaxDataCollection")
     protected Document.WithholdingTaxDataCollection withholdingTaxDataCollection;
-    @XmlElement(name = "DocumentPackages")
+    @XmlElement(namespace = "", name = "DocumentPackages")
     protected Document.DocumentPackages documentPackages;
-    @XmlElement(name = "DocumentSpecialLines")
+    @XmlElement(namespace = "", name = "DocumentSpecialLines")
     protected Document.DocumentSpecialLines documentSpecialLines;
-    @XmlElement(name = "DocumentInstallments")
+    @XmlElement(namespace = "", name = "DocumentInstallments")
     protected Document.DocumentInstallments documentInstallments;
-    @XmlElement(name = "DownPaymentsToDraw")
+    @XmlElement(namespace = "", name = "DownPaymentsToDraw")
     protected Document.DownPaymentsToDraw downPaymentsToDraw;
-    @XmlElement(name = "TaxExtension")
+    @XmlElement(namespace = "", name = "TaxExtension")
     protected Document.TaxExtension taxExtension;
-    @XmlElement(name = "AddressExtension")
+    @XmlElement(namespace = "", name = "AddressExtension")
     protected Document.AddressExtension addressExtension;
 
     /**
@@ -7316,49 +7316,49 @@ public class Document {
     })
     public static class AddressExtension {
 
-        @XmlElement(name = "ShipToStreet")
+        @XmlElement(namespace = "", name = "ShipToStreet")
         protected String shipToStreet;
-        @XmlElement(name = "ShipToStreetNo")
+        @XmlElement(namespace = "", name = "ShipToStreetNo")
         protected String shipToStreetNo;
-        @XmlElement(name = "ShipToBlock")
+        @XmlElement(namespace = "", name = "ShipToBlock")
         protected String shipToBlock;
-        @XmlElement(name = "ShipToBuilding")
+        @XmlElement(namespace = "", name = "ShipToBuilding")
         protected String shipToBuilding;
-        @XmlElement(name = "ShipToCity")
+        @XmlElement(namespace = "", name = "ShipToCity")
         protected String shipToCity;
-        @XmlElement(name = "ShipToZipCode")
+        @XmlElement(namespace = "", name = "ShipToZipCode")
         protected String shipToZipCode;
-        @XmlElement(name = "ShipToCounty")
+        @XmlElement(namespace = "", name = "ShipToCounty")
         protected String shipToCounty;
-        @XmlElement(name = "ShipToState")
+        @XmlElement(namespace = "", name = "ShipToState")
         protected String shipToState;
-        @XmlElement(name = "ShipToCountry")
+        @XmlElement(namespace = "", name = "ShipToCountry")
         protected String shipToCountry;
-        @XmlElement(name = "ShipToAddressType")
+        @XmlElement(namespace = "", name = "ShipToAddressType")
         protected String shipToAddressType;
-        @XmlElement(name = "BillToStreet")
+        @XmlElement(namespace = "", name = "BillToStreet")
         protected String billToStreet;
-        @XmlElement(name = "BillToStreetNo")
+        @XmlElement(namespace = "", name = "BillToStreetNo")
         protected String billToStreetNo;
-        @XmlElement(name = "BillToBlock")
+        @XmlElement(namespace = "", name = "BillToBlock")
         protected String billToBlock;
-        @XmlElement(name = "BillToBuilding")
+        @XmlElement(namespace = "", name = "BillToBuilding")
         protected String billToBuilding;
-        @XmlElement(name = "BillToCity")
+        @XmlElement(namespace = "", name = "BillToCity")
         protected String billToCity;
-        @XmlElement(name = "BillToZipCode")
+        @XmlElement(namespace = "", name = "BillToZipCode")
         protected String billToZipCode;
-        @XmlElement(name = "BillToCounty")
+        @XmlElement(namespace = "", name = "BillToCounty")
         protected String billToCounty;
-        @XmlElement(name = "BillToState")
+        @XmlElement(namespace = "", name = "BillToState")
         protected String billToState;
-        @XmlElement(name = "BillToCountry")
+        @XmlElement(namespace = "", name = "BillToCountry")
         protected String billToCountry;
-        @XmlElement(name = "BillToAddressType")
+        @XmlElement(namespace = "", name = "BillToAddressType")
         protected String billToAddressType;
-        @XmlElement(name = "ShipToGlobalLocationNumber")
+        @XmlElement(namespace = "", name = "ShipToGlobalLocationNumber")
         protected String shipToGlobalLocationNumber;
-        @XmlElement(name = "BillToGlobalLocationNumber")
+        @XmlElement(namespace = "", name = "BillToGlobalLocationNumber")
         protected String billToGlobalLocationNumber;
 
         /**
@@ -8066,7 +8066,7 @@ public class Document {
     })
     public static class DocumentAdditionalExpenses {
 
-        @XmlElement(name = "DocumentAdditionalExpense")
+        @XmlElement(namespace = "", name = "DocumentAdditionalExpense")
         protected List<Document.DocumentAdditionalExpenses.DocumentAdditionalExpense> documentAdditionalExpense;
 
         /**
@@ -8263,103 +8263,103 @@ public class Document {
         })
         public static class DocumentAdditionalExpense {
 
-            @XmlElement(name = "ExpenseCode")
+            @XmlElement(namespace = "", name = "ExpenseCode")
             protected Long expenseCode;
-            @XmlElement(name = "LineTotal")
+            @XmlElement(namespace = "", name = "LineTotal")
             protected Double lineTotal;
-            @XmlElement(name = "LineTotalFC")
+            @XmlElement(namespace = "", name = "LineTotalFC")
             protected Double lineTotalFC;
-            @XmlElement(name = "LineTotalSys")
+            @XmlElement(namespace = "", name = "LineTotalSys")
             protected Double lineTotalSys;
-            @XmlElement(name = "PaidToDate")
+            @XmlElement(namespace = "", name = "PaidToDate")
             protected Double paidToDate;
-            @XmlElement(name = "PaidToDateFC")
+            @XmlElement(namespace = "", name = "PaidToDateFC")
             protected Double paidToDateFC;
-            @XmlElement(name = "PaidToDateSys")
+            @XmlElement(namespace = "", name = "PaidToDateSys")
             protected Double paidToDateSys;
-            @XmlElement(name = "Remarks")
+            @XmlElement(namespace = "", name = "Remarks")
             protected String remarks;
-            @XmlElement(name = "DistributionMethod")
+            @XmlElement(namespace = "", name = "DistributionMethod")
             protected String distributionMethod;
-            @XmlElement(name = "TaxLiable")
+            @XmlElement(namespace = "", name = "TaxLiable")
             protected String taxLiable;
-            @XmlElement(name = "VatGroup")
+            @XmlElement(namespace = "", name = "VatGroup")
             protected String vatGroup;
-            @XmlElement(name = "TaxPercent")
+            @XmlElement(namespace = "", name = "TaxPercent")
             protected Double taxPercent;
-            @XmlElement(name = "TaxSum")
+            @XmlElement(namespace = "", name = "TaxSum")
             protected Double taxSum;
-            @XmlElement(name = "TaxSumFC")
+            @XmlElement(namespace = "", name = "TaxSumFC")
             protected Double taxSumFC;
-            @XmlElement(name = "TaxSumSys")
+            @XmlElement(namespace = "", name = "TaxSumSys")
             protected Double taxSumSys;
-            @XmlElement(name = "DeductibleTaxSum")
+            @XmlElement(namespace = "", name = "DeductibleTaxSum")
             protected Double deductibleTaxSum;
-            @XmlElement(name = "DeductibleTaxSumFC")
+            @XmlElement(namespace = "", name = "DeductibleTaxSumFC")
             protected Double deductibleTaxSumFC;
-            @XmlElement(name = "DeductibleTaxSumSys")
+            @XmlElement(namespace = "", name = "DeductibleTaxSumSys")
             protected Double deductibleTaxSumSys;
-            @XmlElement(name = "AquisitionTax")
+            @XmlElement(namespace = "", name = "AquisitionTax")
             protected String aquisitionTax;
-            @XmlElement(name = "TaxCode")
+            @XmlElement(namespace = "", name = "TaxCode")
             protected String taxCode;
-            @XmlElement(name = "TaxType")
+            @XmlElement(namespace = "", name = "TaxType")
             protected String taxType;
-            @XmlElement(name = "TaxPaid")
+            @XmlElement(namespace = "", name = "TaxPaid")
             protected Double taxPaid;
-            @XmlElement(name = "TaxPaidFC")
+            @XmlElement(namespace = "", name = "TaxPaidFC")
             protected Double taxPaidFC;
-            @XmlElement(name = "TaxPaidSys")
+            @XmlElement(namespace = "", name = "TaxPaidSys")
             protected Double taxPaidSys;
-            @XmlElement(name = "EqualizationTaxPercent")
+            @XmlElement(namespace = "", name = "EqualizationTaxPercent")
             protected Double equalizationTaxPercent;
-            @XmlElement(name = "EqualizationTaxSum")
+            @XmlElement(namespace = "", name = "EqualizationTaxSum")
             protected Double equalizationTaxSum;
-            @XmlElement(name = "EqualizationTaxFC")
+            @XmlElement(namespace = "", name = "EqualizationTaxFC")
             protected Double equalizationTaxFC;
-            @XmlElement(name = "EqualizationTaxSys")
+            @XmlElement(namespace = "", name = "EqualizationTaxSys")
             protected Double equalizationTaxSys;
-            @XmlElement(name = "TaxTotalSum")
+            @XmlElement(namespace = "", name = "TaxTotalSum")
             protected Double taxTotalSum;
-            @XmlElement(name = "TaxTotalSumFC")
+            @XmlElement(namespace = "", name = "TaxTotalSumFC")
             protected Double taxTotalSumFC;
-            @XmlElement(name = "TaxTotalSumSys")
+            @XmlElement(namespace = "", name = "TaxTotalSumSys")
             protected Double taxTotalSumSys;
-            @XmlElement(name = "BaseDocEntry")
+            @XmlElement(namespace = "", name = "BaseDocEntry")
             protected Long baseDocEntry;
-            @XmlElement(name = "BaseDocLine")
+            @XmlElement(namespace = "", name = "BaseDocLine")
             protected Long baseDocLine;
-            @XmlElement(name = "BaseDocType")
+            @XmlElement(namespace = "", name = "BaseDocType")
             protected Long baseDocType;
-            @XmlElement(name = "BaseDocumentReference")
+            @XmlElement(namespace = "", name = "BaseDocumentReference")
             protected Long baseDocumentReference;
-            @XmlElement(name = "LineNum")
+            @XmlElement(namespace = "", name = "LineNum")
             protected Long lineNum;
-            @XmlElement(name = "LastPurchasePrice")
+            @XmlElement(namespace = "", name = "LastPurchasePrice")
             protected String lastPurchasePrice;
-            @XmlElement(name = "Status")
+            @XmlElement(namespace = "", name = "Status")
             protected String status;
-            @XmlElement(name = "Stock")
+            @XmlElement(namespace = "", name = "Stock")
             protected String stock;
-            @XmlElement(name = "TargetAbsEntry")
+            @XmlElement(namespace = "", name = "TargetAbsEntry")
             protected Long targetAbsEntry;
-            @XmlElement(name = "TargetType")
+            @XmlElement(namespace = "", name = "TargetType")
             protected Long targetType;
-            @XmlElement(name = "WTLiable")
+            @XmlElement(namespace = "", name = "WTLiable")
             protected String wtLiable;
-            @XmlElement(name = "DistributionRule")
+            @XmlElement(namespace = "", name = "DistributionRule")
             protected String distributionRule;
-            @XmlElement(name = "Project")
+            @XmlElement(namespace = "", name = "Project")
             protected String project;
-            @XmlElement(name = "DistributionRule2")
+            @XmlElement(namespace = "", name = "DistributionRule2")
             protected String distributionRule2;
-            @XmlElement(name = "DistributionRule3")
+            @XmlElement(namespace = "", name = "DistributionRule3")
             protected String distributionRule3;
-            @XmlElement(name = "DistributionRule4")
+            @XmlElement(namespace = "", name = "DistributionRule4")
             protected String distributionRule4;
-            @XmlElement(name = "DistributionRule5")
+            @XmlElement(namespace = "", name = "DistributionRule5")
             protected String distributionRule5;
-            @XmlElement(name = "DocExpenseTaxJurisdictions")
+            @XmlElement(namespace = "", name = "DocExpenseTaxJurisdictions")
             protected Document.DocumentAdditionalExpenses.DocumentAdditionalExpense.DocExpenseTaxJurisdictions docExpenseTaxJurisdictions;
 
             /**
@@ -9582,7 +9582,7 @@ public class Document {
             })
             public static class DocExpenseTaxJurisdictions {
 
-                @XmlElement(name = "DocExpenseTaxJurisdiction")
+                @XmlElement(namespace = "", name = "DocExpenseTaxJurisdiction")
                 protected List<Document.DocumentAdditionalExpenses.DocumentAdditionalExpense.DocExpenseTaxJurisdictions.DocExpenseTaxJurisdiction> docExpenseTaxJurisdiction;
 
                 /**
@@ -9648,23 +9648,23 @@ public class Document {
                 })
                 public static class DocExpenseTaxJurisdiction {
 
-                    @XmlElement(name = "JurisdictionCode")
+                    @XmlElement(namespace = "", name = "JurisdictionCode")
                     protected String jurisdictionCode;
-                    @XmlElement(name = "JurisdictionType")
+                    @XmlElement(namespace = "", name = "JurisdictionType")
                     protected Long jurisdictionType;
-                    @XmlElement(name = "TaxAmount")
+                    @XmlElement(namespace = "", name = "TaxAmount")
                     protected Double taxAmount;
-                    @XmlElement(name = "TaxAmountSC")
+                    @XmlElement(namespace = "", name = "TaxAmountSC")
                     protected Double taxAmountSC;
-                    @XmlElement(name = "TaxAmountFC")
+                    @XmlElement(namespace = "", name = "TaxAmountFC")
                     protected Double taxAmountFC;
-                    @XmlElement(name = "TaxRate")
+                    @XmlElement(namespace = "", name = "TaxRate")
                     protected Double taxRate;
-                    @XmlElement(name = "DocEntry")
+                    @XmlElement(namespace = "", name = "DocEntry")
                     protected Long docEntry;
-                    @XmlElement(name = "LineNumber")
+                    @XmlElement(namespace = "", name = "LineNumber")
                     protected Long lineNumber;
-                    @XmlElement(name = "RowSequence")
+                    @XmlElement(namespace = "", name = "RowSequence")
                     protected Long rowSequence;
 
                     /**
@@ -9928,7 +9928,7 @@ public class Document {
     })
     public static class DocumentApprovalRequests {
 
-        @XmlElement(name = "Document_ApprovalRequest")
+        @XmlElement(namespace = "", name = "Document_ApprovalRequest")
         protected List<Document.DocumentApprovalRequests.DocumentApprovalRequest> documentApprovalRequest;
 
         /**
@@ -9987,9 +9987,9 @@ public class Document {
         })
         public static class DocumentApprovalRequest {
 
-            @XmlElement(name = "ApprovalTemplatesID")
+            @XmlElement(namespace = "", name = "ApprovalTemplatesID")
             protected Long approvalTemplatesID;
-            @XmlElement(name = "Remarks")
+            @XmlElement(namespace = "", name = "Remarks")
             protected String remarks;
 
             /**
@@ -10094,7 +10094,7 @@ public class Document {
     })
     public static class DocumentInstallments {
 
-        @XmlElement(name = "DocumentInstallment")
+        @XmlElement(namespace = "", name = "DocumentInstallment")
         protected List<Document.DocumentInstallments.DocumentInstallment> documentInstallment;
 
         /**
@@ -10166,23 +10166,23 @@ public class Document {
         })
         public static class DocumentInstallment {
 
-            @XmlElement(name = "DueDate")
+            @XmlElement(namespace = "", name = "DueDate")
             @XmlSchemaType(name = "date")
             protected XMLGregorianCalendar dueDate;
-            @XmlElement(name = "Percentage")
+            @XmlElement(namespace = "", name = "Percentage")
             protected Double percentage;
-            @XmlElement(name = "Total")
+            @XmlElement(namespace = "", name = "Total")
             protected Double total;
-            @XmlElement(name = "LastDunningDate")
+            @XmlElement(namespace = "", name = "LastDunningDate")
             @XmlSchemaType(name = "date")
             protected XMLGregorianCalendar lastDunningDate;
-            @XmlElement(name = "DunningLevel")
+            @XmlElement(namespace = "", name = "DunningLevel")
             protected Long dunningLevel;
-            @XmlElement(name = "TotalFC")
+            @XmlElement(namespace = "", name = "TotalFC")
             protected Double totalFC;
-            @XmlElement(name = "InstallmentId")
+            @XmlElement(namespace = "", name = "InstallmentId")
             protected Long installmentId;
-            @XmlElement(name = "PaymentOrdered")
+            @XmlElement(namespace = "", name = "PaymentOrdered")
             protected String paymentOrdered;
 
             /**
@@ -11055,7 +11055,7 @@ public class Document {
     })
     public static class DocumentLines {
 
-        @XmlElement(name = "DocumentLine")
+        @XmlElement(namespace = "", name = "DocumentLine")
         protected List<Document.DocumentLines.DocumentLine> documentLine;
 
         /**
@@ -11751,358 +11751,358 @@ public class Document {
         })
         public static class DocumentLine {
 
-            @XmlElement(name = "LineNum")
+            @XmlElement(namespace = "", name = "LineNum")
             protected Long lineNum;
-            @XmlElement(name = "ItemCode")
+            @XmlElement(namespace = "", name = "ItemCode")
             protected String itemCode;
-            @XmlElement(name = "ItemDescription")
+            @XmlElement(namespace = "", name = "ItemDescription")
             protected String itemDescription;
-            @XmlElement(name = "Quantity")
+            @XmlElement(namespace = "", name = "Quantity")
             protected Double quantity;
-            @XmlElement(name = "ShipDate")
+            @XmlElement(namespace = "", name = "ShipDate")
             @XmlSchemaType(name = "date")
             protected XMLGregorianCalendar shipDate;
-            @XmlElement(name = "Price")
+            @XmlElement(namespace = "", name = "Price")
             protected Double price;
-            @XmlElement(name = "PriceAfterVAT")
+            @XmlElement(namespace = "", name = "PriceAfterVAT")
             protected Double priceAfterVAT;
-            @XmlElement(name = "Currency")
+            @XmlElement(namespace = "", name = "Currency")
             protected String currency;
-            @XmlElement(name = "Rate")
+            @XmlElement(namespace = "", name = "Rate")
             protected Double rate;
-            @XmlElement(name = "DiscountPercent")
+            @XmlElement(namespace = "", name = "DiscountPercent")
             protected Double discountPercent;
-            @XmlElement(name = "VendorNum")
+            @XmlElement(namespace = "", name = "VendorNum")
             protected String vendorNum;
-            @XmlElement(name = "SerialNum")
+            @XmlElement(namespace = "", name = "SerialNum")
             protected String serialNum;
-            @XmlElement(name = "WarehouseCode")
+            @XmlElement(namespace = "", name = "WarehouseCode")
             protected String warehouseCode;
-            @XmlElement(name = "SalesPersonCode")
+            @XmlElement(namespace = "", name = "SalesPersonCode")
             protected Long salesPersonCode;
-            @XmlElement(name = "CommisionPercent")
+            @XmlElement(namespace = "", name = "CommisionPercent")
             protected Double commisionPercent;
-            @XmlElement(name = "TreeType")
+            @XmlElement(namespace = "", name = "TreeType")
             protected String treeType;
-            @XmlElement(name = "AccountCode")
+            @XmlElement(namespace = "", name = "AccountCode")
             protected String accountCode;
-            @XmlElement(name = "UseBaseUnits")
+            @XmlElement(namespace = "", name = "UseBaseUnits")
             protected String useBaseUnits;
-            @XmlElement(name = "SupplierCatNum")
+            @XmlElement(namespace = "", name = "SupplierCatNum")
             protected String supplierCatNum;
-            @XmlElement(name = "CostingCode")
+            @XmlElement(namespace = "", name = "CostingCode")
             protected String costingCode;
-            @XmlElement(name = "ProjectCode")
+            @XmlElement(namespace = "", name = "ProjectCode")
             protected String projectCode;
-            @XmlElement(name = "BarCode")
+            @XmlElement(namespace = "", name = "BarCode")
             protected String barCode;
-            @XmlElement(name = "VatGroup")
+            @XmlElement(namespace = "", name = "VatGroup")
             protected String vatGroup;
-            @XmlElement(name = "Height1")
+            @XmlElement(namespace = "", name = "Height1")
             protected Double height1;
-            @XmlElement(name = "Hight1Unit")
+            @XmlElement(namespace = "", name = "Hight1Unit")
             protected Long hight1Unit;
-            @XmlElement(name = "Height2")
+            @XmlElement(namespace = "", name = "Height2")
             protected Double height2;
-            @XmlElement(name = "Height2Unit")
+            @XmlElement(namespace = "", name = "Height2Unit")
             protected Long height2Unit;
-            @XmlElement(name = "Lengh1")
+            @XmlElement(namespace = "", name = "Lengh1")
             protected Double lengh1;
-            @XmlElement(name = "Lengh1Unit")
+            @XmlElement(namespace = "", name = "Lengh1Unit")
             protected Long lengh1Unit;
-            @XmlElement(name = "Lengh2")
+            @XmlElement(namespace = "", name = "Lengh2")
             protected Double lengh2;
-            @XmlElement(name = "Lengh2Unit")
+            @XmlElement(namespace = "", name = "Lengh2Unit")
             protected Long lengh2Unit;
-            @XmlElement(name = "Weight1")
+            @XmlElement(namespace = "", name = "Weight1")
             protected Double weight1;
-            @XmlElement(name = "Weight1Unit")
+            @XmlElement(namespace = "", name = "Weight1Unit")
             protected Long weight1Unit;
-            @XmlElement(name = "Weight2")
+            @XmlElement(namespace = "", name = "Weight2")
             protected Double weight2;
-            @XmlElement(name = "Weight2Unit")
+            @XmlElement(namespace = "", name = "Weight2Unit")
             protected Long weight2Unit;
-            @XmlElement(name = "Factor1")
+            @XmlElement(namespace = "", name = "Factor1")
             protected Double factor1;
-            @XmlElement(name = "Factor2")
+            @XmlElement(namespace = "", name = "Factor2")
             protected Double factor2;
-            @XmlElement(name = "Factor3")
+            @XmlElement(namespace = "", name = "Factor3")
             protected Double factor3;
-            @XmlElement(name = "Factor4")
+            @XmlElement(namespace = "", name = "Factor4")
             protected Double factor4;
-            @XmlElement(name = "BaseType")
+            @XmlElement(namespace = "", name = "BaseType")
             protected Long baseType;
-            @XmlElement(name = "BaseEntry")
+            @XmlElement(namespace = "", name = "BaseEntry")
             protected Long baseEntry;
-            @XmlElement(name = "BaseLine")
+            @XmlElement(namespace = "", name = "BaseLine")
             protected Long baseLine;
-            @XmlElement(name = "Volume")
+            @XmlElement(namespace = "", name = "Volume")
             protected Double volume;
-            @XmlElement(name = "VolumeUnit")
+            @XmlElement(namespace = "", name = "VolumeUnit")
             protected Long volumeUnit;
-            @XmlElement(name = "Width1")
+            @XmlElement(namespace = "", name = "Width1")
             protected Double width1;
-            @XmlElement(name = "Width1Unit")
+            @XmlElement(namespace = "", name = "Width1Unit")
             protected Long width1Unit;
-            @XmlElement(name = "Width2")
+            @XmlElement(namespace = "", name = "Width2")
             protected Double width2;
-            @XmlElement(name = "Width2Unit")
+            @XmlElement(namespace = "", name = "Width2Unit")
             protected Long width2Unit;
-            @XmlElement(name = "Address")
+            @XmlElement(namespace = "", name = "Address")
             protected String address;
-            @XmlElement(name = "TaxCode")
+            @XmlElement(namespace = "", name = "TaxCode")
             protected String taxCode;
-            @XmlElement(name = "TaxType")
+            @XmlElement(namespace = "", name = "TaxType")
             protected String taxType;
-            @XmlElement(name = "TaxLiable")
+            @XmlElement(namespace = "", name = "TaxLiable")
             protected String taxLiable;
-            @XmlElement(name = "PickStatus")
+            @XmlElement(namespace = "", name = "PickStatus")
             protected String pickStatus;
-            @XmlElement(name = "PickQuantity")
+            @XmlElement(namespace = "", name = "PickQuantity")
             protected Double pickQuantity;
-            @XmlElement(name = "PickListIdNumber")
+            @XmlElement(namespace = "", name = "PickListIdNumber")
             protected Long pickListIdNumber;
-            @XmlElement(name = "OriginalItem")
+            @XmlElement(namespace = "", name = "OriginalItem")
             protected String originalItem;
-            @XmlElement(name = "BackOrder")
+            @XmlElement(namespace = "", name = "BackOrder")
             protected String backOrder;
-            @XmlElement(name = "FreeText")
+            @XmlElement(namespace = "", name = "FreeText")
             protected String freeText;
-            @XmlElement(name = "ShippingMethod")
+            @XmlElement(namespace = "", name = "ShippingMethod")
             protected Long shippingMethod;
-            @XmlElement(name = "POTargetNum")
+            @XmlElement(namespace = "", name = "POTargetNum")
             protected Long poTargetNum;
-            @XmlElement(name = "POTargetEntry")
+            @XmlElement(namespace = "", name = "POTargetEntry")
             protected String poTargetEntry;
-            @XmlElement(name = "POTargetRowNum")
+            @XmlElement(namespace = "", name = "POTargetRowNum")
             protected Long poTargetRowNum;
-            @XmlElement(name = "CorrectionInvoiceItem")
+            @XmlElement(namespace = "", name = "CorrectionInvoiceItem")
             protected String correctionInvoiceItem;
-            @XmlElement(name = "CorrInvAmountToStock")
+            @XmlElement(namespace = "", name = "CorrInvAmountToStock")
             protected Double corrInvAmountToStock;
-            @XmlElement(name = "CorrInvAmountToDiffAcct")
+            @XmlElement(namespace = "", name = "CorrInvAmountToDiffAcct")
             protected Double corrInvAmountToDiffAcct;
-            @XmlElement(name = "AppliedTax")
+            @XmlElement(namespace = "", name = "AppliedTax")
             protected Double appliedTax;
-            @XmlElement(name = "AppliedTaxFC")
+            @XmlElement(namespace = "", name = "AppliedTaxFC")
             protected Double appliedTaxFC;
-            @XmlElement(name = "AppliedTaxSC")
+            @XmlElement(namespace = "", name = "AppliedTaxSC")
             protected Double appliedTaxSC;
-            @XmlElement(name = "WTLiable")
+            @XmlElement(namespace = "", name = "WTLiable")
             protected String wtLiable;
-            @XmlElement(name = "DeferredTax")
+            @XmlElement(namespace = "", name = "DeferredTax")
             protected String deferredTax;
-            @XmlElement(name = "EqualizationTaxPercent")
+            @XmlElement(namespace = "", name = "EqualizationTaxPercent")
             protected Double equalizationTaxPercent;
-            @XmlElement(name = "TotalEqualizationTax")
+            @XmlElement(namespace = "", name = "TotalEqualizationTax")
             protected Double totalEqualizationTax;
-            @XmlElement(name = "TotalEqualizationTaxFC")
+            @XmlElement(namespace = "", name = "TotalEqualizationTaxFC")
             protected Double totalEqualizationTaxFC;
-            @XmlElement(name = "TotalEqualizationTaxSC")
+            @XmlElement(namespace = "", name = "TotalEqualizationTaxSC")
             protected Double totalEqualizationTaxSC;
-            @XmlElement(name = "NetTaxAmount")
+            @XmlElement(namespace = "", name = "NetTaxAmount")
             protected Double netTaxAmount;
-            @XmlElement(name = "NetTaxAmountFC")
+            @XmlElement(namespace = "", name = "NetTaxAmountFC")
             protected Double netTaxAmountFC;
-            @XmlElement(name = "NetTaxAmountSC")
+            @XmlElement(namespace = "", name = "NetTaxAmountSC")
             protected Double netTaxAmountSC;
-            @XmlElement(name = "MeasureUnit")
+            @XmlElement(namespace = "", name = "MeasureUnit")
             protected String measureUnit;
-            @XmlElement(name = "UnitsOfMeasurment")
+            @XmlElement(namespace = "", name = "UnitsOfMeasurment")
             protected Double unitsOfMeasurment;
-            @XmlElement(name = "LineTotal")
+            @XmlElement(namespace = "", name = "LineTotal")
             protected Double lineTotal;
-            @XmlElement(name = "TaxPercentagePerRow")
+            @XmlElement(namespace = "", name = "TaxPercentagePerRow")
             protected Double taxPercentagePerRow;
-            @XmlElement(name = "TaxTotal")
+            @XmlElement(namespace = "", name = "TaxTotal")
             protected Double taxTotal;
-            @XmlElement(name = "ConsumerSalesForecast")
+            @XmlElement(namespace = "", name = "ConsumerSalesForecast")
             protected String consumerSalesForecast;
-            @XmlElement(name = "ExciseAmount")
+            @XmlElement(namespace = "", name = "ExciseAmount")
             protected Double exciseAmount;
-            @XmlElement(name = "TaxPerUnit")
+            @XmlElement(namespace = "", name = "TaxPerUnit")
             protected Double taxPerUnit;
-            @XmlElement(name = "TotalInclTax")
+            @XmlElement(namespace = "", name = "TotalInclTax")
             protected Double totalInclTax;
-            @XmlElement(name = "CountryOrg")
+            @XmlElement(namespace = "", name = "CountryOrg")
             protected String countryOrg;
-            @XmlElement(name = "SWW")
+            @XmlElement(namespace = "", name = "SWW")
             protected String sww;
-            @XmlElement(name = "TransactionType")
+            @XmlElement(namespace = "", name = "TransactionType")
             protected String transactionType;
-            @XmlElement(name = "DistributeExpense")
+            @XmlElement(namespace = "", name = "DistributeExpense")
             protected String distributeExpense;
-            @XmlElement(name = "ShipToCode")
+            @XmlElement(namespace = "", name = "ShipToCode")
             protected String shipToCode;
-            @XmlElement(name = "RowTotalFC")
+            @XmlElement(namespace = "", name = "RowTotalFC")
             protected Double rowTotalFC;
-            @XmlElement(name = "RowTotalSC")
+            @XmlElement(namespace = "", name = "RowTotalSC")
             protected Double rowTotalSC;
-            @XmlElement(name = "LastBuyInmPrice")
+            @XmlElement(namespace = "", name = "LastBuyInmPrice")
             protected Double lastBuyInmPrice;
-            @XmlElement(name = "LastBuyDistributeSumFc")
+            @XmlElement(namespace = "", name = "LastBuyDistributeSumFc")
             protected Double lastBuyDistributeSumFc;
-            @XmlElement(name = "LastBuyDistributeSumSc")
+            @XmlElement(namespace = "", name = "LastBuyDistributeSumSc")
             protected Double lastBuyDistributeSumSc;
-            @XmlElement(name = "LastBuyDistributeSum")
+            @XmlElement(namespace = "", name = "LastBuyDistributeSum")
             protected Double lastBuyDistributeSum;
-            @XmlElement(name = "StockDistributesumForeign")
+            @XmlElement(namespace = "", name = "StockDistributesumForeign")
             protected Double stockDistributesumForeign;
-            @XmlElement(name = "StockDistributesumSystem")
+            @XmlElement(namespace = "", name = "StockDistributesumSystem")
             protected Double stockDistributesumSystem;
-            @XmlElement(name = "StockDistributesum")
+            @XmlElement(namespace = "", name = "StockDistributesum")
             protected Double stockDistributesum;
-            @XmlElement(name = "StockInmPrice")
+            @XmlElement(namespace = "", name = "StockInmPrice")
             protected Double stockInmPrice;
-            @XmlElement(name = "PickStatusEx")
+            @XmlElement(namespace = "", name = "PickStatusEx")
             protected String pickStatusEx;
-            @XmlElement(name = "TaxBeforeDPM")
+            @XmlElement(namespace = "", name = "TaxBeforeDPM")
             protected Double taxBeforeDPM;
-            @XmlElement(name = "TaxBeforeDPMFC")
+            @XmlElement(namespace = "", name = "TaxBeforeDPMFC")
             protected Double taxBeforeDPMFC;
-            @XmlElement(name = "TaxBeforeDPMSC")
+            @XmlElement(namespace = "", name = "TaxBeforeDPMSC")
             protected Double taxBeforeDPMSC;
-            @XmlElement(name = "CFOPCode")
+            @XmlElement(namespace = "", name = "CFOPCode")
             protected String cfopCode;
-            @XmlElement(name = "CSTCode")
+            @XmlElement(namespace = "", name = "CSTCode")
             protected String cstCode;
-            @XmlElement(name = "Usage")
+            @XmlElement(namespace = "", name = "Usage")
             protected Long usage;
-            @XmlElement(name = "TaxOnly")
+            @XmlElement(namespace = "", name = "TaxOnly")
             protected String taxOnly;
-            @XmlElement(name = "VisualOrder")
+            @XmlElement(namespace = "", name = "VisualOrder")
             protected Long visualOrder;
-            @XmlElement(name = "BaseOpenQuantity")
+            @XmlElement(namespace = "", name = "BaseOpenQuantity")
             protected Double baseOpenQuantity;
-            @XmlElement(name = "UnitPrice")
+            @XmlElement(namespace = "", name = "UnitPrice")
             protected Double unitPrice;
-            @XmlElement(name = "LineStatus")
+            @XmlElement(namespace = "", name = "LineStatus")
             protected String lineStatus;
-            @XmlElement(name = "PackageQuantity")
+            @XmlElement(namespace = "", name = "PackageQuantity")
             protected Double packageQuantity;
-            @XmlElement(name = "Text")
+            @XmlElement(namespace = "", name = "Text")
             protected String text;
-            @XmlElement(name = "LineType")
+            @XmlElement(namespace = "", name = "LineType")
             protected String lineType;
-            @XmlElement(name = "COGSCostingCode")
+            @XmlElement(namespace = "", name = "COGSCostingCode")
             protected String cogsCostingCode;
-            @XmlElement(name = "COGSAccountCode")
+            @XmlElement(namespace = "", name = "COGSAccountCode")
             protected String cogsAccountCode;
-            @XmlElement(name = "ChangeAssemlyBoMWarehouse")
+            @XmlElement(namespace = "", name = "ChangeAssemlyBoMWarehouse")
             protected String changeAssemlyBoMWarehouse;
-            @XmlElement(name = "GrossBuyPrice")
+            @XmlElement(namespace = "", name = "GrossBuyPrice")
             protected Double grossBuyPrice;
-            @XmlElement(name = "GrossBase")
+            @XmlElement(namespace = "", name = "GrossBase")
             protected Long grossBase;
-            @XmlElement(name = "GrossProfitTotalBasePrice")
+            @XmlElement(namespace = "", name = "GrossProfitTotalBasePrice")
             protected Double grossProfitTotalBasePrice;
-            @XmlElement(name = "CostingCode2")
+            @XmlElement(namespace = "", name = "CostingCode2")
             protected String costingCode2;
-            @XmlElement(name = "CostingCode3")
+            @XmlElement(namespace = "", name = "CostingCode3")
             protected String costingCode3;
-            @XmlElement(name = "CostingCode4")
+            @XmlElement(namespace = "", name = "CostingCode4")
             protected String costingCode4;
-            @XmlElement(name = "CostingCode5")
+            @XmlElement(namespace = "", name = "CostingCode5")
             protected String costingCode5;
-            @XmlElement(name = "ItemDetails")
+            @XmlElement(namespace = "", name = "ItemDetails")
             protected String itemDetails;
-            @XmlElement(name = "LocationCode")
+            @XmlElement(namespace = "", name = "LocationCode")
             protected Long locationCode;
-            @XmlElement(name = "ActualDeliveryDate")
+            @XmlElement(namespace = "", name = "ActualDeliveryDate")
             @XmlSchemaType(name = "date")
             protected XMLGregorianCalendar actualDeliveryDate;
-            @XmlElement(name = "RemainingOpenQuantity")
+            @XmlElement(namespace = "", name = "RemainingOpenQuantity")
             protected Double remainingOpenQuantity;
-            @XmlElement(name = "OpenAmount")
+            @XmlElement(namespace = "", name = "OpenAmount")
             protected Double openAmount;
-            @XmlElement(name = "OpenAmountFC")
+            @XmlElement(namespace = "", name = "OpenAmountFC")
             protected Double openAmountFC;
-            @XmlElement(name = "OpenAmountSC")
+            @XmlElement(namespace = "", name = "OpenAmountSC")
             protected Double openAmountSC;
-            @XmlElement(name = "ExLineNo")
+            @XmlElement(namespace = "", name = "ExLineNo")
             protected String exLineNo;
-            @XmlElement(name = "RequiredDate")
+            @XmlElement(namespace = "", name = "RequiredDate")
             @XmlSchemaType(name = "date")
             protected XMLGregorianCalendar requiredDate;
-            @XmlElement(name = "RequiredQuantity")
+            @XmlElement(namespace = "", name = "RequiredQuantity")
             protected Double requiredQuantity;
-            @XmlElement(name = "COGSCostingCode2")
+            @XmlElement(namespace = "", name = "COGSCostingCode2")
             protected String cogsCostingCode2;
-            @XmlElement(name = "COGSCostingCode3")
+            @XmlElement(namespace = "", name = "COGSCostingCode3")
             protected String cogsCostingCode3;
-            @XmlElement(name = "COGSCostingCode4")
+            @XmlElement(namespace = "", name = "COGSCostingCode4")
             protected String cogsCostingCode4;
-            @XmlElement(name = "COGSCostingCode5")
+            @XmlElement(namespace = "", name = "COGSCostingCode5")
             protected String cogsCostingCode5;
-            @XmlElement(name = "CSTforIPI")
+            @XmlElement(namespace = "", name = "CSTforIPI")
             protected String csTforIPI;
-            @XmlElement(name = "CSTforPIS")
+            @XmlElement(namespace = "", name = "CSTforPIS")
             protected String csTforPIS;
-            @XmlElement(name = "CSTforCOFINS")
+            @XmlElement(namespace = "", name = "CSTforCOFINS")
             protected String csTforCOFINS;
-            @XmlElement(name = "CreditOriginCode")
+            @XmlElement(namespace = "", name = "CreditOriginCode")
             protected String creditOriginCode;
-            @XmlElement(name = "WithoutInventoryMovement")
+            @XmlElement(namespace = "", name = "WithoutInventoryMovement")
             protected String withoutInventoryMovement;
-            @XmlElement(name = "AgreementNo")
+            @XmlElement(namespace = "", name = "AgreementNo")
             protected Long agreementNo;
-            @XmlElement(name = "AgreementRowNumber")
+            @XmlElement(namespace = "", name = "AgreementRowNumber")
             protected Long agreementRowNumber;
-            @XmlElement(name = "ShipToDescription")
+            @XmlElement(namespace = "", name = "ShipToDescription")
             protected String shipToDescription;
-            @XmlElement(name = "ActualBaseEntry")
+            @XmlElement(namespace = "", name = "ActualBaseEntry")
             protected Long actualBaseEntry;
-            @XmlElement(name = "ActualBaseLine")
+            @XmlElement(namespace = "", name = "ActualBaseLine")
             protected Long actualBaseLine;
-            @XmlElement(name = "DocEntry")
+            @XmlElement(namespace = "", name = "DocEntry")
             protected Long docEntry;
-            @XmlElement(name = "Surpluses")
+            @XmlElement(namespace = "", name = "Surpluses")
             protected Double surpluses;
-            @XmlElement(name = "DefectAndBreakup")
+            @XmlElement(namespace = "", name = "DefectAndBreakup")
             protected Double defectAndBreakup;
-            @XmlElement(name = "Shortages")
+            @XmlElement(namespace = "", name = "Shortages")
             protected Double shortages;
-            @XmlElement(name = "ConsiderQuantity")
+            @XmlElement(namespace = "", name = "ConsiderQuantity")
             protected String considerQuantity;
-            @XmlElement(name = "PartialRetirement")
+            @XmlElement(namespace = "", name = "PartialRetirement")
             protected String partialRetirement;
-            @XmlElement(name = "RetirementQuantity")
+            @XmlElement(namespace = "", name = "RetirementQuantity")
             protected Double retirementQuantity;
-            @XmlElement(name = "RetirementAPC")
+            @XmlElement(namespace = "", name = "RetirementAPC")
             protected Double retirementAPC;
-            @XmlElement(name = "UoMEntry")
+            @XmlElement(namespace = "", name = "UoMEntry")
             protected Long uoMEntry;
-            @XmlElement(name = "UoMCode")
+            @XmlElement(namespace = "", name = "UoMCode")
             protected String uoMCode;
-            @XmlElement(name = "InventoryQuantity")
+            @XmlElement(namespace = "", name = "InventoryQuantity")
             protected Double inventoryQuantity;
-            @XmlElement(name = "RemainingOpenInventoryQuantity")
+            @XmlElement(namespace = "", name = "RemainingOpenInventoryQuantity")
             protected Double remainingOpenInventoryQuantity;
-            @XmlElement(name = "Incoterms")
+            @XmlElement(namespace = "", name = "Incoterms")
             protected Long incoterms;
-            @XmlElement(name = "TransportMode")
+            @XmlElement(namespace = "", name = "TransportMode")
             protected Long transportMode;
-            @XmlElement(name = "U_ExPrice")
+            @XmlElement(namespace = "", name = "U_ExPrice")
             protected Double uExPrice;
-            @XmlElement(name = "U_ExCurrency")
+            @XmlElement(namespace = "", name = "U_ExCurrency")
             protected String uExCurrency;
-            @XmlElement(name = "U_ExRefNo")
+            @XmlElement(namespace = "", name = "U_ExRefNo")
             protected String uExRefNo;
-            @XmlElement(name = "U_Color")
+            @XmlElement(namespace = "", name = "U_Color")
             protected String uColor;
-            @XmlElement(name = "LineTaxJurisdictions")
+            @XmlElement(namespace = "", name = "LineTaxJurisdictions")
             protected Document.DocumentLines.DocumentLine.LineTaxJurisdictions lineTaxJurisdictions;
-            @XmlElement(name = "ExportProcesses")
+            @XmlElement(namespace = "", name = "ExportProcesses")
             protected Document.DocumentLines.DocumentLine.ExportProcesses exportProcesses;
-            @XmlElement(name = "DocumentLineAdditionalExpenses")
+            @XmlElement(namespace = "", name = "DocumentLineAdditionalExpenses")
             protected Document.DocumentLines.DocumentLine.DocumentLineAdditionalExpenses documentLineAdditionalExpenses;
-            @XmlElement(name = "WithholdingTaxLines")
+            @XmlElement(namespace = "", name = "WithholdingTaxLines")
             protected Document.DocumentLines.DocumentLine.WithholdingTaxLines withholdingTaxLines;
-            @XmlElement(name = "SerialNumbers")
+            @XmlElement(namespace = "", name = "SerialNumbers")
             protected Document.DocumentLines.DocumentLine.SerialNumbers serialNumbers;
-            @XmlElement(name = "BatchNumbers")
+            @XmlElement(namespace = "", name = "BatchNumbers")
             protected Document.DocumentLines.DocumentLine.BatchNumbers batchNumbers;
-            @XmlElement(name = "DocumentLinesBinAllocations")
+            @XmlElement(namespace = "", name = "DocumentLinesBinAllocations")
             protected Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations documentLinesBinAllocations;
 
             /**
@@ -16350,7 +16350,7 @@ public class Document {
             })
             public static class BatchNumbers {
 
-                @XmlElement(name = "BatchNumber")
+                @XmlElement(namespace = "", name = "BatchNumber")
                 protected List<Document.DocumentLines.DocumentLine.BatchNumbers.BatchNumber> batchNumber;
 
                 /**
@@ -16417,28 +16417,28 @@ public class Document {
                 })
                 public static class BatchNumber {
 
-                    @XmlElement(name = "BatchNumber")
+                    @XmlElement(namespace = "", name = "BatchNumber")
                     protected String batchNumber;
-                    @XmlElement(name = "ManufacturerSerialNumber")
+                    @XmlElement(namespace = "", name = "ManufacturerSerialNumber")
                     protected String manufacturerSerialNumber;
-                    @XmlElement(name = "InternalSerialNumber")
+                    @XmlElement(namespace = "", name = "InternalSerialNumber")
                     protected String internalSerialNumber;
-                    @XmlElement(name = "ExpiryDate")
+                    @XmlElement(namespace = "", name = "ExpiryDate")
                     @XmlSchemaType(name = "date")
                     protected XMLGregorianCalendar expiryDate;
-                    @XmlElement(name = "ManufacturingDate")
+                    @XmlElement(namespace = "", name = "ManufacturingDate")
                     @XmlSchemaType(name = "date")
                     protected XMLGregorianCalendar manufacturingDate;
-                    @XmlElement(name = "AddmisionDate")
+                    @XmlElement(namespace = "", name = "AddmisionDate")
                     @XmlSchemaType(name = "date")
                     protected XMLGregorianCalendar addmisionDate;
-                    @XmlElement(name = "Location")
+                    @XmlElement(namespace = "", name = "Location")
                     protected String location;
-                    @XmlElement(name = "Notes")
+                    @XmlElement(namespace = "", name = "Notes")
                     protected String notes;
-                    @XmlElement(name = "Quantity")
+                    @XmlElement(namespace = "", name = "Quantity")
                     protected Double quantity;
-                    @XmlElement(name = "BaseLineNumber")
+                    @XmlElement(namespace = "", name = "BaseLineNumber")
                     protected Long baseLineNumber;
 
                     /**
@@ -16817,7 +16817,7 @@ public class Document {
             })
             public static class DocumentLineAdditionalExpenses {
 
-                @XmlElement(name = "DocumentLineAdditionalExpense")
+                @XmlElement(namespace = "", name = "DocumentLineAdditionalExpense")
                 protected List<Document.DocumentLines.DocumentLine.DocumentLineAdditionalExpenses.DocumentLineAdditionalExpense> documentLineAdditionalExpense;
 
                 /**
@@ -16971,85 +16971,85 @@ public class Document {
                 })
                 public static class DocumentLineAdditionalExpense {
 
-                    @XmlElement(name = "LineNumber")
+                    @XmlElement(namespace = "", name = "LineNumber")
                     protected Long lineNumber;
-                    @XmlElement(name = "GroupCode")
+                    @XmlElement(namespace = "", name = "GroupCode")
                     protected Long groupCode;
-                    @XmlElement(name = "ExpenseCode")
+                    @XmlElement(namespace = "", name = "ExpenseCode")
                     protected Long expenseCode;
-                    @XmlElement(name = "LineTotal")
+                    @XmlElement(namespace = "", name = "LineTotal")
                     protected Double lineTotal;
-                    @XmlElement(name = "LineTotalFC")
+                    @XmlElement(namespace = "", name = "LineTotalFC")
                     protected Double lineTotalFC;
-                    @XmlElement(name = "LineTotalSys")
+                    @XmlElement(namespace = "", name = "LineTotalSys")
                     protected Double lineTotalSys;
-                    @XmlElement(name = "PaidToDate")
+                    @XmlElement(namespace = "", name = "PaidToDate")
                     protected Double paidToDate;
-                    @XmlElement(name = "PaidToDateFC")
+                    @XmlElement(namespace = "", name = "PaidToDateFC")
                     protected Double paidToDateFC;
-                    @XmlElement(name = "PaidToDateSys")
+                    @XmlElement(namespace = "", name = "PaidToDateSys")
                     protected Double paidToDateSys;
-                    @XmlElement(name = "TaxLiable")
+                    @XmlElement(namespace = "", name = "TaxLiable")
                     protected String taxLiable;
-                    @XmlElement(name = "VatGroup")
+                    @XmlElement(namespace = "", name = "VatGroup")
                     protected String vatGroup;
-                    @XmlElement(name = "TaxPercent")
+                    @XmlElement(namespace = "", name = "TaxPercent")
                     protected Double taxPercent;
-                    @XmlElement(name = "TaxSum")
+                    @XmlElement(namespace = "", name = "TaxSum")
                     protected Double taxSum;
-                    @XmlElement(name = "TaxSumFC")
+                    @XmlElement(namespace = "", name = "TaxSumFC")
                     protected Double taxSumFC;
-                    @XmlElement(name = "TaxSumSys")
+                    @XmlElement(namespace = "", name = "TaxSumSys")
                     protected Double taxSumSys;
-                    @XmlElement(name = "DeductibleTaxSum")
+                    @XmlElement(namespace = "", name = "DeductibleTaxSum")
                     protected Double deductibleTaxSum;
-                    @XmlElement(name = "DeductibleTaxSumFC")
+                    @XmlElement(namespace = "", name = "DeductibleTaxSumFC")
                     protected Double deductibleTaxSumFC;
-                    @XmlElement(name = "DeductibleTaxSumSys")
+                    @XmlElement(namespace = "", name = "DeductibleTaxSumSys")
                     protected Double deductibleTaxSumSys;
-                    @XmlElement(name = "AquisitionTax")
+                    @XmlElement(namespace = "", name = "AquisitionTax")
                     protected String aquisitionTax;
-                    @XmlElement(name = "TaxCode")
+                    @XmlElement(namespace = "", name = "TaxCode")
                     protected String taxCode;
-                    @XmlElement(name = "TaxType")
+                    @XmlElement(namespace = "", name = "TaxType")
                     protected String taxType;
-                    @XmlElement(name = "TaxPaid")
+                    @XmlElement(namespace = "", name = "TaxPaid")
                     protected Double taxPaid;
-                    @XmlElement(name = "TaxPaidFC")
+                    @XmlElement(namespace = "", name = "TaxPaidFC")
                     protected Double taxPaidFC;
-                    @XmlElement(name = "TaxPaidSys")
+                    @XmlElement(namespace = "", name = "TaxPaidSys")
                     protected Double taxPaidSys;
-                    @XmlElement(name = "EqualizationTaxPercent")
+                    @XmlElement(namespace = "", name = "EqualizationTaxPercent")
                     protected Double equalizationTaxPercent;
-                    @XmlElement(name = "EqualizationTaxSum")
+                    @XmlElement(namespace = "", name = "EqualizationTaxSum")
                     protected Double equalizationTaxSum;
-                    @XmlElement(name = "EqualizationTaxFC")
+                    @XmlElement(namespace = "", name = "EqualizationTaxFC")
                     protected Double equalizationTaxFC;
-                    @XmlElement(name = "EqualizationTaxSys")
+                    @XmlElement(namespace = "", name = "EqualizationTaxSys")
                     protected Double equalizationTaxSys;
-                    @XmlElement(name = "TaxTotalSum")
+                    @XmlElement(namespace = "", name = "TaxTotalSum")
                     protected Double taxTotalSum;
-                    @XmlElement(name = "TaxTotalSumFC")
+                    @XmlElement(namespace = "", name = "TaxTotalSumFC")
                     protected Double taxTotalSumFC;
-                    @XmlElement(name = "TaxTotalSumSys")
+                    @XmlElement(namespace = "", name = "TaxTotalSumSys")
                     protected Double taxTotalSumSys;
-                    @XmlElement(name = "WTLiable")
+                    @XmlElement(namespace = "", name = "WTLiable")
                     protected String wtLiable;
-                    @XmlElement(name = "BaseGroup")
+                    @XmlElement(namespace = "", name = "BaseGroup")
                     protected Long baseGroup;
-                    @XmlElement(name = "DistributionRule")
+                    @XmlElement(namespace = "", name = "DistributionRule")
                     protected String distributionRule;
-                    @XmlElement(name = "Project")
+                    @XmlElement(namespace = "", name = "Project")
                     protected String project;
-                    @XmlElement(name = "DistributionRule2")
+                    @XmlElement(namespace = "", name = "DistributionRule2")
                     protected String distributionRule2;
-                    @XmlElement(name = "DistributionRule3")
+                    @XmlElement(namespace = "", name = "DistributionRule3")
                     protected String distributionRule3;
-                    @XmlElement(name = "DistributionRule4")
+                    @XmlElement(namespace = "", name = "DistributionRule4")
                     protected String distributionRule4;
-                    @XmlElement(name = "DistributionRule5")
+                    @XmlElement(namespace = "", name = "DistributionRule5")
                     protected String distributionRule5;
-                    @XmlElement(name = "LineExpenseTaxJurisdictions")
+                    @XmlElement(namespace = "", name = "LineExpenseTaxJurisdictions")
                     protected Document.DocumentLines.DocumentLine.DocumentLineAdditionalExpenses.DocumentLineAdditionalExpense.LineExpenseTaxJurisdictions lineExpenseTaxJurisdictions;
 
                     /**
@@ -18056,7 +18056,7 @@ public class Document {
                     })
                     public static class LineExpenseTaxJurisdictions {
 
-                        @XmlElement(name = "LineExpenseTaxJurisdiction")
+                        @XmlElement(namespace = "", name = "LineExpenseTaxJurisdiction")
                         protected List<Document.DocumentLines.DocumentLine.DocumentLineAdditionalExpenses.DocumentLineAdditionalExpense.LineExpenseTaxJurisdictions.LineExpenseTaxJurisdiction> lineExpenseTaxJurisdiction;
 
                         /**
@@ -18122,23 +18122,23 @@ public class Document {
                         })
                         public static class LineExpenseTaxJurisdiction {
 
-                            @XmlElement(name = "JurisdictionCode")
+                            @XmlElement(namespace = "", name = "JurisdictionCode")
                             protected String jurisdictionCode;
-                            @XmlElement(name = "JurisdictionType")
+                            @XmlElement(namespace = "", name = "JurisdictionType")
                             protected Long jurisdictionType;
-                            @XmlElement(name = "TaxAmount")
+                            @XmlElement(namespace = "", name = "TaxAmount")
                             protected Double taxAmount;
-                            @XmlElement(name = "TaxAmountSC")
+                            @XmlElement(namespace = "", name = "TaxAmountSC")
                             protected Double taxAmountSC;
-                            @XmlElement(name = "TaxAmountFC")
+                            @XmlElement(namespace = "", name = "TaxAmountFC")
                             protected Double taxAmountFC;
-                            @XmlElement(name = "TaxRate")
+                            @XmlElement(namespace = "", name = "TaxRate")
                             protected Double taxRate;
-                            @XmlElement(name = "DocEntry")
+                            @XmlElement(namespace = "", name = "DocEntry")
                             protected Long docEntry;
-                            @XmlElement(name = "LineNumber")
+                            @XmlElement(namespace = "", name = "LineNumber")
                             protected Long lineNumber;
-                            @XmlElement(name = "RowSequence")
+                            @XmlElement(namespace = "", name = "RowSequence")
                             protected Long rowSequence;
 
                             /**
@@ -18412,7 +18412,7 @@ public class Document {
             })
             public static class DocumentLinesBinAllocations {
 
-                @XmlElement(name = "DocumentLinesBinAllocation")
+                @XmlElement(namespace = "", name = "DocumentLinesBinAllocation")
                 protected List<Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation> documentLinesBinAllocation;
 
                 /**
@@ -18481,15 +18481,15 @@ public class Document {
                 })
                 public static class DocumentLinesBinAllocation {
 
-                    @XmlElement(name = "BinAbsEntry")
+                    @XmlElement(namespace = "", name = "BinAbsEntry")
                     protected Long binAbsEntry;
-                    @XmlElement(name = "Quantity")
+                    @XmlElement(namespace = "", name = "Quantity")
                     protected Double quantity;
-                    @XmlElement(name = "AllowNegativeQuantity")
+                    @XmlElement(namespace = "", name = "AllowNegativeQuantity")
                     protected String allowNegativeQuantity;
-                    @XmlElement(name = "SerialAndBatchNumbersBaseLine")
+                    @XmlElement(namespace = "", name = "SerialAndBatchNumbersBaseLine")
                     protected Long serialAndBatchNumbersBaseLine;
-                    @XmlElement(name = "BaseLineNumber")
+                    @XmlElement(namespace = "", name = "BaseLineNumber")
                     protected Long baseLineNumber;
 
                     /**
@@ -18662,7 +18662,7 @@ public class Document {
             })
             public static class ExportProcesses {
 
-                @XmlElement(name = "ExportProcess")
+                @XmlElement(namespace = "", name = "ExportProcess")
                 protected List<Document.DocumentLines.DocumentLine.ExportProcesses.ExportProcess> exportProcess;
 
                 /**
@@ -18730,31 +18730,31 @@ public class Document {
                 })
                 public static class ExportProcess {
 
-                    @XmlElement(name = "LineNumber")
+                    @XmlElement(namespace = "", name = "LineNumber")
                     protected Long lineNumber;
-                    @XmlElement(name = "ExportationDocumentTypeCode")
+                    @XmlElement(namespace = "", name = "ExportationDocumentTypeCode")
                     protected Long exportationDocumentTypeCode;
-                    @XmlElement(name = "ExportationDeclarationNumber")
+                    @XmlElement(namespace = "", name = "ExportationDeclarationNumber")
                     protected Long exportationDeclarationNumber;
-                    @XmlElement(name = "ExportationDeclarationDate")
+                    @XmlElement(namespace = "", name = "ExportationDeclarationDate")
                     @XmlSchemaType(name = "date")
                     protected XMLGregorianCalendar exportationDeclarationDate;
-                    @XmlElement(name = "ExportationNatureCode")
+                    @XmlElement(namespace = "", name = "ExportationNatureCode")
                     protected Long exportationNatureCode;
-                    @XmlElement(name = "ExportationRegistryNumber")
+                    @XmlElement(namespace = "", name = "ExportationRegistryNumber")
                     protected Long exportationRegistryNumber;
-                    @XmlElement(name = "ExportationRegistryDate")
+                    @XmlElement(namespace = "", name = "ExportationRegistryDate")
                     @XmlSchemaType(name = "date")
                     protected XMLGregorianCalendar exportationRegistryDate;
-                    @XmlElement(name = "LadingBillNumber")
+                    @XmlElement(namespace = "", name = "LadingBillNumber")
                     protected String ladingBillNumber;
-                    @XmlElement(name = "LadingBillDate")
+                    @XmlElement(namespace = "", name = "LadingBillDate")
                     @XmlSchemaType(name = "date")
                     protected XMLGregorianCalendar ladingBillDate;
-                    @XmlElement(name = "MerchandiseLeftCustomsDate")
+                    @XmlElement(namespace = "", name = "MerchandiseLeftCustomsDate")
                     @XmlSchemaType(name = "date")
                     protected XMLGregorianCalendar merchandiseLeftCustomsDate;
-                    @XmlElement(name = "LadingBillTypeCode")
+                    @XmlElement(namespace = "", name = "LadingBillTypeCode")
                     protected Long ladingBillTypeCode;
 
                     /**
@@ -19069,7 +19069,7 @@ public class Document {
             })
             public static class LineTaxJurisdictions {
 
-                @XmlElement(name = "LineTaxJurisdiction")
+                @XmlElement(namespace = "", name = "LineTaxJurisdiction")
                 protected List<Document.DocumentLines.DocumentLine.LineTaxJurisdictions.LineTaxJurisdiction> lineTaxJurisdiction;
 
                 /**
@@ -19135,23 +19135,23 @@ public class Document {
                 })
                 public static class LineTaxJurisdiction {
 
-                    @XmlElement(name = "JurisdictionCode")
+                    @XmlElement(namespace = "", name = "JurisdictionCode")
                     protected String jurisdictionCode;
-                    @XmlElement(name = "JurisdictionType")
+                    @XmlElement(namespace = "", name = "JurisdictionType")
                     protected Long jurisdictionType;
-                    @XmlElement(name = "TaxAmount")
+                    @XmlElement(namespace = "", name = "TaxAmount")
                     protected Double taxAmount;
-                    @XmlElement(name = "TaxAmountSC")
+                    @XmlElement(namespace = "", name = "TaxAmountSC")
                     protected Double taxAmountSC;
-                    @XmlElement(name = "TaxAmountFC")
+                    @XmlElement(namespace = "", name = "TaxAmountFC")
                     protected Double taxAmountFC;
-                    @XmlElement(name = "TaxRate")
+                    @XmlElement(namespace = "", name = "TaxRate")
                     protected Double taxRate;
-                    @XmlElement(name = "DocEntry")
+                    @XmlElement(namespace = "", name = "DocEntry")
                     protected Long docEntry;
-                    @XmlElement(name = "LineNumber")
+                    @XmlElement(namespace = "", name = "LineNumber")
                     protected Long lineNumber;
-                    @XmlElement(name = "RowSequence")
+                    @XmlElement(namespace = "", name = "RowSequence")
                     protected Long rowSequence;
 
                     /**
@@ -19422,7 +19422,7 @@ public class Document {
             })
             public static class SerialNumbers {
 
-                @XmlElement(name = "SerialNumber")
+                @XmlElement(namespace = "", name = "SerialNumber")
                 protected List<Document.DocumentLines.DocumentLine.SerialNumbers.SerialNumber> serialNumber;
 
                 /**
@@ -19492,36 +19492,36 @@ public class Document {
                 })
                 public static class SerialNumber {
 
-                    @XmlElement(name = "ManufacturerSerialNumber")
+                    @XmlElement(namespace = "", name = "ManufacturerSerialNumber")
                     protected String manufacturerSerialNumber;
-                    @XmlElement(name = "InternalSerialNumber")
+                    @XmlElement(namespace = "", name = "InternalSerialNumber")
                     protected String internalSerialNumber;
-                    @XmlElement(name = "ExpiryDate")
+                    @XmlElement(namespace = "", name = "ExpiryDate")
                     @XmlSchemaType(name = "date")
                     protected XMLGregorianCalendar expiryDate;
-                    @XmlElement(name = "ManufactureDate")
+                    @XmlElement(namespace = "", name = "ManufactureDate")
                     @XmlSchemaType(name = "date")
                     protected XMLGregorianCalendar manufactureDate;
-                    @XmlElement(name = "ReceptionDate")
+                    @XmlElement(namespace = "", name = "ReceptionDate")
                     @XmlSchemaType(name = "date")
                     protected XMLGregorianCalendar receptionDate;
-                    @XmlElement(name = "WarrantyStart")
+                    @XmlElement(namespace = "", name = "WarrantyStart")
                     @XmlSchemaType(name = "date")
                     protected XMLGregorianCalendar warrantyStart;
-                    @XmlElement(name = "WarrantyEnd")
+                    @XmlElement(namespace = "", name = "WarrantyEnd")
                     @XmlSchemaType(name = "date")
                     protected XMLGregorianCalendar warrantyEnd;
-                    @XmlElement(name = "Location")
+                    @XmlElement(namespace = "", name = "Location")
                     protected String location;
-                    @XmlElement(name = "Notes")
+                    @XmlElement(namespace = "", name = "Notes")
                     protected String notes;
-                    @XmlElement(name = "BatchID")
+                    @XmlElement(namespace = "", name = "BatchID")
                     protected String batchID;
-                    @XmlElement(name = "SystemSerialNumber")
+                    @XmlElement(namespace = "", name = "SystemSerialNumber")
                     protected Long systemSerialNumber;
-                    @XmlElement(name = "BaseLineNumber")
+                    @XmlElement(namespace = "", name = "BaseLineNumber")
                     protected Long baseLineNumber;
-                    @XmlElement(name = "Quantity")
+                    @XmlElement(namespace = "", name = "Quantity")
                     protected Double quantity;
 
                     /**
@@ -19911,7 +19911,7 @@ public class Document {
             })
             public static class WithholdingTaxLines {
 
-                @XmlElement(name = "WithholdingTaxLine")
+                @XmlElement(namespace = "", name = "WithholdingTaxLine")
                 protected List<Document.DocumentLines.DocumentLine.WithholdingTaxLines.WithholdingTaxLine> withholdingTaxLine;
 
                 /**
@@ -20004,59 +20004,59 @@ public class Document {
                 })
                 public static class WithholdingTaxLine {
 
-                    @XmlElement(name = "WTCode")
+                    @XmlElement(namespace = "", name = "WTCode")
                     protected String wtCode;
-                    @XmlElement(name = "WTAmountSys")
+                    @XmlElement(namespace = "", name = "WTAmountSys")
                     protected Double wtAmountSys;
-                    @XmlElement(name = "WTAmountFC")
+                    @XmlElement(namespace = "", name = "WTAmountFC")
                     protected Double wtAmountFC;
-                    @XmlElement(name = "WTAmount")
+                    @XmlElement(namespace = "", name = "WTAmount")
                     protected Double wtAmount;
-                    @XmlElement(name = "WithholdingType")
+                    @XmlElement(namespace = "", name = "WithholdingType")
                     protected String withholdingType;
-                    @XmlElement(name = "TaxableAmountinSys")
+                    @XmlElement(namespace = "", name = "TaxableAmountinSys")
                     protected Double taxableAmountinSys;
-                    @XmlElement(name = "TaxableAmountFC")
+                    @XmlElement(namespace = "", name = "TaxableAmountFC")
                     protected Double taxableAmountFC;
-                    @XmlElement(name = "TaxableAmount")
+                    @XmlElement(namespace = "", name = "TaxableAmount")
                     protected Double taxableAmount;
-                    @XmlElement(name = "RoundingType")
+                    @XmlElement(namespace = "", name = "RoundingType")
                     protected String roundingType;
-                    @XmlElement(name = "Rate")
+                    @XmlElement(namespace = "", name = "Rate")
                     protected Double rate;
-                    @XmlElement(name = "Criteria")
+                    @XmlElement(namespace = "", name = "Criteria")
                     protected String criteria;
-                    @XmlElement(name = "Category")
+                    @XmlElement(namespace = "", name = "Category")
                     protected String category;
-                    @XmlElement(name = "BaseType")
+                    @XmlElement(namespace = "", name = "BaseType")
                     protected String baseType;
-                    @XmlElement(name = "AppliedWTAmountSys")
+                    @XmlElement(namespace = "", name = "AppliedWTAmountSys")
                     protected Double appliedWTAmountSys;
-                    @XmlElement(name = "AppliedWTAmountFC")
+                    @XmlElement(namespace = "", name = "AppliedWTAmountFC")
                     protected Double appliedWTAmountFC;
-                    @XmlElement(name = "AppliedWTAmount")
+                    @XmlElement(namespace = "", name = "AppliedWTAmount")
                     protected Double appliedWTAmount;
-                    @XmlElement(name = "GLAccount")
+                    @XmlElement(namespace = "", name = "GLAccount")
                     protected String glAccount;
-                    @XmlElement(name = "LineNum")
+                    @XmlElement(namespace = "", name = "LineNum")
                     protected Long lineNum;
-                    @XmlElement(name = "BaseDocEntry")
+                    @XmlElement(namespace = "", name = "BaseDocEntry")
                     protected Long baseDocEntry;
-                    @XmlElement(name = "BaseDocLine")
+                    @XmlElement(namespace = "", name = "BaseDocLine")
                     protected Long baseDocLine;
-                    @XmlElement(name = "BaseDocType")
+                    @XmlElement(namespace = "", name = "BaseDocType")
                     protected Long baseDocType;
-                    @XmlElement(name = "BaseDocumentReference")
+                    @XmlElement(namespace = "", name = "BaseDocumentReference")
                     protected Long baseDocumentReference;
-                    @XmlElement(name = "Status")
+                    @XmlElement(namespace = "", name = "Status")
                     protected String status;
-                    @XmlElement(name = "TargetAbsEntry")
+                    @XmlElement(namespace = "", name = "TargetAbsEntry")
                     protected Long targetAbsEntry;
-                    @XmlElement(name = "TargetDocumentType")
+                    @XmlElement(namespace = "", name = "TargetDocumentType")
                     protected Long targetDocumentType;
-                    @XmlElement(name = "CSTCodeIncoming")
+                    @XmlElement(namespace = "", name = "CSTCodeIncoming")
                     protected String cstCodeIncoming;
-                    @XmlElement(name = "CSTCodeOutgoing")
+                    @XmlElement(namespace = "", name = "CSTCodeOutgoing")
                     protected String cstCodeOutgoing;
 
                     /**
@@ -20780,7 +20780,7 @@ public class Document {
     })
     public static class DocumentPackages {
 
-        @XmlElement(name = "DocumentPackage")
+        @XmlElement(namespace = "", name = "DocumentPackage")
         protected List<Document.DocumentPackages.DocumentPackage> documentPackage;
 
         /**
@@ -20867,15 +20867,15 @@ public class Document {
         })
         public static class DocumentPackage {
 
-            @XmlElement(name = "Number")
+            @XmlElement(namespace = "", name = "Number")
             protected Long number;
-            @XmlElement(name = "Type")
+            @XmlElement(namespace = "", name = "Type")
             protected String type;
-            @XmlElement(name = "TotalWeight")
+            @XmlElement(namespace = "", name = "TotalWeight")
             protected Double totalWeight;
-            @XmlElement(name = "Units")
+            @XmlElement(namespace = "", name = "Units")
             protected Long units;
-            @XmlElement(name = "DocumentPackageItems")
+            @XmlElement(namespace = "", name = "DocumentPackageItems")
             protected Document.DocumentPackages.DocumentPackage.DocumentPackageItems documentPackageItems;
 
             /**
@@ -21039,7 +21039,7 @@ public class Document {
             })
             public static class DocumentPackageItems {
 
-                @XmlElement(name = "DocumentPackageItem")
+                @XmlElement(namespace = "", name = "DocumentPackageItem")
                 protected List<Document.DocumentPackages.DocumentPackage.DocumentPackageItems.DocumentPackageItem> documentPackageItem;
 
                 /**
@@ -21102,17 +21102,17 @@ public class Document {
                 })
                 public static class DocumentPackageItem {
 
-                    @XmlElement(name = "PackageNumber")
+                    @XmlElement(namespace = "", name = "PackageNumber")
                     protected Long packageNumber;
-                    @XmlElement(name = "ItemCode")
+                    @XmlElement(namespace = "", name = "ItemCode")
                     protected String itemCode;
-                    @XmlElement(name = "Quantity")
+                    @XmlElement(namespace = "", name = "Quantity")
                     protected Double quantity;
-                    @XmlElement(name = "UoMEntry")
+                    @XmlElement(namespace = "", name = "UoMEntry")
                     protected Long uoMEntry;
-                    @XmlElement(name = "MeasureUnit")
+                    @XmlElement(namespace = "", name = "MeasureUnit")
                     protected String measureUnit;
-                    @XmlElement(name = "UnitsOfMeasurement")
+                    @XmlElement(namespace = "", name = "UnitsOfMeasurement")
                     protected Double unitsOfMeasurement;
 
                     /**
@@ -21332,7 +21332,7 @@ public class Document {
     })
     public static class DocumentSpecialLines {
 
-        @XmlElement(name = "DocumentSpecialLine")
+        @XmlElement(namespace = "", name = "DocumentSpecialLine")
         protected List<Document.DocumentSpecialLines.DocumentSpecialLine> documentSpecialLine;
 
         /**
@@ -21419,51 +21419,51 @@ public class Document {
         })
         public static class DocumentSpecialLine {
 
-            @XmlElement(name = "LineNum")
+            @XmlElement(namespace = "", name = "LineNum")
             protected Long lineNum;
-            @XmlElement(name = "AfterLineNumber")
+            @XmlElement(namespace = "", name = "AfterLineNumber")
             protected Long afterLineNumber;
-            @XmlElement(name = "OrderNumber")
+            @XmlElement(namespace = "", name = "OrderNumber")
             protected Long orderNumber;
-            @XmlElement(name = "LineType")
+            @XmlElement(namespace = "", name = "LineType")
             protected String lineType;
-            @XmlElement(name = "Subtotal")
+            @XmlElement(namespace = "", name = "Subtotal")
             protected Double subtotal;
-            @XmlElement(name = "LineText")
+            @XmlElement(namespace = "", name = "LineText")
             protected String lineText;
-            @XmlElement(name = "SubtotalFC")
+            @XmlElement(namespace = "", name = "SubtotalFC")
             protected Double subtotalFC;
-            @XmlElement(name = "SubtotalSC")
+            @XmlElement(namespace = "", name = "SubtotalSC")
             protected Double subtotalSC;
-            @XmlElement(name = "TaxAmount")
+            @XmlElement(namespace = "", name = "TaxAmount")
             protected Double taxAmount;
-            @XmlElement(name = "TaxAmountFC")
+            @XmlElement(namespace = "", name = "TaxAmountFC")
             protected Double taxAmountFC;
-            @XmlElement(name = "TaxAmountSC")
+            @XmlElement(namespace = "", name = "TaxAmountSC")
             protected Double taxAmountSC;
-            @XmlElement(name = "Freight1")
+            @XmlElement(namespace = "", name = "Freight1")
             protected Double freight1;
-            @XmlElement(name = "Freight1FC")
+            @XmlElement(namespace = "", name = "Freight1FC")
             protected Double freight1FC;
-            @XmlElement(name = "Freight1SC")
+            @XmlElement(namespace = "", name = "Freight1SC")
             protected Double freight1SC;
-            @XmlElement(name = "Freight2")
+            @XmlElement(namespace = "", name = "Freight2")
             protected Double freight2;
-            @XmlElement(name = "Freight2FC")
+            @XmlElement(namespace = "", name = "Freight2FC")
             protected Double freight2FC;
-            @XmlElement(name = "Freight2SC")
+            @XmlElement(namespace = "", name = "Freight2SC")
             protected Double freight2SC;
-            @XmlElement(name = "Freight3")
+            @XmlElement(namespace = "", name = "Freight3")
             protected Double freight3;
-            @XmlElement(name = "Freight3FC")
+            @XmlElement(namespace = "", name = "Freight3FC")
             protected Double freight3FC;
-            @XmlElement(name = "Freight3SC")
+            @XmlElement(namespace = "", name = "Freight3SC")
             protected Double freight3SC;
-            @XmlElement(name = "GrossTotal")
+            @XmlElement(namespace = "", name = "GrossTotal")
             protected Double grossTotal;
-            @XmlElement(name = "GrossTotalFC")
+            @XmlElement(namespace = "", name = "GrossTotalFC")
             protected Double grossTotalFC;
-            @XmlElement(name = "GrossTotalSC")
+            @XmlElement(namespace = "", name = "GrossTotalSC")
             protected Double grossTotalSC;
 
             /**
@@ -22150,7 +22150,7 @@ public class Document {
     })
     public static class DownPaymentsToDraw {
 
-        @XmlElement(name = "DownPaymentToDraw")
+        @XmlElement(namespace = "", name = "DownPaymentToDraw")
         protected List<Document.DownPaymentsToDraw.DownPaymentToDraw> downPaymentToDraw;
 
         /**
@@ -22300,47 +22300,47 @@ public class Document {
         })
         public static class DownPaymentToDraw {
 
-            @XmlElement(name = "DocEntry")
+            @XmlElement(namespace = "", name = "DocEntry")
             protected Long docEntry;
-            @XmlElement(name = "PostingDate")
+            @XmlElement(namespace = "", name = "PostingDate")
             @XmlSchemaType(name = "date")
             protected XMLGregorianCalendar postingDate;
-            @XmlElement(name = "DueDate")
+            @XmlElement(namespace = "", name = "DueDate")
             @XmlSchemaType(name = "date")
             protected XMLGregorianCalendar dueDate;
-            @XmlElement(name = "Name")
+            @XmlElement(namespace = "", name = "Name")
             protected String name;
-            @XmlElement(name = "Details")
+            @XmlElement(namespace = "", name = "Details")
             protected String details;
-            @XmlElement(name = "AmountToDraw")
+            @XmlElement(namespace = "", name = "AmountToDraw")
             protected Double amountToDraw;
-            @XmlElement(name = "DownPaymentType")
+            @XmlElement(namespace = "", name = "DownPaymentType")
             protected String downPaymentType;
-            @XmlElement(name = "AmountToDrawFC")
+            @XmlElement(namespace = "", name = "AmountToDrawFC")
             protected Double amountToDrawFC;
-            @XmlElement(name = "AmountToDrawSC")
+            @XmlElement(namespace = "", name = "AmountToDrawSC")
             protected Double amountToDrawSC;
-            @XmlElement(name = "DocInternalID")
+            @XmlElement(namespace = "", name = "DocInternalID")
             protected Long docInternalID;
-            @XmlElement(name = "RowNum")
+            @XmlElement(namespace = "", name = "RowNum")
             protected Long rowNum;
-            @XmlElement(name = "DocNumber")
+            @XmlElement(namespace = "", name = "DocNumber")
             protected Long docNumber;
-            @XmlElement(name = "Tax")
+            @XmlElement(namespace = "", name = "Tax")
             protected Double tax;
-            @XmlElement(name = "TaxFC")
+            @XmlElement(namespace = "", name = "TaxFC")
             protected Double taxFC;
-            @XmlElement(name = "TaxSC")
+            @XmlElement(namespace = "", name = "TaxSC")
             protected Double taxSC;
-            @XmlElement(name = "GrossAmountToDraw")
+            @XmlElement(namespace = "", name = "GrossAmountToDraw")
             protected Double grossAmountToDraw;
-            @XmlElement(name = "GrossAmountToDrawFC")
+            @XmlElement(namespace = "", name = "GrossAmountToDrawFC")
             protected Double grossAmountToDrawFC;
-            @XmlElement(name = "GrossAmountToDrawSC")
+            @XmlElement(namespace = "", name = "GrossAmountToDrawSC")
             protected Double grossAmountToDrawSC;
-            @XmlElement(name = "IsGrossLine")
+            @XmlElement(namespace = "", name = "IsGrossLine")
             protected String isGrossLine;
-            @XmlElement(name = "DownPaymentsToDrawDetails")
+            @XmlElement(namespace = "", name = "DownPaymentsToDrawDetails")
             protected Document.DownPaymentsToDraw.DownPaymentToDraw.DownPaymentsToDrawDetails downPaymentsToDrawDetails;
 
             /**
@@ -22898,7 +22898,7 @@ public class Document {
             })
             public static class DownPaymentsToDrawDetails {
 
-                @XmlElement(name = "DownPaymentToDrawDetails")
+                @XmlElement(namespace = "", name = "DownPaymentToDrawDetails")
                 protected List<Document.DownPaymentsToDraw.DownPaymentToDraw.DownPaymentsToDrawDetails.DownPaymentToDrawDetails> downPaymentToDrawDetails;
 
                 /**
@@ -22995,41 +22995,41 @@ public class Document {
                 })
                 public static class DownPaymentToDrawDetails {
 
-                    @XmlElement(name = "DocInternalID")
+                    @XmlElement(namespace = "", name = "DocInternalID")
                     protected Long docInternalID;
-                    @XmlElement(name = "RowNum")
+                    @XmlElement(namespace = "", name = "RowNum")
                     protected Long rowNum;
-                    @XmlElement(name = "SeqNum")
+                    @XmlElement(namespace = "", name = "SeqNum")
                     protected Long seqNum;
-                    @XmlElement(name = "DocEntry")
+                    @XmlElement(namespace = "", name = "DocEntry")
                     protected Long docEntry;
-                    @XmlElement(name = "VatGroupCode")
+                    @XmlElement(namespace = "", name = "VatGroupCode")
                     protected String vatGroupCode;
-                    @XmlElement(name = "VatPercent")
+                    @XmlElement(namespace = "", name = "VatPercent")
                     protected Double vatPercent;
-                    @XmlElement(name = "AmountToDraw")
+                    @XmlElement(namespace = "", name = "AmountToDraw")
                     protected Double amountToDraw;
-                    @XmlElement(name = "AmountToDrawFC")
+                    @XmlElement(namespace = "", name = "AmountToDrawFC")
                     protected Double amountToDrawFC;
-                    @XmlElement(name = "AmountToDrawSC")
+                    @XmlElement(namespace = "", name = "AmountToDrawSC")
                     protected Double amountToDrawSC;
-                    @XmlElement(name = "Tax")
+                    @XmlElement(namespace = "", name = "Tax")
                     protected Double tax;
-                    @XmlElement(name = "TaxFC")
+                    @XmlElement(namespace = "", name = "TaxFC")
                     protected Double taxFC;
-                    @XmlElement(name = "TaxSC")
+                    @XmlElement(namespace = "", name = "TaxSC")
                     protected Double taxSC;
-                    @XmlElement(name = "IsGrossLine")
+                    @XmlElement(namespace = "", name = "IsGrossLine")
                     protected String isGrossLine;
-                    @XmlElement(name = "GrossAmountToDraw")
+                    @XmlElement(namespace = "", name = "GrossAmountToDraw")
                     protected Double grossAmountToDraw;
-                    @XmlElement(name = "GrossAmountToDrawFC")
+                    @XmlElement(namespace = "", name = "GrossAmountToDrawFC")
                     protected Double grossAmountToDrawFC;
-                    @XmlElement(name = "GrossAmountToDrawSC")
+                    @XmlElement(namespace = "", name = "GrossAmountToDrawSC")
                     protected Double grossAmountToDrawSC;
-                    @XmlElement(name = "LineType")
+                    @XmlElement(namespace = "", name = "LineType")
                     protected String lineType;
-                    @XmlElement(name = "TaxAdjust")
+                    @XmlElement(namespace = "", name = "TaxAdjust")
                     protected String taxAdjust;
 
                     /**
@@ -23547,91 +23547,91 @@ public class Document {
     })
     public static class TaxExtension {
 
-        @XmlElement(name = "TaxId0")
+        @XmlElement(namespace = "", name = "TaxId0")
         protected String taxId0;
-        @XmlElement(name = "TaxId1")
+        @XmlElement(namespace = "", name = "TaxId1")
         protected String taxId1;
-        @XmlElement(name = "TaxId2")
+        @XmlElement(namespace = "", name = "TaxId2")
         protected String taxId2;
-        @XmlElement(name = "TaxId3")
+        @XmlElement(namespace = "", name = "TaxId3")
         protected String taxId3;
-        @XmlElement(name = "TaxId4")
+        @XmlElement(namespace = "", name = "TaxId4")
         protected String taxId4;
-        @XmlElement(name = "TaxId5")
+        @XmlElement(namespace = "", name = "TaxId5")
         protected String taxId5;
-        @XmlElement(name = "TaxId6")
+        @XmlElement(namespace = "", name = "TaxId6")
         protected String taxId6;
-        @XmlElement(name = "TaxId7")
+        @XmlElement(namespace = "", name = "TaxId7")
         protected String taxId7;
-        @XmlElement(name = "TaxId8")
+        @XmlElement(namespace = "", name = "TaxId8")
         protected String taxId8;
-        @XmlElement(name = "TaxId9")
+        @XmlElement(namespace = "", name = "TaxId9")
         protected String taxId9;
-        @XmlElement(name = "State")
+        @XmlElement(namespace = "", name = "State")
         protected String state;
-        @XmlElement(name = "County")
+        @XmlElement(namespace = "", name = "County")
         protected String county;
-        @XmlElement(name = "Incoterms")
+        @XmlElement(namespace = "", name = "Incoterms")
         protected String incoterms;
-        @XmlElement(name = "Vehicle")
+        @XmlElement(namespace = "", name = "Vehicle")
         protected String vehicle;
-        @XmlElement(name = "VehicleState")
+        @XmlElement(namespace = "", name = "VehicleState")
         protected String vehicleState;
-        @XmlElement(name = "NFRef")
+        @XmlElement(namespace = "", name = "NFRef")
         protected String nfRef;
-        @XmlElement(name = "Carrier")
+        @XmlElement(namespace = "", name = "Carrier")
         protected String carrier;
-        @XmlElement(name = "PackQuantity")
+        @XmlElement(namespace = "", name = "PackQuantity")
         protected Long packQuantity;
-        @XmlElement(name = "PackDescription")
+        @XmlElement(namespace = "", name = "PackDescription")
         protected String packDescription;
-        @XmlElement(name = "Brand")
+        @XmlElement(namespace = "", name = "Brand")
         protected String brand;
-        @XmlElement(name = "ShipUnitNo")
+        @XmlElement(namespace = "", name = "ShipUnitNo")
         protected Long shipUnitNo;
-        @XmlElement(name = "NetWeight")
+        @XmlElement(namespace = "", name = "NetWeight")
         protected Double netWeight;
-        @XmlElement(name = "GrossWeight")
+        @XmlElement(namespace = "", name = "GrossWeight")
         protected Double grossWeight;
-        @XmlElement(name = "StreetS")
+        @XmlElement(namespace = "", name = "StreetS")
         protected String streetS;
-        @XmlElement(name = "BlockS")
+        @XmlElement(namespace = "", name = "BlockS")
         protected String blockS;
-        @XmlElement(name = "BuildingS")
+        @XmlElement(namespace = "", name = "BuildingS")
         protected String buildingS;
-        @XmlElement(name = "CityS")
+        @XmlElement(namespace = "", name = "CityS")
         protected String cityS;
-        @XmlElement(name = "ZipCodeS")
+        @XmlElement(namespace = "", name = "ZipCodeS")
         protected String zipCodeS;
-        @XmlElement(name = "CountyS")
+        @XmlElement(namespace = "", name = "CountyS")
         protected String countyS;
-        @XmlElement(name = "StateS")
+        @XmlElement(namespace = "", name = "StateS")
         protected String stateS;
-        @XmlElement(name = "CountryS")
+        @XmlElement(namespace = "", name = "CountryS")
         protected String countryS;
-        @XmlElement(name = "StreetB")
+        @XmlElement(namespace = "", name = "StreetB")
         protected String streetB;
-        @XmlElement(name = "BlockB")
+        @XmlElement(namespace = "", name = "BlockB")
         protected String blockB;
-        @XmlElement(name = "BuildingB")
+        @XmlElement(namespace = "", name = "BuildingB")
         protected String buildingB;
-        @XmlElement(name = "CityB")
+        @XmlElement(namespace = "", name = "CityB")
         protected String cityB;
-        @XmlElement(name = "ZipCodeB")
+        @XmlElement(namespace = "", name = "ZipCodeB")
         protected String zipCodeB;
-        @XmlElement(name = "CountyB")
+        @XmlElement(namespace = "", name = "CountyB")
         protected String countyB;
-        @XmlElement(name = "StateB")
+        @XmlElement(namespace = "", name = "StateB")
         protected String stateB;
-        @XmlElement(name = "CountryB")
+        @XmlElement(namespace = "", name = "CountryB")
         protected String countryB;
-        @XmlElement(name = "ImportOrExport")
+        @XmlElement(namespace = "", name = "ImportOrExport")
         protected String importOrExport;
-        @XmlElement(name = "MainUsage")
+        @XmlElement(namespace = "", name = "MainUsage")
         protected Long mainUsage;
-        @XmlElement(name = "GlobalLocationNumberS")
+        @XmlElement(namespace = "", name = "GlobalLocationNumberS")
         protected String globalLocationNumberS;
-        @XmlElement(name = "GlobalLocationNumberB")
+        @XmlElement(namespace = "", name = "GlobalLocationNumberB")
         protected String globalLocationNumberB;
 
         /**
@@ -24737,7 +24737,7 @@ public class Document {
     })
     public static class WithholdingTaxDataCollection {
 
-        @XmlElement(name = "WithholdingTaxData")
+        @XmlElement(namespace = "", name = "WithholdingTaxData")
         protected List<Document.WithholdingTaxDataCollection.WithholdingTaxData> withholdingTaxData;
 
         /**
@@ -24828,55 +24828,55 @@ public class Document {
         })
         public static class WithholdingTaxData {
 
-            @XmlElement(name = "WTCode")
+            @XmlElement(namespace = "", name = "WTCode")
             protected String wtCode;
-            @XmlElement(name = "WTAmountSys")
+            @XmlElement(namespace = "", name = "WTAmountSys")
             protected Double wtAmountSys;
-            @XmlElement(name = "WTAmountFC")
+            @XmlElement(namespace = "", name = "WTAmountFC")
             protected Double wtAmountFC;
-            @XmlElement(name = "WTAmount")
+            @XmlElement(namespace = "", name = "WTAmount")
             protected Double wtAmount;
-            @XmlElement(name = "WithholdingType")
+            @XmlElement(namespace = "", name = "WithholdingType")
             protected String withholdingType;
-            @XmlElement(name = "TaxableAmountinSys")
+            @XmlElement(namespace = "", name = "TaxableAmountinSys")
             protected Double taxableAmountinSys;
-            @XmlElement(name = "TaxableAmountFC")
+            @XmlElement(namespace = "", name = "TaxableAmountFC")
             protected Double taxableAmountFC;
-            @XmlElement(name = "TaxableAmount")
+            @XmlElement(namespace = "", name = "TaxableAmount")
             protected Double taxableAmount;
-            @XmlElement(name = "RoundingType")
+            @XmlElement(namespace = "", name = "RoundingType")
             protected String roundingType;
-            @XmlElement(name = "Rate")
+            @XmlElement(namespace = "", name = "Rate")
             protected Double rate;
-            @XmlElement(name = "Criteria")
+            @XmlElement(namespace = "", name = "Criteria")
             protected String criteria;
-            @XmlElement(name = "Category")
+            @XmlElement(namespace = "", name = "Category")
             protected String category;
-            @XmlElement(name = "BaseType")
+            @XmlElement(namespace = "", name = "BaseType")
             protected String baseType;
-            @XmlElement(name = "AppliedWTAmountSys")
+            @XmlElement(namespace = "", name = "AppliedWTAmountSys")
             protected Double appliedWTAmountSys;
-            @XmlElement(name = "AppliedWTAmountFC")
+            @XmlElement(namespace = "", name = "AppliedWTAmountFC")
             protected Double appliedWTAmountFC;
-            @XmlElement(name = "AppliedWTAmount")
+            @XmlElement(namespace = "", name = "AppliedWTAmount")
             protected Double appliedWTAmount;
-            @XmlElement(name = "GLAccount")
+            @XmlElement(namespace = "", name = "GLAccount")
             protected String glAccount;
-            @XmlElement(name = "LineNum")
+            @XmlElement(namespace = "", name = "LineNum")
             protected Long lineNum;
-            @XmlElement(name = "BaseDocEntry")
+            @XmlElement(namespace = "", name = "BaseDocEntry")
             protected Long baseDocEntry;
-            @XmlElement(name = "BaseDocLine")
+            @XmlElement(namespace = "", name = "BaseDocLine")
             protected Long baseDocLine;
-            @XmlElement(name = "BaseDocType")
+            @XmlElement(namespace = "", name = "BaseDocType")
             protected Long baseDocType;
-            @XmlElement(name = "BaseDocumentReference")
+            @XmlElement(namespace = "", name = "BaseDocumentReference")
             protected Long baseDocumentReference;
-            @XmlElement(name = "Status")
+            @XmlElement(namespace = "", name = "Status")
             protected String status;
-            @XmlElement(name = "TargetAbsEntry")
+            @XmlElement(namespace = "", name = "TargetAbsEntry")
             protected Long targetAbsEntry;
-            @XmlElement(name = "TargetDocumentType")
+            @XmlElement(namespace = "", name = "TargetDocumentType")
             protected Long targetDocumentType;
 
             /**

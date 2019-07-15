@@ -1,16 +1,8 @@
 package co.igb.rest;
 
-import co.igb.b1ws.client.invoice.Add;
-import co.igb.b1ws.client.invoice.AddResponse;
-import co.igb.b1ws.client.invoice.Document;
-import co.igb.b1ws.client.invoice.Document.DocumentLines;
-import co.igb.b1ws.client.invoice.Document.DocumentLines.DocumentLine;
-import co.igb.b1ws.client.invoice.InvoicesService;
-import co.igb.b1ws.client.invoice.MsgHeader;
-import co.igb.dto.GenericRESTResponseDTO;
+import co.igb.b1ws.client.invoice.*;
 import co.igb.dto.ResponseDTO;
 import co.igb.ejb.IGBApplicationBean;
-import co.igb.manager.client.SessionPoolManagerClient;
 import co.igb.persistence.facade.CustomerFacade;
 import co.igb.persistence.facade.DeliveryNoteFacade;
 import co.igb.util.Constants;
@@ -209,7 +201,7 @@ public class InvoiceREST implements Serializable {
             return Response.ok(new ResponseDTO(-1, "No se encontraron datos de entrega para facturar")).build();
         }
         //Crear factura a partir de la entrega
-        DocumentLines lines = new DocumentLines();
+        Document.DocumentLines lines = new Document.DocumentLines();
         Document invoice = new Document();
         long lineNum = 0;
         for (Object[] row : deliveryData) {
@@ -247,7 +239,7 @@ public class InvoiceREST implements Serializable {
 
             }
 
-            DocumentLine line = new DocumentLine();
+            Document.DocumentLines.DocumentLine line = new Document.DocumentLines.DocumentLine();
             line.setBaseEntry(delDocEntry);
             line.setBaseLine(deliveryLineNum);
             line.setBaseType(deliveryObjectType);

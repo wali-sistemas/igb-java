@@ -29,11 +29,15 @@ public class CheckOutDTO {
     private Integer boxNumber;
     @JsonProperty("company_name")
     private String companyName;
+    @JsonProperty("start_time")
+    private String startTime;
+    @JsonProperty("end_time")
+    private String endTime;
 
     public CheckOutDTO() {
     }
 
-    public CheckOutDTO(Long idCheckoutOrder, Integer orderNumber, Integer deliveryNumber, String itemCode, Integer qtyOrder, Integer qtyScan, String status, String empId, Date datetimeCheckout, Integer boxNumber, String companyName) {
+    public CheckOutDTO(Long idCheckoutOrder, Integer orderNumber, Integer deliveryNumber, String itemCode, Integer qtyOrder, Integer qtyScan, String status, String empId, Date datetimeCheckout, Integer boxNumber, String companyName, String startTime, String endTime) {
         this.idCheckoutOrder = idCheckoutOrder;
         this.orderNumber = orderNumber;
         this.deliveryNumber = deliveryNumber;
@@ -45,6 +49,8 @@ public class CheckOutDTO {
         this.datetimeCheckout = datetimeCheckout;
         this.boxNumber = boxNumber;
         this.companyName = companyName;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     public Long getIdCheckoutOrder() {
@@ -135,6 +141,22 @@ public class CheckOutDTO {
         this.companyName = companyName;
     }
 
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
     @Override
     public String toString() {
         return "CheckOutDTO{" +
@@ -149,6 +171,8 @@ public class CheckOutDTO {
                 ", datetimeCheckout=" + datetimeCheckout +
                 ", boxNumber=" + boxNumber +
                 ", companyName='" + companyName + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
                 '}';
     }
 }
