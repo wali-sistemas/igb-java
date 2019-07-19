@@ -309,9 +309,10 @@ public class BinLocationFacade {
 
         try {
             return em.createNativeQuery(sb.toString()).getSingleResult();
+        } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los atributos de la ubicacion. ", e);
-            return null;
         }
+        return null;
     }
 }

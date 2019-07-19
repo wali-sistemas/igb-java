@@ -114,9 +114,10 @@ public class LocationLimitFacade {
 
         try {
             return em.createQuery(cq).getSingleResult();
-        } catch (Exception e){
+        } catch (NoResultException e) {
+        } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la ubicacion fija.", e);
-            return null;
         }
+        return null;
     }
 }
