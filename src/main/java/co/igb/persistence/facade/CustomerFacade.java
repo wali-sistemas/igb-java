@@ -26,7 +26,12 @@ public class CustomerFacade {
         sb.append("select cast(cardname as varchar(100)) cardname from OCRD where cardcode = '");
         sb.append(customerId);
         sb.append("'");
-        return (String) persistenceConf.chooseSchema(schema, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+        try {
+            return (String) persistenceConf.chooseSchema(schema, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el nombre del cliente con id #[" + customerId + "]", e);
+            return null;
+        }
     }
 
     public int getCustomerCreditDays(String cardCode, String companyName, boolean testing) {

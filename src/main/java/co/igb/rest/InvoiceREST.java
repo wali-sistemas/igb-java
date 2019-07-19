@@ -5,6 +5,7 @@ import co.igb.dto.ResponseDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.facade.CustomerFacade;
 import co.igb.persistence.facade.DeliveryNoteFacade;
+import co.igb.persistence.facade.InvoiceFacade;
 import co.igb.util.Constants;
 import co.igb.util.IGBUtils;
 
@@ -41,6 +42,8 @@ public class InvoiceREST implements Serializable {
 
     private static final Logger CONSOLE = Logger.getLogger(InvoiceREST.class.getSimpleName());
 
+    @EJB
+    private InvoiceFacade invoiceFacade;
     @EJB
     private DeliveryNoteFacade dnFacade;
     @EJB
@@ -346,7 +349,7 @@ public class InvoiceREST implements Serializable {
         }
         //4. Validar y retornar
         if (docEntry > 0) {
-            return Response.ok(new ResponseDTO(0, docEntry)).build();
+            return Response.ok(new ResponseDTO(0, invoiceFacade.getDocNumInvoice(docEntry, companyName, pruebas))).build();
         } else {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ResponseDTO(-1, "Ocurrio un error al crear la factura. " + errorMessage)).build();
         }
