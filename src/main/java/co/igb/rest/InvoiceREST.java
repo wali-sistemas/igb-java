@@ -270,7 +270,7 @@ public class InvoiceREST implements Serializable {
         gastos.getDocumentAdditionalExpense().add(gasto);
 
         //TODO: flete aplica solo para IGB siempre y cuando no sean ítem REPSOL, MotoZone solo llantas y no se efectua por este medio.
-        //if (companyName.contains("IGB")) {
+        if (companyName.contains("IGB")) {
         BigDecimal porcFlete = customerFacade.getCustomerFlete(invoice.getCardCode(), companyName, pruebas);
 
         gasto = new Document.DocumentAdditionalExpenses.DocumentAdditionalExpense();
@@ -279,7 +279,7 @@ public class InvoiceREST implements Serializable {
         gastos.getDocumentAdditionalExpense().add(gasto);
 
         invoice.setDocumentAdditionalExpenses(gastos);
-        //}
+        }
 
         /***Consultando tabla de retenciones***/
         List<Object[]> listRetencion = customerFacade.getWithholdingTaxData(invoice.getCardCode(), companyName, pruebas);
