@@ -68,6 +68,8 @@ public class Constants {
     public static final String DATABASE_TYPE_MSSQL = "mssql";
     public static final String BIN_ACTION_TYPE_FROM = "batFromWarehouse";
     public static final String BIN_ACTION_TYPE_TO = "batToWarehouse";
-
+    public static final long CODE_FLETE_GRABABLE = 1l;
+    public static final long CODE_AUTO_CREE_IGB = 9l;
+    public static final long CODE_AUTO_CREE_MTZ = 5l;
     public static final String[] LDAP_ATTR_IDS = {"name", "givenName", "description", "sAMAccountname", "userPrincipalName", "sn", "distinguishedName", "cn", "mail", "memberOf"};
 }

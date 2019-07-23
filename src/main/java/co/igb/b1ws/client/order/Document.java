@@ -718,6 +718,12 @@ public class Document {
     protected BigDecimal uaiuimpre;
     @XmlElement(name = "U_AIU_UTIL")
     protected BigDecimal uaiuutil;
+    //@XmlElement(name = "U_addInFaElectronica_tipoND_FE")
+    //protected String uAddInFaElectronicaTipoNDFE;
+    //@XmlElement(name = "U_DocAdicionales")
+    //protected String uDocAdicionales;
+    @XmlElement(name = "U_Origen")
+    protected String uOrigen;
     @XmlElement(name = "Document_ApprovalRequests")
     protected Document.DocumentApprovalRequests documentApprovalRequests;
     @XmlElement(name = "DocumentLines")
@@ -8679,6 +8685,14 @@ public class Document {
      */
     public void setUAIUUTIL(BigDecimal value) {
         this.uaiuutil = value;
+    }
+
+    public String getuOrigen() {
+        return uOrigen;
+    }
+
+    public void setuOrigen(String uOrigen) {
+        this.uOrigen = uOrigen;
     }
 
     /**

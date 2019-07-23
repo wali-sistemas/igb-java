@@ -16,6 +16,7 @@ import co.igb.persistence.facade.SalesOrderFacade;
 import co.igb.util.Constants;
 import net.sf.jasperreports.engine.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.printing.PDFPageable;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -23,11 +24,18 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.naming.InitialContext;
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.OrientationRequested;
+import javax.print.attribute.standard.Sides;
 import javax.sql.DataSource;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -336,11 +344,11 @@ public class ReportREST implements Serializable {
         CONSOLE.log(Level.INFO, "Se guardo el documento {0} numero {1}", new Object[]{dto.getDocumento(), dto.getId()});
 
         //TODO: Configurar para imprimir automaticamente
-        /*if (dto.isImprimir()) {
-            Impresora printer = impresoraFacade.obtenerImpresoraSucursal(dto.getSucursal(), "DOC");
+        if (dto.isImprimir()) {
+            /*Impresora String printer = "RICOH Aficio MP 2851 PCL 5e"; /*impresoraFacade.obtenerImpresoraSucursal(dto.getSucursal(), "DOC");
+            if (printer != null && printer.getIdImpresora() != null && printer.getIdImpresora() != 0) {*/
 
-            if (printer != null && printer.getIdImpresora() != null && printer.getIdImpresora() != 0) {
-            PrintService myPrintService = findPrintService("RICOH Aficio MP 2851 PCL 5e"/*printer.getNombreImpresoraServidor());
+            PrintService myPrintService = findPrintService("KyoceraAdminP3055"/*printer.getNombreImpresoraServidor()*/);
 
             PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
             pras.add(Sides.DUPLEX);
@@ -356,11 +364,12 @@ public class ReportREST implements Serializable {
                 CONSOLE.log(Level.INFO, "Se mando a imprimir el documento {0} numero {2} a la impresora {1}",
                         new Object[]{dto.getDocumento(), myPrintService.getName(), dto.getId()});
             }
-        }*/
-        document.close();
+            //}
+            document.close();
+        }
     }
 
-    /*private static PrintService findPrintService(String printerName) {
+    private static PrintService findPrintService(String printerName) {
         PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
         for (PrintService printService : printServices) {
             if (printService.getName().trim().equals(printerName)) {
@@ -368,5 +377,5 @@ public class ReportREST implements Serializable {
             }
         }
         return null;
-    }*/
+    }
 }

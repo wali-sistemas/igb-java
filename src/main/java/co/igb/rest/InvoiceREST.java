@@ -1,18 +1,11 @@
 package co.igb.rest;
 
-import co.igb.b1ws.client.invoice.Add;
-import co.igb.b1ws.client.invoice.AddResponse;
-import co.igb.b1ws.client.invoice.Document;
-import co.igb.b1ws.client.invoice.Document.DocumentLines;
-import co.igb.b1ws.client.invoice.Document.DocumentLines.DocumentLine;
-import co.igb.b1ws.client.invoice.InvoicesService;
-import co.igb.b1ws.client.invoice.MsgHeader;
-import co.igb.dto.GenericRESTResponseDTO;
+import co.igb.b1ws.client.invoice.*;
 import co.igb.dto.ResponseDTO;
 import co.igb.ejb.IGBApplicationBean;
-import co.igb.manager.client.SessionPoolManagerClient;
 import co.igb.persistence.facade.CustomerFacade;
 import co.igb.persistence.facade.DeliveryNoteFacade;
+import co.igb.persistence.facade.InvoiceFacade;
 import co.igb.util.Constants;
 import co.igb.util.IGBUtils;
 
@@ -49,6 +42,8 @@ public class InvoiceREST implements Serializable {
 
     private static final Logger CONSOLE = Logger.getLogger(InvoiceREST.class.getSimpleName());
 
+    @EJB
+    private InvoiceFacade invoiceFacade;
     @EJB
     private DeliveryNoteFacade dnFacade;
     @EJB
@@ -209,7 +204,7 @@ public class InvoiceREST implements Serializable {
             return Response.ok(new ResponseDTO(-1, "No se encontraron datos de entrega para facturar")).build();
         }
         //Crear factura a partir de la entrega
-        DocumentLines lines = new DocumentLines();
+        Document.DocumentLines lines = new Document.DocumentLines();
         Document invoice = new Document();
         long lineNum = 0;
         for (Object[] row : deliveryData) {
@@ -222,6 +217,7 @@ public class InvoiceREST implements Serializable {
             Long deliveryLineNum = ((Integer) row[6]).longValue();
             String deliveryItemCode = (String) row[7];
             Integer deliveryQuantity = (Integer) row[8];
+            BigDecimal deliveryValorNeto = (BigDecimal) row[11];
 
             if (invoice.getSeries() == null) {
                 invoice.setSeries(Long.parseLong(getPropertyValue("igb.invoice.series", companyName)));
@@ -244,10 +240,11 @@ public class InvoiceREST implements Serializable {
                 invoice.setContactPersonCode(deliveryContactCode);
                 invoice.setComments("Creado automaticamente desde WALI por " + userName);
                 invoice.setSalesPersonCode(deliverySalesPersonCode);
-
+                invoice.setuOrigen("W");
+                invoice.setBaseAmount(deliveryValorNeto.doubleValue());
             }
 
-            DocumentLine line = new DocumentLine();
+            Document.DocumentLines.DocumentLine line = new Document.DocumentLines.DocumentLine();
             line.setBaseEntry(delDocEntry);
             line.setBaseLine(deliveryLineNum);
             line.setBaseType(deliveryObjectType);
@@ -259,6 +256,62 @@ public class InvoiceREST implements Serializable {
         }
 
         invoice.setDocumentLines(lines);
+
+        /***Agregando gastos a la factura***/
+        Document.DocumentAdditionalExpenses gastos = new Document.DocumentAdditionalExpenses();
+        Document.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new Document.DocumentAdditionalExpenses.DocumentAdditionalExpense();
+        /***Gasto obligatorio para cualquier cliente***/
+        if (companyName.contains("IGB")) {
+            gasto.setExpenseCode(Constants.CODE_AUTO_CREE_IGB);
+        } else {
+            gasto.setExpenseCode(Constants.CODE_AUTO_CREE_MTZ);
+        }
+        gasto.setLineTotal(Math.ceil(invoice.getBaseAmount() * 0.04));
+        gastos.getDocumentAdditionalExpense().add(gasto);
+
+        //TODO: flete aplica solo para IGB siempre y cuando no sean ítem REPSOL, MotoZone solo llantas y no se efectua por este medio.
+        if (companyName.contains("IGB")) {
+        BigDecimal porcFlete = customerFacade.getCustomerFlete(invoice.getCardCode(), companyName, pruebas);
+
+        gasto = new Document.DocumentAdditionalExpenses.DocumentAdditionalExpense();
+        gasto.setExpenseCode(Constants.CODE_FLETE_GRABABLE);
+        gasto.setLineTotal(Math.ceil(invoice.getBaseAmount() * (porcFlete.doubleValue() / 100)));
+        gastos.getDocumentAdditionalExpense().add(gasto);
+
+        invoice.setDocumentAdditionalExpenses(gastos);
+        }
+
+        /***Consultando tabla de retenciones***/
+        List<Object[]> listRetencion = customerFacade.getWithholdingTaxData(invoice.getCardCode(), companyName, pruebas);
+        if (listRetencion != null || listRetencion.size() > 0) {
+            Document.WithholdingTaxDataCollection retenciones = new Document.WithholdingTaxDataCollection();
+
+            for (Object[] row : listRetencion) {
+                BigDecimal valueRet = (BigDecimal) row[1];
+                BigDecimal baseMinima = (BigDecimal) row[2];
+                Double base = Math.ceil(invoice.getBaseAmount() * (valueRet.doubleValue() / 100));
+
+                Document.WithholdingTaxDataCollection.WithholdingTaxData retencion = new Document.WithholdingTaxDataCollection.WithholdingTaxData();
+
+                if (baseMinima.doubleValue() < invoice.getBaseAmount()) {
+                    /***Agregando retenciones a la factura***/
+                    retencion.setWTCode(row[0].toString());
+                    retencion.setTaxableAmount(base);
+                    retencion.setWTAmount(base);
+                    retencion.setuBaseME(invoice.getBaseAmount());
+                    retencion.setuRetME(base);
+                    retencion.setuBaseML(invoice.getBaseAmount());
+                    retencion.setuRetML(base);
+                    retencion.setuBaseMS(invoice.getBaseAmount());
+                    retencion.setuRetMS(base);
+                    retencion.setuTarifa(valueRet.doubleValue());
+                    retencion.setuFuente("A");
+
+                    retenciones.getWithholdingTaxData().add(retencion);
+                }
+            }
+            invoice.setWithholdingTaxDataCollection(retenciones);
+        }
 
         //1. Login
         String sessionId = null;
@@ -296,7 +349,7 @@ public class InvoiceREST implements Serializable {
         }
         //4. Validar y retornar
         if (docEntry > 0) {
-            return Response.ok(new ResponseDTO(0, docEntry)).build();
+            return Response.ok(new ResponseDTO(0, invoiceFacade.getDocNumInvoice(docEntry, companyName, pruebas))).build();
         } else {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ResponseDTO(-1, "Ocurrio un error al crear la factura. " + errorMessage)).build();
         }
