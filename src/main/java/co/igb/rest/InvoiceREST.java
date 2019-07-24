@@ -266,7 +266,7 @@ public class InvoiceREST implements Serializable {
         } else {
             gasto.setExpenseCode(Constants.CODE_AUTO_CREE_MTZ);
         }
-        gasto.setLineTotal(Math.ceil(invoice.getBaseAmount() * 0.04));
+        gasto.setLineTotal(Math.ceil(invoice.getBaseAmount() * 0.004));
         gastos.getDocumentAdditionalExpense().add(gasto);
 
         //TODO: flete aplica solo para IGB siempre y cuando no sean ítem REPSOL, MotoZone solo llantas y no se efectua por este medio.
