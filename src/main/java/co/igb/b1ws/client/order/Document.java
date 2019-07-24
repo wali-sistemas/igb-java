@@ -722,8 +722,8 @@ public class Document {
     //protected String uAddInFaElectronicaTipoNDFE;
     //@XmlElement(name = "U_DocAdicionales")
     //protected String uDocAdicionales;
-    @XmlElement(name = "U_Origen")
-    protected String uOrigen;
+    //@XmlElement(name = "U_Origen")
+    //protected String uOrigen;
     @XmlElement(name = "Document_ApprovalRequests")
     protected Document.DocumentApprovalRequests documentApprovalRequests;
     @XmlElement(name = "DocumentLines")
@@ -8687,13 +8687,13 @@ public class Document {
         this.uaiuutil = value;
     }
 
-    public String getuOrigen() {
+    /*public String getuOrigen() {
         return uOrigen;
     }
 
     public void setuOrigen(String uOrigen) {
         this.uOrigen = uOrigen;
-    }
+    }*/
 
     /**
      * Obtiene el valor de la propiedad documentApprovalRequests.

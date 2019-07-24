@@ -240,7 +240,7 @@ public class InvoiceREST implements Serializable {
                 invoice.setContactPersonCode(deliveryContactCode);
                 invoice.setComments("Creado automaticamente desde WALI por " + userName);
                 invoice.setSalesPersonCode(deliverySalesPersonCode);
-                invoice.setuOrigen("W");
+                //invoice.setuOrigen("W");
                 invoice.setBaseAmount(deliveryValorNeto.doubleValue());
             }
 

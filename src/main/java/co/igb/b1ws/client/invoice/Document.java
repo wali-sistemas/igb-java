@@ -2254,8 +2254,8 @@ public class Document {
     protected String uSourceEntry;
     @XmlElement(namespace = "", name = "U_QCRefNo")
     protected Long uqcRefNo;
-    @XmlElement(namespace = "", name = "U_Origen")
-    protected String uOrigen;
+    /*@XmlElement(namespace = "", name = "U_Origen")
+    protected String uOrigen;*/
     @XmlElement(namespace = "", name = "Document_ApprovalRequests")
     protected Document.DocumentApprovalRequests documentApprovalRequests;
     @XmlElement(namespace = "", name = "DocumentLines")
@@ -6237,13 +6237,13 @@ public class Document {
         this.uqcRefNo = value;
     }
 
-    public String getuOrigen() {
+    /*public String getuOrigen() {
         return uOrigen;
     }
 
     public void setuOrigen(String uOrigen) {
         this.uOrigen = uOrigen;
-    }
+    }*/
 
     /**
      * Obtiene el valor de la propiedad documentApprovalRequests.
