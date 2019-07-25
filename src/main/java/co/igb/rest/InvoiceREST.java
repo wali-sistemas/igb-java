@@ -264,9 +264,9 @@ public class InvoiceREST implements Serializable {
         invoice.setDocumentLines(lines);
 
         /***Agregando gastos a la factura***/
+        Document.DocumentAdditionalExpenses gastos = new Document.DocumentAdditionalExpenses();
         List<Object[]> listExpenses = customerFacade.getExpensesCode(invoice.getCardCode(), companyName, pruebas);
         if (listExpenses != null || listExpenses.size() > 0) {
-            Document.DocumentAdditionalExpenses gastos = new Document.DocumentAdditionalExpenses();
             for (Object[] row : listExpenses) {
                 BigDecimal expenseCode = (BigDecimal) row[0];
                 BigDecimal prctBsAmnt = (BigDecimal) row[1];
@@ -279,22 +279,20 @@ public class InvoiceREST implements Serializable {
                 gasto.setTaxCode("I_LEG_T0");
                 gastos.getDocumentAdditionalExpense().add(gasto);
             }
-            invoice.setDocumentAdditionalExpenses(gastos);
         }
 
         //TODO: flete aplica solo para IGB siempre y cuando no sean ítem REPSOL, MotoZone solo llantas y no se efectua por este medio.
         if (companyName.contains("IGB")) {
             BigDecimal porcFlete = customerFacade.getCustomerFlete(invoice.getCardCode(), companyName, pruebas);
             if (porcFlete != null) {
-                Document.DocumentAdditionalExpenses gastos = new Document.DocumentAdditionalExpenses();
                 Document.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new Document.DocumentAdditionalExpenses.DocumentAdditionalExpense();
 
                 gasto.setExpenseCode(Constants.CODE_FLETE_GRABABLE);
                 gasto.setLineTotal(Math.ceil(invoice.getBaseAmount() * (porcFlete.doubleValue() / 100)));
                 gastos.getDocumentAdditionalExpense().add(gasto);
-                invoice.setDocumentAdditionalExpenses(gastos);
             }
         }
+        invoice.setDocumentAdditionalExpenses(gastos);
 
         /***Consultando tabla de retenciones***/
         List<Object[]> listRetencion = customerFacade.getWithholdingTaxData(invoice.getCardCode(), companyName, pruebas);
