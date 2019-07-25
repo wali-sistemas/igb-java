@@ -82,4 +82,21 @@ public class CustomerFacade {
             return null;
         }
     }
+
+    public List<Object[]> getExpensesCode(String cardCode, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(x.ExpnsCode as numeric(6)) as ExpnsCode, cast(i.PrctBsAmnt as numeric(4,2)) as PrctBsAmnt ");
+        sb.append("from CRD4 di ");
+        sb.append("inner join OWHT i ON i.WTCode = di.WTCode ");
+        sb.append("inner join OEXD x ON x.ExpnsName = i.U_GASTO ");
+        sb.append("where di.cardCode = '");
+        sb.append(cardCode);
+        sb.append("' order by di.WTCode");
+        try {
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando la tabla de retencion del cliente #[" + cardCode + "]");
+            return null;
+        }
+    }
 }
