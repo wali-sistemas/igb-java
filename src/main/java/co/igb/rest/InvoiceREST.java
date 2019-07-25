@@ -218,6 +218,7 @@ public class InvoiceREST implements Serializable {
             String deliveryItemCode = (String) row[7];
             Integer deliveryQuantity = (Integer) row[8];
             BigDecimal deliveryValorNeto = (BigDecimal) row[11];
+            String deliveryComment = (String) row[10];
 
             if (invoice.getSeries() == null) {
                 invoice.setSeries(Long.parseLong(getPropertyValue("igb.invoice.series", companyName)));
@@ -238,10 +239,15 @@ public class InvoiceREST implements Serializable {
                 }
 
                 invoice.setContactPersonCode(deliveryContactCode);
-                invoice.setComments("Creado automaticamente desde WALI por " + userName);
                 invoice.setSalesPersonCode(deliverySalesPersonCode);
                 //invoice.setuOrigen("W");
                 invoice.setBaseAmount(deliveryValorNeto.doubleValue());
+            }
+
+            if (deliveryComment != null) {
+                invoice.setComments(deliveryComment);
+            } else {
+                invoice.setComments("Creado desde WALI por " + userName);
             }
 
             Document.DocumentLines.DocumentLine line = new Document.DocumentLines.DocumentLine();
@@ -261,25 +267,30 @@ public class InvoiceREST implements Serializable {
         Document.DocumentAdditionalExpenses gastos = new Document.DocumentAdditionalExpenses();
         Document.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new Document.DocumentAdditionalExpenses.DocumentAdditionalExpense();
         /***Gasto obligatorio para cualquier cliente***/
-        if (companyName.contains("IGB")) {
-            gasto.setExpenseCode(Constants.CODE_AUTO_CREE_IGB);
-        } else {
-            gasto.setExpenseCode(Constants.CODE_AUTO_CREE_MTZ);
+        List<Object[]> listExpenses = customerFacade.getExpensesCode(invoice.getCardCode(), companyName, pruebas);
+        if (listExpenses != null || listExpenses.size() > 0) {
+            for (Object[] row : listExpenses) {
+                BigDecimal expenseCode = (BigDecimal) row[0];
+                BigDecimal prctBsAmnt = (BigDecimal) row[1];
+
+                gasto.setExpenseCode(expenseCode.longValue());
+                gasto.setLineTotal(Math.ceil(invoice.getBaseAmount() * (prctBsAmnt.doubleValue() / 100)));
+                //TODO: sin IVA corresponde a un impuesto, y un impuesto nunca se cobra sobre otro impuesto AUTO-CREE.
+                gasto.setTaxCode("I_LEG_T0");
+                gastos.getDocumentAdditionalExpense().add(gasto);
+            }
         }
-        gasto.setLineTotal(Math.ceil(invoice.getBaseAmount() * 0.004));
-        gastos.getDocumentAdditionalExpense().add(gasto);
 
         //TODO: flete aplica solo para IGB siempre y cuando no sean ítem REPSOL, MotoZone solo llantas y no se efectua por este medio.
         if (companyName.contains("IGB")) {
-        BigDecimal porcFlete = customerFacade.getCustomerFlete(invoice.getCardCode(), companyName, pruebas);
+            BigDecimal porcFlete = customerFacade.getCustomerFlete(invoice.getCardCode(), companyName, pruebas);
 
-        gasto = new Document.DocumentAdditionalExpenses.DocumentAdditionalExpense();
-        gasto.setExpenseCode(Constants.CODE_FLETE_GRABABLE);
-        gasto.setLineTotal(Math.ceil(invoice.getBaseAmount() * (porcFlete.doubleValue() / 100)));
-        gastos.getDocumentAdditionalExpense().add(gasto);
-
-        invoice.setDocumentAdditionalExpenses(gastos);
+            gasto = new Document.DocumentAdditionalExpenses.DocumentAdditionalExpense();
+            gasto.setExpenseCode(Constants.CODE_FLETE_GRABABLE);
+            gasto.setLineTotal(Math.ceil(invoice.getBaseAmount() * (porcFlete.doubleValue() / 100)));
+            gastos.getDocumentAdditionalExpense().add(gasto);
         }
+        invoice.setDocumentAdditionalExpenses(gastos);
 
         /***Consultando tabla de retenciones***/
         List<Object[]> listRetencion = customerFacade.getWithholdingTaxData(invoice.getCardCode(), companyName, pruebas);

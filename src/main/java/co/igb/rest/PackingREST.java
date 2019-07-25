@@ -332,14 +332,14 @@ public class PackingREST implements Serializable {
                 String commentOV = salesOrderFacade.getOrderComment(orderNumber, companyName, pruebas);
                 if (commentOV != null) {
                     /*TODO: limitando caracteres no mayores a 254 para que lo acepte SAP*/
-                    String commentWms = "Packing de la orden " + orderNumber + " creada por " + employee;
+                    String commentWms = "Orden #" + orderNumber + " creada por " + employee + " desde WALI.";
                     if ((commentOV.length() + commentWms.length() - 254) > 0) {
                         document.setComments(commentOV.substring(0, commentOV.length() - (commentOV.length() + commentWms.length() - 251)) + "..." + commentWms);
                     } else {
                         document.setComments(commentOV + "." + commentWms);
                     }
                 } else {
-                    document.setComments("Packing de la orden " + orderNumber + " creada por " + employee);
+                    document.setComments("Orden #" + orderNumber + " creada por " + employee + " desde WALI.");
                 }
                 document.setUTOTCAJ(plFacade.getTotalBoxNumber(orderNumber, companyName, pruebas).doubleValue());
                 document.setUVRDECLARADO(salesOrderFacade.getValorDeclarado(orderNumber, companyName, pruebas));
