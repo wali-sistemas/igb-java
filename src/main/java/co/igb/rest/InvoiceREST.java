@@ -25,6 +25,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
@@ -241,7 +242,7 @@ public class InvoiceREST implements Serializable {
                 invoice.setContactPersonCode(deliveryContactCode);
                 invoice.setSalesPersonCode(deliverySalesPersonCode);
                 //invoice.setuOrigen("W");
-                invoice.setBaseAmount(deliveryValorNeto.doubleValue());
+                invoice.setBaseAmount(deliveryValorNeto);
             }
 
             if (deliveryComment != null) {
@@ -270,11 +271,12 @@ public class InvoiceREST implements Serializable {
             for (Object[] row : listExpenses) {
                 BigDecimal expenseCode = (BigDecimal) row[0];
                 BigDecimal prctBsAmnt = (BigDecimal) row[1];
+                BigDecimal lineTotal = invoice.getBaseAmount().multiply(prctBsAmnt.divide(BigDecimal.valueOf(100)));
 
                 Document.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new Document.DocumentAdditionalExpenses.DocumentAdditionalExpense();
 
                 gasto.setExpenseCode(expenseCode.longValue());
-                gasto.setLineTotal(Math.ceil(invoice.getBaseAmount() * (prctBsAmnt.doubleValue() / 100)));
+                gasto.setLineTotal(lineTotal.setScale(0, RoundingMode.CEILING));
                 //TODO: sin IVA corresponde a un impuesto, y un impuesto nunca se cobra sobre otro impuesto AUTO-CREE.
                 gasto.setTaxCode("I_LEG_T0");
                 gastos.getDocumentAdditionalExpense().add(gasto);
@@ -284,11 +286,12 @@ public class InvoiceREST implements Serializable {
         //TODO: flete aplica solo para IGB siempre y cuando no sean ítem REPSOL, MotoZone solo llantas y no se efectua por este medio.
         if (companyName.contains("IGB")) {
             BigDecimal porcFlete = customerFacade.getCustomerFlete(invoice.getCardCode(), companyName, pruebas);
+            BigDecimal lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
             if (porcFlete != null) {
                 Document.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new Document.DocumentAdditionalExpenses.DocumentAdditionalExpense();
 
                 gasto.setExpenseCode(Constants.CODE_FLETE_GRABABLE);
-                gasto.setLineTotal(Math.ceil(invoice.getBaseAmount() * (porcFlete.doubleValue() / 100)));
+                gasto.setLineTotal(lineTotal.setScale(0, RoundingMode.CEILING));
                 gastos.getDocumentAdditionalExpense().add(gasto);
             }
         }
@@ -302,21 +305,21 @@ public class InvoiceREST implements Serializable {
             for (Object[] row : listRetencion) {
                 BigDecimal valueRet = (BigDecimal) row[1];
                 BigDecimal baseMinima = (BigDecimal) row[2];
-                Double base = Math.ceil(invoice.getBaseAmount() * (valueRet.doubleValue() / 100));
+                BigDecimal base = invoice.getBaseAmount().multiply(valueRet.divide(BigDecimal.valueOf(100)));
 
                 Document.WithholdingTaxDataCollection.WithholdingTaxData retencion = new Document.WithholdingTaxDataCollection.WithholdingTaxData();
 
-                if (baseMinima.doubleValue() < invoice.getBaseAmount()) {
+                if (baseMinima.compareTo(invoice.getBaseAmount()) == -1) {
                     /***Agregando retenciones a la factura***/
                     retencion.setWTCode(row[0].toString());
-                    retencion.setTaxableAmount(base);
-                    retencion.setWTAmount(base);
+                    retencion.setTaxableAmount(base.setScale(0,RoundingMode.CEILING));
+                    retencion.setWTAmount(base.setScale(0,RoundingMode.CEILING));
                     retencion.setuBaseME(invoice.getBaseAmount());
-                    retencion.setuRetME(base);
+                    retencion.setuRetME(base.setScale(0,RoundingMode.CEILING));
                     retencion.setuBaseML(invoice.getBaseAmount());
-                    retencion.setuRetML(base);
+                    retencion.setuRetML(base.setScale(0,RoundingMode.CEILING));
                     retencion.setuBaseMS(invoice.getBaseAmount());
-                    retencion.setuRetMS(base);
+                    retencion.setuRetMS(base.setScale(0,RoundingMode.CEILING));
                     retencion.setuTarifa(valueRet.doubleValue());
                     retencion.setuFuente("A");
 

@@ -1,6 +1,7 @@
 
 package co.igb.b1ws.client.invoice;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -2033,7 +2034,7 @@ public class Document {
     @XmlElement(namespace = "", name = "WTExemptedAmountFC")
     protected Double wtExemptedAmountFC;
     @XmlElement(namespace = "", name = "BaseAmount")
-    protected Double baseAmount;
+    protected BigDecimal baseAmount;
     @XmlElement(namespace = "", name = "BaseAmountSC")
     protected Double baseAmountSC;
     @XmlElement(namespace = "", name = "BaseAmountFC")
@@ -4063,7 +4064,7 @@ public class Document {
      * @return possible object is
      * {@link Double }
      */
-    public Double getBaseAmount() {
+    public BigDecimal getBaseAmount() {
         return baseAmount;
     }
 
@@ -4073,7 +4074,7 @@ public class Document {
      * @param value allowed object is
      *              {@link Double }
      */
-    public void setBaseAmount(Double value) {
+    public void setBaseAmount(BigDecimal value) {
         this.baseAmount = value;
     }
 
@@ -7346,7 +7347,7 @@ public class Document {
             @XmlElement(namespace = "", name = "ExpenseCode")
             protected Long expenseCode;
             @XmlElement(namespace = "", name = "LineTotal")
-            protected Double lineTotal;
+            protected BigDecimal lineTotal;
             @XmlElement(namespace = "", name = "LineTotalFC")
             protected Double lineTotalFC;
             @XmlElement(namespace = "", name = "LineTotalSys")
@@ -7468,7 +7469,7 @@ public class Document {
              * @return possible object is
              * {@link Double }
              */
-            public Double getLineTotal() {
+            public BigDecimal getLineTotal() {
                 return lineTotal;
             }
 
@@ -7478,7 +7479,7 @@ public class Document {
              * @param value allowed object is
              *              {@link Double }
              */
-            public void setLineTotal(Double value) {
+            public void setLineTotal(BigDecimal value) {
                 this.lineTotal = value;
             }
 
@@ -21877,7 +21878,7 @@ public class Document {
             @XmlElement(namespace = "", name = "WTAmountFC")
             protected Double wtAmountFC;
             @XmlElement(namespace = "", name = "WTAmount")
-            protected Double wtAmount;
+            protected BigDecimal wtAmount;
             @XmlElement(namespace = "", name = "WithholdingType")
             protected String withholdingType;
             @XmlElement(namespace = "", name = "TaxableAmountinSys")
@@ -21885,7 +21886,7 @@ public class Document {
             @XmlElement(namespace = "", name = "TaxableAmountFC")
             protected Double taxableAmountFC;
             @XmlElement(namespace = "", name = "TaxableAmount")
-            protected Double taxableAmount;
+            protected BigDecimal taxableAmount;
             @XmlElement(namespace = "", name = "RoundingType")
             protected String roundingType;
             @XmlElement(namespace = "", name = "Rate")
@@ -21921,21 +21922,21 @@ public class Document {
             @XmlElement(namespace = "", name = "TargetDocumentType")
             protected Long targetDocumentType;
             @XmlElement(namespace = "", name = "U_Base_ML")
-            protected Double uBaseML;
+            protected BigDecimal uBaseML;
             @XmlElement(namespace = "", name = "U_Base_MS")
-            protected Double uBaseMS;
+            protected BigDecimal uBaseMS;
             @XmlElement(namespace = "", name = "U_Base_ME")
-            protected Double uBaseME;
+            protected BigDecimal uBaseME;
             @XmlElement(namespace = "", name = "U_Tarifa")
             protected Double uTarifa;
             @XmlElement(namespace = "", name = "U_Fuente")
             protected String uFuente;
             @XmlElement(namespace = "", name = "U_Ret_ML")
-            protected Double uRetML;
+            protected BigDecimal uRetML;
             @XmlElement(namespace = "", name = "U_Ret_MS")
-            protected Double uRetMS;
+            protected BigDecimal uRetMS;
             @XmlElement(namespace = "", name = "U_Ret_ME")
-            protected Double uRetME;
+            protected BigDecimal uRetME;
 
             /**
              * Obtiene el valor de la propiedad wtCode.
@@ -22003,7 +22004,7 @@ public class Document {
              * @return possible object is
              * {@link Double }
              */
-            public Double getWTAmount() {
+            public BigDecimal getWTAmount() {
                 return wtAmount;
             }
 
@@ -22013,7 +22014,7 @@ public class Document {
              * @param value allowed object is
              *              {@link Double }
              */
-            public void setWTAmount(Double value) {
+            public void setWTAmount(BigDecimal value) {
                 this.wtAmount = value;
             }
 
@@ -22083,7 +22084,7 @@ public class Document {
              * @return possible object is
              * {@link Double }
              */
-            public Double getTaxableAmount() {
+            public BigDecimal getTaxableAmount() {
                 return taxableAmount;
             }
 
@@ -22093,7 +22094,7 @@ public class Document {
              * @param value allowed object is
              *              {@link Double }
              */
-            public void setTaxableAmount(Double value) {
+            public void setTaxableAmount(BigDecimal value) {
                 this.taxableAmount = value;
             }
 
@@ -22437,27 +22438,27 @@ public class Document {
                 this.targetDocumentType = value;
             }
 
-            public Double getuBaseML() {
+            public BigDecimal getuBaseML() {
                 return uBaseML;
             }
 
-            public void setuBaseML(Double uBaseML) {
+            public void setuBaseML(BigDecimal uBaseML) {
                 this.uBaseML = uBaseML;
             }
 
-            public Double getuBaseMS() {
+            public BigDecimal getuBaseMS() {
                 return uBaseMS;
             }
 
-            public void setuBaseMS(Double uBaseMS) {
+            public void setuBaseMS(BigDecimal uBaseMS) {
                 this.uBaseMS = uBaseMS;
             }
 
-            public Double getuBaseME() {
+            public BigDecimal getuBaseME() {
                 return uBaseME;
             }
 
-            public void setuBaseME(Double uBaseME) {
+            public void setuBaseME(BigDecimal uBaseME) {
                 this.uBaseME = uBaseME;
             }
 
@@ -22477,27 +22478,27 @@ public class Document {
                 this.uFuente = uFuente;
             }
 
-            public Double getuRetML() {
+            public BigDecimal getuRetML() {
                 return uRetML;
             }
 
-            public void setuRetML(Double uRetML) {
+            public void setuRetML(BigDecimal uRetML) {
                 this.uRetML = uRetML;
             }
 
-            public Double getuRetMS() {
+            public BigDecimal getuRetMS() {
                 return uRetMS;
             }
 
-            public void setuRetMS(Double uRetMS) {
+            public void setuRetMS(BigDecimal uRetMS) {
                 this.uRetMS = uRetMS;
             }
 
-            public Double getuRetME() {
+            public BigDecimal getuRetME() {
                 return uRetME;
             }
 
-            public void setuRetME(Double uRetME) {
+            public void setuRetME(BigDecimal uRetME) {
                 this.uRetME = uRetME;
             }
         }
