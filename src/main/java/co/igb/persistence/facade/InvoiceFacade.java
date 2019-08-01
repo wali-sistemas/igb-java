@@ -4,6 +4,8 @@ import co.igb.util.Constants;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.persistence.NoResultException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,5 +30,26 @@ public class InvoiceFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al cosultar el DocNum de la factura de id #[" + docEntry + "]", e);
             return null;
         }
+    }
+
+    public List<Object[]> findListInvoincesShiping(String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select TOP 10 CAST(f.DocDate as date) as DocDate, CAST(f.U_TOT_CAJ as int) as Box, CAST(f.DocNum as varchar(10)) as DocNum, ");
+        sb.append("       CAST(f.CardCode as varchar(20)) as CardCode, CAST(f.CardName as varchar(100)) as CardName, ");
+        sb.append("       CAST(t.Name as varchar(20)) as Transport, CAST(d.StreetS as varchar(100)) as Street, ");
+        sb.append("       CAST(l.Name as varchar(50)) as Depart, CAST(d.CityS as varchar(50)) as City ");
+        sb.append("from   OINV f ");
+        sb.append("inner  join INV12 d ON d.DocEntry = f.DocEntry ");
+        sb.append("inner  join [@TRANSP] t ON t.Code = f.U_TRANSP ");
+        sb.append("inner  join OCST l ON l.Code = d.StateS ");
+        sb.append("where  f.U_SHIPPING = 'N'");
+        sb.append("order  by f.DocDate desc, t.Name ASC");
+        try {
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+        } catch (NoResultException e) {
+        } catch (Exception ex) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando las facturas para shiping de la empresa [" + companyName + "]");
+        }
+        return null;
     }
 }
