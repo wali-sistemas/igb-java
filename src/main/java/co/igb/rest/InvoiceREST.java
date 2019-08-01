@@ -284,7 +284,15 @@ public class InvoiceREST implements Serializable {
         }
 
         //TODO: flete aplica solo para IGB siempre y cuando no sean ítem REPSOL, MotoZone solo llantas y no se efectua por este medio.
-        if (companyName.contains("IGB")) {
+        boolean itemRepsol = false;
+        for (Document.DocumentLines.DocumentLine line : invoice.getDocumentLines().getDocumentLine()) {
+            if (line.getItemCode().substring(0,2).equals("RP")) {
+                itemRepsol = true;
+                break;
+            }
+        }
+
+        if (companyName.contains("IGB") && !itemRepsol) {
             BigDecimal porcFlete = customerFacade.getCustomerFlete(invoice.getCardCode(), companyName, pruebas);
             BigDecimal lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
             if (porcFlete != null) {
@@ -312,14 +320,14 @@ public class InvoiceREST implements Serializable {
                 if (baseMinima.compareTo(invoice.getBaseAmount()) == -1) {
                     /***Agregando retenciones a la factura***/
                     retencion.setWTCode(row[0].toString());
-                    retencion.setTaxableAmount(base.setScale(0,RoundingMode.CEILING));
-                    retencion.setWTAmount(base.setScale(0,RoundingMode.CEILING));
+                    retencion.setTaxableAmount(base.setScale(0, RoundingMode.CEILING));
+                    retencion.setWTAmount(base.setScale(0, RoundingMode.CEILING));
                     retencion.setuBaseME(invoice.getBaseAmount());
-                    retencion.setuRetME(base.setScale(0,RoundingMode.CEILING));
+                    retencion.setuRetME(base.setScale(0, RoundingMode.CEILING));
                     retencion.setuBaseML(invoice.getBaseAmount());
-                    retencion.setuRetML(base.setScale(0,RoundingMode.CEILING));
+                    retencion.setuRetML(base.setScale(0, RoundingMode.CEILING));
                     retencion.setuBaseMS(invoice.getBaseAmount());
-                    retencion.setuRetMS(base.setScale(0,RoundingMode.CEILING));
+                    retencion.setuRetMS(base.setScale(0, RoundingMode.CEILING));
                     retencion.setuTarifa(valueRet.doubleValue());
                     retencion.setuFuente("A");
 

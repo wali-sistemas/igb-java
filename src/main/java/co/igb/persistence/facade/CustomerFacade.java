@@ -72,7 +72,7 @@ public class CustomerFacade {
         sb.append("       cast(i.U_BP_Base_Mi as numeric(18,2)) as U_BP_Base_Mi, cast(i.U_Tipo as varchar(10)) as U_Tipo ");
         sb.append("from CRD4 di ");
         sb.append("inner join OWHT i ON i.WTCode = di.WTCode ");
-        sb.append("where di.cardCode = '");
+        sb.append("where i.Inactive = 'N' and di.cardCode = '");
         sb.append(cardCode);
         sb.append("' order by di.WTCode");
         try {
@@ -89,7 +89,7 @@ public class CustomerFacade {
         sb.append("from CRD4 di ");
         sb.append("inner join OWHT i ON i.WTCode = di.WTCode ");
         sb.append("inner join OEXD x ON x.ExpnsName = i.U_GASTO ");
-        sb.append("where di.cardCode = '");
+        sb.append("where i.Inactive = 'N' and di.cardCode = '");
         sb.append(cardCode);
         sb.append("' order by di.WTCode");
         try {
