@@ -1,14 +1,11 @@
 package co.igb.dto;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+/**
+ * @author jguisao
+ */
 
 import java.util.Date;
 
-/**
- * @author dbotero
- */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class ShipingDTO {
+public class ShippingDTO {
     private Date docDate;
     private Integer box;
     private String docNum;
@@ -19,10 +16,10 @@ public class ShipingDTO {
     private String depart;
     private String city;
 
-    public ShipingDTO() {
+    public ShippingDTO() {
     }
 
-    public ShipingDTO(Date docDate, Integer box, String docNum, String cardCode, String cardName, String transport, String street, String depart, String city) {
+    public ShippingDTO(Date docDate, Integer box, String docNum, String cardCode, String cardName, String transport, String street, String depart, String city) {
         this.docDate = docDate;
         this.box = box;
         this.docNum = docNum;
@@ -108,7 +105,7 @@ public class ShipingDTO {
 
     @Override
     public String toString() {
-        return "ShipingDTO{" +
+        return "ShippingDTO{" +
                 "docDate=" + docDate +
                 ", box=" + box +
                 ", docNum='" + docNum + '\'' +
