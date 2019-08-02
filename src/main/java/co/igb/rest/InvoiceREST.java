@@ -271,15 +271,18 @@ public class InvoiceREST implements Serializable {
             for (Object[] row : listExpenses) {
                 BigDecimal expenseCode = (BigDecimal) row[0];
                 BigDecimal prctBsAmnt = (BigDecimal) row[1];
+                BigDecimal baseMinima = (BigDecimal) row[2];
                 BigDecimal lineTotal = invoice.getBaseAmount().multiply(prctBsAmnt.divide(BigDecimal.valueOf(100)));
 
                 Document.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new Document.DocumentAdditionalExpenses.DocumentAdditionalExpense();
 
-                gasto.setExpenseCode(expenseCode.longValue());
-                gasto.setLineTotal(lineTotal.setScale(0, RoundingMode.CEILING));
-                //TODO: sin IVA corresponde a un impuesto, y un impuesto nunca se cobra sobre otro impuesto AUTO-CREE.
-                gasto.setTaxCode("I_LEG_T0");
-                gastos.getDocumentAdditionalExpense().add(gasto);
+                if (baseMinima.compareTo(invoice.getBaseAmount()) == -1) {
+                    gasto.setExpenseCode(expenseCode.longValue());
+                    gasto.setLineTotal(lineTotal.setScale(0, RoundingMode.CEILING));
+                    //TODO: sin IVA corresponde a un impuesto, y un impuesto nunca se cobra sobre otro impuesto AUTO-CREE.
+                    gasto.setTaxCode("I_LEG_T0");
+                    gastos.getDocumentAdditionalExpense().add(gasto);
+                }
             }
         }
 

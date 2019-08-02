@@ -85,7 +85,7 @@ public class CustomerFacade {
 
     public List<Object[]> getExpensesCode(String cardCode, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(x.ExpnsCode as numeric(6)) as ExpnsCode, cast(i.PrctBsAmnt as numeric(4,2)) as PrctBsAmnt ");
+        sb.append("select cast(x.ExpnsCode as numeric(6)) as ExpnsCode, cast(i.PrctBsAmnt as numeric(4,2)) as PrctBsAmnt, cast(i.U_BP_Base_Mi as numeric(18,2)) as U_BP_Base_Mi ");
         sb.append("from CRD4 di ");
         sb.append("inner join OWHT i ON i.WTCode = di.WTCode ");
         sb.append("inner join OEXD x ON x.ExpnsName = i.U_GASTO ");
