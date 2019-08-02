@@ -289,7 +289,7 @@ public class InvoiceREST implements Serializable {
         //TODO: flete aplica solo para IGB siempre y cuando no sean ítem REPSOL, MotoZone solo llantas y no se efectua por este medio.
         boolean itemRepsol = false;
         for (Document.DocumentLines.DocumentLine line : invoice.getDocumentLines().getDocumentLine()) {
-            if (line.getItemCode().substring(0,2).equals("RP")) {
+            if (line.getItemCode().substring(0, 2).equals("RP")) {
                 itemRepsol = true;
                 break;
             }
