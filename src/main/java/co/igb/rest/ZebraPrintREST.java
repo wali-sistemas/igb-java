@@ -3,10 +3,7 @@ package co.igb.rest;
 import co.igb.dto.RePrintDTO;
 import co.igb.dto.ResponseDTO;
 import co.igb.dto.ZebraPrintDTO;
-import co.igb.persistence.facade.PackingListRecordFacade;
-import co.igb.persistence.facade.PackingOrderFacade;
-import co.igb.persistence.facade.PrinterFacade;
-import co.igb.persistence.facade.SalesOrderFacade;
+import co.igb.persistence.facade.*;
 import co.igb.zebra.ZPLPrinter;
 
 import javax.ejb.EJB;
@@ -49,6 +46,8 @@ public class ZebraPrintREST {
     private SalesOrderFacade soFacade;
     @EJB
     private PrinterFacade prFacade;
+    @EJB
+    private DeliveryNoteFacade deliveryNoteFacade;
 
     @POST
     @Path("packinglist/{printer}")
@@ -82,6 +81,11 @@ public class ZebraPrintREST {
             return Response.ok(new ResponseDTO(-1, "Ocurrió un error al consultar los datos para imprimir la etiqueta. (Order Data)")).build();
         }
 
+        Integer invoice = deliveryNoteFacade.getDocNumInvoice(orderNumbers, companyName, pruebas);
+        if (invoice == null) {
+            return Response.ok(new ResponseDTO(-1, "Ocurrió un error al consultar los datos para imprimir la etiqueta. (Invoice)")).build();
+        }
+
         boolean allSucceeded = true;
         Integer boxes = plFacade.obtainNumberOfBoxes(idPackingList, companyName, pruebas);
         for (int i = 1; i <= boxes; i++) {
@@ -97,6 +101,7 @@ public class ZebraPrintREST {
             label.setEmployee(username);
             label.setCity((String) orderData[3]);
             label.setState((String) orderData[4]);
+            label.setInvoice(invoice.toString());
 
             DocPrintJob job = printService.createPrintJob();
             Doc doc = new SimpleDoc(ZPLPrinter.getPrintData(label, companyName), DocFlavor.BYTE_ARRAY.AUTOSENSE, null);
@@ -203,6 +208,11 @@ public class ZebraPrintREST {
             return Response.ok(new ResponseDTO(-1, "Ocurrió un error al consultar los datos para imprimir la etiqueta. (Order Data)")).build();
         }
 
+        Integer invoice = deliveryNoteFacade.getDocNumInvoice(dto.getOrderNumber(), companyName, pruebas);
+        if (invoice == null) {
+            return Response.ok(new ResponseDTO(-1, "Ocurrió un error al consultar los datos para imprimir la etiqueta. (Invoice)")).build();
+        }
+
         boolean allSucceeded = true;
         for (int i = 1; i <= dto.getBoxNumber(); i++) {
             ZebraPrintDTO label = new ZebraPrintDTO();
@@ -217,6 +227,7 @@ public class ZebraPrintREST {
             label.setEmployee(username);
             label.setCity((String) orderData[3]);
             label.setState((String) orderData[4]);
+            label.setInvoice(invoice.toString());
 
             DocPrintJob job = printService.createPrintJob();
             Doc doc = new SimpleDoc(ZPLPrinter.getPrintData(label, companyName), DocFlavor.BYTE_ARRAY.AUTOSENSE, null);

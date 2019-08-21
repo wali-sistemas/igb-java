@@ -1,120 +1,126 @@
 package co.igb.dto;
-/**
- * @author jguisao
- */
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.util.Date;
 
+/**
+ * @author jguisao
+ */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ShippingDTO {
-    private Date docDate;
-    private Integer box;
-    private String docNum;
-    private String cardCode;
-    private String cardName;
-    private String transport;
-    private String street;
-    private String depart;
-    private String city;
+    @JsonProperty("idshipping_order")
+    private int id;
+    @JsonProperty("order_number")
+    private int order;
+    @JsonProperty("delivery_number")
+    private int delivery;
+    @JsonProperty("box_sum_shipping")
+    private int boxSum;
+    @JsonProperty("invoice_number")
+    private String invoice;
+    @JsonProperty("status")
+    private String estado;
+    @JsonProperty("emp_id")
+    private String empId;
+    @JsonProperty("company_name")
+    private String company;
+    @JsonProperty("datetime_shipping")
+    private Date fecha;
 
     public ShippingDTO() {
     }
 
-    public ShippingDTO(Date docDate, Integer box, String docNum, String cardCode, String cardName, String transport, String street, String depart, String city) {
-        this.docDate = docDate;
-        this.box = box;
-        this.docNum = docNum;
-        this.cardCode = cardCode;
-        this.cardName = cardName;
-        this.transport = transport;
-        this.street = street;
-        this.depart = depart;
-        this.city = city;
+    public ShippingDTO(int boxSum, String invoice) {
+        this.boxSum = boxSum;
+        this.invoice = invoice;
     }
 
-    public Date getDocDate() {
-        return docDate;
+    public int getId() {
+        return id;
     }
 
-    public void setDocDate(Date docDate) {
-        this.docDate = docDate;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public Integer getBox() {
-        return box;
+    public int getOrder() {
+        return order;
     }
 
-    public void setBox(Integer box) {
-        this.box = box;
+    public void setOrder(int order) {
+        this.order = order;
     }
 
-    public String getDocNum() {
-        return docNum;
+    public int getDelivery() {
+        return delivery;
     }
 
-    public void setDocNum(String docNum) {
-        this.docNum = docNum;
+    public void setDelivery(int delivery) {
+        this.delivery = delivery;
     }
 
-    public String getCardCode() {
-        return cardCode;
+    public int getBoxSum() {
+        return boxSum;
     }
 
-    public void setCardCode(String cardCode) {
-        this.cardCode = cardCode;
+    public void setBoxSum(int boxSum) {
+        this.boxSum = boxSum;
     }
 
-    public String getCardName() {
-        return cardName;
+    public String getInvoice() {
+        return invoice;
     }
 
-    public void setCardName(String cardName) {
-        this.cardName = cardName;
+    public void setInvoice(String invoice) {
+        this.invoice = invoice;
     }
 
-    public String getTransport() {
-        return transport;
+    public String getEstado() {
+        return estado;
     }
 
-    public void setTransport(String transport) {
-        this.transport = transport;
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
-    public String getStreet() {
-        return street;
+    public String getEmpId() {
+        return empId;
     }
 
-    public void setStreet(String street) {
-        this.street = street;
+    public void setEmpId(String empId) {
+        this.empId = empId;
     }
 
-    public String getDepart() {
-        return depart;
+    public String getCompany() {
+        return company;
     }
 
-    public void setDepart(String depart) {
-        this.depart = depart;
+    public void setCompany(String company) {
+        this.company = company;
     }
 
-    public String getCity() {
-        return city;
+    public Date getFecha() {
+        return fecha;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 
     @Override
     public String toString() {
         return "ShippingDTO{" +
-                "docDate=" + docDate +
-                ", box=" + box +
-                ", docNum='" + docNum + '\'' +
-                ", cardCode='" + cardCode + '\'' +
-                ", cardName='" + cardName + '\'' +
-                ", transport='" + transport + '\'' +
-                ", street='" + street + '\'' +
-                ", depart='" + depart + '\'' +
-                ", city='" + city + '\'' +
+                "id=" + id +
+                ", order=" + order +
+                ", delivery=" + delivery +
+                ", boxSum=" + boxSum +
+                ", invoice='" + invoice + '\'' +
+                ", estado='" + estado + '\'' +
+                ", empId='" + empId + '\'' +
+                ", company='" + company + '\'' +
+                ", fecha=" + fecha +
                 '}';
     }
 }

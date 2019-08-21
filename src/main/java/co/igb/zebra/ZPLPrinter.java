@@ -1,17 +1,18 @@
 package co.igb.zebra;
 
 import co.igb.dto.ZebraPrintDTO;
+
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 
 /**
- *
  * @author dbotero
  */
 public class ZPLPrinter {
@@ -39,6 +40,8 @@ public class ZPLPrinter {
             context.put("address4", dto.getAddressLine4());
             context.put("employee", dto.getEmployee());
             context.put("city", dto.getCity() + '-' + dto.getState());
+            context.put("container", dto.getInvoice() + '-' + String.format("%03d", dto.getBoxNumber()));
+
             StringWriter writer = new StringWriter();
             Velocity.evaluate(context, writer, "TemplateName", templateText);
             return writer.toString().getBytes();

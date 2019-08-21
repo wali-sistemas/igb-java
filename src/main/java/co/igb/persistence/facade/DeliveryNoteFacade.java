@@ -4,6 +4,7 @@ import co.igb.util.Constants;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -83,5 +84,36 @@ public class DeliveryNoteFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el numero de la entrega", e);
             return null;
         }
+    }
+
+    public Integer getDocNumSalesOrder(Integer docNum, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select DISTINCT cast(d.BaseRef as int) as BaseRef ");
+        sb.append("from   ODLN e ");
+        sb.append("inner  join DLN1 d ON e.DocEntry = d.DocEntry where e.DocNum = ");
+        sb.append(docNum);
+        try {
+            return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la orden para la factura #[" + docNum.toString() + "]");
+        }
+        return null;
+    }
+
+    public Integer getDocNumInvoice(Integer orderNumber, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(v.DocNum as int) as DocNum ");
+        sb.append("from  (select DISTINCT d.BaseRef, d.DocEntry from DLN1 d) d ");
+        sb.append("inner join (select DISTINCT d.BaseRef, d.DocEntry from INV1 d) f ON f.BaseRef = d.DocEntry ");
+        sb.append("inner join OINV v ON v.DocEntry = f.DocEntry where d.BaseRef = ");
+        sb.append(orderNumber);
+        try {
+            return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando la factura desde la entrega", e);
+        }
+        return null;
     }
 }
