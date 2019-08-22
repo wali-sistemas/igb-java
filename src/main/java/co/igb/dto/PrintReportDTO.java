@@ -12,6 +12,7 @@ public class PrintReportDTO {
     private String documento;
     private String companyName;
     private String origen;
+    private String filtro;
     private boolean imprimir;
 
     public PrintReportDTO() {
@@ -74,6 +75,14 @@ public class PrintReportDTO {
         this.imprimir = imprimir;
     }
 
+    public String getFiltro() {
+        return filtro;
+    }
+
+    public void setFiltro(String filtro) {
+        this.filtro = filtro;
+    }
+
     @Override
     public String toString() {
         return "PrintReportDTO{" +
@@ -82,6 +91,7 @@ public class PrintReportDTO {
                 ", documento='" + documento + '\'' +
                 ", companyName='" + companyName + '\'' +
                 ", origen='" + origen + '\'' +
+                ", filtro='" + filtro + '\'' +
                 ", imprimir=" + imprimir +
                 '}';
     }

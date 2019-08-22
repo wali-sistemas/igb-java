@@ -35,5 +35,6 @@ public class ApplicationConfig extends Application {
         resources.add(co.igb.rest.ZebraPrintREST.class);
         resources.add(co.igb.rest.ResupplyREST.class);
         resources.add(co.igb.rest.ReportREST.class);
+        resources.add(ShippingREST.class);
     }
 }

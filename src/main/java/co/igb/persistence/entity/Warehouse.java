@@ -6,6 +6,7 @@ import java.io.Serializable;
 /**
  * @author jguisao
  */
+/***SAP***/
 @Entity
 @Table(name = "OWHS")
 public class Warehouse implements Serializable {

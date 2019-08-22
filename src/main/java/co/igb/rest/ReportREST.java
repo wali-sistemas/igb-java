@@ -307,6 +307,13 @@ public class ReportREST implements Serializable {
                         + File.separator + dto.getDocumento() + ".jrxml");
                 rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + dto.getDocumento() + File.separator + reportName;
                 break;
+            case "shipping":
+                rutaArchivo = applicationBean.obtenerValorPropiedad("url.archivo");
+                reportName = dto.getId() != 0 ? String.valueOf(dto.getId()) + ".pdf" : dto.getFiltro() + ".pdf";
+                report = JasperCompileManager.compileReportToFile(applicationBean.obtenerValorPropiedad("url.jasper") + dto.getCompanyName() + File.separator + dto.getDocumento()
+                        + File.separator + "payroll" + File.separator + "payroll.jrxml");
+                rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + dto.getDocumento() + File.separator + "payroll" + File.separator + reportName;
+                break;
             default:
                 reportName = "";
                 break;
@@ -331,6 +338,11 @@ public class ReportREST implements Serializable {
         Map<String, Object> mapa = new HashMap<>();
         if (dto.getId() != 0) {
             mapa.put("id", dto.getId());
+        }
+        if (dto.getDocumento().equals("shipping")) {
+            if (dto.getFiltro() != null) {
+                mapa.put("filtro", dto.getFiltro());
+            }
         }
         generarInforme(report, rutaArchivo, dto, mapa, connection);
         connection.close();
@@ -365,8 +377,8 @@ public class ReportREST implements Serializable {
                         new Object[]{dto.getDocumento(), myPrintService.getName(), dto.getId()});
             }
             //}
-            document.close();
         }
+        document.close();
     }
 
     private static PrintService findPrintService(String printerName) {

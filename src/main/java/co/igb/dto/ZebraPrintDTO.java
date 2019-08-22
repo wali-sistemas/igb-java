@@ -16,6 +16,7 @@ public class ZebraPrintDTO {
     private String employee;
     private String city;
     private String state;
+    private String invoice;
 
     public void setAddress(String address) {
         this.address = address;
@@ -147,6 +148,14 @@ public class ZebraPrintDTO {
         this.packageTo = packageTo;
     }
 
+    public String getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(String invoice) {
+        this.invoice = invoice;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -183,6 +192,8 @@ public class ZebraPrintDTO {
         sb.append(this.getCity());
         sb.append(", state: ");
         sb.append(this.getState());
+        sb.append(", invoice: ");
+        sb.append(this.getInvoice());
         sb.append("}");
         return sb.toString();
     }
