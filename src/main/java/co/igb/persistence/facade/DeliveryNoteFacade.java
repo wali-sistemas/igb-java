@@ -105,7 +105,7 @@ public class DeliveryNoteFacade {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(v.DocNum as int) as DocNum ");
         sb.append("from  (select DISTINCT d.BaseRef, d.DocEntry from DLN1 d) d ");
-        sb.append("inner join (select DISTINCT d.BaseRef, d.DocEntry from INV1 d) f ON f.BaseRef = d.DocEntry ");
+        sb.append("inner join (select DISTINCT d.BaseRef, d.DocEntry from INV1 d where d.BaseType = '15') f ON f.BaseRef = d.DocEntry ");
         sb.append("inner join OINV v ON v.DocEntry = f.DocEntry where d.BaseRef = ");
         sb.append(orderNumber);
         try {
