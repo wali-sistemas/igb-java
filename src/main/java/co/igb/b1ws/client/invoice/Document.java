@@ -1934,7 +1934,7 @@ public class Document {
     @XmlElement(namespace = "", name = "TransNum")
     protected Long transNum;
     @XmlElement(namespace = "", name = "VatSum")
-    protected Double vatSum;
+    protected BigDecimal vatSum;
     @XmlElement(namespace = "", name = "VatSumSys")
     protected Double vatSumSys;
     @XmlElement(namespace = "", name = "VatSumFc")
@@ -3104,7 +3104,7 @@ public class Document {
      * @return possible object is
      * {@link Double }
      */
-    public Double getVatSum() {
+    public BigDecimal getVatSum() {
         return vatSum;
     }
 
@@ -3114,7 +3114,7 @@ public class Document {
      * @param value allowed object is
      *              {@link Double }
      */
-    public void setVatSum(Double value) {
+    public void setVatSum(BigDecimal value) {
         this.vatSum = value;
     }
 

@@ -1,18 +1,12 @@
 package co.igb.rest;
 
-import co.igb.dto.PrintReportDTO;
-import co.igb.dto.ResponseDTO;
-import co.igb.dto.SalesOrderDTO;
-import co.igb.dto.UserDTO;
+import co.igb.dto.*;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.ejb.IGBAuthLDAP;
 import co.igb.persistence.entity.AssignedOrder;
 import co.igb.persistence.entity.PickingRecord;
 import co.igb.persistence.entity.ReportPickingProgress;
-import co.igb.persistence.facade.AssignedOrderFacade;
-import co.igb.persistence.facade.PickingRecordFacade;
-import co.igb.persistence.facade.ReportPickingProgressFacade;
-import co.igb.persistence.facade.SalesOrderFacade;
+import co.igb.persistence.facade.*;
 import co.igb.util.Constants;
 import net.sf.jasperreports.engine.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -39,6 +33,7 @@ import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -68,6 +63,8 @@ public class ReportREST implements Serializable {
     private PickingRecordFacade pickingRecordFacade;
     @EJB
     private ReportPickingProgressFacade reportPickingProgressFacade;
+    @EJB
+    private InvoiceFacade invoiceFacade;
 
     @GET
     @Path("reports-orders")
@@ -274,6 +271,42 @@ public class ReportREST implements Serializable {
         }
 
         return Response.ok(new ResponseDTO(0, datos)).build();
+    }
+
+    @GET
+    @Path("sales-annual")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response getSalesAnnual(@HeaderParam("X-Company-Name") String companyName,
+                                   @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Consultando el total de ventas anuales para la empresa [" + companyName + "]");
+        List<Object[]> sales = invoiceFacade.getAnnualSales(companyName, pruebas);
+        if (sales != null) {
+            List<SalesAnnualDTO> listSales = new ArrayList<>();
+            for (Object[] row : sales) {
+                listSales.add(new SalesAnnualDTO((String) row[0], (BigDecimal) row[1], (BigDecimal) row[2], (BigDecimal) row[3]));
+            }
+            return Response.ok(new ResponseDTO(listSales == null ? -1 : 0, listSales)).build();
+        }
+        return Response.ok(new ResponseDTO(-1, "No se encontraron datos para mostar.")).build();
+    }
+
+    @GET
+    @Path("sales-monthly")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response getSalesMonthly(@HeaderParam("X-Company-Name") String companyName,
+                                    @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Consultando el total de ventas mensulaes para la empresa [" + companyName + "]");
+        List<Object[]> sales = invoiceFacade.getMonthlySales(companyName, pruebas);
+        if (sales != null || sales.size() <= 0) {
+            List<SalesMonthlyDTO> listSales = new ArrayList<>();
+            for (Object[] row : sales) {
+                listSales.add(new SalesMonthlyDTO((String) row[0], (String) row[1], (BigDecimal) row[2], (BigDecimal) row[3], (BigDecimal) row[4]));
+            }
+            return Response.ok(new ResponseDTO(listSales == null ? -1 : 0, listSales)).build();
+        }
+        return Response.ok(new ResponseDTO(-1, "No se encontraron datos para mostrar.")).build();
     }
 
     @POST

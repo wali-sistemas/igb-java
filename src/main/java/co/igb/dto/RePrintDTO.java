@@ -10,8 +10,16 @@ public class RePrintDTO {
     private Integer orderNumber;
     private Integer boxNumber;
     private String printerName;
+    private boolean assigBoxInvoice;
 
     public RePrintDTO() {
+    }
+
+    public RePrintDTO(Integer orderNumber, Integer boxNumber, String printerName, boolean assigBoxInvoice) {
+        this.orderNumber = orderNumber;
+        this.boxNumber = boxNumber;
+        this.printerName = printerName;
+        this.assigBoxInvoice = assigBoxInvoice;
     }
 
     public Integer getOrderNumber() {
@@ -38,12 +46,21 @@ public class RePrintDTO {
         this.printerName = printerName;
     }
 
+    public boolean isAssigBoxInvoice() {
+        return assigBoxInvoice;
+    }
+
+    public void setAssigBoxInvoice(boolean assigBoxInvoice) {
+        this.assigBoxInvoice = assigBoxInvoice;
+    }
+
     @Override
     public String toString() {
         return "RePrintDTO{" +
                 "orderNumber=" + orderNumber +
                 ", boxNumber=" + boxNumber +
                 ", printerName='" + printerName + '\'' +
+                ", assigBoxInvoice=" + assigBoxInvoice +
                 '}';
     }
 }
