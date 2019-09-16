@@ -116,10 +116,24 @@ public class InvoiceFacade {
         }
     }
 
+    public void updateFielUser(Integer DocNum, Integer totalBox, String companyName, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaUpdate<Invoice> cu = cb.createCriteriaUpdate(Invoice.class);
+        Root<Invoice> root = cu.from(Invoice.class);
+        cu.set(root.get(Invoice_.uTotalCaja), totalBox);
+        cu.where(cb.equal(root.get(Invoice_.docNum), DocNum));
+        try {
+            em.createQuery(cu).executeUpdate();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el total de cajas para la factura #[", DocNum.toString() + "]");
+        }
+    }
+
     public Object[] getShippingInformation(Integer DocNum, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(d.StreetS as varchar(45)) as Direccion, cast(CityS as varchar(30)) as Ciudad, cast(m.Name as varchar(30)) as Departamento, ");
-        sb.append("       cast(s.Phone2 as varchar(15)) as Telefono, CAST(f.U_PESO_BRUTO as int) as Peso, cast(f.U_VR_DECLARADO as int) as ValorDeclarado, ");
+        sb.append("       cast(s.Phone2 as varchar(15)) as Telefono, cast(f.U_PESO_BRUTO as int) as Peso, cast(f.U_VR_DECLARADO as int) as ValorDeclarado, ");
         sb.append("       cast(f.U_UBIC1 as varchar(15)) as guia, cast(f.U_OBSERVACION as varchar(45)) as Comentario, cast(t.Name as varchar(45)) as Transporte ");
         sb.append("from   OINV f ");
         sb.append("inner  join INV12 d ON d.DocEntry = f.DocEntry ");
@@ -132,6 +146,58 @@ public class InvoiceFacade {
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la información para shipping de la factura #[" + DocNum.toString() + "]");
+        }
+        return null;
+    }
+
+    public List<Object[]> getAnnualSales(String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select CAST(t.año AS varchar(4)) as año, CAST(SUM(t.costoTotalVenta - t.costoTotalNota) as numeric(18,0)) AS costoTotal, CAST(SUM(t.valorTotalVenta - t.valorTotalNota) AS numeric(18,0)) AS valorTotal, ");
+        sb.append("CAST(((SUM(t.valorTotalVenta - t.valorTotalNota) - SUM(t.costoTotalVenta - t.costoTotalNota)) / SUM(t.valorTotalVenta - t.valorTotalNota)) * 100 as numeric(18,2)) AS margenAnual ");
+        sb.append("from ( select 'FV' as Doc, CAST(YEAR(f.DocDate) as varchar(4)) AS año, CAST(SUM((CAST(d.Quantity AS int) * CAST(d.StockPrice AS numeric(18,0)))) as numeric(18,0)) AS costoTotalVenta, 0 AS costoTotalNota, ");
+        sb.append("       CAST(SUM((CAST(d.LineTotal AS numeric(18,0)) - (CAST(d.LineTotal AS numeric(18,0)) * CAST(f.DiscPrcnt AS int))/100)) as numeric(18,0)) AS valorTotalVenta, 0 AS valorTotalNota ");
+        sb.append("from OINV f ");
+        sb.append("Inner Join INV1 d ON d.DocEntry = f.DocEntry ");
+        sb.append("Where f.DocType = 'I' and YEAR(f.DocDate) between YEAR(DATEADD (YEAR, -4, GETDATE())) AND YEAR(GETDATE()) Group by YEAR(f.DocDate) ");
+        sb.append("UNION ALL ");
+        sb.append("select 'NC' as Doc, CAST(YEAR(n.DocDate) as varchar(4)) AS año, 0 AS costoTotalVenta, CAST(SUM((CAST(d.Quantity AS int) * CAST(d.StockPrice AS numeric(18,0)))) as numeric(18,0)) AS costoTotalNota, 0 AS valorTotalVenta, ");
+        sb.append("       CAST(SUM((CAST(d.LineTotal AS numeric(18,0)) - (CAST(d.LineTotal AS numeric(18,0)) * CAST(n.DiscPrcnt AS int))/100)) as numeric(18,0)) AS valorTotalNota ");
+        sb.append("from ORIN n ");
+        sb.append("Inner Join RIN1 d ON d.DocEntry = n.DocEntry ");
+        sb.append("Where n.DocType = 'I' and YEAR(n.DocDate) between YEAR(DATEADD (YEAR, -4, GETDATE())) AND YEAR(GETDATE()) ");
+        sb.append("Group by YEAR(n.DocDate) ) AS t Group by t.año");
+        try {
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando las ventas anuales para la empresa [" + companyName + "]");
+        }
+        return null;
+    }
+
+    public List<Object[]> getMonthlySales(String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select CAST(t.mes AS varchar(20)) as mes, CAST(YEAR(t.año) as varchar(4)) as año,CAST(SUM(t.costoTotalVenta - t.costoTotalNota) as numeric(18,0)) AS costoTotal, CAST(SUM(t.valorTotalVenta - t.valorTotalNota) AS numeric(18,0)) AS valorTotal, ");
+        sb.append("CAST(((SUM(t.valorTotalVenta - t.valorTotalNota) - SUM(t.costoTotalVenta - t.costoTotalNota)) / SUM(t.valorTotalVenta - t.valorTotalNota)) * 100 as numeric(18,2)) AS margenMensual ");
+        sb.append("from(select 'FV' as Doc, MONTH(f.DocDate) as mm, DATENAME(MONTH, f.DocDate) AS mes, CAST(YEAR(f.DocDate) as varchar(4)) AS año, ");
+        sb.append("CAST(SUM((CAST(d.Quantity AS int) * CAST(d.StockPrice AS numeric(18,0)))) as numeric(18,0)) AS costoTotalVenta, 0 AS costoTotalNota, ");
+        sb.append("CAST(SUM((CAST(d.LineTotal AS numeric(18,0)) - (CAST(d.LineTotal AS numeric(18,0)) * CAST(f.DiscPrcnt AS int))/100)) as numeric(18,0)) AS valorTotalVenta, 0 AS valorTotalNota ");
+        sb.append("from OINV f ");
+        sb.append("Inner Join INV1 d ON d.DocEntry = f.DocEntry ");
+        sb.append("Where f.DocType = 'I' and YEAR(f.DocDate) = YEAR(GETDATE()) ");
+        sb.append("Group by DATENAME(MONTH, f.DocDate), YEAR(f.DocDate), MONTH(f.DocDate) UNION ALL ");
+        sb.append("select 'NC' as Doc, MONTH(n.DocDate) as mm, DATENAME(MONTH, n.DocDate) AS mes, CAST(YEAR(n.DocDate) as varchar(4)) AS año, 0 AS costoTotalVenta, ");
+        sb.append("CAST(SUM((CAST(d.Quantity AS int) * CAST(d.StockPrice AS numeric(18,0)))) as numeric(18,0)) AS costoTotalNota, 0 AS valorTotalVenta, ");
+        sb.append("CAST(SUM((CAST(d.LineTotal AS numeric(18,0)) - (CAST(d.LineTotal AS numeric(18,0)) * CAST(n.DiscPrcnt AS int))/100)) as numeric(18,0)) AS valorTotalNota ");
+        sb.append("from ORIN n ");
+        sb.append("Inner Join RIN1 d ON d.DocEntry = n.DocEntry ");
+        sb.append("Where n.DocType = 'I' and YEAR(n.DocDate) = YEAR(GETDATE()) ");
+        sb.append("Group by DATENAME(MONTH, n.DocDate), YEAR(n.DocDate), MONTH(n.DocDate)) AS t Group by t.mm, t.mes, t.año Order by t.mm");
+        try {
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando las ventas mensuales para la empresa [" + companyName + "]");
         }
         return null;
     }
