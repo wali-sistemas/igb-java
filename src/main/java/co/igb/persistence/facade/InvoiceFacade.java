@@ -177,22 +177,29 @@ public class InvoiceFacade {
 
     public List<Object[]> getMonthlySales(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select CAST(t.mes AS varchar(20)) as mes, CAST(YEAR(t.año) as varchar(4)) as año,CAST(SUM(t.costoTotalVenta - t.costoTotalNota) as numeric(18,0)) AS costoTotal, CAST(SUM(t.valorTotalVenta - t.valorTotalNota) AS numeric(18,0)) AS valorTotal, ");
-        sb.append("CAST(((SUM(t.valorTotalVenta - t.valorTotalNota) - SUM(t.costoTotalVenta - t.costoTotalNota)) / SUM(t.valorTotalVenta - t.valorTotalNota)) * 100 as numeric(18,2)) AS margenMensual ");
-        sb.append("from(select 'FV' as Doc, MONTH(f.DocDate) as mm, DATENAME(MONTH, f.DocDate) AS mes, CAST(YEAR(f.DocDate) as varchar(4)) AS año, ");
-        sb.append("CAST(SUM((CAST(d.Quantity AS int) * CAST(d.StockPrice AS numeric(18,0)))) as numeric(18,0)) AS costoTotalVenta, 0 AS costoTotalNota, ");
-        sb.append("CAST(SUM((CAST(d.LineTotal AS numeric(18,0)) - (CAST(d.LineTotal AS numeric(18,0)) * CAST(f.DiscPrcnt AS int))/100)) as numeric(18,0)) AS valorTotalVenta, 0 AS valorTotalNota ");
-        sb.append("from OINV f ");
+        sb.append("Select CAST(DATENAME(month, DATEADD(month, MONTH(DATEADD(mm, number, GETDATE())), 0) - 1) AS varchar(20)) AS mes, CAST(YEAR(GETDATE()) AS varchar(4)) AS año, ");
+        sb.append("ISNULL(CAST(SUM(t.costoTotalVenta - t.costoTotalNota) AS numeric(18,0)),0) AS costoTotal, ");
+        sb.append("ISNULL(CAST(SUM(t.valorTotalVenta - t.valorTotalNota) AS numeric(18,0)),0) AS valorTotal, ");
+        sb.append("ISNULL(CAST(((SUM(t.valorTotalVenta - t.valorTotalNota) - SUM(t.costoTotalVenta - t.costoTotalNota)) / SUM(t.valorTotalVenta - t.valorTotalNota)) * 100 AS numeric(18,2)),0) AS margenAnual ");
+        sb.append("From master.dbo.spt_values v ");
+        sb.append("Left join ( Select 'FV' AS Doc, MONTH(f.DocDate) AS mm, DATENAME(MONTH, f.DocDate) AS mes, ");
+        sb.append("CAST(SUM((CAST(d.Quantity AS int) * CAST(d.StockPrice AS numeric(18,0)))) AS numeric(18,0)) AS costoTotalVenta, 0 AS costoTotalNota, ");
+        sb.append("CAST(SUM((CAST(d.LineTotal AS numeric(18,0)) - (CAST(d.LineTotal AS numeric(18,0)) * CAST(f.DiscPrcnt AS int))/100)) AS numeric(18,0)) AS valorTotalVenta, 0 AS valorTotalNota ");
+        sb.append("From OINV f ");
         sb.append("Inner Join INV1 d ON d.DocEntry = f.DocEntry ");
         sb.append("Where f.DocType = 'I' and YEAR(f.DocDate) = YEAR(GETDATE()) ");
         sb.append("Group by DATENAME(MONTH, f.DocDate), YEAR(f.DocDate), MONTH(f.DocDate) UNION ALL ");
-        sb.append("select 'NC' as Doc, MONTH(n.DocDate) as mm, DATENAME(MONTH, n.DocDate) AS mes, CAST(YEAR(n.DocDate) as varchar(4)) AS año, 0 AS costoTotalVenta, ");
-        sb.append("CAST(SUM((CAST(d.Quantity AS int) * CAST(d.StockPrice AS numeric(18,0)))) as numeric(18,0)) AS costoTotalNota, 0 AS valorTotalVenta, ");
-        sb.append("CAST(SUM((CAST(d.LineTotal AS numeric(18,0)) - (CAST(d.LineTotal AS numeric(18,0)) * CAST(n.DiscPrcnt AS int))/100)) as numeric(18,0)) AS valorTotalNota ");
-        sb.append("from ORIN n ");
+        sb.append("Select 'NC' AS Doc, MONTH(n.DocDate) AS mm, DATENAME(MONTH, n.DocDate) AS mes, 0 AS costoTotalVenta,");
+        sb.append("CAST(SUM((CAST(d.Quantity AS int) * CAST(d.StockPrice AS numeric(18,0)))) AS numeric(18,0)) AS costoTotalNota, 0 AS valorTotalVenta, ");
+        sb.append("CAST(SUM((CAST(d.LineTotal AS numeric(18,0)) - (CAST(d.LineTotal AS numeric(18,0)) * CAST(ISNULL(n.DiscPrcnt,0) AS int))/100)) AS numeric(18,0)) AS valorTotalNota ");
+        sb.append("From ORIN n ");
         sb.append("Inner Join RIN1 d ON d.DocEntry = n.DocEntry ");
         sb.append("Where n.DocType = 'I' and YEAR(n.DocDate) = YEAR(GETDATE()) ");
-        sb.append("Group by DATENAME(MONTH, n.DocDate), YEAR(n.DocDate), MONTH(n.DocDate)) AS t Group by t.mm, t.mes, t.año Order by t.mm");
+        sb.append("Group by DATENAME(MONTH, n.DocDate), YEAR(n.DocDate), MONTH(n.DocDate) ");
+        sb.append(") AS t ON t.mm = MONTH(DATEADD(mm, number, GETDATE())) ");
+        sb.append("Where (name IS NULL) AND (number BETWEEN 0 AND 11) ");
+        sb.append("Group By DATENAME(month, DATEADD(month, MONTH(DATEADD(mm, number, GETDATE())), 0) - 1), STR(MONTH(DATEADD(mm, number, GETDATE())), 2) ");
+        sb.append("Order BY STR(MONTH(DATEADD(mm, number, GETDATE())), 2) ASC");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException ex) {
