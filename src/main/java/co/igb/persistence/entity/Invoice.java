@@ -6,6 +6,7 @@ import java.io.Serializable;
 /**
  * @author jguisao
  */
+
 /***SAP***/
 @Entity
 @Table(name = "OINV")
@@ -21,6 +22,9 @@ public class Invoice implements Serializable {
     @Basic(optional = false)
     @Column(name = "U_SHIPPING")
     private Character uShipping;
+    @Basic(optional = false)
+    @Column(name = "U_TOT_CAJ")
+    private Integer uTotalCaja;
 
     public Invoice() {
     }
@@ -49,6 +53,14 @@ public class Invoice implements Serializable {
         this.uShipping = uShipping;
     }
 
+    public Integer getuTotalCaja() {
+        return uTotalCaja;
+    }
+
+    public void setuTotalCaja(Integer uTotalCaja) {
+        this.uTotalCaja = uTotalCaja;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -70,8 +82,9 @@ public class Invoice implements Serializable {
     public String toString() {
         return "Invoice{" +
                 "docEntry=" + docEntry +
-                ", docNum='" + docNum + '\'' +
+                ", docNum=" + docNum +
                 ", uShipping=" + uShipping +
+                ", uTotalCaja=" + uTotalCaja +
                 '}';
     }
 }

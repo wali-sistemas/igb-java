@@ -104,7 +104,7 @@ public class SalesOrderFacade {
             sb.append("and enc.confirmed = 'Y' ");
         }
         sb.append(") as t ) as f ) as j ");
-        if(filterGroup){
+        if (filterGroup) {
             sb.append("where j.contGrupo > 1 ");
         }
         sb.append("order by j.docdate, j.docnum");
@@ -304,5 +304,24 @@ public class SalesOrderFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los numAtCard del packingList. ", e);
             return "N/A";
         }
+    }
+
+    public List<Object[]> listPendingOrdersByInvoice(String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select DISTINCT cast(e.DocNum as int) as entrega, cast(o.DocNum as int) as orden, cast(e.DocDate as date) as fechaEntrega, ");
+        sb.append("       cast(o.DocDate as date) as fechaOrden, cast(e.DocTotal as numeric(18,0)) as total, cast(d.WhsCode as varchar(20)) as almacen ");
+        sb.append("from  ORDR o ");
+        sb.append("inner join RDR1 d ON d.DocEntry = o.DocEntry ");
+        sb.append("inner join RDR12 d1 ON d1.DocEntry = d.DocEntry ");
+        sb.append("inner join ODLN e ON e.DocEntry = d.TrgetEntry ");
+        sb.append("where e.DocStatus = 'O' AND o.DocType = 'I' AND e.DocType = 'I' AND o.CANCELED = 'N' AND d.TargetType = 15 AND e.CANCELED = 'N' ");
+        sb.append("      AND cast(e.DocDate as Date) between cast(GETDATE()-10 as date) and cast(GETDATE() as date)");
+        try{
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+        } catch (NoResultException ex){
+        } catch (Exception e){
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error listando las ordenes pendientes por facturar.");
+        }
+        return null;
     }
 }

@@ -48,6 +48,8 @@ public class ZebraPrintREST {
     private PrinterFacade prFacade;
     @EJB
     private DeliveryNoteFacade deliveryNoteFacade;
+    @EJB
+    private InvoiceFacade invoiceFacade;
 
     @POST
     @Path("packinglist/{printer}")
@@ -209,10 +211,13 @@ public class ZebraPrintREST {
         }
 
         Integer invoice = deliveryNoteFacade.getDocNumInvoice(dto.getOrderNumber(), companyName, pruebas);
-        if (invoice == null) {
+        if (invoice == null || invoice == 0) {
             return Response.ok(new ResponseDTO(-1, "Ocurrió un error al consultar los datos para imprimir la etiqueta. (Invoice)")).build();
         }
-
+        //TODO: Asignar campos de usuario (u_ToTal_Caj) en la factura
+        if (dto.isAssigBoxInvoice()) {
+            invoiceFacade.updateFielUser(invoice, dto.getBoxNumber(), companyName, pruebas);
+        }
         boolean allSucceeded = true;
         for (int i = 1; i <= dto.getBoxNumber(); i++) {
             ZebraPrintDTO label = new ZebraPrintDTO();

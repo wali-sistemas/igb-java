@@ -885,7 +885,7 @@ public class PackingREST implements Serializable {
             CONSOLE.log(Level.INFO, "confirmado el checkout para la orden #", dto.getOrderNumber());
             return Response.ok(new ResponseDTO(0, "CheckOut confirmado exitosamente.")).build();
         } catch (Exception e) {
-            CONSOLE.log(Level.INFO, "Ocurrio un error confirmando el checkout para la orden #", dto.getOrderNumber());
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error confirmando el checkout para la orden #", dto.getOrderNumber());
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error confirmando el checkout.")).build();
         }
     }
@@ -902,5 +902,15 @@ public class PackingREST implements Serializable {
         }
         Integer idCheckOut = checkOutOrderFacade.getIdCheckOut(orderNumber, companyName, pruebas);
         return Response.ok(new ResponseDTO(idCheckOut == 0 ? -1 : 0, idCheckOut)).build();
+    }
+
+    @GET
+    @Path("find-orders-pending")
+    @Produces({MediaType.APPLICATION_JSON + ";chaset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response findOrdersPendingByInvoice(@HeaderParam("X-Company-Name") String companyName,
+                                               @HeaderParam("X-Pruebas") boolean pruebas) {
+        List<Object[]> orders = salesOrderFacade.listPendingOrdersByInvoice(companyName, pruebas);
+        return Response.ok(new ResponseDTO(orders == null ? -1 : 0, orders)).build();
     }
 }

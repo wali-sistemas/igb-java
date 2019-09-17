@@ -14,11 +14,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.datatype.DatatypeFactory;
@@ -220,6 +216,7 @@ public class InvoiceREST implements Serializable {
             Integer deliveryQuantity = (Integer) row[8];
             BigDecimal deliveryValorNeto = (BigDecimal) row[11];
             String deliveryComment = (String) row[10];
+            BigDecimal deliveryImpuesto = (BigDecimal) row[12];
 
             if (invoice.getSeries() == null) {
                 invoice.setSeries(Long.parseLong(getPropertyValue("igb.invoice.series", companyName)));
@@ -243,6 +240,7 @@ public class InvoiceREST implements Serializable {
                 invoice.setSalesPersonCode(deliverySalesPersonCode);
                 //invoice.setuOrigen("W");
                 invoice.setBaseAmount(deliveryValorNeto);
+                invoice.setVatSum(deliveryImpuesto);
             }
 
             if (deliveryComment != null) {
@@ -316,7 +314,13 @@ public class InvoiceREST implements Serializable {
             for (Object[] row : listRetencion) {
                 BigDecimal valueRet = (BigDecimal) row[1];
                 BigDecimal baseMinima = (BigDecimal) row[2];
-                BigDecimal base = invoice.getBaseAmount().multiply(valueRet.divide(BigDecimal.valueOf(100)));
+                BigDecimal base = new BigDecimal(0);
+                //TODO: Clientes con (R/IVA VENTAS) su base parte del impuesto
+                if (row[3].equals("IVA") || row[0].equals("RVIV")) {
+                    base = invoice.getVatSum().multiply(valueRet.divide(BigDecimal.valueOf(100)));
+                } else {
+                    base = invoice.getBaseAmount().multiply(valueRet.divide(BigDecimal.valueOf(100)));
+                }
 
                 Document.WithholdingTaxDataCollection.WithholdingTaxData retencion = new Document.WithholdingTaxDataCollection.WithholdingTaxData();
 
