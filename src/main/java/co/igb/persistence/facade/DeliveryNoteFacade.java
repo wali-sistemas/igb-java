@@ -31,8 +31,12 @@ public class DeliveryNoteFacade {
         sb.append("cast(enc.cardcode as varchar(20)) cardcode, cast(enc.slpcode as int) slpcode, cast(ISNULL(enc.cntctcode,'') as int) cntctcode, ");
         sb.append("cast(det.linenum as int) linenum, cast(det.itemcode as varchar(20)) itemcode, cast(det.quantity as int) quantity, ");
         sb.append("cast(enc.U_VR_DECLARADO as numeric(18,2)) valorDeclarado, cast(enc.Comments as varchar(250)) comentario, ");
-        sb.append("cast(enc.DocTotal-enc.VatSum as numeric(18,2)) as valorNeto, cast(enc.VatSum as numeric(18,2)) as impuesto from odln enc ");
-        sb.append("inner join dln1 det on det.docentry = enc.docentry where enc.docentry =");
+        sb.append("cast(enc.DocTotal-enc.VatSum as numeric(18,2)) as valorNeto, cast(enc.VatSum as numeric(18,2)) as impuesto, ");
+        sb.append("cast(pay.extradays as int) as days ");
+        sb.append("from odln enc ");
+        sb.append("inner join dln1 det on det.docentry = enc.docentry ");
+        sb.append("inner join octg pay on pay.groupnum = enc.groupnum ");
+        sb.append("where enc.docentry =");
         sb.append(deliveryDocEntry);
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
