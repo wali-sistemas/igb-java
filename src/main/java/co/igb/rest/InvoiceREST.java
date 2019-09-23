@@ -217,6 +217,7 @@ public class InvoiceREST implements Serializable {
             BigDecimal deliveryValorNeto = (BigDecimal) row[11];
             String deliveryComment = (String) row[10];
             BigDecimal deliveryImpuesto = (BigDecimal) row[12];
+            Integer deliveryCreditDays = (Integer) row[13];
 
             if (invoice.getSeries() == null) {
                 invoice.setSeries(Long.parseLong(getPropertyValue("igb.invoice.series", companyName)));
@@ -231,7 +232,7 @@ public class InvoiceREST implements Serializable {
 
                 try {
                     GregorianCalendar date = new GregorianCalendar();
-                    date.add(Calendar.DATE, customerFacade.getCustomerCreditDays(cardCode, companyName, pruebas));
+                    date.add(Calendar.DATE, deliveryCreditDays/*customerFacade.getCustomerCreditDays(cardCode, companyName, pruebas)*/);
                     invoice.setDocDueDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(date));
                 } catch (Exception e) {
                 }
