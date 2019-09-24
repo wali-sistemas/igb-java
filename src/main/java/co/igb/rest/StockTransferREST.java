@@ -132,7 +132,7 @@ public class StockTransferREST implements Serializable {
             Integer expectedQuantity = binLocationFacade.getTotalQuantity(itemTransfer.getBinAbsFrom(), itemTransfer.getItemCode(), companyName, pruebas);
             try {
                 //Trasladar la diferencia a la ubicacion de inconsistencias
-                Long docEntry = adjustMissingQuantity(itemTransfer, expectedQuantity, companyName, warehouseCode);
+                Long docEntry = adjustMissingQuantity(itemTransfer, expectedQuantity, companyName, warehouseCode, employeeName);
                 CONSOLE.log(Level.INFO, "Se trasladaron las unidades sobrantes a la ubicacion de inventario. DocEntry={0}", docEntry);
             } catch (Exception e) {
                 return Response.ok(new ResponseDTO(-1, "Ocurrio un error al reportar la inconsistencia de inventario. " + e.getMessage())).build();
@@ -412,7 +412,7 @@ public class StockTransferREST implements Serializable {
                 transfer.setSeries(Long.parseLong(getPropertyValue(Constants.STOCK_TRANSFER_SERIES, companyName)));
                 transfer.setToWarehouse(inventory.getWhsCode());
                 transfer.setFromWarehouse(inventory.getWhsCode());
-                transfer.setComments("Traslado despues de realizar inventario.");
+                transfer.setComments("Inconsistencias despues de realizar inventario en wali reportadas por " + employeeName);
 
                 StockTransfer.StockTransferLines documentLines = new StockTransfer.StockTransferLines();
 
@@ -675,13 +675,13 @@ public class StockTransferREST implements Serializable {
     }
 
     private Long adjustMissingQuantity(SingleItemTransferDTO itemTransfer, Integer expectedQuantity,
-                                       String companyName, String warehouseCode) throws Exception {
+                                       String companyName, String warehouseCode, String employeeName) throws Exception {
         StockTransfer transfer = new StockTransfer();
 
         transfer.setSeries(Long.parseLong(getPropertyValue(Constants.STOCK_TRANSFER_SERIES, companyName)));
         transfer.setToWarehouse(itemTransfer.getWarehouseCode());
         transfer.setFromWarehouse(itemTransfer.getWarehouseCode());
-        transfer.setComments("Traslado despues de realizar inventario.");
+        transfer.setComments("Inconsistencia creada desde wali reportada por " + employeeName);
 
         StockTransfer.StockTransferLines documentLines = new StockTransfer.StockTransferLines();
         StockTransfer.StockTransferLines.StockTransferLine line = new StockTransfer.StockTransferLines.StockTransferLine();
