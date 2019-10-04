@@ -718,6 +718,16 @@ public class Document {
     protected BigDecimal uaiuimpre;
     @XmlElement(name = "U_AIU_UTIL")
     protected BigDecimal uaiuutil;
+    //@XmlElement(name = "U_F_EN_DOC_FIN")
+    //protected XMLGregorianCalendar uFenDocFin;
+    //@XmlElement(name = "U_F_PAGO_FINAL")
+    //protected XMLGregorianCalendar uFpagoFinal;
+    //@XmlElement(name = "U_VLR_PAGO_FINAL")
+    //protected Integer uVlrPagoFinal;
+    //@XmlElement(name = "U_LIQUID_COMEX")
+    //protected Integer uLiquidComex;
+    //@XmlElement(name = "U_CANT_CONTE")
+    //protected Integer uCantConte;
     //@XmlElement(name = "U_addInFaElectronica_tipoND_FE")
     //protected String uAddInFaElectronicaTipoNDFE;
     //@XmlElement(name = "U_DocAdicionales")
@@ -8687,7 +8697,47 @@ public class Document {
         this.uaiuutil = value;
     }
 
-    /*public String getuOrigen() {
+    /*public XMLGregorianCalendar getuFenDocFin() {
+        return uFenDocFin;
+    }
+
+    public void setuFenDocFin(XMLGregorianCalendar uFenDocFin) {
+        this.uFenDocFin = uFenDocFin;
+    }
+
+    public XMLGregorianCalendar getuFpagoFinal() {
+        return uFpagoFinal;
+    }
+
+    public void setuFpagoFinal(XMLGregorianCalendar uFpagoFinal) {
+        this.uFpagoFinal = uFpagoFinal;
+    }
+
+    public Integer getuVlrPagoFinal() {
+        return uVlrPagoFinal;
+    }
+
+    public void setuVlrPagoFinal(Integer uVlrPagoFinal) {
+        this.uVlrPagoFinal = uVlrPagoFinal;
+    }
+
+    public Integer getuLiquidComex() {
+        return uLiquidComex;
+    }
+
+    public void setuLiquidComex(Integer uLiquidComex) {
+        this.uLiquidComex = uLiquidComex;
+    }
+
+    public Integer getuCantConte() {
+        return uCantConte;
+    }
+
+    public void setuCantConte(Integer uCantConte) {
+        this.uCantConte = uCantConte;
+    }
+
+    public String getuOrigen() {
         return uOrigen;
     }
 
