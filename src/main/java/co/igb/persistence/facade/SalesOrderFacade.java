@@ -1,19 +1,18 @@
 package co.igb.persistence.facade;
 
 import co.igb.dto.SalesOrderDTO;
+import co.igb.persistence.entity.SalesOrderDetail;
+import co.igb.persistence.entity.SalesOrderDetail_;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.criteria.*;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -316,12 +315,51 @@ public class SalesOrderFacade {
         sb.append("inner join ODLN e ON e.DocEntry = d.TrgetEntry ");
         sb.append("where e.DocStatus = 'O' AND o.DocType = 'I' AND e.DocType = 'I' AND o.CANCELED = 'N' AND d.TargetType = 15 AND e.CANCELED = 'N' ");
         sb.append("      AND cast(e.DocDate as Date) between cast(GETDATE()-10 as date) and cast(GETDATE() as date)");
-        try{
+        try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
-        } catch (NoResultException ex){
-        } catch (Exception e){
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error listando las ordenes pendientes por facturar.");
         }
         return null;
+    }
+
+    public boolean closeOrderLines(Integer orderEntry, HashSet<String> items, String companyName, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaUpdate<SalesOrderDetail> cu = cb.createCriteriaUpdate(SalesOrderDetail.class);
+        Root<SalesOrderDetail> root = cu.from(SalesOrderDetail.class);
+
+        Expression<String> parentExpression = root.get(SalesOrderDetail_.itemCode);
+        Predicate parentPredicate = parentExpression.in(items);
+
+        cu.set(root.get(SalesOrderDetail_.lineStatus), 'C');
+        cu.where(cb.and(cb.equal(root.get(SalesOrderDetail_.docEntry), orderEntry)), parentPredicate);
+        try {
+            em.createQuery(cu).executeUpdate();
+            return true;
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar las lineas de la orden {0} para los productos que no tienen saldo: {1}", new Object[]{orderEntry, parentExpression});
+        }
+        return false;
+    }
+
+    public boolean modifySalesOrderQuantity(Integer orderEntry, String itemCode, Integer newQuantity, String companyName, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaUpdate<SalesOrderDetail> cu = cb.createCriteriaUpdate(SalesOrderDetail.class);
+        Root<SalesOrderDetail> root = cu.from(SalesOrderDetail.class);
+
+        cu.set(root.get(SalesOrderDetail_.quantity), newQuantity);
+        cu.where(cb.and(cb.equal(root.get(SalesOrderDetail_.itemCode), itemCode)), cb.equal(root.get(SalesOrderDetail_.docEntry), orderEntry));
+        try {
+            em.createQuery(cu).executeUpdate();
+            return true;
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al modificar la cantidad del item {1} para la orden {0}", new Object[]{orderEntry, itemCode});
+        }
+        return false;
     }
 }

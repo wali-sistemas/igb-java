@@ -198,9 +198,10 @@ public class PickingREST implements Serializable {
             }
 
             if (!itemsMissing.isEmpty()) {
-                //Marcar lineas de orden cerradas para items sin saldo
-                ResponseDTO res = salesOrderEJB.closeOrderLines(companyName, orderDocEntry, itemsMissing);
-                if (res.getCode() < 0) {
+                //TODO: Marcar lineas de orden cerradas para items sin saldo
+                //ResponseDTO res = salesOrderEJB.closeOrderLines(companyName, orderDocEntry, itemsMissing);
+                boolean res = soFacade.closeOrderLines(orderDocEntry, itemsMissing, companyName, pruebas);
+                if (!res) {
                     PickingWarningDTO warning = new PickingWarningDTO();
                     warning.setItems(new ArrayList<>(itemsMissing));
                     warning.setMessage(
