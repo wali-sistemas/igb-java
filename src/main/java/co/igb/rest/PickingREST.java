@@ -189,11 +189,12 @@ public class PickingREST implements Serializable {
                     itemsMissing.add(pendingItemcode);
                 } else if (!availableStock.containsKey(pendingItemcode) && pickedItems.containsKey(pendingItemcode)) {
                     //TODO: reprocesar orden para que se genere cierre si no hay mas items pendientes
-                    salesOrderEJB.modifySalesOrderQuantity(
+                    /*salesOrderEJB.modifySalesOrderQuantity(
                             companyName,
                             orderDocEntry,
                             pendingItemcode,
-                            getTotalPicked(pickedItems.get(pendingItemcode)));
+                            getTotalPicked(pickedItems.get(pendingItemcode)));*/
+                    soFacade.modifySalesOrderQuantity(orderDocEntry, pendingItemcode, getTotalPicked(pickedItems.get(pendingItemcode)), companyName, pruebas);
                 }
             }
 

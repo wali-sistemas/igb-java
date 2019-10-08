@@ -51,7 +51,7 @@ public class SalesOrderEJB {
         return response.getDocument();
     }
 
-    public ResponseDTO closeOrderLines(String companyName, Integer orderEntry, HashSet<String> items) {
+    /*public ResponseDTO closeOrderLines(String companyName, Integer orderEntry, HashSet<String> items) {
         ResponseDTO res = null;
         //1. Login
         String sessionId = null;
@@ -147,7 +147,7 @@ public class SalesOrderEJB {
             }
         }
         return new ResponseDTO(0, res.getContent());
-    }
+    }*/
 
     private String getSessionId(String companyName) {
         String sessionId = null;
