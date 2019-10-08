@@ -65,6 +65,8 @@ public class ReportREST implements Serializable {
     private ReportPickingProgressFacade reportPickingProgressFacade;
     @EJB
     private InvoiceFacade invoiceFacade;
+    @EJB
+    private PaymentsReceivedFacade paymentsReceivedFacade;
 
     @GET
     @Path("reports-orders")
@@ -307,6 +309,17 @@ public class ReportREST implements Serializable {
             return Response.ok(new ResponseDTO(listSales == null ? -1 : 0, listSales)).build();
         }
         return Response.ok(new ResponseDTO(-1, "No se encontraron datos para mostrar.")).build();
+    }
+
+    @GET
+    @Path("sales-collect")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response getSalesCollect(@HeaderParam("X-Company-Name") String companyName,
+                                    @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Consultando el recaudo de ventas mensulaes para la empresa [" + companyName + "]");
+        List<Object[]> listCollect = paymentsReceivedFacade.getCollect(companyName, pruebas);
+        return Response.ok(new ResponseDTO(0, listCollect)).build();
     }
 
     @POST
