@@ -130,8 +130,7 @@ public class SalesOrderFacade {
         return orders;
     }
 
-    public List<Object[]> findOrdersStockAvailability(Integer orderNumber, List<String> itemCodes, String warehouseCode,
-                                                      String schemaName, boolean testing) {
+    public List<Object[]> findOrdersStockAvailability(Integer orderNumber, List<String> itemCodes, String warehouseCode, String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(detalle.itemCode as varchar(20)) itemCode, cast(detalle.openQty as int) openQuantity, cast(detalle.quantity as int) quantity, ");
         sb.append("cast(saldo.binabs as int) binAbs, cast(saldo.onhandqty as int) available, cast(ubicacion.bincode as varchar(50)) binCode, ");
@@ -190,8 +189,8 @@ public class SalesOrderFacade {
 
     public Map<String, Integer> listPendingItems(Integer orderNumber, String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(det.ItemCode as varchar(20)) itemcode, cast(sum(det.OpenQty) as int) pendingQuantity ");
-        sb.append("from ORDR enc inner join RDR1 det on det.docentry = enc.docentry and det.OpenQty > 0 ");
+        sb.append("select cast(det.ItemCode as varchar(20)) itemcode, cast(sum(det.Quantity) as int) pendingQuantity ");
+        sb.append("from ORDR enc inner join RDR1 det on det.docentry = enc.docentry and det.Quantity > 0 ");
         sb.append("where enc.docnum = ");
         sb.append(orderNumber);
         sb.append(" group by det.ItemCode ");
@@ -210,6 +209,24 @@ public class SalesOrderFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar los items pendientes de la orden. ", e);
             return new HashMap<>();
         }
+    }
+
+    public List<Object[]> getOrderStates(String schemaName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select case when o.U_SEPARADOR = '' then 'SAP' when o.U_SEPARADOR is null then 'INSITU' ");
+        sb.append("      when o.U_SEPARADOR = 'PENDIENTE DE PAGO' then 'PEND PAGO' else cast(o.U_SEPARADOR as varchar(20)) end as Estado, ");
+        sb.append("      cast(COUNT(o.DocNum) AS int) AS Pedidos, ");
+        sb.append("      cast(sum(((((((o.DocTotal + o.DiscSum) - o.VatSum) - o.TotalExpns) + o.WtSum) - o.RoundDif) - o.DiscSum)) as numeric(18,0)) as Total ");
+        sb.append("from  ORDR o ");
+        sb.append("where o.DocStatus = 'O' and o.U_DESP = 'N' and YEAR(o.DocDate) = YEAR(GETDATE()) ");
+        sb.append("group by o.U_SEPARADOR order by Pedidos ASC");
+        try {
+            return persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error listado la estadistica de las ordenes.", e);
+        }
+        return null;
     }
 
     public Object queryCustomer(Integer orderNumber, String schemaName, boolean testing) {
