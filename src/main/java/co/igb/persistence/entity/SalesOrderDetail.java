@@ -25,15 +25,19 @@ public class SalesOrderDetail implements Serializable {
     @Basic(optional = false)
     @Column(name = "Quantity")
     private Integer quantity;
+    @Basic(optional = false)
+    @Column(name = "OpenQty")
+    private Integer openQty;
 
     public SalesOrderDetail() {
     }
 
-    public SalesOrderDetail(Integer docEntry, String itemCode, char lineStatus, Integer quantity) {
+    public SalesOrderDetail(Integer docEntry, String itemCode, char lineStatus, Integer quantity, Integer openQty) {
         this.docEntry = docEntry;
         this.itemCode = itemCode;
         this.lineStatus = lineStatus;
         this.quantity = quantity;
+        this.openQty = openQty;
     }
 
     public Integer getDocEntry() {
@@ -68,6 +72,14 @@ public class SalesOrderDetail implements Serializable {
         this.quantity = quantity;
     }
 
+    public Integer getOpenQty() {
+        return openQty;
+    }
+
+    public void setOpenQty(Integer openQty) {
+        openQty = openQty;
+    }
+
     @Override
     public String toString() {
         return "SalesOrderDetail{" +
@@ -75,6 +87,7 @@ public class SalesOrderDetail implements Serializable {
                 ", itemCode='" + itemCode + '\'' +
                 ", lineStatus=" + lineStatus +
                 ", quantity=" + quantity +
+                ", OpenQty=" + openQty +
                 '}';
     }
 }

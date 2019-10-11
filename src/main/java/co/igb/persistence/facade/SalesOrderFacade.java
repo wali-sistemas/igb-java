@@ -352,6 +352,7 @@ public class SalesOrderFacade {
         Root<SalesOrderDetail> root = cu.from(SalesOrderDetail.class);
 
         cu.set(root.get(SalesOrderDetail_.quantity), newQuantity);
+        cu.set(root.get(SalesOrderDetail_.openQty), newQuantity);
         cu.where(cb.and(cb.equal(root.get(SalesOrderDetail_.itemCode), itemCode)), cb.equal(root.get(SalesOrderDetail_.docEntry), orderEntry));
         try {
             em.createQuery(cu).executeUpdate();
