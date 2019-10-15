@@ -54,7 +54,7 @@ public class InvoiceFacade {
         return null;
     }
 
-    public List<Object[]> findListInvoicesShipping(String transport, String invoice, String companyName, boolean testing) {
+    public List<Object[]> findListInvoicesShipping(String transport, String invoice, String companyName, String warehouseCode, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select CAST(f.DocDate as date) as DocDate, CAST(f.U_TOT_CAJ as int) as Box, CAST(f.DocNum as varchar(10)) as DocNum, ");
         sb.append("       CAST(f.CardCode as varchar(20)) as CardCode, CAST(f.CardName as varchar(100)) as CardName, ");
@@ -64,7 +64,9 @@ public class InvoiceFacade {
         sb.append("inner  join INV12 d ON d.DocEntry = f.DocEntry ");
         sb.append("inner  join [@TRANSP] t ON t.Code = f.U_TRANSP ");
         sb.append("inner  join OCST l ON l.Code = d.StateS and l.Country = 'CO' ");
-        sb.append("where  f.U_SHIPPING = 'N' and f.U_TOT_CAJ > 0 ");
+        sb.append("where  (select top 1 d.WhsCode from INV1 d where d.DocEntry = f.DocEntry) = '");
+        sb.append(warehouseCode);
+        sb.append("' and f.U_SHIPPING = 'N' and f.U_TOT_CAJ > 0 ");
         if (!transport.equals("*")) {
             sb.append("and cast(t.Name as varchar(15)) = '");
             sb.append(transport);

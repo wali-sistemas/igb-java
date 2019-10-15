@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,6 +68,10 @@ public class ReportREST implements Serializable {
     private InvoiceFacade invoiceFacade;
     @EJB
     private PaymentsReceivedFacade paymentsReceivedFacade;
+    @EJB
+    private PackingListRecordFacade packingListRecordFacade;
+    @EJB
+    private ShippingOrderFacade shippingOrderFacade;
 
     @GET
     @Path("reports-orders")
@@ -75,10 +80,13 @@ public class ReportREST implements Serializable {
     public Response obtainReportsOrders(@HeaderParam("X-Company-Name") String companyName,
                                         @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                         @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Consultando estados de ordenes en bodega general para la empresa [" + companyName + "]");
         List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, false, companyName, pruebas, warehouseCode);
         List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations(companyName, pruebas);
+        BigInteger packing = packingListRecordFacade.getOrdersForPacking(companyName, pruebas);
+        Integer shiping = shippingOrderFacade.getOrdersForShipping(companyName, pruebas);
 
-        Integer[] contador = new Integer[]{0, 0};
+        Integer[] contador = new Integer[]{0, 0, packing.intValue(), shiping};
         for (SalesOrderDTO s : orders) {
             boolean existe = false;
 
@@ -97,7 +105,7 @@ public class ReportREST implements Serializable {
                 contador[0]++;
             }
         }
-
+        CONSOLE.log(Level.INFO, "Retornando estados de ordenes en bodega general para la empresa [" + companyName + "]");
         return Response.ok(new ResponseDTO(0, contador)).build();
     }
 
