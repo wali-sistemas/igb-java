@@ -379,17 +379,6 @@ public class ReportREST implements Serializable {
         }
     }
 
-    @GET
-    @Path("sales-collect")
-    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response getSalesCollect(@HeaderParam("X-Company-Name") String companyName,
-                                    @HeaderParam("X-Pruebas") boolean pruebas) {
-        CONSOLE.log(Level.INFO, "Consultando el recaudo de ventas mensulaes para la empresa [" + companyName + "]");
-        List<Object[]> listCollect = paymentsReceivedFacade.getCollect(companyName, pruebas);
-        return Response.ok(new ResponseDTO(0, listCollect)).build();
-    }
-
     @POST
     @Path("generate-report/")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
