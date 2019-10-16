@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,6 +68,10 @@ public class ReportREST implements Serializable {
     private InvoiceFacade invoiceFacade;
     @EJB
     private PaymentsReceivedFacade paymentsReceivedFacade;
+    @EJB
+    private PackingListRecordFacade packingListRecordFacade;
+    @EJB
+    private ShippingOrderFacade shippingOrderFacade;
 
     @GET
     @Path("reports-orders")
@@ -75,10 +80,13 @@ public class ReportREST implements Serializable {
     public Response obtainReportsOrders(@HeaderParam("X-Company-Name") String companyName,
                                         @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                         @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Consultando estados de ordenes en bodega general para la empresa [" + companyName + "]");
         List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, false, companyName, pruebas, warehouseCode);
         List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations(companyName, pruebas);
+        BigInteger packing = packingListRecordFacade.getOrdersForPacking(companyName, pruebas);
+        Integer shiping = shippingOrderFacade.getOrdersForShipping(companyName, pruebas);
 
-        Integer[] contador = new Integer[]{0, 0};
+        Integer[] contador = new Integer[]{0, 0, packing.intValue(), shiping};
         for (SalesOrderDTO s : orders) {
             boolean existe = false;
 
@@ -97,7 +105,7 @@ public class ReportREST implements Serializable {
                 contador[0]++;
             }
         }
-
+        CONSOLE.log(Level.INFO, "Retornando estados de ordenes en bodega general para la empresa [" + companyName + "]");
         return Response.ok(new ResponseDTO(0, contador)).build();
     }
 
@@ -288,9 +296,11 @@ public class ReportREST implements Serializable {
             for (Object[] row : sales) {
                 listSales.add(new SalesAnnualDTO((String) row[0], (BigDecimal) row[1], (BigDecimal) row[2], (BigDecimal) row[3]));
             }
+            CONSOLE.log(Level.INFO, "Retornando ventas anuales para [" + companyName + "]");
             return Response.ok(new ResponseDTO(listSales == null ? -1 : 0, listSales)).build();
         }
-        return Response.ok(new ResponseDTO(-1, "No se encontraron datos para mostar.")).build();
+        CONSOLE.log(Level.SEVERE, "No se encontraron ventas anuales para mostrar en [" + companyName + "]");
+        return Response.ok(new ResponseDTO(-1, "No se encontraron ventas anuales para mostar.")).build();
     }
 
     @GET
@@ -299,16 +309,74 @@ public class ReportREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response getSalesMonthly(@HeaderParam("X-Company-Name") String companyName,
                                     @HeaderParam("X-Pruebas") boolean pruebas) {
-        CONSOLE.log(Level.INFO, "Consultando el total de ventas mensulaes para la empresa [" + companyName + "]");
+        CONSOLE.log(Level.INFO, "Consultando el total de ventas mensuales para la empresa [" + companyName + "]");
         List<Object[]> sales = invoiceFacade.getMonthlySales(companyName, pruebas);
         if (sales != null || sales.size() <= 0) {
             List<SalesMonthlyDTO> listSales = new ArrayList<>();
             for (Object[] row : sales) {
                 listSales.add(new SalesMonthlyDTO((String) row[0], (String) row[1], (BigDecimal) row[2], (BigDecimal) row[3], (BigDecimal) row[4]));
             }
+            CONSOLE.log(Level.INFO, "Retornando ventas mensuales para [" + companyName + "]");
             return Response.ok(new ResponseDTO(listSales == null ? -1 : 0, listSales)).build();
         }
-        return Response.ok(new ResponseDTO(-1, "No se encontraron datos para mostrar.")).build();
+        CONSOLE.log(Level.SEVERE, "No se encontraron ventas mensuales para mostrar en [" + companyName + "]");
+        return Response.ok(new ResponseDTO(-1, "No se encontraron ventas mensuales para mostrar.")).build();
+    }
+
+    @GET
+    @Path("sales-collect-monthly")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response getSalesCollectMonthly(@HeaderParam("X-Company-Name") String companyName,
+                                           @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Consultando el recaudo de ventas mensulaes para la empresa [" + companyName + "]");
+        List<Object[]> listCollect = paymentsReceivedFacade.getCollectMonthly(companyName, pruebas);
+        if (listCollect != null || listCollect.size() <= 0) {
+            CONSOLE.log(Level.INFO, "Retornando recaudos mensuales para la empresa [" + companyName + "]");
+            return Response.ok(new ResponseDTO(0, listCollect)).build();
+        } else {
+            CONSOLE.log(Level.SEVERE, "No se encontraron recaudos mensuales para mostrar en [" + companyName + "]");
+            return Response.ok(new ResponseDTO(-1, "No se encontraron recaudos mensuales para mostrar.")).build();
+        }
+    }
+
+    @GET
+    @Path("sales-by-collect")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response getSalesByCollect(@HeaderParam("X-Company-Name") String companyName,
+                                      @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Consultando la cartera por cobrar para la empresa [" + companyName + "]");
+        List<Object[]> listByCollect = paymentsReceivedFacade.getByCollect(companyName, pruebas);
+        if (listByCollect != null || listByCollect.size() <= 0) {
+            CONSOLE.log(Level.INFO, "Retornando la cartera por cobrar para la empresa [" + companyName + "]");
+            return Response.ok(new ResponseDTO(0, listByCollect)).build();
+        } else {
+            CONSOLE.log(Level.SEVERE, "No se encontro cartera por cobrar para mostrar en [" + companyName + "]");
+            return Response.ok(new ResponseDTO(-1, "No se encontro cartera por cobrar para mostrar en [" + companyName + "].")).build();
+        }
+    }
+
+    @GET
+    @Path("states-order")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response listOrderStates(@HeaderParam("X-Company-Name") String companyName,
+                                    @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Consultando estados de las ordenes para la empresa [" + companyName + "]");
+        List<Object[]> listOrders = salesOrderFacade.getOrderStates(companyName, pruebas);
+        if (listOrders != null || listOrders.size() <= 0) {
+            BigDecimal totalInvoice = invoiceFacade.getInvoiceTotal(companyName, pruebas);
+            List<StatusOrderDTO> listStatusOrder = new ArrayList<>();
+            for (Object[] row : listOrders) {
+                listStatusOrder.add(new StatusOrderDTO((String) row[0], (Integer) row[1], (BigDecimal) row[2], totalInvoice));
+            }
+            CONSOLE.log(Level.INFO, "Retornando estado de las ordenes para la empresa [" + companyName + "]");
+            return Response.ok(new ResponseDTO(0, listStatusOrder)).build();
+        } else {
+            CONSOLE.log(Level.SEVERE, "No se encontraron estados de ordenes para mostrar en [" + companyName + "]");
+            return Response.ok(new ResponseDTO(-1, "No se encontraron estados de ordenes para mostrar.")).build();
+        }
     }
 
     @GET

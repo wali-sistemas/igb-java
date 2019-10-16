@@ -11,6 +11,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,7 +55,7 @@ public class InvoiceFacade {
         return null;
     }
 
-    public List<Object[]> findListInvoicesShipping(String transport, String invoice, String companyName, boolean testing) {
+    public List<Object[]> findListInvoicesShipping(String transport, String invoice, String companyName, String warehouseCode, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select CAST(f.DocDate as date) as DocDate, CAST(f.U_TOT_CAJ as int) as Box, CAST(f.DocNum as varchar(10)) as DocNum, ");
         sb.append("       CAST(f.CardCode as varchar(20)) as CardCode, CAST(f.CardName as varchar(100)) as CardName, ");
@@ -64,7 +65,9 @@ public class InvoiceFacade {
         sb.append("inner  join INV12 d ON d.DocEntry = f.DocEntry ");
         sb.append("inner  join [@TRANSP] t ON t.Code = f.U_TRANSP ");
         sb.append("inner  join OCST l ON l.Code = d.StateS and l.Country = 'CO' ");
-        sb.append("where  f.U_SHIPPING = 'N' and f.U_TOT_CAJ > 0 ");
+        sb.append("where  (select top 1 d.WhsCode from INV1 d where d.DocEntry = f.DocEntry) = '");
+        sb.append(warehouseCode);
+        sb.append("' and f.U_SHIPPING = 'N' and f.U_TOT_CAJ > 0 ");
         if (!transport.equals("*")) {
             sb.append("and cast(t.Name as varchar(15)) = '");
             sb.append(transport);
@@ -207,5 +210,22 @@ public class InvoiceFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando las ventas mensuales para la empresa [" + companyName + "]");
         }
         return null;
+    }
+
+    public BigDecimal getInvoiceTotal(String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Select ISNULL(CAST(SUM(t.valorTotalVenta - t.valorTotalNota) AS numeric(18,0)),0) AS Facturado From ( ");
+        sb.append("Select CAST(SUM((CAST(d.LineTotal AS numeric(18,0)) - (CAST(d.LineTotal AS numeric(18,0)) * CAST(f.DiscPrcnt AS int))/100)) AS numeric(18,0)) AS valorTotalVenta, 0 AS valorTotalNota ");
+        sb.append("From OINV f Inner Join INV1 d ON d.DocEntry = f.DocEntry Where f.DocType = 'I' and YEAR(f.DocDate) = YEAR(GETDATE()) and MONTH(f.DocDate) = MONTH(GETDATE()) ");
+        sb.append("UNION ALL ");
+        sb.append("Select 0 AS valorTotalVenta, CAST(SUM((CAST(d.LineTotal AS numeric(18,0)) - (CAST(d.LineTotal AS numeric(18,0)) * CAST(ISNULL(n.DiscPrcnt,0) AS int))/100)) AS numeric(18,0)) AS valorTotalNota ");
+        sb.append("From ORIN n Inner Join RIN1 d ON d.DocEntry = n.DocEntry Where n.DocType = 'I' and YEAR(n.DocDate) = YEAR(GETDATE()) and MONTH(n.DocDate) = MONTH(GETDATE())) AS t");
+        try {
+            return (BigDecimal) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el total facturado a la fecha para [" + companyName + "]", e);
+        }
+        return new BigDecimal(0);
     }
 }
