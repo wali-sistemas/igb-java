@@ -341,6 +341,23 @@ public class ReportREST implements Serializable {
     }
 
     @GET
+    @Path("sales-by-collect")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response getSalesByCollect(@HeaderParam("X-Company-Name") String companyName,
+                                      @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Consultando la cartera por cobrar para la empresa [" + companyName + "]");
+        List<Object[]> listByCollect = paymentsReceivedFacade.getByCollect(companyName, pruebas);
+        if (listByCollect != null || listByCollect.size() <= 0) {
+            CONSOLE.log(Level.INFO, "Retornando la cartera por cobrar para la empresa [" + companyName + "]");
+            return Response.ok(new ResponseDTO(0, listByCollect)).build();
+        } else {
+            CONSOLE.log(Level.SEVERE, "No se encontro cartera por cobrar para mostrar en [" + companyName + "]");
+            return Response.ok(new ResponseDTO(-1, "No se encontro cartera por cobrar para mostrar en [" + companyName + "].")).build();
+        }
+    }
+
+    @GET
     @Path("states-order")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
@@ -349,8 +366,13 @@ public class ReportREST implements Serializable {
         CONSOLE.log(Level.INFO, "Consultando estados de las ordenes para la empresa [" + companyName + "]");
         List<Object[]> listOrders = salesOrderFacade.getOrderStates(companyName, pruebas);
         if (listOrders != null || listOrders.size() <= 0) {
+            BigDecimal totalInvoice = invoiceFacade.getInvoiceTotal(companyName, pruebas);
+            List<StatusOrderDTO> listStatusOrder = new ArrayList<>();
+            for (Object[] row : listOrders) {
+                listStatusOrder.add(new StatusOrderDTO((String) row[0], (Integer) row[1], (BigDecimal) row[2], totalInvoice));
+            }
             CONSOLE.log(Level.INFO, "Retornando estado de las ordenes para la empresa [" + companyName + "]");
-            return Response.ok(new ResponseDTO(0, listOrders)).build();
+            return Response.ok(new ResponseDTO(0, listStatusOrder)).build();
         } else {
             CONSOLE.log(Level.SEVERE, "No se encontraron estados de ordenes para mostrar en [" + companyName + "]");
             return Response.ok(new ResponseDTO(-1, "No se encontraron estados de ordenes para mostrar.")).build();

@@ -11,6 +11,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -209,5 +210,22 @@ public class InvoiceFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando las ventas mensuales para la empresa [" + companyName + "]");
         }
         return null;
+    }
+
+    public BigDecimal getInvoiceTotal(String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Select ISNULL(CAST(SUM(t.valorTotalVenta - t.valorTotalNota) AS numeric(18,0)),0) AS Facturado From ( ");
+        sb.append("Select CAST(SUM((CAST(d.LineTotal AS numeric(18,0)) - (CAST(d.LineTotal AS numeric(18,0)) * CAST(f.DiscPrcnt AS int))/100)) AS numeric(18,0)) AS valorTotalVenta, 0 AS valorTotalNota ");
+        sb.append("From OINV f Inner Join INV1 d ON d.DocEntry = f.DocEntry Where f.DocType = 'I' and YEAR(f.DocDate) = YEAR(GETDATE()) and MONTH(f.DocDate) = MONTH(GETDATE()) ");
+        sb.append("UNION ALL ");
+        sb.append("Select 0 AS valorTotalVenta, CAST(SUM((CAST(d.LineTotal AS numeric(18,0)) - (CAST(d.LineTotal AS numeric(18,0)) * CAST(ISNULL(n.DiscPrcnt,0) AS int))/100)) AS numeric(18,0)) AS valorTotalNota ");
+        sb.append("From ORIN n Inner Join RIN1 d ON d.DocEntry = n.DocEntry Where n.DocType = 'I' and YEAR(n.DocDate) = YEAR(GETDATE()) and MONTH(n.DocDate) = MONTH(GETDATE())) AS t");
+        try {
+            return (BigDecimal) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el total facturado a la fecha para [" + companyName + "]", e);
+        }
+        return new BigDecimal(0);
     }
 }
