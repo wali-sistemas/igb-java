@@ -6,6 +6,7 @@ package co.igb.persistence.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /***SAP***/
 @Entity
@@ -28,16 +29,20 @@ public class SalesOrderDetail implements Serializable {
     @Basic(optional = false)
     @Column(name = "OpenQty")
     private Integer openQty;
+    @Basic(optional = false)
+    @Column(name = "LineTotal")
+    private BigDecimal lineTotal;
 
     public SalesOrderDetail() {
     }
 
-    public SalesOrderDetail(Integer docEntry, String itemCode, char lineStatus, Integer quantity, Integer openQty) {
+    public SalesOrderDetail(Integer docEntry, String itemCode, char lineStatus, Integer quantity, Integer openQty, BigDecimal lineTotal) {
         this.docEntry = docEntry;
         this.itemCode = itemCode;
         this.lineStatus = lineStatus;
         this.quantity = quantity;
         this.openQty = openQty;
+        this.lineTotal = lineTotal;
     }
 
     public Integer getDocEntry() {
@@ -77,7 +82,15 @@ public class SalesOrderDetail implements Serializable {
     }
 
     public void setOpenQty(Integer openQty) {
-        openQty = openQty;
+        this.openQty = openQty;
+    }
+
+    public BigDecimal getLineTotal() {
+        return lineTotal;
+    }
+
+    public void setLineTotal(BigDecimal lineTotal) {
+        this.lineTotal = lineTotal;
     }
 
     @Override
@@ -87,7 +100,8 @@ public class SalesOrderDetail implements Serializable {
                 ", itemCode='" + itemCode + '\'' +
                 ", lineStatus=" + lineStatus +
                 ", quantity=" + quantity +
-                ", OpenQty=" + openQty +
+                ", openQty=" + openQty +
+                ", lineTotal=" + lineTotal +
                 '}';
     }
 }

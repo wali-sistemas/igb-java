@@ -15,13 +15,7 @@ import co.igb.persistence.entity.InventoryDifference;
 import co.igb.persistence.entity.PickingRecord;
 import co.igb.persistence.entity.SaldoUbicacion;
 import co.igb.persistence.entity.StockTransferDetail;
-import co.igb.persistence.facade.BinLocationFacade;
-import co.igb.persistence.facade.InventoryDetailFacade;
-import co.igb.persistence.facade.InventoryDifferenceFacade;
-import co.igb.persistence.facade.InventoryFacade;
-import co.igb.persistence.facade.PickingRecordFacade;
-import co.igb.persistence.facade.SalesOrderFacade;
-import co.igb.persistence.facade.StockTransferDetailFacade;
+import co.igb.persistence.facade.*;
 import co.igb.util.Constants;
 import co.igb.util.IGBUtils;
 
@@ -40,6 +34,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -77,6 +72,8 @@ public class StockTransferREST implements Serializable {
     private StockTransferDetailFacade stockTransferDetailFacade;
     @EJB
     private SalesOrderEJB salesOrderEJB;
+    @EJB
+    private ItemFacade itemFacade;
     @Inject
     private IGBApplicationBean appBean;
     @Inject
@@ -123,7 +120,8 @@ public class StockTransferREST implements Serializable {
                     new Object[]{itemTransfer.getQuantity(), itemTransfer.getExpectedQuantity()});
             Integer orderDocEntry = salesOrderFacade.getOrderDocEntry(itemTransfer.getOrderNumber(), companyName, pruebas);
             //ResponseDTO res = salesOrderEJB.modifySalesOrderQuantity(companyName, orderDocEntry, itemTransfer.getItemCode(), itemTransfer.getQuantity());
-            boolean res = salesOrderFacade.modifySalesOrderQuantity(orderDocEntry, itemTransfer.getItemCode(), itemTransfer.getQuantity(), companyName, pruebas);
+            boolean res = salesOrderFacade.modifySalesOrderQuantity(orderDocEntry, itemTransfer.getItemCode(), itemTransfer.getQuantity(),
+                    getPriceItem(itemTransfer.getItemCode(), companyName, pruebas), companyName, pruebas);
             if (!res) {
                 return Response.ok(new ResponseDTO(-1, "Ocurrio un error al modificar la cantidad de la orden #[" + orderDocEntry.toString() + "]")).build();
             }
@@ -263,6 +261,10 @@ public class StockTransferREST implements Serializable {
             return false;
         }
         return true;
+    }
+
+    private BigDecimal getPriceItem(String itemcode, String companyName, boolean testing) {
+        return itemFacade.getItemPrice(itemcode, companyName, testing);
     }
 
     @GET
