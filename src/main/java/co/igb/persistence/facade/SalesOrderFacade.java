@@ -362,7 +362,7 @@ public class SalesOrderFacade {
         return false;
     }
 
-    public boolean modifySalesOrderQuantity(Integer orderEntry, String itemCode, Integer newQuantity, String companyName, boolean testing) {
+    public boolean modifySalesOrderQuantity(Integer orderEntry, String itemCode, Integer newQuantity, BigDecimal price, String companyName, boolean testing) {
         EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaUpdate<SalesOrderDetail> cu = cb.createCriteriaUpdate(SalesOrderDetail.class);
@@ -370,6 +370,7 @@ public class SalesOrderFacade {
 
         cu.set(root.get(SalesOrderDetail_.quantity), newQuantity);
         cu.set(root.get(SalesOrderDetail_.openQty), newQuantity);
+        cu.set(root.get(SalesOrderDetail_.lineTotal), price.multiply(new BigDecimal(newQuantity)));
         cu.where(cb.and(cb.equal(root.get(SalesOrderDetail_.itemCode), itemCode)), cb.equal(root.get(SalesOrderDetail_.docEntry), orderEntry));
         try {
             em.createQuery(cu).executeUpdate();

@@ -10,11 +10,7 @@ import co.igb.persistence.entity.AssignedOrder;
 import co.igb.persistence.entity.PackingOrder;
 import co.igb.persistence.entity.PackingOrderItem;
 import co.igb.persistence.entity.PackingOrderItemBin;
-import co.igb.persistence.facade.AssignedOrderFacade;
-import co.igb.persistence.facade.BinLocationFacade;
-import co.igb.persistence.facade.PackingOrderFacade;
-import co.igb.persistence.facade.PickingRecordFacade;
-import co.igb.persistence.facade.SalesOrderFacade;
+import co.igb.persistence.facade.*;
 import co.igb.util.Constants;
 
 import javax.ejb.EJB;
@@ -32,6 +28,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -66,6 +63,8 @@ public class PickingREST implements Serializable {
     private StockTransferEJB stockTransferEJB;
     @EJB
     private SalesOrderEJB salesOrderEJB;
+    @EJB
+    private ItemFacade itemFacade;
     @Inject
     private IGBApplicationBean appBean;
 
@@ -194,7 +193,8 @@ public class PickingREST implements Serializable {
                             orderDocEntry,
                             pendingItemcode,
                             getTotalPicked(pickedItems.get(pendingItemcode)));*/
-                    soFacade.modifySalesOrderQuantity(orderDocEntry, pendingItemcode, getTotalPicked(pickedItems.get(pendingItemcode)), companyName, pruebas);
+                    soFacade.modifySalesOrderQuantity(orderDocEntry, pendingItemcode, getTotalPicked(pickedItems.get(pendingItemcode)),
+                            getPriceItem(pendingItemcode, companyName, pruebas), companyName, pruebas);
                 }
             }
 
@@ -273,6 +273,10 @@ public class PickingREST implements Serializable {
             sum += quantity;
         }
         return sum;
+    }
+
+    private BigDecimal getPriceItem(String itemcode, String companyName, boolean testing) {
+        return itemFacade.getItemPrice(itemcode, companyName, testing);
     }
 
     private boolean avoidBin(TreeSet<String> skippedItems, String itemCode, String binType, String binTypeToAvoid) {
