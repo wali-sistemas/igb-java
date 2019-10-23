@@ -168,7 +168,7 @@ public class PickingREST implements Serializable {
 
             if (pendingItems == null || pendingItems.isEmpty()) {
                 CONSOLE.log(Level.WARNING, "La orden {0} no tiene items pendientes por despachar y se marca como cerrada. ", order.getOrderNumber());
-                closeAndPack(order, pickedItems, companyName, pruebas);
+                closeAndPack(order, pickedItems, warehouseCode, companyName, pruebas);
                 continue;
             }
 
@@ -219,7 +219,7 @@ public class PickingREST implements Serializable {
                 if (itemsMissing.size() == pendingItems.size()) {
                     //Finaliza la orden de picking ya que no quedan items pendientes
                     CONSOLE.log(Level.WARNING, "La orden {0} no tiene saldo en picking para los items pendientes por despachar y se marca como cerrada. ", order.getOrderNumber());
-                    closeAndPack(order, pickedItems, companyName, pruebas);
+                    closeAndPack(order, pickedItems, warehouseCode, companyName, pruebas);
                     continue;
                 }
             }
@@ -291,6 +291,7 @@ public class PickingREST implements Serializable {
     public Response closeOrders(@PathParam("username") String username,
                                 @QueryParam("orderNumber") Integer orderNumber,
                                 @HeaderParam("X-Company-Name") String companyName,
+                                @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                 @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Procesando solicitud de cierre de orden {0}", orderNumber != null ? orderNumber : "multiple");
 
@@ -320,7 +321,7 @@ public class PickingREST implements Serializable {
                 }
             }
 
-            closeAndPack(order, pickedItems, companyName, pruebas);
+            closeAndPack(order, pickedItems, warehouseCode, companyName, pruebas);
             /*
             try {
                 moveItemsToPackingArea(order.getOrderNumber(), companyName);
@@ -336,7 +337,7 @@ public class PickingREST implements Serializable {
         return Response.ok(new ResponseDTO(0, "")).build();
     }
 
-    private void closeAndPack(AssignedOrder order, Map<String, Map<Long, Integer>> pickedItems, String companyName, boolean pruebas) {
+    private void closeAndPack(AssignedOrder order, Map<String, Map<Long, Integer>> pickedItems, String warehouseCode, String companyName, boolean pruebas) {
         try {
             HashMap<Long, String[]> bins = new HashMap<>();
             PackingOrder packingOrder = new PackingOrder();
@@ -345,6 +346,7 @@ public class PickingREST implements Serializable {
             packingOrder.setOrderNumber(order.getOrderNumber());
             packingOrder.setStatus(Constants.STATUS_OPEN);
             packingOrder.setCompanyName(companyName);
+            packingOrder.setWarehouseCode(warehouseCode);
 
             for (String itemCode : pickedItems.keySet()) {
                 PackingOrderItem packingItem = new PackingOrderItem();
