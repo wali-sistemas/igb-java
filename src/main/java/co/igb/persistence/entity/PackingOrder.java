@@ -44,6 +44,9 @@ public class PackingOrder implements Serializable {
     @Basic(optional = false)
     @Column(name = "company_name")
     private String companyName;
+    @Basic(optional = false)
+    @Column(name = "warehouse_code")
+    private String warehouseCode;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "packingOrder", fetch = FetchType.EAGER)
     private List<PackingOrderItem> items;
 
@@ -107,6 +110,14 @@ public class PackingOrder implements Serializable {
         this.companyName = companyName;
     }
 
+    public String getWarehouseCode() {
+        return warehouseCode;
+    }
+
+    public void setWarehouseCode(String warehouseCode) {
+        this.warehouseCode = warehouseCode;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -134,7 +145,15 @@ public class PackingOrder implements Serializable {
 
     @Override
     public String toString() {
-        return "PackingOrder{" + "id=" + id + ", orderNumber=" + orderNumber + ", status=" + status + ", customerId=" + customerId + ", customerName=" + customerName + ", companyName=" + companyName + ", items=" + items + '}';
+        return "PackingOrder{" +
+                "id=" + id +
+                ", orderNumber=" + orderNumber +
+                ", status='" + status + '\'' +
+                ", customerId='" + customerId + '\'' +
+                ", customerName='" + customerName + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", warehouseCode='" + warehouseCode + '\'' +
+                ", items=" + items +
+                '}';
     }
-
 }

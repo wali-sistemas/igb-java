@@ -95,9 +95,10 @@ public class PackingREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listCustomersWithPackingRecords(@HeaderParam("X-Company-Name") String companyName,
+                                                    @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                                     @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Listando clientes con registros de packing pendientes");
-        List<Object[]> customers = poFacade.listCustomersWithOpenRecords(companyName, pruebas);
+        List<Object[]> customers = poFacade.listCustomersWithOpenRecords(companyName, warehouseCode, pruebas);
         CONSOLE.log(Level.INFO, "Se obtuvieron {0} clientes con ordenes de empaque abiertas", customers.size());
         return Response.ok(new ResponseDTO(0, customers)).build();
     }
@@ -108,9 +109,10 @@ public class PackingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listCustomerOrders(@PathParam("customerId") String customerId,
                                        @HeaderParam("X-Company-Name") String companyName,
+                                       @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                        @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Listando ordenes de packing abiertas para el cliente {0}", customerId);
-        List<Object[]> orders = poFacade.listCustomerOrders(customerId, companyName, pruebas);
+        List<Object[]> orders = poFacade.listCustomerOrders(customerId, warehouseCode, companyName, pruebas);
         CONSOLE.log(Level.INFO, "Se obtuvieron {0} ordenes de empaque abiertas para el cliente {1}", new Object[]{orders.size(), customerId});
         return Response.ok(new ResponseDTO(0, orders)).build();
     }
