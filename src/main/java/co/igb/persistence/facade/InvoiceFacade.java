@@ -57,7 +57,7 @@ public class InvoiceFacade {
 
     public List<Object[]> findListInvoicesShipping(String transport, String invoice, String companyName, String warehouseCode, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select CAST(f.DocDate as date) as DocDate, CAST(f.U_TOT_CAJ as int) as Box, CAST(f.DocNum as varchar(10)) as DocNum, ");
+        sb.append("select top 12 CAST(f.DocDate as date) as DocDate, CAST(f.U_TOT_CAJ as int) as Box, CAST(f.DocNum as varchar(10)) as DocNum, ");
         sb.append("       CAST(f.CardCode as varchar(20)) as CardCode, CAST(f.CardName as varchar(100)) as CardName, ");
         sb.append("       CAST(t.Name as varchar(15)) as Transport, CAST(d.StreetS as varchar(100)) as Street, ");
         sb.append("       CAST(l.Name as varchar(50)) as Depart, CAST(d.CityS as varchar(50)) as City ");
