@@ -9,17 +9,19 @@ import java.math.BigDecimal;
 public class StatusOrderDTO {
     private String status;
     private Integer orderNumber;
-    private BigDecimal totalOrder;
+    private BigDecimal totalPend;
     private BigDecimal totalInvoice;
+    private BigDecimal totalOrder;
 
     public StatusOrderDTO() {
     }
 
-    public StatusOrderDTO(String status, Integer orderNumber, BigDecimal totalOrder, BigDecimal totalInvoice) {
+    public StatusOrderDTO(String status, Integer orderNumber, BigDecimal totalPend, BigDecimal totalInvoice, BigDecimal totalOrder) {
         this.status = status;
         this.orderNumber = orderNumber;
-        this.totalOrder = totalOrder;
+        this.totalPend = totalPend;
         this.totalInvoice = totalInvoice;
+        this.totalOrder = totalOrder;
     }
 
     public String getStatus() {
@@ -38,12 +40,12 @@ public class StatusOrderDTO {
         this.orderNumber = orderNumber;
     }
 
-    public BigDecimal getTotalOrder() {
-        return totalOrder;
+    public BigDecimal getTotalPend() {
+        return totalPend;
     }
 
-    public void setTotalOrder(BigDecimal totalOrder) {
-        this.totalOrder = totalOrder;
+    public void setTotalPend(BigDecimal totalPend) {
+        this.totalPend = totalPend;
     }
 
     public BigDecimal getTotalInvoice() {
@@ -52,6 +54,14 @@ public class StatusOrderDTO {
 
     public void setTotalInvoice(BigDecimal totalInvoice) {
         this.totalInvoice = totalInvoice;
+    }
+
+    public BigDecimal getTotalOrder() {
+        return totalOrder;
+    }
+
+    public void setTotalOrder(BigDecimal totalOrder) {
+        this.totalOrder = totalOrder;
     }
 
     @Override

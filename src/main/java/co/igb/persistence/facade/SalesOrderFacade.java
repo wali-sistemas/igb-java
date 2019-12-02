@@ -213,7 +213,7 @@ public class SalesOrderFacade {
 
     public List<Object[]> getOrderStates(String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select case when o.U_SEPARADOR = '' then 'SAP' when o.U_SEPARADOR is null then 'INSITU' ");
+        sb.append("select case when o.U_SEPARADOR = '' then 'SAP NO APROB' when o.U_SEPARADOR is null then 'APP NO APROB' ");
         sb.append("      when o.U_SEPARADOR = 'PENDIENTE DE PAGO' then 'PEND PAGO' else cast(o.U_SEPARADOR as varchar(20)) end as Estado, ");
         sb.append("      cast(COUNT(o.DocNum) AS int) AS Pedidos, ");
         sb.append("      cast(sum(((((((o.DocTotal + o.DiscSum) - o.VatSum) - o.TotalExpns) + o.WtSum) - o.RoundDif) - o.DiscSum)) as numeric(18,0)) as Total ");
@@ -225,6 +225,20 @@ public class SalesOrderFacade {
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error listado la estadistica de las ordenes.", e);
+        }
+        return null;
+    }
+
+    public BigDecimal getTotalOrderMonth(String schemaName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(sum((DocTotal - VatSum + DiscSum - TotalExpns + WTSum) - DiscSum) as numeric(18,0)) as TotalPedido ");
+        sb.append("from ORDR ");
+        sb.append("where CANCELED = 'N' AND YEAR(DocDate) = YEAR(GETDATE()) AND MONTH(DocDate) = MONTH(GETDATE())");
+        try {
+            return (BigDecimal) persistenceConf.chooseSchema(schemaName,testing,DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el total de ordenes mensuales.");
         }
         return null;
     }
