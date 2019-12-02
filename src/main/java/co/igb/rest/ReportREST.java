@@ -367,9 +367,10 @@ public class ReportREST implements Serializable {
         List<Object[]> listOrders = salesOrderFacade.getOrderStates(companyName, pruebas);
         if (listOrders != null || listOrders.size() <= 0) {
             BigDecimal totalInvoice = invoiceFacade.getInvoiceTotal(companyName, pruebas);
+            BigDecimal totalOrder = salesOrderFacade.getTotalOrderMonth(companyName,pruebas);
             List<StatusOrderDTO> listStatusOrder = new ArrayList<>();
             for (Object[] row : listOrders) {
-                listStatusOrder.add(new StatusOrderDTO((String) row[0], (Integer) row[1], (BigDecimal) row[2], totalInvoice));
+                listStatusOrder.add(new StatusOrderDTO((String) row[0], (Integer) row[1], (BigDecimal) row[2], totalInvoice, totalOrder));
             }
             CONSOLE.log(Level.INFO, "Retornando estado de las ordenes para la empresa [" + companyName + "]");
             return Response.ok(new ResponseDTO(0, listStatusOrder)).build();

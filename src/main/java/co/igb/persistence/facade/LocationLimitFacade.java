@@ -28,20 +28,33 @@ public class LocationLimitFacade {
     public LocationLimitFacade() {
     }
 
-    public List<Object> listLocationsLimits(String schema, boolean pruebas, String warehouseCode) {
+    public List<Object> listLocationsLimits(String itemCode, String binCode, String schema, boolean pruebas, String warehouseCode) {
         EntityManager em = persistenceConf.chooseSchema(schema, pruebas, DB_TYPE);
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT CONVERT(VARCHAR(30),Code) AS code, CONVERT(VARCHAR(30),Name) AS Name, ");
         sb.append("       CONVERT(VARCHAR(20),U_Ubicacion) AS U_Ubicacion, CONVERT(VARCHAR(20),U_Item) AS U_Item, ");
         sb.append("       CONVERT(INT,U_CantMinima) AS U_CantMinima, CONVERT(int,U_CantMaxima) AS U_CantMaxima ");
         sb.append("FROM   [@LIMITES_UBICACION] ");
-        sb.append("WHERE  U_Ubicacion LIKE '");
-        sb.append(warehouseCode);
-        sb.append("%'");
+        sb.append("WHERE  (U_Ubicacion ");
+
+        if (itemCode.equals("*")) {
+            sb.append("LIKE '");
+            sb.append(warehouseCode);
+            sb.append("%')");
+        } else {
+            sb.append("= '");
+            sb.append(binCode);
+            sb.append("' OR U_Item = '");
+            sb.append(itemCode);
+            sb.append("')");
+        }
+
+
+        sb.append(" ORDER BY U_Item, U_Ubicacion ASC");
 
         try {
             return em.createNativeQuery(sb.toString()).getResultList();
-        } catch (NoResultException e) {
+        } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al obtener los limites de las ubicaciones. ", e);
         }
@@ -61,10 +74,11 @@ public class LocationLimitFacade {
         try {
             em.createQuery(cu).executeUpdate();
             return true;
+        } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar los limites de ubicacion. ", e);
-            return false;
         }
+        return false;
     }
 
     public boolean createLimit(String schema, boolean testing, LocationLimit limit) {
@@ -83,10 +97,11 @@ public class LocationLimitFacade {
         try {
             persistenceConf.chooseSchema(schema, testing, DB_TYPE).createNativeQuery(sb.toString()).executeUpdate();
             return true;
+        } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el nuevo limite de ubicacion. ", e);
-            return false;
         }
+        return false;
     }
 
     public void deleteLimit(String code, String schema, boolean testing) {
@@ -99,6 +114,7 @@ public class LocationLimitFacade {
 
         try {
             em.createQuery(cd).executeUpdate();
+        } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al eliminar el limite de ubicacion. ", e);
         }
@@ -114,7 +130,7 @@ public class LocationLimitFacade {
 
         try {
             return em.createQuery(cq).getSingleResult();
-        } catch (NoResultException e) {
+        } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la ubicacion fija.", e);
         }
