@@ -238,7 +238,7 @@ public class PickingREST implements Serializable {
                 if (pendingItems.containsKey(sorted.getItemCode()) && pendingQuantity > 0) {
                     sorted.setPendingQuantity(pendingQuantity);
                     sortedStock.add(sorted);
-                    //break;
+                    break;
                 }
             }
         }
@@ -247,8 +247,8 @@ public class PickingREST implements Serializable {
         if (sortedStock.isEmpty()) {
             return Response.ok(new ResponseDTO(-1, warnings)).build();
         } else {
-            //return Response.ok(new ResponseDTO(0, sortedStock.first())).build();
-            return Response.ok(new ResponseDTO(0, sortedStock)).build();
+            return Response.ok(new ResponseDTO(0, sortedStock.first())).build();
+            //return Response.ok(new ResponseDTO(0, sortedStock)).build();
         }
     }
 
