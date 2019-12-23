@@ -119,10 +119,11 @@ public class StockTransferREST implements Serializable {
             CONSOLE.log(Level.INFO, "La cantidad tomada ({0}) es superior a la cantidad de la orden ({1}). Reajustando orden para acomodar nueva cantidad...",
                     new Object[]{itemTransfer.getQuantity(), itemTransfer.getExpectedQuantity()});
             Integer orderDocEntry = salesOrderFacade.getOrderDocEntry(itemTransfer.getOrderNumber(), companyName, pruebas);
-            //ResponseDTO res = salesOrderEJB.modifySalesOrderQuantity(companyName, orderDocEntry, itemTransfer.getItemCode(), itemTransfer.getQuantity());
-            boolean res = salesOrderFacade.modifySalesOrderQuantity(orderDocEntry, itemTransfer.getItemCode(), itemTransfer.getQuantity(),
-                    getPriceItem(itemTransfer.getItemCode(), companyName, pruebas), companyName, pruebas);
-            if (!res) {
+            ResponseDTO res = salesOrderEJB.modifySalesOrderQuantity(companyName, orderDocEntry, itemTransfer.getItemCode(), itemTransfer.getQuantity());
+            /*boolean res = salesOrderFacade.modifySalesOrderQuantity(orderDocEntry, itemTransfer.getItemCode(), itemTransfer.getQuantity(),
+                    getPriceItem(itemTransfer.getItemCode(), companyName, pruebas), companyName, pruebas);*/
+            //if (!res) {
+            if (res.getCode() < 0) {
                 return Response.ok(new ResponseDTO(-1, "Ocurrio un error al modificar la cantidad de la orden #[" + orderDocEntry.toString() + "]")).build();
             }
         } else if (itemTransfer.getExpectedQuantity() > itemTransfer.getQuantity()) {
@@ -245,6 +246,8 @@ public class StockTransferREST implements Serializable {
                     pickingRecord.setQuantity(itemTransfer.getQuantity().longValue());
                 }
                 pickingRecordFacade.create(pickingRecord, companyName, pruebas);
+                //TODO: marcar campo de usuario 'u_picking = Y' en el detalle de la orden de venta al ítem
+                salesOrderFacade.updatePickingOrderLine(pickingRecord.getOrderNumber().intValue(), pickingRecord.getItemCode(), companyName, pruebas);
                 return Response.ok(new ResponseDTO(0, pickingRecord)).build();
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Se produjo un error al grabar la operación en la base de datos MySQL. ", e);

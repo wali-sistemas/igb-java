@@ -32,10 +32,7 @@ public class SalesOrderEJB {
     private BasicSAPFunctions sapFunctions;
 
     private Document retrieveOrderDocument(Long docEntry, String sessionId) throws MalformedURLException {
-        OrdersService service = new OrdersService(
-                new URL(String.format(
-                        appBean.obtenerValorPropiedad(Constants.B1WS_WSDL_URL),
-                        Constants.B1WS_ORDERS_SERVICE)));
+        OrdersService service = new OrdersService(new URL(String.format(appBean.obtenerValorPropiedad(Constants.B1WS_WSDL_URL), Constants.B1WS_ORDERS_SERVICE)));
 
         MsgHeader header = new MsgHeader();
         header.setServiceName(Constants.B1WS_ORDERS_SERVICE);
@@ -51,7 +48,7 @@ public class SalesOrderEJB {
         return response.getDocument();
     }
 
-    /*public ResponseDTO closeOrderLines(String companyName, Integer orderEntry, HashSet<String> items) {
+    public ResponseDTO closeOrderLines(String companyName, Integer orderEntry, HashSet<String> items) {
         ResponseDTO res = null;
         //1. Login
         String sessionId = null;
@@ -121,6 +118,7 @@ public class SalesOrderEJB {
                 for (Document.DocumentLines.DocumentLine line : lines) {
                     if (line.getItemCode().equals(itemCode)) {
                         line.setQuantity(newQuantity.doubleValue());
+                        line.setuPicking("Y");
                         break;
                     }
                 }
@@ -128,7 +126,7 @@ public class SalesOrderEJB {
                 if (res.getCode() == 0) {
                     CONSOLE.log(Level.INFO, "Se modifico la orden satisfactoriamente");
                 } else {
-                    CONSOLE.log(Level.WARNING, "Ocurrió un problema al modificar la orden " + res.getContent());
+                    CONSOLE.log(Level.WARNING, "Ocurrió un problema al modificar la orden " + res.getContent() + ". Resetear el sesión ID.");
                     return new ResponseDTO(-1, res.getContent());
                 }
             } catch (Exception e) {
@@ -147,7 +145,7 @@ public class SalesOrderEJB {
             }
         }
         return new ResponseDTO(0, res.getContent());
-    }*/
+    }
 
     private String getSessionId(String companyName) {
         String sessionId = null;
@@ -161,10 +159,7 @@ public class SalesOrderEJB {
 
     private ResponseDTO modifyOrderDocument(Document document, String sessionId) throws MalformedURLException {
         String errorMessage = null;
-        OrdersService service = new OrdersService(
-                new URL(String.format(
-                        appBean.obtenerValorPropiedad(Constants.B1WS_WSDL_URL),
-                        Constants.B1WS_ORDERS_SERVICE)));
+        OrdersService service = new OrdersService(new URL(String.format(appBean.obtenerValorPropiedad(Constants.B1WS_WSDL_URL), Constants.B1WS_ORDERS_SERVICE)));
 
         MsgHeader header = new MsgHeader();
         header.setServiceName(Constants.B1WS_ORDERS_SERVICE);

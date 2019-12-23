@@ -104,8 +104,8 @@ public class PickingREST implements Serializable {
     }
 
     private Object[] processPickingStatus(Integer orderNumber, Boolean excludeTemporary, String companyName, boolean pruebas) {
+        //consultar los items pickineados
         Map<String, Map<Long, Integer>> pickedItems = prFacade.listPickedItems(orderNumber, excludeTemporary, companyName, pruebas);
-
         //consultar los items pendientes por entregar de cada orden
         Map<String, Integer> pendingItems = soFacade.listPendingItems(orderNumber, companyName, pruebas);
 
@@ -132,12 +132,13 @@ public class PickingREST implements Serializable {
     }
 
     @GET
-    @Path("nextitem/{username}")
+    @Path("nextitem/{username}/{position}")
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response findNextItemToPick(
             @PathParam("username") String username,
+            @PathParam("position") Integer position,
             @QueryParam("orderNumber") Integer orderNumber,
             @HeaderParam("X-Company-Name") String companyName,
             @HeaderParam("X-Warehouse-Code") String warehouseCode,
@@ -162,8 +163,8 @@ public class PickingREST implements Serializable {
 
             Integer orderDocEntry = soFacade.getOrderDocEntry(order.getOrderNumber(), companyName, pruebas);
             Object[] pickingStatus = processPickingStatus(order.getOrderNumber(), false, companyName, pruebas);
-            Map<String, Integer> pendingItems = (Map<String, Integer>) pickingStatus[0];
-            Map<String, Map<Long, Integer>> pickedItems = (Map<String, Map<Long, Integer>>) pickingStatus[1];
+            HashMap<String, Integer> pendingItems = (HashMap<String, Integer>) pickingStatus[0];
+            HashMap<String, Map<Long, Integer>> pickedItems = (HashMap<String, Map<Long, Integer>>) pickingStatus[1];
             TreeSet<String> skipped = (TreeSet<String>) pickingStatus[2];
 
             if (pendingItems == null || pendingItems.isEmpty()) {
@@ -173,36 +174,26 @@ public class PickingREST implements Serializable {
             }
 
             //Si hay items pendientes por picking, consulta su saldo y lo retorna organizado por velocidad y secuencia.
-            List<Object[]> orderStock = soFacade.findOrdersStockAvailability(
-                    order.getOrderNumber(),
-                    new ArrayList<>(pendingItems.keySet()),
-                    warehouseCode,
-                    companyName,
-                    pruebas);
+            List<Object[]> orderStock = soFacade.findOrdersStockAvailability(order.getOrderNumber(), position, new ArrayList<>(pendingItems.keySet()), warehouseCode, companyName, pruebas);
 
             HashMap<String, List<Object[]>> availableStock = parseOrderAvailableStock(orderStock);
             HashSet<String> itemsMissing = new HashSet<>();
             for (String pendingItemcode : pendingItems.keySet()) {
                 //Si no hay inventario y no se ha hecho picking para la referencia, la agrega a la lista de lineas para cerrar en la orden
-                if (!availableStock.containsKey(pendingItemcode) && !pickedItems.containsKey(pendingItemcode)) {
+                if (!availableStock.containsKey(pendingItemcode) && pickedItems.containsKey(pendingItemcode)) {
                     itemsMissing.add(pendingItemcode);
                 } else if (!availableStock.containsKey(pendingItemcode) && pickedItems.containsKey(pendingItemcode)) {
                     //TODO: reprocesar orden para que se genere cierre si no hay mas items pendientes
-                    /*salesOrderEJB.modifySalesOrderQuantity(
-                            companyName,
-                            orderDocEntry,
-                            pendingItemcode,
-                            getTotalPicked(pickedItems.get(pendingItemcode)));*/
-                    soFacade.modifySalesOrderQuantity(orderDocEntry, pendingItemcode, getTotalPicked(pickedItems.get(pendingItemcode)),
-                            getPriceItem(pendingItemcode, companyName, pruebas), companyName, pruebas);
+                    salesOrderEJB.modifySalesOrderQuantity(companyName, orderDocEntry, pendingItemcode, getTotalPicked(pickedItems.get(pendingItemcode)));
+                    //soFacade.modifySalesOrderQuantity(orderDocEntry, pendingItemcode, getTotalPicked(pickedItems.get(pendingItemcode)), getPriceItem(pendingItemcode, companyName, pruebas), companyName, pruebas);
                 }
             }
 
             if (!itemsMissing.isEmpty()) {
                 //TODO: Marcar lineas de orden cerradas para items sin saldo
-                //ResponseDTO res = salesOrderEJB.closeOrderLines(companyName, orderDocEntry, itemsMissing);
-                boolean res = soFacade.closeOrderLines(orderDocEntry, itemsMissing, companyName, pruebas);
-                if (!res) {
+                ResponseDTO res = salesOrderEJB.closeOrderLines(companyName, orderDocEntry, itemsMissing);
+                //boolean res = soFacade.closeOrderLines(orderDocEntry, itemsMissing, companyName, pruebas);
+                if (res.getCode() < 0) {
                     PickingWarningDTO warning = new PickingWarningDTO();
                     warning.setItems(new ArrayList<>(itemsMissing));
                     warning.setMessage(
@@ -215,7 +206,6 @@ public class PickingREST implements Serializable {
                 }
 
                 //TODO: notificar cierre de lineas
-
                 if (itemsMissing.size() == pendingItems.size()) {
                     //Finaliza la orden de picking ya que no quedan items pendientes
                     CONSOLE.log(Level.WARNING, "La orden {0} no tiene saldo en picking para los items pendientes por despachar y se marca como cerrada. ", order.getOrderNumber());
@@ -290,6 +280,7 @@ public class PickingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response closeOrders(@PathParam("username") String username,
                                 @QueryParam("orderNumber") Integer orderNumber,
+                                @QueryParam("position") Integer position,
                                 @HeaderParam("X-Company-Name") String companyName,
                                 @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                 @HeaderParam("X-Pruebas") boolean pruebas) {

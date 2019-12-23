@@ -13896,6 +13896,8 @@ public class Document {
             protected String uTransitWHSCode;
             @XmlElement(name = "U_CalcAIU")
             protected String uCalcAIU;
+            @XmlElement(name = "U_Picking")
+            protected String uPicking;
             @XmlElement(name = "LineTaxJurisdictions")
             protected Document.DocumentLines.DocumentLine.LineTaxJurisdictions lineTaxJurisdictions;
             @XmlElement(name = "DocumentLineAdditionalExpenses")
@@ -18947,6 +18949,14 @@ public class Document {
              */
             public void setUCalcAIU(String value) {
                 this.uCalcAIU = value;
+            }
+
+            public String getuPicking() {
+                return uPicking;
+            }
+
+            public void setuPicking(String uPicking) {
+                this.uPicking = uPicking;
             }
 
             /**
