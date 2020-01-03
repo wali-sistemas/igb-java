@@ -728,10 +728,18 @@ public class Document {
     //protected Integer uLiquidComex;
     //@XmlElement(name = "U_CANT_CONTE")
     //protected Integer uCantConte;
-    //@XmlElement(name = "U_addInFaElectronica_tipoND_FE")
-    //protected String uAddInFaElectronicaTipoNDFE;
-    //@XmlElement(name = "U_DocAdicionales")
-    //protected String uDocAdicionales;
+    @XmlElement(name = "U_addInFaElectronica_tipoND_FE")
+    protected String uAddInFaElectronicaTipoNDFE;
+    @XmlElement(name = "U_tipoNCC_FE")
+    protected String uTipoNCCFE;
+    @XmlElement(name = "U_tipoEmisionFE")
+    protected String uTipoEmisionFE;
+    @XmlElement(name = "U_tipo_NCV_FE")
+    protected String uTipoNCVFE;
+    @XmlElement(name = "U_tipo_NDV_FE")
+    protected String uTipoNDVFE;
+    @XmlElement(name = "U_DocAdicionales")
+    protected String uDocAdicionales;
     //@XmlElement(name = "U_Origen")
     //protected String uOrigen;
     @XmlElement(name = "Document_ApprovalRequests")
@@ -8744,6 +8752,54 @@ public class Document {
     public void setuOrigen(String uOrigen) {
         this.uOrigen = uOrigen;
     }*/
+
+    public String getuAddInFaElectronicaTipoNDFE() {
+        return uAddInFaElectronicaTipoNDFE;
+    }
+
+    public void setuAddInFaElectronicaTipoNDFE(String uAddInFaElectronicaTipoNDFE) {
+        this.uAddInFaElectronicaTipoNDFE = uAddInFaElectronicaTipoNDFE;
+    }
+
+    public String getuTipoNCCFE() {
+        return uTipoNCCFE;
+    }
+
+    public void setuTipoNCCFE(String uTipoNCCFE) {
+        this.uTipoNCCFE = uTipoNCCFE;
+    }
+
+    public String getuDocAdicionales() {
+        return uDocAdicionales;
+    }
+
+    public void setuDocAdicionales(String uDocAdicionales) {
+        this.uDocAdicionales = uDocAdicionales;
+    }
+
+    public String getuTipoEmisionFE() {
+        return uTipoEmisionFE;
+    }
+
+    public void setuTipoEmisionFE(String uTipoEmisionFE) {
+        this.uTipoEmisionFE = uTipoEmisionFE;
+    }
+
+    public String getuTipoNCVFE() {
+        return uTipoNCVFE;
+    }
+
+    public void setuTipoNCVFE(String uTipoNCVFE) {
+        this.uTipoNCVFE = uTipoNCVFE;
+    }
+
+    public String getuTipoNDVFE() {
+        return uTipoNDVFE;
+    }
+
+    public void setuTipoNDVFE(String uTipoNDVFE) {
+        this.uTipoNDVFE = uTipoNDVFE;
+    }
 
     /**
      * Obtiene el valor de la propiedad documentApprovalRequests.
