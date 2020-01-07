@@ -1,23 +1,23 @@
 package co.igb.dto;
 
 /**
- *
  * @author dbotero
  */
 public class SortedStockDTO implements Comparable<SortedStockDTO> {
 
-    private String itemCode;
-    private String itemName;
-    private int openQuantity;
-    private int quantity;
     private long binAbs;
     private int availableQuantity;
-    private String binCode;
     private int orderNumber;
     private int pendingQuantity;
+    private int openQuantity;
+    private int quantity;
+    private String itemCode;
+    private String itemName;
+    private String binCode;
     private String velocity;
-    private Integer sequence;
     private String binLocationType;
+    private Integer sequence;
+    private Integer lineNum;
 
     public SortedStockDTO(Object[] dbData) {
         itemCode = (String) dbData[0];
@@ -31,6 +31,7 @@ public class SortedStockDTO implements Comparable<SortedStockDTO> {
         velocity = (String) dbData[8];
         sequence = (Integer) dbData[9];
         binLocationType = (String) dbData[10];
+        lineNum = (Integer) dbData[11];
     }
 
     public int getPendingQuantity() {
@@ -93,6 +94,14 @@ public class SortedStockDTO implements Comparable<SortedStockDTO> {
         return binLocationType;
     }
 
+    public Integer getLineNum() {
+        return lineNum;
+    }
+
+    public void setLineNum(Integer lineNum) {
+        this.lineNum = lineNum;
+    }
+
     @Override
     public int compareTo(SortedStockDTO o) {
         if (o == null || o.getBinCode() == null) {
@@ -104,5 +113,24 @@ public class SortedStockDTO implements Comparable<SortedStockDTO> {
         }
 
         return this.velocity.compareTo(o.getVelocity());
+    }
+
+    @Override
+    public String toString() {
+        return "SortedStockDTO{" +
+                "itemCode='" + itemCode + '\'' +
+                ", itemName='" + itemName + '\'' +
+                ", openQuantity=" + openQuantity +
+                ", quantity=" + quantity +
+                ", binAbs=" + binAbs +
+                ", availableQuantity=" + availableQuantity +
+                ", binCode='" + binCode + '\'' +
+                ", orderNumber=" + orderNumber +
+                ", pendingQuantity=" + pendingQuantity +
+                ", velocity='" + velocity + '\'' +
+                ", sequence=" + sequence +
+                ", binLocationType='" + binLocationType + '\'' +
+                ", lineNum=" + lineNum +
+                '}';
     }
 }

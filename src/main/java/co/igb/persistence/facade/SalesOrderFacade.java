@@ -130,14 +130,20 @@ public class SalesOrderFacade {
         return orders;
     }
 
-    public List<Object[]> findOrdersStockAvailability(Integer orderNumber, List<String> itemCodes, String warehouseCode, String schemaName, boolean testing) {
+    public List<Object[]> findOrdersStockAvailability(Integer orderNumber, Integer position, List<String> itemCodes, String warehouseCode, String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(detalle.itemCode as varchar(20)) itemCode, cast(detalle.openQty as int) openQuantity, cast(detalle.quantity as int) quantity, ");
-        sb.append("cast(saldo.binabs as int) binAbs, cast(saldo.onhandqty as int) available, cast(ubicacion.bincode as varchar(50)) binCode, ");
+
+        sb.append("select t.itemCode, t.openQuantity, t.quantity, t.binAbs, t.available, t.binCode, t.itemName, t.orderNumber, t.velocidad, t.secuencia, t.binType, t.LineNumCount from (");
+        sb.append("select ROW_NUMBER() OVER(ORDER BY ubicacion.bincode ASC) as fila, cast(detalle.itemCode as varchar(20)) itemCode, cast(detalle.openQty as int) openQuantity, ");
+        sb.append("cast(detalle.quantity as int) quantity, cast(saldo.binabs as int) binAbs, cast(saldo.onhandqty as int) available, cast(ubicacion.bincode as varchar(50)) binCode, ");
         sb.append("cast(detalle.Dscription as varchar(100)) itemName, cast(orden.docnum as int) orderNumber, ");
         sb.append("cast(ubicacion.attr2val as varchar(5)) velocidad, cast(ubicacion.attr3val as int) secuencia, ");
-        sb.append("cast(ubicacion.attr1val as varchar(10)) binType ");
-        sb.append("from ordr orden inner join rdr1 detalle on detalle.docentry = orden.docentry and detalle.lineStatus = 'O' ");
+        sb.append("cast(ubicacion.attr1val as varchar(10)) binType, ");
+        sb.append("cast((select COUNT(ubicacion.bincode) from RDR1 d inner join OIBQ saldo on saldo.ItemCode = d.ItemCode and saldo.WhsCode = '01' and saldo.OnHandQty > 0 ");
+        sb.append("inner join OBIN ubicacion on ubicacion.absentry = saldo.binabs and ubicacion.SysBin = 'N' and ubicacion.Attr1Val IN ('PICKING','STORAGE') ");
+        sb.append("where d.LineStatus = 'O' and d.u_Picking = 'N' and d.DocEntry = detalle.DocEntry) as int) as LineNumCount ");
+        sb.append("from ordr orden inner join rdr1 detalle on detalle.docentry = orden.docentry and detalle.lineStatus = 'O' and detalle.u_Picking = 'N' ");
+
         if (itemCodes != null && !itemCodes.isEmpty()) {
             sb.append("and detalle.itemcode in (");
             for (String itemCode : itemCodes) {
@@ -148,12 +154,15 @@ public class SalesOrderFacade {
             sb.deleteCharAt(sb.length() - 1);
             sb.append(") ");
         }
+
         sb.append("inner join OIBQ saldo on saldo.ItemCode = detalle.ItemCode and saldo.WhsCode = '");
         sb.append(warehouseCode);
-        sb.append("' and saldo.OnHandQty > 0 inner join obin ubicacion on ubicacion.absentry = saldo.binabs and ubicacion.SysBin = 'N' ");
+        sb.append("' and saldo.OnHandQty > 0 inner join OBIN ubicacion on ubicacion.absentry = saldo.binabs and ubicacion.SysBin = 'N' ");
         sb.append("and ubicacion.Attr1Val IN ('PICKING','STORAGE') where orden.docnum = ");
         sb.append(orderNumber);
-        sb.append(" order by velocidad, secuencia ");
+        sb.append(") as t where fila = ");
+        sb.append(position);
+        sb.append(" order by t.velocidad, t.secuencia ");
 
         CONSOLE.log(Level.FINE, sb.toString());
         try {
@@ -191,7 +200,7 @@ public class SalesOrderFacade {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(det.ItemCode as varchar(20)) itemcode, cast(sum(det.Quantity) as int) pendingQuantity ");
         sb.append("from ORDR enc inner join RDR1 det on det.docentry = enc.docentry and det.Quantity > 0 ");
-        sb.append("where enc.docnum = ");
+        sb.append("where enc.DocStatus = 'O' and det.LineStatus = 'O' and enc.docnum = ");
         sb.append(orderNumber);
         sb.append(" group by det.ItemCode ");
         CONSOLE.log(Level.FINE, sb.toString());
@@ -235,7 +244,7 @@ public class SalesOrderFacade {
         sb.append("from ORDR ");
         sb.append("where CANCELED = 'N' AND YEAR(DocDate) = YEAR(GETDATE()) AND MONTH(DocDate) = MONTH(GETDATE())");
         try {
-            return (BigDecimal) persistenceConf.chooseSchema(schemaName,testing,DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (BigDecimal) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el total de ordenes mensuales.");
@@ -355,7 +364,23 @@ public class SalesOrderFacade {
         return null;
     }
 
-    public boolean closeOrderLines(Integer orderEntry, HashSet<String> items, String companyName, boolean testing) {
+    public void updatePickingOrderLine(Integer orderEntry, String item, String companyName, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaUpdate<SalesOrderDetail> cu = cb.createCriteriaUpdate(SalesOrderDetail.class);
+        Root<SalesOrderDetail> root = cu.from(SalesOrderDetail.class);
+
+        cu.set(root.get(SalesOrderDetail_.uPicking), "Y");
+        cu.where(cb.and(cb.equal(root.get(SalesOrderDetail_.docEntry), orderEntry)), cb.equal(root.get(SalesOrderDetail_.itemCode), item));
+        try {
+            em.createQuery(cu).executeUpdate();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el campo [uPicking] en el detalle de la orden #{0} para el item {0}", new Object[]{orderEntry, item});
+        }
+    }
+
+    /*public boolean closeOrderLines(Integer orderEntry, HashSet<String> items, String companyName, boolean testing) {
         EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaUpdate<SalesOrderDetail> cu = cb.createCriteriaUpdate(SalesOrderDetail.class);
@@ -374,9 +399,9 @@ public class SalesOrderFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar las lineas de la orden {0} para los productos que no tienen saldo: {1}", new Object[]{orderEntry, parentExpression});
         }
         return false;
-    }
+    }*/
 
-    public boolean modifySalesOrderQuantity(Integer orderEntry, String itemCode, Integer newQuantity, BigDecimal price, String companyName, boolean testing) {
+    /*public boolean modifySalesOrderQuantity(Integer orderEntry, String itemCode, Integer newQuantity, BigDecimal price, String companyName, boolean testing) {
         EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaUpdate<SalesOrderDetail> cu = cb.createCriteriaUpdate(SalesOrderDetail.class);
@@ -384,7 +409,16 @@ public class SalesOrderFacade {
 
         cu.set(root.get(SalesOrderDetail_.quantity), newQuantity);
         cu.set(root.get(SalesOrderDetail_.openQty), newQuantity);
+        cu.set(root.get(SalesOrderDetail_.openCreQty), newQuantity);
+        cu.set(root.get(SalesOrderDetail_.packQty), newQuantity);
+        cu.set(root.get(SalesOrderDetail_.pcQuantity), newQuantity);
+        cu.set(root.get(SalesOrderDetail_.invQty), newQuantity);
+        cu.set(root.get(SalesOrderDetail_.openInvQty), newQuantity);
         cu.set(root.get(SalesOrderDetail_.lineTotal), price.multiply(new BigDecimal(newQuantity)));
+        cu.set(root.get(SalesOrderDetail_.openSum), price.multiply(new BigDecimal(newQuantity)));
+        cu.set(root.get(SalesOrderDetail_.totalSumSy), price.multiply(new BigDecimal(newQuantity)));
+        cu.set(root.get(SalesOrderDetail_.openSumSys), price.multiply(new BigDecimal(newQuantity)));
+
         cu.where(cb.and(cb.equal(root.get(SalesOrderDetail_.itemCode), itemCode)), cb.equal(root.get(SalesOrderDetail_.docEntry), orderEntry));
         try {
             em.createQuery(cu).executeUpdate();
@@ -394,5 +428,5 @@ public class SalesOrderFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al modificar la cantidad del item {1} para la orden {0}", new Object[]{orderEntry, itemCode});
         }
         return false;
-    }
+    }*/
 }

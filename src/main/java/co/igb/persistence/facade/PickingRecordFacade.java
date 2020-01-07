@@ -102,8 +102,7 @@ public class PickingRecordFacade {
      * @param companyName
      * @return map with structure [itemcode->[bin->quantity]]
      */
-    public Map<String, Map<Long, Integer>> listPickedItems(Integer orderNumber, Boolean excludeTemporary,
-                                                           String companyName, boolean testing) {
+    public Map<String, Map<Long, Integer>> listPickedItems(Integer orderNumber, Boolean excludeTemporary, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from picking_record where order_number = ");
         sb.append(orderNumber);
