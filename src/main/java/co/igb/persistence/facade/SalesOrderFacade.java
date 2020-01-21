@@ -162,7 +162,7 @@ public class SalesOrderFacade {
         sb.append(orderNumber);
         sb.append(") as t where fila = ");
         sb.append(position);
-        sb.append(" order by t.velocidad, t.secuencia ");
+        sb.append(" order by t.binType, t.velocidad, t.secuencia ");
 
         CONSOLE.log(Level.FINE, sb.toString());
         try {
