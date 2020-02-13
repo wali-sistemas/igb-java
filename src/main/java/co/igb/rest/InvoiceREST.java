@@ -317,7 +317,7 @@ public class InvoiceREST implements Serializable {
                 BigDecimal baseMinima = (BigDecimal) row[2];
                 BigDecimal base = new BigDecimal(0);
                 //TODO: Clientes con (R/IVA VENTAS) su base parte del impuesto
-                if (row[3].equals("IVA") || row[0].equals("RVIV")) {
+                if (row[3].equals("IVA")) {
                     base = invoice.getVatSum().multiply(valueRet.divide(BigDecimal.valueOf(100)));
                 } else {
                     base = invoice.getBaseAmount().multiply(valueRet.divide(BigDecimal.valueOf(100)));

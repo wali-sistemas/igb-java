@@ -1,10 +1,6 @@
 package co.igb.rest;
 
-import co.igb.b1ws.client.deliverynote.Add;
-import co.igb.b1ws.client.deliverynote.AddResponse;
-import co.igb.b1ws.client.deliverynote.DeliveryNotesService;
-import co.igb.b1ws.client.deliverynote.Document;
-import co.igb.b1ws.client.deliverynote.MsgHeader;
+import co.igb.b1ws.client.deliverynote.*;
 import co.igb.dto.*;
 import co.igb.ejb.EmailManager;
 import co.igb.ejb.IGBApplicationBean;
@@ -36,10 +32,6 @@ import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static co.igb.b1ws.client.deliverynote.Document.DocumentLines.DocumentLine;
-import static co.igb.b1ws.client.deliverynote.Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations;
-import static co.igb.b1ws.client.deliverynote.Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation;
 
 /**
  * @author dbotero
@@ -256,25 +248,35 @@ public class PackingREST implements Serializable {
         PackingOrder po = poFacade.find(idPackingOrder, companyName, pruebas);
         if (po != null) {
             //Validando si la orden ya tiene entrega en SAP
-            if (deliveryNoteFacade.getCountDeliveryNote(po.getOrderNumber(), companyName, pruebas) > 0) {
-                //Se procede a cerrar el packing list en MySql
-                poFacade.closePackingOrder(idPackingOrder.intValue(), companyName, pruebas);
+            Integer delivery = deliveryNoteFacade.getDocNumDeliveryNote(po.getOrderNumber(), companyName, pruebas);
+            if (delivery > 0) {
+                try {
+                    //Se procede a cerrar el packing list en MySql
+                    poFacade.closePackingOrder(idPackingOrder.intValue(), companyName, pruebas);
+                } catch (Exception e) {
+                    CONSOLE.log(Level.WARNING, "Ocurrio una excepcion cerrando la orden #{0} en [{1}]", new Object[]{idPackingOrder, companyName});
+                }
+
                 CONSOLE.log(Level.WARNING, "Ya existe una entrega en SAP para la orden #{0}", po.getOrderNumber());
                 return Response.ok(new ResponseDTO(0, "Ya existe una entrega en SAP para la orden #" + po.getOrderNumber().toString())).build();
             } else {
-                //Validando si la orden se encuentra cerrada
+                //Validando si la orden se encuentra cerrada o cancelada
                 if (salesOrderFacade.getOrderStatus(po.getOrderNumber(), companyName, pruebas).equals("C")) {
                     //Se procede a cerrar el packing list en MySql
                     poFacade.closePackingOrder(idPackingOrder.intValue(), companyName, pruebas);
+
                     CONSOLE.log(Level.WARNING, "La orden #{0} ya se encuentra cerrada en SAP.", po.getOrderNumber());
                     return Response.ok(new ResponseDTO(0, "La orden " + po.getOrderNumber().toString() + " ya se encuentra cerrada en SAP")).build();
                 } else {
                     CONSOLE.log(Level.INFO, "Retornando items para la packing order #{0}", idPackingOrder);
-                    List<Object[]> items = poFacade.listOrderItems(idPackingOrder, companyName, pruebas);
+                    List<PackingOrderItem> items = po.getItems();//poFacade.listOrderItems(idPackingOrder, companyName, pruebas);
                     List<Object[]> listItems = new ArrayList<>();
-                    for (Object[] obj : items) {
-                        Object[] attributes = itemFacade.getItemAttributes((String) obj[3], companyName, pruebas);
-                        listItems.add(new Object[]{obj[0], obj[1], obj[2], obj[3], obj[4], obj[5], obj[6], attributes[0], attributes[1]});
+
+                    for (PackingOrderItem obj : items) {
+                        //Object[] attributes = itemFacade.getItemAttributes((String) obj.getItemCode(), companyName, pruebas);
+                        //listItems.add(new Object[]{obj[0], obj[1], obj[2], obj[3], obj[4], obj[5], obj[6], attributes[0], attributes[1]});
+                        listItems.add(new Object[]{obj.getBins().get(0).getBinCode(), obj.getBins().get(0).getBinName(), (obj.getBins().get(0).getPickedQty() - obj.getBins().get(0).getPackedQty()),
+                                obj.getItemCode(), obj.getBins().get(0).getPickedQty(), 0, null, null, null});
                     }
 
                     CONSOLE.log(Level.INFO, "Se encontraron {0} items para la packing list", items.size());
@@ -282,8 +284,8 @@ public class PackingREST implements Serializable {
                 }
             }
         } else {
-            CONSOLE.log(Level.SEVERE, "No se encontraron datos para la packing list " + idPackingOrder);
-            return Response.ok(new ResponseDTO(-1, null)).build();
+            CONSOLE.log(Level.SEVERE, "No se encontraron datos para la packing list #" + idPackingOrder.toString());
+            return Response.ok(new ResponseDTO(-1, "No se encontraron datos para la packing list #" + idPackingOrder.toString())).build();
         }
     }
 
@@ -307,7 +309,7 @@ public class PackingREST implements Serializable {
             return Response.ok(new ResponseDTO(-2, "La órden no se encuentra abierta y por lo tanto no se puede proceder con el proceso de packing")).build();
         }
 
-        HashMap<String, DocumentLine> items = new HashMap<>();
+        HashMap<String, Document.DocumentLines.DocumentLine> items = new HashMap<>();
         Document document = new Document();
         Integer orderDocEntry = null;
         for (Object[] row : packingRecords) {
@@ -351,10 +353,9 @@ public class PackingREST implements Serializable {
                 }
             }
 
-            DocumentLine line;
+            Document.DocumentLines.DocumentLine line = new Document.DocumentLines.DocumentLine();
             if (!items.containsKey(itemCode)) {
                 //Si el item no se ha agregado a la orden
-                line = new DocumentLine();
                 line.setLineNum((long) items.size());
                 line.setItemCode(itemCode);
                 line.setQuantity(quantity.doubleValue());
@@ -372,7 +373,7 @@ public class PackingREST implements Serializable {
 
                 line.setBaseEntry(orderDocEntry.longValue());
                 line.setBaseType(Long.parseLong(getPropertyValue(Constants.SALES_ORDER_SERIES, companyName)));
-                line.setDocumentLinesBinAllocations(new DocumentLinesBinAllocations());
+                line.setDocumentLinesBinAllocations(new Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations());
 
                 items.put(itemCode, line);
             } else {
@@ -382,7 +383,7 @@ public class PackingREST implements Serializable {
             }
 
             boolean quantityAdded = false;
-            for (DocumentLinesBinAllocation binAllocation : line.getDocumentLinesBinAllocations().getDocumentLinesBinAllocation()) {
+            for (Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation binAllocation : line.getDocumentLinesBinAllocations().getDocumentLinesBinAllocation()) {
                 if (binAllocation.getBinAbsEntry().equals(binAbs.longValue())) {
                     binAllocation.setQuantity(binAllocation.getQuantity() + quantity.doubleValue());
                     quantityAdded = true;
@@ -391,7 +392,7 @@ public class PackingREST implements Serializable {
             }
 
             if (!quantityAdded) {
-                DocumentLinesBinAllocation binAllocation = new DocumentLinesBinAllocation();
+                Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation binAllocation = new Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation();
                 binAllocation.setAllowNegativeQuantity(Constants.SAP_STATUS_NO);
                 binAllocation.setBaseLineNumber(line.getLineNum());
                 binAllocation.setBinAbsEntry(binAbs.longValue());
@@ -401,10 +402,10 @@ public class PackingREST implements Serializable {
         }
 
         Document.DocumentLines documentLines = new Document.DocumentLines();
-        List<DocumentLine> itemsList = new ArrayList<>(items.values());
-        itemsList.sort(new Comparator<DocumentLine>() {
+        List<Document.DocumentLines.DocumentLine> itemsList = new ArrayList<>(items.values());
+        itemsList.sort(new Comparator<Document.DocumentLines.DocumentLine>() {
             @Override
-            public int compare(DocumentLine o1, DocumentLine o2) {
+            public int compare(Document.DocumentLines.DocumentLine o1, Document.DocumentLines.DocumentLine o2) {
                 return o1.getLineNum().compareTo(o2.getLineNum());
             }
         });
@@ -466,7 +467,7 @@ public class PackingREST implements Serializable {
         sb.append(", comments=");
         sb.append(document.getComments());
         sb.append(", lines[");
-        for (DocumentLine line : document.getDocumentLines().getDocumentLine()) {
+        for (Document.DocumentLines.DocumentLine line : document.getDocumentLines().getDocumentLine()) {
             sb.append("line{");
             sb.append("lineNum=");
             sb.append(line.getLineNum());
@@ -481,7 +482,7 @@ public class PackingREST implements Serializable {
             sb.append(", baseType=");
             sb.append(line.getBaseType());
             sb.append(", bins[");
-            for (DocumentLinesBinAllocation binAllocation : line.getDocumentLinesBinAllocations().getDocumentLinesBinAllocation()) {
+            for (Document.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation binAllocation : line.getDocumentLinesBinAllocations().getDocumentLinesBinAllocation()) {
                 sb.append("bin{");
                 sb.append("allowNegative=");
                 sb.append(binAllocation.getAllowNegativeQuantity());
@@ -522,75 +523,36 @@ public class PackingREST implements Serializable {
 
     @PUT
     @Path("close/{username}/{idPackingOrder}")
-    //@Produces("application/pdf")
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public Response closePackingOrder(@PathParam("username") String username,
                                       @PathParam("idPackingOrder") Integer idPackingOrder,
                                       @HeaderParam("X-Company-Name") String companyName,
                                       @HeaderParam("X-Pruebas") boolean pruebas) {
-        CONSOLE.log(Level.INFO, "Cerrando packing orden {0}", username);
-        //Cierra los registros de packing abiertos
-        plFacade.closePackingOrder(idPackingOrder, companyName, pruebas);
-        boolean orderComplete = poFacade.isPackingOrderComplete(idPackingOrder, companyName, pruebas);
-        if (!orderComplete) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar si la orden de packing se encuentra completa.");
-        }
-        //Se cierra la orden de packing
-        poFacade.closePackingOrder(idPackingOrder, companyName, pruebas);
-
-        /*List<PackingListRecordDTO> records = parseRecords(plFacade.listRecords(idPackingOrder, companyName, pruebas, false));
-
-        String companyReportName = null;
-        List<CompanyDTO> companies = appBean.listCompanies();
-        for (CompanyDTO company : companies) {
-            if (company.getCompanyId().equals(companyName)) {
-                companyReportName = company.getCompanyName();
-                break;
-            }
-        }
-
-        String fileName = String.valueOf(poFacade.OrderNumber(idPackingOrder, companyName, pruebas));String.valueOf(System.currentTimeMillis());
-        File file = pdfManager.createPackingListPdf(idPackingOrder.toString(), fileName, companyReportName, records);
+        CONSOLE.log(Level.INFO, "Cerrando packing orden #{0} asignada al usuario {1} en [{2}]", new Object[]{idPackingOrder.toString(), username, companyName});
 
         try {
-            UserDTO userDto = ldapUtil.getUserInfo(username);
-            CONSOLE.log(Level.INFO, "Enviando correo al empleado {0} -> {1}", new Object[]{userDto.getCompleteName(), userDto.getEmail()});
-            emailManager.sendWithAttachment(file.getAbsolutePath(), fileName + ".pdf", userDto.getCompleteName(), userDto.getEmail());
-            //TODO: parametrizar ubicacion PDF
+            //Cierra los registros de packing abiertos MySql
+            plFacade.closePackingOrder(idPackingOrder, companyName, pruebas);
         } catch (Exception e) {
-            CONSOLE.log(Level.INFO, "Enviando correo a sistemas, ya que ocurrio un error al cargar los datos del empleado {0}", username);
-            emailManager.sendWithAttachment(
-                    file.getAbsolutePath(),
-                    fileName + ".pdf",
-                    username,
-                    appBean.obtenerValorPropiedad(Constants.EMAIL_BCC_PACKING_ERROR));
+            CONSOLE.log(Level.WARNING, "Ocurrio una excepcion cerrando los registros de packing abiertos para la orden #{0} asignada al usuario {1} en [{2}]",
+                    new Object[]{idPackingOrder, username, companyName});
         }
 
-        Response.ResponseBuilder response = Response.ok(file);
-        response.header("Content-Disposition", "attachment; filename=" + fileName + ".pdf");*/
-        return Response.ok().build();/*response.build();*/
+        if (!poFacade.isPackingOrderComplete(idPackingOrder, companyName, pruebas)) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar si la orden de packing #{0} se encuentra completa", idPackingOrder.toString());
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error al consultar si la orden de packing #" + idPackingOrder.toString() + "se encuentra completa.")).build();
+        }
+
+        try {
+            //Se cierra la orden de packing MySql
+            poFacade.closePackingOrder(idPackingOrder, companyName, pruebas);
+        } catch (Exception e) {
+            CONSOLE.log(Level.WARNING, "Ocurrio una excepcion cerrando la orden #{0} asignada al usuario {1} en [{2}]",
+                    new Object[]{idPackingOrder, username, companyName});
+            return Response.ok(new ResponseDTO(-1, e.getMessage())).build();
+        }
+        return Response.ok(new ResponseDTO(0, "Packing orden cerrada.")).build();
     }
-
-    /*@GET
-    @Path("pdf/{username}/{idPackingOrder}")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-    public Response getUrlPackingList(@PathParam("username") String username,
-                                      @PathParam("idPackingOrder") Integer idPackingOrder,
-                                      @HeaderParam("X-Company-Name") String companyName,
-                                      @HeaderParam("X-Pruebas") boolean pruebas) {
-        List<PackingListRecordDTO> records = parseRecords(plFacade.listRecords(idPackingOrder, companyName, pruebas, false));
-        String companyReportName = null;
-        List<CompanyDTO> companies = appBean.listCompanies();
-        for (CompanyDTO company : companies) {
-            if (company.getCompanyId().equals(companyName)) {
-                companyReportName = company.getCompanyName();
-                break;
-            }
-        }
-        File file = pdfManager.createPackingListPdf(String.valueOf(poFacade.OrderNumber(idPackingOrder, companyName, pruebas)), companyReportName, records);
-        return Response.ok(file.exists()).build();
-    }*/
-
 
     private List<PackingListRecordDTO> parseRecords(List<Object[]> rows) {
         List<PackingListRecordDTO> records = new ArrayList<>();

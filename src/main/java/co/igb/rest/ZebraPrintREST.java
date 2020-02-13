@@ -73,10 +73,10 @@ public class ZebraPrintREST {
             return Response.ok(new ResponseDTO(-1, "Ocurrió un error al consultar los datos para imprimir la etiqueta. (Order Numbers)")).build();
         }
 
-        String numAtCards = soFacade.listNumAtCards(orderNumbers.toString(), companyName, pruebas);
+        /*String numAtCards = soFacade.listNumAtCards(orderNumbers.toString(), companyName, pruebas);
         if (numAtCards == null || numAtCards.trim().isEmpty()) {
             return Response.ok(new ResponseDTO(-1, "Ocurrió un error al consultar los datos para imprimir la etiqueta. (NumAtCard)")).build();
-        }
+        }*/
 
         Object[] orderData = soFacade.retrieveStickerInfo(orderNumbers.toString(), companyName, pruebas);
         if (orderData == null || orderData.length == 0) {
@@ -98,7 +98,7 @@ public class ZebraPrintREST {
             label.setSalesOrderNumbers(orderNumbers.toString());
             label.setCarrier((String) orderData[2]);
             label.setTotalBoxes(boxes);
-            label.setNumAtCards(numAtCards);
+            label.setNumAtCards("N/A");
             label.setPrinterName(printerName);
             label.setEmployee(username);
             label.setCity((String) orderData[3]);
