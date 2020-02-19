@@ -73,7 +73,7 @@ public class DeliveryNoteFacade {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el numero de la entrega. ", e);
         }
-        return null;
+        return 0;
     }
 
     public Integer getDocNumSalesOrder(Integer docNum, String companyName, boolean testing) {
