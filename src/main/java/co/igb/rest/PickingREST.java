@@ -197,7 +197,7 @@ public class PickingREST implements Serializable {
                                     "Ocurrió un error al cerrar las líneas de la órden %s para los productos que no tienen saldo: %s",
                                     order.getOrderNumber(),
                                     Arrays.toString(itemsMissing.toArray())));
-                    warning.setOrderNumber(orderNumber);
+                    warning.setOrderNumber(orderDocEntry);
                     warnings.add(warning);
                 }
 
