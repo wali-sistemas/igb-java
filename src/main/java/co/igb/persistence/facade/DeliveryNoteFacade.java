@@ -33,7 +33,7 @@ public class DeliveryNoteFacade {
         sb.append("cast(enc.U_VR_DECLARADO as numeric(18,2)) valorDeclarado, cast(enc.Comments as varchar(250)) comentario, ");
         sb.append("cast(enc.DocTotal-enc.VatSum as numeric(18,2)) as valorNeto, cast(enc.VatSum as numeric(18,2)) as impuesto, ");
         sb.append("cast(pay.extradays as int) as days ");
-        sb.append("from odln enc ");
+        sb.append("from  odln enc ");
         sb.append("inner join dln1 det on det.docentry = enc.docentry ");
         sb.append("inner join octg pay on pay.groupnum = enc.groupnum ");
         sb.append("where enc.docentry =");
@@ -43,21 +43,6 @@ public class DeliveryNoteFacade {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los datos de la entrega. ", e);
             return new ArrayList<>();
-        }
-    }
-
-    public Integer getCountDeliveryNote(Integer orderNumber, String companyName, boolean testing) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("select CAST(COUNT(e.DocNum) AS int) AS entrega ");
-        sb.append("from ODLN e ");
-        sb.append("inner Join DLN1 d On e.DocEntry = d.DocEntry ");
-        sb.append("where d.BaseRef = ");
-        sb.append(orderNumber);
-        try {
-            return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
-        } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el documento de entrega. ", e);
-            return null;
         }
     }
 
@@ -72,27 +57,28 @@ public class DeliveryNoteFacade {
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el detalle de la entrega #" + DocNum);
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el detalle de la entrega #" + DocNum.toString(), e);
             return null;
         }
     }
 
     public Integer getDocNumDeliveryNote(Integer orderNumber, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select DISTINCT cast(d.DocEntry as int) DocEntry ");
+        sb.append("select DISTINCT cast(d.DocEntry as int)as DocEntry ");
         sb.append("from DLN1 d where d.BaseRef =");
         sb.append(orderNumber);
         try {
             return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (NoResultException ex) {
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el numero de la entrega", e);
-            return null;
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el numero de la entrega. ", e);
         }
+        return 0;
     }
 
     public Integer getDocNumSalesOrder(Integer docNum, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select DISTINCT cast(d.BaseRef as int) as BaseRef ");
+        sb.append("select DISTINCT cast(d.BaseRef as int)as BaseRef ");
         sb.append("from   ODLN e ");
         sb.append("inner  join DLN1 d ON e.DocEntry = d.DocEntry where e.DocNum = ");
         sb.append(docNum);
@@ -100,23 +86,24 @@ public class DeliveryNoteFacade {
             return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException ex) {
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la orden para la factura #[" + docNum.toString() + "]");
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la orden para la factura #[" + docNum.toString() + "]. ", e);
         }
         return null;
     }
 
     public Integer getDocNumInvoice(Integer orderNumber, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(v.DocNum as int) as DocNum ");
-        sb.append("from  (select DISTINCT d.BaseRef, d.DocEntry from DLN1 d) d ");
-        sb.append("inner join (select DISTINCT d.BaseRef, d.DocEntry from INV1 d where d.BaseType = '15') f ON f.BaseRef = d.DocEntry ");
-        sb.append("inner join OINV v ON v.DocEntry = f.DocEntry where d.BaseRef = ");
+        sb.append("select top 1 cast(f.DocNum as int)as DocNum ");
+        sb.append("from  DLN1 d ");
+        sb.append("inner join OINV f ON d.TrgetEntry = f.DocEntry ");
+        sb.append("where d.BaseEntry = (select o.DocEntry from ORDR o where o.DocNum = ");
         sb.append(orderNumber);
+        sb.append(")");
         try {
             return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException ex) {
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando la factura desde la entrega", e);
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando la factura desde la entrega. ", e);
         }
         return null;
     }

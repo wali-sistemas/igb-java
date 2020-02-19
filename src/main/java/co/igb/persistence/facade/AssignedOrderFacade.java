@@ -69,8 +69,7 @@ public class AssignedOrderFacade {
         }
     }
 
-    public List<AssignedOrder> listOpenAssignationsByUserAndCompany(
-            String username, Integer orderNumber, String companyName, boolean testing) {
+    public List<AssignedOrder> listOpenAssignationsByUserAndCompany(String username, Integer orderNumber, String companyName, boolean testing) {
         EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<AssignedOrder> cq = cb.createQuery(AssignedOrder.class);

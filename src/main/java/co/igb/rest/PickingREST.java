@@ -29,15 +29,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -107,7 +99,7 @@ public class PickingREST implements Serializable {
         //consultar los items pickineados
         Map<String, Map<Long, Integer>> pickedItems = prFacade.listPickedItems(orderNumber, excludeTemporary, companyName, pruebas);
         //consultar los items pendientes por entregar de cada orden
-        Map<String, Integer> pendingItems = soFacade.listPendingItems(orderNumber, companyName, pruebas);
+        LinkedHashMap<String, Integer> pendingItems = soFacade.listPendingItems(orderNumber, companyName, pruebas);
 
         //si un item existe en la lista de picking pero no en la de pendientes, no se tiene en cuenta
         for (int i = 0; i < pendingItems.keySet().size(); i++) {
@@ -132,14 +124,14 @@ public class PickingREST implements Serializable {
     }
 
     @GET
-    @Path("nextitem/{username}/{position}")
+    @Path("nextitem/{username}")
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response findNextItemToPick(
             @PathParam("username") String username,
-            @PathParam("position") Integer position,
             @QueryParam("orderNumber") Integer orderNumber,
+            @QueryParam("position") Integer position,
             @HeaderParam("X-Company-Name") String companyName,
             @HeaderParam("X-Warehouse-Code") String warehouseCode,
             @HeaderParam("X-Pruebas") boolean pruebas) {
@@ -163,7 +155,7 @@ public class PickingREST implements Serializable {
 
             Integer orderDocEntry = soFacade.getOrderDocEntry(order.getOrderNumber(), companyName, pruebas);
             Object[] pickingStatus = processPickingStatus(order.getOrderNumber(), false, companyName, pruebas);
-            HashMap<String, Integer> pendingItems = (HashMap<String, Integer>) pickingStatus[0];
+            LinkedHashMap<String, Integer> pendingItems = (LinkedHashMap<String, Integer>) pickingStatus[0];
             HashMap<String, Map<Long, Integer>> pickedItems = (HashMap<String, Map<Long, Integer>>) pickingStatus[1];
             TreeSet<String> skipped = (TreeSet<String>) pickingStatus[2];
 
@@ -173,8 +165,12 @@ public class PickingREST implements Serializable {
                 continue;
             }
 
-            //Si hay items pendientes por picking, consulta su saldo y lo retorna organizado por velocidad y secuencia.
-            List<Object[]> orderStock = soFacade.findOrdersStockAvailability(order.getOrderNumber(), position, new ArrayList<>(pendingItems.keySet()), warehouseCode, companyName, pruebas);
+            List<Object[]> orderStock = new ArrayList<>();
+            for (String itemPend : pendingItems.keySet()) {
+                //Si hay items pendientes por picking, consulta su saldo y lo retorna organizado por velocidad y secuencia.
+                orderStock = soFacade.findOrdersStockAvailability(order.getOrderNumber(), position, itemPend, warehouseCode, companyName, pruebas);
+                break;
+            }
 
             HashMap<String, List<Object[]>> availableStock = parseOrderAvailableStock(orderStock);
             HashSet<String> itemsMissing = new HashSet<>();
@@ -201,7 +197,7 @@ public class PickingREST implements Serializable {
                                     "Ocurrió un error al cerrar las líneas de la órden %s para los productos que no tienen saldo: %s",
                                     order.getOrderNumber(),
                                     Arrays.toString(itemsMissing.toArray())));
-                    warning.setOrderNumber(orderNumber);
+                    warning.setOrderNumber(orderDocEntry);
                     warnings.add(warning);
                 }
 
