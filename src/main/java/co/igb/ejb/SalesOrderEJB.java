@@ -118,7 +118,7 @@ public class SalesOrderEJB {
                 for (Document.DocumentLines.DocumentLine line : lines) {
                     if (line.getItemCode().equals(itemCode)) {
                         line.setQuantity(newQuantity.doubleValue());
-                        line.setuPicking("Y");
+                        //line.setuPicking("Y");
                         break;
                     }
                 }

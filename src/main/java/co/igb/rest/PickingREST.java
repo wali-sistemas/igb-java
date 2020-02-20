@@ -165,15 +165,20 @@ public class PickingREST implements Serializable {
                 continue;
             }
 
+            HashSet<String> itemsMissing = new HashSet<>();
             List<Object[]> orderStock = new ArrayList<>();
             for (String itemPend : pendingItems.keySet()) {
                 //Si hay items pendientes por picking, consulta su saldo y lo retorna organizado por velocidad y secuencia.
                 orderStock = soFacade.findOrdersStockAvailability(order.getOrderNumber(), position, itemPend, warehouseCode, companyName, pruebas);
-                break;
+                //si no hay saldo disponible se agrega a la lista de items para cerrar la linea en la orden y continua con el sigt item.
+                if (orderStock.size() <= 0 || orderStock.isEmpty()) {
+                    itemsMissing.add(itemPend);
+                } else {
+                    break;
+                }
             }
 
             HashMap<String, List<Object[]>> availableStock = parseOrderAvailableStock(orderStock);
-            HashSet<String> itemsMissing = new HashSet<>();
             for (String pendingItemcode : pendingItems.keySet()) {
                 //Si no hay inventario y no se ha hecho picking para la referencia, la agrega a la lista de lineas para cerrar en la orden
                 if (!availableStock.containsKey(pendingItemcode) && pickedItems.containsKey(pendingItemcode)) {
