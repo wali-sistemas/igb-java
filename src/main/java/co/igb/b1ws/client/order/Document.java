@@ -723,7 +723,7 @@ public class Document {
     @XmlElement(name = "U_F_PAGO_FINAL")
     protected XMLGregorianCalendar uFpagoFinal;
     @XmlElement(name = "U_VLR_PAGO_FINAL")
-    protected Integer uVlrPagoFinal;
+    protected BigDecimal uVlrPagoFinal;
     @XmlElement(name = "U_LIQUID_COMEX")
     protected Integer uLiquidComex;
     @XmlElement(name = "U_CANT_CONTE")
@@ -8721,11 +8721,11 @@ public class Document {
         this.uFpagoFinal = uFpagoFinal;
     }
 
-    public Integer getuVlrPagoFinal() {
+    public BigDecimal getuVlrPagoFinal() {
         return uVlrPagoFinal;
     }
 
-    public void setuVlrPagoFinal(Integer uVlrPagoFinal) {
+    public void setuVlrPagoFinal(BigDecimal uVlrPagoFinal) {
         this.uVlrPagoFinal = uVlrPagoFinal;
     }
 
