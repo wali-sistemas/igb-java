@@ -718,16 +718,16 @@ public class Document {
     protected BigDecimal uaiuimpre;
     @XmlElement(name = "U_AIU_UTIL")
     protected BigDecimal uaiuutil;
-    //@XmlElement(name = "U_F_EN_DOC_FIN")
-    //protected XMLGregorianCalendar uFenDocFin;
-    //@XmlElement(name = "U_F_PAGO_FINAL")
-    //protected XMLGregorianCalendar uFpagoFinal;
-    //@XmlElement(name = "U_VLR_PAGO_FINAL")
-    //protected Integer uVlrPagoFinal;
-    //@XmlElement(name = "U_LIQUID_COMEX")
-    //protected Integer uLiquidComex;
-    //@XmlElement(name = "U_CANT_CONTE")
-    //protected Integer uCantConte;
+    @XmlElement(name = "U_F_EN_DOC_FIN")
+    protected XMLGregorianCalendar uFenDocFin;
+    @XmlElement(name = "U_F_PAGO_FINAL")
+    protected XMLGregorianCalendar uFpagoFinal;
+    @XmlElement(name = "U_VLR_PAGO_FINAL")
+    protected Integer uVlrPagoFinal;
+    @XmlElement(name = "U_LIQUID_COMEX")
+    protected Integer uLiquidComex;
+    @XmlElement(name = "U_CANT_CONTE")
+    protected Integer uCantConte;
     @XmlElement(name = "U_addInFaElectronica_tipoND_FE")
     protected String uAddInFaElectronicaTipoNDFE;
     @XmlElement(name = "U_tipoNCC_FE")
@@ -8705,7 +8705,7 @@ public class Document {
         this.uaiuutil = value;
     }
 
-    /*public XMLGregorianCalendar getuFenDocFin() {
+    public XMLGregorianCalendar getuFenDocFin() {
         return uFenDocFin;
     }
 
@@ -8745,7 +8745,7 @@ public class Document {
         this.uCantConte = uCantConte;
     }
 
-    public String getuOrigen() {
+    /*public String getuOrigen() {
         return uOrigen;
     }
 
