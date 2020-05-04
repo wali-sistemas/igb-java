@@ -68,7 +68,7 @@ public class ZebraPrintREST {
             return Response.ok(new ResponseDTO(-1, "No se encontró la impresora [" + printerName + "] en el servidor.")).build();
         }
 
-        Integer orderNumbers = poFacade.OrderNumber(idPackingList, companyName, pruebas);
+        Integer orderNumbers = poFacade.orderNumber(idPackingList, companyName, pruebas);
         if (orderNumbers == null) {
             return Response.ok(new ResponseDTO(-1, "Ocurrió un error al consultar los datos para imprimir la etiqueta. (Order Numbers)")).build();
         }
