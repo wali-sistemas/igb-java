@@ -14,7 +14,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- *
  * @author dbotero
  */
 @Entity
@@ -43,14 +42,21 @@ public class PickingRecord implements Serializable {
     @Column(name = "bin_from")
     private Long binFrom;
     @Basic(optional = false)
+    @Column(name = "bin_name_from")
+    private String binNameFrom;
+    @Basic(optional = false)
     @Column(name = "bin_to")
     private Long binTo;
+    @Basic(optional = false)
+    @Column(name = "bin_name_to")
+    private String binNameTo;
     @Basic(optional = false)
     @Column(name = "stock_transfer_doc_entry")
     private Long stockTransferDocEntry;
     @Basic(optional = false)
     @Column(name = "emp_id")
     private String empId;
+    @Basic(optional = false)
     @Column(name = "transaction_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date transactionDate;
@@ -162,6 +168,22 @@ public class PickingRecord implements Serializable {
         this.companyName = companyName;
     }
 
+    public String getBinNameFrom() {
+        return binNameFrom;
+    }
+
+    public void setBinNameFrom(String binNameFrom) {
+        this.binNameFrom = binNameFrom;
+    }
+
+    public String getBinNameTo() {
+        return binNameTo;
+    }
+
+    public void setBinNameTo(String binNameTo) {
+        this.binNameTo = binNameTo;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -189,7 +211,21 @@ public class PickingRecord implements Serializable {
 
     @Override
     public String toString() {
-        return "PickingRecord{" + "id=" + id + ", orderNumber=" + orderNumber + ", itemCode=" + itemCode + ", quantity=" + quantity + ", binFrom=" + binFrom + ", binTo=" + binTo + ", stockTransferDocEntry=" + stockTransferDocEntry + ", empId=" + empId + ", transactionDate=" + transactionDate + ", status=" + status + ", expires=" + expires + ", companyName=" + companyName + '}';
+        return "PickingRecord{" +
+                "id=" + id +
+                ", orderNumber=" + orderNumber +
+                ", itemCode='" + itemCode + '\'' +
+                ", quantity=" + quantity +
+                ", binFrom=" + binFrom +
+                ", binNameFrom='" + binNameFrom + '\'' +
+                ", binTo=" + binTo +
+                ", binNameTo='" + binNameTo + '\'' +
+                ", stockTransferDocEntry=" + stockTransferDocEntry +
+                ", empId='" + empId + '\'' +
+                ", transactionDate=" + transactionDate +
+                ", status='" + status + '\'' +
+                ", expires=" + expires +
+                ", companyName='" + companyName + '\'' +
+                '}';
     }
-
 }
