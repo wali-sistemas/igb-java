@@ -1,16 +1,12 @@
 package co.igb.persistence.facade;
 
 import co.igb.dto.SalesOrderDTO;
-import co.igb.persistence.entity.SalesOrderDetail;
-import co.igb.persistence.entity.SalesOrderDetail_;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.criteria.*;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.logging.Level;
@@ -371,7 +367,7 @@ public class SalesOrderFacade {
         return null;
     }
 
-    public void updatePickingOrderLine(Integer orderEntry, String item, String companyName, boolean testing) {
+    /*public void updatePickingOrderLine(Integer orderEntry, String item, String companyName, boolean testing) {
         EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaUpdate<SalesOrderDetail> cu = cb.createCriteriaUpdate(SalesOrderDetail.class);
@@ -385,7 +381,7 @@ public class SalesOrderFacade {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el campo [uPicking] en el detalle de la orden #{0} para el item {0}", new Object[]{orderEntry, item});
         }
-    }
+    }*/
 
     /*public boolean closeOrderLines(Integer orderEntry, HashSet<String> items, String companyName, boolean testing) {
         EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);

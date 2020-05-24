@@ -51,9 +51,9 @@ public class PackingOrderFacade {
     public List<PackingDTO> listOpen(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select enc.idpacking_order, enc.order_number, enc.status, enc.customer_id, enc.customer_name, ");
-        sb.append("item.idpacking_order_item, item.item_code, bin.idpacking_order_item_bin, bin.bin_code, ");
-        sb.append("bin.bin_abs, bin.picked_qty, bin.packed_qty ");
-        sb.append("from packing_order enc ");
+        sb.append("      item.idpacking_order_item, item.item_code, bin.idpacking_order_item_bin, bin.bin_code, ");
+        sb.append("      bin.bin_abs, bin.picked_qty, bin.packed_qty ");
+        sb.append("from  packing_order enc ");
         sb.append("inner join packing_order_item item on item.idpacking_order = enc.idpacking_order ");
         sb.append("inner join packing_order_item_bin bin on bin.idpacking_order_item = item.idpacking_order_item ");
         sb.append("where status = 'open' and company_name = '");
@@ -104,7 +104,7 @@ public class PackingOrderFacade {
         }
     }
 
-    public Integer OrderNumber(Integer idPackingList, String companyName, boolean testing) {
+    public Integer getOrderNumber(Integer idPackingList, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select distinct order_number order_number from packing_order where company_name = '");
         sb.append(companyName);
@@ -202,20 +202,17 @@ public class PackingOrderFacade {
 
     public List<Object[]> listOrderItems(Long idPackingOrder, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-
-        sb.append("select bin.bin_code, bin.bin_name, bin.picked_qty - bin.packed_qty AS missing_quantity, itm.item_code, bin.picked_qty, bin.packed_qty, IFNULL(rec.box_number, 0) AS box_number ");
+        sb.append("select bin.bin_code, bin.bin_name, bin.picked_qty - bin.packed_qty AS missing_quantity, itm.item_code, ");
+        sb.append("      bin.picked_qty, bin.packed_qty, 0 AS box_number ");
         sb.append("from  packing_order ord ");
         sb.append("inner join packing_order_item itm on itm.idpacking_order = ord.idpacking_order ");
         sb.append("inner join packing_order_item_bin bin on bin.idpacking_order_item = itm.idpacking_order_item ");
-        sb.append("left  join packing_list_record rec on rec.idpacking_order = ord.idpacking_order and rec.item_code = itm.item_code ");
         sb.append("where ord.company_name = '");
         sb.append(companyName);
         sb.append("' and ord.idpacking_order = ");
         sb.append(idPackingOrder);
         sb.append(" and bin.picked_qty > 0 ");
-        //sb.append(" and bin.picked_qty - bin.packed_qty > 0 ");
         sb.append(" order by bin_code, item_code");
-
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
@@ -295,7 +292,6 @@ public class PackingOrderFacade {
 
     public List<Object[]> listAllPackings(String customer, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-
         sb.append("SELECT ord.customer_id, ord.customer_name, ord.order_number, item.item_code, bin.bin_name, bin.bin_code, bin.bin_abs, bin.picked_qty, ord.idpacking_order ");
         sb.append("FROM   packing_order ord ");
         sb.append("INNER  JOIN packing_order_item item ON item.idpacking_order = ord.idpacking_order ");

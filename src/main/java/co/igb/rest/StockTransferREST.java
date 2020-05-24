@@ -251,7 +251,7 @@ public class StockTransferREST implements Serializable {
                 }
                 pickingRecordFacade.create(pickingRecord, companyName, pruebas);
                 //TODO: marcar campo de usuario 'u_picking = Y' en el detalle de la orden de venta al ítem
-                salesOrderFacade.updatePickingOrderLine(pickingRecord.getOrderNumber().intValue(), pickingRecord.getItemCode(), companyName, pruebas);
+                //salesOrderFacade.updatePickingOrderLine(pickingRecord.getOrderNumber().intValue(), pickingRecord.getItemCode(), companyName, pruebas);
                 return Response.ok(new ResponseDTO(0, pickingRecord)).build();
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Se produjo un error al grabar la operación en la base de datos MySQL. ", e);
