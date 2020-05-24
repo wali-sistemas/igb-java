@@ -230,6 +230,10 @@ public class StockTransferREST implements Serializable {
                 PickingRecord pickingRecord = new PickingRecord();
                 pickingRecord.setBinFrom(itemTransfer.getBinAbsFrom());
                 pickingRecord.setBinTo(itemTransfer.getBinAbsTo());
+
+                pickingRecord.setBinNameFrom((String) binLocationFacade.getBinCodeAndName(pickingRecord.getBinFrom(), companyName, pruebas)[0]);
+                pickingRecord.setBinNameTo((String) binLocationFacade.getBinCodeAndName(pickingRecord.getBinTo(), companyName, pruebas)[0]);
+
                 pickingRecord.setEmpId(itemTransfer.getUsername());
                 pickingRecord.setItemCode(itemTransfer.getItemCode());
                 pickingRecord.setOrderNumber(itemTransfer.getOrderNumber().longValue());

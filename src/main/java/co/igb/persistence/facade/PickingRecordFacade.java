@@ -104,7 +104,7 @@ public class PickingRecordFacade {
      */
     public Map<String, Map<Long, Integer>> listPickedItems(Integer orderNumber, Boolean excludeTemporary, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select * from picking_record where order_number = ");
+        sb.append("select item_code, quantity, bin_to from picking_record where order_number = ");
         sb.append(orderNumber);
         if (excludeTemporary) {
             sb.append(" and expires is null ");
@@ -117,9 +117,9 @@ public class PickingRecordFacade {
             Map<String, Map<Long, Integer>> pickedItems = new HashMap<>();
             List<Object[]> results = persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
             for (Object[] row : results) {
-                String itemCode = (String) row[2];
-                Integer quantity = (Integer) row[3];
-                Long binAbs = ((Integer) row[5]).longValue();
+                String itemCode = (String) row[0];
+                Integer quantity = (Integer) row[1];
+                Long binAbs = ((Integer) row[2]).longValue();
                 Map<Long, Integer> bins = pickedItems.get(itemCode);
                 if (bins == null) {
                     bins = new HashMap<>();
