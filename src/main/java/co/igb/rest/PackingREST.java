@@ -16,14 +16,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.Serializable;
@@ -239,16 +232,16 @@ public class PackingREST implements Serializable {
     }
 
     @GET
-    @Path("items/{idPackingOrder}")
+    @Path("items/{idPackingOrder}/{orderNumber}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listPackingOrderItems(@PathParam("idPackingOrder") Long idPackingOrder,
+                                          @PathParam("orderNumber") Integer orderNumber,
                                           @HeaderParam("X-Company-Name") String companyName,
                                           @HeaderParam("X-Pruebas") boolean pruebas) {
-        PackingOrder po = poFacade.find(idPackingOrder, companyName, pruebas);
-        if (po != null) {
+        if (orderNumber != null) {
             //Validando si la orden ya tiene entrega en SAP
-            Integer delivery = deliveryNoteFacade.getDocNumDeliveryNote(po.getOrderNumber(), companyName, pruebas);
+            Integer delivery = deliveryNoteFacade.getDocNumDeliveryNote(orderNumber, companyName, pruebas);
             if (delivery > 0) {
                 try {
                     //Se procede a cerrar el packing list en MySql
@@ -257,26 +250,28 @@ public class PackingREST implements Serializable {
                     CONSOLE.log(Level.WARNING, "Ocurrio una excepcion cerrando la orden #{0} en [{1}]", new Object[]{idPackingOrder, companyName});
                 }
 
-                CONSOLE.log(Level.WARNING, "Ya existe una entrega en SAP para la orden #{0}", po.getOrderNumber());
-                return Response.ok(new ResponseDTO(0, "Ya existe una entrega en SAP para la orden #" + po.getOrderNumber().toString())).build();
+                CONSOLE.log(Level.WARNING, "Ya existe una entrega en SAP para la orden #{0}", orderNumber.toString());
+                return Response.ok(new ResponseDTO(0, "Ya existe una entrega en SAP para la orden #" + orderNumber.toString())).build();
             } else {
                 //Validando si la orden se encuentra cerrada o cancelada
-                if (salesOrderFacade.getOrderStatus(po.getOrderNumber(), companyName, pruebas).equals("C")) {
+                if (salesOrderFacade.getOrderStatus(orderNumber, companyName, pruebas).equals("C")) {
                     //Se procede a cerrar el packing list en MySql
                     poFacade.closePackingOrder(idPackingOrder.intValue(), companyName, pruebas);
 
-                    CONSOLE.log(Level.WARNING, "La orden #{0} ya se encuentra cerrada en SAP.", po.getOrderNumber());
-                    return Response.ok(new ResponseDTO(0, "La orden " + po.getOrderNumber().toString() + " ya se encuentra cerrada en SAP")).build();
+                    CONSOLE.log(Level.WARNING, "La orden #{0} ya se encuentra cerrada en SAP.", orderNumber.toString());
+                    return Response.ok(new ResponseDTO(0, "La orden " + orderNumber.toString() + " ya se encuentra cerrada en SAP")).build();
                 } else {
                     CONSOLE.log(Level.INFO, "Retornando items para la packing order #{0}", idPackingOrder);
-                    List<PackingOrderItem> items = po.getItems();//poFacade.listOrderItems(idPackingOrder, companyName, pruebas);
+                    List<Object[]> items = poFacade.listOrderItems(idPackingOrder, companyName, pruebas);
                     List<Object[]> listItems = new ArrayList<>();
 
-                    for (PackingOrderItem obj : items) {
+                    for (Object[] obj : items) {
                         //Object[] attributes = itemFacade.getItemAttributes((String) obj.getItemCode(), companyName, pruebas);
-                        //listItems.add(new Object[]{obj[0], obj[1], obj[2], obj[3], obj[4], obj[5], obj[6], attributes[0], attributes[1]});
-                        listItems.add(new Object[]{obj.getBins().get(0).getBinCode(), obj.getBins().get(0).getBinName(), (obj.getBins().get(0).getPickedQty() - obj.getBins().get(0).getPackedQty()),
-                                obj.getItemCode(), obj.getBins().get(0).getPickedQty(), 0, null, null, null});
+                        listItems.add(new Object[]{obj[0], obj[1], obj[2], obj[3], obj[4], obj[5], obj[6], null, null});
+                        /*for (int i = 0; i < obj.getBins().size(); i++) {
+                            listItems.add(new Object[]{obj.getBins().get(i).getBinCode(), obj.getBins().get(i).getBinName(), (obj.getBins().get(i).getPickedQty() - obj.getBins().get(i).getPackedQty()),
+                                    obj.getItemCode(), obj.getBins().get(i).getPickedQty(), 0, null, null, null});
+                        }*/
                     }
 
                     CONSOLE.log(Level.INFO, "Se encontraron {0} items para la packing list", items.size());
