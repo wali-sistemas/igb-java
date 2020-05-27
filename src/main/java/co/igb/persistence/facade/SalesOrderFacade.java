@@ -357,7 +357,7 @@ public class SalesOrderFacade {
         sb.append("from  ORDR o ");
         sb.append("inner join RDR1 d ON d.DocEntry = o.DocEntry and d.TargetType = 15 ");
         sb.append("inner join ODLN e ON e.DocEntry = d.TrgetEntry and e.CANCELED = 'N' and e.DocStatus = 'O' and e.DocType = 'I' ");
-        sb.append("where o.DocType = 'I' and o.CANCELED = 'N' and cast(e.DocDate as Date) between cast(GETDATE()-5 as date) and cast(GETDATE() as date)");
+        sb.append("where o.DocType = 'I' and o.CANCELED = 'N' and cast(o.DocDate as Date) between cast(GETDATE()-5 as date) and cast(GETDATE() as date)");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException ex) {
