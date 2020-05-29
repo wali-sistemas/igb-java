@@ -738,6 +738,8 @@ public class Document {
     protected String uTipoNCVFE;
     @XmlElement(name = "U_tipo_NDV_FE")
     protected String uTipoNDVFE;
+    @XmlElement(name = "U_condEntrega_FE")
+    protected String uCondEntregaFE;
     @XmlElement(name = "U_DocAdicionales")
     protected String uDocAdicionales;
     //@XmlElement(name = "U_Origen")
@@ -8752,6 +8754,14 @@ public class Document {
     public void setuOrigen(String uOrigen) {
         this.uOrigen = uOrigen;
     }*/
+
+    public String getuCondEntregaFE() {
+        return uCondEntregaFE;
+    }
+
+    public void setuCondEntregaFE(String uCondEntregaFE) {
+        this.uCondEntregaFE = uCondEntregaFE;
+    }
 
     public String getuAddInFaElectronicaTipoNDFE() {
         return uAddInFaElectronicaTipoNDFE;
