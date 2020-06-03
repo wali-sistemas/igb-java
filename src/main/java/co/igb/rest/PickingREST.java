@@ -131,7 +131,6 @@ public class PickingREST implements Serializable {
     public Response findNextItemToPick(
             @PathParam("username") String username,
             @QueryParam("orderNumber") Integer orderNumber,
-            @QueryParam("position") Integer position,
             @HeaderParam("X-Company-Name") String companyName,
             @HeaderParam("X-Warehouse-Code") String warehouseCode,
             @HeaderParam("X-Pruebas") boolean pruebas) {
@@ -165,25 +164,17 @@ public class PickingREST implements Serializable {
                 continue;
             }
 
-            HashSet<String> itemsMissing = new HashSet<>();
-            List<Object[]> orderStock = new ArrayList<>();
-            for (String itemPend : pendingItems.keySet()) {
-                //Si hay items pendientes por picking, consulta su saldo y lo retorna organizado por velocidad y secuencia.
-                orderStock = soFacade.findOrdersStockAvailability(order.getOrderNumber(), position, itemPend, warehouseCode, companyName, pruebas);
-                //si no hay saldo disponible se agrega a la lista de items para cerrar la linea en la orden y continua con el sigt item.
-                if (orderStock.size() <= 0 || orderStock.isEmpty()) {
-                    itemsMissing.add(itemPend);
-                } else {
-                    break;
-                }
-            }
-
+            List<Object[]> orderStock = soFacade.findOrdersStockAvailability(order.getOrderNumber(), new ArrayList(pendingItems.keySet()), warehouseCode, companyName, pruebas);
             HashMap<String, List<Object[]>> availableStock = parseOrderAvailableStock(orderStock);
+            HashSet<String> itemsMissing = new HashSet<>();
+
             for (String pendingItemcode : pendingItems.keySet()) {
                 //Si no hay inventario y no se ha hecho picking para la referencia, la agrega a la lista de lineas para cerrar en la orden
-                if (!availableStock.containsKey(pendingItemcode) && pickedItems.containsKey(pendingItemcode)) {
+                if (!availableStock.containsKey(pendingItemcode) && !pickedItems.containsKey(pendingItemcode)) {
                     itemsMissing.add(pendingItemcode);
-                } else if (!availableStock.containsKey(pendingItemcode) && pickedItems.containsKey(pendingItemcode)) {
+                    continue;
+                }
+                if (!availableStock.containsKey(pendingItemcode) && pickedItems.containsKey(pendingItemcode)) {
                     //TODO: reprocesar orden para que se genere cierre si no hay mas items pendientes
                     salesOrderEJB.modifySalesOrderQuantity(companyName, orderDocEntry, pendingItemcode, getTotalPicked(pickedItems.get(pendingItemcode)));
                     //soFacade.modifySalesOrderQuantity(orderDocEntry, pendingItemcode, getTotalPicked(pickedItems.get(pendingItemcode)), getPriceItem(pendingItemcode, companyName, pruebas), companyName, pruebas);
@@ -229,17 +220,17 @@ public class PickingREST implements Serializable {
                 if (pendingItems.containsKey(sorted.getItemCode()) && pendingQuantity > 0) {
                     sorted.setPendingQuantity(pendingQuantity);
                     sortedStock.add(sorted);
-                    break;
                 }
             }
+            continue;
         }
 
         //seleccionar y retornar el siguiente item para picking
         if (sortedStock.isEmpty()) {
             return Response.ok(new ResponseDTO(-1, warnings)).build();
         } else {
-            return Response.ok(new ResponseDTO(0, sortedStock.first())).build();
-            //return Response.ok(new ResponseDTO(0, sortedStock)).build();
+            //return Response.ok(new ResponseDTO(0, sortedStock.first())).build();
+            return Response.ok(new ResponseDTO(0, sortedStock)).build();
         }
     }
 

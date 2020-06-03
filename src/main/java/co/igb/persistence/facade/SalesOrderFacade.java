@@ -131,48 +131,37 @@ public class SalesOrderFacade {
         return orders;
     }
 
-    public List<Object[]> findOrdersStockAvailability(Integer orderNumber, Integer position, String itemCode, String warehouseCode, String schemaName, boolean testing) {
+    public List<Object[]> findOrdersStockAvailability(Integer orderNumber, List<String> itemCodes, String warehouseCode, String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-
-        sb.append("select t.itemCode, t.openQuantity, t.quantity, t.binAbs, t.available, t.binCode, t.itemName, t.orderNumber, t.velocidad, t.secuencia, t.binType, t.LineNumCount from (");
-        sb.append("select ROW_NUMBER() OVER(ORDER BY ubicacion.attr2val, cast(ubicacion.attr3val as int)) as ordenLogico, cast(detalle.itemCode as varchar(20)) itemCode, cast(detalle.openQty as int) openQuantity, ");
-        sb.append("cast(detalle.quantity as int) quantity, cast(saldo.binabs as int) binAbs, cast(saldo.onhandqty as int) available, cast(ubicacion.bincode as varchar(50)) binCode, ");
+        sb.append("select cast(detalle.itemCode as varchar(20)) itemCode, cast(detalle.openQty as int) openQuantity, cast(detalle.quantity as int) quantity, ");
+        sb.append("cast(saldo.binabs as int) binAbs, cast(saldo.onhandqty as int) available, cast(ubicacion.bincode as varchar(50)) binCode, ");
         sb.append("cast(detalle.Dscription as varchar(100)) itemName, cast(orden.docnum as int) orderNumber, ");
         sb.append("cast(ubicacion.attr2val as varchar(5)) velocidad, cast(ubicacion.attr3val as int) secuencia, ");
-        sb.append("cast(ubicacion.attr1val as varchar(10)) binType, ");
-        sb.append("cast((select COUNT(ubicacion.bincode) from RDR1 d inner join OIBQ saldo on saldo.ItemCode = d.ItemCode and saldo.WhsCode = '01' and saldo.OnHandQty > 0 ");
-        sb.append("inner join OBIN ubicacion on ubicacion.absentry = saldo.binabs and ubicacion.SysBin = 'N' and ubicacion.Attr1Val IN ('PICKING','STORAGE') ");
-        sb.append("where d.LineStatus = 'O' /*and d.u_Picking = 'N'*/ and d.DocEntry = detalle.DocEntry and d.ItemCode = '");
-        sb.append(itemCode);
-        sb.append("') as int) as LineNumCount from ordr orden inner join rdr1 detalle on detalle.docentry = orden.docentry and detalle.lineStatus = 'O' /*and detalle.u_Picking = 'N'*/ ");
-
-        if (itemCode != null && !itemCode.isEmpty()) {
-            sb.append("and detalle.itemcode = '");
-            sb.append(itemCode);
-            /*for (String itemCode : itemCodes) {
+        sb.append("cast(ubicacion.attr1val as varchar(10)) binType ");
+        sb.append("from ordr orden inner join rdr1 detalle on detalle.docentry = orden.docentry and detalle.lineStatus = 'O' ");
+        if (itemCodes != null && !itemCodes.isEmpty()) {
+            sb.append("and detalle.itemcode in (");
+            for (String itemCode : itemCodes) {
                 sb.append("'");
                 sb.append(itemCode);
                 sb.append("',");
-            }*/
-            //sb.deleteCharAt(sb.length() - 1);
-            //sb.append(") ");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            sb.append(") ");
         }
-
-        sb.append("' inner join OIBQ saldo on saldo.ItemCode = detalle.ItemCode and saldo.WhsCode = '");
+        sb.append("inner join OIBQ saldo on saldo.ItemCode = detalle.ItemCode and saldo.WhsCode = '");
         sb.append(warehouseCode);
-        sb.append("' and saldo.OnHandQty > 0 inner join OBIN ubicacion on ubicacion.absentry = saldo.binabs and ubicacion.SysBin = 'N' ");
+        sb.append("' and saldo.OnHandQty > 0 inner join obin ubicacion on ubicacion.absentry = saldo.binabs and ubicacion.SysBin = 'N' ");
         sb.append("and ubicacion.Attr1Val IN ('PICKING','STORAGE') where orden.docnum = ");
         sb.append(orderNumber);
-        sb.append(") as t where t.ordenLogico = ");
-        sb.append(position);
-        sb.append(" order by t.velocidad, t.secuencia ");
+        sb.append(" order by velocidad, secuencia ");
+        CONSOLE.log(Level.FINE, sb.toString());
         try {
-            return persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
-        } catch (NoResultException ex) {
+            return persistenceConf.chooseSchema(schemaName, testing, "mssql").createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar el inventario para lis items de las ordenes asignadas. ", e);
+            return new ArrayList();
         }
-        return new ArrayList();
     }
 
     public List<Object[]> findOrdersById(List<Integer> orderIds, String schemaName, boolean testing) {
