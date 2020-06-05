@@ -742,6 +742,8 @@ public class Document {
     protected String uCondEntregaFE;
     @XmlElement(name = "U_DocAdicionales")
     protected String uDocAdicionales;
+    @XmlElement(name = "U_SHIPPING")
+    protected String uShipping;
     //@XmlElement(name = "U_Origen")
     //protected String uOrigen;
     @XmlElement(name = "Document_ApprovalRequests")
@@ -8745,6 +8747,14 @@ public class Document {
 
     public void setuCantConte(Integer uCantConte) {
         this.uCantConte = uCantConte;
+    }
+
+    public String getuShipping() {
+        return uShipping;
+    }
+
+    public void setuShipping(String uShipping) {
+        this.uShipping = uShipping;
     }
 
     /*public String getuOrigen() {
