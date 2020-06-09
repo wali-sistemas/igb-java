@@ -316,11 +316,14 @@ public class InvoiceREST implements Serializable {
                 BigDecimal valueRet = (BigDecimal) row[1];
                 BigDecimal baseMinima = (BigDecimal) row[2];
                 BigDecimal base = new BigDecimal(0);
+                BigDecimal baseImpuesto = new BigDecimal(0);
                 //TODO: Clientes con (R/IVA VENTAS) su base parte del impuesto
                 if (row[3].equals("IVA")) {
                     base = invoice.getVatSum().multiply(valueRet.divide(BigDecimal.valueOf(100)));
+                    baseImpuesto = invoice.getVatSum();
                 } else {
                     base = invoice.getBaseAmount().multiply(valueRet.divide(BigDecimal.valueOf(100)));
+                    baseImpuesto = invoice.getBaseAmount();
                 }
 
                 Document.WithholdingTaxDataCollection.WithholdingTaxData retencion = new Document.WithholdingTaxDataCollection.WithholdingTaxData();
@@ -330,11 +333,11 @@ public class InvoiceREST implements Serializable {
                     retencion.setWTCode(row[0].toString());
                     retencion.setTaxableAmount(base.setScale(0, RoundingMode.CEILING));
                     retencion.setWTAmount(base.setScale(0, RoundingMode.CEILING));
-                    retencion.setuBaseME(invoice.getBaseAmount());
+                    retencion.setuBaseME(baseImpuesto.setScale(0, RoundingMode.CEILING));
                     retencion.setuRetME(base.setScale(0, RoundingMode.CEILING));
-                    retencion.setuBaseML(invoice.getBaseAmount());
+                    retencion.setuBaseML(baseImpuesto.setScale(0, RoundingMode.CEILING));
                     retencion.setuRetML(base.setScale(0, RoundingMode.CEILING));
-                    retencion.setuBaseMS(invoice.getBaseAmount());
+                    retencion.setuBaseMS(baseImpuesto.setScale(0, RoundingMode.CEILING));
                     retencion.setuRetMS(base.setScale(0, RoundingMode.CEILING));
                     retencion.setuTarifa(valueRet.doubleValue());
                     retencion.setuFuente("A");
