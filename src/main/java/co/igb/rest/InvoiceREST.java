@@ -242,6 +242,7 @@ public class InvoiceREST implements Serializable {
                 //invoice.setuOrigen("W");
                 invoice.setBaseAmount(deliveryValorNeto);
                 invoice.setVatSum(deliveryImpuesto);
+                invoice.setuWUID(getPropertyValue("invoice.wuid", companyName));
             }
 
             if (deliveryComment != null) {

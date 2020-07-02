@@ -2255,6 +2255,8 @@ public class Document {
     protected String uSourceEntry;
     @XmlElement(namespace = "", name = "U_QCRefNo")
     protected Long uqcRefNo;
+    @XmlElement(namespace = "", name = "U_WUID")
+    protected String uWUID;
     /*@XmlElement(namespace = "", name = "U_Origen")
     protected String uOrigen;*/
     @XmlElement(namespace = "", name = "Document_ApprovalRequests")
@@ -6236,6 +6238,14 @@ public class Document {
      */
     public void setUQCRefNo(Long value) {
         this.uqcRefNo = value;
+    }
+
+    public String getuWUID() {
+        return uWUID;
+    }
+
+    public void setuWUID(String uWUID) {
+        this.uWUID = uWUID;
     }
 
     /*public String getuOrigen() {

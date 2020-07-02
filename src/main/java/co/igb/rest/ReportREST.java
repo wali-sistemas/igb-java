@@ -367,7 +367,7 @@ public class ReportREST implements Serializable {
         List<Object[]> listOrders = salesOrderFacade.getOrderStates(companyName, pruebas);
         if (listOrders != null || listOrders.size() <= 0) {
             BigDecimal totalInvoice = invoiceFacade.getInvoiceTotal(companyName, pruebas);
-            BigDecimal totalOrder = salesOrderFacade.getTotalOrderMonth(companyName,pruebas);
+            BigDecimal totalOrder = salesOrderFacade.getTotalOrderMonth(companyName, pruebas);
             List<StatusOrderDTO> listStatusOrder = new ArrayList<>();
             for (Object[] row : listOrders) {
                 listStatusOrder.add(new StatusOrderDTO((String) row[0], (Integer) row[1], (BigDecimal) row[2], totalInvoice, totalOrder));
@@ -378,6 +378,15 @@ public class ReportREST implements Serializable {
             CONSOLE.log(Level.SEVERE, "No se encontraron estados de ordenes para mostrar en [" + companyName + "]");
             return Response.ok(new ResponseDTO(-1, "No se encontraron estados de ordenes para mostrar.")).build();
         }
+    }
+
+    @GET
+    @Path("orders-of-day")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response listOrdersOfDay(@HeaderParam("X-Company-Name") String companyName,
+                                    @HeaderParam("X-Pruebas") boolean pruebas) {
+        return Response.ok(salesOrderFacade.listOrdersOfDay(companyName, pruebas)).build();
     }
 
     @POST
