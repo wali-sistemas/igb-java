@@ -356,6 +356,24 @@ public class SalesOrderFacade {
         return null;
     }
 
+    public List<Object[]> listOrdersOfDay(String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(enc.DocDate as date) as Fecha, cast(COUNT(enc.DocNum) as int) as TotalOrder, ");
+        sb.append(" (select cast(COUNT(DocNum) as int) from ORDR e where DocStatus = 'O' and cast(e.DocDate as date) = cast(enc.DocDate as date)) as Abiertas, ");
+        sb.append(" (select cast(COUNT(DocNum) as int) from ORDR e where DocStatus = 'C' and cast(e.DocDate as date) = cast(enc.DocDate as date)) as Cerradas, ");
+        sb.append(" SUM(cast(enc.DocTotal as numeric(18,2))) as Monto ");
+        sb.append("from ORDR enc ");
+        sb.append("where cast(enc.DocDate as date) between cast(GETDATE()-4 as date) and cast(GETDATE() as date) ");
+        sb.append("group by enc.DocDate ");
+        try {
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando las ordenes del dia para la empresa " + companyName, e);
+        }
+        return new ArrayList<>();
+    }
+
     /*public void updatePickingOrderLine(Integer orderEntry, String item, String companyName, boolean testing) {
         EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
