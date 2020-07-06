@@ -2257,6 +2257,10 @@ public class Document {
     protected Long uqcRefNo;
     @XmlElement(namespace = "", name = "U_WUID")
     protected String uWUID;
+    @XmlElement(name = "U_MedioPg")
+    protected String uMedioPg;
+    @XmlElement(name = "U_Plantilla")
+    protected Integer uPlantilla;
     /*@XmlElement(namespace = "", name = "U_Origen")
     protected String uOrigen;*/
     @XmlElement(namespace = "", name = "Document_ApprovalRequests")
@@ -6246,6 +6250,22 @@ public class Document {
 
     public void setuWUID(String uWUID) {
         this.uWUID = uWUID;
+    }
+
+    public String getuMedioPg() {
+        return uMedioPg;
+    }
+
+    public void setuMedioPg(String uMedioPg) {
+        this.uMedioPg = uMedioPg;
+    }
+
+    public Integer getuPlantilla() {
+        return uPlantilla;
+    }
+
+    public void setuPlantilla(Integer uPlantilla) {
+        this.uPlantilla = uPlantilla;
     }
 
     /*public String getuOrigen() {

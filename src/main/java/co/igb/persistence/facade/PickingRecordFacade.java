@@ -56,48 +56,6 @@ public class PickingRecordFacade {
     }
 
     /**
-     * @param orderNumbers
-     * @param companyName
-     * @return map with structure [orderNumber->[itemcode->quantity]]
-     */
-    public Map<Integer, Map<String, Integer>> listPickedItems(List<Integer> orderNumbers, String companyName, boolean testing) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("select * from picking_record where order_number in (");
-        for (Integer orderNumber : orderNumbers) {
-            sb.append(orderNumber);
-            sb.append(",");
-        }
-        sb.deleteCharAt(sb.length() - 1);
-        sb.append(") and company_name = '");
-        sb.append(companyName);
-        sb.append("'");
-        CONSOLE.log(Level.FINE, sb.toString());
-        try {
-            Map<Integer, Map<String, Integer>> pickedItems = new HashMap<>();
-            List<Object[]> results = persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
-            for (Object[] row : results) {
-                Integer orderNumber = (Integer) row[1];
-                String itemCode = (String) row[2];
-                Integer quantity = (Integer) row[3];
-                Map<String, Integer> items = pickedItems.get(orderNumber);
-                if (items == null) {
-                    items = new HashMap<>();
-                    items.put(itemCode, quantity);
-                } else if (!items.containsKey(itemCode)) {
-                    items.put(itemCode, quantity);
-                } else {
-                    items.put(itemCode, items.get(itemCode) + quantity);
-                }
-                pickedItems.put(orderNumber, items);
-            }
-            return pickedItems;
-        } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "There was an error loading already picked items. ", e);
-            return new HashMap<>();
-        }
-    }
-
-    /**
      * @param orderNumber
      * @param companyName
      * @return map with structure [itemcode->[bin->quantity]]

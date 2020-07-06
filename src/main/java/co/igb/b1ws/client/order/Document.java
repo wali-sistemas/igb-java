@@ -744,6 +744,10 @@ public class Document {
     protected String uDocAdicionales;
     @XmlElement(name = "U_SHIPPING")
     protected String uShipping;
+    @XmlElement(name = "U_MedioPg")
+    protected String uMedioPg;
+    @XmlElement(name = "U_Plantilla")
+    protected Integer uPlantilla;
     //@XmlElement(name = "U_Origen")
     //protected String uOrigen;
     @XmlElement(name = "Document_ApprovalRequests")
@@ -8755,6 +8759,22 @@ public class Document {
 
     public void setuShipping(String uShipping) {
         this.uShipping = uShipping;
+    }
+
+    public String getuMedioPg() {
+        return uMedioPg;
+    }
+
+    public void setuMedioPg(String uMedioPg) {
+        this.uMedioPg = uMedioPg;
+    }
+
+    public Integer getuPlantilla() {
+        return uPlantilla;
+    }
+
+    public void setuPlantilla(Integer uPlantilla) {
+        this.uPlantilla = uPlantilla;
     }
 
     /*public String getuOrigen() {
