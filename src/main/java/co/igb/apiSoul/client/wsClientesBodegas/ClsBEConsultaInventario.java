@@ -1,5 +1,5 @@
 
-package co.igb.apiSoul.client;
+package co.igb.apiSoul.client.wsClientesBodegas;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

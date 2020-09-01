@@ -1,5 +1,5 @@
 
-package co.igb.apiSoul.client;
+package co.igb.apiSoul.client.wsClientesBodegas;
 
 import java.net.MalformedURLException;
 import java.net.URL;

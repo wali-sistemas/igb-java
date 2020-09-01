@@ -1,5 +1,5 @@
 
-package co.igb.apiSoul.client;
+package co.igb.apiSoul.client.wsClientesBodegas;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;

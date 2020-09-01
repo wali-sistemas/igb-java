@@ -1,5 +1,5 @@
 
-package co.igb.apiSoul.client;
+package co.igb.apiSoul.client.wsClientesBodegas;
 
 import java.util.ArrayList;
 import java.util.List;
