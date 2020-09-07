@@ -90,10 +90,12 @@ public class PickingRecordFacade {
                 pickedItems.put(itemCode, bins);
             }
             return pickedItems;
+        } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "There was an error loading already picked items. ", e);
-            return new HashMap<>();
+            //return new HashMap<>();
         }
+        return null;
     }
 
     public List<Integer> listPickingsRecords(String companyName, boolean testing) {

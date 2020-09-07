@@ -70,4 +70,6 @@ public class Constants {
     public static final String BIN_ACTION_TYPE_TO = "batToWarehouse";
     public static final long CODE_FLETE_GRABABLE = 1l;
     public static final String[] LDAP_ATTR_IDS = {"name", "givenName", "description", "sAMAccountname", "userPrincipalName", "sn", "distinguishedName", "cn", "mail", "memberOf"};
+    public static final String SOUL_USER = "811011909";
+    public static final String SOUL_PASSWORD = "IgbMp200*";
 }

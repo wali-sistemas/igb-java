@@ -200,6 +200,8 @@ public class IGBApplicationBean implements Serializable {
     }
 
     public static void main(String[] args) {
+        String v = "Mtz2020*";
+        args = v.split("");
         System.out.println(Arrays.toString(args));
 
         StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();

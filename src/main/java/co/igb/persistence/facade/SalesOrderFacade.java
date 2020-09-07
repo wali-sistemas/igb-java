@@ -217,11 +217,12 @@ public class SalesOrderFacade {
             return results;
         } catch (NoResultException e) {
             CONSOLE.log(Level.WARNING, "No se encontraron items pendientes para la orden {0}", orderNumber);
-            return new LinkedHashMap<>();
+            //return new LinkedHashMap<>();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar los items pendientes de la orden. ", e);
-            return new LinkedHashMap<>();
+            //return new LinkedHashMap<>();
         }
+        return null;
     }
 
     public List<Object[]> getOrderStates(String schemaName, boolean testing) {

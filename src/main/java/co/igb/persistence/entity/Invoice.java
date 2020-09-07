@@ -25,6 +25,9 @@ public class Invoice implements Serializable {
     @Basic(optional = false)
     @Column(name = "U_TOT_CAJ")
     private Integer uTotalCaja;
+    @Basic(optional = false)
+    @Column(name = "U_UBIC1")
+    private String uGuia;
 
     public Invoice() {
     }
@@ -61,6 +64,14 @@ public class Invoice implements Serializable {
         this.uTotalCaja = uTotalCaja;
     }
 
+    public String getuGuia() {
+        return uGuia;
+    }
+
+    public void setuGuia(String uGuia) {
+        this.uGuia = uGuia;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -85,6 +96,7 @@ public class Invoice implements Serializable {
                 ", docNum=" + docNum +
                 ", uShipping=" + uShipping +
                 ", uTotalCaja=" + uTotalCaja +
+                ", uGuia=" + uGuia +
                 '}';
     }
 }
