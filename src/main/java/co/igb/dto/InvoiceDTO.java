@@ -18,11 +18,12 @@ public class InvoiceDTO {
     private String street;
     private String depart;
     private String city;
+    private String codCity;
 
     public InvoiceDTO() {
     }
 
-    public InvoiceDTO(Date docDate, Integer box, String docNum, String cardCode, String cardName, String transport, String street, String depart, String city) {
+    public InvoiceDTO(Date docDate, Integer box, String docNum, String cardCode, String cardName, String transport, String street, String depart, String city, String codCity) {
         this.docDate = docDate;
         this.box = box;
         this.docNum = docNum;
@@ -32,6 +33,7 @@ public class InvoiceDTO {
         this.street = street;
         this.depart = depart;
         this.city = city;
+        this.codCity = codCity;
     }
 
     public Date getDocDate() {
@@ -106,6 +108,14 @@ public class InvoiceDTO {
         this.city = city;
     }
 
+    public String getCodCity() {
+        return codCity;
+    }
+
+    public void setCodCity(String codCity) {
+        this.codCity = codCity;
+    }
+
     @Override
     public String toString() {
         return "InvoiceDTO{" +
@@ -118,6 +128,7 @@ public class InvoiceDTO {
                 ", street='" + street + '\'' +
                 ", depart='" + depart + '\'' +
                 ", city='" + city + '\'' +
+                ", codCity='" + codCity + '\'' +
                 '}';
     }
 }

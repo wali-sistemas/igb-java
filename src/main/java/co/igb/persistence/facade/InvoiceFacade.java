@@ -57,28 +57,28 @@ public class InvoiceFacade {
 
     public List<Object[]> findListInvoicesShipping(String transport, String invoice, String companyName, String warehouseCode, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select top 12 CAST(f.DocDate as date) as DocDate, CAST(f.U_TOT_CAJ as int) as Box, CAST(f.DocNum as varchar(10)) as DocNum, ");
-        sb.append("       CAST(f.CardCode as varchar(20)) as CardCode, CAST(f.CardName as varchar(100)) as CardName, ");
-        sb.append("       CAST(t.Name as varchar(15)) as Transport, CAST(d.StreetS as varchar(100)) as Street, ");
-        sb.append("       CAST(l.Name as varchar(50)) as Depart, CAST(d.CityS as varchar(50)) as City ");
-        sb.append("from   OINV f ");
-        sb.append("inner  join INV12 d ON d.DocEntry = f.DocEntry ");
-        sb.append("inner  join [@TRANSP] t ON t.Code = f.U_TRANSP ");
-        sb.append("inner  join OCST l ON l.Code = d.StateS and l.Country = 'CO' ");
-        sb.append("where  (select top 1 d.WhsCode from INV1 d where d.DocEntry = f.DocEntry) = '");
+        sb.append("select top 12 CAST(f.DocDate as date)as DocDate,CAST(f.U_TOT_CAJ as int)as Box,CAST(f.DocNum as varchar(10))as DocNum, ");
+        sb.append("       CAST(f.CardCode as varchar(20))as CardCode,CAST(f.CardName as varchar(100))as CardName, ");
+        sb.append("       CAST(t.Name as varchar(15))as Transport,CAST(d.StreetS as varchar(100))as Street, ");
+        sb.append("       CAST(l.Name as varchar(50))as Depart,CAST(d.CityS as varchar(50))as City,CAST(d.BlockS as varchar(20))as CodCity ");
+        sb.append("from  OINV f ");
+        sb.append("inner join INV12 d ON d.DocEntry = f.DocEntry ");
+        sb.append("inner join [@TRANSP] t ON t.Code = f.U_TRANSP ");
+        sb.append("inner join OCST l ON l.Code = d.StateS and l.Country = 'CO' ");
+        sb.append("where (select top 1 d.WhsCode from INV1 d where d.DocEntry = f.DocEntry)='");
         sb.append(warehouseCode);
-        sb.append("' and f.U_SHIPPING = 'N' and f.U_TOT_CAJ > 0 ");
+        sb.append("' and f.U_SHIPPING='N' and f.U_TOT_CAJ>0 ");
         if (!transport.equals("*")) {
-            sb.append("and cast(t.Name as varchar(15)) = '");
+            sb.append("and cast(t.Name as varchar(15))='");
             sb.append(transport);
             sb.append("' ");
         }
         if (!invoice.isEmpty()) {
-            sb.append("and f.DocNum = '");
+            sb.append("and f.DocNum='");
             sb.append(invoice);
             sb.append("' ");
         }
-        sb.append("order  by f.DocDate desc, t.Name ASC");
+        sb.append("order by f.DocDate desc,t.Name ASC");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException e) {
@@ -105,31 +105,45 @@ public class InvoiceFacade {
         return null;
     }
 
-    public void updateFieldShipping(Integer DocNum, String companyName, boolean testing) {
+    public void updateFieldShipping(Integer docNum, String companyName, boolean testing) {
         EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaUpdate<Invoice> cu = cb.createCriteriaUpdate(Invoice.class);
         Root<Invoice> root = cu.from(Invoice.class);
         cu.set(root.get(Invoice_.uShipping), 'S');
-        cu.where(cb.equal(root.get(Invoice_.docNum), DocNum));
+        cu.where(cb.equal(root.get(Invoice_.docNum), docNum));
         try {
             em.createQuery(cu).executeUpdate();
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando el shipping para la factura #[" + DocNum.toString() + "]");
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando el shipping para la factura #[" + docNum.toString() + "]");
         }
     }
 
-    public void updateFielUser(Integer DocNum, Integer totalBox, String companyName, boolean testing) {
+    public void updateFieldTotalBox(Integer docNum, Integer totalBox, String companyName, boolean testing) {
         EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaUpdate<Invoice> cu = cb.createCriteriaUpdate(Invoice.class);
         Root<Invoice> root = cu.from(Invoice.class);
         cu.set(root.get(Invoice_.uTotalCaja), totalBox);
-        cu.where(cb.equal(root.get(Invoice_.docNum), DocNum));
+        cu.where(cb.equal(root.get(Invoice_.docNum), docNum));
         try {
             em.createQuery(cu).executeUpdate();
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el total de cajas para la factura #[", DocNum.toString() + "]");
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el total de cajas para la factura #[", docNum.toString() + "]");
+        }
+    }
+
+    public void updateNroGuia(String docNums, String guia, String companyName, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaUpdate<Invoice> cu = cb.createCriteriaUpdate(Invoice.class);
+        Root<Invoice> root = cu.from(Invoice.class);
+        cu.set(root.get(Invoice_.uGuia), guia);
+        cu.where(cb.equal(root.get(Invoice_.docNum), docNums));
+        try {
+            em.createQuery(cu).executeUpdate();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar la guia para la(s) factura(s) #[", docNums.toString() + "]");
         }
     }
 

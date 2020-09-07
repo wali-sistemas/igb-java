@@ -216,7 +216,7 @@ public class ZebraPrintREST {
         }
         //TODO: Asignar campos de usuario (u_ToTal_Caj) en la factura
         if (dto.isAssigBoxInvoice()) {
-            invoiceFacade.updateFielUser(invoice, dto.getBoxNumber(), companyName, pruebas);
+            invoiceFacade.updateFieldTotalBox(invoice, dto.getBoxNumber(), companyName, pruebas);
         }
         boolean allSucceeded = true;
         for (int i = 1; i <= dto.getBoxNumber(); i++) {

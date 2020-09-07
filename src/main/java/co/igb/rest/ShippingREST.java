@@ -1,8 +1,8 @@
 package co.igb.rest;
 
-import co.igb.dto.InvoiceDTO;
-import co.igb.dto.ResponseDTO;
-import co.igb.dto.ShippingDTO;
+import co.igb.apiTransport.client.SaferboTransportClient;
+import co.igb.dto.*;
+import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.entity.ShippingOrder;
 import co.igb.persistence.facade.*;
 import co.igb.util.Constants;
@@ -11,6 +11,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -29,6 +30,8 @@ import java.util.logging.Logger;
 public class ShippingREST implements Serializable {
     private static final Logger CONSOLE = Logger.getLogger(ShippingREST.class.getSimpleName());
 
+    @Inject
+    private IGBApplicationBean appBean;
     @EJB
     private InvoiceFacade invoiceFacade;
     @EJB
@@ -120,6 +123,7 @@ public class ShippingREST implements Serializable {
             dto.setStreet((String) row[6]);
             dto.setDepart((String) row[7]);
             dto.setCity((String) row[8]);
+            dto.setCodCity((String) row[9]);
 
             shipping.add(dto);
         }
@@ -172,5 +176,35 @@ public class ShippingREST implements Serializable {
         }
 
         return Response.ok(new ResponseDTO(0, detailBox)).build();
+    }
+
+    @POST
+    @Path("add-guia-saferbo")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response createGuiaSaferbo(ApiSaferboDTO dto,
+                                      @HeaderParam("X-Company-Name") String companyName,
+                                      @HeaderParam("X-Pruebas") boolean pruebas) {
+        SaferboTransportClient saferboClient = new SaferboTransportClient(appBean.obtenerValorPropiedad("igb.api.saferbo"));
+        ResponseCrearGuiaDTO respREST = null;
+        respREST = saferboClient.createGuia(dto);
+
+
+        if (!respREST.getNumeroGuia().isEmpty() || !respREST.getNumeroGuia().equals(null)) {
+            CONSOLE.log(Level.INFO, "Creación de guia saferbo exitosa #{0}", respREST.getNumeroGuia());
+
+            //Actualizar en las facturas de SAP la guia campo
+            try {
+                invoiceFacade.updateNroGuia(dto.getFactura(), respREST.getNumeroGuia(), companyName, pruebas);
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar la guia en SAP para la empresa " + companyName);
+            }
+
+            return Response.ok(new ResponseDTO(0, respREST.getNumeroGuia())).build();
+        } else {
+            CONSOLE.log(Level.SEVERE, respREST.getNumeroGuia());
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error al crear la guia para la transportadora saferbo.")).build();
+        }
     }
 }

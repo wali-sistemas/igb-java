@@ -101,6 +101,16 @@ public class PickingREST implements Serializable {
         //consultar los items pendientes por entregar de cada orden
         LinkedHashMap<String, Integer> pendingItems = soFacade.listPendingItems(orderNumber, companyName, pruebas);
 
+        //TODO: validar que si retorne datos de las dos instancias
+        if (pickedItems.equals(null)) {
+            CONSOLE.log(Level.WARNING, "Ocurrio un error consultando los items pickineados instancia(MySQL)");
+            return null;
+        }
+        if (pendingItems.equals(null)) {
+            CONSOLE.log(Level.WARNING, "Ocurrio un error consultando los items pendientes instancia(SAP)");
+            return null;
+        }
+
         //si un item existe en la lista de picking pero no en la de pendientes, no se tiene en cuenta
         for (int i = 0; i < pendingItems.keySet().size(); i++) {
             String itemCode = (String) pendingItems.keySet().toArray()[i];
@@ -154,13 +164,24 @@ public class PickingREST implements Serializable {
 
             Integer orderDocEntry = soFacade.getOrderDocEntry(order.getOrderNumber(), companyName, pruebas);
             Object[] pickingStatus = processPickingStatus(order.getOrderNumber(), false, companyName, pruebas);
+            //TODO: validar datos consultados de las dos instancias
+            if (pickingStatus.equals(null)) {
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error consultandos datos de alguna de las instancias(SAP-MySQL).")).build();
+            }
+
             LinkedHashMap<String, Integer> pendingItems = (LinkedHashMap<String, Integer>) pickingStatus[0];
             HashMap<String, Map<Long, Integer>> pickedItems = (HashMap<String, Map<Long, Integer>>) pickingStatus[1];
             TreeSet<String> skipped = (TreeSet<String>) pickingStatus[2];
 
             if (pendingItems == null || pendingItems.isEmpty()) {
                 CONSOLE.log(Level.WARNING, "La orden {0} no tiene items pendientes por despachar y se marca como cerrada. ", order.getOrderNumber());
-                closeAndPack(order, pickedItems, warehouseCode, companyName, pruebas);
+                try {
+                    closeAndPack(order, pickedItems, warehouseCode, companyName, pruebas);
+                } catch (Exception e) {
+                    CONSOLE.log(Level.SEVERE, "Ocurrio un error cerrando la orden {0}", order);
+                    return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la orden " + order)).build();
+                }
+
                 continue;
             }
 
@@ -201,7 +222,12 @@ public class PickingREST implements Serializable {
                 if (itemsMissing.size() == pendingItems.size()) {
                     //Finaliza la orden de picking ya que no quedan items pendientes
                     CONSOLE.log(Level.WARNING, "La orden {0} no tiene saldo en picking para los items pendientes por despachar y se marca como cerrada. ", order.getOrderNumber());
-                    closeAndPack(order, pickedItems, warehouseCode, companyName, pruebas);
+                    try {
+                        closeAndPack(order, pickedItems, warehouseCode, companyName, pruebas);
+                    } catch (Exception e) {
+                        CONSOLE.log(Level.SEVERE, "Ocurrio un error cerrando la orden {0}", order);
+                        return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la orden " + order)).build();
+                    }
                     continue;
                 }
             }
@@ -290,8 +316,15 @@ public class PickingREST implements Serializable {
         for (AssignedOrder order : orders) {
             CONSOLE.log(Level.INFO, "Procesando estado de picking para {0}", order.toString());
             Object[] pickingStatus = processPickingStatus(order.getOrderNumber(), true, companyName, pruebas);
-            Map<String, Integer> pendingItems = (Map<String, Integer>) pickingStatus[0];
-            Map<String, Map<Long, Integer>> pickedItems = (Map<String, Map<Long, Integer>>) pickingStatus[1];
+            //TODO: validar datos consultados de las dos instancias
+            if (pickingStatus.equals(null)) {
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error consultandos datos de alguna de las instancias(SAP-MySQL).")).build();
+            }
+
+            //Map<String, Integer> pendingItems = (Map<String, Integer>) pickingStatus[0];
+            LinkedHashMap<String, Integer> pendingItems = (LinkedHashMap<String, Integer>) pickingStatus[0];
+            //Map<String, Map<Long, Integer>> pickedItems = (Map<String, Map<Long, Integer>>) pickingStatus[1];
+            HashMap<String, Map<Long, Integer>> pickedItems = (HashMap<String, Map<Long, Integer>>) pickingStatus[1];
 
             //TODO: validar si este mapa trae items con valor cero o si solo incluye items que tengan algun valor
             //validar que todos los items pendientes tengan cantidad igual a cero
@@ -304,7 +337,12 @@ public class PickingREST implements Serializable {
                 }
             }
 
-            closeAndPack(order, pickedItems, warehouseCode, companyName, pruebas);
+            try {
+                closeAndPack(order, pickedItems, warehouseCode, companyName, pruebas);
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error cerrando la orden {0}", order);
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la orden " + order)).build();
+            }
             /*
             try {
                 moveItemsToPackingArea(order.getOrderNumber(), companyName);
