@@ -43,10 +43,10 @@ public class SoulREST implements Serializable {
     public Response getCurrentStock(@HeaderParam("X-Company-Name") String companyName,
                                     @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Iniciando consulta de stock [WebService de Magnum]");
-        List<ClsBEConsultaInventario> list = consultarInventario(Constants.SOUL_USER, Constants.SOUL_PASSWORD);
+        List<ClsBEConsultaInventarioBodega> list = consultarInventarioBodega(Constants.SOUL_USER, Constants.SOUL_PASSWORD);
 
         List<ApiSoulStockDTO> stock = new ArrayList<>();
-        for (ClsBEConsultaInventario obj : list) {
+        for (ClsBEConsultaInventarioBodega obj : list) {
             ApiSoulStockDTO dto = new ApiSoulStockDTO();
             dto.setSku(obj.getSku());
             dto.setCantidadDisponible(obj.getCantidadDisponible());
@@ -72,10 +72,10 @@ public class SoulREST implements Serializable {
         return Response.ok(stock).build();
     }
 
-    private List<ClsBEConsultaInventario> consultarInventario(String user, String password) {
+    private List<ClsBEConsultaInventarioBodega> consultarInventarioBodega(String user, String password) {
         WsClientesBodegas service = new WsClientesBodegas();
         CONSOLE.log(Level.INFO, "Conectando con WebService de [Magnum-Soul]");
-        RespConsultaInventario response = service.getWsClientesBodegasSoap12().consultaInventario(user, password);
+        RespConsultaInventarioBodega response = service.getWsClientesBodegasSoap12().consultaInventarioBodega(user, password);
         return response.getConsultasInventario().getConsultaInventario();
     }
 }

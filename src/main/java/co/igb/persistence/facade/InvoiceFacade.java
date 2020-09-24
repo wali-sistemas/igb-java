@@ -175,13 +175,13 @@ public class InvoiceFacade {
         sb.append("       CAST(SUM((CAST(d.LineTotal AS numeric(18,0)) - (CAST(d.LineTotal AS numeric(18,0)) * CAST(f.DiscPrcnt AS int))/100)) as numeric(18,0)) AS valorTotalVenta, 0 AS valorTotalNota ");
         sb.append("from OINV f ");
         sb.append("Inner Join INV1 d ON d.DocEntry = f.DocEntry ");
-        sb.append("Where f.DocType = 'I' and YEAR(f.DocDate) between YEAR(DATEADD (YEAR, -4, GETDATE())) AND YEAR(GETDATE()) Group by YEAR(f.DocDate) ");
+        sb.append("Where f.DocType = 'I' and YEAR(f.DocDate) between YEAR(DATEADD (YEAR, -3, GETDATE())) AND YEAR(GETDATE()) Group by YEAR(f.DocDate) ");
         sb.append("UNION ALL ");
         sb.append("select 'NC' as Doc, CAST(YEAR(n.DocDate) as varchar(4)) AS año, 0 AS costoTotalVenta, CAST(SUM((CAST(d.Quantity AS int) * CAST(d.StockPrice AS numeric(18,0)))) as numeric(18,0)) AS costoTotalNota, 0 AS valorTotalVenta, ");
         sb.append("       CAST(SUM((CAST(d.LineTotal AS numeric(18,0)) - (CAST(d.LineTotal AS numeric(18,0)) * CAST(n.DiscPrcnt AS int))/100)) as numeric(18,0)) AS valorTotalNota ");
         sb.append("from ORIN n ");
         sb.append("Inner Join RIN1 d ON d.DocEntry = n.DocEntry ");
-        sb.append("Where n.DocType = 'I' and YEAR(n.DocDate) between YEAR(DATEADD (YEAR, -4, GETDATE())) AND YEAR(GETDATE()) ");
+        sb.append("Where n.DocType = 'I' and YEAR(n.DocDate) between YEAR(DATEADD (YEAR, -3, GETDATE())) AND YEAR(GETDATE()) ");
         sb.append("Group by YEAR(n.DocDate) ) AS t Group by t.año");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();

@@ -20,6 +20,8 @@ public class PersistenceConf {
     private EntityManager emVARROC;
     @PersistenceContext(unitName = "VARROCPruebasPU")
     private EntityManager emVARROCPruebas;
+    @PersistenceContext(unitName = "VELEZPU")
+    private EntityManager emVELEZ;
     @PersistenceContext(unitName = "MySQLPU")
     private EntityManager emWali;
     @PersistenceContext(unitName = "MySQLPruebasPU")
@@ -43,6 +45,8 @@ public class PersistenceConf {
                     return emIGBPruebas;
                 case "VARROCPruebas":
                     return emVARROCPruebas;
+                case "VELEZ":
+                    return emVELEZ;
                 default:
                     return null;
             }

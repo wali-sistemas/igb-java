@@ -52,4 +52,11 @@
             <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
         </properties>
     </persistence-unit>
+    <persistence-unit name="VELEZPU" transaction-type="JTA">
+        <jta-data-source>java:/VELEZDS</jta-data-source>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
+        </properties>
+    </persistence-unit>
 </persistence>

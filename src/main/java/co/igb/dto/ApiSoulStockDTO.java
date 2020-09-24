@@ -12,17 +12,21 @@ public class ApiSoulStockDTO {
     private String estado;
     private int cantidadDisponible;
     private int cantidadReservada;
+    private String bodega;
+    private String sede;
     //variables adicionales
     private String itemName;
     private String whsCode;
     public ApiSoulStockDTO() {
     }
 
-    public ApiSoulStockDTO(String sku, String estado, int cantidadDisponible, int cantidadReservada, String itemName, String whsCode) {
+    public ApiSoulStockDTO(String sku, String estado, int cantidadDisponible, int cantidadReservada, String bodega, String sede, String itemName, String whsCode) {
         this.sku = sku;
         this.estado = estado;
         this.cantidadDisponible = cantidadDisponible;
         this.cantidadReservada = cantidadReservada;
+        this.bodega = bodega;
+        this.sede = sede;
         this.itemName = itemName;
         this.whsCode = whsCode;
     }
@@ -75,6 +79,22 @@ public class ApiSoulStockDTO {
         this.whsCode = whsCode;
     }
 
+    public String getBodega() {
+        return bodega;
+    }
+
+    public void setBodega(String bodega) {
+        this.bodega = bodega;
+    }
+
+    public String getSede() {
+        return sede;
+    }
+
+    public void setSede(String sede) {
+        this.sede = sede;
+    }
+
     @Override
     public String toString() {
         return "ApiSoulStockDTO{" +
@@ -82,6 +102,8 @@ public class ApiSoulStockDTO {
                 ", estado='" + estado + '\'' +
                 ", cantidadDisponible=" + cantidadDisponible +
                 ", cantidadReservada=" + cantidadReservada +
+                ", bodega='" + bodega + '\'' +
+                ", sede='" + sede + '\'' +
                 ", itemName='" + itemName + '\'' +
                 ", whsCode='" + whsCode + '\'' +
                 '}';
