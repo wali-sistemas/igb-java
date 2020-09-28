@@ -20,6 +20,7 @@ public class ApiSoulStockDTO {
     public ApiSoulStockDTO() {
     }
 
+
     public ApiSoulStockDTO(String sku, String estado, int cantidadDisponible, int cantidadReservada, String bodega, String sede, String itemName, String whsCode) {
         this.sku = sku;
         this.estado = estado;

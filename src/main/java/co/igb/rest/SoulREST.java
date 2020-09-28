@@ -43,8 +43,8 @@ public class SoulREST implements Serializable {
     public Response getCurrentStock(@HeaderParam("X-Company-Name") String companyName,
                                     @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Iniciando consulta de stock [WebService de Magnum]");
-        List<ClsBEConsultaInventarioBodega> list = consultarInventarioBodega(Constants.SOUL_USER, Constants.SOUL_PASSWORD);
 
+        List<ClsBEConsultaInventarioBodega> list = consultarInventarioBodega(Constants.SOUL_USER, Constants.SOUL_PASSWORD);
         List<ApiSoulStockDTO> stock = new ArrayList<>();
         for (ClsBEConsultaInventarioBodega obj : list) {
             ApiSoulStockDTO dto = new ApiSoulStockDTO();
