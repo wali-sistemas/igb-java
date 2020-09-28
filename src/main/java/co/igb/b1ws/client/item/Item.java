@@ -1,22 +1,17 @@
 
 package co.igb.b1ws.client.item;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
  * <p>Clase Java para anonymous complex type.
- * 
+ *
  * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
- * 
+ *
  * <pre>
  * &lt;complexType&gt;
  *   &lt;complexContent&gt;
@@ -1670,8 +1665,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
+ *
+ *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -2171,6 +2166,48 @@ public class Item {
     protected String scsCode;
     @XmlElement(name = "SpProdType")
     protected String spProdType;
+    @XmlElement(name = "InCostRollup")
+    protected String inCostRoll;
+    @XmlElement(name = "VirtualAssetItem")
+    protected String virtAstItm;
+    @XmlElement(name = "EnforceAssetSerialNumbers")
+    protected String enAstSeri;
+    @XmlElement(name = "UpdateDate")
+    @XmlSchemaType(name = "date")
+    protected XMLGregorianCalendar updateDate;
+    @XmlElement(name = "UpdateTime")
+    protected String updateTime;
+    @XmlElement(name = "GSTRelevnt")
+    protected String gstRelevnt;
+    @XmlElement(name = "SACEntry")
+    protected Long sacEntry;
+    @XmlElement(name = "GSTTaxCategory")
+    protected String gstTaxCtg;
+    @XmlElement(name = "ServiceCategoryEntry")
+    protected Long serviceCtg;
+    @XmlElement(name = "AssessableValue")
+    protected Double assblValue;
+    @XmlElement(name = "AssVal4WTR")
+    protected Double assVal4WTR;
+    @XmlElement(name = "SOIExcisable")
+    protected String soiExc;
+    @XmlElement(name = "ImportedItem")
+    protected String imported;
+    @XmlElement(name = "PricingPrc")
+    protected Double pricingPrc;
+    @XmlElement(name = "PricingUnit")
+    protected Long priceUnit;
+    @XmlElement(name = "CreateDate")
+    @XmlSchemaType(name = "date")
+    protected XMLGregorianCalendar createDate;
+    @XmlElement(name = "CreateTime")
+    protected String createTime;
+    @XmlElement(name = "ItemAttributeGroups")
+    protected String itmsGrpCod;
+    @XmlElement(name = "U_Marcas_info")
+    protected String uMarcasInfo;
+    @XmlElement(name = "U_Grupo")
+    protected String uGrupo;
     @XmlElement(name = "U_Subgrupo")
     protected String uSubgrupo;
     @XmlElement(name = "U_Marca")
@@ -2186,6 +2223,7 @@ public class Item {
     @XmlElement(name = "U_FEC_CREA")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar ufeccrea;
+    @XmlSchemaType(name = "date")
     @XmlElement(name = "U_UNI_PRO_VTAS")
     protected Double uuniprovtas;
     @XmlElement(name = "U_VLGX_VIV")
@@ -2193,6 +2231,7 @@ public class Item {
     @XmlElement(name = "U_VLGX_ORD")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar uvlgxord;
+    @XmlSchemaType(name = "date")
     @XmlElement(name = "U_VLGX_BOM")
     protected String uvlgxbom;
     @XmlElement(name = "U_VLGX_PLN")
@@ -2221,14 +2260,42 @@ public class Item {
     protected String uResponsable;
     @XmlElement(name = "U_VLGX_CA")
     protected String uvlgxca;
-    
+    @XmlElement(name = "U_CATEGORIA")
+    protected String uCategoria;
+    @XmlElement(name = "U_CATALOGO")
+    protected String uCatalogo;
+    @XmlElement(name = "U_TIPO")
+    protected String uTipo;
+    @XmlElement(name = "ItemPrices")
+    protected Item.ItemPrices itemPrices;
+    @XmlElement(name = "ItemWarehouseInfoCollection")
+    protected Item.ItemWarehouseInfoCollection itemWarehouseInfoCollection;
+    @XmlElement(name = "ItemPreferredVendors")
+    protected Item.ItemPreferredVendors itemPreferredVendors;
+    @XmlElement(name = "ItemLocalizationInfos")
+    protected Item.ItemLocalizationInfos itemLocalizationInfos;
+    @XmlElement(name = "ItemProjects")
+    protected Item.ItemProjects itemProjects;
+    @XmlElement(name = "ItemDistributionRules")
+    protected Item.ItemDistributionRules itemDistributionRules;
+    @XmlElement(name = "ItemBarCodeCollection")
+    protected Item.ItemBarCodeCollection itemBarCodeCollection;
+    @XmlElement(name = "ItemDepreciationParameters")
+    protected Item.ItemDepreciationParameters itemDepreciationParameters;
+    @XmlElement(name = "ItemIntrastatExtension")
+    protected Item.ItemIntrastatExtension itemIntrastatExtension;
+    @XmlElement(name = "ItemPeriodControls")
+    protected Item.ItemPeriodControls itemPeriodControls;
+    @XmlElement(name = "ItemUnitOfMeasurementCollection")
+    protected Item.ItemUnitOfMeasurementCollection itemUnitOfMeasurementCollection;
+
     /**
      * Obtiene el valor de la propiedad itemCode.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getItemCode() {
         return itemCode;
@@ -2236,11 +2303,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad itemCode.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setItemCode(String value) {
         this.itemCode = value;
@@ -2248,11 +2315,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad itemName.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getItemName() {
         return itemName;
@@ -2260,11 +2327,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad itemName.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setItemName(String value) {
         this.itemName = value;
@@ -2272,11 +2339,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad foreignName.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getForeignName() {
         return foreignName;
@@ -2284,11 +2351,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad foreignName.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setForeignName(String value) {
         this.foreignName = value;
@@ -2296,11 +2363,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad itemsGroupCode.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getItemsGroupCode() {
         return itemsGroupCode;
@@ -2308,11 +2375,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad itemsGroupCode.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setItemsGroupCode(Long value) {
         this.itemsGroupCode = value;
@@ -2320,11 +2387,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad customsGroupCode.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getCustomsGroupCode() {
         return customsGroupCode;
@@ -2332,11 +2399,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad customsGroupCode.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setCustomsGroupCode(Long value) {
         this.customsGroupCode = value;
@@ -2344,11 +2411,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesVATGroup.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getSalesVATGroup() {
         return salesVATGroup;
@@ -2356,11 +2423,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesVATGroup.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setSalesVATGroup(String value) {
         this.salesVATGroup = value;
@@ -2368,11 +2435,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad barCode.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getBarCode() {
         return barCode;
@@ -2380,11 +2447,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad barCode.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setBarCode(String value) {
         this.barCode = value;
@@ -2392,11 +2459,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad vatLiable.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getVatLiable() {
         return vatLiable;
@@ -2404,11 +2471,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad vatLiable.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setVatLiable(String value) {
         this.vatLiable = value;
@@ -2416,11 +2483,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseItem.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getPurchaseItem() {
         return purchaseItem;
@@ -2428,11 +2495,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseItem.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setPurchaseItem(String value) {
         this.purchaseItem = value;
@@ -2440,11 +2507,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesItem.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getSalesItem() {
         return salesItem;
@@ -2452,11 +2519,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesItem.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setSalesItem(String value) {
         this.salesItem = value;
@@ -2464,11 +2531,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad inventoryItem.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getInventoryItem() {
         return inventoryItem;
@@ -2476,11 +2543,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad inventoryItem.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setInventoryItem(String value) {
         this.inventoryItem = value;
@@ -2488,11 +2555,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad incomeAccount.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getIncomeAccount() {
         return incomeAccount;
@@ -2500,11 +2567,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad incomeAccount.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setIncomeAccount(String value) {
         this.incomeAccount = value;
@@ -2512,11 +2579,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad exemptIncomeAccount.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getExemptIncomeAccount() {
         return exemptIncomeAccount;
@@ -2524,11 +2591,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad exemptIncomeAccount.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setExemptIncomeAccount(String value) {
         this.exemptIncomeAccount = value;
@@ -2536,11 +2603,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad expanseAccount.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getExpanseAccount() {
         return expanseAccount;
@@ -2548,11 +2615,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad expanseAccount.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setExpanseAccount(String value) {
         this.expanseAccount = value;
@@ -2560,11 +2627,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad mainsupplier.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getMainsupplier() {
         return mainsupplier;
@@ -2572,11 +2639,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad mainsupplier.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setMainsupplier(String value) {
         this.mainsupplier = value;
@@ -2584,11 +2651,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad supplierCatalogNo.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getSupplierCatalogNo() {
         return supplierCatalogNo;
@@ -2596,11 +2663,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad supplierCatalogNo.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setSupplierCatalogNo(String value) {
         this.supplierCatalogNo = value;
@@ -2608,11 +2675,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad desiredInventory.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getDesiredInventory() {
         return desiredInventory;
@@ -2620,11 +2687,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad desiredInventory.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setDesiredInventory(Double value) {
         this.desiredInventory = value;
@@ -2632,11 +2699,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad minInventory.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getMinInventory() {
         return minInventory;
@@ -2644,11 +2711,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad minInventory.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setMinInventory(Double value) {
         this.minInventory = value;
@@ -2656,11 +2723,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad picture.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getPicture() {
         return picture;
@@ -2668,11 +2735,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad picture.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setPicture(String value) {
         this.picture = value;
@@ -2680,11 +2747,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad userText.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUserText() {
         return userText;
@@ -2692,11 +2759,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad userText.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUserText(String value) {
         this.userText = value;
@@ -2704,11 +2771,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad serialNum.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getSerialNum() {
         return serialNum;
@@ -2716,11 +2783,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad serialNum.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setSerialNum(String value) {
         this.serialNum = value;
@@ -2728,11 +2795,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad commissionPercent.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getCommissionPercent() {
         return commissionPercent;
@@ -2740,11 +2807,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad commissionPercent.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setCommissionPercent(Double value) {
         this.commissionPercent = value;
@@ -2752,11 +2819,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad commissionSum.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getCommissionSum() {
         return commissionSum;
@@ -2764,11 +2831,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad commissionSum.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setCommissionSum(Double value) {
         this.commissionSum = value;
@@ -2776,11 +2843,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad commissionGroup.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getCommissionGroup() {
         return commissionGroup;
@@ -2788,11 +2855,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad commissionGroup.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setCommissionGroup(Long value) {
         this.commissionGroup = value;
@@ -2800,11 +2867,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad treeType.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getTreeType() {
         return treeType;
@@ -2812,11 +2879,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad treeType.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setTreeType(String value) {
         this.treeType = value;
@@ -2824,11 +2891,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad assetItem.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getAssetItem() {
         return assetItem;
@@ -2836,11 +2903,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad assetItem.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setAssetItem(String value) {
         this.assetItem = value;
@@ -2848,11 +2915,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad dataExportCode.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getDataExportCode() {
         return dataExportCode;
@@ -2860,11 +2927,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad dataExportCode.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setDataExportCode(String value) {
         this.dataExportCode = value;
@@ -2872,11 +2939,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad manufacturer.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getManufacturer() {
         return manufacturer;
@@ -2884,11 +2951,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad manufacturer.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setManufacturer(Long value) {
         this.manufacturer = value;
@@ -2896,11 +2963,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad quantityOnStock.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getQuantityOnStock() {
         return quantityOnStock;
@@ -2908,11 +2975,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad quantityOnStock.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setQuantityOnStock(Double value) {
         this.quantityOnStock = value;
@@ -2920,11 +2987,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad quantityOrderedFromVendors.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getQuantityOrderedFromVendors() {
         return quantityOrderedFromVendors;
@@ -2932,11 +2999,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad quantityOrderedFromVendors.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setQuantityOrderedFromVendors(Double value) {
         this.quantityOrderedFromVendors = value;
@@ -2944,11 +3011,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad quantityOrderedByCustomers.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getQuantityOrderedByCustomers() {
         return quantityOrderedByCustomers;
@@ -2956,11 +3023,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad quantityOrderedByCustomers.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setQuantityOrderedByCustomers(Double value) {
         this.quantityOrderedByCustomers = value;
@@ -2968,11 +3035,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad manageSerialNumbers.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getManageSerialNumbers() {
         return manageSerialNumbers;
@@ -2980,11 +3047,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad manageSerialNumbers.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setManageSerialNumbers(String value) {
         this.manageSerialNumbers = value;
@@ -2992,11 +3059,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad manageBatchNumbers.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getManageBatchNumbers() {
         return manageBatchNumbers;
@@ -3004,11 +3071,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad manageBatchNumbers.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setManageBatchNumbers(String value) {
         this.manageBatchNumbers = value;
@@ -3016,11 +3083,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad valid.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getValid() {
         return valid;
@@ -3028,11 +3095,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad valid.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setValid(String value) {
         this.valid = value;
@@ -3040,11 +3107,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad validFrom.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link XMLGregorianCalendar }
-     *     
+     *
      */
     public XMLGregorianCalendar getValidFrom() {
         return validFrom;
@@ -3052,11 +3119,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad validFrom.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link XMLGregorianCalendar }
-     *     
+     *
      */
     public void setValidFrom(XMLGregorianCalendar value) {
         this.validFrom = value;
@@ -3064,11 +3131,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad validTo.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link XMLGregorianCalendar }
-     *     
+     *
      */
     public XMLGregorianCalendar getValidTo() {
         return validTo;
@@ -3076,11 +3143,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad validTo.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link XMLGregorianCalendar }
-     *     
+     *
      */
     public void setValidTo(XMLGregorianCalendar value) {
         this.validTo = value;
@@ -3088,11 +3155,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad validRemarks.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getValidRemarks() {
         return validRemarks;
@@ -3100,11 +3167,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad validRemarks.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setValidRemarks(String value) {
         this.validRemarks = value;
@@ -3112,11 +3179,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad frozen.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getFrozen() {
         return frozen;
@@ -3124,11 +3191,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad frozen.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setFrozen(String value) {
         this.frozen = value;
@@ -3136,11 +3203,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad frozenFrom.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link XMLGregorianCalendar }
-     *     
+     *
      */
     public XMLGregorianCalendar getFrozenFrom() {
         return frozenFrom;
@@ -3148,11 +3215,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad frozenFrom.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link XMLGregorianCalendar }
-     *     
+     *
      */
     public void setFrozenFrom(XMLGregorianCalendar value) {
         this.frozenFrom = value;
@@ -3160,11 +3227,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad frozenTo.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link XMLGregorianCalendar }
-     *     
+     *
      */
     public XMLGregorianCalendar getFrozenTo() {
         return frozenTo;
@@ -3172,11 +3239,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad frozenTo.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link XMLGregorianCalendar }
-     *     
+     *
      */
     public void setFrozenTo(XMLGregorianCalendar value) {
         this.frozenTo = value;
@@ -3184,11 +3251,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad frozenRemarks.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getFrozenRemarks() {
         return frozenRemarks;
@@ -3196,11 +3263,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad frozenRemarks.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setFrozenRemarks(String value) {
         this.frozenRemarks = value;
@@ -3208,11 +3275,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesUnit.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getSalesUnit() {
         return salesUnit;
@@ -3220,11 +3287,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesUnit.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setSalesUnit(String value) {
         this.salesUnit = value;
@@ -3232,11 +3299,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesItemsPerUnit.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getSalesItemsPerUnit() {
         return salesItemsPerUnit;
@@ -3244,11 +3311,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesItemsPerUnit.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setSalesItemsPerUnit(Double value) {
         this.salesItemsPerUnit = value;
@@ -3256,11 +3323,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesPackagingUnit.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getSalesPackagingUnit() {
         return salesPackagingUnit;
@@ -3268,11 +3335,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesPackagingUnit.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setSalesPackagingUnit(String value) {
         this.salesPackagingUnit = value;
@@ -3280,11 +3347,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesQtyPerPackUnit.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getSalesQtyPerPackUnit() {
         return salesQtyPerPackUnit;
@@ -3292,11 +3359,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesQtyPerPackUnit.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setSalesQtyPerPackUnit(Double value) {
         this.salesQtyPerPackUnit = value;
@@ -3304,11 +3371,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesUnitLength.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getSalesUnitLength() {
         return salesUnitLength;
@@ -3316,11 +3383,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesUnitLength.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setSalesUnitLength(Double value) {
         this.salesUnitLength = value;
@@ -3328,11 +3395,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesLengthUnit.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getSalesLengthUnit() {
         return salesLengthUnit;
@@ -3340,11 +3407,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesLengthUnit.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setSalesLengthUnit(Long value) {
         this.salesLengthUnit = value;
@@ -3352,11 +3419,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesUnitWidth.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getSalesUnitWidth() {
         return salesUnitWidth;
@@ -3364,11 +3431,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesUnitWidth.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setSalesUnitWidth(Double value) {
         this.salesUnitWidth = value;
@@ -3376,11 +3443,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesWidthUnit.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getSalesWidthUnit() {
         return salesWidthUnit;
@@ -3388,11 +3455,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesWidthUnit.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setSalesWidthUnit(Long value) {
         this.salesWidthUnit = value;
@@ -3400,11 +3467,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesUnitHeight.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getSalesUnitHeight() {
         return salesUnitHeight;
@@ -3412,11 +3479,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesUnitHeight.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setSalesUnitHeight(Double value) {
         this.salesUnitHeight = value;
@@ -3424,11 +3491,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesHeightUnit.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getSalesHeightUnit() {
         return salesHeightUnit;
@@ -3436,11 +3503,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesHeightUnit.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setSalesHeightUnit(Long value) {
         this.salesHeightUnit = value;
@@ -3448,11 +3515,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesUnitVolume.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getSalesUnitVolume() {
         return salesUnitVolume;
@@ -3460,11 +3527,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesUnitVolume.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setSalesUnitVolume(Double value) {
         this.salesUnitVolume = value;
@@ -3472,11 +3539,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesVolumeUnit.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getSalesVolumeUnit() {
         return salesVolumeUnit;
@@ -3484,11 +3551,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesVolumeUnit.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setSalesVolumeUnit(Long value) {
         this.salesVolumeUnit = value;
@@ -3496,11 +3563,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesUnitWeight.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getSalesUnitWeight() {
         return salesUnitWeight;
@@ -3508,11 +3575,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesUnitWeight.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setSalesUnitWeight(Double value) {
         this.salesUnitWeight = value;
@@ -3520,11 +3587,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesWeightUnit.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getSalesWeightUnit() {
         return salesWeightUnit;
@@ -3532,11 +3599,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesWeightUnit.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setSalesWeightUnit(Long value) {
         this.salesWeightUnit = value;
@@ -3544,11 +3611,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseUnit.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getPurchaseUnit() {
         return purchaseUnit;
@@ -3556,11 +3623,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseUnit.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setPurchaseUnit(String value) {
         this.purchaseUnit = value;
@@ -3568,11 +3635,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseItemsPerUnit.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getPurchaseItemsPerUnit() {
         return purchaseItemsPerUnit;
@@ -3580,11 +3647,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseItemsPerUnit.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setPurchaseItemsPerUnit(Double value) {
         this.purchaseItemsPerUnit = value;
@@ -3592,11 +3659,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchasePackagingUnit.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getPurchasePackagingUnit() {
         return purchasePackagingUnit;
@@ -3604,11 +3671,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchasePackagingUnit.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setPurchasePackagingUnit(String value) {
         this.purchasePackagingUnit = value;
@@ -3616,11 +3683,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseQtyPerPackUnit.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getPurchaseQtyPerPackUnit() {
         return purchaseQtyPerPackUnit;
@@ -3628,11 +3695,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseQtyPerPackUnit.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setPurchaseQtyPerPackUnit(Double value) {
         this.purchaseQtyPerPackUnit = value;
@@ -3640,11 +3707,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseUnitLength.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getPurchaseUnitLength() {
         return purchaseUnitLength;
@@ -3652,11 +3719,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseUnitLength.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setPurchaseUnitLength(Double value) {
         this.purchaseUnitLength = value;
@@ -3664,11 +3731,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseLengthUnit.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getPurchaseLengthUnit() {
         return purchaseLengthUnit;
@@ -3676,11 +3743,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseLengthUnit.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setPurchaseLengthUnit(Long value) {
         this.purchaseLengthUnit = value;
@@ -3688,11 +3755,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseUnitWidth.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getPurchaseUnitWidth() {
         return purchaseUnitWidth;
@@ -3700,11 +3767,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseUnitWidth.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setPurchaseUnitWidth(Double value) {
         this.purchaseUnitWidth = value;
@@ -3712,11 +3779,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseWidthUnit.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getPurchaseWidthUnit() {
         return purchaseWidthUnit;
@@ -3724,11 +3791,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseWidthUnit.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setPurchaseWidthUnit(Long value) {
         this.purchaseWidthUnit = value;
@@ -3736,11 +3803,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseUnitHeight.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getPurchaseUnitHeight() {
         return purchaseUnitHeight;
@@ -3748,11 +3815,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseUnitHeight.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setPurchaseUnitHeight(Double value) {
         this.purchaseUnitHeight = value;
@@ -3760,11 +3827,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseHeightUnit.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getPurchaseHeightUnit() {
         return purchaseHeightUnit;
@@ -3772,11 +3839,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseHeightUnit.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setPurchaseHeightUnit(Long value) {
         this.purchaseHeightUnit = value;
@@ -3784,11 +3851,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseUnitVolume.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getPurchaseUnitVolume() {
         return purchaseUnitVolume;
@@ -3796,11 +3863,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseUnitVolume.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setPurchaseUnitVolume(Double value) {
         this.purchaseUnitVolume = value;
@@ -3808,11 +3875,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseVolumeUnit.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getPurchaseVolumeUnit() {
         return purchaseVolumeUnit;
@@ -3820,11 +3887,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseVolumeUnit.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setPurchaseVolumeUnit(Long value) {
         this.purchaseVolumeUnit = value;
@@ -3832,11 +3899,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseUnitWeight.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getPurchaseUnitWeight() {
         return purchaseUnitWeight;
@@ -3844,11 +3911,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseUnitWeight.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setPurchaseUnitWeight(Double value) {
         this.purchaseUnitWeight = value;
@@ -3856,11 +3923,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseWeightUnit.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getPurchaseWeightUnit() {
         return purchaseWeightUnit;
@@ -3868,11 +3935,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseWeightUnit.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setPurchaseWeightUnit(Long value) {
         this.purchaseWeightUnit = value;
@@ -3880,11 +3947,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseVATGroup.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getPurchaseVATGroup() {
         return purchaseVATGroup;
@@ -3892,11 +3959,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseVATGroup.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setPurchaseVATGroup(String value) {
         this.purchaseVATGroup = value;
@@ -3904,11 +3971,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesFactor1.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getSalesFactor1() {
         return salesFactor1;
@@ -3916,11 +3983,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesFactor1.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setSalesFactor1(Double value) {
         this.salesFactor1 = value;
@@ -3928,11 +3995,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesFactor2.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getSalesFactor2() {
         return salesFactor2;
@@ -3940,11 +4007,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesFactor2.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setSalesFactor2(Double value) {
         this.salesFactor2 = value;
@@ -3952,11 +4019,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesFactor3.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getSalesFactor3() {
         return salesFactor3;
@@ -3964,11 +4031,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesFactor3.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setSalesFactor3(Double value) {
         this.salesFactor3 = value;
@@ -3976,11 +4043,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesFactor4.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getSalesFactor4() {
         return salesFactor4;
@@ -3988,11 +4055,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesFactor4.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setSalesFactor4(Double value) {
         this.salesFactor4 = value;
@@ -4000,11 +4067,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseFactor1.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getPurchaseFactor1() {
         return purchaseFactor1;
@@ -4012,11 +4079,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseFactor1.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setPurchaseFactor1(Double value) {
         this.purchaseFactor1 = value;
@@ -4024,11 +4091,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseFactor2.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getPurchaseFactor2() {
         return purchaseFactor2;
@@ -4036,11 +4103,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseFactor2.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setPurchaseFactor2(Double value) {
         this.purchaseFactor2 = value;
@@ -4048,11 +4115,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseFactor3.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getPurchaseFactor3() {
         return purchaseFactor3;
@@ -4060,11 +4127,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseFactor3.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setPurchaseFactor3(Double value) {
         this.purchaseFactor3 = value;
@@ -4072,11 +4139,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseFactor4.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getPurchaseFactor4() {
         return purchaseFactor4;
@@ -4084,11 +4151,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseFactor4.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setPurchaseFactor4(Double value) {
         this.purchaseFactor4 = value;
@@ -4096,11 +4163,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad movingAveragePrice.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getMovingAveragePrice() {
         return movingAveragePrice;
@@ -4108,11 +4175,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad movingAveragePrice.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setMovingAveragePrice(Double value) {
         this.movingAveragePrice = value;
@@ -4120,11 +4187,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad foreignRevenuesAccount.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getForeignRevenuesAccount() {
         return foreignRevenuesAccount;
@@ -4132,11 +4199,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad foreignRevenuesAccount.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setForeignRevenuesAccount(String value) {
         this.foreignRevenuesAccount = value;
@@ -4144,11 +4211,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad ecRevenuesAccount.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getECRevenuesAccount() {
         return ecRevenuesAccount;
@@ -4156,11 +4223,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad ecRevenuesAccount.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setECRevenuesAccount(String value) {
         this.ecRevenuesAccount = value;
@@ -4168,11 +4235,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad foreignExpensesAccount.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getForeignExpensesAccount() {
         return foreignExpensesAccount;
@@ -4180,11 +4247,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad foreignExpensesAccount.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setForeignExpensesAccount(String value) {
         this.foreignExpensesAccount = value;
@@ -4192,11 +4259,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad ecExpensesAccount.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getECExpensesAccount() {
         return ecExpensesAccount;
@@ -4204,11 +4271,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad ecExpensesAccount.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setECExpensesAccount(String value) {
         this.ecExpensesAccount = value;
@@ -4216,11 +4283,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad avgStdPrice.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getAvgStdPrice() {
         return avgStdPrice;
@@ -4228,11 +4295,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad avgStdPrice.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setAvgStdPrice(Double value) {
         this.avgStdPrice = value;
@@ -4240,11 +4307,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad defaultWarehouse.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getDefaultWarehouse() {
         return defaultWarehouse;
@@ -4252,11 +4319,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad defaultWarehouse.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setDefaultWarehouse(String value) {
         this.defaultWarehouse = value;
@@ -4264,11 +4331,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad shipType.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getShipType() {
         return shipType;
@@ -4276,11 +4343,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad shipType.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setShipType(Long value) {
         this.shipType = value;
@@ -4288,11 +4355,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad glMethod.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getGLMethod() {
         return glMethod;
@@ -4300,11 +4367,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad glMethod.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setGLMethod(String value) {
         this.glMethod = value;
@@ -4312,11 +4379,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad taxType.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getTaxType() {
         return taxType;
@@ -4324,11 +4391,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad taxType.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setTaxType(String value) {
         this.taxType = value;
@@ -4336,11 +4403,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad maxInventory.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getMaxInventory() {
         return maxInventory;
@@ -4348,11 +4415,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad maxInventory.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setMaxInventory(Double value) {
         this.maxInventory = value;
@@ -4360,11 +4427,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad manageStockByWarehouse.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getManageStockByWarehouse() {
         return manageStockByWarehouse;
@@ -4372,11 +4439,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad manageStockByWarehouse.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setManageStockByWarehouse(String value) {
         this.manageStockByWarehouse = value;
@@ -4384,11 +4451,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseHeightUnit1.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getPurchaseHeightUnit1() {
         return purchaseHeightUnit1;
@@ -4396,11 +4463,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseHeightUnit1.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setPurchaseHeightUnit1(Long value) {
         this.purchaseHeightUnit1 = value;
@@ -4408,11 +4475,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseUnitHeight1.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getPurchaseUnitHeight1() {
         return purchaseUnitHeight1;
@@ -4420,11 +4487,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseUnitHeight1.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setPurchaseUnitHeight1(Double value) {
         this.purchaseUnitHeight1 = value;
@@ -4432,11 +4499,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseLengthUnit1.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getPurchaseLengthUnit1() {
         return purchaseLengthUnit1;
@@ -4444,11 +4511,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseLengthUnit1.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setPurchaseLengthUnit1(Long value) {
         this.purchaseLengthUnit1 = value;
@@ -4456,11 +4523,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseUnitLength1.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getPurchaseUnitLength1() {
         return purchaseUnitLength1;
@@ -4468,11 +4535,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseUnitLength1.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setPurchaseUnitLength1(Double value) {
         this.purchaseUnitLength1 = value;
@@ -4480,11 +4547,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseWeightUnit1.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getPurchaseWeightUnit1() {
         return purchaseWeightUnit1;
@@ -4492,11 +4559,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseWeightUnit1.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setPurchaseWeightUnit1(Long value) {
         this.purchaseWeightUnit1 = value;
@@ -4504,11 +4571,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseUnitWeight1.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getPurchaseUnitWeight1() {
         return purchaseUnitWeight1;
@@ -4516,11 +4583,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseUnitWeight1.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setPurchaseUnitWeight1(Double value) {
         this.purchaseUnitWeight1 = value;
@@ -4528,11 +4595,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseWidthUnit1.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getPurchaseWidthUnit1() {
         return purchaseWidthUnit1;
@@ -4540,11 +4607,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseWidthUnit1.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setPurchaseWidthUnit1(Long value) {
         this.purchaseWidthUnit1 = value;
@@ -4552,11 +4619,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad purchaseUnitWidth1.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getPurchaseUnitWidth1() {
         return purchaseUnitWidth1;
@@ -4564,11 +4631,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad purchaseUnitWidth1.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setPurchaseUnitWidth1(Double value) {
         this.purchaseUnitWidth1 = value;
@@ -4576,11 +4643,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesHeightUnit1.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getSalesHeightUnit1() {
         return salesHeightUnit1;
@@ -4588,11 +4655,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesHeightUnit1.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setSalesHeightUnit1(Long value) {
         this.salesHeightUnit1 = value;
@@ -4600,11 +4667,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesUnitHeight1.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getSalesUnitHeight1() {
         return salesUnitHeight1;
@@ -4612,11 +4679,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesUnitHeight1.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setSalesUnitHeight1(Double value) {
         this.salesUnitHeight1 = value;
@@ -4624,11 +4691,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesLengthUnit1.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getSalesLengthUnit1() {
         return salesLengthUnit1;
@@ -4636,11 +4703,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesLengthUnit1.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setSalesLengthUnit1(Long value) {
         this.salesLengthUnit1 = value;
@@ -4648,11 +4715,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesUnitLength1.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getSalesUnitLength1() {
         return salesUnitLength1;
@@ -4660,11 +4727,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesUnitLength1.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setSalesUnitLength1(Double value) {
         this.salesUnitLength1 = value;
@@ -4672,11 +4739,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesWeightUnit1.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getSalesWeightUnit1() {
         return salesWeightUnit1;
@@ -4684,11 +4751,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesWeightUnit1.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setSalesWeightUnit1(Long value) {
         this.salesWeightUnit1 = value;
@@ -4696,11 +4763,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesUnitWeight1.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getSalesUnitWeight1() {
         return salesUnitWeight1;
@@ -4708,11 +4775,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesUnitWeight1.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setSalesUnitWeight1(Double value) {
         this.salesUnitWeight1 = value;
@@ -4720,11 +4787,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesWidthUnit1.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getSalesWidthUnit1() {
         return salesWidthUnit1;
@@ -4732,11 +4799,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesWidthUnit1.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setSalesWidthUnit1(Long value) {
         this.salesWidthUnit1 = value;
@@ -4744,11 +4811,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad salesUnitWidth1.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getSalesUnitWidth1() {
         return salesUnitWidth1;
@@ -4756,11 +4823,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad salesUnitWidth1.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setSalesUnitWidth1(Double value) {
         this.salesUnitWidth1 = value;
@@ -4768,11 +4835,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad forceSelectionOfSerialNumber.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getForceSelectionOfSerialNumber() {
         return forceSelectionOfSerialNumber;
@@ -4780,11 +4847,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad forceSelectionOfSerialNumber.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setForceSelectionOfSerialNumber(String value) {
         this.forceSelectionOfSerialNumber = value;
@@ -4792,11 +4859,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad manageSerialNumbersOnReleaseOnly.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getManageSerialNumbersOnReleaseOnly() {
         return manageSerialNumbersOnReleaseOnly;
@@ -4804,11 +4871,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad manageSerialNumbersOnReleaseOnly.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setManageSerialNumbersOnReleaseOnly(String value) {
         this.manageSerialNumbersOnReleaseOnly = value;
@@ -4816,11 +4883,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad wtLiable.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getWTLiable() {
         return wtLiable;
@@ -4828,11 +4895,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad wtLiable.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setWTLiable(String value) {
         this.wtLiable = value;
@@ -4840,11 +4907,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad costAccountingMethod.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getCostAccountingMethod() {
         return costAccountingMethod;
@@ -4852,11 +4919,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad costAccountingMethod.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setCostAccountingMethod(String value) {
         this.costAccountingMethod = value;
@@ -4864,11 +4931,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad sww.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getSWW() {
         return sww;
@@ -4876,11 +4943,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad sww.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setSWW(String value) {
         this.sww = value;
@@ -4888,11 +4955,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad warrantyTemplate.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getWarrantyTemplate() {
         return warrantyTemplate;
@@ -4900,11 +4967,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad warrantyTemplate.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setWarrantyTemplate(String value) {
         this.warrantyTemplate = value;
@@ -4912,11 +4979,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad indirectTax.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getIndirectTax() {
         return indirectTax;
@@ -4924,11 +4991,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad indirectTax.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setIndirectTax(String value) {
         this.indirectTax = value;
@@ -4936,11 +5003,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad arTaxCode.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getArTaxCode() {
         return arTaxCode;
@@ -4948,11 +5015,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad arTaxCode.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setArTaxCode(String value) {
         this.arTaxCode = value;
@@ -4960,11 +5027,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad apTaxCode.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getApTaxCode() {
         return apTaxCode;
@@ -4972,11 +5039,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad apTaxCode.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setApTaxCode(String value) {
         this.apTaxCode = value;
@@ -4984,11 +5051,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad baseUnitName.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getBaseUnitName() {
         return baseUnitName;
@@ -4996,11 +5063,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad baseUnitName.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setBaseUnitName(String value) {
         this.baseUnitName = value;
@@ -5008,11 +5075,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad itemCountryOrg.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getItemCountryOrg() {
         return itemCountryOrg;
@@ -5020,11 +5087,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad itemCountryOrg.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setItemCountryOrg(String value) {
         this.itemCountryOrg = value;
@@ -5032,11 +5099,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad issueMethod.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getIssueMethod() {
         return issueMethod;
@@ -5044,11 +5111,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad issueMethod.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setIssueMethod(String value) {
         this.issueMethod = value;
@@ -5056,11 +5123,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad sriAndBatchManageMethod.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getSRIAndBatchManageMethod() {
         return sriAndBatchManageMethod;
@@ -5068,11 +5135,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad sriAndBatchManageMethod.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setSRIAndBatchManageMethod(String value) {
         this.sriAndBatchManageMethod = value;
@@ -5080,11 +5147,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad isPhantom.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getIsPhantom() {
         return isPhantom;
@@ -5092,11 +5159,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad isPhantom.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setIsPhantom(String value) {
         this.isPhantom = value;
@@ -5104,11 +5171,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad inventoryUOM.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getInventoryUOM() {
         return inventoryUOM;
@@ -5116,11 +5183,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad inventoryUOM.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setInventoryUOM(String value) {
         this.inventoryUOM = value;
@@ -5128,11 +5195,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad planningSystem.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getPlanningSystem() {
         return planningSystem;
@@ -5140,11 +5207,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad planningSystem.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setPlanningSystem(String value) {
         this.planningSystem = value;
@@ -5152,11 +5219,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad procurementMethod.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProcurementMethod() {
         return procurementMethod;
@@ -5164,11 +5231,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad procurementMethod.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProcurementMethod(String value) {
         this.procurementMethod = value;
@@ -5176,11 +5243,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad componentWarehouse.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getComponentWarehouse() {
         return componentWarehouse;
@@ -5188,11 +5255,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad componentWarehouse.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setComponentWarehouse(String value) {
         this.componentWarehouse = value;
@@ -5200,11 +5267,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad orderIntervals.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getOrderIntervals() {
         return orderIntervals;
@@ -5212,11 +5279,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad orderIntervals.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setOrderIntervals(Long value) {
         this.orderIntervals = value;
@@ -5224,11 +5291,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad orderMultiple.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getOrderMultiple() {
         return orderMultiple;
@@ -5236,11 +5303,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad orderMultiple.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setOrderMultiple(Double value) {
         this.orderMultiple = value;
@@ -5248,11 +5315,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad leadTime.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getLeadTime() {
         return leadTime;
@@ -5260,11 +5327,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad leadTime.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setLeadTime(Long value) {
         this.leadTime = value;
@@ -5272,11 +5339,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad minOrderQuantity.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getMinOrderQuantity() {
         return minOrderQuantity;
@@ -5284,11 +5351,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad minOrderQuantity.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setMinOrderQuantity(Double value) {
         this.minOrderQuantity = value;
@@ -5296,11 +5363,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad itemType.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getItemType() {
         return itemType;
@@ -5308,11 +5375,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad itemType.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setItemType(String value) {
         this.itemType = value;
@@ -5320,11 +5387,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad itemClass.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getItemClass() {
         return itemClass;
@@ -5332,11 +5399,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad itemClass.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setItemClass(String value) {
         this.itemClass = value;
@@ -5344,11 +5411,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad outgoingServiceCode.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getOutgoingServiceCode() {
         return outgoingServiceCode;
@@ -5356,11 +5423,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad outgoingServiceCode.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setOutgoingServiceCode(Long value) {
         this.outgoingServiceCode = value;
@@ -5368,11 +5435,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad incomingServiceCode.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getIncomingServiceCode() {
         return incomingServiceCode;
@@ -5380,11 +5447,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad incomingServiceCode.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setIncomingServiceCode(Long value) {
         this.incomingServiceCode = value;
@@ -5392,11 +5459,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad serviceGroup.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getServiceGroup() {
         return serviceGroup;
@@ -5404,11 +5471,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad serviceGroup.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setServiceGroup(Long value) {
         this.serviceGroup = value;
@@ -5416,11 +5483,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad ncmCode.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getNCMCode() {
         return ncmCode;
@@ -5428,11 +5495,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad ncmCode.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setNCMCode(Long value) {
         this.ncmCode = value;
@@ -5440,11 +5507,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad materialType.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getMaterialType() {
         return materialType;
@@ -5452,11 +5519,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad materialType.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setMaterialType(String value) {
         this.materialType = value;
@@ -5464,11 +5531,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad materialGroup.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getMaterialGroup() {
         return materialGroup;
@@ -5476,11 +5543,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad materialGroup.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setMaterialGroup(Long value) {
         this.materialGroup = value;
@@ -5488,11 +5555,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad productSource.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProductSource() {
         return productSource;
@@ -5500,11 +5567,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad productSource.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProductSource(String value) {
         this.productSource = value;
@@ -5512,11 +5579,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties1.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties1() {
         return properties1;
@@ -5524,11 +5591,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties1.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties1(String value) {
         this.properties1 = value;
@@ -5536,11 +5603,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties2.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties2() {
         return properties2;
@@ -5548,11 +5615,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties2.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties2(String value) {
         this.properties2 = value;
@@ -5560,11 +5627,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties3.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties3() {
         return properties3;
@@ -5572,11 +5639,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties3.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties3(String value) {
         this.properties3 = value;
@@ -5584,11 +5651,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties4.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties4() {
         return properties4;
@@ -5596,11 +5663,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties4.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties4(String value) {
         this.properties4 = value;
@@ -5608,11 +5675,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties5.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties5() {
         return properties5;
@@ -5620,11 +5687,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties5.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties5(String value) {
         this.properties5 = value;
@@ -5632,11 +5699,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties6.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties6() {
         return properties6;
@@ -5644,11 +5711,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties6.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties6(String value) {
         this.properties6 = value;
@@ -5656,11 +5723,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties7.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties7() {
         return properties7;
@@ -5668,11 +5735,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties7.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties7(String value) {
         this.properties7 = value;
@@ -5680,11 +5747,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties8.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties8() {
         return properties8;
@@ -5692,11 +5759,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties8.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties8(String value) {
         this.properties8 = value;
@@ -5704,11 +5771,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties9.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties9() {
         return properties9;
@@ -5716,11 +5783,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties9.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties9(String value) {
         this.properties9 = value;
@@ -5728,11 +5795,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties10.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties10() {
         return properties10;
@@ -5740,11 +5807,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties10.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties10(String value) {
         this.properties10 = value;
@@ -5752,11 +5819,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties11.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties11() {
         return properties11;
@@ -5764,11 +5831,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties11.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties11(String value) {
         this.properties11 = value;
@@ -5776,11 +5843,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties12.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties12() {
         return properties12;
@@ -5788,11 +5855,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties12.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties12(String value) {
         this.properties12 = value;
@@ -5800,11 +5867,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties13.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties13() {
         return properties13;
@@ -5812,11 +5879,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties13.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties13(String value) {
         this.properties13 = value;
@@ -5824,11 +5891,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties14.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties14() {
         return properties14;
@@ -5836,11 +5903,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties14.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties14(String value) {
         this.properties14 = value;
@@ -5848,11 +5915,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties15.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties15() {
         return properties15;
@@ -5860,11 +5927,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties15.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties15(String value) {
         this.properties15 = value;
@@ -5872,11 +5939,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties16.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties16() {
         return properties16;
@@ -5884,11 +5951,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties16.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties16(String value) {
         this.properties16 = value;
@@ -5896,11 +5963,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties17.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties17() {
         return properties17;
@@ -5908,11 +5975,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties17.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties17(String value) {
         this.properties17 = value;
@@ -5920,11 +5987,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties18.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties18() {
         return properties18;
@@ -5932,11 +5999,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties18.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties18(String value) {
         this.properties18 = value;
@@ -5944,11 +6011,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties19.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties19() {
         return properties19;
@@ -5956,11 +6023,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties19.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties19(String value) {
         this.properties19 = value;
@@ -5968,11 +6035,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties20.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties20() {
         return properties20;
@@ -5980,11 +6047,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties20.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties20(String value) {
         this.properties20 = value;
@@ -5992,11 +6059,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties21.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties21() {
         return properties21;
@@ -6004,11 +6071,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties21.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties21(String value) {
         this.properties21 = value;
@@ -6016,11 +6083,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties22.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties22() {
         return properties22;
@@ -6028,11 +6095,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties22.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties22(String value) {
         this.properties22 = value;
@@ -6040,11 +6107,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties23.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties23() {
         return properties23;
@@ -6052,11 +6119,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties23.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties23(String value) {
         this.properties23 = value;
@@ -6064,11 +6131,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties24.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties24() {
         return properties24;
@@ -6076,11 +6143,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties24.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties24(String value) {
         this.properties24 = value;
@@ -6088,11 +6155,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties25.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties25() {
         return properties25;
@@ -6100,11 +6167,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties25.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties25(String value) {
         this.properties25 = value;
@@ -6112,11 +6179,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties26.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties26() {
         return properties26;
@@ -6124,11 +6191,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties26.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties26(String value) {
         this.properties26 = value;
@@ -6136,11 +6203,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties27.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties27() {
         return properties27;
@@ -6148,11 +6215,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties27.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties27(String value) {
         this.properties27 = value;
@@ -6160,11 +6227,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties28.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties28() {
         return properties28;
@@ -6172,11 +6239,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties28.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties28(String value) {
         this.properties28 = value;
@@ -6184,11 +6251,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties29.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties29() {
         return properties29;
@@ -6196,11 +6263,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties29.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties29(String value) {
         this.properties29 = value;
@@ -6208,11 +6275,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties30.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties30() {
         return properties30;
@@ -6220,11 +6287,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties30.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties30(String value) {
         this.properties30 = value;
@@ -6232,11 +6299,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties31.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties31() {
         return properties31;
@@ -6244,11 +6311,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties31.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties31(String value) {
         this.properties31 = value;
@@ -6256,11 +6323,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties32.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties32() {
         return properties32;
@@ -6268,11 +6335,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties32.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties32(String value) {
         this.properties32 = value;
@@ -6280,11 +6347,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties33.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties33() {
         return properties33;
@@ -6292,11 +6359,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties33.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties33(String value) {
         this.properties33 = value;
@@ -6304,11 +6371,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties34.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties34() {
         return properties34;
@@ -6316,11 +6383,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties34.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties34(String value) {
         this.properties34 = value;
@@ -6328,11 +6395,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties35.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties35() {
         return properties35;
@@ -6340,11 +6407,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties35.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties35(String value) {
         this.properties35 = value;
@@ -6352,11 +6419,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties36.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties36() {
         return properties36;
@@ -6364,11 +6431,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties36.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties36(String value) {
         this.properties36 = value;
@@ -6376,11 +6443,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties37.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties37() {
         return properties37;
@@ -6388,11 +6455,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties37.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties37(String value) {
         this.properties37 = value;
@@ -6400,11 +6467,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties38.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties38() {
         return properties38;
@@ -6412,11 +6479,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties38.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties38(String value) {
         this.properties38 = value;
@@ -6424,11 +6491,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties39.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties39() {
         return properties39;
@@ -6436,11 +6503,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties39.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties39(String value) {
         this.properties39 = value;
@@ -6448,11 +6515,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties40.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties40() {
         return properties40;
@@ -6460,11 +6527,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties40.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties40(String value) {
         this.properties40 = value;
@@ -6472,11 +6539,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties41.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties41() {
         return properties41;
@@ -6484,11 +6551,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties41.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties41(String value) {
         this.properties41 = value;
@@ -6496,11 +6563,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties42.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties42() {
         return properties42;
@@ -6508,11 +6575,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties42.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties42(String value) {
         this.properties42 = value;
@@ -6520,11 +6587,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties43.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties43() {
         return properties43;
@@ -6532,11 +6599,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties43.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties43(String value) {
         this.properties43 = value;
@@ -6544,11 +6611,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties44.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties44() {
         return properties44;
@@ -6556,11 +6623,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties44.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties44(String value) {
         this.properties44 = value;
@@ -6568,11 +6635,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties45.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties45() {
         return properties45;
@@ -6580,11 +6647,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties45.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties45(String value) {
         this.properties45 = value;
@@ -6592,11 +6659,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties46.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties46() {
         return properties46;
@@ -6604,11 +6671,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties46.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties46(String value) {
         this.properties46 = value;
@@ -6616,11 +6683,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties47.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties47() {
         return properties47;
@@ -6628,11 +6695,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties47.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties47(String value) {
         this.properties47 = value;
@@ -6640,11 +6707,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties48.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties48() {
         return properties48;
@@ -6652,11 +6719,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties48.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties48(String value) {
         this.properties48 = value;
@@ -6664,11 +6731,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties49.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties49() {
         return properties49;
@@ -6676,11 +6743,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties49.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties49(String value) {
         this.properties49 = value;
@@ -6688,11 +6755,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties50.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties50() {
         return properties50;
@@ -6700,11 +6767,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties50.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties50(String value) {
         this.properties50 = value;
@@ -6712,11 +6779,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties51.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties51() {
         return properties51;
@@ -6724,11 +6791,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties51.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties51(String value) {
         this.properties51 = value;
@@ -6736,11 +6803,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties52.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties52() {
         return properties52;
@@ -6748,11 +6815,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties52.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties52(String value) {
         this.properties52 = value;
@@ -6760,11 +6827,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties53.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties53() {
         return properties53;
@@ -6772,11 +6839,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties53.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties53(String value) {
         this.properties53 = value;
@@ -6784,11 +6851,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties54.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties54() {
         return properties54;
@@ -6796,11 +6863,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties54.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties54(String value) {
         this.properties54 = value;
@@ -6808,11 +6875,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties55.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties55() {
         return properties55;
@@ -6820,11 +6887,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties55.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties55(String value) {
         this.properties55 = value;
@@ -6832,11 +6899,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties56.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties56() {
         return properties56;
@@ -6844,11 +6911,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties56.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties56(String value) {
         this.properties56 = value;
@@ -6856,11 +6923,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties57.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties57() {
         return properties57;
@@ -6868,11 +6935,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties57.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties57(String value) {
         this.properties57 = value;
@@ -6880,11 +6947,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties58.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties58() {
         return properties58;
@@ -6892,11 +6959,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties58.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties58(String value) {
         this.properties58 = value;
@@ -6904,11 +6971,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties59.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties59() {
         return properties59;
@@ -6916,11 +6983,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties59.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties59(String value) {
         this.properties59 = value;
@@ -6928,11 +6995,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties60.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties60() {
         return properties60;
@@ -6940,11 +7007,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties60.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties60(String value) {
         this.properties60 = value;
@@ -6952,11 +7019,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties61.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties61() {
         return properties61;
@@ -6964,11 +7031,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties61.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties61(String value) {
         this.properties61 = value;
@@ -6976,11 +7043,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties62.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties62() {
         return properties62;
@@ -6988,11 +7055,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties62.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties62(String value) {
         this.properties62 = value;
@@ -7000,11 +7067,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties63.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties63() {
         return properties63;
@@ -7012,11 +7079,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties63.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties63(String value) {
         this.properties63 = value;
@@ -7024,11 +7091,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad properties64.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getProperties64() {
         return properties64;
@@ -7036,11 +7103,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad properties64.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setProperties64(String value) {
         this.properties64 = value;
@@ -7048,11 +7115,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad autoCreateSerialNumbersOnRelease.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getAutoCreateSerialNumbersOnRelease() {
         return autoCreateSerialNumbersOnRelease;
@@ -7060,11 +7127,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad autoCreateSerialNumbersOnRelease.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setAutoCreateSerialNumbersOnRelease(String value) {
         this.autoCreateSerialNumbersOnRelease = value;
@@ -7072,11 +7139,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad dnfEntry.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getDNFEntry() {
         return dnfEntry;
@@ -7084,11 +7151,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad dnfEntry.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setDNFEntry(Long value) {
         this.dnfEntry = value;
@@ -7096,11 +7163,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad gtsItemSpec.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getGTSItemSpec() {
         return gtsItemSpec;
@@ -7108,11 +7175,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad gtsItemSpec.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setGTSItemSpec(String value) {
         this.gtsItemSpec = value;
@@ -7120,11 +7187,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad gtsItemTaxCategory.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getGTSItemTaxCategory() {
         return gtsItemTaxCategory;
@@ -7132,11 +7199,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad gtsItemTaxCategory.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setGTSItemTaxCategory(String value) {
         this.gtsItemTaxCategory = value;
@@ -7144,11 +7211,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad fuelID.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getFuelID() {
         return fuelID;
@@ -7156,11 +7223,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad fuelID.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setFuelID(Long value) {
         this.fuelID = value;
@@ -7168,11 +7235,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad beverageTableCode.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getBeverageTableCode() {
         return beverageTableCode;
@@ -7180,11 +7247,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad beverageTableCode.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setBeverageTableCode(String value) {
         this.beverageTableCode = value;
@@ -7192,11 +7259,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad beverageGroupCode.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getBeverageGroupCode() {
         return beverageGroupCode;
@@ -7204,11 +7271,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad beverageGroupCode.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setBeverageGroupCode(String value) {
         this.beverageGroupCode = value;
@@ -7216,11 +7283,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad beverageCommercialBrandCode.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getBeverageCommercialBrandCode() {
         return beverageCommercialBrandCode;
@@ -7228,11 +7295,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad beverageCommercialBrandCode.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setBeverageCommercialBrandCode(Long value) {
         this.beverageCommercialBrandCode = value;
@@ -7240,11 +7307,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad series.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getSeries() {
         return series;
@@ -7252,11 +7319,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad series.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setSeries(Long value) {
         this.series = value;
@@ -7264,11 +7331,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad toleranceDays.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getToleranceDays() {
         return toleranceDays;
@@ -7276,11 +7343,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad toleranceDays.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setToleranceDays(Long value) {
         this.toleranceDays = value;
@@ -7288,11 +7355,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad typeOfAdvancedRules.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getTypeOfAdvancedRules() {
         return typeOfAdvancedRules;
@@ -7300,11 +7367,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad typeOfAdvancedRules.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setTypeOfAdvancedRules(String value) {
         this.typeOfAdvancedRules = value;
@@ -7312,11 +7379,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad issuePrimarilyBy.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getIssuePrimarilyBy() {
         return issuePrimarilyBy;
@@ -7324,11 +7391,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad issuePrimarilyBy.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setIssuePrimarilyBy(String value) {
         this.issuePrimarilyBy = value;
@@ -7336,11 +7403,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad noDiscounts.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getNoDiscounts() {
         return noDiscounts;
@@ -7348,11 +7415,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad noDiscounts.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setNoDiscounts(String value) {
         this.noDiscounts = value;
@@ -7360,11 +7427,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad assetClass.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getAssetClass() {
         return assetClass;
@@ -7372,11 +7439,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad assetClass.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setAssetClass(String value) {
         this.assetClass = value;
@@ -7384,11 +7451,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad assetGroup.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getAssetGroup() {
         return assetGroup;
@@ -7396,11 +7463,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad assetGroup.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setAssetGroup(String value) {
         this.assetGroup = value;
@@ -7408,11 +7475,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad inventoryNumber.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getInventoryNumber() {
         return inventoryNumber;
@@ -7420,11 +7487,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad inventoryNumber.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setInventoryNumber(String value) {
         this.inventoryNumber = value;
@@ -7432,11 +7499,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad technician.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getTechnician() {
         return technician;
@@ -7444,11 +7511,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad technician.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setTechnician(Long value) {
         this.technician = value;
@@ -7456,11 +7523,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad employee.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getEmployee() {
         return employee;
@@ -7468,11 +7535,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad employee.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setEmployee(Long value) {
         this.employee = value;
@@ -7480,11 +7547,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad location.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getLocation() {
         return location;
@@ -7492,11 +7559,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad location.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setLocation(Long value) {
         this.location = value;
@@ -7504,11 +7571,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad assetStatus.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getAssetStatus() {
         return assetStatus;
@@ -7516,11 +7583,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad assetStatus.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setAssetStatus(String value) {
         this.assetStatus = value;
@@ -7528,11 +7595,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad capitalizationDate.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link XMLGregorianCalendar }
-     *     
+     *
      */
     public XMLGregorianCalendar getCapitalizationDate() {
         return capitalizationDate;
@@ -7540,11 +7607,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad capitalizationDate.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link XMLGregorianCalendar }
-     *     
+     *
      */
     public void setCapitalizationDate(XMLGregorianCalendar value) {
         this.capitalizationDate = value;
@@ -7552,11 +7619,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad statisticalAsset.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getStatisticalAsset() {
         return statisticalAsset;
@@ -7564,11 +7631,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad statisticalAsset.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setStatisticalAsset(String value) {
         this.statisticalAsset = value;
@@ -7576,11 +7643,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad cession.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getCession() {
         return cession;
@@ -7588,11 +7655,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad cession.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setCession(String value) {
         this.cession = value;
@@ -7600,11 +7667,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad deactivateAfterUsefulLife.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getDeactivateAfterUsefulLife() {
         return deactivateAfterUsefulLife;
@@ -7612,11 +7679,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad deactivateAfterUsefulLife.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setDeactivateAfterUsefulLife(String value) {
         this.deactivateAfterUsefulLife = value;
@@ -7624,11 +7691,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad manageByQuantity.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getManageByQuantity() {
         return manageByQuantity;
@@ -7636,11 +7703,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad manageByQuantity.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setManageByQuantity(String value) {
         this.manageByQuantity = value;
@@ -7648,11 +7715,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad uoMGroupEntry.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getUoMGroupEntry() {
         return uoMGroupEntry;
@@ -7660,11 +7727,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad uoMGroupEntry.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setUoMGroupEntry(Long value) {
         this.uoMGroupEntry = value;
@@ -7672,11 +7739,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad inventoryUoMEntry.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getInventoryUoMEntry() {
         return inventoryUoMEntry;
@@ -7684,11 +7751,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad inventoryUoMEntry.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setInventoryUoMEntry(Long value) {
         this.inventoryUoMEntry = value;
@@ -7696,11 +7763,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad defaultSalesUoMEntry.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getDefaultSalesUoMEntry() {
         return defaultSalesUoMEntry;
@@ -7708,11 +7775,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad defaultSalesUoMEntry.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setDefaultSalesUoMEntry(Long value) {
         this.defaultSalesUoMEntry = value;
@@ -7720,11 +7787,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad defaultPurchasingUoMEntry.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getDefaultPurchasingUoMEntry() {
         return defaultPurchasingUoMEntry;
@@ -7732,11 +7799,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad defaultPurchasingUoMEntry.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setDefaultPurchasingUoMEntry(Long value) {
         this.defaultPurchasingUoMEntry = value;
@@ -7744,11 +7811,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad depreciationGroup.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getDepreciationGroup() {
         return depreciationGroup;
@@ -7756,11 +7823,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad depreciationGroup.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setDepreciationGroup(String value) {
         this.depreciationGroup = value;
@@ -7768,11 +7835,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad assetSerialNumber.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getAssetSerialNumber() {
         return assetSerialNumber;
@@ -7780,11 +7847,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad assetSerialNumber.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setAssetSerialNumber(String value) {
         this.assetSerialNumber = value;
@@ -7792,11 +7859,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad inventoryWeight.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getInventoryWeight() {
         return inventoryWeight;
@@ -7804,11 +7871,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad inventoryWeight.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setInventoryWeight(Double value) {
         this.inventoryWeight = value;
@@ -7816,11 +7883,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad inventoryWeightUnit.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getInventoryWeightUnit() {
         return inventoryWeightUnit;
@@ -7828,11 +7895,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad inventoryWeightUnit.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setInventoryWeightUnit(Long value) {
         this.inventoryWeightUnit = value;
@@ -7840,11 +7907,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad inventoryWeight1.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getInventoryWeight1() {
         return inventoryWeight1;
@@ -7852,11 +7919,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad inventoryWeight1.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setInventoryWeight1(Double value) {
         this.inventoryWeight1 = value;
@@ -7864,11 +7931,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad inventoryWeightUnit1.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getInventoryWeightUnit1() {
         return inventoryWeightUnit1;
@@ -7876,11 +7943,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad inventoryWeightUnit1.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setInventoryWeightUnit1(Long value) {
         this.inventoryWeightUnit1 = value;
@@ -7888,11 +7955,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad defaultCountingUnit.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getDefaultCountingUnit() {
         return defaultCountingUnit;
@@ -7900,11 +7967,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad defaultCountingUnit.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setDefaultCountingUnit(String value) {
         this.defaultCountingUnit = value;
@@ -7912,11 +7979,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad countingItemsPerUnit.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getCountingItemsPerUnit() {
         return countingItemsPerUnit;
@@ -7924,11 +7991,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad countingItemsPerUnit.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setCountingItemsPerUnit(Double value) {
         this.countingItemsPerUnit = value;
@@ -7936,11 +8003,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad defaultCountingUoMEntry.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getDefaultCountingUoMEntry() {
         return defaultCountingUoMEntry;
@@ -7948,11 +8015,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad defaultCountingUoMEntry.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setDefaultCountingUoMEntry(Long value) {
         this.defaultCountingUoMEntry = value;
@@ -7960,11 +8027,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad excisable.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getExcisable() {
         return excisable;
@@ -7972,11 +8039,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad excisable.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setExcisable(String value) {
         this.excisable = value;
@@ -7984,11 +8051,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad chapterID.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getChapterID() {
         return chapterID;
@@ -7996,11 +8063,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad chapterID.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setChapterID(Long value) {
         this.chapterID = value;
@@ -8008,11 +8075,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad scsCode.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getScsCode() {
         return scsCode;
@@ -8020,11 +8087,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad scsCode.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setScsCode(String value) {
         this.scsCode = value;
@@ -8032,11 +8099,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad spProdType.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getSpProdType() {
         return spProdType;
@@ -8044,23 +8111,291 @@ public class Item {
 
     /**
      * Define el valor de la propiedad spProdType.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setSpProdType(String value) {
         this.spProdType = value;
     }
 
+    public String getInCostRoll() {
+        return inCostRoll;
+    }
+
+    public void setInCostRoll(String inCostRoll) {
+        this.inCostRoll = inCostRoll;
+    }
+
+    public String getVirtAstItm() {
+        return virtAstItm;
+    }
+
+    public void setVirtAstItm(String virtAstItm) {
+        this.virtAstItm = virtAstItm;
+    }
+
+    public String getEnAstSeri() {
+        return enAstSeri;
+    }
+
+    public void setEnAstSeri(String enAstSeri) {
+        this.enAstSeri = enAstSeri;
+    }
+
+    public XMLGregorianCalendar getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(XMLGregorianCalendar updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    public void setCreateDate(XMLGregorianCalendar createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getgSTRelevnt() {
+        return gstRelevnt;
+    }
+
+    public void setgSTRelevnt(String gSTRelevnt) {
+        this.gstRelevnt = gSTRelevnt;
+    }
+
+    public Long getsACEntry() {
+        return sacEntry;
+    }
+
+    public void setsACEntry(Long sACEntry) {
+        this.sacEntry = sACEntry;
+    }
+
+    public String getGstTaxCtg() {
+        return gstTaxCtg;
+    }
+
+    public void setGstTaxCtg(String gstTaxCtg) {
+        this.gstTaxCtg = gstTaxCtg;
+    }
+
+    public Long getServiceCtg() {
+        return serviceCtg;
+    }
+
+    public void setServiceCtg(Long serviceCtg) {
+        this.serviceCtg = serviceCtg;
+    }
+
+    public Double getAssblValue() {
+        return assblValue;
+    }
+
+    public void setAssblValue(Double assblValue) {
+        this.assblValue = assblValue;
+    }
+
+    public Double getAssVal4WTR() {
+        return assVal4WTR;
+    }
+
+    public void setAssVal4WTR(Double assVal4WTR) {
+        this.assVal4WTR = assVal4WTR;
+    }
+
+    public String getSoiExc() {
+        return soiExc;
+    }
+
+    public void setSoiExc(String soiExc) {
+        this.soiExc = soiExc;
+    }
+
+    public String getImported() {
+        return imported;
+    }
+
+    public void setImported(String imported) {
+        this.imported = imported;
+    }
+
+    public Double getPricingPrc() {
+        return pricingPrc;
+    }
+
+    public void setPricingPrc(Double pricingPrc) {
+        this.pricingPrc = pricingPrc;
+    }
+
+    public Long getPriceUnit() {
+        return priceUnit;
+    }
+
+    public void setPriceUnit(Long priceUnit) {
+        this.priceUnit = priceUnit;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getuMarcasInfo() {
+        return uMarcasInfo;
+    }
+
+    public void setuMarcasInfo(String uMarcasInfo) {
+        this.uMarcasInfo = uMarcasInfo;
+    }
+
+    public String getuGrupo() {
+        return uGrupo;
+    }
+
+    public void setuGrupo(String uGrupo) {
+        this.uGrupo = uGrupo;
+    }
+
+    public String getuCategoria() {
+        return uCategoria;
+    }
+
+    public void setuCategoria(String uCategoria) {
+        this.uCategoria = uCategoria;
+    }
+
+    public String getuCatalogo() {
+        return uCatalogo;
+    }
+
+    public void setuCatalogo(String uCatalogo) {
+        this.uCatalogo = uCatalogo;
+    }
+
+    public String getuTipo() {
+        return uTipo;
+    }
+
+    public void setuTipo(String uTipo) {
+        this.uTipo = uTipo;
+    }
+
+    public ItemPrices getItemPrices() {
+        return itemPrices;
+    }
+
+    public void setItemPrices(ItemPrices itemPrices) {
+        this.itemPrices = itemPrices;
+    }
+
+    public ItemWarehouseInfoCollection getItemWarehouseInfoCollection() {
+        return itemWarehouseInfoCollection;
+    }
+
+    public void setItemWarehouseInfoCollection(ItemWarehouseInfoCollection itemWarehouseInfoCollection) {
+        this.itemWarehouseInfoCollection = itemWarehouseInfoCollection;
+    }
+
+    public ItemPreferredVendors getItemPreferredVendors() {
+        return itemPreferredVendors;
+    }
+
+    public void setItemPreferredVendors(ItemPreferredVendors itemPreferredVendors) {
+        this.itemPreferredVendors = itemPreferredVendors;
+    }
+
+    public ItemLocalizationInfos getItemLocalizationInfos() {
+        return itemLocalizationInfos;
+    }
+
+    public void setItemLocalizationInfos(ItemLocalizationInfos itemLocalizationInfos) {
+        this.itemLocalizationInfos = itemLocalizationInfos;
+    }
+
+    public ItemProjects getItemProjects() {
+        return itemProjects;
+    }
+
+    public void setItemProjects(ItemProjects itemProjects) {
+        this.itemProjects = itemProjects;
+    }
+
+    public ItemDistributionRules getItemDistributionRules() {
+        return itemDistributionRules;
+    }
+
+    public void setItemDistributionRules(ItemDistributionRules itemDistributionRules) {
+        this.itemDistributionRules = itemDistributionRules;
+    }
+
+    public ItemBarCodeCollection getItemBarCodeCollection() {
+        return itemBarCodeCollection;
+    }
+
+    public void setItemBarCodeCollection(ItemBarCodeCollection itemBarCodeCollection) {
+        this.itemBarCodeCollection = itemBarCodeCollection;
+    }
+
+    public ItemDepreciationParameters getItemDepreciationParameters() {
+        return itemDepreciationParameters;
+    }
+
+    public void setItemDepreciationParameters(ItemDepreciationParameters itemDepreciationParameters) {
+        this.itemDepreciationParameters = itemDepreciationParameters;
+    }
+
+    public ItemIntrastatExtension getItemIntrastatExtension() {
+        return itemIntrastatExtension;
+    }
+
+    public void setItemIntrastatExtension(ItemIntrastatExtension itemIntrastatExtension) {
+        this.itemIntrastatExtension = itemIntrastatExtension;
+    }
+
+    public ItemPeriodControls getItemPeriodControls() {
+        return itemPeriodControls;
+    }
+
+    public void setItemPeriodControls(ItemPeriodControls itemPeriodControls) {
+        this.itemPeriodControls = itemPeriodControls;
+    }
+
+    public ItemUnitOfMeasurementCollection getItemUnitOfMeasurementCollection() {
+        return itemUnitOfMeasurementCollection;
+    }
+
+    public void setItemUnitOfMeasurementCollection(ItemUnitOfMeasurementCollection itemUnitOfMeasurementCollection) {
+        this.itemUnitOfMeasurementCollection = itemUnitOfMeasurementCollection;
+    }
+
+    public String getItmsGrpCod() {
+        return itmsGrpCod;
+    }
+
+    public void setItmsGrpCod(String itmsGrpCod) {
+        this.itmsGrpCod = itmsGrpCod;
+    }
+
     /**
      * Obtiene el valor de la propiedad uSubgrupo.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUSubgrupo() {
         return uSubgrupo;
@@ -8068,11 +8403,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad uSubgrupo.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUSubgrupo(String value) {
         this.uSubgrupo = value;
@@ -8080,11 +8415,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad uMarca.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUMarca() {
         return uMarca;
@@ -8092,11 +8427,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad uMarca.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUMarca(String value) {
         this.uMarca = value;
@@ -8104,11 +8439,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad uProcedencia.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUProcedencia() {
         return uProcedencia;
@@ -8116,11 +8451,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad uProcedencia.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUProcedencia(String value) {
         this.uProcedencia = value;
@@ -8128,11 +8463,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad uModelo.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUModelo() {
         return uModelo;
@@ -8140,11 +8475,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad uModelo.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUModelo(String value) {
         this.uModelo = value;
@@ -8152,11 +8487,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad uCodAnterior.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUCodAnterior() {
         return uCodAnterior;
@@ -8164,11 +8499,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad uCodAnterior.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUCodAnterior(String value) {
         this.uCodAnterior = value;
@@ -8176,11 +8511,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad ucostoimp.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUCOSTOIMP() {
         return ucostoimp;
@@ -8188,11 +8523,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad ucostoimp.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUCOSTOIMP(String value) {
         this.ucostoimp = value;
@@ -8200,11 +8535,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad ufeccrea.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link XMLGregorianCalendar }
-     *     
+     *
      */
     public XMLGregorianCalendar getUFECCREA() {
         return ufeccrea;
@@ -8212,11 +8547,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad ufeccrea.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link XMLGregorianCalendar }
-     *     
+     *
      */
     public void setUFECCREA(XMLGregorianCalendar value) {
         this.ufeccrea = value;
@@ -8224,11 +8559,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad uuniprovtas.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getUUNIPROVTAS() {
         return uuniprovtas;
@@ -8236,11 +8571,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad uuniprovtas.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setUUNIPROVTAS(Double value) {
         this.uuniprovtas = value;
@@ -8248,11 +8583,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad uvlgxviv.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUVLGXVIV() {
         return uvlgxviv;
@@ -8260,11 +8595,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad uvlgxviv.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUVLGXVIV(String value) {
         this.uvlgxviv = value;
@@ -8272,11 +8607,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad uvlgxord.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link XMLGregorianCalendar }
-     *     
+     *
      */
     public XMLGregorianCalendar getUVLGXORD() {
         return uvlgxord;
@@ -8284,11 +8619,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad uvlgxord.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link XMLGregorianCalendar }
-     *     
+     *
      */
     public void setUVLGXORD(XMLGregorianCalendar value) {
         this.uvlgxord = value;
@@ -8296,11 +8631,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad uvlgxbom.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUVLGXBOM() {
         return uvlgxbom;
@@ -8308,11 +8643,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad uvlgxbom.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUVLGXBOM(String value) {
         this.uvlgxbom = value;
@@ -8320,11 +8655,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad uvlgxpln.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUVLGXPLN() {
         return uvlgxpln;
@@ -8332,11 +8667,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad uvlgxpln.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUVLGXPLN(String value) {
         this.uvlgxpln = value;
@@ -8344,11 +8679,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad uvlgxsup.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUVLGXSUP() {
         return uvlgxsup;
@@ -8356,11 +8691,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad uvlgxsup.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUVLGXSUP(String value) {
         this.uvlgxsup = value;
@@ -8368,11 +8703,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad uVarrocItemCode.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUVarrocItemCode() {
         return uVarrocItemCode;
@@ -8380,11 +8715,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad uVarrocItemCode.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUVarrocItemCode(String value) {
         this.uVarrocItemCode = value;
@@ -8392,11 +8727,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad uwmsVelocity.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUWMSVelocity() {
         return uwmsVelocity;
@@ -8404,11 +8739,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad uwmsVelocity.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUWMSVelocity(String value) {
         this.uwmsVelocity = value;
@@ -8416,11 +8751,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad uAplicacion.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUAplicacion() {
         return uAplicacion;
@@ -8428,11 +8763,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad uAplicacion.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUAplicacion(String value) {
         this.uAplicacion = value;
@@ -8440,11 +8775,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad uType.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUType() {
         return uType;
@@ -8452,11 +8787,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad uType.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUType(String value) {
         this.uType = value;
@@ -8464,11 +8799,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad unwrscrp.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Double }
-     *     
+     *
      */
     public Double getUNWRSCRP() {
         return unwrscrp;
@@ -8476,11 +8811,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad unwrscrp.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Double }
-     *     
+     *
      */
     public void setUNWRSCRP(Double value) {
         this.unwrscrp = value;
@@ -8488,11 +8823,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad unwrwopo.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getUNWRWOPO() {
         return unwrwopo;
@@ -8500,11 +8835,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad unwrwopo.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setUNWRWOPO(Long value) {
         this.unwrwopo = value;
@@ -8512,11 +8847,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad unwrmatrix.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Long }
-     *     
+     *
      */
     public Long getUNWRMATRIX() {
         return unwrmatrix;
@@ -8524,11 +8859,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad unwrmatrix.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Long }
-     *     
+     *
      */
     public void setUNWRMATRIX(Long value) {
         this.unwrmatrix = value;
@@ -8536,11 +8871,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad unwrAutoShipment.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUNWRAutoShipment() {
         return unwrAutoShipment;
@@ -8548,11 +8883,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad unwrAutoShipment.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUNWRAutoShipment(String value) {
         this.unwrAutoShipment = value;
@@ -8560,11 +8895,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad uTipoInventario.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUTipoInventario() {
         return uTipoInventario;
@@ -8572,11 +8907,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad uTipoInventario.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUTipoInventario(String value) {
         this.uTipoInventario = value;
@@ -8584,11 +8919,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad uResponsable.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUResponsable() {
         return uResponsable;
@@ -8596,11 +8931,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad uResponsable.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUResponsable(String value) {
         this.uResponsable = value;
@@ -8608,11 +8943,11 @@ public class Item {
 
     /**
      * Obtiene el valor de la propiedad uvlgxca.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUVLGXCA() {
         return uvlgxca;
@@ -8620,11 +8955,11 @@ public class Item {
 
     /**
      * Define el valor de la propiedad uvlgxca.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUVLGXCA(String value) {
         this.uvlgxca = value;
@@ -8632,9 +8967,9 @@ public class Item {
 
     /**
      * <p>Clase Java para anonymous complex type.
-     * 
+     *
      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-     * 
+     *
      * <pre>
      * &lt;complexType&gt;
      *   &lt;complexContent&gt;
@@ -8719,15 +9054,15 @@ public class Item {
      *   &lt;/complexContent&gt;
      * &lt;/complexType&gt;
      * </pre>
-     * 
-     * 
+     *
+     *
      */
 
     /**
      * <p>Clase Java para anonymous complex type.
-     * 
+     *
      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-     * 
+     *
      * <pre>
      * &lt;complexType&gt;
      *   &lt;complexContent&gt;
@@ -8752,43 +9087,43 @@ public class Item {
      *   &lt;/complexContent&gt;
      * &lt;/complexType&gt;
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "itemBarCode"
+            "itemBarCode"
     })
     public static class ItemBarCodeCollection {
 
         @XmlElement(name = "ItemBarCode")
-        protected List<Item.ItemBarCodeCollection.ItemBarCode> itemBarCode;
+        protected List<ItemBarCode> itemBarCode;
 
         /**
          * Gets the value of the itemBarCode property.
-         * 
+         *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the itemBarCode property.
-         * 
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getItemBarCode().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link Item.ItemBarCodeCollection.ItemBarCode }
-         * 
-         * 
+         *
+         *
          */
-        public List<Item.ItemBarCodeCollection.ItemBarCode> getItemBarCode() {
+        public List<ItemBarCode> getItemBarCode() {
             if (itemBarCode == null) {
-                itemBarCode = new ArrayList<Item.ItemBarCodeCollection.ItemBarCode>();
+                itemBarCode = new ArrayList<ItemBarCode>();
             }
             return this.itemBarCode;
         }
@@ -8796,9 +9131,9 @@ public class Item {
 
         /**
          * <p>Clase Java para anonymous complex type.
-         * 
+         *
          * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-         * 
+         *
          * <pre>
          * &lt;complexType&gt;
          *   &lt;complexContent&gt;
@@ -8813,8 +9148,8 @@ public class Item {
          *   &lt;/complexContent&gt;
          * &lt;/complexType&gt;
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -8833,11 +9168,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad absEntry.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getAbsEntry() {
                 return absEntry;
@@ -8845,11 +9180,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad absEntry.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setAbsEntry(Long value) {
                 this.absEntry = value;
@@ -8857,11 +9192,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad uoMEntry.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getUoMEntry() {
                 return uoMEntry;
@@ -8869,11 +9204,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad uoMEntry.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setUoMEntry(Long value) {
                 this.uoMEntry = value;
@@ -8881,11 +9216,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad barcode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getBarcode() {
                 return barcode;
@@ -8893,11 +9228,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad barcode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setBarcode(String value) {
                 this.barcode = value;
@@ -8905,11 +9240,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad freeText.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getFreeText() {
                 return freeText;
@@ -8917,11 +9252,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad freeText.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setFreeText(String value) {
                 this.freeText = value;
@@ -8934,9 +9269,9 @@ public class Item {
 
     /**
      * <p>Clase Java para anonymous complex type.
-     * 
+     *
      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-     * 
+     *
      * <pre>
      * &lt;complexType&gt;
      *   &lt;complexContent&gt;
@@ -8964,43 +9299,43 @@ public class Item {
      *   &lt;/complexContent&gt;
      * &lt;/complexType&gt;
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "itemDepreciationParameter"
+            "itemDepreciationParameter"
     })
     public static class ItemDepreciationParameters {
 
         @XmlElement(name = "ItemDepreciationParameter")
-        protected List<Item.ItemDepreciationParameters.ItemDepreciationParameter> itemDepreciationParameter;
+        protected List<ItemDepreciationParameter> itemDepreciationParameter;
 
         /**
          * Gets the value of the itemDepreciationParameter property.
-         * 
+         *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the itemDepreciationParameter property.
-         * 
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getItemDepreciationParameter().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link Item.ItemDepreciationParameters.ItemDepreciationParameter }
-         * 
-         * 
+         *
+         *
          */
-        public List<Item.ItemDepreciationParameters.ItemDepreciationParameter> getItemDepreciationParameter() {
+        public List<ItemDepreciationParameter> getItemDepreciationParameter() {
             if (itemDepreciationParameter == null) {
-                itemDepreciationParameter = new ArrayList<Item.ItemDepreciationParameters.ItemDepreciationParameter>();
+                itemDepreciationParameter = new ArrayList<ItemDepreciationParameter>();
             }
             return this.itemDepreciationParameter;
         }
@@ -9008,9 +9343,9 @@ public class Item {
 
         /**
          * <p>Clase Java para anonymous complex type.
-         * 
+         *
          * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-         * 
+         *
          * <pre>
          * &lt;complexType&gt;
          *   &lt;complexContent&gt;
@@ -9028,8 +9363,8 @@ public class Item {
          *   &lt;/complexContent&gt;
          * &lt;/complexType&gt;
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -9056,11 +9391,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad fiscalYear.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getFiscalYear() {
                 return fiscalYear;
@@ -9068,11 +9403,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad fiscalYear.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setFiscalYear(String value) {
                 this.fiscalYear = value;
@@ -9080,11 +9415,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad depreciationArea.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getDepreciationArea() {
                 return depreciationArea;
@@ -9092,11 +9427,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad depreciationArea.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setDepreciationArea(String value) {
                 this.depreciationArea = value;
@@ -9104,11 +9439,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad depreciationStartDate.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public XMLGregorianCalendar getDepreciationStartDate() {
                 return depreciationStartDate;
@@ -9116,11 +9451,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad depreciationStartDate.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public void setDepreciationStartDate(XMLGregorianCalendar value) {
                 this.depreciationStartDate = value;
@@ -9128,11 +9463,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad depreciationEndDate.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public XMLGregorianCalendar getDepreciationEndDate() {
                 return depreciationEndDate;
@@ -9140,11 +9475,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad depreciationEndDate.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public void setDepreciationEndDate(XMLGregorianCalendar value) {
                 this.depreciationEndDate = value;
@@ -9152,11 +9487,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad usefulLife.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getUsefulLife() {
                 return usefulLife;
@@ -9164,11 +9499,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad usefulLife.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setUsefulLife(Long value) {
                 this.usefulLife = value;
@@ -9176,11 +9511,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad remainingLife.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getRemainingLife() {
                 return remainingLife;
@@ -9188,11 +9523,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad remainingLife.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setRemainingLife(Double value) {
                 this.remainingLife = value;
@@ -9200,11 +9535,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad depreciationType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getDepreciationType() {
                 return depreciationType;
@@ -9212,11 +9547,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad depreciationType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setDepreciationType(String value) {
                 this.depreciationType = value;
@@ -9229,9 +9564,9 @@ public class Item {
 
     /**
      * <p>Clase Java para anonymous complex type.
-     * 
+     *
      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-     * 
+     *
      * <pre>
      * &lt;complexType&gt;
      *   &lt;complexContent&gt;
@@ -9260,43 +9595,43 @@ public class Item {
      *   &lt;/complexContent&gt;
      * &lt;/complexType&gt;
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "itemDistributionRule"
+            "itemDistributionRule"
     })
     public static class ItemDistributionRules {
 
         @XmlElement(name = "ItemDistributionRule")
-        protected List<Item.ItemDistributionRules.ItemDistributionRule> itemDistributionRule;
+        protected List<ItemDistributionRule> itemDistributionRule;
 
         /**
          * Gets the value of the itemDistributionRule property.
-         * 
+         *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the itemDistributionRule property.
-         * 
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getItemDistributionRule().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link Item.ItemDistributionRules.ItemDistributionRule }
-         * 
-         * 
+         *
+         *
          */
-        public List<Item.ItemDistributionRules.ItemDistributionRule> getItemDistributionRule() {
+        public List<ItemDistributionRule> getItemDistributionRule() {
             if (itemDistributionRule == null) {
-                itemDistributionRule = new ArrayList<Item.ItemDistributionRules.ItemDistributionRule>();
+                itemDistributionRule = new ArrayList<ItemDistributionRule>();
             }
             return this.itemDistributionRule;
         }
@@ -9304,9 +9639,9 @@ public class Item {
 
         /**
          * <p>Clase Java para anonymous complex type.
-         * 
+         *
          * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-         * 
+         *
          * <pre>
          * &lt;complexType&gt;
          *   &lt;complexContent&gt;
@@ -9325,8 +9660,8 @@ public class Item {
          *   &lt;/complexContent&gt;
          * &lt;/complexType&gt;
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -9355,11 +9690,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad lineNumber.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getLineNumber() {
                 return lineNumber;
@@ -9367,11 +9702,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad lineNumber.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setLineNumber(String value) {
                 this.lineNumber = value;
@@ -9379,11 +9714,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad validFrom.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public XMLGregorianCalendar getValidFrom() {
                 return validFrom;
@@ -9391,11 +9726,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad validFrom.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public void setValidFrom(XMLGregorianCalendar value) {
                 this.validFrom = value;
@@ -9403,11 +9738,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad validTo.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public XMLGregorianCalendar getValidTo() {
                 return validTo;
@@ -9415,11 +9750,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad validTo.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public void setValidTo(XMLGregorianCalendar value) {
                 this.validTo = value;
@@ -9427,11 +9762,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad distributionRule.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getDistributionRule() {
                 return distributionRule;
@@ -9439,11 +9774,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad distributionRule.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setDistributionRule(String value) {
                 this.distributionRule = value;
@@ -9451,11 +9786,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad distributionRule2.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getDistributionRule2() {
                 return distributionRule2;
@@ -9463,11 +9798,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad distributionRule2.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setDistributionRule2(String value) {
                 this.distributionRule2 = value;
@@ -9475,11 +9810,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad distributionRule3.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getDistributionRule3() {
                 return distributionRule3;
@@ -9487,11 +9822,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad distributionRule3.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setDistributionRule3(String value) {
                 this.distributionRule3 = value;
@@ -9499,11 +9834,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad distributionRule4.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getDistributionRule4() {
                 return distributionRule4;
@@ -9511,11 +9846,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad distributionRule4.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setDistributionRule4(String value) {
                 this.distributionRule4 = value;
@@ -9523,11 +9858,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad distributionRule5.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getDistributionRule5() {
                 return distributionRule5;
@@ -9535,11 +9870,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad distributionRule5.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setDistributionRule5(String value) {
                 this.distributionRule5 = value;
@@ -9552,9 +9887,9 @@ public class Item {
 
     /**
      * <p>Clase Java para anonymous complex type.
-     * 
+     *
      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-     * 
+     *
      * <pre>
      * &lt;complexType&gt;
      *   &lt;complexContent&gt;
@@ -9621,8 +9956,8 @@ public class Item {
      *   &lt;/complexContent&gt;
      * &lt;/complexType&gt;
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
@@ -9673,11 +10008,11 @@ public class Item {
 
         /**
          * Obtiene el valor de la propiedad itemCode.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getItemCode() {
             return itemCode;
@@ -9685,11 +10020,11 @@ public class Item {
 
         /**
          * Define el valor de la propiedad itemCode.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setItemCode(String value) {
             this.itemCode = value;
@@ -9697,11 +10032,11 @@ public class Item {
 
         /**
          * Obtiene el valor de la propiedad commodityCode.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link Long }
-         *     
+         *
          */
         public Long getCommodityCode() {
             return commodityCode;
@@ -9709,11 +10044,11 @@ public class Item {
 
         /**
          * Define el valor de la propiedad commodityCode.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link Long }
-         *     
+         *
          */
         public void setCommodityCode(Long value) {
             this.commodityCode = value;
@@ -9721,11 +10056,11 @@ public class Item {
 
         /**
          * Obtiene el valor de la propiedad supplementaryUnit.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link Long }
-         *     
+         *
          */
         public Long getSupplementaryUnit() {
             return supplementaryUnit;
@@ -9733,11 +10068,11 @@ public class Item {
 
         /**
          * Define el valor de la propiedad supplementaryUnit.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link Long }
-         *     
+         *
          */
         public void setSupplementaryUnit(Long value) {
             this.supplementaryUnit = value;
@@ -9745,11 +10080,11 @@ public class Item {
 
         /**
          * Obtiene el valor de la propiedad factorOfSupplementaryUnit.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link Double }
-         *     
+         *
          */
         public Double getFactorOfSupplementaryUnit() {
             return factorOfSupplementaryUnit;
@@ -9757,11 +10092,11 @@ public class Item {
 
         /**
          * Define el valor de la propiedad factorOfSupplementaryUnit.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link Double }
-         *     
+         *
          */
         public void setFactorOfSupplementaryUnit(Double value) {
             this.factorOfSupplementaryUnit = value;
@@ -9769,11 +10104,11 @@ public class Item {
 
         /**
          * Obtiene el valor de la propiedad importRegionState.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link Long }
-         *     
+         *
          */
         public Long getImportRegionState() {
             return importRegionState;
@@ -9781,11 +10116,11 @@ public class Item {
 
         /**
          * Define el valor de la propiedad importRegionState.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link Long }
-         *     
+         *
          */
         public void setImportRegionState(Long value) {
             this.importRegionState = value;
@@ -9793,11 +10128,11 @@ public class Item {
 
         /**
          * Obtiene el valor de la propiedad exportRegionState.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link Long }
-         *     
+         *
          */
         public Long getExportRegionState() {
             return exportRegionState;
@@ -9805,11 +10140,11 @@ public class Item {
 
         /**
          * Define el valor de la propiedad exportRegionState.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link Long }
-         *     
+         *
          */
         public void setExportRegionState(Long value) {
             this.exportRegionState = value;
@@ -9817,11 +10152,11 @@ public class Item {
 
         /**
          * Obtiene el valor de la propiedad importNatureOfTransaction.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link Long }
-         *     
+         *
          */
         public Long getImportNatureOfTransaction() {
             return importNatureOfTransaction;
@@ -9829,11 +10164,11 @@ public class Item {
 
         /**
          * Define el valor de la propiedad importNatureOfTransaction.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link Long }
-         *     
+         *
          */
         public void setImportNatureOfTransaction(Long value) {
             this.importNatureOfTransaction = value;
@@ -9841,11 +10176,11 @@ public class Item {
 
         /**
          * Obtiene el valor de la propiedad exportNatureOfTransaction.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link Long }
-         *     
+         *
          */
         public Long getExportNatureOfTransaction() {
             return exportNatureOfTransaction;
@@ -9853,11 +10188,11 @@ public class Item {
 
         /**
          * Define el valor de la propiedad exportNatureOfTransaction.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link Long }
-         *     
+         *
          */
         public void setExportNatureOfTransaction(Long value) {
             this.exportNatureOfTransaction = value;
@@ -9865,11 +10200,11 @@ public class Item {
 
         /**
          * Obtiene el valor de la propiedad importStatisticalProcedure.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link Long }
-         *     
+         *
          */
         public Long getImportStatisticalProcedure() {
             return importStatisticalProcedure;
@@ -9877,11 +10212,11 @@ public class Item {
 
         /**
          * Define el valor de la propiedad importStatisticalProcedure.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link Long }
-         *     
+         *
          */
         public void setImportStatisticalProcedure(Long value) {
             this.importStatisticalProcedure = value;
@@ -9889,11 +10224,11 @@ public class Item {
 
         /**
          * Obtiene el valor de la propiedad exportStatisticalProcedure.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link Long }
-         *     
+         *
          */
         public Long getExportStatisticalProcedure() {
             return exportStatisticalProcedure;
@@ -9901,11 +10236,11 @@ public class Item {
 
         /**
          * Define el valor de la propiedad exportStatisticalProcedure.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link Long }
-         *     
+         *
          */
         public void setExportStatisticalProcedure(Long value) {
             this.exportStatisticalProcedure = value;
@@ -9913,11 +10248,11 @@ public class Item {
 
         /**
          * Obtiene el valor de la propiedad countryOfOrigin.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getCountryOfOrigin() {
             return countryOfOrigin;
@@ -9925,11 +10260,11 @@ public class Item {
 
         /**
          * Define el valor de la propiedad countryOfOrigin.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setCountryOfOrigin(String value) {
             this.countryOfOrigin = value;
@@ -9937,11 +10272,11 @@ public class Item {
 
         /**
          * Obtiene el valor de la propiedad serviceCode.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link Long }
-         *     
+         *
          */
         public Long getServiceCode() {
             return serviceCode;
@@ -9949,11 +10284,11 @@ public class Item {
 
         /**
          * Define el valor de la propiedad serviceCode.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link Long }
-         *     
+         *
          */
         public void setServiceCode(Long value) {
             this.serviceCode = value;
@@ -9961,11 +10296,11 @@ public class Item {
 
         /**
          * Obtiene el valor de la propiedad type.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getType() {
             return type;
@@ -9973,11 +10308,11 @@ public class Item {
 
         /**
          * Define el valor de la propiedad type.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setType(String value) {
             this.type = value;
@@ -9985,11 +10320,11 @@ public class Item {
 
         /**
          * Obtiene el valor de la propiedad serviceSupplyMethod.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getServiceSupplyMethod() {
             return serviceSupplyMethod;
@@ -9997,11 +10332,11 @@ public class Item {
 
         /**
          * Define el valor de la propiedad serviceSupplyMethod.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setServiceSupplyMethod(String value) {
             this.serviceSupplyMethod = value;
@@ -10009,11 +10344,11 @@ public class Item {
 
         /**
          * Obtiene el valor de la propiedad servicePaymentMethod.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getServicePaymentMethod() {
             return servicePaymentMethod;
@@ -10021,11 +10356,11 @@ public class Item {
 
         /**
          * Define el valor de la propiedad servicePaymentMethod.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setServicePaymentMethod(String value) {
             this.servicePaymentMethod = value;
@@ -10033,11 +10368,11 @@ public class Item {
 
         /**
          * Obtiene el valor de la propiedad importRegionCountry.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getImportRegionCountry() {
             return importRegionCountry;
@@ -10045,11 +10380,11 @@ public class Item {
 
         /**
          * Define el valor de la propiedad importRegionCountry.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setImportRegionCountry(String value) {
             this.importRegionCountry = value;
@@ -10057,11 +10392,11 @@ public class Item {
 
         /**
          * Obtiene el valor de la propiedad exportRegionCountry.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getExportRegionCountry() {
             return exportRegionCountry;
@@ -10069,11 +10404,11 @@ public class Item {
 
         /**
          * Define el valor de la propiedad exportRegionCountry.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setExportRegionCountry(String value) {
             this.exportRegionCountry = value;
@@ -10081,11 +10416,11 @@ public class Item {
 
         /**
          * Obtiene el valor de la propiedad useWeightInCalculation.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getUseWeightInCalculation() {
             return useWeightInCalculation;
@@ -10093,11 +10428,11 @@ public class Item {
 
         /**
          * Define el valor de la propiedad useWeightInCalculation.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setUseWeightInCalculation(String value) {
             this.useWeightInCalculation = value;
@@ -10105,11 +10440,11 @@ public class Item {
 
         /**
          * Obtiene el valor de la propiedad intrastatRelevant.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getIntrastatRelevant() {
             return intrastatRelevant;
@@ -10117,11 +10452,11 @@ public class Item {
 
         /**
          * Define el valor de la propiedad intrastatRelevant.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setIntrastatRelevant(String value) {
             this.intrastatRelevant = value;
@@ -10129,11 +10464,11 @@ public class Item {
 
         /**
          * Obtiene el valor de la propiedad statisticalCode.
-         * 
+         *
          * @return
          *     possible object is
          *     {@link String }
-         *     
+         *
          */
         public String getStatisticalCode() {
             return statisticalCode;
@@ -10141,11 +10476,11 @@ public class Item {
 
         /**
          * Define el valor de la propiedad statisticalCode.
-         * 
+         *
          * @param value
          *     allowed object is
          *     {@link String }
-         *     
+         *
          */
         public void setStatisticalCode(String value) {
             this.statisticalCode = value;
@@ -10156,9 +10491,9 @@ public class Item {
 
     /**
      * <p>Clase Java para anonymous complex type.
-     * 
+     *
      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-     * 
+     *
      * <pre>
      * &lt;complexType&gt;
      *   &lt;complexContent&gt;
@@ -10181,43 +10516,43 @@ public class Item {
      *   &lt;/complexContent&gt;
      * &lt;/complexType&gt;
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "itemLocalizationInfo"
+            "itemLocalizationInfo"
     })
     public static class ItemLocalizationInfos {
 
         @XmlElement(name = "ItemLocalizationInfo")
-        protected List<Item.ItemLocalizationInfos.ItemLocalizationInfo> itemLocalizationInfo;
+        protected List<ItemLocalizationInfo> itemLocalizationInfo;
 
         /**
          * Gets the value of the itemLocalizationInfo property.
-         * 
+         *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the itemLocalizationInfo property.
-         * 
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getItemLocalizationInfo().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link Item.ItemLocalizationInfos.ItemLocalizationInfo }
-         * 
-         * 
+         *
+         *
          */
-        public List<Item.ItemLocalizationInfos.ItemLocalizationInfo> getItemLocalizationInfo() {
+        public List<ItemLocalizationInfo> getItemLocalizationInfo() {
             if (itemLocalizationInfo == null) {
-                itemLocalizationInfo = new ArrayList<Item.ItemLocalizationInfos.ItemLocalizationInfo>();
+                itemLocalizationInfo = new ArrayList<ItemLocalizationInfo>();
             }
             return this.itemLocalizationInfo;
         }
@@ -10225,9 +10560,9 @@ public class Item {
 
         /**
          * <p>Clase Java para anonymous complex type.
-         * 
+         *
          * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-         * 
+         *
          * <pre>
          * &lt;complexType&gt;
          *   &lt;complexContent&gt;
@@ -10240,8 +10575,8 @@ public class Item {
          *   &lt;/complexContent&gt;
          * &lt;/complexType&gt;
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -10256,11 +10591,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad itemCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getItemCode() {
                 return itemCode;
@@ -10268,11 +10603,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad itemCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setItemCode(String value) {
                 this.itemCode = value;
@@ -10280,11 +10615,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad incomeNature.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getIncomeNature() {
                 return incomeNature;
@@ -10292,11 +10627,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad incomeNature.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setIncomeNature(String value) {
                 this.incomeNature = value;
@@ -10309,9 +10644,9 @@ public class Item {
 
     /**
      * <p>Clase Java para anonymous complex type.
-     * 
+     *
      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-     * 
+     *
      * <pre>
      * &lt;complexType&gt;
      *   &lt;complexContent&gt;
@@ -10344,43 +10679,43 @@ public class Item {
      *   &lt;/complexContent&gt;
      * &lt;/complexType&gt;
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "itemPeriodControl"
+            "itemPeriodControl"
     })
     public static class ItemPeriodControls {
 
         @XmlElement(name = "ItemPeriodControl")
-        protected List<Item.ItemPeriodControls.ItemPeriodControl> itemPeriodControl;
+        protected List<ItemPeriodControl> itemPeriodControl;
 
         /**
          * Gets the value of the itemPeriodControl property.
-         * 
+         *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the itemPeriodControl property.
-         * 
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getItemPeriodControl().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link Item.ItemPeriodControls.ItemPeriodControl }
-         * 
-         * 
+         *
+         *
          */
-        public List<Item.ItemPeriodControls.ItemPeriodControl> getItemPeriodControl() {
+        public List<ItemPeriodControl> getItemPeriodControl() {
             if (itemPeriodControl == null) {
-                itemPeriodControl = new ArrayList<Item.ItemPeriodControls.ItemPeriodControl>();
+                itemPeriodControl = new ArrayList<ItemPeriodControl>();
             }
             return this.itemPeriodControl;
         }
@@ -10388,9 +10723,9 @@ public class Item {
 
         /**
          * <p>Clase Java para anonymous complex type.
-         * 
+         *
          * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-         * 
+         *
          * <pre>
          * &lt;complexType&gt;
          *   &lt;complexContent&gt;
@@ -10413,8 +10748,8 @@ public class Item {
          *   &lt;/complexContent&gt;
          * &lt;/complexType&gt;
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -10435,11 +10770,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad fiscalYear.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getFiscalYear() {
                 return fiscalYear;
@@ -10447,11 +10782,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad fiscalYear.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setFiscalYear(String value) {
                 this.fiscalYear = value;
@@ -10459,11 +10794,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad depreciationArea.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getDepreciationArea() {
                 return depreciationArea;
@@ -10471,11 +10806,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad depreciationArea.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setDepreciationArea(String value) {
                 this.depreciationArea = value;
@@ -10483,11 +10818,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad subPeriod.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getSubPeriod() {
                 return subPeriod;
@@ -10495,11 +10830,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad subPeriod.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setSubPeriod(Long value) {
                 this.subPeriod = value;
@@ -10507,11 +10842,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad depreciationStatus.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getDepreciationStatus() {
                 return depreciationStatus;
@@ -10519,11 +10854,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad depreciationStatus.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setDepreciationStatus(String value) {
                 this.depreciationStatus = value;
@@ -10531,11 +10866,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad factor.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getFactor() {
                 return factor;
@@ -10543,11 +10878,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad factor.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setFactor(Double value) {
                 this.factor = value;
@@ -10560,9 +10895,9 @@ public class Item {
 
     /**
      * <p>Clase Java para anonymous complex type.
-     * 
+     *
      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-     * 
+     *
      * <pre>
      * &lt;complexType&gt;
      *   &lt;complexContent&gt;
@@ -10584,43 +10919,43 @@ public class Item {
      *   &lt;/complexContent&gt;
      * &lt;/complexType&gt;
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "itemPreferredVendor"
+            "itemPreferredVendor"
     })
     public static class ItemPreferredVendors {
 
         @XmlElement(name = "ItemPreferredVendor")
-        protected List<Item.ItemPreferredVendors.ItemPreferredVendor> itemPreferredVendor;
+        protected List<ItemPreferredVendor> itemPreferredVendor;
 
         /**
          * Gets the value of the itemPreferredVendor property.
-         * 
+         *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the itemPreferredVendor property.
-         * 
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getItemPreferredVendor().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link Item.ItemPreferredVendors.ItemPreferredVendor }
-         * 
-         * 
+         *
+         *
          */
-        public List<Item.ItemPreferredVendors.ItemPreferredVendor> getItemPreferredVendor() {
+        public List<ItemPreferredVendor> getItemPreferredVendor() {
             if (itemPreferredVendor == null) {
-                itemPreferredVendor = new ArrayList<Item.ItemPreferredVendors.ItemPreferredVendor>();
+                itemPreferredVendor = new ArrayList<ItemPreferredVendor>();
             }
             return this.itemPreferredVendor;
         }
@@ -10628,9 +10963,9 @@ public class Item {
 
         /**
          * <p>Clase Java para anonymous complex type.
-         * 
+         *
          * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-         * 
+         *
          * <pre>
          * &lt;complexType&gt;
          *   &lt;complexContent&gt;
@@ -10642,8 +10977,8 @@ public class Item {
          *   &lt;/complexContent&gt;
          * &lt;/complexType&gt;
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -10656,11 +10991,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad bpCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getBPCode() {
                 return bpCode;
@@ -10668,11 +11003,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad bpCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setBPCode(String value) {
                 this.bpCode = value;
@@ -10685,9 +11020,9 @@ public class Item {
 
     /**
      * <p>Clase Java para anonymous complex type.
-     * 
+     *
      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-     * 
+     *
      * <pre>
      * &lt;complexType&gt;
      *   &lt;complexContent&gt;
@@ -10756,43 +11091,43 @@ public class Item {
      *   &lt;/complexContent&gt;
      * &lt;/complexType&gt;
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "itemPrice"
+            "itemPrice"
     })
     public static class ItemPrices {
 
         @XmlElement(name = "ItemPrice")
-        protected List<Item.ItemPrices.ItemPrice> itemPrice;
+        protected List<ItemPrice> itemPrice;
 
         /**
          * Gets the value of the itemPrice property.
-         * 
+         *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the itemPrice property.
-         * 
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getItemPrice().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link Item.ItemPrices.ItemPrice }
-         * 
-         * 
+         *
+         *
          */
-        public List<Item.ItemPrices.ItemPrice> getItemPrice() {
+        public List<ItemPrice> getItemPrice() {
             if (itemPrice == null) {
-                itemPrice = new ArrayList<Item.ItemPrices.ItemPrice>();
+                itemPrice = new ArrayList<ItemPrice>();
             }
             return this.itemPrice;
         }
@@ -10800,9 +11135,9 @@ public class Item {
 
         /**
          * <p>Clase Java para anonymous complex type.
-         * 
+         *
          * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-         * 
+         *
          * <pre>
          * &lt;complexType&gt;
          *   &lt;complexContent&gt;
@@ -10861,8 +11196,8 @@ public class Item {
          *   &lt;/complexContent&gt;
          * &lt;/complexType&gt;
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -10893,11 +11228,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad priceList.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getPriceList() {
                 return priceList;
@@ -10905,11 +11240,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad priceList.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setPriceList(Long value) {
                 this.priceList = value;
@@ -10917,11 +11252,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad price.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getPrice() {
                 return price;
@@ -10929,11 +11264,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad price.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setPrice(Double value) {
                 this.price = value;
@@ -10941,11 +11276,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad currency.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCurrency() {
                 return currency;
@@ -10953,11 +11288,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad currency.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCurrency(String value) {
                 this.currency = value;
@@ -10965,11 +11300,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad additionalPrice1.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getAdditionalPrice1() {
                 return additionalPrice1;
@@ -10977,11 +11312,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad additionalPrice1.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setAdditionalPrice1(Double value) {
                 this.additionalPrice1 = value;
@@ -10989,11 +11324,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad additionalCurrency1.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getAdditionalCurrency1() {
                 return additionalCurrency1;
@@ -11001,11 +11336,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad additionalCurrency1.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setAdditionalCurrency1(String value) {
                 this.additionalCurrency1 = value;
@@ -11013,11 +11348,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad additionalPrice2.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getAdditionalPrice2() {
                 return additionalPrice2;
@@ -11025,11 +11360,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad additionalPrice2.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setAdditionalPrice2(Double value) {
                 this.additionalPrice2 = value;
@@ -11037,11 +11372,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad additionalCurrency2.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getAdditionalCurrency2() {
                 return additionalCurrency2;
@@ -11049,11 +11384,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad additionalCurrency2.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setAdditionalCurrency2(String value) {
                 this.additionalCurrency2 = value;
@@ -11061,11 +11396,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad basePriceList.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getBasePriceList() {
                 return basePriceList;
@@ -11073,11 +11408,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad basePriceList.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setBasePriceList(Long value) {
                 this.basePriceList = value;
@@ -11085,11 +11420,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad factor.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getFactor() {
                 return factor;
@@ -11097,11 +11432,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad factor.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setFactor(Double value) {
                 this.factor = value;
@@ -11109,11 +11444,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad uoMPrices.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Item.ItemPrices.ItemPrice.UoMPrices }
-             *     
+             *
              */
             public Item.ItemPrices.ItemPrice.UoMPrices getUoMPrices() {
                 return uoMPrices;
@@ -11121,11 +11456,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad uoMPrices.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Item.ItemPrices.ItemPrice.UoMPrices }
-             *     
+             *
              */
             public void setUoMPrices(Item.ItemPrices.ItemPrice.UoMPrices value) {
                 this.uoMPrices = value;
@@ -11134,9 +11469,9 @@ public class Item {
 
             /**
              * <p>Clase Java para anonymous complex type.
-             * 
+             *
              * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-             * 
+             *
              * <pre>
              * &lt;complexType&gt;
              *   &lt;complexContent&gt;
@@ -11176,43 +11511,43 @@ public class Item {
              *   &lt;/complexContent&gt;
              * &lt;/complexType&gt;
              * </pre>
-             * 
-             * 
+             *
+             *
              */
             @XmlAccessorType(XmlAccessType.FIELD)
             @XmlType(name = "", propOrder = {
-                "uoMPrice"
+                    "uoMPrice"
             })
             public static class UoMPrices {
 
                 @XmlElement(name = "UoMPrice")
-                protected List<Item.ItemPrices.ItemPrice.UoMPrices.UoMPrice> uoMPrice;
+                protected List<UoMPrice> uoMPrice;
 
                 /**
                  * Gets the value of the uoMPrice property.
-                 * 
+                 *
                  * <p>
                  * This accessor method returns a reference to the live list,
                  * not a snapshot. Therefore any modification you make to the
                  * returned list will be present inside the JAXB object.
                  * This is why there is not a <CODE>set</CODE> method for the uoMPrice property.
-                 * 
+                 *
                  * <p>
                  * For example, to add a new item, do as follows:
                  * <pre>
                  *    getUoMPrice().add(newItem);
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  * <p>
                  * Objects of the following type(s) are allowed in the list
                  * {@link Item.ItemPrices.ItemPrice.UoMPrices.UoMPrice }
-                 * 
-                 * 
+                 *
+                 *
                  */
-                public List<Item.ItemPrices.ItemPrice.UoMPrices.UoMPrice> getUoMPrice() {
+                public List<UoMPrice> getUoMPrice() {
                     if (uoMPrice == null) {
-                        uoMPrice = new ArrayList<Item.ItemPrices.ItemPrice.UoMPrices.UoMPrice>();
+                        uoMPrice = new ArrayList<UoMPrice>();
                     }
                     return this.uoMPrice;
                 }
@@ -11220,9 +11555,9 @@ public class Item {
 
                 /**
                  * <p>Clase Java para anonymous complex type.
-                 * 
+                 *
                  * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-                 * 
+                 *
                  * <pre>
                  * &lt;complexType&gt;
                  *   &lt;complexContent&gt;
@@ -11252,8 +11587,8 @@ public class Item {
                  *   &lt;/complexContent&gt;
                  * &lt;/complexType&gt;
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  */
                 @XmlAccessorType(XmlAccessType.FIELD)
                 @XmlType(name = "", propOrder = {
@@ -11288,11 +11623,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad priceList.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getPriceList() {
                         return priceList;
@@ -11300,11 +11635,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad priceList.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setPriceList(Long value) {
                         this.priceList = value;
@@ -11312,11 +11647,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad uoMEntry.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getUoMEntry() {
                         return uoMEntry;
@@ -11324,11 +11659,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad uoMEntry.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setUoMEntry(Long value) {
                         this.uoMEntry = value;
@@ -11336,11 +11671,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad reduceBy.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public Double getReduceBy() {
                         return reduceBy;
@@ -11348,11 +11683,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad reduceBy.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public void setReduceBy(Double value) {
                         this.reduceBy = value;
@@ -11360,11 +11695,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad price.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public Double getPrice() {
                         return price;
@@ -11372,11 +11707,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad price.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public void setPrice(Double value) {
                         this.price = value;
@@ -11384,11 +11719,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad currency.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getCurrency() {
                         return currency;
@@ -11396,11 +11731,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad currency.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setCurrency(String value) {
                         this.currency = value;
@@ -11408,11 +11743,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad additionalReduceBy1.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public Double getAdditionalReduceBy1() {
                         return additionalReduceBy1;
@@ -11420,11 +11755,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad additionalReduceBy1.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public void setAdditionalReduceBy1(Double value) {
                         this.additionalReduceBy1 = value;
@@ -11432,11 +11767,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad additionalPrice1.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public Double getAdditionalPrice1() {
                         return additionalPrice1;
@@ -11444,11 +11779,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad additionalPrice1.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public void setAdditionalPrice1(Double value) {
                         this.additionalPrice1 = value;
@@ -11456,11 +11791,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad additionalCurrency1.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getAdditionalCurrency1() {
                         return additionalCurrency1;
@@ -11468,11 +11803,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad additionalCurrency1.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setAdditionalCurrency1(String value) {
                         this.additionalCurrency1 = value;
@@ -11480,11 +11815,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad additionalReduceBy2.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public Double getAdditionalReduceBy2() {
                         return additionalReduceBy2;
@@ -11492,11 +11827,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad additionalReduceBy2.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public void setAdditionalReduceBy2(Double value) {
                         this.additionalReduceBy2 = value;
@@ -11504,11 +11839,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad additionalPrice2.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public Double getAdditionalPrice2() {
                         return additionalPrice2;
@@ -11516,11 +11851,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad additionalPrice2.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public void setAdditionalPrice2(Double value) {
                         this.additionalPrice2 = value;
@@ -11528,11 +11863,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad additionalCurrency2.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getAdditionalCurrency2() {
                         return additionalCurrency2;
@@ -11540,11 +11875,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad additionalCurrency2.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setAdditionalCurrency2(String value) {
                         this.additionalCurrency2 = value;
@@ -11552,11 +11887,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad auto.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getAuto() {
                         return auto;
@@ -11564,11 +11899,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad auto.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setAuto(String value) {
                         this.auto = value;
@@ -11585,9 +11920,9 @@ public class Item {
 
     /**
      * <p>Clase Java para anonymous complex type.
-     * 
+     *
      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-     * 
+     *
      * <pre>
      * &lt;complexType&gt;
      *   &lt;complexContent&gt;
@@ -11612,43 +11947,43 @@ public class Item {
      *   &lt;/complexContent&gt;
      * &lt;/complexType&gt;
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "itemProject"
+            "itemProject"
     })
     public static class ItemProjects {
 
         @XmlElement(name = "ItemProject")
-        protected List<Item.ItemProjects.ItemProject> itemProject;
+        protected List<ItemProject> itemProject;
 
         /**
          * Gets the value of the itemProject property.
-         * 
+         *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the itemProject property.
-         * 
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getItemProject().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link Item.ItemProjects.ItemProject }
-         * 
-         * 
+         *
+         *
          */
-        public List<Item.ItemProjects.ItemProject> getItemProject() {
+        public List<ItemProject> getItemProject() {
             if (itemProject == null) {
-                itemProject = new ArrayList<Item.ItemProjects.ItemProject>();
+                itemProject = new ArrayList<ItemProject>();
             }
             return this.itemProject;
         }
@@ -11656,9 +11991,9 @@ public class Item {
 
         /**
          * <p>Clase Java para anonymous complex type.
-         * 
+         *
          * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-         * 
+         *
          * <pre>
          * &lt;complexType&gt;
          *   &lt;complexContent&gt;
@@ -11673,8 +12008,8 @@ public class Item {
          *   &lt;/complexContent&gt;
          * &lt;/complexType&gt;
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -11695,11 +12030,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad lineNumber.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getLineNumber() {
                 return lineNumber;
@@ -11707,11 +12042,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad lineNumber.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setLineNumber(Long value) {
                 this.lineNumber = value;
@@ -11719,11 +12054,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad validFrom.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public XMLGregorianCalendar getValidFrom() {
                 return validFrom;
@@ -11731,11 +12066,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad validFrom.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public void setValidFrom(XMLGregorianCalendar value) {
                 this.validFrom = value;
@@ -11743,11 +12078,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad validTo.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public XMLGregorianCalendar getValidTo() {
                 return validTo;
@@ -11755,11 +12090,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad validTo.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link XMLGregorianCalendar }
-             *     
+             *
              */
             public void setValidTo(XMLGregorianCalendar value) {
                 this.validTo = value;
@@ -11767,11 +12102,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad project.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getProject() {
                 return project;
@@ -11779,11 +12114,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad project.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setProject(String value) {
                 this.project = value;
@@ -11796,9 +12131,9 @@ public class Item {
 
     /**
      * <p>Clase Java para anonymous complex type.
-     * 
+     *
      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-     * 
+     *
      * <pre>
      * &lt;complexType&gt;
      *   &lt;complexContent&gt;
@@ -11899,43 +12234,43 @@ public class Item {
      *   &lt;/complexContent&gt;
      * &lt;/complexType&gt;
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "itemUnitOfMeasurement"
+            "itemUnitOfMeasurement"
     })
     public static class ItemUnitOfMeasurementCollection {
 
         @XmlElement(name = "ItemUnitOfMeasurement")
-        protected List<Item.ItemUnitOfMeasurementCollection.ItemUnitOfMeasurement> itemUnitOfMeasurement;
+        protected List<ItemUnitOfMeasurement> itemUnitOfMeasurement;
 
         /**
          * Gets the value of the itemUnitOfMeasurement property.
-         * 
+         *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the itemUnitOfMeasurement property.
-         * 
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getItemUnitOfMeasurement().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link Item.ItemUnitOfMeasurementCollection.ItemUnitOfMeasurement }
-         * 
-         * 
+         *
+         *
          */
-        public List<Item.ItemUnitOfMeasurementCollection.ItemUnitOfMeasurement> getItemUnitOfMeasurement() {
+        public List<ItemUnitOfMeasurement> getItemUnitOfMeasurement() {
             if (itemUnitOfMeasurement == null) {
-                itemUnitOfMeasurement = new ArrayList<Item.ItemUnitOfMeasurementCollection.ItemUnitOfMeasurement>();
+                itemUnitOfMeasurement = new ArrayList<ItemUnitOfMeasurement>();
             }
             return this.itemUnitOfMeasurement;
         }
@@ -11943,9 +12278,9 @@ public class Item {
 
         /**
          * <p>Clase Java para anonymous complex type.
-         * 
+         *
          * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-         * 
+         *
          * <pre>
          * &lt;complexType&gt;
          *   &lt;complexContent&gt;
@@ -12036,8 +12371,8 @@ public class Item {
          *   &lt;/complexContent&gt;
          * &lt;/complexType&gt;
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -12094,11 +12429,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad uoMType.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUoMType() {
                 return uoMType;
@@ -12106,11 +12441,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad uoMType.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUoMType(String value) {
                 this.uoMType = value;
@@ -12118,11 +12453,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad uoMEntry.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getUoMEntry() {
                 return uoMEntry;
@@ -12130,11 +12465,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad uoMEntry.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setUoMEntry(Long value) {
                 this.uoMEntry = value;
@@ -12142,11 +12477,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad defaultBarcode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getDefaultBarcode() {
                 return defaultBarcode;
@@ -12154,11 +12489,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad defaultBarcode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setDefaultBarcode(Long value) {
                 this.defaultBarcode = value;
@@ -12166,11 +12501,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad defaultPackage.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getDefaultPackage() {
                 return defaultPackage;
@@ -12178,11 +12513,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad defaultPackage.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setDefaultPackage(Long value) {
                 this.defaultPackage = value;
@@ -12190,11 +12525,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad length1.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getLength1() {
                 return length1;
@@ -12202,11 +12537,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad length1.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setLength1(Double value) {
                 this.length1 = value;
@@ -12214,11 +12549,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad length1Unit.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getLength1Unit() {
                 return length1Unit;
@@ -12226,11 +12561,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad length1Unit.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setLength1Unit(Long value) {
                 this.length1Unit = value;
@@ -12238,11 +12573,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad length2.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getLength2() {
                 return length2;
@@ -12250,11 +12585,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad length2.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setLength2(Double value) {
                 this.length2 = value;
@@ -12262,11 +12597,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad length2Unit.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getLength2Unit() {
                 return length2Unit;
@@ -12274,11 +12609,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad length2Unit.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setLength2Unit(Long value) {
                 this.length2Unit = value;
@@ -12286,11 +12621,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad width1.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getWidth1() {
                 return width1;
@@ -12298,11 +12633,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad width1.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setWidth1(Double value) {
                 this.width1 = value;
@@ -12310,11 +12645,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad width1Unit.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getWidth1Unit() {
                 return width1Unit;
@@ -12322,11 +12657,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad width1Unit.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setWidth1Unit(Long value) {
                 this.width1Unit = value;
@@ -12334,11 +12669,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad width2.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getWidth2() {
                 return width2;
@@ -12346,11 +12681,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad width2.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setWidth2(Double value) {
                 this.width2 = value;
@@ -12358,11 +12693,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad width2Unit.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getWidth2Unit() {
                 return width2Unit;
@@ -12370,11 +12705,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad width2Unit.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setWidth2Unit(Long value) {
                 this.width2Unit = value;
@@ -12382,11 +12717,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad height1.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getHeight1() {
                 return height1;
@@ -12394,11 +12729,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad height1.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setHeight1(Double value) {
                 this.height1 = value;
@@ -12406,11 +12741,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad height1Unit.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getHeight1Unit() {
                 return height1Unit;
@@ -12418,11 +12753,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad height1Unit.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setHeight1Unit(Long value) {
                 this.height1Unit = value;
@@ -12430,11 +12765,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad height2.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getHeight2() {
                 return height2;
@@ -12442,11 +12777,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad height2.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setHeight2(Double value) {
                 this.height2 = value;
@@ -12454,11 +12789,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad height2Unit.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getHeight2Unit() {
                 return height2Unit;
@@ -12466,11 +12801,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad height2Unit.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setHeight2Unit(Long value) {
                 this.height2Unit = value;
@@ -12478,11 +12813,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad volume.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getVolume() {
                 return volume;
@@ -12490,11 +12825,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad volume.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setVolume(Double value) {
                 this.volume = value;
@@ -12502,11 +12837,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad volumeUnit.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getVolumeUnit() {
                 return volumeUnit;
@@ -12514,11 +12849,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad volumeUnit.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setVolumeUnit(Long value) {
                 this.volumeUnit = value;
@@ -12526,11 +12861,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad weight1.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getWeight1() {
                 return weight1;
@@ -12538,11 +12873,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad weight1.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setWeight1(Double value) {
                 this.weight1 = value;
@@ -12550,11 +12885,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad weight1Unit.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getWeight1Unit() {
                 return weight1Unit;
@@ -12562,11 +12897,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad weight1Unit.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setWeight1Unit(Long value) {
                 this.weight1Unit = value;
@@ -12574,11 +12909,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad weight2.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getWeight2() {
                 return weight2;
@@ -12586,11 +12921,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad weight2.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setWeight2(Double value) {
                 this.weight2 = value;
@@ -12598,11 +12933,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad weight2Unit.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getWeight2Unit() {
                 return weight2Unit;
@@ -12610,11 +12945,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad weight2Unit.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setWeight2Unit(Long value) {
                 this.weight2Unit = value;
@@ -12622,11 +12957,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad itemUoMPackageCollection.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Item.ItemUnitOfMeasurementCollection.ItemUnitOfMeasurement.ItemUoMPackageCollection }
-             *     
+             *
              */
             public Item.ItemUnitOfMeasurementCollection.ItemUnitOfMeasurement.ItemUoMPackageCollection getItemUoMPackageCollection() {
                 return itemUoMPackageCollection;
@@ -12634,11 +12969,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad itemUoMPackageCollection.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Item.ItemUnitOfMeasurementCollection.ItemUnitOfMeasurement.ItemUoMPackageCollection }
-             *     
+             *
              */
             public void setItemUoMPackageCollection(Item.ItemUnitOfMeasurementCollection.ItemUnitOfMeasurement.ItemUoMPackageCollection value) {
                 this.itemUoMPackageCollection = value;
@@ -12647,9 +12982,9 @@ public class Item {
 
             /**
              * <p>Clase Java para anonymous complex type.
-             * 
+             *
              * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-             * 
+             *
              * <pre>
              * &lt;complexType&gt;
              *   &lt;complexContent&gt;
@@ -12700,43 +13035,43 @@ public class Item {
              *   &lt;/complexContent&gt;
              * &lt;/complexType&gt;
              * </pre>
-             * 
-             * 
+             *
+             *
              */
             @XmlAccessorType(XmlAccessType.FIELD)
             @XmlType(name = "", propOrder = {
-                "itemUoMPackage"
+                    "itemUoMPackage"
             })
             public static class ItemUoMPackageCollection {
 
                 @XmlElement(name = "ItemUoMPackage")
-                protected List<Item.ItemUnitOfMeasurementCollection.ItemUnitOfMeasurement.ItemUoMPackageCollection.ItemUoMPackage> itemUoMPackage;
+                protected List<ItemUoMPackage> itemUoMPackage;
 
                 /**
                  * Gets the value of the itemUoMPackage property.
-                 * 
+                 *
                  * <p>
                  * This accessor method returns a reference to the live list,
                  * not a snapshot. Therefore any modification you make to the
                  * returned list will be present inside the JAXB object.
                  * This is why there is not a <CODE>set</CODE> method for the itemUoMPackage property.
-                 * 
+                 *
                  * <p>
                  * For example, to add a new item, do as follows:
                  * <pre>
                  *    getItemUoMPackage().add(newItem);
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  * <p>
                  * Objects of the following type(s) are allowed in the list
                  * {@link Item.ItemUnitOfMeasurementCollection.ItemUnitOfMeasurement.ItemUoMPackageCollection.ItemUoMPackage }
-                 * 
-                 * 
+                 *
+                 *
                  */
-                public List<Item.ItemUnitOfMeasurementCollection.ItemUnitOfMeasurement.ItemUoMPackageCollection.ItemUoMPackage> getItemUoMPackage() {
+                public List<ItemUoMPackage> getItemUoMPackage() {
                     if (itemUoMPackage == null) {
-                        itemUoMPackage = new ArrayList<Item.ItemUnitOfMeasurementCollection.ItemUnitOfMeasurement.ItemUoMPackageCollection.ItemUoMPackage>();
+                        itemUoMPackage = new ArrayList<ItemUoMPackage>();
                     }
                     return this.itemUoMPackage;
                 }
@@ -12744,9 +13079,9 @@ public class Item {
 
                 /**
                  * <p>Clase Java para anonymous complex type.
-                 * 
+                 *
                  * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-                 * 
+                 *
                  * <pre>
                  * &lt;complexType&gt;
                  *   &lt;complexContent&gt;
@@ -12787,8 +13122,8 @@ public class Item {
                  *   &lt;/complexContent&gt;
                  * &lt;/complexType&gt;
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  */
                 @XmlAccessorType(XmlAccessType.FIELD)
                 @XmlType(name = "", propOrder = {
@@ -12843,11 +13178,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad uoMType.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getUoMType() {
                         return uoMType;
@@ -12855,11 +13190,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad uoMType.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setUoMType(String value) {
                         this.uoMType = value;
@@ -12867,11 +13202,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad uoMEntry.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getUoMEntry() {
                         return uoMEntry;
@@ -12879,11 +13214,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad uoMEntry.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setUoMEntry(Long value) {
                         this.uoMEntry = value;
@@ -12891,11 +13226,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad packageTypeEntry.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getPackageTypeEntry() {
                         return packageTypeEntry;
@@ -12903,11 +13238,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad packageTypeEntry.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setPackageTypeEntry(Long value) {
                         this.packageTypeEntry = value;
@@ -12915,11 +13250,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad length1.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public Double getLength1() {
                         return length1;
@@ -12927,11 +13262,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad length1.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public void setLength1(Double value) {
                         this.length1 = value;
@@ -12939,11 +13274,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad length1Unit.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getLength1Unit() {
                         return length1Unit;
@@ -12951,11 +13286,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad length1Unit.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setLength1Unit(Long value) {
                         this.length1Unit = value;
@@ -12963,11 +13298,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad length2.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public Double getLength2() {
                         return length2;
@@ -12975,11 +13310,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad length2.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public void setLength2(Double value) {
                         this.length2 = value;
@@ -12987,11 +13322,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad length2Unit.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getLength2Unit() {
                         return length2Unit;
@@ -12999,11 +13334,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad length2Unit.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setLength2Unit(Long value) {
                         this.length2Unit = value;
@@ -13011,11 +13346,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad width1.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public Double getWidth1() {
                         return width1;
@@ -13023,11 +13358,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad width1.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public void setWidth1(Double value) {
                         this.width1 = value;
@@ -13035,11 +13370,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad width1Unit.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getWidth1Unit() {
                         return width1Unit;
@@ -13047,11 +13382,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad width1Unit.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setWidth1Unit(Long value) {
                         this.width1Unit = value;
@@ -13059,11 +13394,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad width2.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public Double getWidth2() {
                         return width2;
@@ -13071,11 +13406,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad width2.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public void setWidth2(Double value) {
                         this.width2 = value;
@@ -13083,11 +13418,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad width2Unit.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getWidth2Unit() {
                         return width2Unit;
@@ -13095,11 +13430,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad width2Unit.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setWidth2Unit(Long value) {
                         this.width2Unit = value;
@@ -13107,11 +13442,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad height1.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public Double getHeight1() {
                         return height1;
@@ -13119,11 +13454,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad height1.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public void setHeight1(Double value) {
                         this.height1 = value;
@@ -13131,11 +13466,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad height1Unit.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getHeight1Unit() {
                         return height1Unit;
@@ -13143,11 +13478,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad height1Unit.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setHeight1Unit(Long value) {
                         this.height1Unit = value;
@@ -13155,11 +13490,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad height2.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public Double getHeight2() {
                         return height2;
@@ -13167,11 +13502,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad height2.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public void setHeight2(Double value) {
                         this.height2 = value;
@@ -13179,11 +13514,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad height2Unit.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getHeight2Unit() {
                         return height2Unit;
@@ -13191,11 +13526,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad height2Unit.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setHeight2Unit(Long value) {
                         this.height2Unit = value;
@@ -13203,11 +13538,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad volume.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public Double getVolume() {
                         return volume;
@@ -13215,11 +13550,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad volume.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public void setVolume(Double value) {
                         this.volume = value;
@@ -13227,11 +13562,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad volumeUnit.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getVolumeUnit() {
                         return volumeUnit;
@@ -13239,11 +13574,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad volumeUnit.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setVolumeUnit(Long value) {
                         this.volumeUnit = value;
@@ -13251,11 +13586,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad weight1.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public Double getWeight1() {
                         return weight1;
@@ -13263,11 +13598,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad weight1.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public void setWeight1(Double value) {
                         this.weight1 = value;
@@ -13275,11 +13610,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad weight1Unit.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getWeight1Unit() {
                         return weight1Unit;
@@ -13287,11 +13622,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad weight1Unit.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setWeight1Unit(Long value) {
                         this.weight1Unit = value;
@@ -13299,11 +13634,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad weight2.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public Double getWeight2() {
                         return weight2;
@@ -13311,11 +13646,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad weight2.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public void setWeight2(Double value) {
                         this.weight2 = value;
@@ -13323,11 +13658,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad weight2Unit.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getWeight2Unit() {
                         return weight2Unit;
@@ -13335,11 +13670,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad weight2Unit.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setWeight2Unit(Long value) {
                         this.weight2Unit = value;
@@ -13347,11 +13682,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad quantityPerPackage.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public Double getQuantityPerPackage() {
                         return quantityPerPackage;
@@ -13359,11 +13694,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad quantityPerPackage.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Double }
-                     *     
+                     *
                      */
                     public void setQuantityPerPackage(Double value) {
                         this.quantityPerPackage = value;
@@ -13380,9 +13715,9 @@ public class Item {
 
     /**
      * <p>Clase Java para anonymous complex type.
-     * 
+     *
      * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-     * 
+     *
      * <pre>
      * &lt;complexType&gt;
      *   &lt;complexContent&gt;
@@ -13526,43 +13861,43 @@ public class Item {
      *   &lt;/complexContent&gt;
      * &lt;/complexType&gt;
      * </pre>
-     * 
-     * 
+     *
+     *
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "itemWarehouseInfo"
+            "itemWarehouseInfo"
     })
     public static class ItemWarehouseInfoCollection {
 
         @XmlElement(name = "ItemWarehouseInfo")
-        protected List<Item.ItemWarehouseInfoCollection.ItemWarehouseInfo> itemWarehouseInfo;
+        protected List<ItemWarehouseInfo> itemWarehouseInfo;
 
         /**
          * Gets the value of the itemWarehouseInfo property.
-         * 
+         *
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
          * This is why there is not a <CODE>set</CODE> method for the itemWarehouseInfo property.
-         * 
+         *
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
          *    getItemWarehouseInfo().add(newItem);
          * </pre>
-         * 
-         * 
+         *
+         *
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link Item.ItemWarehouseInfoCollection.ItemWarehouseInfo }
-         * 
-         * 
+         *
+         *
          */
-        public List<Item.ItemWarehouseInfoCollection.ItemWarehouseInfo> getItemWarehouseInfo() {
+        public List<ItemWarehouseInfo> getItemWarehouseInfo() {
             if (itemWarehouseInfo == null) {
-                itemWarehouseInfo = new ArrayList<Item.ItemWarehouseInfoCollection.ItemWarehouseInfo>();
+                itemWarehouseInfo = new ArrayList<ItemWarehouseInfo>();
             }
             return this.itemWarehouseInfo;
         }
@@ -13570,9 +13905,9 @@ public class Item {
 
         /**
          * <p>Clase Java para anonymous complex type.
-         * 
+         *
          * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-         * 
+         *
          * <pre>
          * &lt;complexType&gt;
          *   &lt;complexContent&gt;
@@ -13706,8 +14041,8 @@ public class Item {
          *   &lt;/complexContent&gt;
          * &lt;/complexType&gt;
          * </pre>
-         * 
-         * 
+         *
+         *
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
@@ -13858,11 +14193,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad minimalStock.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getMinimalStock() {
                 return minimalStock;
@@ -13870,11 +14205,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad minimalStock.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setMinimalStock(Double value) {
                 this.minimalStock = value;
@@ -13882,11 +14217,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad maximalStock.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getMaximalStock() {
                 return maximalStock;
@@ -13894,11 +14229,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad maximalStock.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setMaximalStock(Double value) {
                 this.maximalStock = value;
@@ -13906,11 +14241,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad minimalOrder.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getMinimalOrder() {
                 return minimalOrder;
@@ -13918,11 +14253,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad minimalOrder.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setMinimalOrder(Double value) {
                 this.minimalOrder = value;
@@ -13930,11 +14265,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad standardAveragePrice.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getStandardAveragePrice() {
                 return standardAveragePrice;
@@ -13942,11 +14277,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad standardAveragePrice.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setStandardAveragePrice(Double value) {
                 this.standardAveragePrice = value;
@@ -13954,11 +14289,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad locked.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getLocked() {
                 return locked;
@@ -13966,11 +14301,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad locked.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setLocked(String value) {
                 this.locked = value;
@@ -13978,11 +14313,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad inventoryAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getInventoryAccount() {
                 return inventoryAccount;
@@ -13990,11 +14325,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad inventoryAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setInventoryAccount(String value) {
                 this.inventoryAccount = value;
@@ -14002,11 +14337,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad costAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCostAccount() {
                 return costAccount;
@@ -14014,11 +14349,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad costAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCostAccount(String value) {
                 this.costAccount = value;
@@ -14026,11 +14361,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad transferAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getTransferAccount() {
                 return transferAccount;
@@ -14038,11 +14373,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad transferAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setTransferAccount(String value) {
                 this.transferAccount = value;
@@ -14050,11 +14385,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad revenuesAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getRevenuesAccount() {
                 return revenuesAccount;
@@ -14062,11 +14397,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad revenuesAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setRevenuesAccount(String value) {
                 this.revenuesAccount = value;
@@ -14074,11 +14409,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad varienceAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getVarienceAccount() {
                 return varienceAccount;
@@ -14086,11 +14421,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad varienceAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setVarienceAccount(String value) {
                 this.varienceAccount = value;
@@ -14098,11 +14433,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad decreasingAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getDecreasingAccount() {
                 return decreasingAccount;
@@ -14110,11 +14445,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad decreasingAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setDecreasingAccount(String value) {
                 this.decreasingAccount = value;
@@ -14122,11 +14457,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad increasingAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getIncreasingAccount() {
                 return increasingAccount;
@@ -14134,11 +14469,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad increasingAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setIncreasingAccount(String value) {
                 this.increasingAccount = value;
@@ -14146,11 +14481,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad returningAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getReturningAccount() {
                 return returningAccount;
@@ -14158,11 +14493,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad returningAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setReturningAccount(String value) {
                 this.returningAccount = value;
@@ -14170,11 +14505,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad expensesAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getExpensesAccount() {
                 return expensesAccount;
@@ -14182,11 +14517,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad expensesAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setExpensesAccount(String value) {
                 this.expensesAccount = value;
@@ -14194,11 +14529,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad euRevenuesAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getEURevenuesAccount() {
                 return euRevenuesAccount;
@@ -14206,11 +14541,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad euRevenuesAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setEURevenuesAccount(String value) {
                 this.euRevenuesAccount = value;
@@ -14218,11 +14553,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad euExpensesAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getEUExpensesAccount() {
                 return euExpensesAccount;
@@ -14230,11 +14565,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad euExpensesAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setEUExpensesAccount(String value) {
                 this.euExpensesAccount = value;
@@ -14242,11 +14577,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad foreignRevenueAcc.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getForeignRevenueAcc() {
                 return foreignRevenueAcc;
@@ -14254,11 +14589,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad foreignRevenueAcc.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setForeignRevenueAcc(String value) {
                 this.foreignRevenueAcc = value;
@@ -14266,11 +14601,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad foreignExpensAcc.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getForeignExpensAcc() {
                 return foreignExpensAcc;
@@ -14278,11 +14613,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad foreignExpensAcc.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setForeignExpensAcc(String value) {
                 this.foreignExpensAcc = value;
@@ -14290,11 +14625,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad exemptIncomeAcc.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getExemptIncomeAcc() {
                 return exemptIncomeAcc;
@@ -14302,11 +14637,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad exemptIncomeAcc.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setExemptIncomeAcc(String value) {
                 this.exemptIncomeAcc = value;
@@ -14314,11 +14649,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad priceDifferenceAcc.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getPriceDifferenceAcc() {
                 return priceDifferenceAcc;
@@ -14326,11 +14661,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad priceDifferenceAcc.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setPriceDifferenceAcc(String value) {
                 this.priceDifferenceAcc = value;
@@ -14338,11 +14673,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad warehouseCode.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getWarehouseCode() {
                 return warehouseCode;
@@ -14350,11 +14685,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad warehouseCode.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setWarehouseCode(String value) {
                 this.warehouseCode = value;
@@ -14362,11 +14697,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad inStock.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getInStock() {
                 return inStock;
@@ -14374,11 +14709,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad inStock.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setInStock(Double value) {
                 this.inStock = value;
@@ -14386,11 +14721,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad committed.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getCommitted() {
                 return committed;
@@ -14398,11 +14733,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad committed.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setCommitted(Double value) {
                 this.committed = value;
@@ -14410,11 +14745,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad ordered.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getOrdered() {
                 return ordered;
@@ -14422,11 +14757,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad ordered.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setOrdered(Double value) {
                 this.ordered = value;
@@ -14434,11 +14769,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad countedQuantity.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getCountedQuantity() {
                 return countedQuantity;
@@ -14446,11 +14781,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad countedQuantity.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setCountedQuantity(Double value) {
                 this.countedQuantity = value;
@@ -14458,11 +14793,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad wasCounted.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getWasCounted() {
                 return wasCounted;
@@ -14470,11 +14805,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad wasCounted.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setWasCounted(String value) {
                 this.wasCounted = value;
@@ -14482,11 +14817,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad userSignature.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getUserSignature() {
                 return userSignature;
@@ -14494,11 +14829,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad userSignature.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setUserSignature(Long value) {
                 this.userSignature = value;
@@ -14506,11 +14841,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad counted.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Double }
-             *     
+             *
              */
             public Double getCounted() {
                 return counted;
@@ -14518,11 +14853,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad counted.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Double }
-             *     
+             *
              */
             public void setCounted(Double value) {
                 this.counted = value;
@@ -14530,11 +14865,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad expenseClearingAct.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getExpenseClearingAct() {
                 return expenseClearingAct;
@@ -14542,11 +14877,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad expenseClearingAct.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setExpenseClearingAct(String value) {
                 this.expenseClearingAct = value;
@@ -14554,11 +14889,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad purchaseCreditAcc.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getPurchaseCreditAcc() {
                 return purchaseCreditAcc;
@@ -14566,11 +14901,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad purchaseCreditAcc.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setPurchaseCreditAcc(String value) {
                 this.purchaseCreditAcc = value;
@@ -14578,11 +14913,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad euPurchaseCreditAcc.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getEUPurchaseCreditAcc() {
                 return euPurchaseCreditAcc;
@@ -14590,11 +14925,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad euPurchaseCreditAcc.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setEUPurchaseCreditAcc(String value) {
                 this.euPurchaseCreditAcc = value;
@@ -14602,11 +14937,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad foreignPurchaseCreditAcc.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getForeignPurchaseCreditAcc() {
                 return foreignPurchaseCreditAcc;
@@ -14614,11 +14949,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad foreignPurchaseCreditAcc.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setForeignPurchaseCreditAcc(String value) {
                 this.foreignPurchaseCreditAcc = value;
@@ -14626,11 +14961,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad salesCreditAcc.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getSalesCreditAcc() {
                 return salesCreditAcc;
@@ -14638,11 +14973,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad salesCreditAcc.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setSalesCreditAcc(String value) {
                 this.salesCreditAcc = value;
@@ -14650,11 +14985,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad salesCreditEUAcc.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getSalesCreditEUAcc() {
                 return salesCreditEUAcc;
@@ -14662,11 +14997,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad salesCreditEUAcc.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setSalesCreditEUAcc(String value) {
                 this.salesCreditEUAcc = value;
@@ -14674,11 +15009,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad exemptedCredits.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getExemptedCredits() {
                 return exemptedCredits;
@@ -14686,11 +15021,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad exemptedCredits.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setExemptedCredits(String value) {
                 this.exemptedCredits = value;
@@ -14698,11 +15033,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad salesCreditForeignAcc.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getSalesCreditForeignAcc() {
                 return salesCreditForeignAcc;
@@ -14710,11 +15045,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad salesCreditForeignAcc.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setSalesCreditForeignAcc(String value) {
                 this.salesCreditForeignAcc = value;
@@ -14722,11 +15057,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad expenseOffsettingAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getExpenseOffsettingAccount() {
                 return expenseOffsettingAccount;
@@ -14734,11 +15069,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad expenseOffsettingAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setExpenseOffsettingAccount(String value) {
                 this.expenseOffsettingAccount = value;
@@ -14746,11 +15081,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad wipAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getWipAccount() {
                 return wipAccount;
@@ -14758,11 +15093,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad wipAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setWipAccount(String value) {
                 this.wipAccount = value;
@@ -14770,11 +15105,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad exchangeRateDifferencesAcct.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getExchangeRateDifferencesAcct() {
                 return exchangeRateDifferencesAcct;
@@ -14782,11 +15117,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad exchangeRateDifferencesAcct.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setExchangeRateDifferencesAcct(String value) {
                 this.exchangeRateDifferencesAcct = value;
@@ -14794,11 +15129,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad goodsClearingAcct.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getGoodsClearingAcct() {
                 return goodsClearingAcct;
@@ -14806,11 +15141,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad goodsClearingAcct.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setGoodsClearingAcct(String value) {
                 this.goodsClearingAcct = value;
@@ -14818,11 +15153,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad negativeInventoryAdjustmentAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getNegativeInventoryAdjustmentAccount() {
                 return negativeInventoryAdjustmentAccount;
@@ -14830,11 +15165,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad negativeInventoryAdjustmentAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setNegativeInventoryAdjustmentAccount(String value) {
                 this.negativeInventoryAdjustmentAccount = value;
@@ -14842,11 +15177,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad costInflationOffsetAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCostInflationOffsetAccount() {
                 return costInflationOffsetAccount;
@@ -14854,11 +15189,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad costInflationOffsetAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCostInflationOffsetAccount(String value) {
                 this.costInflationOffsetAccount = value;
@@ -14866,11 +15201,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad glDecreaseAcct.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getGLDecreaseAcct() {
                 return glDecreaseAcct;
@@ -14878,11 +15213,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad glDecreaseAcct.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setGLDecreaseAcct(String value) {
                 this.glDecreaseAcct = value;
@@ -14890,11 +15225,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad glIncreaseAcct.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getGLIncreaseAcct() {
                 return glIncreaseAcct;
@@ -14902,11 +15237,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad glIncreaseAcct.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setGLIncreaseAcct(String value) {
                 this.glIncreaseAcct = value;
@@ -14914,11 +15249,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad paReturnAcct.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getPAReturnAcct() {
                 return paReturnAcct;
@@ -14926,11 +15261,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad paReturnAcct.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setPAReturnAcct(String value) {
                 this.paReturnAcct = value;
@@ -14938,11 +15273,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad purchaseAcct.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getPurchaseAcct() {
                 return purchaseAcct;
@@ -14950,11 +15285,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad purchaseAcct.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setPurchaseAcct(String value) {
                 this.purchaseAcct = value;
@@ -14962,11 +15297,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad purchaseOffsetAcct.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getPurchaseOffsetAcct() {
                 return purchaseOffsetAcct;
@@ -14974,11 +15309,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad purchaseOffsetAcct.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setPurchaseOffsetAcct(String value) {
                 this.purchaseOffsetAcct = value;
@@ -14986,11 +15321,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad shippedGoodsAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getShippedGoodsAccount() {
                 return shippedGoodsAccount;
@@ -14998,11 +15333,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad shippedGoodsAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setShippedGoodsAccount(String value) {
                 this.shippedGoodsAccount = value;
@@ -15010,11 +15345,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad stockInflationOffsetAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getStockInflationOffsetAccount() {
                 return stockInflationOffsetAccount;
@@ -15022,11 +15357,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad stockInflationOffsetAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setStockInflationOffsetAccount(String value) {
                 this.stockInflationOffsetAccount = value;
@@ -15034,11 +15369,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad stockInflationAdjustAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getStockInflationAdjustAccount() {
                 return stockInflationAdjustAccount;
@@ -15046,11 +15381,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad stockInflationAdjustAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setStockInflationAdjustAccount(String value) {
                 this.stockInflationAdjustAccount = value;
@@ -15058,11 +15393,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad vatInRevenueAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getVATInRevenueAccount() {
                 return vatInRevenueAccount;
@@ -15070,11 +15405,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad vatInRevenueAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setVATInRevenueAccount(String value) {
                 this.vatInRevenueAccount = value;
@@ -15082,11 +15417,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad wipVarianceAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getWipVarianceAccount() {
                 return wipVarianceAccount;
@@ -15094,11 +15429,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad wipVarianceAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setWipVarianceAccount(String value) {
                 this.wipVarianceAccount = value;
@@ -15106,11 +15441,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad costInflationAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getCostInflationAccount() {
                 return costInflationAccount;
@@ -15118,11 +15453,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad costInflationAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setCostInflationAccount(String value) {
                 this.costInflationAccount = value;
@@ -15130,11 +15465,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad whIncomingCenvatAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getWHIncomingCenvatAccount() {
                 return whIncomingCenvatAccount;
@@ -15142,11 +15477,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad whIncomingCenvatAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setWHIncomingCenvatAccount(String value) {
                 this.whIncomingCenvatAccount = value;
@@ -15154,11 +15489,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad whOutgoingCenvatAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getWHOutgoingCenvatAccount() {
                 return whOutgoingCenvatAccount;
@@ -15166,11 +15501,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad whOutgoingCenvatAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setWHOutgoingCenvatAccount(String value) {
                 this.whOutgoingCenvatAccount = value;
@@ -15178,11 +15513,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad stockInTransitAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getStockInTransitAccount() {
                 return stockInTransitAccount;
@@ -15190,11 +15525,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad stockInTransitAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setStockInTransitAccount(String value) {
                 this.stockInTransitAccount = value;
@@ -15202,11 +15537,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad wipOffsetProfitAndLossAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getWipOffsetProfitAndLossAccount() {
                 return wipOffsetProfitAndLossAccount;
@@ -15214,11 +15549,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad wipOffsetProfitAndLossAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setWipOffsetProfitAndLossAccount(String value) {
                 this.wipOffsetProfitAndLossAccount = value;
@@ -15226,11 +15561,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad inventoryOffsetProfitAndLossAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getInventoryOffsetProfitAndLossAccount() {
                 return inventoryOffsetProfitAndLossAccount;
@@ -15238,11 +15573,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad inventoryOffsetProfitAndLossAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setInventoryOffsetProfitAndLossAccount(String value) {
                 this.inventoryOffsetProfitAndLossAccount = value;
@@ -15250,11 +15585,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad defaultBin.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Long }
-             *     
+             *
              */
             public Long getDefaultBin() {
                 return defaultBin;
@@ -15262,11 +15597,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad defaultBin.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Long }
-             *     
+             *
              */
             public void setDefaultBin(Long value) {
                 this.defaultBin = value;
@@ -15274,11 +15609,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad defaultBinEnforced.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getDefaultBinEnforced() {
                 return defaultBinEnforced;
@@ -15286,11 +15621,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad defaultBinEnforced.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setDefaultBinEnforced(String value) {
                 this.defaultBinEnforced = value;
@@ -15298,11 +15633,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad purchaseBalanceAccount.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getPurchaseBalanceAccount() {
                 return purchaseBalanceAccount;
@@ -15310,11 +15645,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad purchaseBalanceAccount.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setPurchaseBalanceAccount(String value) {
                 this.purchaseBalanceAccount = value;
@@ -15322,11 +15657,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad uubic1.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUUBIC1() {
                 return uubic1;
@@ -15334,11 +15669,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad uubic1.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUUBIC1(String value) {
                 this.uubic1 = value;
@@ -15346,11 +15681,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad uubic2.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUUBIC2() {
                 return uubic2;
@@ -15358,11 +15693,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad uubic2.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUUBIC2(String value) {
                 this.uubic2 = value;
@@ -15370,11 +15705,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad uubic3.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUUBIC3() {
                 return uubic3;
@@ -15382,11 +15717,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad uubic3.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUUBIC3(String value) {
                 this.uubic3 = value;
@@ -15394,11 +15729,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad uubic4.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUUBIC4() {
                 return uubic4;
@@ -15406,11 +15741,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad uubic4.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUUBIC4(String value) {
                 this.uubic4 = value;
@@ -15418,11 +15753,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad uubic5.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUUBIC5() {
                 return uubic5;
@@ -15430,11 +15765,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad uubic5.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUUBIC5(String value) {
                 this.uubic5 = value;
@@ -15442,11 +15777,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad uvlgxrht.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUVLGXRHT() {
                 return uvlgxrht;
@@ -15454,11 +15789,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad uvlgxrht.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUVLGXRHT(String value) {
                 this.uvlgxrht = value;
@@ -15466,11 +15801,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad uvlgxnsp.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUVLGXNSP() {
                 return uvlgxnsp;
@@ -15478,11 +15813,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad uvlgxnsp.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUVLGXNSP(String value) {
                 this.uvlgxnsp = value;
@@ -15490,11 +15825,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad uvlgxpol.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link String }
-             *     
+             *
              */
             public String getUVLGXPOL() {
                 return uvlgxpol;
@@ -15502,11 +15837,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad uvlgxpol.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link String }
-             *     
+             *
              */
             public void setUVLGXPOL(String value) {
                 this.uvlgxpol = value;
@@ -15514,11 +15849,11 @@ public class Item {
 
             /**
              * Obtiene el valor de la propiedad itemCycleCounts.
-             * 
+             *
              * @return
              *     possible object is
              *     {@link Item.ItemWarehouseInfoCollection.ItemWarehouseInfo.ItemCycleCounts }
-             *     
+             *
              */
             public Item.ItemWarehouseInfoCollection.ItemWarehouseInfo.ItemCycleCounts getItemCycleCounts() {
                 return itemCycleCounts;
@@ -15526,11 +15861,11 @@ public class Item {
 
             /**
              * Define el valor de la propiedad itemCycleCounts.
-             * 
+             *
              * @param value
              *     allowed object is
              *     {@link Item.ItemWarehouseInfoCollection.ItemWarehouseInfo.ItemCycleCounts }
-             *     
+             *
              */
             public void setItemCycleCounts(Item.ItemWarehouseInfoCollection.ItemWarehouseInfo.ItemCycleCounts value) {
                 this.itemCycleCounts = value;
@@ -15539,9 +15874,9 @@ public class Item {
 
             /**
              * <p>Clase Java para anonymous complex type.
-             * 
+             *
              * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-             * 
+             *
              * <pre>
              * &lt;complexType&gt;
              *   &lt;complexContent&gt;
@@ -15575,43 +15910,43 @@ public class Item {
              *   &lt;/complexContent&gt;
              * &lt;/complexType&gt;
              * </pre>
-             * 
-             * 
+             *
+             *
              */
             @XmlAccessorType(XmlAccessType.FIELD)
             @XmlType(name = "", propOrder = {
-                "itemCycleCount"
+                    "itemCycleCount"
             })
             public static class ItemCycleCounts {
 
                 @XmlElement(name = "ItemCycleCount")
-                protected List<Item.ItemWarehouseInfoCollection.ItemWarehouseInfo.ItemCycleCounts.ItemCycleCount> itemCycleCount;
+                protected List<ItemCycleCount> itemCycleCount;
 
                 /**
                  * Gets the value of the itemCycleCount property.
-                 * 
+                 *
                  * <p>
                  * This accessor method returns a reference to the live list,
                  * not a snapshot. Therefore any modification you make to the
                  * returned list will be present inside the JAXB object.
                  * This is why there is not a <CODE>set</CODE> method for the itemCycleCount property.
-                 * 
+                 *
                  * <p>
                  * For example, to add a new item, do as follows:
                  * <pre>
                  *    getItemCycleCount().add(newItem);
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  * <p>
                  * Objects of the following type(s) are allowed in the list
                  * {@link Item.ItemWarehouseInfoCollection.ItemWarehouseInfo.ItemCycleCounts.ItemCycleCount }
-                 * 
-                 * 
+                 *
+                 *
                  */
-                public List<Item.ItemWarehouseInfoCollection.ItemWarehouseInfo.ItemCycleCounts.ItemCycleCount> getItemCycleCount() {
+                public List<ItemCycleCount> getItemCycleCount() {
                     if (itemCycleCount == null) {
-                        itemCycleCount = new ArrayList<Item.ItemWarehouseInfoCollection.ItemWarehouseInfo.ItemCycleCounts.ItemCycleCount>();
+                        itemCycleCount = new ArrayList<ItemCycleCount>();
                     }
                     return this.itemCycleCount;
                 }
@@ -15619,9 +15954,9 @@ public class Item {
 
                 /**
                  * <p>Clase Java para anonymous complex type.
-                 * 
+                 *
                  * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
-                 * 
+                 *
                  * <pre>
                  * &lt;complexType&gt;
                  *   &lt;complexContent&gt;
@@ -15645,8 +15980,8 @@ public class Item {
                  *   &lt;/complexContent&gt;
                  * &lt;/complexType&gt;
                  * </pre>
-                 * 
-                 * 
+                 *
+                 *
                  */
                 @XmlAccessorType(XmlAccessType.FIELD)
                 @XmlType(name = "", propOrder = {
@@ -15671,11 +16006,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad cycleCode.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getCycleCode() {
                         return cycleCode;
@@ -15683,11 +16018,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad cycleCode.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setCycleCode(Long value) {
                         this.cycleCode = value;
@@ -15695,11 +16030,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad alert.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getAlert() {
                         return alert;
@@ -15707,11 +16042,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad alert.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setAlert(String value) {
                         this.alert = value;
@@ -15719,11 +16054,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad nextCountingDate.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link XMLGregorianCalendar }
-                     *     
+                     *
                      */
                     public XMLGregorianCalendar getNextCountingDate() {
                         return nextCountingDate;
@@ -15731,11 +16066,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad nextCountingDate.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link XMLGregorianCalendar }
-                     *     
+                     *
                      */
                     public void setNextCountingDate(XMLGregorianCalendar value) {
                         this.nextCountingDate = value;
@@ -15743,11 +16078,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad alertTime.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link XMLGregorianCalendar }
-                     *     
+                     *
                      */
                     public XMLGregorianCalendar getAlertTime() {
                         return alertTime;
@@ -15755,11 +16090,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad alertTime.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link XMLGregorianCalendar }
-                     *     
+                     *
                      */
                     public void setAlertTime(XMLGregorianCalendar value) {
                         this.alertTime = value;
@@ -15767,11 +16102,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad destinationUser.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public Long getDestinationUser() {
                         return destinationUser;
@@ -15779,11 +16114,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad destinationUser.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link Long }
-                     *     
+                     *
                      */
                     public void setDestinationUser(Long value) {
                         this.destinationUser = value;
@@ -15791,11 +16126,11 @@ public class Item {
 
                     /**
                      * Obtiene el valor de la propiedad warehouseCode.
-                     * 
+                     *
                      * @return
                      *     possible object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public String getWarehouseCode() {
                         return warehouseCode;
@@ -15803,11 +16138,11 @@ public class Item {
 
                     /**
                      * Define el valor de la propiedad warehouseCode.
-                     * 
+                     *
                      * @param value
                      *     allowed object is
                      *     {@link String }
-                     *     
+                     *
                      */
                     public void setWarehouseCode(String value) {
                         this.warehouseCode = value;

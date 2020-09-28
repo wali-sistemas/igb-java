@@ -359,13 +359,19 @@ public class SalesOrderFacade {
 
     public List<Object[]> listOrdersOfDay(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(enc.DocDate as date) as Fecha, cast(COUNT(enc.DocNum) as int) as TotalOrder, ");
-        sb.append(" (select cast(COUNT(DocNum) as int) from ORDR e where DocStatus = 'O' and cast(e.DocDate as date) = cast(enc.DocDate as date)) as Abiertas, ");
-        sb.append(" (select cast(COUNT(DocNum) as int) from ORDR e where DocStatus = 'C' and cast(e.DocDate as date) = cast(enc.DocDate as date)) as Cerradas, ");
-        sb.append(" SUM(cast(enc.DocTotal-enc.VatSum as numeric(18,2))) as Monto ");
-        sb.append("from ORDR enc ");
-        sb.append("where enc.CANCELED = 'N' and cast(enc.DocDate as date) between cast(GETDATE()-4 as date) and cast(GETDATE() as date) ");
-        sb.append("group by enc.DocDate ");
+        sb.append("select cast(GETDATE()-v.number as date)as Fecha,isnull(t.TotalOrder,0)as TotalOrder,isnull(t.Abiertas,0)as Abiertas,isnull(t.Cerradas,0)as Cerradas,isnull(t.Monto,0)as Monto ");
+        sb.append("from master.dbo.spt_values v ");
+        sb.append(" left join( ");
+        sb.append("  select cast(enc.DocDate as date)as Fecha,cast(COUNT(enc.DocNum)as int)as TotalOrder,");
+        sb.append("   (select cast(COUNT(DocNum)as int) from ORDR e where DocStatus='O' and cast(e.DocDate as date)=cast(enc.DocDate as date))as Abiertas, ");
+        sb.append("   (select cast(COUNT(DocNum)as int) from ORDR e where DocStatus='C' and cast(e.DocDate as date)=cast(enc.DocDate as date))as Cerradas, ");
+        sb.append("   SUM(cast(enc.DocTotal-enc.VatSum as numeric(18,2)))as Monto ");
+        sb.append("  from ORDR enc ");
+        sb.append("  where enc.CANCELED='N' and cast(enc.DocDate as date) between cast(GETDATE()-4 as date) and cast(GETDATE()as date) ");
+        sb.append("  group by enc.DocDate ");
+        sb.append(" )as t ON t.Fecha=cast(GETDATE()-v.number as date) ");
+        sb.append("where (name IS NULL)AND(number BETWEEN 0 AND 4) ");
+        sb.append("order by v.number desc");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException ex) {
