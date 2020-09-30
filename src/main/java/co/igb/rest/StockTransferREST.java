@@ -51,7 +51,6 @@ import java.util.logging.Logger;
 @Stateless
 @Path("stocktransfer")
 public class StockTransferREST implements Serializable {
-
     private static final Logger CONSOLE = Logger.getLogger(StockTransferREST.class.getSimpleName());
 
     @EJB
@@ -221,9 +220,7 @@ public class StockTransferREST implements Serializable {
                         new Object[]{itemTransfer.getQuantity(), itemTransfer.getExpectedQuantity()});
                 Integer orderDocEntry = salesOrderFacade.getOrderDocEntry(itemTransfer.getOrderNumber(), companyName, pruebas);
                 ResponseDTO res = salesOrderEJB.modifySalesOrderQuantity(companyName, orderDocEntry, itemTransfer.getItemCode(), itemTransfer.getQuantity());
-            /*boolean res = salesOrderFacade.modifySalesOrderQuantity(orderDocEntry, itemTransfer.getItemCode(), itemTransfer.getQuantity(),
-                    getPriceItem(itemTransfer.getItemCode(), companyName, pruebas), companyName, pruebas);*/
-                //if (!res) {
+
                 if (res.getCode() < 0) {
                     return Response.ok(new ResponseDTO(-1, "Ocurrio un error al modificar la cantidad de la orden #[" + orderDocEntry.toString() + "]")).build();
                 }

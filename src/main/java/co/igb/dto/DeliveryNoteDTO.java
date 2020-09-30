@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author dbotero
  */
 public class DeliveryNoteDTO {
-
     private String cardCode;
     private Integer DocNum;
     private List<DeliveryNoteLineDTO> lines;
@@ -53,7 +51,6 @@ public class DeliveryNoteDTO {
     }
 
     public static class DeliveryNoteLineDTO {
-
         private String itemCode;
         private Integer quantity;
         private String warehouseCode;
@@ -105,7 +102,6 @@ public class DeliveryNoteDTO {
         }
 
         public static class DeliveryNoteBinAllocationDTO {
-
             private Integer quantity;
             private Long binAbs;
 

@@ -2,6 +2,9 @@ package co.igb.dto;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
+/**
+ * @author jguisao
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WarehouseDTO {
     private Integer dftBinAbs;

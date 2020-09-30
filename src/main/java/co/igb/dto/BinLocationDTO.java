@@ -1,11 +1,9 @@
 package co.igb.dto;
 
 /**
- *
  * @author dbotero
  */
 public class BinLocationDTO {
-
     private Long binAbs;
     private String binCode;
     private String binName;
@@ -13,6 +11,14 @@ public class BinLocationDTO {
     private Integer pieces;
 
     public BinLocationDTO() {
+    }
+
+    public BinLocationDTO(Long binAbs, String binCode, String binName, Integer items, Integer pieces) {
+        this.binAbs = binAbs;
+        this.binCode = binCode;
+        this.binName = binName;
+        this.items = items;
+        this.pieces = pieces;
     }
 
     public Long getBinAbs() {
@@ -59,5 +65,4 @@ public class BinLocationDTO {
     public String toString() {
         return "BinLocationDTO{" + "binAbs=" + binAbs + ", binCode=" + binCode + ", binName=" + binName + ", items=" + items + ", pieces=" + pieces + '}';
     }
-
 }

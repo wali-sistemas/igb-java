@@ -20,7 +20,6 @@ import java.util.logging.Logger;
  */
 @Stateless
 public class BasicSAPFunctions {
-
     private static final Logger CONSOLE = Logger.getLogger(BasicSAPFunctions.class.getSimpleName());
 
     @Inject

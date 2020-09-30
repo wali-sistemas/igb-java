@@ -40,7 +40,6 @@ import java.util.logging.Logger;
 @Stateless
 @Path("user")
 public class UserREST {
-
     private static final Logger CONSOLE = Logger.getLogger(UserREST.class.getSimpleName());
 
     @EJB
@@ -101,6 +100,7 @@ public class UserREST {
                 try {
                     user = getUserInfoFromLdap(user, true, user.getSelectedCompany(), pruebas);
                 } catch (IGBAuthenticationException ex) {
+                    CONSOLE.log(Level.SEVERE, "Ocurrio un ");
                     return Response.ok(new AuthenticationResponseDTO(1, "Ocurrio un error al autenticar al usuario (Post-LDAP). ")).build();
                 }
             } catch (Exception e) {

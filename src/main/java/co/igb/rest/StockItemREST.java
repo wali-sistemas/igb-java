@@ -19,7 +19,6 @@ import java.util.logging.Logger;
 @Stateless
 @Path("stockitem")
 public class StockItemREST implements Serializable {
-
     private static final Logger CONSOLE = Logger.getLogger(StockItemREST.class.getSimpleName());
 
     @EJB

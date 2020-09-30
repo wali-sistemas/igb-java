@@ -30,7 +30,6 @@ import java.util.logging.Logger;
 @Stateless
 @Path("binlocation")
 public class BinLocationREST implements Serializable {
-
     private static final Logger CONSOLE = Logger.getLogger(BinLocationREST.class.getSimpleName());
 
     @EJB

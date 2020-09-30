@@ -4,7 +4,6 @@ package co.igb.dto;
  * @author dbotero
  */
 public class ZebraPrintDTO {
-
     private Integer boxNumber;
     private Integer totalBoxes;
     private String printerName;
@@ -17,6 +16,24 @@ public class ZebraPrintDTO {
     private String city;
     private String state;
     private String invoice;
+
+    public ZebraPrintDTO() {
+    }
+
+    public ZebraPrintDTO(Integer boxNumber, Integer totalBoxes, String printerName, String packageTo, String carrier, String address, String salesOrderNumbers, String numAtCards, String employee, String city, String state, String invoice) {
+        this.boxNumber = boxNumber;
+        this.totalBoxes = totalBoxes;
+        this.printerName = printerName;
+        this.packageTo = packageTo;
+        this.carrier = carrier;
+        this.address = address;
+        this.salesOrderNumbers = salesOrderNumbers;
+        this.numAtCards = numAtCards;
+        this.employee = employee;
+        this.city = city;
+        this.state = state;
+        this.invoice = invoice;
+    }
 
     public void setAddress(String address) {
         this.address = address;

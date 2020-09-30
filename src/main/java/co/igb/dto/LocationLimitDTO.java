@@ -1,11 +1,9 @@
 package co.igb.dto;
 
 /**
- *
  * @author YEIJARA
  */
 public class LocationLimitDTO {
-
     private Integer cantMaxima;
     private Integer cantMinima;
     private String code;
@@ -71,5 +69,17 @@ public class LocationLimitDTO {
 
     public void setItem(String item) {
         this.item = item;
+    }
+
+    @Override
+    public String toString() {
+        return "LocationLimitDTO{" +
+                "cantMaxima=" + cantMaxima +
+                ", cantMinima=" + cantMinima +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", ubicacion='" + ubicacion + '\'' +
+                ", item='" + item + '\'' +
+                '}';
     }
 }

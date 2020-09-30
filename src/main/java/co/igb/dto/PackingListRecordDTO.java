@@ -6,7 +6,6 @@ import java.util.Date;
  * @author dbotero
  */
 public class PackingListRecordDTO {
-
     private Integer idPackingList;
     private Integer orderNumber;
     private String customerId;
@@ -142,5 +141,4 @@ public class PackingListRecordDTO {
     public String toString() {
         return "PackingListRecordDTO{" + "idPackingList=" + idPackingList + ", orderNumber=" + orderNumber + ", customerId=" + customerId + ", customerName=" + customerName + ", datetimePacked=" + datetimePacked + ", idPackingOrder=" + idPackingOrder + ", itemCode=" + itemCode + ", quantity=" + quantity + ", binCode=" + binCode + ", binAbs=" + binAbs + ", boxNumber=" + boxNumber + ", employee=" + employee + ", status=" + status + '}';
     }
-
 }

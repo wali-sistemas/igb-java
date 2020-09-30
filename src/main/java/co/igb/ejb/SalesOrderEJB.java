@@ -1,13 +1,6 @@
 package co.igb.ejb;
 
-import co.igb.b1ws.client.order.Document;
-import co.igb.b1ws.client.order.DocumentParams;
-import co.igb.b1ws.client.order.GetByParams;
-import co.igb.b1ws.client.order.GetByParamsResponse;
-import co.igb.b1ws.client.order.MsgHeader;
-import co.igb.b1ws.client.order.OrdersService;
-import co.igb.b1ws.client.order.Update;
-import co.igb.b1ws.client.order.UpdateResponse;
+import co.igb.b1ws.client.order.*;
 import co.igb.dto.ResponseDTO;
 import co.igb.rest.BasicSAPFunctions;
 import co.igb.util.Constants;
@@ -22,6 +15,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * @author jguisao
+ */
 @Stateless
 public class SalesOrderEJB {
     private static final Logger CONSOLE = Logger.getLogger(SalesOrderEJB.class.getSimpleName());
@@ -83,7 +79,6 @@ public class SalesOrderEJB {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar lineas en la orden. ", e);
             }
         }
-
         //3. Logout
         if (sessionId != null) {
             boolean resp = sapFunctions.returnSession(sessionId);
@@ -118,7 +113,6 @@ public class SalesOrderEJB {
                 for (Document.DocumentLines.DocumentLine line : lines) {
                     if (line.getItemCode().equals(itemCode)) {
                         line.setQuantity(newQuantity.doubleValue());
-                        //line.setuPicking("Y");
                         break;
                     }
                 }
@@ -130,11 +124,10 @@ public class SalesOrderEJB {
                     return new ResponseDTO(-1, res.getContent());
                 }
             } catch (Exception e) {
-                CONSOLE.log(Level.SEVERE, "Ocurrio un error al modificar la cantidad de la orden ", e);
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al modificar la cantidad de la orden. ", e);
                 return new ResponseDTO(-1, e);
             }
         }
-
         //3. Logout
         if (sessionId != null) {
             boolean resp = sapFunctions.returnSession(sessionId);

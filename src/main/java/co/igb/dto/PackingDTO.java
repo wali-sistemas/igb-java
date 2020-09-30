@@ -1,16 +1,15 @@
 package co.igb.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 /**
- *
  * @author dbotero
  */
 public class PackingDTO {
-
     @JsonProperty("idpacking_order")
     private Integer idPackingOrder;
     @JsonProperty("order_number")
@@ -115,7 +114,6 @@ public class PackingDTO {
     }
 
     public static class PackingLineDTO {
-
         @JsonProperty("idpacking_order_item")
         private Integer idPackingOrderItem;
         @JsonProperty("item_code")
@@ -192,7 +190,6 @@ public class PackingDTO {
         }
 
         public static class PackingBinDTO {
-
             @JsonProperty("idpacking_order_item_bin")
             private Integer idPackingOrderItemBin;
             @JsonProperty("bin_code")
@@ -205,7 +202,6 @@ public class PackingDTO {
             private Integer packedQty;
 
             public PackingBinDTO() {
-
             }
 
             public Integer getIdPackingOrderItemBin() {
@@ -277,7 +273,6 @@ public class PackingDTO {
                 }
                 return true;
             }
-
         }
     }
 }

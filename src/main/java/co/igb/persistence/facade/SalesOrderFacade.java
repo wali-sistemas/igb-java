@@ -1,12 +1,16 @@
 package co.igb.persistence.facade;
 
 import co.igb.dto.SalesOrderDTO;
+import co.igb.persistence.entity.SalesOrderDetail;
+import co.igb.persistence.entity.SalesOrderDetail_;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.criteria.*;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.logging.Level;
@@ -397,7 +401,7 @@ public class SalesOrderFacade {
         }
     }*/
 
-    /*public boolean closeOrderLines(Integer orderEntry, HashSet<String> items, String companyName, boolean testing) {
+    public boolean closeOrderLines(Integer orderEntry, HashSet<String> items, String companyName, boolean testing) {
         EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaUpdate<SalesOrderDetail> cu = cb.createCriteriaUpdate(SalesOrderDetail.class);
@@ -416,7 +420,7 @@ public class SalesOrderFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar las lineas de la orden {0} para los productos que no tienen saldo: {1}", new Object[]{orderEntry, parentExpression});
         }
         return false;
-    }*/
+    }
 
     /*public boolean modifySalesOrderQuantity(Integer orderEntry, String itemCode, Integer newQuantity, BigDecimal price, String companyName, boolean testing) {
         EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);

@@ -4,11 +4,9 @@ import java.util.HashMap;
 import java.util.Set;
 
 /**
- *
  * @author dbotero
  */
 public class PickingOrderDTO {
-
     private Integer totalItems = 0;
     private HashMap<String, Integer> items;
 
@@ -61,7 +59,6 @@ public class PickingOrderDTO {
 }
 
 class PickingOrderItemDTO {
-
     private String itemCode;
     private Integer quantity;
 
@@ -88,5 +85,4 @@ class PickingOrderItemDTO {
     public String toString() {
         return "PickingOrderItemDTO{" + "itemCode=" + itemCode + ", quantity=" + quantity + '}';
     }
-
 }

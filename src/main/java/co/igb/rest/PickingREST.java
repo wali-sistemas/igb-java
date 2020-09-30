@@ -17,14 +17,7 @@ import javax.ejb.EJB;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.Serializable;
@@ -38,7 +31,6 @@ import java.util.logging.Logger;
  */
 @Path("picking/v2")
 public class PickingREST implements Serializable {
-
     private static final Logger CONSOLE = Logger.getLogger(PickingREST.class.getSimpleName());
 
     @EJB
@@ -63,7 +55,7 @@ public class PickingREST implements Serializable {
     public PickingREST() {
     }
 
-    @GET
+    @DELETE
     @Path("delete-temporary")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
@@ -101,7 +93,7 @@ public class PickingREST implements Serializable {
         //consultar los items pendientes por entregar de cada orden
         LinkedHashMap<String, Integer> pendingItems = soFacade.listPendingItems(orderNumber, companyName, pruebas);
 
-        //TODO: validar que si retorne datos de las dos instancias
+        //validar que si retorne datos de las dos instancias
         if (pickedItems.equals(null)) {
             CONSOLE.log(Level.WARNING, "Ocurrio un error consultando los items pickineados instancia(MySQL)");
             return null;
@@ -164,7 +156,7 @@ public class PickingREST implements Serializable {
 
             Integer orderDocEntry = soFacade.getOrderDocEntry(order.getOrderNumber(), companyName, pruebas);
             Object[] pickingStatus = processPickingStatus(order.getOrderNumber(), false, companyName, pruebas);
-            //TODO: validar datos consultados de las dos instancias
+            //validar datos consultados de las dos instancias
             if (pickingStatus.equals(null)) {
                 return Response.ok(new ResponseDTO(-1, "Ocurrio un error consultandos datos de alguna de las instancias(SAP-MySQL).")).build();
             }
@@ -178,10 +170,9 @@ public class PickingREST implements Serializable {
                 try {
                     closeAndPack(order, pickedItems, warehouseCode, companyName, pruebas);
                 } catch (Exception e) {
-                    CONSOLE.log(Level.SEVERE, "Ocurrio un error cerrando la orden {0}", order);
-                    return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la orden " + order)).build();
+                    CONSOLE.log(Level.SEVERE, "Ocurrio un error cerrando la orden " + order.getOrderNumber(), e);
+                    return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la orden " + order.getOrderNumber())).build();
                 }
-
                 continue;
             }
 
@@ -196,7 +187,7 @@ public class PickingREST implements Serializable {
                     continue;
                 }
                 if (!availableStock.containsKey(pendingItemcode) && pickedItems.containsKey(pendingItemcode)) {
-                    //TODO: reprocesar orden para que se genere cierre si no hay mas items pendientes
+                    //reprocesar orden para que se genere cierre si no hay mas items pendientes
                     salesOrderEJB.modifySalesOrderQuantity(companyName, orderDocEntry, pendingItemcode, getTotalPicked(pickedItems.get(pendingItemcode)));
                     //soFacade.modifySalesOrderQuantity(orderDocEntry, pendingItemcode, getTotalPicked(pickedItems.get(pendingItemcode)), getPriceItem(pendingItemcode, companyName, pruebas), companyName, pruebas);
                 }
@@ -204,9 +195,10 @@ public class PickingREST implements Serializable {
 
             if (!itemsMissing.isEmpty()) {
                 //TODO: Marcar lineas de orden cerradas para items sin saldo
-                ResponseDTO res = salesOrderEJB.closeOrderLines(companyName, orderDocEntry, itemsMissing);
-                //boolean res = soFacade.closeOrderLines(orderDocEntry, itemsMissing, companyName, pruebas);
-                if (res.getCode() < 0) {
+                //ResponseDTO res = salesOrderEJB.closeOrderLines(companyName, orderDocEntry, itemsMissing);
+                boolean res = soFacade.closeOrderLines(orderDocEntry, itemsMissing, companyName, pruebas);
+                //if (res.getCode() < 0) {
+                if (!res) {
                     PickingWarningDTO warning = new PickingWarningDTO();
                     warning.setItems(new ArrayList<>(itemsMissing));
                     warning.setMessage(
@@ -218,15 +210,15 @@ public class PickingREST implements Serializable {
                     warnings.add(warning);
                 }
 
-                //TODO: notificar cierre de lineas
+                //notificar cierre de lineas
                 if (itemsMissing.size() == pendingItems.size()) {
                     //Finaliza la orden de picking ya que no quedan items pendientes
                     CONSOLE.log(Level.WARNING, "La orden {0} no tiene saldo en picking para los items pendientes por despachar y se marca como cerrada. ", order.getOrderNumber());
                     try {
                         closeAndPack(order, pickedItems, warehouseCode, companyName, pruebas);
                     } catch (Exception e) {
-                        CONSOLE.log(Level.SEVERE, "Ocurrio un error cerrando la orden {0}", order);
-                        return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la orden " + order)).build();
+                        CONSOLE.log(Level.SEVERE, "Ocurrio un error cerrando la orden " + order.getOrderNumber(), e);
+                        return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la orden " + order.getOrderNumber())).build();
                     }
                     continue;
                 }
@@ -316,17 +308,15 @@ public class PickingREST implements Serializable {
         for (AssignedOrder order : orders) {
             CONSOLE.log(Level.INFO, "Procesando estado de picking para {0}", order.toString());
             Object[] pickingStatus = processPickingStatus(order.getOrderNumber(), true, companyName, pruebas);
-            //TODO: validar datos consultados de las dos instancias
+            //validar datos consultados de las dos instancias
             if (pickingStatus.equals(null)) {
                 return Response.ok(new ResponseDTO(-1, "Ocurrio un error consultandos datos de alguna de las instancias(SAP-MySQL).")).build();
             }
 
-            //Map<String, Integer> pendingItems = (Map<String, Integer>) pickingStatus[0];
             LinkedHashMap<String, Integer> pendingItems = (LinkedHashMap<String, Integer>) pickingStatus[0];
-            //Map<String, Map<Long, Integer>> pickedItems = (Map<String, Map<Long, Integer>>) pickingStatus[1];
             HashMap<String, Map<Long, Integer>> pickedItems = (HashMap<String, Map<Long, Integer>>) pickingStatus[1];
 
-            //TODO: validar si este mapa trae items con valor cero o si solo incluye items que tengan algun valor
+            //validar si este mapa trae items con valor cero o si solo incluye items que tengan algun valor
             //validar que todos los items pendientes tengan cantidad igual a cero
             for (String itemCode : pendingItems.keySet()) {
                 if (pendingItems.get(itemCode) > 0) {
@@ -340,20 +330,9 @@ public class PickingREST implements Serializable {
             try {
                 closeAndPack(order, pickedItems, warehouseCode, companyName, pruebas);
             } catch (Exception e) {
-                CONSOLE.log(Level.SEVERE, "Ocurrio un error cerrando la orden {0}", order);
-                return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la orden " + order)).build();
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error cerrando la orden " + order.getOrderNumber(), e);
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la orden " + order.getOrderNumber())).build();
             }
-            /*
-            try {
-                moveItemsToPackingArea(order.getOrderNumber(), companyName);
-            } catch (Exception e) {
-                return Response.ok(
-                        new ResponseDTO(
-                                -1,
-                                "Ocurrió un error al trasladar los ítems a la ubicación de packing. " + e.getMessage())
-                ).build();
-            }
-             */
         }
         return Response.ok(new ResponseDTO(0, "")).build();
     }

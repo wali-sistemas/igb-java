@@ -3,7 +3,6 @@ package co.igb.dto;
 import java.math.BigDecimal;
 
 /**
- *
  * @author jguisao
  */
 public class StatusOrderDTO {

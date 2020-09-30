@@ -5,11 +5,8 @@ import co.igb.b1ws.client.stocktransfer.AddResponse;
 import co.igb.b1ws.client.stocktransfer.MsgHeader;
 import co.igb.b1ws.client.stocktransfer.StockTransfer;
 import co.igb.b1ws.client.stocktransfer.StockTransferService;
-import co.igb.dto.GenericRESTResponseDTO;
-import co.igb.dto.ResponseDTO;
 import co.igb.exception.SAPSessionException;
 import co.igb.exception.WaliRuntimeException;
-import co.igb.manager.client.SessionPoolManagerClient;
 import co.igb.persistence.entity.AssignedOrder;
 import co.igb.persistence.entity.PickingRecord;
 import co.igb.persistence.facade.AssignedOrderFacade;
@@ -22,13 +19,15 @@ import co.igb.util.IGBUtils;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.core.Response;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * @author jguisao
+ */
 @Stateless
 public class StockTransferEJB {
     private static final Logger CONSOLE = Logger.getLogger(IGBAuthLDAP.class.getSimpleName());
@@ -44,7 +43,6 @@ public class StockTransferEJB {
     private PickingRecordFacade prFacade;
 
     public void transferClosedPickingToPackingArea(Integer orderNumber, String companyName, boolean pruebas) {
-
         //1. validar que la orden se encuentre cerrada
         AssignedOrder assignedOrder = aoFacade.findByOrderNumber(orderNumber, companyName, pruebas);
         if (assignedOrder == null) {
@@ -53,10 +51,8 @@ public class StockTransferEJB {
         if (!assignedOrder.getStatus().equals(Constants.STATUS_CLOSED)) {
             throw new WaliRuntimeException("La orden " + orderNumber + " no se encuentra cerrada, por lo tanto no puede ser descargada a ubicación de packing");
         }
-
         //2. obtener picking records para la orden
         List<PickingRecord> pickedItems = prFacade.listPicking(orderNumber, companyName, pruebas);
-
         //3. recorrer cada registro, agregando lineas al traslado
         StockTransfer document = new StockTransfer();
         document.setSeries(Long.parseLong(getPropertyValue(Constants.STOCK_TRANSFER_SERIES, companyName)));
@@ -110,7 +106,6 @@ public class StockTransferEJB {
             documentLines.getStockTransferLine().add(line);
         }
         document.setStockTransferLines(documentLines);
-
         //4. crear documento en sap
         processSAPTransaction(document, companyName);
     }
@@ -163,9 +158,9 @@ public class StockTransferEJB {
         MsgHeader header = new MsgHeader();
         header.setServiceName("StockTransferService");
         header.setSessionID(sessionId);
-        
+
         CONSOLE.log(Level.INFO, "Creando traslado en SAP con sessionId [{0}]", sessionId);
-        
+
         AddResponse response = service.getStockTransferServiceSoap12().add(add, header);
         return response.getStockTransferParams().getDocEntry();
     }

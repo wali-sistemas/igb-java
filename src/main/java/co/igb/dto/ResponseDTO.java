@@ -1,11 +1,9 @@
 package co.igb.dto;
 
 /**
- *
  * @author dbotero
  */
 public class ResponseDTO {
-
     private int code;
     private Object content;
 
@@ -33,4 +31,11 @@ public class ResponseDTO {
         this.content = content;
     }
 
+    @Override
+    public String toString() {
+        return "ResponseDTO{" +
+                "code=" + code +
+                ", content=" + content +
+                '}';
+    }
 }

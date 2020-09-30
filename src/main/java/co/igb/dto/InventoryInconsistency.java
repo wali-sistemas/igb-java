@@ -1,5 +1,8 @@
 package co.igb.dto;
 
+/**
+ * @author dbotero
+ */
 public class InventoryInconsistency {
     private String binCode;
     private String itemCode;
@@ -7,7 +10,6 @@ public class InventoryInconsistency {
     private Integer foundQuantity;
 
     public InventoryInconsistency() {
-
     }
 
     public String getBinCode() {
