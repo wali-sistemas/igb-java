@@ -21,6 +21,18 @@ public class SingleItemTransferDTO {
     public SingleItemTransferDTO() {
     }
 
+    public SingleItemTransferDTO(Long binAbsFrom, Long binAbsTo, Integer quantity, Integer expectedQuantity, Integer orderNumber, String username, String itemCode, String warehouseCode, Boolean temporary) {
+        this.binAbsFrom = binAbsFrom;
+        this.binAbsTo = binAbsTo;
+        this.quantity = quantity;
+        this.expectedQuantity = expectedQuantity;
+        this.orderNumber = orderNumber;
+        this.username = username;
+        this.itemCode = itemCode;
+        this.warehouseCode = warehouseCode;
+        this.temporary = temporary;
+    }
+
     public Long getBinAbsFrom() {
         return binAbsFrom;
     }

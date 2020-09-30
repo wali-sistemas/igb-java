@@ -63,4 +63,13 @@ public class ResponseCrearGuiaDTO {
             this.valor = valor;
         }
     }
+
+    @Override
+    public String toString() {
+        return "ResponseCrearGuiaDTO{" +
+                "numeroGuia='" + numeroGuia + '\'' +
+                ", linkDeConsulta='" + linkDeConsulta + '\'' +
+                ", datosAdicionales=" + datosAdicionales +
+                '}';
+    }
 }

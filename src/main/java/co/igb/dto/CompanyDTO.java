@@ -4,7 +4,6 @@ package co.igb.dto;
  * @author dbotero
  */
 public class CompanyDTO implements Comparable<CompanyDTO> {
-
     private String companyId;
     private String companyName;
     private boolean testCompany;

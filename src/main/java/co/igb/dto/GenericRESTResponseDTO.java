@@ -3,12 +3,10 @@ package co.igb.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- *
  * @author jguisao
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GenericRESTResponseDTO {
-
     private int estado;
     private Integer valor;
     private String mensaje;

@@ -27,14 +27,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author YEIJARA
  */
 @Stateless
 @Path("inventory")
 public class InventoryREST {
-
     private static final Logger CONSOLE = Logger.getLogger(InventoryREST.class.getSimpleName());
+
     @EJB
     private InventoryFacade inventoryFacade;
     @EJB

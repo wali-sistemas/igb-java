@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author dbotero
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StockTransferDTO {
     private String username;
@@ -18,6 +21,17 @@ public class StockTransferDTO {
 
     public StockTransferDTO() {
         setLines(new ArrayList<>());
+    }
+
+    public StockTransferDTO(String username, String binCodeFrom, String binCodeTo, Long binAbsFrom, Long binAbsTo, String warehouseCode, String filler, List<StockTransferLineDTO> lines) {
+        this.username = username;
+        this.binCodeFrom = binCodeFrom;
+        this.binCodeTo = binCodeTo;
+        this.binAbsFrom = binAbsFrom;
+        this.binAbsTo = binAbsTo;
+        this.warehouseCode = warehouseCode;
+        this.filler = filler;
+        this.lines = lines;
     }
 
     public List<StockTransferLineDTO> getLines() {

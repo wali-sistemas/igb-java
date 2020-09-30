@@ -8,7 +8,6 @@ import java.util.Objects;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDTO implements Comparable<UserDTO> {
-
     private Integer ordenesAsignadas;
     private String username;
     private String password;
@@ -169,5 +168,4 @@ public class UserDTO implements Comparable<UserDTO> {
         }
         return 0;
     }
-
 }

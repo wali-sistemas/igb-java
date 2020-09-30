@@ -1,9 +1,21 @@
 package co.igb.dto;
 
+/**
+ * @author dbotero
+ */
 public class AutoPackDTO {
     private String customerId;
     private Integer orderNumber;
     private Integer idPackingOrder;
+
+    public AutoPackDTO() {
+    }
+
+    public AutoPackDTO(String customerId, Integer orderNumber, Integer idPackingOrder) {
+        this.customerId = customerId;
+        this.orderNumber = orderNumber;
+        this.idPackingOrder = idPackingOrder;
+    }
 
     public Integer getIdPackingOrder() {
         return idPackingOrder;

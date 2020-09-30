@@ -1,11 +1,9 @@
 package co.igb.dto;
 
 /**
- *
  * @author dbotero
  */
 public class AuthenticationResponseDTO {
-
     private int code;
     private String message;
     private UserDTO user;
@@ -46,5 +44,4 @@ public class AuthenticationResponseDTO {
     public String toString() {
         return "AuthenticationResponseDTO{" + "code=" + code + ", message=" + message + ", user=" + user + '}';
     }
-
 }

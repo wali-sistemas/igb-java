@@ -30,8 +30,8 @@ import java.util.logging.Logger;
 @Stateless
 @Path("resupply")
 public class ResupplyREST implements Serializable {
-
     private static final Logger CONSOLE = Logger.getLogger(ResupplyREST.class.getSimpleName());
+
     @EJB
     private BinLocationFacade binLocationFacade;
     @EJB
@@ -122,7 +122,7 @@ public class ResupplyREST implements Serializable {
                 return Response.ok(new ResponseDTO(-1, "Ocurrio un error al actualizar el límite de ubicación.")).build();
             }
         } else {
-            //TODO: consultar si ya esta registrada la ubicación fija. Solo puede existir una ubicacion fija para un item.
+            //consultar si ya esta registrada la ubicación fija. Solo puede existir una ubicacion fija para un item.
             if ((locationLimitFacade.findLocationFixed(limit.getItem(), companyName, pruebas)) != null) {
                 return Response.ok(new ResponseDTO(-1, "Ya existe una ubicación fija para este ítem.")).build();
             }
@@ -146,6 +146,7 @@ public class ResupplyREST implements Serializable {
             locationLimitFacade.deleteLimit(code, companyName, pruebas);
             return Response.ok(new ResponseDTO(0, "Se elimino correctamente.")).build();
         } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error eliminando los limites de localizacion en " + companyName, e);
             return Response.ok(new ResponseDTO(-1, e.getMessage())).build();
         }
     }

@@ -50,10 +50,10 @@ import java.util.logging.Logger;
 @Stateless
 @Path("report")
 public class ReportREST implements Serializable {
+    private static final Logger CONSOLE = Logger.getLogger(ReportREST.class.getSimpleName());
 
     @Inject
     private IGBApplicationBean applicationBean;
-    private static final Logger CONSOLE = Logger.getLogger(ReportREST.class.getSimpleName());
     @EJB
     private SalesOrderFacade salesOrderFacade;
     @EJB
@@ -433,7 +433,7 @@ public class ReportREST implements Serializable {
                 break;
         }
 
-        //TODO: Se crea la coneccion con la base de datos
+        //Se crea la coneccion con la base de datos
         String cn = null;
         InitialContext initialContext = new InitialContext();
         if (dto.getOrigen().equals("S")) {
@@ -448,7 +448,7 @@ public class ReportREST implements Serializable {
         DataSource dataSource = (DataSource) initialContext.lookup(cn);
         Connection connection = dataSource.getConnection();
 
-        //TODO: Se mandan los parametros al Jasper
+        //Se mandan los parametros al Jasper
         Map<String, Object> mapa = new HashMap<>();
         if (dto.getId() != 0) {
             mapa.put("id", dto.getId());
@@ -469,7 +469,7 @@ public class ReportREST implements Serializable {
         PDDocument document = PDDocument.load(new File(rutaArchivo));
         CONSOLE.log(Level.INFO, "Se guardo el documento {0} numero {1}", new Object[]{dto.getDocumento(), dto.getId()});
 
-        //TODO: Configurar para imprimir automaticamente
+        //Configurar para imprimir automaticamente
         if (dto.isImprimir()) {
             /*Impresora String printer = "RICOH Aficio MP 2851 PCL 5e"; /*impresoraFacade.obtenerImpresoraSucursal(dto.getSucursal(), "DOC");
             if (printer != null && printer.getIdImpresora() != null && printer.getIdImpresora() != 0) {*/

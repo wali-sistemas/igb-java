@@ -36,7 +36,6 @@ import java.util.logging.Logger;
 @Stateless
 @Path("invoice")
 public class InvoiceREST implements Serializable {
-
     private static final Logger CONSOLE = Logger.getLogger(InvoiceREST.class.getSimpleName());
 
     @EJB
@@ -93,7 +92,6 @@ public class InvoiceREST implements Serializable {
         long lineNum = 0;
         for (Object[] row : deliveryData) {
             Long delDocEntry = ((Integer) row[0]).longValue();
-            Long deliveryDocNum = ((Integer) row[1]).longValue();
             Long deliveryObjectType = ((Integer) row[2]).longValue();
             String cardCode = (String) row[3];
             Long deliverySalesPersonCode = ((Integer) row[4]).longValue();
@@ -206,7 +204,6 @@ public class InvoiceREST implements Serializable {
         long lineNum = 0;
         for (Object[] row : deliveryData) {
             Long delDocEntry = ((Integer) row[0]).longValue();
-            Long deliveryDocNum = ((Integer) row[1]).longValue();
             Long deliveryObjectType = ((Integer) row[2]).longValue();
             String cardCode = (String) row[3];
             Long deliverySalesPersonCode = ((Integer) row[4]).longValue();
@@ -239,7 +236,6 @@ public class InvoiceREST implements Serializable {
 
                 invoice.setContactPersonCode(deliveryContactCode);
                 invoice.setSalesPersonCode(deliverySalesPersonCode);
-                //invoice.setuOrigen("W");
                 invoice.setBaseAmount(deliveryValorNeto);
                 invoice.setVatSum(deliveryImpuesto);
                 invoice.setuWUID(getPropertyValue("invoice.wuid", companyName));
@@ -279,14 +275,14 @@ public class InvoiceREST implements Serializable {
                 if (baseMinima.compareTo(invoice.getBaseAmount()) == -1) {
                     gasto.setExpenseCode(expenseCode.longValue());
                     gasto.setLineTotal(lineTotal.setScale(0, RoundingMode.CEILING));
-                    //TODO: sin IVA corresponde a un impuesto, y un impuesto nunca se cobra sobre otro impuesto AUTO-CREE.
+                    //sin IVA corresponde a un impuesto, y un impuesto nunca se cobra sobre otro impuesto AUTO-CREE.
                     gasto.setTaxCode("I_LEG_T0");
                     gastos.getDocumentAdditionalExpense().add(gasto);
                 }
             }
         }
 
-        //TODO: flete aplica solo para IGB siempre y cuando no sean ítem REPSOL, MotoZone solo llantas y no se efectua por este medio.
+        //flete aplica solo para IGB siempre y cuando no sean ítem REPSOL, MotoZone solo llantas y no se efectua por este medio.
         boolean itemRepsol = false;
         for (Document.DocumentLines.DocumentLine line : invoice.getDocumentLines().getDocumentLine()) {
             if (line.getItemCode().substring(0, 2).equals("RP")) {
@@ -318,7 +314,7 @@ public class InvoiceREST implements Serializable {
                 BigDecimal baseMinima = (BigDecimal) row[2];
                 BigDecimal base = new BigDecimal(0);
                 BigDecimal baseImpuesto = new BigDecimal(0);
-                //TODO: Clientes con (R/IVA VENTAS) su base parte del impuesto
+                //clientes con (R/IVA VENTAS) su base parte del impuesto
                 if (row[3].equals("IVA")) {
                     base = invoice.getVatSum().multiply(valueRet.divide(BigDecimal.valueOf(100)));
                     baseImpuesto = invoice.getVatSum();
@@ -348,7 +344,6 @@ public class InvoiceREST implements Serializable {
             }
             invoice.setWithholdingTaxDataCollection(retenciones);
         }
-
         //1. Login
         String sessionId = null;
         try {

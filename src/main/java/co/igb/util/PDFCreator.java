@@ -13,6 +13,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author dbotero
+ */
 public class PDFCreator {
     private final static String[] HEADER_ARRAY = {"Caja", "Órden", "Artículo", "Cant."};
     private final static Font SMALL_BOLD = new Font(Font.FontFamily.TIMES_ROMAN, 8, Font.BOLD);
@@ -70,7 +73,6 @@ public class PDFCreator {
         addEmptyLine(paragraph, 1);
 
         document.add(paragraph);
-
     }
 
     public static void addContent(Document document, List<PackingListRecordDTO> dataObjList) throws DocumentException {

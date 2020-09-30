@@ -122,14 +122,14 @@ public class IGBAuthLDAP {
                 if (usuario != null) {
                     if (usuario.get().equals(username)) {
                         String email;
-                        
+
                         try {
                             email = (String) attrs.get(Constants.LDAP_EMAIL_FIELD).get();
-                        } catch(NullPointerException e) {
-                            CONSOLE.log(Level.INFO, "El usuario {0} no tiene email", usuario.get());
+                        } catch (NullPointerException e) {
+                            CONSOLE.log(Level.INFO, "El usuario {0} no tiene email" + usuario.get(), e);
                             email = null;
                         }
-                        
+
                         String name = (String) attrs.get(Constants.LDAP_NAME_FIELD).get();
                         String surname = (String) attrs.get(Constants.LDAP_LASTNAME_FIELD).get();
                         String completeName = (String) attrs.get(Constants.LDAP_FULLNAME_FIELD).get();
@@ -176,7 +176,7 @@ public class IGBAuthLDAP {
                 Attributes attrs = rslt.getAttributes();
                 Attribute usuario = attrs.get(Constants.LDAP_USERNAME_FIELD);
                 if (usuario != null) {
-                    try{
+                    try {
                         Attribute memberOf = attrs.get(Constants.LDAP_MEMBEROF_FIELD);
                         if (memberOf != null && memberOf.contains("CN=" + groupName + "," + Constants.LDAP_USERS_CONTAINER)) {
                             String email = (String) attrs.get(Constants.LDAP_EMAIL_FIELD).get();
@@ -186,7 +186,7 @@ public class IGBAuthLDAP {
 
                             users.add(new UserDTO((String) usuario.get(), name, surname, email, completeName));
                         }
-                    } catch(NullPointerException e) {
+                    } catch (NullPointerException e) {
                         CONSOLE.log(Level.INFO, "El usuario {0} no tiene email en LDAP. ", usuario.get());
                     }
                 }

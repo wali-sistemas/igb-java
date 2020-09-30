@@ -32,7 +32,6 @@ import java.util.logging.Logger;
 @Stateless
 @Path("packing")
 public class PackingREST implements Serializable {
-
     private static final Logger CONSOLE = Logger.getLogger(PackingREST.class.getSimpleName());
 
     @EJB
@@ -205,7 +204,6 @@ public class PackingREST implements Serializable {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el registro. ", e);
             return Response.ok(new ResponseDTO(-1, "Ocurrió un error al crear el registro")).build();
         }
-
     }
 
     @GET
@@ -247,7 +245,7 @@ public class PackingREST implements Serializable {
                     //Se procede a cerrar el packing list en MySql
                     poFacade.closePackingOrder(idPackingOrder.intValue(), companyName, pruebas);
                 } catch (Exception e) {
-                    CONSOLE.log(Level.WARNING, "Ocurrio una excepcion cerrando la orden #{0} en [{1}]", new Object[]{idPackingOrder, companyName});
+                    CONSOLE.log(Level.WARNING, "Ocurrio una excepcion cerrando la orden #" + idPackingOrder.toString() + " en " + companyName, e);
                 }
 
                 CONSOLE.log(Level.WARNING, "Ya existe una entrega en SAP para la orden #{0}", orderNumber.toString());
@@ -266,12 +264,7 @@ public class PackingREST implements Serializable {
                     List<Object[]> listItems = new ArrayList<>();
 
                     for (Object[] obj : items) {
-                        //Object[] attributes = itemFacade.getItemAttributes((String) obj.getItemCode(), companyName, pruebas);
                         listItems.add(new Object[]{obj[0], obj[1], obj[2], obj[3], obj[4], obj[5], obj[6], null, null});
-                        /*for (int i = 0; i < obj.getBins().size(); i++) {
-                            listItems.add(new Object[]{obj.getBins().get(i).getBinCode(), obj.getBins().get(i).getBinName(), (obj.getBins().get(i).getPickedQty() - obj.getBins().get(i).getPackedQty()),
-                                    obj.getItemCode(), obj.getBins().get(i).getPickedQty(), 0, null, null, null});
-                        }*/
                     }
 
                     CONSOLE.log(Level.INFO, "Se encontraron {0} items para la packing list", items.size());
@@ -308,29 +301,20 @@ public class PackingREST implements Serializable {
         Document document = new Document();
         Integer orderDocEntry = null;
         for (Object[] row : packingRecords) {
-            Integer idPackingListRecord = (Integer) row[0];
-            Integer idPackingList = (Integer) row[1];
             Integer orderNumber = (Integer) row[2];
             String customerId = (String) row[3];
-            String customerName = (String) row[4];
-            Date packingDate = (Date) row[5];
-            //Integer idPackingOrder = (Integer)row[6];
             String itemCode = (String) row[7];
-            String itemName = (String) row[8];
             Integer quantity = (Integer) row[9];
             Integer binAbs = (Integer) row[10];
             String binCode = (String) row[11];
-            Integer boxNumber = (Integer) row[12];
-            String status = (String) row[13];
             String employee = (String) row[14];
-            //String companyName = (String)row[14];
 
             if (orderDocEntry == null) {
                 document.setSeries(Long.parseLong(getPropertyValue(Constants.DELIVERY_NOTE_SERIES, companyName)));
                 document.setCardCode(customerId);
                 String commentOV = salesOrderFacade.getOrderComment(orderNumber, companyName, pruebas);
                 if (commentOV != null) {
-                    /*TODO: limitando caracteres no mayores a 254 para que lo acepte SAP*/
+                    //limitando caracteres no mayores a 254 para que lo acepte SAP
                     String commentWms = "Orden #" + orderNumber + " creada por " + employee + " desde WALI.";
                     if ((commentOV.length() + commentWms.length() - 254) > 0) {
                         document.setComments(commentOV.substring(0, commentOV.length() - (commentOV.length() + commentWms.length() - 251)) + "..." + commentWms);
@@ -363,6 +347,7 @@ public class PackingREST implements Serializable {
                     }
                     line.setBaseLine(baseLineNum);
                 } catch (Exception e) {
+                    CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el numero de linea de la orden " + orderNumber.toString(), e);
                     return Response.ok(new ResponseDTO(-1, e.getMessage())).build();
                 }
 
@@ -518,7 +503,7 @@ public class PackingREST implements Serializable {
 
     @PUT
     @Path("close/{username}/{idPackingOrder}")
-    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     public Response closePackingOrder(@PathParam("username") String username,
                                       @PathParam("idPackingOrder") Integer idPackingOrder,
                                       @HeaderParam("X-Company-Name") String companyName,
@@ -529,8 +514,7 @@ public class PackingREST implements Serializable {
             //Cierra los registros de packing abiertos MySql
             plFacade.closePackingOrder(idPackingOrder, companyName, pruebas);
         } catch (Exception e) {
-            CONSOLE.log(Level.WARNING, "Ocurrio una excepcion cerrando los registros de packing abiertos para la orden #{0} asignada al usuario {1} en [{2}]",
-                    new Object[]{idPackingOrder, username, companyName});
+            CONSOLE.log(Level.WARNING, "Ocurrio una excepcion cerrando los registros de packing abiertos para la orden #" + idPackingOrder + " asignada al usuario " + username + " en " + companyName, e);
         }
 
         if (!poFacade.isPackingOrderComplete(idPackingOrder, companyName, pruebas)) {
@@ -542,8 +526,7 @@ public class PackingREST implements Serializable {
             //Se cierra la orden de packing MySql
             poFacade.closePackingOrder(idPackingOrder, companyName, pruebas);
         } catch (Exception e) {
-            CONSOLE.log(Level.WARNING, "Ocurrio una excepcion cerrando la orden #{0} asignada al usuario {1} en [{2}]",
-                    new Object[]{idPackingOrder, username, companyName});
+            CONSOLE.log(Level.WARNING, "Ocurrio una excepcion cerrando la orden #" + idPackingOrder.toString() + " asignada al usuario " + username + " en " + companyName, e);
             return Response.ok(new ResponseDTO(-1, e.getMessage())).build();
         }
         return Response.ok(new ResponseDTO(0, "Packing orden cerrada.")).build();
@@ -709,9 +692,6 @@ public class PackingREST implements Serializable {
             if (responseInvoice.getCode() != 0) {
                 return Response.ok(responseInvoice).build();
             }
-
-            //TODO:
-            //cerrar OV si queda con items pendientes
         }
 
         return Response.ok(new ResponseDTO(0, "Proceso de empaque automatico finalizado con éxito")).build();
@@ -724,7 +704,6 @@ public class PackingREST implements Serializable {
                                      @HeaderParam("X-Company-Name") String companyName,
                                      @HeaderParam("X-Pruebas") boolean pruebas) {
         List<Object[]> customers = poFacade.listAllPackings(customer, companyName, pruebas);
-
         return Response.ok(new ResponseDTO(0, customers)).build();
     }
 
@@ -748,13 +727,13 @@ public class PackingREST implements Serializable {
             PackingOrder packingOrder = poFacade.find(idPackingOrder.longValue(), companyName, pruebas);
             emailManager.sendPackingErrorNotification(packingOrder.getOrderNumber(), username);
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al cancelar el proceso de packing " + idPackingOrder, e);
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al cancelar el proceso de packing " + idPackingOrder.toString(), e);
         }
 
         return Response.ok(new ResponseDTO(0, "")).build();
     }
 
-    @GET
+    @PUT
     @Path("cancel-packing-order/{idPackingOrder}")
     @Produces({MediaType.APPLICATION_JSON + ";chaset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
@@ -773,7 +752,7 @@ public class PackingREST implements Serializable {
 
             return Response.ok(new ResponseDTO(0, "Ok")).build();
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al cancelar el proceso de packing " + idPackingOrder, e);
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al cancelar el proceso de packing " + idPackingOrder.toString(), e);
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error al cancelar el proceso de packing.")).build();
         }
     }
@@ -844,7 +823,7 @@ public class PackingREST implements Serializable {
             CONSOLE.log(Level.INFO, "confirmado el checkout para la orden #", dto.getOrderNumber().toString());
             return Response.ok(new ResponseDTO(0, "CheckOut confirmado exitosamente.")).build();
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error confirmando el checkout para la orden #", dto.getOrderNumber().toString());
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error confirmando el checkout para la orden #" + dto.getOrderNumber().toString(), e);
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error confirmando el checkout.")).build();
         }
     }

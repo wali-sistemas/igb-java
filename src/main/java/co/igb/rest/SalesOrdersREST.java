@@ -33,7 +33,6 @@ import java.util.logging.Logger;
 @Stateless
 @Path("salesorder")
 public class SalesOrdersREST implements Serializable {
-
     private static final Logger CONSOLE = Logger.getLogger(SalesOrdersREST.class.getSimpleName());
 
     @EJB
@@ -58,7 +57,7 @@ public class SalesOrdersREST implements Serializable {
                                    @HeaderParam("X-Company-Name") String companyName,
                                    @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                    @HeaderParam("X-Pruebas") boolean pruebas) {
-        CONSOLE.log(Level.INFO, "Listando ordenes de compra abiertas. mostrar no autorizadas? {0}", showAll);
+        CONSOLE.log(Level.INFO, "Listando ordenes abiertas. mostrar no autorizadas? {0}", showAll);
         CONSOLE.log(Level.INFO, "en pruebas? {0}", pruebas);
         try {
             List<SalesOrderDTO> orders = soFacade.findOpenOrders(showAll, filterGroup, companyName, pruebas, warehouseCode);
@@ -91,6 +90,7 @@ public class SalesOrdersREST implements Serializable {
             }
             return Response.ok(orders).build();
         } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error listando las ordenes abiertas en " + companyName, e);
             return Response.serverError().build();
         }
     }

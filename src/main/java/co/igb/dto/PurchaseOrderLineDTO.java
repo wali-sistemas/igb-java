@@ -3,11 +3,9 @@ package co.igb.dto;
 import java.util.Objects;
 
 /**
- *
  * @author dbotero
  */
 public class PurchaseOrderLineDTO {
-
     private Long docLine;
     private String itemCode;
     private String itemName;
@@ -98,5 +96,4 @@ public class PurchaseOrderLineDTO {
         return "PurchaseOrderLineDTO{" + "docLine=" + docLine + ", itemCode=" + itemCode + ", itemName="
                 + itemName + ", quantity=" + quantity + ", lineNum=" + lineNum + '}';
     }
-
 }

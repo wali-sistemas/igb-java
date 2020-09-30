@@ -1,7 +1,6 @@
 package co.igb.util;
 
 /**
- *
  * @author dbotero
  */
 public class IGBUtils {

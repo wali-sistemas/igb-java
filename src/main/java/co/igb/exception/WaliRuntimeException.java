@@ -1,5 +1,8 @@
 package co.igb.exception;
 
+/**
+ * @author dbotero
+ */
 public class WaliRuntimeException extends RuntimeException {
     public WaliRuntimeException() {
     }
@@ -12,7 +15,7 @@ public class WaliRuntimeException extends RuntimeException {
         super(throwable);
     }
 
-    public WaliRuntimeException(String message, Throwable cause){
+    public WaliRuntimeException(String message, Throwable cause) {
         super(message, cause);
     }
 }

@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- *
  * @author dbotero
  */
 public class OrderAssignmentDTO {
@@ -50,5 +49,4 @@ public class OrderAssignmentDTO {
         sb.append("}");
         return sb.toString();
     }
-
 }

@@ -4,12 +4,10 @@ import co.igb.b1ws.client.purchasedeliverynote.Add;
 import co.igb.b1ws.client.purchasedeliverynote.AddResponse;
 import co.igb.b1ws.client.purchasedeliverynote.Document;
 import co.igb.b1ws.client.purchasedeliverynote.PurchaseDeliveryNotesService;
-import co.igb.dto.GenericRESTResponseDTO;
 import co.igb.dto.PurchaseOrderDTO;
 import co.igb.dto.PurchaseOrderLineDTO;
 import co.igb.dto.ResponseDTO;
 import co.igb.ejb.IGBApplicationBean;
-import co.igb.manager.client.SessionPoolManagerClient;
 import co.igb.persistence.facade.PurchaseOrderFacade;
 import co.igb.util.IGBUtils;
 
@@ -41,8 +39,8 @@ import java.util.logging.Logger;
 @Stateless
 @Path("reception")
 public class ReceptionREST implements Serializable {
-
     private static final Logger CONSOLE = Logger.getLogger(ReceptionREST.class.getSimpleName());
+
     @EJB
     private PurchaseOrderFacade poFacade;
     @EJB
@@ -59,6 +57,7 @@ public class ReceptionREST implements Serializable {
         try {
             return Response.ok(poFacade.findOpenOrders(companyName, pruebas)).build();
         } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando las ordenes abiertas en " + companyName, e);
             return Response.serverError().build();
         }
     }

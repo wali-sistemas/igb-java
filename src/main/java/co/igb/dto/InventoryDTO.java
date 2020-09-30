@@ -1,11 +1,9 @@
 package co.igb.dto;
 
 /**
- *
  * @author YEIJARA
  */
 public class InventoryDTO {
-
     private Integer idInventory;
     private Integer quantity;
     private String item;

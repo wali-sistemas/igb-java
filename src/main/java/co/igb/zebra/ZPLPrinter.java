@@ -16,7 +16,6 @@ import org.apache.velocity.app.Velocity;
  * @author dbotero
  */
 public class ZPLPrinter {
-
     private static final Logger CONSOLE = Logger.getLogger(ZPLPrinter.class.getSimpleName());
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 

@@ -90,7 +90,7 @@ public class ShippingREST implements Serializable {
             invoiceFacade.updateFieldShipping(entity.getInvoiceNumber(), companyName, pruebas);
             return Response.ok(new ResponseDTO(0, "Shipping creado.")).build();
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error creando el shipping para la factura #" + shippingDTO.getInvoice());
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error creando el shipping para la factura #" + shippingDTO.getInvoice(), e);
             return Response.ok(-1, "Ocurrio un error creando el shipping para la factura #" + shippingDTO.getInvoice()).build();
         }
     }
@@ -198,7 +198,7 @@ public class ShippingREST implements Serializable {
             try {
                 invoiceFacade.updateNroGuia(dto.getFactura(), respREST.getNumeroGuia(), companyName, pruebas);
             } catch (Exception e) {
-                CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar la guia en SAP para la empresa " + companyName);
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar la guia en SAP para la empresa " + companyName, e);
             }
 
             return Response.ok(new ResponseDTO(0, respREST.getNumeroGuia())).build();

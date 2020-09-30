@@ -6,11 +6,9 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- *
  * @author dbotero
  */
 public class PurchaseOrderDTO {
-
     private Long docEntry;
     private String docNum;
     private String series;
@@ -23,7 +21,6 @@ public class PurchaseOrderDTO {
     private Integer items;
     private Double docRate;
     private String comments;
-
     private String ubpcost;
     private String uwuid;
     private Date uftomaped;
@@ -126,7 +123,6 @@ public class PurchaseOrderDTO {
     private Date uFechaArriboCEDI;
     private String uCatRet;
     private String uBodega;
-
     private List<PurchaseOrderLineDTO> lines;
 
     public PurchaseOrderDTO() {
@@ -1103,40 +1099,124 @@ public class PurchaseOrderDTO {
         return true;
     }
 
-//    @Override
-//    public String toString() {
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("PurchaseOrderDTO {");
-//        for (Method method : PurchaseOrderDTO.class.getDeclaredMethods()) {
-//            try {
-//                String methodName = method.getName();
-//                Object result = method.invoke(this);
-//                if (methodName.startsWith("get") && result != null) {
-//                    //String fieldName = methodName.substring(0,1).toLowerCase();
-//                    sb.append(methodName.substring(3, 4).toLowerCase());
-//                    sb.append(methodName.substring(4));
-//                    sb.append(" = ");
-//                    if (result instanceof java.lang.String) {
-//                        sb.append("\"");
-//                    }
-//                    sb.append(result.toString());
-//                    if (result instanceof java.lang.String) {
-//                        sb.append("\"");
-//                    }
-//                    sb.append(", ");
-//                }
-//            } catch (Exception e) {
-//            }
-//        }
-//        if (sb.charAt(sb.length() - 2) == ',') {
-//            sb.delete(sb.length() - 2, sb.length());
-//        }
-//        sb.append("}");
-//
-//        return sb.toString();
-//    }
     @Override
     public String toString() {
-        return "PurchaseOrderDTO{" + "docEntry=" + docEntry + ", docNum=" + docNum + ", series=" + series + ", salesPersonCode=" + salesPersonCode + ", docDate=" + docDate + ", docTotal=" + docTotal + ", docTotalFC=" + docTotalFC + ", cardCode=" + cardCode + ", cardName=" + cardName + ", items=" + items + ", docRate=" + docRate + ", comments=" + comments + ", ubpcost=" + ubpcost + ", uwuid=" + uwuid + ", uftomaped=" + uftomaped + ", ucampana=" + ucampana + ", utransp=" + utransp + ", useparador=" + useparador + ", udesp=" + udesp + ", uubic1=" + uubic1 + ", uconcnc=" + uconcnc + ", uconcnd=" + uconcnd + ", uconcinv=" + uconcinv + ", ufembarque=" + ufembarque + ", utermneg=" + utermneg + ", umodtransp=" + umodtransp + ", upuertodes=" + upuertodes + ", umodimp=" + umodimp + ", uestadooc=" + uestadooc + ", ufproforma=" + ufproforma + ", uembarcado=" + uembarcado + ", udoctransp=" + udoctransp + ", ufdoctransp=" + ufdoctransp + ", ufarribpuerto=" + ufarribpuerto + ", ufarribalma=" + ufarribalma + ", ureqant=" + ureqant + ", uantrealiz=" + uantrealiz + ", utotcaj=" + utotcaj + ", utotbul=" + utotbul + ", utotlios=" + utotlios + ", uvlrfle=" + uvlrfle + ", uvlrseg=" + uvlrseg + ", utotfle=" + utotfle + ", uhoraini=" + uhoraini + ", uhorafin=" + uhorafin + ", upesobruto=" + upesobruto + ", uautprecio=" + uautprecio + ", uTipoNota=" + uTipoNota + ", ununfac=" + ununfac + ", ufechaentregapro=" + ufechaentregapro + ", unumfacimp=" + unumfacimp + ", utranspimp=" + utranspimp + ", utiempoestimado=" + utiempoestimado + ", ufecini=" + ufecini + ", ufecfin=" + ufecfin + ", uivcDone=" + uivcDone + ", uVendedor2=" + uVendedor2 + ", uDifCode=" + uDifCode + ", uok1IVAPA=" + uok1IVAPA + ", umotdevol=" + umotdevol + ", ufechapago=" + ufechapago + ", uantcancelado=" + uantcancelado + ", uimpcancelado=" + uimpcancelado + ", utipoempaque=" + utipoempaque + ", uvranticipo=" + uvranticipo + ", uvrtotal=" + uvrtotal + ", uvrimpuesto=" + uvrimpuesto + ", uobservacion=" + uobservacion + ", uvrdeclarado=" + uvrdeclarado + ", upuertoemb=" + upuertoemb + ", unaviera=" + unaviera + ", utranspterr=" + utranspterr + ", uagenteadu=" + uagenteadu + ", ualmacdes=" + ualmacdes + ", uguid=" + uguid + ", ubpvncon2=" + ubpvncon2 + ", ubpvseri=" + ubpvseri + ", ubpvtran=" + ubpvtran + ", ubpvfafe=" + ubpvfafe + ", ubpvcomp=" + ubpvcomp + ", ubpvtdoc=" + ubpvtdoc + ", ubpvnimp=" + ubpvnimp + ", ubpvNumExp=" + ubpvNumExp + ", ubpvncon=" + ubpvncon + ", umotivo=" + umotivo + ", uestadoped=" + uestadoped + ", uAutorret=" + uAutorret + ", uRetefue=" + uRetefue + ", uReteIca=" + uReteIca + ", unwrPicS=" + unwrPicS + ", unwrbRet=" + unwrbRet + ", uNwrPAut=" + uNwrPAut + ", uNwrNote=" + uNwrNote + ", uNwrTag=" + uNwrTag + ", uNwrFrgt=" + uNwrFrgt + ", unwrnorm=" + unwrnorm + ", uTypeExped=" + uTypeExped + ", unwrManifest=" + unwrManifest + ", uempacador=" + uempacador + ", uhorainiemp=" + uhorainiemp + ", uhorafinemp=" + uhorafinemp + ", ualist=" + ualist + ", ufeciniemp=" + ufeciniemp + ", ufecfinemp=" + ufecfinemp + ", uok1IFRS=" + uok1IFRS + ", utotfleclie=" + utotfleclie + ", ushipping=" + ushipping + ", uEsIndep=" + uEsIndep + ", uDocEntryLeg=" + uDocEntryLeg + ", uIdLineLeg=" + uIdLineLeg + ", uSerieLeg=" + uSerieLeg + ", uFechaArriboCEDI=" + uFechaArriboCEDI + ", uCatRet=" + uCatRet + ", uBodega=" + uBodega + ", lines=" + lines + '}';
+        return "PurchaseOrderDTO{" +
+                "docEntry=" + docEntry +
+                ", docNum='" + docNum + '\'' +
+                ", series='" + series + '\'' +
+                ", salesPersonCode=" + salesPersonCode +
+                ", docDate=" + docDate +
+                ", docTotal=" + docTotal +
+                ", docTotalFC=" + docTotalFC +
+                ", cardCode='" + cardCode + '\'' +
+                ", cardName='" + cardName + '\'' +
+                ", items=" + items +
+                ", docRate=" + docRate +
+                ", comments='" + comments + '\'' +
+                ", ubpcost='" + ubpcost + '\'' +
+                ", uwuid='" + uwuid + '\'' +
+                ", uftomaped=" + uftomaped +
+                ", ucampana='" + ucampana + '\'' +
+                ", utransp='" + utransp + '\'' +
+                ", useparador='" + useparador + '\'' +
+                ", udesp='" + udesp + '\'' +
+                ", uubic1='" + uubic1 + '\'' +
+                ", uconcnc='" + uconcnc + '\'' +
+                ", uconcnd='" + uconcnd + '\'' +
+                ", uconcinv='" + uconcinv + '\'' +
+                ", ufembarque=" + ufembarque +
+                ", utermneg='" + utermneg + '\'' +
+                ", umodtransp='" + umodtransp + '\'' +
+                ", upuertodes='" + upuertodes + '\'' +
+                ", umodimp='" + umodimp + '\'' +
+                ", uestadooc='" + uestadooc + '\'' +
+                ", ufproforma=" + ufproforma +
+                ", uembarcado='" + uembarcado + '\'' +
+                ", udoctransp='" + udoctransp + '\'' +
+                ", ufdoctransp=" + ufdoctransp +
+                ", ufarribpuerto=" + ufarribpuerto +
+                ", ufarribalma=" + ufarribalma +
+                ", ureqant='" + ureqant + '\'' +
+                ", uantrealiz='" + uantrealiz + '\'' +
+                ", utotcaj=" + utotcaj +
+                ", utotbul=" + utotbul +
+                ", utotlios=" + utotlios +
+                ", uvlrfle=" + uvlrfle +
+                ", uvlrseg=" + uvlrseg +
+                ", utotfle=" + utotfle +
+                ", uhoraini=" + uhoraini +
+                ", uhorafin=" + uhorafin +
+                ", upesobruto=" + upesobruto +
+                ", uautprecio='" + uautprecio + '\'' +
+                ", uTipoNota='" + uTipoNota + '\'' +
+                ", ununfac='" + ununfac + '\'' +
+                ", ufechaentregapro=" + ufechaentregapro +
+                ", unumfacimp='" + unumfacimp + '\'' +
+                ", utranspimp='" + utranspimp + '\'' +
+                ", utiempoestimado=" + utiempoestimado +
+                ", ufecini=" + ufecini +
+                ", ufecfin=" + ufecfin +
+                ", uivcDone='" + uivcDone + '\'' +
+                ", uVendedor2='" + uVendedor2 + '\'' +
+                ", uDifCode='" + uDifCode + '\'' +
+                ", uok1IVAPA='" + uok1IVAPA + '\'' +
+                ", umotdevol='" + umotdevol + '\'' +
+                ", ufechapago=" + ufechapago +
+                ", uantcancelado='" + uantcancelado + '\'' +
+                ", uimpcancelado='" + uimpcancelado + '\'' +
+                ", utipoempaque='" + utipoempaque + '\'' +
+                ", uvranticipo=" + uvranticipo +
+                ", uvrtotal=" + uvrtotal +
+                ", uvrimpuesto=" + uvrimpuesto +
+                ", uobservacion='" + uobservacion + '\'' +
+                ", uvrdeclarado=" + uvrdeclarado +
+                ", upuertoemb='" + upuertoemb + '\'' +
+                ", unaviera='" + unaviera + '\'' +
+                ", utranspterr='" + utranspterr + '\'' +
+                ", uagenteadu='" + uagenteadu + '\'' +
+                ", ualmacdes='" + ualmacdes + '\'' +
+                ", uguid='" + uguid + '\'' +
+                ", ubpvncon2='" + ubpvncon2 + '\'' +
+                ", ubpvseri='" + ubpvseri + '\'' +
+                ", ubpvtran='" + ubpvtran + '\'' +
+                ", ubpvfafe='" + ubpvfafe + '\'' +
+                ", ubpvcomp='" + ubpvcomp + '\'' +
+                ", ubpvtdoc='" + ubpvtdoc + '\'' +
+                ", ubpvnimp='" + ubpvnimp + '\'' +
+                ", ubpvNumExp='" + ubpvNumExp + '\'' +
+                ", ubpvncon='" + ubpvncon + '\'' +
+                ", umotivo='" + umotivo + '\'' +
+                ", uestadoped='" + uestadoped + '\'' +
+                ", uAutorret='" + uAutorret + '\'' +
+                ", uRetefue='" + uRetefue + '\'' +
+                ", uReteIca='" + uReteIca + '\'' +
+                ", unwrPicS='" + unwrPicS + '\'' +
+                ", unwrbRet='" + unwrbRet + '\'' +
+                ", uNwrPAut=" + uNwrPAut +
+                ", uNwrNote='" + uNwrNote + '\'' +
+                ", uNwrTag='" + uNwrTag + '\'' +
+                ", uNwrFrgt=" + uNwrFrgt +
+                ", unwrnorm='" + unwrnorm + '\'' +
+                ", uTypeExped='" + uTypeExped + '\'' +
+                ", unwrManifest='" + unwrManifest + '\'' +
+                ", uempacador='" + uempacador + '\'' +
+                ", uhorainiemp=" + uhorainiemp +
+                ", uhorafinemp=" + uhorafinemp +
+                ", ualist='" + ualist + '\'' +
+                ", ufeciniemp=" + ufeciniemp +
+                ", ufecfinemp=" + ufecfinemp +
+                ", uok1IFRS='" + uok1IFRS + '\'' +
+                ", utotfleclie=" + utotfleclie +
+                ", ushipping='" + ushipping + '\'' +
+                ", uEsIndep='" + uEsIndep + '\'' +
+                ", uDocEntryLeg=" + uDocEntryLeg +
+                ", uIdLineLeg='" + uIdLineLeg + '\'' +
+                ", uSerieLeg=" + uSerieLeg +
+                ", uFechaArriboCEDI=" + uFechaArriboCEDI +
+                ", uCatRet='" + uCatRet + '\'' +
+                ", uBodega='" + uBodega + '\'' +
+                ", lines=" + lines +
+                '}';
     }
 }

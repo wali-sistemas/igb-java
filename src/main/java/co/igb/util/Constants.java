@@ -1,11 +1,13 @@
 package co.igb.util;
 
+/**
+ * @author dbotero
+ */
 public class Constants {
     public static final String INVOICE_SERIES = "igb.invoice.series";
     public static final String STOCK_TRANSFER_SERIES = "igb.stock-transfer.series";
     public static final String SALES_ORDER_SERIES = "igb.sales.order.series";
     public static final String DELIVERY_NOTE_SERIES = "igb.delivery.note.series";
-    //public static final String WAREHOUSE_CODE = "igb.warehouse.code";
     public static final String COMPANIES = "igb.login.companies";
     public static final String INITIAL_CONTEXT_FACTORY = "initial.context.factory";
     public static final String PROVIDER_URL = "provider.url";
@@ -50,7 +52,6 @@ public class Constants {
     public static final String STATUS_OPEN = "open";
     public static final String SAP_STATUS_OPEN = "O";
     public static final String SAP_STATUS_NO = "tNO";
-    public static final String SAP_STATUS_YES = "tYES";
     public static final String TEMPORARY_PICKING_TTL = "igb.temporary.picking.ttl";
     public static final String B1WS_WSDL_URL = "igb.b1ws.wsdlUrl";
     public static final String B1WS_DATABASE_SERVER = "igb.b1ws.databaseServer";

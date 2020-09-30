@@ -2,6 +2,9 @@ package co.igb.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/**
+ * @author dbotero
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StockTransferLineDTO {
     private String itemCode;
@@ -10,6 +13,13 @@ public class StockTransferLineDTO {
     private String whsCode;
 
     public StockTransferLineDTO() {
+    }
+
+    public StockTransferLineDTO(String itemCode, Integer quantity, String fromWhsCode, String whsCode) {
+        this.itemCode = itemCode;
+        this.quantity = quantity;
+        this.fromWhsCode = fromWhsCode;
+        this.whsCode = whsCode;
     }
 
     public Integer getQuantity() {

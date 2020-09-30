@@ -3,11 +3,9 @@ package co.igb.dto;
 import java.util.Date;
 
 /**
- *
  * @author dbotero
  */
 public class SalesOrderDTO {
-
     private Long docEntry;
     private String docNum;
     private String series;
@@ -22,6 +20,26 @@ public class SalesOrderDTO {
     private String status;
     private String address;
     private String transp;
+
+    public SalesOrderDTO() {
+    }
+
+    public SalesOrderDTO(Long docEntry, String docNum, String series, String confirmed, Long salesPersonCode, Date docDate, String cardCode, String cardName, Integer items, String comments, String assignedPickingEmployee, String status, String address, String transp) {
+        this.docEntry = docEntry;
+        this.docNum = docNum;
+        this.series = series;
+        this.confirmed = confirmed;
+        this.salesPersonCode = salesPersonCode;
+        this.docDate = docDate;
+        this.cardCode = cardCode;
+        this.cardName = cardName;
+        this.items = items;
+        this.comments = comments;
+        this.assignedPickingEmployee = assignedPickingEmployee;
+        this.status = status;
+        this.address = address;
+        this.transp = transp;
+    }
 
     public Long getDocEntry() {
         return docEntry;
@@ -133,5 +151,25 @@ public class SalesOrderDTO {
 
     public void setTransp(String transp) {
         this.transp = transp;
+    }
+
+    @Override
+    public String toString() {
+        return "SalesOrderDTO{" +
+                "docEntry=" + docEntry +
+                ", docNum='" + docNum + '\'' +
+                ", series='" + series + '\'' +
+                ", confirmed='" + confirmed + '\'' +
+                ", salesPersonCode=" + salesPersonCode +
+                ", docDate=" + docDate +
+                ", cardCode='" + cardCode + '\'' +
+                ", cardName='" + cardName + '\'' +
+                ", items=" + items +
+                ", comments='" + comments + '\'' +
+                ", assignedPickingEmployee='" + assignedPickingEmployee + '\'' +
+                ", status='" + status + '\'' +
+                ", address='" + address + '\'' +
+                ", transp='" + transp + '\'' +
+                '}';
     }
 }

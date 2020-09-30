@@ -22,8 +22,8 @@ import java.util.logging.Logger;
 @Stateless
 @Path("generic")
 public class GenericOperationsREST {
-
     private static final Logger CONSOLE = Logger.getLogger(GenericOperationsREST.class.getSimpleName());
+
     @Inject
     private IGBApplicationBean applicationBean;
     @EJB

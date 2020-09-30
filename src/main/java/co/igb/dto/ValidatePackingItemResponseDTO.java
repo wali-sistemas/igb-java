@@ -1,10 +1,16 @@
 package co.igb.dto;
 
+/**
+ * @author dbotero
+ */
 public class ValidatePackingItemResponseDTO {
     private String itemName;
     private Integer items;
 
-    public ValidatePackingItemResponseDTO(String itemName, Integer items){
+    public ValidatePackingItemResponseDTO() {
+    }
+
+    public ValidatePackingItemResponseDTO(String itemName, Integer items) {
         this.itemName = itemName;
         this.items = items;
     }
@@ -23,5 +29,13 @@ public class ValidatePackingItemResponseDTO {
 
     public void setItems(Integer items) {
         this.items = items;
+    }
+
+    @Override
+    public String toString() {
+        return "ValidatePackingItemResponseDTO{" +
+                "itemName='" + itemName + '\'' +
+                ", items=" + items +
+                '}';
     }
 }

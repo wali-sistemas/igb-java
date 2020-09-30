@@ -32,8 +32,4 @@ public class SessionPoolManagerClient {
     public GenericRESTResponseDTO returnSession(String sessionId) {
         return webTarget.path("return").path(sessionId).request(MediaType.APPLICATION_JSON).put(Entity.entity(sessionId, MediaType.APPLICATION_JSON), GenericRESTResponseDTO.class);
     }
-
-    /*public GenericRESTResponseDTO returnSession(SessionDTO dto) {
-        return webTarget.path("return").request(MediaType.APPLICATION_JSON).put(Entity.entity(dto, MediaType.APPLICATION_JSON), GenericRESTResponseDTO.class);
-    }*/
 }

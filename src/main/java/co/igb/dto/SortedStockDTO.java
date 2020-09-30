@@ -4,7 +4,6 @@ package co.igb.dto;
  * @author dbotero
  */
 public class SortedStockDTO implements Comparable<SortedStockDTO> {
-
     private String itemCode;
     private String itemName;
     private int openQuantity;
@@ -17,6 +16,9 @@ public class SortedStockDTO implements Comparable<SortedStockDTO> {
     private String velocity;
     private Integer sequence;
     private String binLocationType;
+
+    public SortedStockDTO() {
+    }
 
     public SortedStockDTO(Object[] dbData) {
         itemCode = (String) dbData[0];

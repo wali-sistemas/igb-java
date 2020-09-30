@@ -12,7 +12,6 @@ import javax.ws.rs.core.MediaType;
  * @author jguisao
  */
 public class SessionManagerClient {
-
     private WebTarget webTarget;
     private Client client;
 

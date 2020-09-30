@@ -1,5 +1,8 @@
 package co.igb.exception;
 
+/**
+ * @author dbotero
+ */
 public class SAPSessionException extends RuntimeException {
     public SAPSessionException() {
     }
