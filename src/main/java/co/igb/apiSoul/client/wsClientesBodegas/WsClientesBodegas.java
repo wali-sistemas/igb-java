@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "wsClientesBodegas", targetNamespace = "http://tempuri.org/", wsdlLocation = "https://pruebassoul.magnum.com.co/TestMercurio/ServiciosWeb/Clientes/wsClientesbodegas.asmx?wsdl")
+@WebServiceClient(name = "wsClientesBodegas", targetNamespace = "http://tempuri.org/", wsdlLocation = "https://soul.magnum.com.co/Mercurio/ServiciosWeb/Clientes/wsClientesBodegas.asmx?wsdl")
 public class WsClientesBodegas
     extends Service
 {
@@ -30,7 +30,7 @@ public class WsClientesBodegas
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("https://pruebassoul.magnum.com.co/TestMercurio/ServiciosWeb/Clientes/wsClientesbodegas.asmx?wsdl");
+            url = new URL("https://soul.magnum.com.co/Mercurio/ServiciosWeb/Clientes/wsClientesBodegas.asmx?wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }

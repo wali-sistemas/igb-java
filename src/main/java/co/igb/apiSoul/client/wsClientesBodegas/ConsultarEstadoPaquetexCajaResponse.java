@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Clase Java para anonymous complex type.
- *
+ * 
  * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
- *
+ * 
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -24,10 +24,12 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-        "consultarEstadoPaquetexCajaResult"
+    "consultarEstadoPaquetexCajaResult"
 })
 @XmlRootElement(name = "ConsultarEstadoPaquetexCajaResponse")
 public class ConsultarEstadoPaquetexCajaResponse {
@@ -37,9 +39,11 @@ public class ConsultarEstadoPaquetexCajaResponse {
 
     /**
      * Obtiene el valor de la propiedad consultarEstadoPaquetexCajaResult.
-     *
-     * @return possible object is
-     * {@link RespConsultarEstadoPaquete }
+     * 
+     * @return
+     *     possible object is
+     *     {@link RespConsultarEstadoPaquete }
+     *     
      */
     public RespConsultarEstadoPaquete getConsultarEstadoPaquetexCajaResult() {
         return consultarEstadoPaquetexCajaResult;
@@ -47,9 +51,11 @@ public class ConsultarEstadoPaquetexCajaResponse {
 
     /**
      * Define el valor de la propiedad consultarEstadoPaquetexCajaResult.
-     *
-     * @param value allowed object is
-     *              {@link RespConsultarEstadoPaquete }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link RespConsultarEstadoPaquete }
+     *     
      */
     public void setConsultarEstadoPaquetexCajaResult(RespConsultarEstadoPaquete value) {
         this.consultarEstadoPaquetexCajaResult = value;

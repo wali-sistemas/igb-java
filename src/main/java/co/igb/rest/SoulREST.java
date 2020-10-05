@@ -53,7 +53,7 @@ public class SoulREST implements Serializable {
             dto.setCantidadReservada(obj.getCantidadReservada());
             dto.setEstado(obj.getEstado());
 
-            if (!obj.getSku().equals("PUBLICIDAD")) {
+            if (obj.getSku().substring(0, 2).equals("TY") || obj.getSku().substring(0, 2).equals("PW") || obj.getSku().substring(0, 1).equals("U")) {
                 dto.setItemName(itemFacade.getItemName(obj.getSku(), companyName, pruebas));
             } else {
                 dto.setItemName(obj.getSku());
@@ -61,8 +61,7 @@ public class SoulREST implements Serializable {
 
             if (obj.getSku().substring(0, 2).equals("TY")) {
                 dto.setWhsCode("26");
-            }
-            if (obj.getSku().substring(0, 2).equals("PW")) {
+            } else if (obj.getSku().substring(0, 2).equals("PW") || obj.getSku().substring(0, 1).equals("U")) {
                 dto.setWhsCode("05");
             }
 
