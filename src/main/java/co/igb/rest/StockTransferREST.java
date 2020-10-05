@@ -127,12 +127,12 @@ public class StockTransferREST implements Serializable {
             }
 
             //Enviar correo
-            mailManager.sendInventoryInconsistence(
+            /*mailManager.sendInventoryInconsistence(
                     itemTransfer.getUsername(),
                     binLocationFacade.getBinCodeAndName(itemTransfer.getBinAbsTo(), companyName, pruebas),
                     itemTransfer.getItemCode(),
                     expectedQuantity,
-                    itemTransfer.getQuantity());
+                    itemTransfer.getQuantity());*/
 
             if (itemTransfer.getQuantity() == 0) {
                 CONSOLE.log(Level.INFO, "Se reporto la inconsistencia de inventario, no se hace traslado ya que la cantidad encontrada fue cero");
@@ -215,8 +215,8 @@ public class StockTransferREST implements Serializable {
         //4. Validar y retornar
         if (docEntry > 0 || itemTransfer.getTemporary()) {
             //TODO: modificar la orden de venta
-            if (itemTransfer.getExpectedQuantity() < itemTransfer.getQuantity()) {
-                CONSOLE.log(Level.INFO, "La cantidad tomada ({0}) es superior a la cantidad de la orden ({1}). Reajustando orden para acomodar nueva cantidad...",
+            if (itemTransfer.getExpectedQuantity() != itemTransfer.getQuantity()) {
+                CONSOLE.log(Level.INFO, "La cantidad tomada ({0}) es diferente a la cantidad de la orden ({1}). Reajustando orden para acomodar nueva cantidad...",
                         new Object[]{itemTransfer.getQuantity(), itemTransfer.getExpectedQuantity()});
                 Integer orderDocEntry = salesOrderFacade.getOrderDocEntry(itemTransfer.getOrderNumber(), companyName, pruebas);
                 ResponseDTO res = salesOrderEJB.modifySalesOrderQuantity(companyName, orderDocEntry, itemTransfer.getItemCode(), itemTransfer.getQuantity());
