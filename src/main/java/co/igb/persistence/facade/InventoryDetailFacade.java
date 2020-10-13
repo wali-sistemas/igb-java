@@ -10,23 +10,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author YEIJARA
  */
 @Stateless
 public class InventoryDetailFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(InventoryFacade.class.getSimpleName());
-    private static final String DB_TYPE = Constants.DATABASE_TYPE_MYSQL;
+    private static final String DB_TYPE_WALI = Constants.DATABASE_TYPE_WALI;
 
     @EJB
     private PersistenceConf persistenceConf;
 
-    public InventoryDetailFacade(){
+    public InventoryDetailFacade() {
     }
 
     public void addDetail(InventoryDetail detail, String companyName, boolean testing) {
-        persistenceConf.chooseSchema(companyName, testing, DB_TYPE).persist(detail);
+        persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).persist(detail);
     }
 
     public List<InventoryDetail> findInventoryDetail(Integer idInventory, String companyName, boolean testing) {
@@ -38,7 +37,7 @@ public class InventoryDetailFacade {
         sb.append(idInventory);
 
         try {
-            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE)
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI)
                     .createNativeQuery(sb.toString(), InventoryDetail.class).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al obtener el detalle del inventario. ", e);

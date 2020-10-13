@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 public class GroupAllowedFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(DeliveryNoteFacade.class.getSimpleName());
-    private static final String DB_TYPE = Constants.DATABASE_TYPE_MYSQL;
+    private static final String DB_TYPE_WALI = Constants.DATABASE_TYPE_WALI;
 
     @EJB
     private PersistenceConf persistenceConf;
@@ -27,10 +27,9 @@ public class GroupAllowedFacade {
         sb.append("'");
 
         try {
-            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             return new ArrayList<>();
         }
     }
-
 }

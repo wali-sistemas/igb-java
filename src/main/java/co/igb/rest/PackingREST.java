@@ -191,7 +191,7 @@ public class PackingREST implements Serializable {
         record.setItemCode(packingRecord.getItemCode());
         record.setItemName(packingRecord.getItemName());
         record.setOrderNumber(packingRecord.getOrderNumber());
-        record.setIdPackingOrder(packingRecord.getIdPackingOrder());
+        record.setIdPackingOrder(new PackingOrder(packingRecord.getIdPackingOrder().longValue()));
         record.setQuantity(packingRecord.getQuantity());
         record.setStatus(Constants.STATUS_OPEN);
         record.setCompanyName(companyName);

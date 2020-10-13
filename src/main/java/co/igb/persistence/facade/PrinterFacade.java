@@ -15,7 +15,7 @@ import java.util.List;
 @Stateless
 public class PrinterFacade {
 
-    private static final String DB_TYPE = Constants.DATABASE_TYPE_MYSQL;
+    private static final String DB_TYPE_WALI = Constants.DATABASE_TYPE_WALI;
 
     @EJB
     private PersistenceConf persistenceConf;
@@ -24,7 +24,7 @@ public class PrinterFacade {
     }
 
     public List<Printer> findAll(String companyName, boolean testing) {
-        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI);
         CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
         cq.select(cq.from(Printer.class));
         return em.createQuery(cq).getResultList();

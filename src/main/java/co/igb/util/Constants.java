@@ -65,8 +65,9 @@ public class Constants {
     public static final String B1WS_DELIVERY_NOTE_SERVICE = "DeliveryNotesService";
     public static final String B1WS_ORDERS_SERVICE = "OrdersService";
     public static final String BIN_TYPE_PICKING = "PICKING";
-    public static final String DATABASE_TYPE_MYSQL = "mysql";
+    //public static final String DATABASE_TYPE_MYSQL = "mysql";
     public static final String DATABASE_TYPE_MSSQL = "mssql";
+    public static final String DATABASE_TYPE_WALI = "WMS";
     public static final String BIN_ACTION_TYPE_FROM = "batFromWarehouse";
     public static final String BIN_ACTION_TYPE_TO = "batToWarehouse";
     public static final long CODE_FLETE_GRABABLE = 1l;

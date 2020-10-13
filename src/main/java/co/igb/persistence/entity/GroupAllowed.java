@@ -14,7 +14,7 @@ import java.util.Objects;
 @Table(name = "groups_allowed")
 public class GroupAllowed implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "idgroups_allowed")
     private Long id;

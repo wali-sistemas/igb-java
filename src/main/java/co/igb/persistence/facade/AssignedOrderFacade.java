@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 public class AssignedOrderFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(AssignedOrderFacade.class.getSimpleName());
-    private static final String DB_TYPE = Constants.DATABASE_TYPE_MYSQL;
+    private static final String DB_TYPE_WALI = Constants.DATABASE_TYPE_WALI;
 
     @EJB
     private PersistenceConf persistenceConf;
@@ -31,15 +31,15 @@ public class AssignedOrderFacade {
     }
 
     public void create(AssignedOrder assignation, String companyName, boolean testing) {
-        persistenceConf.chooseSchema(companyName, testing, DB_TYPE).persist(assignation);
+        persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).persist(assignation);
     }
 
     public AssignedOrder edit(AssignedOrder assignation, String companyName, boolean testing) {
-        return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).merge(assignation);
+        return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).merge(assignation);
     }
 
     public List<AssignedOrder> listOpenAssignations(String companyName, boolean testing) {
-        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<AssignedOrder> cq = cb.createQuery(AssignedOrder.class);
         Root<AssignedOrder> root = cq.from(AssignedOrder.class);
@@ -55,7 +55,7 @@ public class AssignedOrderFacade {
     }
 
     public List<AssignedOrder> listClosedAssignations(String companyName, boolean testing) {
-        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<AssignedOrder> cq = cb.createQuery(AssignedOrder.class);
         Root<AssignedOrder> root = cq.from(AssignedOrder.class);
@@ -70,7 +70,7 @@ public class AssignedOrderFacade {
     }
 
     public List<AssignedOrder> listOpenAssignationsByUserAndCompany(String username, Integer orderNumber, String companyName, boolean testing) {
-        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<AssignedOrder> cq = cb.createQuery(AssignedOrder.class);
         Root<AssignedOrder> root = cq.from(AssignedOrder.class);
@@ -97,7 +97,7 @@ public class AssignedOrderFacade {
     }
 
     public AssignedOrder findByOrderNumber(Integer orderNumber, String companyName, boolean testing) {
-        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<AssignedOrder> cq = cb.createQuery(AssignedOrder.class);
         Root<AssignedOrder> root = cq.from(AssignedOrder.class);
@@ -113,7 +113,7 @@ public class AssignedOrderFacade {
     }
 
     public Integer countOrderEmployeeAssigneed(String user, String companyName, boolean testing) {
-        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(Integer.class);
         Root root = cq.from(AssignedOrder.class);
@@ -131,7 +131,7 @@ public class AssignedOrderFacade {
     }
 
     public boolean enablePicking(Integer orderNumber, String companyName, boolean testing) {
-        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaUpdate<AssignedOrder> cu = cb.createCriteriaUpdate(AssignedOrder.class);
         Root<AssignedOrder> root = cu.from(AssignedOrder.class);
@@ -149,7 +149,7 @@ public class AssignedOrderFacade {
     }
 
     public boolean deleteAssignedOrder(Integer orderNumber, String companyName, boolean testing) {
-        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI);
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaDelete<AssignedOrder> cd = cb.createCriteriaDelete(AssignedOrder.class);
         Root<AssignedOrder> root = cd.from(AssignedOrder.class);
