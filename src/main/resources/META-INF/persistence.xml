@@ -59,4 +59,11 @@
             <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
         </properties>
     </persistence-unit>
+    <persistence-unit name="WMSPU" transaction-type="JTA">
+        <jta-data-source>java:/WMSDS</jta-data-source>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
+        </properties>
+    </persistence-unit>
 </persistence>

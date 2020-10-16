@@ -25,7 +25,7 @@ public class PackingOrder implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "idpacking_order")
     private Long id;
@@ -52,6 +52,10 @@ public class PackingOrder implements Serializable {
 
     public PackingOrder() {
         items = new ArrayList<>();
+    }
+
+    public PackingOrder(Long id) {
+        this.id = id;
     }
 
     public Long getId() {

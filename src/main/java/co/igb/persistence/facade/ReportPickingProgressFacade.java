@@ -20,28 +20,27 @@ import java.util.logging.Logger;
 public class ReportPickingProgressFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(ReportPickingProgressFacade.class.getSimpleName());
-    private static final String DB_TYPE = Constants.DATABASE_TYPE_MYSQL;
+    private static final String DB_TYPE_WALI = Constants.DATABASE_TYPE_WALI;
 
     @EJB
     private PersistenceConf persistenceConf;
 
     public ReportPickingProgressFacade() {
-
     }
 
     public void create(ReportPickingProgress reportPickingProgress, String companyName, boolean testing) {
-        persistenceConf.chooseSchema(companyName, testing, DB_TYPE).persist(reportPickingProgress);
+        persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).persist(reportPickingProgress);
     }
 
     public ReportPickingProgress obtainReportOrder(Integer orderNumber, String companyName, boolean testing) {
-        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName, testing, DB_TYPE).getCriteriaBuilder();
+        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(ReportPickingProgress.class);
         Root report = cq.from(ReportPickingProgress.class);
 
         cq.where(cb.equal(report.get(ReportPickingProgress_.orderNumber), orderNumber));
 
         try {
-            return (ReportPickingProgress) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createQuery(cq).getSingleResult();
+            return (ReportPickingProgress) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createQuery(cq).getSingleResult();
         } catch (NoResultException e) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el reporte para una orden. ", e);

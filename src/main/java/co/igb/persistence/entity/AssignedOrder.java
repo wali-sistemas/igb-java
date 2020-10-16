@@ -14,17 +14,16 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- *
  * @author dbotero
  */
 @Entity
-@Table(name = "assigned_orders")
+@Table(name = "assigned_orders", schema="DBO")
 public class AssignedOrder implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "idassigned_orders")
     private Long id;
@@ -155,7 +154,16 @@ public class AssignedOrder implements Serializable {
 
     @Override
     public String toString() {
-        return "AssignedOrder{" + "id=" + id + ", empId=" + empId + ", orderNumber=" + orderNumber + ", dateAssigned=" + dateAssigned + ", customerId=" + customerId + ", assignedBy=" + assignedBy + ", status=" + status + ", company=" + company + '}';
+        return "AssignedOrder{" +
+                "id=" + id +
+                ", empId='" + empId + '\'' +
+                ", orderNumber=" + orderNumber +
+                ", dateAssigned=" + dateAssigned +
+                ", customerName='" + customerName + '\'' +
+                ", customerId='" + customerId + '\'' +
+                ", assignedBy='" + assignedBy + '\'' +
+                ", status='" + status + '\'' +
+                ", company='" + company + '\'' +
+                '}';
     }
-
 }

@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class InventoryFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(InventoryFacade.class.getSimpleName());
-    private static final String DB_TYPE = Constants.DATABASE_TYPE_MYSQL;
+    private static final String DB_TYPE_WALI = Constants.DATABASE_TYPE_WALI;
 
     @EJB
     private PersistenceConf persistenceConf;
@@ -28,19 +28,19 @@ public class InventoryFacade {
     }
 
     public void create(Inventory inventory, String companyName, boolean testing) {
-        persistenceConf.chooseSchema(companyName, testing, DB_TYPE).persist(inventory);
+        persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).persist(inventory);
     }
 
     public Inventory edit(Inventory inventory, String companyName, boolean testing) {
-        return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).merge(inventory);
+        return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).merge(inventory);
     }
 
     public Inventory find(Integer idInventory, String companyName, boolean testing) {
-        return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).find(Inventory.class, idInventory);
+        return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).find(Inventory.class, idInventory);
     }
 
     public Inventory findLastInventoryOpen(String warehouse, String companyName, boolean testing) {
-        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName, testing, DB_TYPE).getCriteriaBuilder();
+        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).getCriteriaBuilder();
         CriteriaQuery<Inventory> cq = cb.createQuery(Inventory.class);
         Root<Inventory> inventory = cq.from(Inventory.class);
 
@@ -51,7 +51,7 @@ public class InventoryFacade {
         cq.orderBy(cb.desc(inventory.get(Inventory_.id)));
 
         try {
-            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createQuery(cq).setMaxResults(1).getSingleResult();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createQuery(cq).setMaxResults(1).getSingleResult();
         } catch (NoResultException e) {
             return null;
         } catch (Exception e) {
@@ -79,7 +79,7 @@ public class InventoryFacade {
         sb.append("ORDER BY MAX(date)");
 
         try {
-            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "", e);
             return null;

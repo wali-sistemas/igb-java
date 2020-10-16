@@ -12,7 +12,7 @@ import javax.ejb.Stateless;
 @Stateless
 public class UserFacade {
 
-    private static final String DB_TYPE = Constants.DATABASE_TYPE_MYSQL;
+    private static final String DB_TYPE_WALI = Constants.DATABASE_TYPE_WALI;
 
     @EJB
     private PersistenceConf persistenceConf;
@@ -21,15 +21,14 @@ public class UserFacade {
     }
 
     public void create(User user, String companyName, boolean testing) {
-        persistenceConf.chooseSchema(companyName, testing, DB_TYPE).persist(user);
+        persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).persist(user);
     }
 
     public User edit(User user, String companyName, boolean testing) {
-        return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).merge(user);
+        return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).merge(user);
     }
 
     public User find(String username, String companyName, boolean testing) {
-        return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).find(User.class, username);
+        return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).find(User.class, username);
     }
-
 }

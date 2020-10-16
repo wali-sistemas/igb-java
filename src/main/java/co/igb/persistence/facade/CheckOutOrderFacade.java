@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 @Stateless
 public class CheckOutOrderFacade {
     private static final Logger CONSOLE = Logger.getLogger(PackingOrderFacade.class.getSimpleName());
-    private static final String DB_TYPE = Constants.DATABASE_TYPE_MYSQL;
+    private static final String DB_TYPE_WALI = Constants.DATABASE_TYPE_WALI;
 
     @EJB
     private PersistenceConf persistenceConf;
@@ -26,7 +26,7 @@ public class CheckOutOrderFacade {
 
     public void create(CheckOutOrder checkOutOrder, String companyName, boolean testing) {
         CONSOLE.log(Level.INFO, "creando registro check-out para la order #[" + checkOutOrder.getOrderNumber().toString() + "]");
-        persistenceConf.chooseSchema(companyName, testing, DB_TYPE).persist(checkOutOrder);
+        persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).persist(checkOutOrder);
     }
 
     public Integer getIdCheckOut(String orderNumber, String companyName, boolean testing) {
@@ -38,7 +38,7 @@ public class CheckOutOrderFacade {
         sb.append(orderNumber);
         sb.append(" LIMIT 1");
         try {
-            return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException e) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al obtener el conteo para el check-out con orden #[" + orderNumber + "].", e);
@@ -55,7 +55,7 @@ public class CheckOutOrderFacade {
         sb.append(box);
         sb.append(" order by item_code ASC");
         try {
-            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando la lista de items de una caja.");

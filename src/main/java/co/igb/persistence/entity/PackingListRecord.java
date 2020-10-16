@@ -1,14 +1,6 @@
 package co.igb.persistence.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -23,7 +15,7 @@ public class PackingListRecord implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "idpacking_list_record")
     private Long id;
@@ -43,9 +35,9 @@ public class PackingListRecord implements Serializable {
     @Basic(optional = false)
     @Column(name = "datetime_packed")
     private Date datetimePacked;
-    @Basic(optional = false)
-    @Column(name = "idpacking_order")
-    private Integer idPackingOrder;
+    @JoinColumn(name = "idpacking_order", referencedColumnName = "idpacking_order")
+    @ManyToOne(optional = false)
+    private PackingOrder idPackingOrder;
     @Basic(optional = false)
     @Column(name = "item_code")
     private String itemCode;
@@ -122,11 +114,11 @@ public class PackingListRecord implements Serializable {
         this.datetimePacked = datetimePacked;
     }
 
-    public Integer getIdPackingOrder() {
+    public PackingOrder getIdPackingOrder() {
         return idPackingOrder;
     }
 
-    public void setIdPackingOrder(Integer idPackingOrder) {
+    public void setIdPackingOrder(PackingOrder idPackingOrder) {
         this.idPackingOrder = idPackingOrder;
     }
 
@@ -233,7 +225,23 @@ public class PackingListRecord implements Serializable {
 
     @Override
     public String toString() {
-        return "PackingListRecord{" + "id=" + id + ", idPackingList=" + idPackingList + ", orderNumber=" + orderNumber + ", customerId=" + customerId + ", customerName=" + customerName + ", datetimePacked=" + datetimePacked + ", idPackingOrder=" + idPackingOrder + ", itemCode=" + itemCode + ", quantity=" + quantity + ", binCode=" + binCode + ", binAbs=" + binAbs + ", boxNumber=" + boxNumber + ", employee=" + employee + ", companyName=" + companyName + ", status=" + status + '}';
+        return "PackingListRecord{" +
+                "id=" + id +
+                ", idPackingList=" + idPackingList +
+                ", orderNumber=" + orderNumber +
+                ", customerId='" + customerId + '\'' +
+                ", customerName='" + customerName + '\'' +
+                ", datetimePacked=" + datetimePacked +
+                ", idPackingOrder=" + idPackingOrder +
+                ", itemCode='" + itemCode + '\'' +
+                ", itemName='" + itemName + '\'' +
+                ", quantity=" + quantity +
+                ", binCode='" + binCode + '\'' +
+                ", binAbs=" + binAbs +
+                ", boxNumber=" + boxNumber +
+                ", employee='" + employee + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", status='" + status + '\'' +
+                '}';
     }
-
 }

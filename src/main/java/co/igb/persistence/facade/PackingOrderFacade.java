@@ -11,7 +11,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +27,7 @@ import java.util.logging.Logger;
 public class PackingOrderFacade {
 
     private static final Logger CONSOLE = Logger.getLogger(PackingOrderFacade.class.getSimpleName());
-    private static final String DB_TYPE = Constants.DATABASE_TYPE_MYSQL;
+    private static final String DB_TYPE_WALI = Constants.DATABASE_TYPE_WALI;
 
     @EJB
     private PersistenceConf persistenceConf;
@@ -37,15 +36,15 @@ public class PackingOrderFacade {
     }
 
     public void create(PackingOrder packingOrder, String companyName, boolean testing) {
-        persistenceConf.chooseSchema(companyName, testing, DB_TYPE).persist(packingOrder);
+        persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).persist(packingOrder);
     }
 
     public PackingOrder edit(PackingOrder packingOrder, String companyName, boolean testing) {
-        return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).merge(packingOrder);
+        return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).merge(packingOrder);
     }
 
     public PackingOrder find(Long idPackingOrder, String companyName, boolean testing) {
-        return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).find(PackingOrder.class, idPackingOrder);
+        return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).find(PackingOrder.class, idPackingOrder);
     }
 
     public List<PackingDTO> listOpen(String companyName, boolean testing) {
@@ -61,7 +60,7 @@ public class PackingOrderFacade {
         sb.append("'");
         try {
             Map<Integer, PackingDTO> records = new HashMap<>();
-            List<Object[]> rows = persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            List<Object[]> rows = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getResultList();
 
             for (Object[] col : rows) {
                 Integer id = (Integer) col[0];
@@ -88,16 +87,18 @@ public class PackingOrderFacade {
     public List<Object[]> listCustomersWithOpenRecords(String companyName, String warehouseCode, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select distinct o.customer_id, o.customer_name, ");
-        sb.append("(select GROUP_CONCAT(DISTINCT od.order_number) from packing_order od where od.customer_id = o.customer_id and od.company_name = '");
-        sb.append(companyName);
-        sb.append("' and status = 'open') AS order_numbers ");
+        sb.append("convert(varchar(50),STUFF((");
+        sb.append(" select distinct ','+cast(od.order_number as varchar(10)) ");
+        sb.append(" from packing_order od ");
+        sb.append(" where od.customer_id=o.customer_id and od.company_name=o.company_name and status='open' ");
+        sb.append(" for xml path('')),1,1,'')) as order_numbers ");
         sb.append("from packing_order o where o.company_name = '");
         sb.append(companyName);
         sb.append("' and warehouse_code = '");
         sb.append(warehouseCode);
         sb.append("' and status = 'open' order by customer_name;");
         try {
-            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los clientes con ordenes de empaque abiertas. ", e);
             return new ArrayList<>();
@@ -111,7 +112,7 @@ public class PackingOrderFacade {
         sb.append("' and idpacking_order =");
         sb.append(idPackingList);
         try {
-            return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la orden.", e);
             return null;
@@ -128,7 +129,7 @@ public class PackingOrderFacade {
         sb.append(warehouseCode);
         sb.append("' order by order_number");
         try {
-            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ordenes de empaque abiertas para el cliente " + customerId, e);
             return new ArrayList<>();
@@ -148,7 +149,7 @@ public class PackingOrderFacade {
         sb.append(companyName);
         sb.append("' and ord.status = 'open'");
         try {
-            return ((BigInteger) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult()).intValue();
+            return ((BigInteger) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getSingleResult()).intValue();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los items por orden y ubicacion. ", e);
             return 0;
@@ -170,7 +171,7 @@ public class PackingOrderFacade {
         sb.append(companyName);
         sb.append("' and ord.status = 'open'");
         try {
-            return ((BigInteger) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult()).intValue();
+            return ((BigInteger) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getSingleResult()).intValue();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al validar item por orden y ubicacion. ", e);
             return 0;
@@ -193,7 +194,7 @@ public class PackingOrderFacade {
         sb.append(companyName);
         sb.append("')");
         try {
-            int result = persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).executeUpdate();
+            int result = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).executeUpdate();
             CONSOLE.log(Level.INFO, "Se actualizaron {0} filas", result);
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar la cantidad de items empacados. ", e);
@@ -214,7 +215,7 @@ public class PackingOrderFacade {
         sb.append(" and bin.picked_qty > 0 ");
         sb.append(" order by bin_code, item_code");
         try {
-            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la orden de empaque. ", e);
             return new ArrayList<>();
@@ -229,7 +230,12 @@ public class PackingOrderFacade {
         sb.append("where ord.idpacking_order = ");
         sb.append(idPackingOrder);
         try {
-            return ((BigDecimal) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult()).intValue() == 0;
+            int res = (int) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getSingleResult();
+            if (res == 0) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar si la orden de packing se encuentra completa. ", e);
             return false;
@@ -238,7 +244,7 @@ public class PackingOrderFacade {
 
     public boolean arePackingOrdersComplete(String username, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select ifnull(sum(bin.picked_qty - bin.packed_qty), 0) pendingItems from packing_order ord ");
+        sb.append("select isnull(sum(bin.picked_qty - bin.packed_qty), 0)as pendingItems from packing_order ord ");
         sb.append("inner join packing_order_item itm on itm.idpacking_order = ord.idpacking_order ");
         sb.append("inner join packing_order_item_bin bin on bin.idpacking_order_item = itm.idpacking_order_item ");
         sb.append("where ord.idpacking_order in (");
@@ -249,7 +255,12 @@ public class PackingOrderFacade {
         sb.append(companyName);
         sb.append("' )");
         try {
-            return ((BigDecimal) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult()).intValue() == 0;
+            int res = (int) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getSingleResult();
+            if (res == 0) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar si la orden de packing se encuentra completa. ", e);
             return false;
@@ -264,14 +275,14 @@ public class PackingOrderFacade {
         sb.append(companyName);
         sb.append("'");
         try {
-            persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).executeUpdate();
+            persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).executeUpdate();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la orden de packing. ", e);
         }
     }
 
     public List<PackingOrder> listOrders(String customerId, Integer salesOrder, String companyName, boolean testing) {
-        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName, testing, DB_TYPE).getCriteriaBuilder();
+        CriteriaBuilder cb = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).getCriteriaBuilder();
         CriteriaQuery<PackingOrder> cq = cb.createQuery(PackingOrder.class);
         Root<PackingOrder> root = cq.from(PackingOrder.class);
         Predicate customer = cb.equal(root.get(PackingOrder_.customerId), customerId);
@@ -283,7 +294,7 @@ public class PackingOrderFacade {
         }
 
         try {
-            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createQuery(cq).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createQuery(cq).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar las ordenes de packing. ", e);
             return new ArrayList<>();
@@ -308,7 +319,7 @@ public class PackingOrderFacade {
         }
 
         try {
-            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar las ordenes de packing. ", e);
             return new ArrayList<>();
@@ -325,7 +336,7 @@ public class PackingOrderFacade {
         sb.append(idPackingOrder);
         sb.append(" order by bin_code, item_code");
         try {
-            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la orden de empaque. ", e);
             return new ArrayList<>();
@@ -337,7 +348,7 @@ public class PackingOrderFacade {
         sb.append("update packing_order_item_bin set packed_qty = 0 where idpacking_order_item = ");
         sb.append(idPackingOrderItem);
         try {
-            persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).executeUpdate();
+            persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).executeUpdate();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el packedQty.", e);
         }

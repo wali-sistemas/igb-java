@@ -22,6 +22,8 @@ public class PersistenceConf {
     private EntityManager emVARROCPruebas;
     @PersistenceContext(unitName = "VELEZPU")
     private EntityManager emVELEZ;
+    @PersistenceContext(unitName = "WMSPU")
+    private EntityManager emWMS;
     @PersistenceContext(unitName = "MySQLPU")
     private EntityManager emWali;
     @PersistenceContext(unitName = "MySQLPruebasPU")
@@ -29,12 +31,14 @@ public class PersistenceConf {
 
     public EntityManager chooseSchema(String companyName, boolean testing, String dbType) {
 
-        if (dbType.equalsIgnoreCase(Constants.DATABASE_TYPE_MYSQL)) {
+        if (dbType.equalsIgnoreCase(Constants.DATABASE_TYPE_WALI)) {
+            return emWMS;
+        /*} else if (dbType.equalsIgnoreCase(Constants.DATABASE_TYPE_MYSQL)) {
             if (testing) {
                 return emWaliPruebas;
             } else {
                 return emWali;
-            }
+            }*/
         } else {
             switch (companyName) {
                 case "IGB":

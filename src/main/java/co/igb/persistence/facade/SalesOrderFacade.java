@@ -88,6 +88,8 @@ public class SalesOrderFacade {
 
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public List<SalesOrderDTO> findOpenOrders(boolean showAll, boolean filterGroup, String schemaName, boolean testing, String warehouseCode) {
+        EntityManager em = persistenceConf.chooseSchema(schemaName, testing, DB_TYPE);
+
         StringBuilder sb = new StringBuilder();
 
         sb.append("select j.docnum, j.docdate, j.cardcode, j.cardname, j.confirmed, j.items, j.comments, j.address, j.transp ");
@@ -114,7 +116,7 @@ public class SalesOrderFacade {
 
         List<SalesOrderDTO> orders = new ArrayList<>();
         try {
-            for (Object[] row : (List<Object[]>) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList()) {
+            for (Object[] row : (List<Object[]>) em.createNativeQuery(sb.toString()).getResultList()) {
                 SalesOrderDTO order = new SalesOrderDTO();
                 order.setDocNum((String) row[0]);
                 order.setDocDate((Date) row[1]);
