@@ -36,5 +36,6 @@ public class ApplicationConfig extends Application {
         resources.add(co.igb.rest.ReportREST.class);
         resources.add(co.igb.rest.ShippingREST.class);
         resources.add(co.igb.rest.SoulREST.class);
+        resources.add(co.igb.rest.DeliveryREST.class);
     }
 }
