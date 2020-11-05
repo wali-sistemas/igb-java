@@ -55,7 +55,6 @@ public class WarehouseFacade {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Warehouse> cq = cb.createQuery(Warehouse.class);
         Root<Warehouse> root = cq.from(Warehouse.class);
-
         cq.where(cb.equal(root.get(Warehouse_.inactive), 'N'));
         try {
             return em.createQuery(cq).getResultList();

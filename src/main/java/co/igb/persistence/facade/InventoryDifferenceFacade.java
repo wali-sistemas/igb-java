@@ -5,7 +5,6 @@ import co.igb.util.Constants;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import java.util.logging.Logger;
 
 /**
  * @author YEIJARA

@@ -76,8 +76,6 @@ public class AssignedOrderFacade {
         Root<AssignedOrder> root = cq.from(AssignedOrder.class);
 
         Predicate statusOpen = cb.equal(root.get(AssignedOrder_.status), "open");
-        //Predicate statusWarning = cb.equal(root.get(AssignedOrder_.status), "warning");
-        //Predicate status = cb.or(statusOpen, statusWarning);
         Predicate userOwns = cb.equal(root.get(AssignedOrder_.empId), username);
         Predicate companyFilter = cb.equal(root.get(AssignedOrder_.company), companyName);
 
