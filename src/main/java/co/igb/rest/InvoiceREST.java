@@ -204,6 +204,7 @@ public class InvoiceREST implements Serializable {
         long lineNum = 0;
         for (Object[] row : deliveryData) {
             Long delDocEntry = ((Integer) row[0]).longValue();
+            Integer docNum = (Integer) row[1];
             Long deliveryObjectType = ((Integer) row[2]).longValue();
             String cardCode = (String) row[3];
             Long deliverySalesPersonCode = ((Integer) row[4]).longValue();
@@ -239,6 +240,7 @@ public class InvoiceREST implements Serializable {
                 invoice.setBaseAmount(deliveryValorNeto);
                 invoice.setVatSum(deliveryImpuesto);
                 invoice.setuWUID(getPropertyValue("invoice.wuid", companyName));
+                invoice.setUnunfac(docNum.toString());
             }
 
             if (deliveryComment != null) {

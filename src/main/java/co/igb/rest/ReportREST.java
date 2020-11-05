@@ -397,36 +397,44 @@ public class ReportREST implements Serializable {
     public ResponseDTO generateReport(PrintReportDTO dto) throws Exception {
         String reportName = null;
         String report = null;
-        String rutaArchivo = "";
+        String rutaArchivo = applicationBean.obtenerValorPropiedad("url.archivo");
 
         switch (dto.getDocumento()) {
             case "delivery":
-                rutaArchivo = applicationBean.obtenerValorPropiedad("url.archivo");
                 reportName = dto.getId() + ".pdf";
                 report = JasperCompileManager.compileReportToFile(applicationBean.obtenerValorPropiedad("url.jasper") + dto.getCompanyName() + File.separator + dto.getDocumento()
                         + File.separator + dto.getDocumento() + ".jrxml");
                 rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + dto.getDocumento() + File.separator + reportName;
                 break;
             case "packingList":
-                rutaArchivo = applicationBean.obtenerValorPropiedad("url.archivo");
                 reportName = dto.getId() + ".pdf";
                 report = JasperCompileManager.compileReportToFile(applicationBean.obtenerValorPropiedad("url.jasper") + dto.getCompanyName() + File.separator + dto.getDocumento()
                         + File.separator + dto.getDocumento() + ".jrxml");
                 rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + dto.getDocumento() + File.separator + reportName;
                 break;
             case "checkOut":
-                rutaArchivo = applicationBean.obtenerValorPropiedad("url.archivo");
                 reportName = dto.getId() + ".pdf";
                 report = JasperCompileManager.compileReportToFile(applicationBean.obtenerValorPropiedad("url.jasper") + dto.getCompanyName() + File.separator + dto.getDocumento()
                         + File.separator + dto.getDocumento() + ".jrxml");
                 rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + dto.getDocumento() + File.separator + reportName;
                 break;
             case "shipping":
-                rutaArchivo = applicationBean.obtenerValorPropiedad("url.archivo");
                 reportName = dto.getId() != 0 ? String.valueOf(dto.getId()) + ".pdf" : dto.getFiltro() + ".pdf";
                 report = JasperCompileManager.compileReportToFile(applicationBean.obtenerValorPropiedad("url.jasper") + dto.getCompanyName() + File.separator + dto.getDocumento()
                         + File.separator + "payroll" + File.separator + "payroll.jrxml");
                 rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + dto.getDocumento() + File.separator + "payroll" + File.separator + reportName;
+                break;
+            case "pickingExpress":
+                reportName = dto.getId() + ".pdf";
+                report = JasperCompileManager.compileReportToFile(applicationBean.obtenerValorPropiedad("url.jasper") + dto.getCompanyName() + File.separator + dto.getDocumento()
+                        + File.separator + dto.getDocumento() + ".jrxml");
+                rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + dto.getDocumento() + File.separator + reportName;
+                break;
+            case "pickingExpressGroup":
+                reportName = dto.getFiltro() + ".pdf";
+                report = JasperCompileManager.compileReportToFile(applicationBean.obtenerValorPropiedad("url.jasper") + dto.getCompanyName() + File.separator + "pickingExpress"
+                        + File.separator + dto.getDocumento() + ".jrxml");
+                rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + "pickingExpress" + File.separator + reportName;
                 break;
             default:
                 reportName = "";
@@ -452,12 +460,11 @@ public class ReportREST implements Serializable {
         Map<String, Object> mapa = new HashMap<>();
         if (dto.getId() != 0) {
             mapa.put("id", dto.getId());
-        }
-        if (dto.getDocumento().equals("shipping")) {
+        } else //if (dto.getDocumento().equals("shipping") || dto.getDocumento().equals("pickingExpress")) {
             if (dto.getFiltro() != null) {
                 mapa.put("filtro", dto.getFiltro());
             }
-        }
+        //}
         generarInforme(report, rutaArchivo, dto, mapa, connection);
         connection.close();
         return new ResponseDTO(0, rutaArchivo);
@@ -474,7 +481,7 @@ public class ReportREST implements Serializable {
             /*Impresora String printer = "RICOH Aficio MP 2851 PCL 5e"; /*impresoraFacade.obtenerImpresoraSucursal(dto.getSucursal(), "DOC");
             if (printer != null && printer.getIdImpresora() != null && printer.getIdImpresora() != 0) {*/
 
-            PrintService myPrintService = findPrintService("KyoceraAdminP3055"/*printer.getNombreImpresoraServidor()*/);
+            PrintService myPrintService = findPrintService("KyoceraCediP3055"/*printer.getNombreImpresoraServidor()*/);
 
             PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
             pras.add(Sides.DUPLEX);

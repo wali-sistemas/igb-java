@@ -32,7 +32,7 @@ public class ShippingOrderFacade {
 
     public List<String> listTransPayroll(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT distinct s.transport_name FROM shipping_order s WHERE cast(s.datetime_shipping as date) = curdate() ORDER BY s.transport_name ASC");
+        sb.append("SELECT distinct s.transport_name FROM shipping_order s WHERE cast(s.datetime_shipping as date) = GETDATE() ORDER BY s.transport_name ASC");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException ex) {
