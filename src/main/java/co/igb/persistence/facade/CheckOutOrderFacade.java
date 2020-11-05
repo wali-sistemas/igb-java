@@ -31,12 +31,11 @@ public class CheckOutOrderFacade {
 
     public Integer getIdCheckOut(String orderNumber, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select idcheckout_order from checkout_order ");
+        sb.append("select top 1 idcheckout_order from checkout_order ");
         sb.append("where company_name = '");
         sb.append(companyName);
         sb.append("' and order_number = ");
         sb.append(orderNumber);
-        sb.append(" LIMIT 1");
         try {
             return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException e) {
