@@ -2261,6 +2261,8 @@ public class Document {
     protected String uMedioPg;
     @XmlElement(name = "U_Plantilla")
     protected Integer uPlantilla;
+    @XmlElement(name = "U_NUNFAC")
+    protected String ununfac;
     /*@XmlElement(namespace = "", name = "U_Origen")
     protected String uOrigen;*/
     @XmlElement(namespace = "", name = "Document_ApprovalRequests")
@@ -6266,6 +6268,14 @@ public class Document {
 
     public void setuPlantilla(Integer uPlantilla) {
         this.uPlantilla = uPlantilla;
+    }
+
+    public String getUnunfac() {
+        return ununfac;
+    }
+
+    public void setUnunfac(String ununfac) {
+        this.ununfac = ununfac;
     }
 
     /*public String getuOrigen() {

@@ -326,6 +326,7 @@ public class PackingREST implements Serializable {
                 }
                 document.setUTOTCAJ(plFacade.getTotalBoxNumber(orderNumber, companyName, pruebas).doubleValue());
                 document.setUVRDECLARADO(salesOrderFacade.getValorDeclarado(orderNumber, companyName, pruebas));
+                document.setUNUNFAC(orderNumber.toString());
                 orderDocEntry = salesOrderFacade.getOrderDocEntry(orderNumber, companyName, pruebas);
                 if (orderDocEntry == null || orderDocEntry <= 0) {
                     return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "Ocurrió un error al consultar los datos de la orden. ")).build();
