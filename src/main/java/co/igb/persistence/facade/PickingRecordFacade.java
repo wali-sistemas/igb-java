@@ -93,16 +93,13 @@ public class PickingRecordFacade {
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "There was an error loading already picked items. ", e);
-            //return new HashMap<>();
         }
         return null;
     }
 
     public List<Integer> listPickingsRecords(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-
         sb.append("SELECT DISTINCT order_number AS order_number FROM picking_record ");
-
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException e) {

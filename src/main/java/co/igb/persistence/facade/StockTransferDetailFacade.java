@@ -34,9 +34,7 @@ public class StockTransferDetailFacade {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(StockTransferDetail.class);
         Root stock = cq.from(StockTransferDetail.class);
-
         cq.where(cb.equal(stock.get("stockTransferDetailPK").get("docEntry"), docEntry));
-
         try {
             return em.createQuery(cq).getResultList();
         } catch (NoResultException e) {

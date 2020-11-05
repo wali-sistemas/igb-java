@@ -48,8 +48,6 @@ public class LocationLimitFacade {
             sb.append(itemCode);
             sb.append("')");
         }
-
-
         sb.append(" ORDER BY U_Item, U_Ubicacion ASC");
 
         try {

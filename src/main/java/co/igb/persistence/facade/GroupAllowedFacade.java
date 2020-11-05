@@ -6,12 +6,13 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Stateless
 public class GroupAllowedFacade {
 
-    private static final Logger CONSOLE = Logger.getLogger(DeliveryNoteFacade.class.getSimpleName());
+    private static final Logger CONSOLE = Logger.getLogger(GroupAllowedFacade.class.getSimpleName());
     private static final String DB_TYPE_WALI = Constants.DATABASE_TYPE_WALI;
 
     @EJB
@@ -25,10 +26,10 @@ public class GroupAllowedFacade {
         sb.append("select distinct ldap_group from groups_allowed where module = '");
         sb.append(module);
         sb.append("'");
-
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar los perfiles del wms.", e);
             return new ArrayList<>();
         }
     }

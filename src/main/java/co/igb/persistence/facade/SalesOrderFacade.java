@@ -89,9 +89,7 @@ public class SalesOrderFacade {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public List<SalesOrderDTO> findOpenOrders(boolean showAll, boolean filterGroup, String schemaName, boolean testing, String warehouseCode) {
         EntityManager em = persistenceConf.chooseSchema(schemaName, testing, DB_TYPE);
-
         StringBuilder sb = new StringBuilder();
-
         sb.append("select j.docnum, j.docdate, j.cardcode, j.cardname, j.confirmed, j.items, j.comments, j.address, j.transp ");
         sb.append("from (select f.*, COUNT(f.grupo) OVER (PARTITION BY f.cardcode) as contGrupo from ( ");
         sb.append("select t.*, ROW_NUMBER() OVER (PARTITION BY t.cardcode order by t.cardcode) as grupo from ( ");
@@ -207,13 +205,6 @@ public class SalesOrderFacade {
         sb.append("where enc.DocStatus = 'O' and det.LineStatus = 'O' and enc.docnum =");
         sb.append(orderNumber);
         sb.append(" order by velocidad, secuencia");
-
-        /*sb.append("select cast(det.ItemCode as varchar(20)) itemcode, cast(sum(det.Quantity) as int) pendingQuantity ");
-        sb.append("from ORDR enc inner join RDR1 det on det.docentry = enc.docentry and det.Quantity > 0 ");
-        sb.append("where enc.DocStatus = 'O' and det.LineStatus = 'O' and enc.docnum = ");
-        sb.append(orderNumber);
-        sb.append(" group by det.ItemCode ");*/
-
         try {
             LinkedHashMap<String, Integer> results = new LinkedHashMap<>();
             List<Object[]> rows = (List<Object[]>) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
@@ -223,10 +214,8 @@ public class SalesOrderFacade {
             return results;
         } catch (NoResultException e) {
             CONSOLE.log(Level.WARNING, "No se encontraron items pendientes para la orden {0}", orderNumber);
-            //return new LinkedHashMap<>();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar los items pendientes de la orden. ", e);
-            //return new LinkedHashMap<>();
         }
         return null;
     }
