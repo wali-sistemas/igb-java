@@ -122,7 +122,19 @@ public class BinLocationFacade {
         }
     }
 
-    public List<Object[]> findInventoryLocationId(String companyName, boolean testing) {
+    public Integer getBinAbsInventory(String companyName, String warehouse, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(absentry as int) absEntry from obin where attr1val = 'INVENTORY' and Disabled = 'N' and WhsCode = '");
+        sb.append(warehouse);
+        try {
+            return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ubicaciones de inventario para la empresa " + companyName, e);
+            return null;
+        }
+    }
+
+    /*public List<Object[]> findInventoryLocationId(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(whscode as varchar(2)) whsCode, cast(absentry as int) absEntry from obin where attr1val = 'INVENTORY' and Disabled = 'N'");
         try {
@@ -131,7 +143,7 @@ public class BinLocationFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ubicaciones de inventario para la empresa " + companyName, e);
             return null;
         }
-    }
+    }*/
 
     public List<Object[]> findReceptionLocations(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();

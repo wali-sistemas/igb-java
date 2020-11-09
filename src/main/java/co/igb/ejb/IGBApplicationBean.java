@@ -57,7 +57,7 @@ public class IGBApplicationBean implements Serializable {
     @PostConstruct
     private void initialize() {
         loadProperties();
-        consultarUbicacionesInventario();
+        //consultarUbicacionesInventario();
         consultarUbicacionesRecepcion();
     }
 
@@ -149,7 +149,7 @@ public class IGBApplicationBean implements Serializable {
         CONSOLE.log(Level.INFO, "Se cargaron ubicaciones de recepcion para {0} empresas", companies.length);
     }
 
-    private void consultarUbicacionesInventario() {
+    /*private void consultarUbicacionesInventario() {
         inventoryLocations = new HashMap<>();
         String[] companies = props.getProperty(Constants.COMPANIES).split(";");
         for (String company : companies) {
@@ -176,7 +176,7 @@ public class IGBApplicationBean implements Serializable {
             }
         }
         CONSOLE.log(Level.INFO, "Se cargaron ubicaciones de inventario para {0} empresas", companies.length);
-    }
+    }*/
 
     public String obtenerValorPropiedad(String prop) {
         return props.getProperty(prop);
@@ -210,9 +210,9 @@ public class IGBApplicationBean implements Serializable {
         System.out.println(encryptor.encrypt(args[1]));
     }
 
-    public Integer getInventoryBinId(String companyName, String warehouseCode) {
+    /*public Integer getInventoryBinId(String companyName, String warehouseCode) {
         return inventoryLocations.get(companyName).get(warehouseCode);
-    }
+    }*/
 
     public Integer getReceptionBinId(String companyName, String warehouseCode) {
         return receptionLocations.get(companyName).get(warehouseCode);
