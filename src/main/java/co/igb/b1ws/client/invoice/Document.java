@@ -2257,11 +2257,11 @@ public class Document {
     protected Long uqcRefNo;
     @XmlElement(namespace = "", name = "U_WUID")
     protected String uWUID;
-    @XmlElement(name = "U_MedioPg")
+    @XmlElement(namespace = "", name = "U_MedioPg")
     protected String uMedioPg;
-    @XmlElement(name = "U_Plantilla")
+    @XmlElement(namespace = "", name = "U_Plantilla")
     protected Integer uPlantilla;
-    @XmlElement(name = "U_NUNFAC")
+    @XmlElement(namespace = "", name = "U_NUNFAC")
     protected String ununfac;
     /*@XmlElement(namespace = "", name = "U_Origen")
     protected String uOrigen;*/
