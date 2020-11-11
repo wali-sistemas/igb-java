@@ -40,6 +40,7 @@ public class ZPLPrinter {
             context.put("employee", dto.getEmployee());
             context.put("city", dto.getCity() + '-' + dto.getState());
             context.put("container", dto.getInvoice() + '-' + String.format("%03d", dto.getBoxNumber()));
+            context.put("payment", dto.getPayment());
 
             StringWriter writer = new StringWriter();
             Velocity.evaluate(context, writer, "TemplateName", templateText);
