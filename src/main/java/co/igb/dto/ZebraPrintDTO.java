@@ -16,11 +16,12 @@ public class ZebraPrintDTO {
     private String city;
     private String state;
     private String invoice;
+    private String payment;
 
     public ZebraPrintDTO() {
     }
 
-    public ZebraPrintDTO(Integer boxNumber, Integer totalBoxes, String printerName, String packageTo, String carrier, String address, String salesOrderNumbers, String numAtCards, String employee, String city, String state, String invoice) {
+    public ZebraPrintDTO(Integer boxNumber, Integer totalBoxes, String printerName, String packageTo, String carrier, String address, String salesOrderNumbers, String numAtCards, String employee, String city, String state, String invoice, String payment) {
         this.boxNumber = boxNumber;
         this.totalBoxes = totalBoxes;
         this.printerName = printerName;
@@ -33,6 +34,7 @@ public class ZebraPrintDTO {
         this.city = city;
         this.state = state;
         this.invoice = invoice;
+        this.payment = payment;
     }
 
     public void setAddress(String address) {
@@ -173,6 +175,14 @@ public class ZebraPrintDTO {
         this.invoice = invoice;
     }
 
+    public String getPayment() {
+        return payment;
+    }
+
+    public void setPayment(String payment) {
+        this.payment = payment;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -211,6 +221,8 @@ public class ZebraPrintDTO {
         sb.append(this.getState());
         sb.append(", invoice: ");
         sb.append(this.getInvoice());
+        sb.append(", payment: ");
+        sb.append(this.getPayment());
         sb.append("}");
         return sb.toString();
     }

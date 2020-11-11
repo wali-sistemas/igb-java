@@ -222,13 +222,19 @@ public class SalesOrderFacade {
 
     public List<Object[]> getOrderStates(String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select case when o.U_SEPARADOR = '' then 'SAP NO APROB' when o.U_SEPARADOR is null then 'APP NO APROB' ");
-        sb.append("      when o.U_SEPARADOR = 'PENDIENTE DE PAGO' then 'PEND PAGO' else cast(o.U_SEPARADOR as varchar(20)) end as Estado, ");
-        sb.append("      cast(COUNT(o.DocNum) AS int) AS Pedidos, ");
-        sb.append("      cast(sum(((((((o.DocTotal + o.DiscSum) - o.VatSum) - o.TotalExpns) + o.WtSum) - o.RoundDif) - o.DiscSum)) as numeric(18,0)) as Total ");
+        sb.append("select case when o.U_SEPARADOR='' then 'SAP NO APROB' when o.U_SEPARADOR is null then 'APP NO APROB' ");
+        sb.append(" when o.U_SEPARADOR='PENDIENTE DE PAGO' then 'PEND PAGO' else cast(o.U_SEPARADOR as varchar(20))end as Estado, ");
+        sb.append(" cast(count(o.DocNum)as int)as Pedidos, ");
+        sb.append(" cast(isnull(sum(((((((o.DocTotal+o.DiscSum)-o.VatSum)-o.TotalExpns)+o.WtSum)-o.RoundDif)-o.DiscSum)),0)as numeric(18,0))as Total ");
         sb.append("from  ORDR o ");
-        sb.append("where o.DocStatus = 'O' and o.U_DESP = 'N' and YEAR(o.DocDate) = YEAR(GETDATE()) ");
-        sb.append("group by o.U_SEPARADOR order by Pedidos ASC");
+        sb.append("where o.DocStatus='O' and o.U_DESP='N' and cast(o.DocDate as Date) between cast(GETDATE()-30 as date) and cast(GETDATE()as date) ");
+        sb.append("group by o.U_SEPARADOR ");
+        sb.append("union all ");
+        sb.append("select 'ENTREGA'as Estado,cast(count(e.DocNum)as int)as Pedidos, ");
+        sb.append(" cast(isnull(sum(((((((e.DocTotal+e.DiscSum)-e.VatSum)-e.TotalExpns)+e.WtSum)-e.RoundDif)-e.DiscSum)),0)as numeric(18,0))as Total ");
+        sb.append("from  ODLN e ");
+        sb.append("where e.CANCELED='N' and e.DocStatus='O' and e.DocType='I' and cast(e.DocDate as date) between cast(GETDATE()-30 as date) and cast(GETDATE()as date) ");
+        sb.append("order by Estado ASC");
         try {
             return persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException ex) {
@@ -294,13 +300,14 @@ public class SalesOrderFacade {
 
     public Object[] retrieveStickerInfo(String orderNumbers, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT DISTINCT cast(o.cardname as varchar(100)) AS cardname, cast(ISNULL(dir.StreetS, ISNULL(dir.Address2S, ISNULL(dir.Address3S,''))) as varchar(220)) AS address, ");
-        sb.append("       cast(transp.name as varchar(50)) AS trans, cast(dir.CityS as varchar(100)) AS city, ISNULL(cast(dep.Name as varchar(100)),'') AS depart ");
-        sb.append("FROM  ORDR o ");
-        sb.append("INNER JOIN RDR12 dir ON o.DocEntry = dir.DocEntry ");
-        sb.append("LEFT  JOIN [@BPCO_DEP] dep ON dep.Code = dir.StateS ");
-        sb.append("INNER JOIN [@transp] transp ON transp.code = o.u_transp ");
-        sb.append("WHERE o.docnum IN (");
+        sb.append("select distinct cast(o.cardname as varchar(100))as cardname,cast(ISNULL(dir.StreetS,ISNULL(dir.Address2S,ISNULL(dir.Address3S,'')))as varchar(220))as address, ");
+        sb.append(" cast(transp.name as varchar(50))as trans,cast(dir.CityS as varchar(100))as city,ISNULL(cast(dep.Name as varchar(100)),'')as depart,cast(pg.PymntGroup as varchar(50))as pay ");
+        sb.append("from  ORDR o ");
+        sb.append("inner join RDR12 dir ON o.DocEntry=dir.DocEntry ");
+        sb.append("left  join [@BPCO_DEP] dep ON dep.Code=dir.StateS ");
+        sb.append("inner join [@transp] transp ON transp.code=o.u_transp ");
+        sb.append("inner join OCTG pg on pg.GroupNum=o.GroupNum ");
+        sb.append("where o.docnum IN (");
         sb.append(orderNumbers);
         sb.append(")");
         try {
@@ -338,11 +345,10 @@ public class SalesOrderFacade {
     public List<Object[]> listPendingOrdersByInvoice(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select DISTINCT cast(e.DocNum as int) as entrega, cast(o.DocNum as int) as orden, cast(e.DocDate as date) as fechaEntrega, ");
-        sb.append("       cast(o.DocDate as date) as fechaOrden, cast(e.DocTotal as numeric(18,0)) as total, cast(d.WhsCode as varchar(20)) as almacen ");
+        sb.append("       cast(o.DocDate as date) as fechaOrden, cast(e.DocTotal as numeric(18,0)) as total, cast((select top 1 d.WhsCode from RDR1 d where d.DocEntry=o.DocEntry) as varchar(20)) as almacen ");
         sb.append("from  ORDR o ");
-        sb.append("inner join RDR1 d ON d.DocEntry = o.DocEntry and d.TargetType = 15 ");
-        sb.append("inner join ODLN e ON e.DocEntry = d.TrgetEntry and e.CANCELED = 'N' and e.DocStatus = 'O' and e.DocType = 'I' ");
-        sb.append("where o.DocType = 'I' and o.CANCELED = 'N' and cast(o.DocDate as Date) between cast(GETDATE()-5 as date) and cast(GETDATE() as date)");
+        sb.append("inner join ODLN e ON o.DocNum = e.U_NUNFAC ");
+        sb.append("where e.CANCELED='N' and e.DocStatus='O' and e.DocType='I' and o.DocType='I' and o.CANCELED='N' and cast(o.DocDate as Date) between cast(GETDATE()-10 as date) and cast(GETDATE() as date)");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException ex) {
