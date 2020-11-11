@@ -300,13 +300,14 @@ public class SalesOrderFacade {
 
     public Object[] retrieveStickerInfo(String orderNumbers, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT DISTINCT cast(o.cardname as varchar(100)) AS cardname, cast(ISNULL(dir.StreetS, ISNULL(dir.Address2S, ISNULL(dir.Address3S,''))) as varchar(220)) AS address, ");
-        sb.append("       cast(transp.name as varchar(50)) AS trans, cast(dir.CityS as varchar(100)) AS city, ISNULL(cast(dep.Name as varchar(100)),'') AS depart ");
-        sb.append("FROM  ORDR o ");
-        sb.append("INNER JOIN RDR12 dir ON o.DocEntry = dir.DocEntry ");
-        sb.append("LEFT  JOIN [@BPCO_DEP] dep ON dep.Code = dir.StateS ");
-        sb.append("INNER JOIN [@transp] transp ON transp.code = o.u_transp ");
-        sb.append("WHERE o.docnum IN (");
+        sb.append("select distinct cast(o.cardname as varchar(100))as cardname,cast(ISNULL(dir.StreetS,ISNULL(dir.Address2S,ISNULL(dir.Address3S,'')))as varchar(220))as address, ");
+        sb.append(" cast(transp.name as varchar(50))as trans,cast(dir.CityS as varchar(100))as city,ISNULL(cast(dep.Name as varchar(100)),'')as depart,cast(pg.PymntGroup as varchar(50))as pay ");
+        sb.append("from  ORDR o ");
+        sb.append("inner join RDR12 dir ON o.DocEntry=dir.DocEntry ");
+        sb.append("left  join [@BPCO_DEP] dep ON dep.Code=dir.StateS ");
+        sb.append("inner join [@transp] transp ON transp.code=o.u_transp ");
+        sb.append("inner join OCTG pg on pg.GroupNum=o.GroupNum ");
+        sb.append("where o.docnum IN (");
         sb.append(orderNumbers);
         sb.append(")");
         try {
