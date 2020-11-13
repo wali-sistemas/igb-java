@@ -196,11 +196,6 @@ public class ZebraPrintREST {
             return Response.ok(new ResponseDTO(-1, "Ocurrió un error al consultar los datos para imprimir la etiqueta. (Order Numbers)")).build();
         }
 
-        String numAtCards = soFacade.listNumAtCards(dto.getOrderNumber().toString(), companyName, pruebas);
-        if (numAtCards == null || numAtCards.trim().isEmpty()) {
-            return Response.ok(new ResponseDTO(-1, "Ocurrió un error al consultar los datos para imprimir la etiqueta. (NumAtCard)")).build();
-        }
-
         Object[] orderData = soFacade.retrieveStickerInfo(dto.getOrderNumber().toString(), companyName, pruebas);
         if (orderData == null || orderData.length == 0) {
             return Response.ok(new ResponseDTO(-1, "Ocurrió un error al consultar los datos para imprimir la etiqueta. (Order Data)")).build();
@@ -223,12 +218,13 @@ public class ZebraPrintREST {
             label.setSalesOrderNumbers(dto.getOrderNumber().toString());
             label.setCarrier((String) orderData[2]);
             label.setTotalBoxes(dto.getBoxNumber());
-            label.setNumAtCards(numAtCards);
+            label.setNumAtCards("N/A");
             label.setPrinterName(dto.getPrinterName());
             label.setEmployee(username);
             label.setCity((String) orderData[3]);
             label.setState((String) orderData[4]);
             label.setInvoice(invoice.toString());
+            label.setPayment((String) orderData[5]);
 
             DocPrintJob job = printService.createPrintJob();
             Doc doc = new SimpleDoc(ZPLPrinter.getPrintData(label, companyName), DocFlavor.BYTE_ARRAY.AUTOSENSE, null);
