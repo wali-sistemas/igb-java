@@ -52,6 +52,7 @@ public class DeliveryREST {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response createDeliveryNote(Integer docNum,
                                        @HeaderParam("X-Company-Name") String companyName,
+                                       @HeaderParam("X-Employee") String userName,
                                        @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Creando documento de entrega para la orden {0}", docNum);
 
@@ -94,7 +95,7 @@ public class DeliveryREST {
             Integer quantity = (Integer) row[3];
             Integer binAbs = (Integer) row[4];
             String binCode = (String) row[5];
-            String employee = "WMS";
+            String employee = userName;
 
             if (orderDocEntry == null) {
                 document.setSeries(Long.parseLong(getPropertyValue(Constants.DELIVERY_NOTE_SERIES, companyName)));
