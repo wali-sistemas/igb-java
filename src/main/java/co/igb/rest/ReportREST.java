@@ -72,6 +72,8 @@ public class ReportREST implements Serializable {
     private PackingListRecordFacade packingListRecordFacade;
     @EJB
     private ShippingOrderFacade shippingOrderFacade;
+    @EJB
+    private LandedCostsFacade landedCostsFacade;
 
     @GET
     @Path("reports-orders")
@@ -388,6 +390,26 @@ public class ReportREST implements Serializable {
                                     @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Iniciando servicio para consultar las ordenes del día en {0}", companyName);
         return Response.ok(salesOrderFacade.listOrdersOfDay(companyName, pruebas)).build();
+    }
+
+    @GET
+    @Path("comex-purchase-costo")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response getPurchaseCosto(@HeaderParam("X-Company-Name") String companyName,
+                                     @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Consultando el costo de compras de comex en [" + companyName + "]");
+        List<Object[]> costs = landedCostsFacade.listPurchesesCosts(companyName, pruebas);
+        if (costs != null || costs.size() <= 0) {
+            List<PurchaseCostDTO> PurchasesCosts = new ArrayList<>();
+            for (Object[] row : costs) {
+                PurchasesCosts.add(new PurchaseCostDTO((BigDecimal) row[0], (BigDecimal) row[1], (BigDecimal) row[2], (String) row[3], (int) row[4]));
+            }
+            CONSOLE.log(Level.INFO, "Retornando costos de compras comex en [" + companyName + "]");
+            return Response.ok(new ResponseDTO(PurchasesCosts == null ? -1 : 0, PurchasesCosts)).build();
+        }
+        CONSOLE.log(Level.SEVERE, "No se encontraron los costos de compras para mostrar en [" + companyName + "]");
+        return Response.ok(new ResponseDTO(-1, "No se encontraron los costos de compras para mostrar en " + companyName)).build();
     }
 
     @POST
