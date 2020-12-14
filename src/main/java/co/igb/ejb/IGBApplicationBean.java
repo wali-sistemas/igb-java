@@ -183,7 +183,7 @@ public class IGBApplicationBean implements Serializable {
     }
 
     public boolean isPathExcludedFromTokenValidation(String path) {
-        return excludedPaths.contains(path) || pathMatchesTemplate(path);
+        return excludedPaths.contains(path) || pathMatchesTemplate(path) || path.contains("comex");
     }
 
     private boolean pathMatchesTemplate(String path) {

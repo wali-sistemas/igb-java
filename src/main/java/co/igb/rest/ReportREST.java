@@ -393,7 +393,7 @@ public class ReportREST implements Serializable {
     }
 
     @GET
-    @Path("comex-purchase-costo")
+    @Path("comex/purchase-costo")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response getPurchaseCosto(@HeaderParam("X-Company-Name") String companyName,
@@ -410,6 +410,26 @@ public class ReportREST implements Serializable {
         }
         CONSOLE.log(Level.SEVERE, "No se encontraron los costos de compras para mostrar en [" + companyName + "]");
         return Response.ok(new ResponseDTO(-1, "No se encontraron los costos de compras para mostrar en " + companyName)).build();
+    }
+
+    @GET
+    @Path("comex/import-costo")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response getImportCosto(@HeaderParam("X-Company-Name") String companyName,
+                                   @HeaderParam("X-Pruebas") boolean pruebas) {
+        return Response.ok(new ResponseDTO(0, landedCostsFacade.listImportsCosto(companyName, pruebas))).build();
+    }
+
+    @GET
+    @Path("comex/purchase-factor")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response getPurchaseCosto(@QueryParam("year") Integer year,
+                                     @QueryParam("month") String month,
+                                     @HeaderParam("X-Company-Name") String companyName,
+                                     @HeaderParam("X-Pruebas") boolean pruebas) {
+        return Response.ok(new ResponseDTO(0, landedCostsFacade.listPurchesesFactor(year, month, companyName, pruebas))).build();
     }
 
     @POST
