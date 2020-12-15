@@ -24,10 +24,10 @@ public class PersistenceConf {
     private EntityManager emVELEZ;
     @PersistenceContext(unitName = "WMSPU")
     private EntityManager emWMS;
-    @PersistenceContext(unitName = "MySQLPU")
+    /*@PersistenceContext(unitName = "MySQLPU")
     private EntityManager emWali;
     @PersistenceContext(unitName = "MySQLPruebasPU")
-    private EntityManager emWaliPruebas;
+    private EntityManager emWaliPruebas;*/
 
     public EntityManager chooseSchema(String companyName, boolean testing, String dbType) {
 

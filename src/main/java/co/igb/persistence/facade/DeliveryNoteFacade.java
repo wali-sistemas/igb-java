@@ -114,13 +114,14 @@ public class DeliveryNoteFacade {
         StringBuilder sb = new StringBuilder();
 
         sb.append("select cast(t.DocNum as int)as DocNum,cast(t.CardCode as varchar(20))as CardCode,cast(t.ItemCode as varchar(20))as ItemCode, ");
-        sb.append(" t.Quantity,cast(u.AbsEntry as int)as BinAbs,t.BinCode,cast(t.Comments as varchar(254))as Comments,t.ValorDeclarado,cast(t.DocEntry as int)as DocEntry,cast(t.LineNum as int)as LineNum ");
+        sb.append(" t.Quantity,cast(u.AbsEntry as int)as BinAbs,t.BinCode,cast(t.Comments as varchar(254))as Comments,t.ValorDeclarado,cast(t.DocEntry as int)as DocEntry, ");
+        sb.append(" cast(t.LineNum as int)as LineNum,cast(t.WhsCode as varchar(10))as WhsCode ");
         sb.append("from (select d.ItemCode,cast(d.Quantity as int)as Quantity,cast((select top 1 ubicacion.BinCode ");
         sb.append(" from  OIBQ saldo ");
         sb.append(" inner join OBIN ubicacion on ubicacion.absentry=saldo.binabs and ubicacion.SysBin='N' and ubicacion.Attr1Val IN ('PICKING','STORAGE') ");
         sb.append(" where saldo.OnHandQty>=d.Quantity and saldo.ItemCode=d.ItemCode and saldo.WhsCode='01' and saldo.OnHandQty>0 ");
         sb.append(" order by cast(ubicacion.attr2val as varchar(10)),cast(ubicacion.attr3val as int))as varchar(20))as BinCode,o.DocNum,o.CardCode,o.Comments, ");
-        sb.append(" cast((o.DocTotal+o.DiscSum+o.WtSum)-o.VatSum-o.TotalExpns-o.RoundDif as numeric(18,2))as ValorDeclarado,o.DocEntry,d.LineNum ");
+        sb.append(" cast((o.DocTotal+o.DiscSum+o.WtSum)-o.VatSum-o.TotalExpns-o.RoundDif as numeric(18,2))as ValorDeclarado,o.DocEntry,d.LineNum,d.WhsCode ");
         sb.append(" from ORDR o ");
         sb.append(" inner join RDR1 d ON d.DocEntry=o.DocEntry and d.LineStatus='O' ");
         sb.append(" where o.DocStatus='O' and o.DocNum=");

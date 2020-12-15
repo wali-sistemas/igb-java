@@ -3,6 +3,7 @@ package co.igb.rest;
 import co.igb.dto.RePrintDTO;
 import co.igb.dto.ResponseDTO;
 import co.igb.dto.ZebraPrintDTO;
+import co.igb.dto.ZebraPrintItemDTO;
 import co.igb.persistence.facade.*;
 import co.igb.zebra.ZPLPrinter;
 
@@ -50,6 +51,8 @@ public class ZebraPrintREST {
     private DeliveryNoteFacade deliveryNoteFacade;
     @EJB
     private InvoiceFacade invoiceFacade;
+    @EJB
+    private ItemFacade itemFacade;
 
     @POST
     @Path("packinglist/{printer}")
@@ -177,7 +180,7 @@ public class ZebraPrintREST {
     }
 
     @POST
-    @Path("Order/re-print")
+    @Path("order/re-print")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
@@ -232,6 +235,41 @@ public class ZebraPrintREST {
                 job.print(doc, null);
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al Re-imprimir las etiquetas para la orden " + dto.getOrderNumber(), e);
+                allSucceeded = false;
+            }
+        }
+        return Response.ok(new ResponseDTO(0, allSucceeded)).build();
+    }
+
+    @POST
+    @Path("item")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response printItem(ZebraPrintItemDTO dto,
+                              @HeaderParam("X-Company-Name") String companyName,
+                              @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Imprimiendo etiqueta de barras para el item #{0}", dto.getItemCode());
+
+        PrintService printService = getPrintService(dto.getPrinterName());
+        if (printService == null) {
+            return Response.ok(new ResponseDTO(-1, "No se encontró la impresora [" + dto.getPrinterName() + "] en el servidor.")).build();
+        }
+
+        String itemName = itemFacade.getItemName(dto.getItemCode(), companyName, pruebas);
+
+        boolean allSucceeded = true;
+        for (int i = 1; i <= dto.getQty(); i++) {
+            ZebraPrintItemDTO label = new ZebraPrintItemDTO();
+            label.setItemCode(dto.getItemCode());
+            label.setItemName(itemName);
+
+            DocPrintJob job = printService.createPrintJob();
+            Doc doc = new SimpleDoc(ZPLPrinter.getPrintItemData(label), DocFlavor.BYTE_ARRAY.AUTOSENSE, null);
+            try {
+                job.print(doc, null);
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al imprimir la etiqueta del item " + dto.getItemCode(), e);
                 allSucceeded = false;
             }
         }
