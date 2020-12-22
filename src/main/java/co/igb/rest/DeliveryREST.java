@@ -70,16 +70,22 @@ public class DeliveryREST {
                 //validar si hay más stock en otras ubicaciones
                 List<Object[]> bins = soFacade.findOrdersStockAvailability((Integer) obj[0], new ArrayList<>(Collections.singleton((String) obj[2])), (String) obj[10], companyName, pruebas);
 
-                int qtyOrd = (int) obj[3], qtyComp = 0, qtyBin = 0;
+                int qtyOrd = (int) obj[3], qtyComp = 0, qtyBin = 0, qtyReal = 0;
                 if (bins.size() > 0) {
                     for (Object[] objBin : bins) {
                         if (qtyComp == qtyOrd) {
                             break;
                         }
                         qtyBin = (int) objBin[4];
-                        if ((qtyOrd > qtyBin) && (qtyComp != qtyOrd)) {
-                            itemsMissing.add(new Object[]{obj[0], obj[1], obj[2], objBin[4], objBin[3], objBin[5], obj[6], obj[7], obj[8], obj[9]});
-                            qtyComp += (int) objBin[4];
+                        if ((qtyOrd > qtyBin) && (qtyComp <= qtyOrd)) {
+                            qtyReal = qtyOrd - qtyComp;
+                            if (qtyReal <= qtyBin) {
+                                itemsMissing.add(new Object[]{obj[0], obj[1], obj[2], qtyReal, objBin[3], objBin[5], obj[6], obj[7], obj[8], obj[9]});
+                                qtyComp += qtyReal;
+                            } else {
+                                itemsMissing.add(new Object[]{obj[0], obj[1], obj[2], objBin[4], objBin[3], objBin[5], obj[6], obj[7], obj[8], obj[9]});
+                                qtyComp += (int) objBin[4];
+                            }
                         }
                     }
                 } else {
