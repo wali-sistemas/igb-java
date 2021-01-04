@@ -191,17 +191,17 @@ public class PackingListRecordFacade {
         }
     }
 
-    public BigInteger getOrdersForPacking(String companyName, boolean testing) {
+    public Integer getOrdersForPacking(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select count(order_number) Packing from packing_order o where o.company_name = '");
+        sb.append("select cast(count(order_number)as int)as Packing from packing_order o where o.company_name = '");
         sb.append(companyName);
         sb.append("' and status = 'open'");
         try {
-            return (BigInteger) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getSingleResult();
+            return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException ex) {
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultarel total de ordenes pendientes por packing.", e);
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el total de ordenes pendientes por packing.", e);
         }
-        return BigInteger.valueOf(0);
+        return 0;
     }
 }

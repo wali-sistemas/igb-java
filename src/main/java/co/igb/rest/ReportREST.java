@@ -85,7 +85,7 @@ public class ReportREST implements Serializable {
         CONSOLE.log(Level.INFO, "Consultando estados de ordenes en bodega general para la empresa [" + companyName + "]");
         List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, false, companyName, pruebas, warehouseCode);
         List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations(companyName, pruebas);
-        BigInteger packing = packingListRecordFacade.getOrdersForPacking(companyName, pruebas);
+        Integer packing = packingListRecordFacade.getOrdersForPacking(companyName, pruebas);
         Integer shiping = shippingOrderFacade.getOrdersForShipping(companyName, pruebas);
 
         Integer[] contador = new Integer[]{0, 0, packing.intValue(), shiping};
