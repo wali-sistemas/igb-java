@@ -229,6 +229,11 @@ public class ZebraPrintREST {
             label.setInvoice(invoice.toString());
             label.setPayment((String) orderData[5]);
 
+            //Se valida si la etiqueta es para motorepuesto, para generar una etiqueta personalizada
+            if (orderData[6].equals("C900998242")) {
+                companyName = "velez";
+            }
+
             DocPrintJob job = printService.createPrintJob();
             Doc doc = new SimpleDoc(ZPLPrinter.getPrintData(label, companyName), DocFlavor.BYTE_ARRAY.AUTOSENSE, null);
             try {
