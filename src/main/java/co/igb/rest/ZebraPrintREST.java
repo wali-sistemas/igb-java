@@ -3,7 +3,6 @@ package co.igb.rest;
 import co.igb.dto.RePrintDTO;
 import co.igb.dto.ResponseDTO;
 import co.igb.dto.ZebraPrintDTO;
-import co.igb.dto.ZebraPrintItemDTO;
 import co.igb.persistence.facade.*;
 import co.igb.zebra.ZPLPrinter;
 
@@ -246,7 +245,7 @@ public class ZebraPrintREST {
         return Response.ok(new ResponseDTO(0, allSucceeded)).build();
     }
 
-    @POST
+    /*@POST
     @Path("item")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
@@ -279,5 +278,5 @@ public class ZebraPrintREST {
             }
         }
         return Response.ok(new ResponseDTO(0, allSucceeded)).build();
-    }
+    }*/
 }

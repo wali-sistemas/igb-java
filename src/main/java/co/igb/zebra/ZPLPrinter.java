@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import co.igb.dto.ZebraPrintItemDTO;
 import org.apache.commons.io.IOUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -52,7 +51,7 @@ public class ZPLPrinter {
         }
     }
 
-    public static byte[] getPrintItemData(ZebraPrintItemDTO dto) {
+    /*public static byte[] getPrintItemData(ZebraPrintItemDTO dto) {
         try {
             ClassLoader classLoader = ZPLPrinter.class.getClassLoader();
             String templateText = IOUtils.toString(classLoader.getResourceAsStream("item.prn"), "UTF-8");
@@ -68,5 +67,5 @@ public class ZPLPrinter {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al procesar la etiqueta de item. ", e);
             return null;
         }
-    }
+    }*/
 }
