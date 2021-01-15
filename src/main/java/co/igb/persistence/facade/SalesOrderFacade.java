@@ -382,6 +382,17 @@ public class SalesOrderFacade {
         return new ArrayList<>();
     }
 
+    public String getCardCode(String order) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(cardCode as varchar(20))as cardCode from ORDR where DocNum=");
+        sb.append(order);
+        try {
+            return (String) persistenceConf.chooseSchema("IGB", false, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
     /*public void updatePickingOrderLine(Integer orderEntry, String item, String companyName, boolean testing) {
         EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
         CriteriaBuilder cb = em.getCriteriaBuilder();
