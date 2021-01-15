@@ -34,13 +34,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -473,11 +469,16 @@ public class ReportREST implements Serializable {
                 rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + dto.getDocumento() + File.separator + reportName;
                 break;
             case "pickingExpressGroup":
-                reportName = dto.getFiltro() + ".pdf";
-                report = JasperCompileManager.compileReportToFile(applicationBean.obtenerValorPropiedad("url.jasper") + dto.getCompanyName() + File.separator + "pickingExpress"
-                        + File.separator + dto.getDocumento() + ".jrxml");
-                rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + "pickingExpress" + File.separator + reportName;
-                break;
+                //validar si las ordenes corresponden al mismo cliente, de lo contrario no continuar con multi-picking.
+                if (validateMultiPicking(dto.getFiltro())) {
+                    reportName = dto.getFiltro() + ".pdf";
+                    report = JasperCompileManager.compileReportToFile(applicationBean.obtenerValorPropiedad("url.jasper") + dto.getCompanyName() + File.separator + "pickingExpress"
+                            + File.separator + dto.getDocumento() + ".jrxml");
+                    rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + "pickingExpress" + File.separator + reportName;
+                    break;
+                } else {
+                    return new ResponseDTO(-2, "Las ordenes no corresponde al mismo cliente.");
+                }
             default:
                 reportName = "";
                 break;
@@ -523,7 +524,7 @@ public class ReportREST implements Serializable {
             /*Impresora String printer = "RICOH Aficio MP 2851 PCL 5e"; /*impresoraFacade.obtenerImpresoraSucursal(dto.getSucursal(), "DOC");
             if (printer != null && printer.getIdImpresora() != null && printer.getIdImpresora() != 0) {*/
 
-            PrintService myPrintService = findPrintService("KyoceraCediP3055"/*printer.getNombreImpresoraServidor()*/);
+            PrintService myPrintService = findPrintService("RICOHAficioMP4002_2doPiso"/*printer.getNombreImpresoraServidor()*/);
 
             PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
             pras.add(Sides.DUPLEX);
@@ -552,5 +553,19 @@ public class ReportREST implements Serializable {
             }
         }
         return null;
+    }
+
+    private boolean validateMultiPicking(String orders) {
+        HashSet<String> clients = new HashSet<>();
+        if (orders != null && orders.contains(",")) {
+            for (String order : orders.split(",")) {
+                clients.add(salesOrderFacade.getCardCode(order));
+            }
+        }
+        if (clients.size() <= 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
