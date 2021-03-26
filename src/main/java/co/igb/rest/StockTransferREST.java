@@ -1,14 +1,12 @@
 package co.igb.rest;
 
-import co.igb.b1ws.client.stocktransfer.Add;
-import co.igb.b1ws.client.stocktransfer.AddResponse;
-import co.igb.b1ws.client.stocktransfer.MsgHeader;
-import co.igb.b1ws.client.stocktransfer.StockTransfer;
-import co.igb.b1ws.client.stocktransfer.StockTransferService;
 import co.igb.dto.*;
 import co.igb.ejb.EmailManager;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.ejb.SalesOrderEJB;
+import co.igb.hanaws.client.stockTransfers.StockTransfersClient;
+import co.igb.hanaws.dto.stockTransfers.StockTransfersDTO;
+import co.igb.hanaws.dto.stockTransfers.StockTransfersRestDTO;
 import co.igb.persistence.entity.Inventory;
 import co.igb.persistence.entity.InventoryDetail;
 import co.igb.persistence.entity.InventoryDifference;
@@ -18,7 +16,9 @@ import co.igb.persistence.entity.StockTransferDetail;
 import co.igb.persistence.facade.*;
 import co.igb.util.Constants;
 import co.igb.util.IGBUtils;
+import com.google.gson.Gson;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -35,8 +35,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -52,7 +50,7 @@ import java.util.logging.Logger;
 @Path("stocktransfer")
 public class StockTransferREST implements Serializable {
     private static final Logger CONSOLE = Logger.getLogger(StockTransferREST.class.getSimpleName());
-
+    private StockTransfersClient service;
     @EJB
     private BasicSAPFunctions sapFunctions;
     @EJB
@@ -79,6 +77,15 @@ public class StockTransferREST implements Serializable {
     private EmailManager mailManager;
 
     public StockTransferREST() {
+    }
+
+    @PostConstruct
+    private void initialize() {
+        try {
+            service = new StockTransfersClient(Constants.HANAWS_SL_URL);
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "No fue posible iniciar la instancia de StockTransfersServiceLayer. ", e);
+        }
     }
 
     @POST
@@ -126,60 +133,52 @@ public class StockTransferREST implements Serializable {
                 return Response.ok(new ResponseDTO(-1, "Ocurrio un error al reportar la inconsistencia de inventario. " + e.getMessage())).build();
             }
 
-            //Enviar correo
-            /*mailManager.sendInventoryInconsistence(
-                    itemTransfer.getUsername(),
-                    binLocationFacade.getBinCodeAndName(itemTransfer.getBinAbsTo(), companyName, pruebas),
-                    itemTransfer.getItemCode(),
-                    expectedQuantity,
-                    itemTransfer.getQuantity());*/
-
             if (itemTransfer.getQuantity() == 0) {
                 CONSOLE.log(Level.INFO, "Se reporto la inconsistencia de inventario, no se hace traslado ya que la cantidad encontrada fue cero");
                 return Response.ok(new ResponseDTO(0, "Inconsistencia de inventario reportada")).build();
             }
         }
 
-        StockTransfer document = new StockTransfer();
+        StockTransfersDTO document = new StockTransfersDTO();
         document.setSeries(Long.parseLong(getPropertyValue(Constants.STOCK_TRANSFER_SERIES, companyName)));
         document.setToWarehouse(itemTransfer.getWarehouseCode());
         document.setFromWarehouse(itemTransfer.getWarehouseCode());
         document.setComments("Proceso de picking orden #" + itemTransfer.getOrderNumber() + " creado por " + employeeName);
 
-        StockTransfer.StockTransferLines.StockTransferLine line = new StockTransfer.StockTransferLines.StockTransferLine();
+        StockTransfersDTO.StockTransferLines.StockTransferLine line = new StockTransfersDTO.StockTransferLines.StockTransferLine();
         line.setLineNum(0L);
         line.setItemCode(itemTransfer.getItemCode());
         line.setQuantity(itemTransfer.getQuantity().doubleValue());
         line.setWarehouseCode(itemTransfer.getWarehouseCode());
         line.setFromWarehouseCode(itemTransfer.getWarehouseCode());
 
-        StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+        StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
         outOperation.setAllowNegativeQuantity("tNO");
         outOperation.setBaseLineNumber(0L);
         outOperation.setBinAbsEntry(itemTransfer.getBinAbsFrom());
         outOperation.setBinActionType("batFromWarehouse");
         outOperation.setQuantity(itemTransfer.getQuantity().doubleValue());
 
-        StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+        StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
         inOperation.setAllowNegativeQuantity("tNO");
         inOperation.setBaseLineNumber(0L);
         inOperation.setBinAbsEntry(itemTransfer.getBinAbsTo());
         inOperation.setBinActionType("batToWarehouse");
         inOperation.setQuantity(itemTransfer.getQuantity().doubleValue());
 
-        StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations binAllocations = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations();
-        binAllocations.getStockTransferLinesBinAllocation().add(inOperation);
-        binAllocations.getStockTransferLinesBinAllocation().add(outOperation);
+        List<StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation> binAllocations = new ArrayList<>();
+        binAllocations.add(inOperation);
+        binAllocations.add(outOperation);
 
         line.setStockTransferLinesBinAllocations(binAllocations);
-        StockTransfer.StockTransferLines documentLines = new StockTransfer.StockTransferLines();
-        documentLines.getStockTransferLine().add(line);
+        List<StockTransfersDTO.StockTransferLines.StockTransferLine> documentLines = new ArrayList<>();
+        documentLines.add(line);
         document.setStockTransferLines(documentLines);
 
         //1. Login
         String sessionId = null;
         try {
-            sessionId = sapFunctions.getSessionId(companyName);
+            sessionId = sapFunctions.getSessionId(companyName.equals("IGBPruebas") ? "DBIGBTH" : companyName);
             if (sessionId != null) {
                 CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
             } else {
@@ -214,12 +213,14 @@ public class StockTransferREST implements Serializable {
         }
         //4. Validar y retornar
         if (docEntry > 0 || itemTransfer.getTemporary()) {
-            //TODO: modificar la orden de venta
+            //modificar la orden de venta por temas de unidad de empaque.
             if (itemTransfer.getExpectedQuantity() != itemTransfer.getQuantity()) {
                 CONSOLE.log(Level.INFO, "La cantidad tomada ({0}) es diferente a la cantidad de la orden ({1}). Reajustando orden para acomodar nueva cantidad...",
                         new Object[]{itemTransfer.getQuantity(), itemTransfer.getExpectedQuantity()});
                 Integer orderDocEntry = salesOrderFacade.getOrderDocEntry(itemTransfer.getOrderNumber(), companyName, pruebas);
-                ResponseDTO res = salesOrderEJB.modifySalesOrderQuantity(companyName, orderDocEntry, itemTransfer.getItemCode(), itemTransfer.getQuantity());
+                Long lineNumItem = salesOrderFacade.getLineNum(itemTransfer.getOrderNumber(), itemTransfer.getItemCode(), companyName, pruebas);
+
+                ResponseDTO res = salesOrderEJB.modifySalesOrderQuantity(companyName, orderDocEntry, lineNumItem, itemTransfer.getQuantity());
 
                 if (res.getCode() < 0) {
                     return Response.ok(new ResponseDTO(-1, "Ocurrio un error al modificar la cantidad de la orden #[" + orderDocEntry.toString() + "]")).build();
@@ -293,27 +294,24 @@ public class StockTransferREST implements Serializable {
             return startCounting(binCode, warehouse, companyName, pruebas, 0L);
         }
 
-        StockTransfer transfer = new StockTransfer();
-
+        StockTransfersDTO transfer = new StockTransfersDTO();
+        List<StockTransfersDTO.StockTransferLines.StockTransferLine> documentLines = new ArrayList<>();
         transfer.setSeries(Long.parseLong(getPropertyValue(Constants.STOCK_TRANSFER_SERIES, companyName)));
         transfer.setToWarehouse(warehouse);
         transfer.setFromWarehouse(warehouse);
         transfer.setComments("Traslado para realizar inventario.");
 
-        StockTransfer.StockTransferLines documentLines = new StockTransfer.StockTransferLines();
-
         long linea = 0;
         for (SaldoUbicacion s : stock) {
-            StockTransfer.StockTransferLines.StockTransferLine line = new StockTransfer.StockTransferLines.StockTransferLine();
-
+            StockTransfersDTO.StockTransferLines.StockTransferLine line = new StockTransfersDTO.StockTransferLines.StockTransferLine();
             line.setLineNum(linea);
             line.setItemCode(s.getItemCode());
             line.setQuantity(s.getOnHandQty().doubleValue());
             line.setWarehouseCode(s.getWhsCode());
             line.setFromWarehouseCode(s.getWhsCode());
 
-            StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation =
-                    new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+            StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation =
+                    new StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
 
             outOperation.setAllowNegativeQuantity("tNO");
             outOperation.setBaseLineNumber(linea);
@@ -321,8 +319,8 @@ public class StockTransferREST implements Serializable {
             outOperation.setBinActionType("batFromWarehouse");
             outOperation.setQuantity(s.getOnHandQty().doubleValue());
 
-            StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation =
-                    new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+            StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation =
+                    new StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
 
             inOperation.setAllowNegativeQuantity("tNO");
             inOperation.setBaseLineNumber(linea);
@@ -330,23 +328,21 @@ public class StockTransferREST implements Serializable {
             inOperation.setBinActionType("batToWarehouse");
             inOperation.setQuantity(s.getOnHandQty().doubleValue());
 
-            StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations binAllocations =
-                    new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations();
-            binAllocations.getStockTransferLinesBinAllocation().add(inOperation);
-            binAllocations.getStockTransferLinesBinAllocation().add(outOperation);
+            List<StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation> binAllocations = new ArrayList<>();
+            binAllocations.add(inOperation);
+            binAllocations.add(outOperation);
 
             line.setStockTransferLinesBinAllocations(binAllocations);
 
-            documentLines.getStockTransferLine().add(line);
+            documentLines.add(line);
             linea++;
         }
-
         transfer.setStockTransferLines(documentLines);
 
         //1. Login
         String sessionId = null;
         try {
-            sessionId = sapFunctions.getSessionId(companyName);
+            sessionId = sapFunctions.getSessionId(companyName.equals("IGBPruebas") ? "DBIGBTH" : companyName);
             if (sessionId != null) {
                 CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
             } else {
@@ -358,12 +354,8 @@ public class StockTransferREST implements Serializable {
         //2. Registrar documento
         Long docEntry = -1L;
         if (sessionId != null) {
-            try {
-                docEntry = createTransferDocument(transfer, sessionId);
-                CONSOLE.log(Level.INFO, "Se creo la transferencia docEntry={0}", docEntry);
-            } catch (MalformedURLException e) {
-                CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
-            }
+            docEntry = createTransferDocument(transfer, sessionId);
+            CONSOLE.log(Level.INFO, "Se creo la transferencia docEntry={0}", docEntry);
         }
         //3. Logout
         if (sessionId != null) {
@@ -381,7 +373,6 @@ public class StockTransferREST implements Serializable {
 
     private Response startCounting(String binCode, String warehouse, String companyName, boolean pruebas, Long docEntry) {
         Inventory inventory = new Inventory();
-
         inventory.setDate(new Date());
         inventory.setLocation(binCode);
         inventory.setStatus("PE");
@@ -416,14 +407,13 @@ public class StockTransferREST implements Serializable {
             List<StockTransferDetail> stock = stockTransferDetailFacade.findStockTransfer(inventory.getTransfer(), companyName, pruebas);
 
             if (stock != null && !stock.isEmpty()) {
-                StockTransfer transfer = new StockTransfer();
+                StockTransfersDTO transfer = new StockTransfersDTO();
+                List<StockTransfersDTO.StockTransferLines.StockTransferLine> documentLines = new ArrayList<>();
 
                 transfer.setSeries(Long.parseLong(getPropertyValue(Constants.STOCK_TRANSFER_SERIES, companyName)));
                 transfer.setToWarehouse(inventory.getWhsCode());
                 transfer.setFromWarehouse(inventory.getWhsCode());
                 transfer.setComments("Inconsistencias despues de realizar inventario en wali reportadas por " + employeeName);
-
-                StockTransfer.StockTransferLines documentLines = new StockTransfer.StockTransferLines();
 
                 long linea = 0;
                 for (InventoryDetail i : detail) {
@@ -432,7 +422,7 @@ public class StockTransferREST implements Serializable {
                         //SaldoUbicacion s = stock.get(j);
 
                         if (i.getItem().equals(s.getItemCode())) {
-                            StockTransfer.StockTransferLines.StockTransferLine line = new StockTransfer.StockTransferLines.StockTransferLine();
+                            StockTransfersDTO.StockTransferLines.StockTransferLine line = new StockTransfersDTO.StockTransferLines.StockTransferLine();
 
                             line.setLineNum(linea);
                             line.setItemCode(s.getItemCode());
@@ -448,30 +438,27 @@ public class StockTransferREST implements Serializable {
                                 differences.add(new InventoryDifference(null, idInventory, i.getItem(), s.getQuantity().intValue(), i.getQuantity()));
                             }
 
-                            StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
-
+                            StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
                             outOperation.setAllowNegativeQuantity("tNO");
                             outOperation.setBaseLineNumber(linea);
-                            //outOperation.setBinAbsEntry(Long.parseLong(appBean.obtenerValorPropiedad("inventory.ubication")));
                             outOperation.setBinAbsEntry(binLocationFacade.getBinAbsInventory(companyName, warehouseCode, pruebas).longValue());
                             outOperation.setBinActionType("batFromWarehouse");
                             outOperation.setQuantity(line.getQuantity());
 
-                            StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
-
+                            StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
                             inOperation.setAllowNegativeQuantity("tNO");
                             inOperation.setBaseLineNumber(linea);
                             inOperation.setBinAbsEntry(binLocationFacade.getBinAbs(inventory.getLocation(), companyName, pruebas).longValue());
                             inOperation.setBinActionType("batToWarehouse");
                             inOperation.setQuantity(line.getQuantity());
 
-                            StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations binAllocations = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations();
-                            binAllocations.getStockTransferLinesBinAllocation().add(inOperation);
-                            binAllocations.getStockTransferLinesBinAllocation().add(outOperation);
+                            List<StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation> binAllocations = new ArrayList<>();
+                            binAllocations.add(inOperation);
+                            binAllocations.add(outOperation);
 
                             line.setStockTransferLinesBinAllocations(binAllocations);
 
-                            documentLines.getStockTransferLine().add(line);
+                            documentLines.add(line);
                             linea++;
 
                             stock.remove(j);
@@ -484,7 +471,7 @@ public class StockTransferREST implements Serializable {
                 //1. Login
                 String sessionId = null;
                 try {
-                    sessionId = sapFunctions.getSessionId(companyName);
+                    sessionId = sapFunctions.getSessionId(companyName.equals("IGBPruebas") ? "DBIGBTH" : companyName);
                     if (sessionId != null) {
                         CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
                     } else {
@@ -496,12 +483,8 @@ public class StockTransferREST implements Serializable {
                 //2. Registrar documento
                 Long docEntry;
                 if (sessionId != null) {
-                    try {
-                        docEntry = createTransferDocument(transfer, sessionId);
-                        CONSOLE.log(Level.INFO, "Se creo la transferencia docEntry={0}", docEntry);
-                    } catch (MalformedURLException e) {
-                        CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
-                    }
+                    docEntry = createTransferDocument(transfer, sessionId);
+                    CONSOLE.log(Level.INFO, "Se creo la transferencia docEntry={0}", docEntry);
                 }
                 //3. Logout
                 if (sessionId != null) {
@@ -533,7 +516,6 @@ public class StockTransferREST implements Serializable {
                 inventoryDifferenceFacade.create(difference, companyName, pruebas);
                 differences.add(difference);
             }
-
             inventory.setStatus("F");
 
             try {
@@ -543,10 +525,8 @@ public class StockTransferREST implements Serializable {
             }
 
             sendInconsistenciesEmail(employeeName, differences, inventory.getLocation());
-
             return Response.ok(differences).build();
         }
-
         return Response.ok(-1).build();
     }
 
@@ -586,47 +566,46 @@ public class StockTransferREST implements Serializable {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "No se recibió el código de la bodega")).build();
         }
 
-        StockTransfer document = new StockTransfer();
+        StockTransfersDTO document = new StockTransfersDTO();
         document.setSeries(Long.parseLong(getPropertyValue(Constants.STOCK_TRANSFER_SERIES, companyName)));
-        //document.setCardCode(itemTransfer.get);
         document.setToWarehouse(itemTransfer.getWarehouseCode());
         document.setFromWarehouse(itemTransfer.getWarehouseCode());
         document.setComments("Re-abastecimiento de ubicación #" + itemTransfer.getOrderNumber());
 
-        StockTransfer.StockTransferLines.StockTransferLine line = new StockTransfer.StockTransferLines.StockTransferLine();
+        StockTransfersDTO.StockTransferLines.StockTransferLine line = new StockTransfersDTO.StockTransferLines.StockTransferLine();
         line.setLineNum(0L);
         line.setItemCode(itemTransfer.getItemCode());
         line.setQuantity(itemTransfer.getQuantity().doubleValue());
         line.setWarehouseCode(itemTransfer.getWarehouseCode());
         line.setFromWarehouseCode(itemTransfer.getWarehouseCode());
 
-        StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+        StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
         outOperation.setAllowNegativeQuantity("tNO");
         outOperation.setBaseLineNumber(0L);
         outOperation.setBinAbsEntry(itemTransfer.getBinAbsFrom());
         outOperation.setBinActionType("batFromWarehouse");
         outOperation.setQuantity(itemTransfer.getQuantity().doubleValue());
 
-        StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+        StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
         inOperation.setAllowNegativeQuantity("tNO");
         inOperation.setBaseLineNumber(0L);
         inOperation.setBinAbsEntry(itemTransfer.getBinAbsTo());
         inOperation.setBinActionType("batToWarehouse");
         inOperation.setQuantity(itemTransfer.getQuantity().doubleValue());
 
-        StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations binAllocations = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations();
-        binAllocations.getStockTransferLinesBinAllocation().add(inOperation);
-        binAllocations.getStockTransferLinesBinAllocation().add(outOperation);
+        List<StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation> binAllocations = new ArrayList<>();
+        binAllocations.add(inOperation);
+        binAllocations.add(outOperation);
 
         line.setStockTransferLinesBinAllocations(binAllocations);
-        StockTransfer.StockTransferLines documentLines = new StockTransfer.StockTransferLines();
-        documentLines.getStockTransferLine().add(line);
+        List<StockTransfersDTO.StockTransferLines.StockTransferLine> documentLines = new ArrayList<>();
+        documentLines.add(line);
         document.setStockTransferLines(documentLines);
 
         //1. Login
         String sessionId = null;
         try {
-            sessionId = sapFunctions.getSessionId(companyName);
+            sessionId = sapFunctions.getSessionId(companyName.equals("IGBPruebas") ? "DBIGBTH" : companyName);
             if (sessionId != null) {
                 CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
             } else {
@@ -670,61 +649,62 @@ public class StockTransferREST implements Serializable {
         }
     }
 
-    private Long createTransferDocument(StockTransfer document, String sessionId) throws MalformedURLException {
-        StockTransferService service = new StockTransferService(new URL(String.format(appBean.obtenerValorPropiedad(Constants.B1WS_WSDL_URL), "StockTransferService")));
-        Add add = new Add();
-        add.setStockTransfer(document);
-
-        MsgHeader header = new MsgHeader();
-        header.setServiceName("StockTransferService");
-        header.setSessionID(sessionId);
-        CONSOLE.log(Level.INFO, "Creando traslado en SAP con sessionId [{0}]", sessionId);
-        AddResponse response = service.getStockTransferServiceSoap12().add(add, header);
-        return response.getStockTransferParams().getDocEntry();
+    private Long createTransferDocument(StockTransfersDTO document, String sessionId) {
+        StockTransfersRestDTO res = null;
+        try {
+            Gson gson = new Gson();
+            String JSON = gson.toJson(document);
+            CONSOLE.log(Level.INFO, JSON);
+            res = service.addTransfer(document, sessionId);
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error retornando la respuesta de la creacion del traslado. ", e.getMessage());
+            return -1l;
+        }
+        return res.getDocEntry();
     }
 
     private Long adjustMissingQuantity(SingleItemTransferDTO itemTransfer, Integer expectedQuantity, String companyName, String warehouseCode, String employeeName, boolean pruebas) throws Exception {
-        StockTransfer transfer = new StockTransfer();
+        StockTransfersDTO transfer = new StockTransfersDTO();
 
         transfer.setSeries(Long.parseLong(getPropertyValue(Constants.STOCK_TRANSFER_SERIES, companyName)));
         transfer.setToWarehouse(itemTransfer.getWarehouseCode());
         transfer.setFromWarehouse(itemTransfer.getWarehouseCode());
         transfer.setComments("Inconsistencia creada desde wali reportada por " + employeeName);
 
-        StockTransfer.StockTransferLines documentLines = new StockTransfer.StockTransferLines();
-        StockTransfer.StockTransferLines.StockTransferLine line = new StockTransfer.StockTransferLines.StockTransferLine();
+        List<StockTransfersDTO.StockTransferLines.StockTransferLine> documentLines = new ArrayList<>();
+        StockTransfersDTO.StockTransferLines.StockTransferLine line = new StockTransfersDTO.StockTransferLines.StockTransferLine();
         line.setLineNum(0L);
         line.setItemCode(itemTransfer.getItemCode());
         line.setWarehouseCode(itemTransfer.getWarehouseCode());
         line.setFromWarehouseCode(itemTransfer.getWarehouseCode());
         line.setQuantity((double) (expectedQuantity - itemTransfer.getQuantity()));
 
-        StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+        StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
         outOperation.setAllowNegativeQuantity("tNO");
         outOperation.setBaseLineNumber(0L);
         outOperation.setBinAbsEntry(itemTransfer.getBinAbsFrom());
         outOperation.setBinActionType("batFromWarehouse");
         outOperation.setQuantity(line.getQuantity());
 
-        StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+        StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
         inOperation.setAllowNegativeQuantity("tNO");
         inOperation.setBaseLineNumber(0L);
         inOperation.setBinAbsEntry(binLocationFacade.getBinAbsInventory(companyName, warehouseCode, pruebas).longValue());
         inOperation.setBinActionType("batToWarehouse");
         inOperation.setQuantity(line.getQuantity());
 
-        StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations binAllocations = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations();
-        binAllocations.getStockTransferLinesBinAllocation().add(inOperation);
-        binAllocations.getStockTransferLinesBinAllocation().add(outOperation);
+        List<StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation> binAllocations = new ArrayList<>();
+        binAllocations.add(inOperation);
+        binAllocations.add(outOperation);
 
         line.setStockTransferLinesBinAllocations(binAllocations);
-        documentLines.getStockTransferLine().add(line);
+        documentLines.add(line);
         transfer.setStockTransferLines(documentLines);
 
         //1. Login
         String sessionId = null;
         try {
-            sessionId = sapFunctions.getSessionId(companyName);
+            sessionId = sapFunctions.getSessionId(companyName.equals("IGBPruebas") ? "DBIGBTH" : companyName);
             if (sessionId != null) {
                 CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
             } else {
@@ -767,49 +747,49 @@ public class StockTransferREST implements Serializable {
             @HeaderParam("X-Warehouse-Code") String warehouseCode) {
         CONSOLE.log(Level.INFO, "Realizando traslado entre ubicaciones {0}", stockTransfer);
 
-        StockTransfer document = new StockTransfer();
+        StockTransfersDTO document = new StockTransfersDTO();
         document.setSeries(Long.parseLong(getPropertyValue(Constants.STOCK_TRANSFER_SERIES, companyName)));
         document.setToWarehouse(stockTransfer.getWarehouseCode());
         document.setFromWarehouse(stockTransfer.getWarehouseCode());
         document.setComments("Traslado entre ubicaciones generado desde Wali por " + stockTransfer.getUsername());
 
-        StockTransfer.StockTransferLines documentLines = new StockTransfer.StockTransferLines();
+        List<StockTransfersDTO.StockTransferLines.StockTransferLine> documentLines = new ArrayList<>();
         long lineNum = 0L;
         for (StockTransferLineDTO lineDTO : stockTransfer.getLines()) {
-            StockTransfer.StockTransferLines.StockTransferLine line = new StockTransfer.StockTransferLines.StockTransferLine();
+            StockTransfersDTO.StockTransferLines.StockTransferLine line = new StockTransfersDTO.StockTransferLines.StockTransferLine();
             line.setLineNum(lineNum++);
             line.setItemCode(lineDTO.getItemCode());
             line.setQuantity(lineDTO.getQuantity().doubleValue());
             line.setWarehouseCode(stockTransfer.getWarehouseCode());
             line.setFromWarehouseCode(stockTransfer.getWarehouseCode());
 
-            StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+            StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
             outOperation.setAllowNegativeQuantity(Constants.SAP_STATUS_NO);
             outOperation.setBaseLineNumber(line.getLineNum());
             outOperation.setBinAbsEntry(stockTransfer.getBinAbsFrom());
             outOperation.setBinActionType(Constants.BIN_ACTION_TYPE_FROM);
             outOperation.setQuantity(lineDTO.getQuantity().doubleValue());
 
-            StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+            StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
             inOperation.setAllowNegativeQuantity(Constants.SAP_STATUS_NO);
             inOperation.setBaseLineNumber(line.getLineNum());
             inOperation.setBinAbsEntry(stockTransfer.getBinAbsTo());
             inOperation.setBinActionType(Constants.BIN_ACTION_TYPE_TO);
             inOperation.setQuantity(lineDTO.getQuantity().doubleValue());
 
-            StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations binAllocations = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations();
-            binAllocations.getStockTransferLinesBinAllocation().add(inOperation);
-            binAllocations.getStockTransferLinesBinAllocation().add(outOperation);
+            List<StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation> binAllocations = new ArrayList<>();
+            binAllocations.add(inOperation);
+            binAllocations.add(outOperation);
 
             line.setStockTransferLinesBinAllocations(binAllocations);
-            documentLines.getStockTransferLine().add(line);
+            documentLines.add(line);
         }
         document.setStockTransferLines(documentLines);
 
         //1. Login
         String sessionId = null;
         try {
-            sessionId = sapFunctions.getSessionId(companyName);
+            sessionId = sapFunctions.getSessionId(companyName.equals("IGBPruebas") ? "DBIGBTH" : companyName);
             if (sessionId != null) {
                 CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
             } else {
@@ -878,49 +858,49 @@ public class StockTransferREST implements Serializable {
             @HeaderParam("X-Warehouse-Code") String warehouseCode) {
         CONSOLE.log(Level.INFO, "Realizando traslado entre almacenes {0}", stockTransfer);
 
-        StockTransfer document = new StockTransfer();
+        StockTransfersDTO document = new StockTransfersDTO();
         document.setSeries(Long.parseLong(getPropertyValue(Constants.STOCK_TRANSFER_SERIES, companyName)));
         document.setToWarehouse(stockTransfer.getWarehouseCode());
         document.setFromWarehouse(stockTransfer.getFiller());
         document.setComments("Traslado entre almacenes generado desde Wali por " + stockTransfer.getUsername());
 
-        StockTransfer.StockTransferLines documentLines = new StockTransfer.StockTransferLines();
+        List<StockTransfersDTO.StockTransferLines.StockTransferLine> documentLines = new ArrayList<>();
         long lineNum = 0L;
         for (StockTransferLineDTO lineDTO : stockTransfer.getLines()) {
-            StockTransfer.StockTransferLines.StockTransferLine line = new StockTransfer.StockTransferLines.StockTransferLine();
+            StockTransfersDTO.StockTransferLines.StockTransferLine line = new StockTransfersDTO.StockTransferLines.StockTransferLine();
             line.setLineNum(lineNum++);
             line.setItemCode(lineDTO.getItemCode());
             line.setQuantity(lineDTO.getQuantity().doubleValue());
             line.setWarehouseCode(stockTransfer.getWarehouseCode());
             line.setFromWarehouseCode(stockTransfer.getFiller());
 
-            StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+            StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation = new StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
             outOperation.setAllowNegativeQuantity(Constants.SAP_STATUS_NO);
             outOperation.setBaseLineNumber(line.getLineNum());
             outOperation.setBinAbsEntry(stockTransfer.getBinAbsFrom());
             outOperation.setBinActionType(Constants.BIN_ACTION_TYPE_FROM);
             outOperation.setQuantity(lineDTO.getQuantity().doubleValue());
 
-            StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
+            StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation = new StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
             inOperation.setAllowNegativeQuantity(Constants.SAP_STATUS_NO);
             inOperation.setBaseLineNumber(line.getLineNum());
             inOperation.setBinAbsEntry(stockTransfer.getBinAbsTo());
             inOperation.setBinActionType(Constants.BIN_ACTION_TYPE_TO);
             inOperation.setQuantity(lineDTO.getQuantity().doubleValue());
 
-            StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations binAllocations = new StockTransfer.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations();
-            binAllocations.getStockTransferLinesBinAllocation().add(inOperation);
-            binAllocations.getStockTransferLinesBinAllocation().add(outOperation);
+            List<StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation> binAllocations = new ArrayList<>();
+            binAllocations.add(inOperation);
+            binAllocations.add(outOperation);
 
             line.setStockTransferLinesBinAllocations(binAllocations);
-            documentLines.getStockTransferLine().add(line);
+            documentLines.add(line);
         }
         document.setStockTransferLines(documentLines);
 
         //1. Login
         String sessionId = null;
         try {
-            sessionId = sapFunctions.getSessionId(companyName);
+            sessionId = sapFunctions.getSessionId(companyName.equals("IGBPruebas") ? "DBIGBTH" : companyName);
             if (sessionId != null) {
                 CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
             } else {

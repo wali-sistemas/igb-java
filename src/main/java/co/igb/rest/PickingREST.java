@@ -32,7 +32,6 @@ import java.util.logging.Logger;
 @Path("picking/v2")
 public class PickingREST implements Serializable {
     private static final Logger CONSOLE = Logger.getLogger(PickingREST.class.getSimpleName());
-
     @EJB
     private SalesOrderFacade soFacade;
     @EJB
@@ -186,16 +185,17 @@ public class PickingREST implements Serializable {
                     itemsMissing.add(pendingItemcode);
                     continue;
                 }
-                if (!availableStock.containsKey(pendingItemcode) && pickedItems.containsKey(pendingItemcode)) {
+                //TODO: Pendiente al realizar las pruebas
+                /*if (!availableStock.containsKey(pendingItemcode) && pickedItems.containsKey(pendingItemcode)) {
                     //reprocesar orden para que se genere cierre si no hay mas items pendientes
-                    salesOrderEJB.modifySalesOrderQuantity(companyName, orderDocEntry, pendingItemcode, getTotalPicked(pickedItems.get(pendingItemcode)));
+                    Long lineNum = soFacade.getLineNum(orderNumber, pendingItemcode, companyName, pruebas);
+                    salesOrderEJB.modifySalesOrderQuantity(companyName, orderDocEntry, lineNum, getTotalPicked(pickedItems.get(pendingItemcode)));
                     //soFacade.modifySalesOrderQuantity(orderDocEntry, pendingItemcode, getTotalPicked(pickedItems.get(pendingItemcode)), getPriceItem(pendingItemcode, companyName, pruebas), companyName, pruebas);
-                }
+                }*/
             }
 
             if (!itemsMissing.isEmpty()) {
                 //TODO: Marcar lineas de orden cerradas para items sin saldo
-                //ResponseDTO res = salesOrderEJB.closeOrderLines(companyName, orderDocEntry, itemsMissing);
                 boolean res = soFacade.closeOrderLines(orderDocEntry, itemsMissing, companyName, pruebas);
                 //if (res.getCode() < 0) {
                 if (!res) {
@@ -381,9 +381,5 @@ public class PickingREST implements Serializable {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el estado de la asignacion de picking. ", e);
         }
-    }
-
-    private void moveItemsToPackingArea(Integer orderNumber, String companyName, boolean pruebas) {
-        stockTransferEJB.transferClosedPickingToPackingArea(orderNumber, companyName, pruebas);
     }
 }
