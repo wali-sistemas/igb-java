@@ -4,7 +4,6 @@ package co.igb.util;
  * @author dbotero
  */
 public class Constants {
-    public static final String INVOICE_SERIES = "igb.invoice.series";
     public static final String STOCK_TRANSFER_SERIES = "igb.stock-transfer.series";
     public static final String SALES_ORDER_SERIES = "igb.sales.order.series";
     public static final String DELIVERY_NOTE_SERIES = "igb.delivery.note.series";
@@ -61,12 +60,8 @@ public class Constants {
     public static final String B1WS_COMPANY_PASSWORD = "igb.b1ws.companyPassword";
     public static final String B1WS_LANGUAGE = "igb.b1ws.language";
     public static final String B1WS_LICENSE_SERVER = "igb.b1ws.licenseServer";
-    public static final String B1WS_LOGIN_SERVICE = "LoginService";
-    public static final String B1WS_DELIVERY_NOTE_SERVICE = "DeliveryNotesService";
-    public static final String B1WS_ORDERS_SERVICE = "OrdersService";
     public static final String BIN_TYPE_PICKING = "PICKING";
-    //public static final String DATABASE_TYPE_MYSQL = "mysql";
-    public static final String DATABASE_TYPE_MSSQL = "mssql";
+    public static final String DATABASE_TYPE_HANA = "HANA";
     public static final String DATABASE_TYPE_WALI = "WMS";
     public static final String BIN_ACTION_TYPE_FROM = "batFromWarehouse";
     public static final String BIN_ACTION_TYPE_TO = "batToWarehouse";
@@ -74,4 +69,5 @@ public class Constants {
     public static final String[] LDAP_ATTR_IDS = {"name", "givenName", "description", "sAMAccountname", "userPrincipalName", "sn", "distinguishedName", "cn", "mail", "memberOf"};
     public static final String SOUL_USER = "811011909";
     public static final String SOUL_PASSWORD = "IgbMp2020*";
+    public static final String HANAWS_SL_URL = "https://slhana.igbcolombia.com:50000/b1s/";
 }
