@@ -6,7 +6,6 @@ import co.igb.util.Constants;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -17,10 +16,8 @@ import java.util.logging.Logger;
  */
 @Stateless
 public class PackingListRecordFacade {
-
     private static final Logger CONSOLE = Logger.getLogger(PackingListRecordFacade.class.getSimpleName());
     private static final String DB_TYPE_WALI = Constants.DATABASE_TYPE_WALI;
-
     @EJB
     private PersistenceConf persistenceConf;
 
@@ -110,21 +107,6 @@ public class PackingListRecordFacade {
         return new ArrayList<>();
     }
 
-    public List<Object[]> listByPackingList(Integer idPackingList, String companyName, boolean testing) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("select * from packing_list_record where idpacking_list = ");
-        sb.append(idPackingList);
-        sb.append(" and company_name = '");
-        sb.append(companyName);
-        sb.append("' order by box_number");
-        try {
-            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getResultList();
-        } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los items por packing list. ", e);
-            return new ArrayList<>();
-        }
-    }
-
     public void closePackingOrder(Integer idPackingOrder, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("update packing_list_record set status = 'closed' where company_name = '");
@@ -163,31 +145,6 @@ public class PackingListRecordFacade {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el numero de cajas por packing list. ", e);
             return 0;
-        }
-    }
-
-    public String listOrderNumbers(Integer idPackingList, String companyName, boolean testing) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("select distinct order_number from packing_list_record where idpacking_list = ");
-        sb.append(idPackingList);
-        sb.append(" and company_name = '");
-        sb.append(companyName);
-        sb.append("' and status = 'open'");
-        try {
-            List<Integer> orderNumberList = (List<Integer>) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getResultList();
-            StringBuilder orderNumberText = new StringBuilder();
-            for (Integer orderNumber : orderNumberList) {
-                orderNumberText.append(orderNumber);
-                orderNumberText.append(",");
-            }
-            if (orderNumberText.length() == 0) {
-                return null;
-            }
-            orderNumberText.delete(orderNumberText.length() - 1, orderNumberText.length());
-            return orderNumberText.toString();
-        } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los numeros de orden de compra del packingList. ", e);
-            return null;
         }
     }
 

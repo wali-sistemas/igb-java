@@ -18,47 +18,42 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author dbotero
+ * @author jguisao
  */
 @Stateless
 public class PurchaseOrderFacade {
-
     private static final Logger CONSOLE = Logger.getLogger(PurchaseOrderFacade.class.getSimpleName());
-    private static final String DB_TYPE = Constants.DATABASE_TYPE_MSSQL;
-
+    private static final String DB_TYPE_HANA = Constants.DATABASE_TYPE_HANA;
     @Inject
     private IGBApplicationBean applicationBean;
-
     @EJB
     private PersistenceConf persistenceConf;
 
     public PurchaseOrderFacade() {
-
     }
 
-    public PurchaseOrderDTO find(String docNum, String schemaName, boolean testing) {
+    public PurchaseOrderDTO find(String docNum, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-
-        sb.append("select cast(enc.series as varchar(4)) series ");
-        sb.append(", cast(enc.docentry as int) docentry ");
-        sb.append(", cast(enc.docnum as varchar(10)) docnum ");
-        sb.append(", cast(enc.docdate as date) docdate ");
-        sb.append(", enc.doctotal, enc.doctotalfc ");
-        sb.append(", cast(enc.CardCode as varchar(20)) cardcode ");
-        sb.append(", cast(enc.CardName as varchar(100)) cardname ");
-        sb.append(", cast(det.ItemCode as varchar(50)) itemcode ");
-        sb.append(", cast(det.Dscription as varchar(100)) itemname ");
-        sb.append(", cast(det.OpenQty as int) quantity ");
-        sb.append(", cast(det.LineNum as int) linenum ");
-        sb.append("from opor enc inner join por1 det on det.docentry = enc.docentry ");
-        sb.append("where enc.docnum =");
+        sb.append("select cast(enc.\"Series\" as varchar(4)) series, ");
+        sb.append(" cast(enc.\"DocEntry\"as int)docentry, ");
+        sb.append(" cast(enc.\"DocNum\"as varchar(10)) docnum, ");
+        sb.append(" cast(enc.\"DocDate\"as date) docdate, ");
+        sb.append(" enc. \"DocTotal\", enc.\"DocTotalFC\", ");
+        sb.append(" cast(enc.\"CardCode\"as varchar(20)) cardcode, ");
+        sb.append(" cast(enc.\"CardName\"as varchar(100)) cardname, ");
+        sb.append(" cast(det.\"ItemCode\"as varchar(50)) itemcode, ");
+        sb.append(" cast(det.\"Dscription\"as varchar(100)) itemname, ");
+        sb.append(" cast(det.\"OpenQty\"as int)quantity, ");
+        sb.append(" cast(det.\"LineNum\"as int)linenum ");
+        sb.append("from OPOR enc ");
+        sb.append("inner join POR1 det on det.\"DocEntry\" = enc.\"DocEntry\"");
+        sb.append("where enc.\"DocNum\" =");
         sb.append(docNum);
-        sb.append(" and det.OpenQty > 0 ");
-        sb.append("order by enc.docdate, det.lineNum, det.itemcode");
-
+        sb.append(" and det.\"OpenQty\">0 ");
+        sb.append("order by enc.\"DocDate\",det.\"LineNum\",det.\"ItemCode\"");
         try {
             PurchaseOrderDTO dto = new PurchaseOrderDTO();
-            for (Object[] row : (List<Object[]>) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList()) {
+            for (Object[] row : (List<Object[]>) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList()) {
                 if (dto.getDocNum() == null) {
                     dto.setSeries((String) row[0]);
                     dto.setDocEntry(((Integer) row[1]).longValue());
@@ -92,18 +87,17 @@ public class PurchaseOrderFacade {
     }
 
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public List<PurchaseOrderDTO> findOpenOrders(String schemaName, boolean testing) {
+    public List<PurchaseOrderDTO> findOpenOrders(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-
-        sb.append("select cast(enc.series as varchar(4)) series, cast(enc.DocNum as varchar(10)) docnum, ");
-        sb.append("cast(enc.docdate as date) docdate, cast(enc.cardcode as varchar(20)) cardcode, cast(enc.cardname as varchar(100)) cardname, ");
-        sb.append("enc.doctotal, enc.doctotalfc, (select count(1) from POR1 det where det.docentry = enc.docentry and det.LineStatus = 'O') items ");
-        sb.append("from OPOR enc where enc.series in (");
-        sb.append(listToString(schemaName));
-        sb.append(") and enc.docstatus = 'O' order by enc.docdate ");
+        sb.append("select cast(enc.\"Series\" as varchar(4)) series, cast(enc.\"DocNum\" as varchar(10)) docnum, ");
+        sb.append(" cast(enc.\"DocDate\" as date) docdate, cast(enc.\"CardCode\" as varchar(20)) cardcode, cast(enc.\"CardName\" as varchar(100)) cardname, ");
+        sb.append(" enc.\"DocTotal\", enc.\"DocTotalFC\", cast((select count(1) from POR1 det where det.\"DocEntry\" = enc.\"DocEntry\" and det.\"LineStatus\" = 'O') as int) items ");
+        sb.append("from OPOR enc where enc.\"Series\" in (");
+        sb.append(listToString(companyName));
+        sb.append(") and enc.\"DocStatus\" = 'O' order by enc.\"DocDate\" ");
         List<PurchaseOrderDTO> orders = new ArrayList<>();
         try {
-            for (Object[] row : (List<Object[]>) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList()) {
+            for (Object[] row : (List<Object[]>) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList()) {
                 PurchaseOrderDTO dto = new PurchaseOrderDTO();
                 dto.setSeries((String) row[0]);
                 dto.setDocNum((String) row[1]);

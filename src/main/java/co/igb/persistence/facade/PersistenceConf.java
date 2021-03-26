@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 
 @Stateless
 public class PersistenceConf {
-
     private static final Logger CONSOLE = Logger.getLogger(BinLocationFacade.class.getSimpleName());
 
     @PersistenceContext(unitName = "IGBPU")
@@ -24,21 +23,15 @@ public class PersistenceConf {
     private EntityManager emVELEZ;
     @PersistenceContext(unitName = "WMSPU")
     private EntityManager emWMS;
-    /*@PersistenceContext(unitName = "MySQLPU")
-    private EntityManager emWali;
-    @PersistenceContext(unitName = "MySQLPruebasPU")
-    private EntityManager emWaliPruebas;*/
+    @PersistenceContext(unitName = "HANAIGBPU")
+    private EntityManager emHANAIGB;
+    @PersistenceContext(unitName = "HANAVARROCPU")
+    private EntityManager emHANAVARROC;
 
     public EntityManager chooseSchema(String companyName, boolean testing, String dbType) {
 
         if (dbType.equalsIgnoreCase(Constants.DATABASE_TYPE_WALI)) {
             return emWMS;
-        /*} else if (dbType.equalsIgnoreCase(Constants.DATABASE_TYPE_MYSQL)) {
-            if (testing) {
-                return emWaliPruebas;
-            } else {
-                return emWali;
-            }*/
         } else {
             switch (companyName) {
                 case "IGB":
@@ -46,9 +39,13 @@ public class PersistenceConf {
                 case "VARROC":
                     return emVARROC;
                 case "IGBPruebas":
-                    return emIGBPruebas;
+                    return emHANAIGB;
+                case "DBIGBTH":
+                    return emHANAIGB;
                 case "VARROCPruebas":
-                    return emVARROCPruebas;
+                    return emHANAVARROC;
+                case "DBVARROCTH":
+                    return emHANAVARROC;
                 case "VELEZ":
                     return emVELEZ;
                 default:

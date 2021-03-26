@@ -1,8 +1,7 @@
 package co.igb.persistence.facade;
 
 import co.igb.dto.SalesOrderDTO;
-import co.igb.persistence.entity.SalesOrderDetail;
-import co.igb.persistence.entity.SalesOrderDetail_;
+import co.igb.util.Constants;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -10,7 +9,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.criteria.*;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.logging.Level;
@@ -21,10 +19,8 @@ import java.util.logging.Logger;
  */
 @Stateless
 public class SalesOrderFacade {
-
     private static final Logger CONSOLE = Logger.getLogger(SalesOrderFacade.class.getSimpleName());
-    private static final String DB_TYPE = "mssql";
-
+    private static final String DB_TYPE_HANA = Constants.DATABASE_TYPE_HANA;
     @EJB
     private PersistenceConf persistenceConf;
 
@@ -33,10 +29,10 @@ public class SalesOrderFacade {
 
     public String getOrderStatus(Integer docNum, String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(DocStatus as varchar(1)) docstatus from ORDR where DocNum = ");
+        sb.append("select cast(o.\"DocStatus\" as varchar(1)) DocStatus from ORDR o where o.\"DocNum\"=");
         sb.append(docNum);
         try {
-            return (String) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (String) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el estado de la orden " + docNum + ". ", e);
@@ -46,11 +42,11 @@ public class SalesOrderFacade {
 
     public BigDecimal getValorDeclarado(Integer docNum, String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast((DocTotal + DiscSum + WtSum) - VatSum - TotalExpns - RoundDif AS numeric(18,2)) AS valorDeclarado ");
-        sb.append("from ORDR where DocNum = ");
+        sb.append("select cast((o.\"DocTotal\" + o.\"DiscSum\" + o.\"WTSum\") - o.\"VatSum\" - o.\"TotalExpns\" - o.\"RoundDif\" as numeric(18,2)) as valorDeclarado ");
+        sb.append("from ORDR o where o.\"DocNum\"=");
         sb.append(docNum);
         try {
-            return (BigDecimal) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (BigDecimal) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el valor declarado para la orden " + docNum + ".", e);
@@ -61,10 +57,10 @@ public class SalesOrderFacade {
     public String getOrderComment(Integer docNum, String schemaName, boolean testing) {
         if (docNum != null && schemaName != null && !schemaName.isEmpty()) {
             StringBuilder sb = new StringBuilder();
-            sb.append("select cast(comments as varchar(254)) comments from ORDR where DocNum = ");
+            sb.append("select cast(o.\"Comments\" as varchar(254)) as Comments from ORDR o where o.\"DocNum\"=");
             sb.append(docNum);
             try {
-                return (String) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+                return (String) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
             } catch (NoResultException ex) {
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el comentario de la orden " + docNum + ".", e);
@@ -75,10 +71,10 @@ public class SalesOrderFacade {
 
     public Integer getOrderDocEntry(Integer docNum, String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select DocEntry from ORDR where DocNum = ");
+        sb.append("select o.\"DocEntry\" from ORDR o where o.\"DocNum\"=");
         sb.append(docNum);
         try {
-            return (Integer) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (Integer) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el docentry de la orden. ", e);
@@ -88,30 +84,29 @@ public class SalesOrderFacade {
 
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public List<SalesOrderDTO> findOpenOrders(boolean showAll, boolean filterGroup, String schemaName, boolean testing, String warehouseCode) {
-        EntityManager em = persistenceConf.chooseSchema(schemaName, testing, DB_TYPE);
+        EntityManager em = persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA);
         StringBuilder sb = new StringBuilder();
         sb.append("select j.docnum, j.docdate, j.cardcode, j.cardname, j.confirmed, j.items, j.comments, j.address, j.transp ");
-        sb.append("from (select f.*, COUNT(f.grupo) OVER (PARTITION BY f.cardcode) as contGrupo from ( ");
+        sb.append("from (select f.*, COUNT(f.grupo) OVER (PARTITION BY f.cardcode) as \"ContGrupo\" from ( ");
         sb.append("select t.*, ROW_NUMBER() OVER (PARTITION BY t.cardcode order by t.cardcode) as grupo from ( ");
-        sb.append("select distinct cast(enc.docnum as varchar(10)) as docnum, ");
-        sb.append("cast(enc.docdate as date) as docdate, cast(enc.cardcode as varchar(20)) as cardcode, ");
-        sb.append("cast(enc.cardname as varchar(100)) as cardname, cast(enc.confirmed as varchar(1)) as confirmed, ");
-        sb.append("(select count(1) from rdr1 det where det.docentry = enc.docentry and det.linestatus = 'O') as items, ");
-        sb.append("cast(comments as varchar(254)) as comments, cast(enc.address2 as varchar(200)) as address, ");
-        sb.append("isnull(cast(enc.u_transp as varchar(4)),'') as transp from ordr enc ");
-        sb.append("inner join rdr1 det on det.docentry = enc.docentry and det.whscode = '");
+        sb.append("select distinct cast(enc.\"DocNum\" as varchar(10)) as docnum, ");
+        sb.append("cast(enc.\"DocDate\" as date) as docdate, cast(enc.\"CardCode\" as varchar(20)) as cardcode, ");
+        sb.append("cast(enc.\"CardName\" as varchar(100)) as cardname, cast(enc.\"Confirmed\" as varchar(1)) as confirmed, ");
+        sb.append("cast((select count(1) from RDR1 det where det.\"DocEntry\" = enc.\"DocEntry\" and det.\"LineStatus\" = 'O') as int) as items, ");
+        sb.append("cast(enc.\"Comments\" as varchar(254)) as comments, cast(enc.\"Address2\" as varchar(200)) as address, ");
+        sb.append("ifnull(cast(enc.\"U_TRANSP\" as varchar(4)),'') as transp from ORDR enc ");
+        sb.append("inner join RDR1 det on det.\"DocEntry\" = enc.\"DocEntry\" and det.\"WhsCode\" = '");
         sb.append(warehouseCode);
-        sb.append("' where enc.DocStatus = 'O' and enc.U_SEPARADOR IN ('APROBADO','PREPAGO','SEDE BOGOTA') and ");
-        sb.append("        year(enc.DocDate) = year(GETDATE()) and MONTH(enc.DocDate) between MONTH(GETDATE())-1 and MONTH(GETDATE()) ");
+        sb.append("' where enc.\"DocStatus\" = 'O' and enc.\"U_SEPARADOR\" IN ('APROBADO','PREPAGO','SEDE BOGOTA') and ");
+        sb.append("        year(enc.\"DocDate\") = year(current_date) and MONTH(enc.\"DocDate\") between MONTH(current_date)-1 and MONTH(current_date) ");
         if (!showAll) {
-            sb.append("and enc.confirmed = 'Y' ");
+            sb.append("and enc.\"Confirmed\" = 'Y' ");
         }
         sb.append(") as t ) as f ) as j ");
         if (filterGroup) {
-            sb.append("where j.contGrupo > 1 ");
+            sb.append("where j.\"ContGrupo\" > 1 ");
         }
         sb.append("order by j.docdate, j.docnum");
-
         List<SalesOrderDTO> orders = new ArrayList<>();
         try {
             for (Object[] row : (List<Object[]>) em.createNativeQuery(sb.toString()).getResultList()) {
@@ -137,14 +132,14 @@ public class SalesOrderFacade {
 
     public List<Object[]> findOrdersStockAvailability(Integer orderNumber, List<String> itemCodes, String warehouseCode, String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(detalle.itemCode as varchar(20)) itemCode, cast(detalle.openQty as int) openQuantity, cast(detalle.quantity as int) quantity, ");
-        sb.append("cast(saldo.binabs as int) binAbs, cast(saldo.onhandqty as int) available, cast(ubicacion.bincode as varchar(50)) binCode, ");
-        sb.append("cast(detalle.Dscription as varchar(100)) itemName, cast(orden.docnum as int) orderNumber, ");
-        sb.append("cast(ubicacion.attr2val as varchar(5)) velocidad, cast(ubicacion.attr3val as int) secuencia, ");
-        sb.append("cast(ubicacion.attr1val as varchar(10)) binType ");
-        sb.append("from ordr orden inner join rdr1 detalle on detalle.docentry = orden.docentry and detalle.lineStatus = 'O' ");
+        sb.append("select cast(d.\"ItemCode\" as varchar(20)) itemCode, cast(d.\"OpenQty\" as int) openQuantity, cast(d.\"Quantity\" as int) quantity, ");
+        sb.append("cast(s.\"BinAbs\" as int) binAbs, cast(s.\"OnHandQty\" as int) available, cast(u.\"BinCode\" as varchar(50)) binCode, ");
+        sb.append("cast(d.\"Dscription\" as varchar(100)) itemName, cast(o.\"DocNum\" as int) orderNumber, ");
+        sb.append("cast(u.\"Attr2Val\" as varchar(5)) \"velocidad\", cast(u.\"Attr3Val\" as int) \"secuencia\", ");
+        sb.append("cast(u.\"Attr1Val\" as varchar(10)) binType ");
+        sb.append("from ORDR o inner join RDR1 d on d.\"DocEntry\" = o.\"DocEntry\" and d.\"LineStatus\" = 'O' ");
         if (itemCodes != null && !itemCodes.isEmpty()) {
-            sb.append("and detalle.itemcode in (");
+            sb.append("and d.\"ItemCode\" in (");
             for (String itemCode : itemCodes) {
                 sb.append("'");
                 sb.append(itemCode);
@@ -153,15 +148,15 @@ public class SalesOrderFacade {
             sb.deleteCharAt(sb.length() - 1);
             sb.append(") ");
         }
-        sb.append("inner join OIBQ saldo on saldo.ItemCode = detalle.ItemCode and saldo.WhsCode = '");
+        sb.append("inner join OIBQ s on s.\"ItemCode\" = d.\"ItemCode\" and s.\"WhsCode\" = '");
         sb.append(warehouseCode);
-        sb.append("' and saldo.OnHandQty > 0 inner join obin ubicacion on ubicacion.absentry = saldo.binabs and ubicacion.SysBin = 'N' ");
-        sb.append("and ubicacion.Attr1Val IN ('PICKING','STORAGE') where orden.docnum = ");
+        sb.append("' and s.\"OnHandQty\" > 0 inner join OBIN u on u.\"AbsEntry\" = s.\"BinAbs\" and u.\"SysBin\" = 'N' ");
+        sb.append("and u.\"Attr1Val\" IN ('PICKING','STORAGE') where o.\"DocNum\" = ");
         sb.append(orderNumber);
-        sb.append(" order by velocidad, secuencia ");
+        sb.append(" order by \"velocidad\", \"secuencia\" ");
         CONSOLE.log(Level.FINE, sb.toString());
         try {
-            return persistenceConf.chooseSchema(schemaName, testing, "mssql").createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar el inventario para lis items de las ordenes asignadas. ", e);
             return new ArrayList();
@@ -173,10 +168,10 @@ public class SalesOrderFacade {
             return new ArrayList();
         }
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(enc.docnum as varchar(10)) docnum, ");
-        sb.append("cast(enc.cardname as varchar(100)) cardname ");
-        sb.append("from ordr enc where enc.DocStatus = 'O' ");
-        sb.append("and enc.docnum in (");
+        sb.append("select cast(enc.\"DocNum\" as varchar(10)) docnum, ");
+        sb.append("cast(enc.\"CardName\" as varchar(100)) cardname ");
+        sb.append("from ORDR enc where enc.\"DocStatus\" = 'O' ");
+        sb.append("and enc.\"DocNum\" in (");
         for (Integer orderNumber : orderIds) {
             sb.append(orderNumber);
             sb.append(",");
@@ -184,7 +179,7 @@ public class SalesOrderFacade {
         sb.deleteCharAt(sb.length() - 1);
         sb.append(")");
         try {
-            return persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al buscar ordenes por id. ", e);
@@ -194,20 +189,23 @@ public class SalesOrderFacade {
 
     public LinkedHashMap<String, Integer> listPendingItems(Integer orderNumber, String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(det.ItemCode as varchar(20)) itemcode, cast(det.Quantity as int)as pendingQuantity, ");
-        sb.append("cast((select top 1 ubicacion.attr2val from OIBQ saldo inner join OBIN ubicacion on ubicacion.absentry = saldo.binabs and ubicacion.SysBin = 'N' ");
-        sb.append("and ubicacion.Attr1Val IN ('PICKING','STORAGE') where saldo.WhsCode = det.WhsCode and saldo.OnHandQty > 0 and saldo.ItemCode = det.ItemCode ");
-        sb.append("order by ubicacion.attr2val, ubicacion.attr3val)as varchar(5))as velocidad, cast((select top 1 ubicacion.attr3val from OIBQ saldo ");
-        sb.append("inner join OBIN ubicacion on ubicacion.absentry = saldo.binabs and ubicacion.SysBin = 'N' and ubicacion.Attr1Val IN ('PICKING','STORAGE') ");
-        sb.append("where saldo.WhsCode = det.WhsCode and saldo.OnHandQty > 0 and saldo.ItemCode = det.ItemCode order by ubicacion.attr2val, ubicacion.attr3val)as int)as secuencia ");
-        sb.append("from ORDR enc ");
-        sb.append("inner join RDR1 det on det.docentry = enc.docentry and det.Quantity > 0 ");
-        sb.append("where enc.DocStatus = 'O' and det.LineStatus = 'O' and enc.docnum =");
+        sb.append("select cast(d.\"ItemCode\" as varchar(20))as \"ItemCode\", cast(d.\"Quantity\" as int)as pendingQuantity, ");
+        sb.append(" cast((select t.\"Attr2Val\" from (select cast(u.\"Attr2Val\" as varchar(10))as \"Attr2Val\",row_number() over(partition by s.\"ItemCode\" order by cast(u.\"Attr2Val\" as varchar(10)),cast(u.\"Attr3Val\" as int))as \"fila\" ");
+        sb.append(" from OIBQ s ");
+        sb.append(" inner join OBIN u on u.\"AbsEntry\"=s.\"BinAbs\" and u.\"SysBin\"='N' and u.\"Attr1Val\" in ('PICKING','STORAGE') ");
+        sb.append(" where s.\"WhsCode\"=d.\"WhsCode\" and s.\"OnHandQty\">0 and s.\"ItemCode\"=d.\"ItemCode\")as t where t.\"fila\"=1)as varchar(5))as \"Vel\",");
+        sb.append(" cast((select r.\"Attr3Val\" from (select cast(u.\"Attr3Val\" as int)as \"Attr3Val\",row_number() over(partition by s.\"ItemCode\" order by cast(u.\"Attr2Val\" as varchar(10)),cast(u.\"Attr3Val\" as int))as \"fila\" ");
+        sb.append(" from OIBQ s ");
+        sb.append(" inner join OBIN u on u.\"AbsEntry\"=s.\"BinAbs\" and u.\"SysBin\"='N' and u.\"Attr1Val\" in ('PICKING','STORAGE') ");
+        sb.append(" where s.\"WhsCode\"=d.\"WhsCode\" and s.\"OnHandQty\">0 and s.\"ItemCode\"=d.\"ItemCode\")as r where r.\"fila\"=1)as int)as \"Sec\" ");
+        sb.append("from ORDR o ");
+        sb.append("inner join RDR1 d on d.\"DocEntry\"=o.\"DocEntry\" and d.\"Quantity\">0 ");
+        sb.append("where o.\"DocStatus\"='O' and d.\"LineStatus\"='O' and o.\"DocNum\"=");
         sb.append(orderNumber);
-        sb.append(" order by velocidad, secuencia");
+        sb.append(" order by \"Vel\",\"Sec\"");
         try {
             LinkedHashMap<String, Integer> results = new LinkedHashMap<>();
-            List<Object[]> rows = (List<Object[]>) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            List<Object[]> rows = (List<Object[]>) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
             for (Object[] col : rows) {
                 results.put((String) col[0], (Integer) col[1]);
             }
@@ -222,21 +220,21 @@ public class SalesOrderFacade {
 
     public List<Object[]> getOrderStates(String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select case when o.U_SEPARADOR='' then 'SAP NO APROB' when o.U_SEPARADOR is null then 'APP NO APROB' ");
-        sb.append(" when o.U_SEPARADOR='PENDIENTE DE PAGO' then 'PEND PAGO' else cast(o.U_SEPARADOR as varchar(20))end as Estado, ");
-        sb.append(" cast(count(o.DocNum)as int)as Pedidos, ");
-        sb.append(" cast(isnull(sum(((((((o.DocTotal+o.DiscSum)-o.VatSum)-o.TotalExpns)+o.WtSum)-o.RoundDif)-o.DiscSum)),0)as numeric(18,0))as Total ");
+        sb.append("select case when o.\"U_SEPARADOR\"='' then 'SAP NO APROB' when o.\"U_SEPARADOR\" is null then 'APP NO APROB' ");
+        sb.append(" when o.\"U_SEPARADOR\"='PENDIENTE DE PAGO' then 'PEND PAGO' else cast(o.\"U_SEPARADOR\" as varchar(20))end as \"Estado\", ");
+        sb.append(" cast(count(o.\"DocNum\")as int)as Pedidos, ");
+        sb.append(" cast(ifnull(sum(((((((o.\"DocTotal\"+o.\"DiscSum\")-o.\"VatSum\")-o.\"TotalExpns\")+o.\"WTSum\")-o.\"RoundDif\")-o.\"DiscSum\")),0)as numeric(18,0))as Total ");
         sb.append("from  ORDR o ");
-        sb.append("where o.DocStatus='O' and o.U_DESP='N' and cast(o.DocDate as Date) between cast(GETDATE()-30 as date) and cast(GETDATE()as date) ");
-        sb.append("group by o.U_SEPARADOR ");
+        sb.append("where o.\"DocStatus\"='O' and o.\"U_DESP\"='N' and o.\"DocDate\" between ADD_DAYS(TO_DATE(current_date,'YYYY-MM-DD'),-3) and current_date ");
+        sb.append("group by o.\"U_SEPARADOR\" ");
         sb.append("union all ");
-        sb.append("select 'ENTREGA'as Estado,cast(count(e.DocNum)as int)as Pedidos, ");
-        sb.append(" cast(isnull(sum(((((((e.DocTotal+e.DiscSum)-e.VatSum)-e.TotalExpns)+e.WtSum)-e.RoundDif)-e.DiscSum)),0)as numeric(18,0))as Total ");
+        sb.append("select 'ENTREGA'as Estado,cast(count(e.\"DocNum\")as int)as Pedidos, ");
+        sb.append(" cast(ifnull(sum(((((((e.\"DocTotal\"+e.\"DiscSum\")-e.\"VatSum\")-e.\"TotalExpns\")+e.\"WTSum\")-e.\"RoundDif\")-e.\"DiscSum\")),0)as numeric(18,0))as Total ");
         sb.append("from  ODLN e ");
-        sb.append("where e.CANCELED='N' and e.DocStatus='O' and e.DocType='I' and cast(e.DocDate as date) between cast(GETDATE()-30 as date) and cast(GETDATE()as date) ");
-        sb.append("order by Estado ASC");
+        sb.append("where e.\"CANCELED\"='N' and e.\"DocStatus\"='O' and e.\"DocType\"='I' and e.\"DocDate\" between ADD_DAYS(TO_DATE(current_date,'YYYY-MM-DD'),-3) and current_date ");
+        sb.append("order by \"Estado\" ASC");
         try {
-            return persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error listado la estadistica de las ordenes.", e);
@@ -246,11 +244,11 @@ public class SalesOrderFacade {
 
     public BigDecimal getTotalOrderMonth(String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(sum((DocTotal - VatSum + DiscSum - TotalExpns + WTSum) - DiscSum) as numeric(18,0)) as TotalPedido ");
-        sb.append("from ORDR ");
-        sb.append("where CANCELED = 'N' AND YEAR(DocDate) = YEAR(GETDATE()) AND MONTH(DocDate) = MONTH(GETDATE())");
+        sb.append("select cast(sum((o.\"DocTotal\" - o.\"VatSum\" + o.\"DiscSum\" - o.\"TotalExpns\" + o.\"WTSum\") - o.\"DiscSum\") as numeric(18,0)) as TotalPedido ");
+        sb.append("from ORDR o ");
+        sb.append("where o.\"CANCELED\" = 'N' AND YEAR(o.\"DocDate\") = YEAR(current_date) AND MONTH(o.\"DocDate\") = MONTH(current_date)");
         try {
-            return (BigDecimal) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (BigDecimal) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el total de ordenes mensuales.");
@@ -258,16 +256,17 @@ public class SalesOrderFacade {
         return null;
     }
 
-    public Long getLineNum(Integer orderNumber, String itemcode, String companyName, boolean testing) {
+    public Long getLineNum(Integer orderNumber, String itemCode, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select top 1 det.linenum from ordr enc inner join rdr1 det on det.docentry = enc.docentry ");
-        sb.append("where enc.docnum = ");
+        sb.append("select det.\"LineNum\" from ORDR enc inner join RDR1 det on det.\"DocEntry\" = enc.\"DocEntry\" ");
+        sb.append("where enc.\"DocNum\" = ");
         sb.append(orderNumber);
-        sb.append(" and det.itemcode = '");
-        sb.append(itemcode);
-        sb.append("' and linestatus = 'O'");
+        sb.append(" and det.\"ItemCode\" = '");
+        sb.append(itemCode);
+        sb.append("' and det.\"LineStatus\" = 'O' ");
+        sb.append("limit 1");
         try {
-            return ((Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult()).longValue();
+            return ((Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult()).longValue();
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el numero de linea de una orden. ", e);
@@ -277,20 +276,20 @@ public class SalesOrderFacade {
 
     public List<Object[]> listRemainingStock(Integer orderNumber, String warehouseCode, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(detalle.itemCode as varchar(20)) itemCode, cast(detalle.openQty as int) openQuantity ");
-        sb.append(", cast(detalle.quantity as int) quantity, cast(detalle.Dscription as varchar(100)) itemName ");
-        sb.append(", cast(orden.docnum as int) orderNumber, cast(saldo.onhand as int) availableTotal, (");
-        sb.append("select cast(isnull(sum(onhandqty), 0) as int) availableBins from oibq saldoUbicacion ");
-        sb.append("inner join obin ubicacion on ubicacion.absentry = saldoUbicacion.binAbs ");
-        sb.append("where saldoUbicacion.itemcode = detalle.ItemCode and ubicacion.attr1val IN ('PICKING','STORAGE') ");
-        sb.append(") availableBins from ordr orden ");
-        sb.append("inner join rdr1 detalle on detalle.docentry = orden.docentry and detalle.lineStatus = 'O' ");
-        sb.append("inner join oitw saldo on saldo.whscode = '");
+        sb.append("select cast(d.\"ItemCode\" as varchar(20)) itemCode, cast(d.\"OpenQty\" as int) openQuantity, ");
+        sb.append(" cast(d.\"Quantity\" as int) quantity, cast(d.\"Dscription\" as varchar(100)) itemName, ");
+        sb.append(" cast(o.\"DocNum\" as int) orderNumber, cast(s.\"OnHand\" as int) availableTotal,( ");
+        sb.append(" select cast(ifnull(sum(o.\"OnHandQty\"), 0) as int)as \"availableBins\" from OIBQ o ");
+        sb.append(" inner join OBIN u on u.\"AbsEntry\" = o.\"BinAbs\" ");
+        sb.append(" where o.\"ItemCode\" = d.\"ItemCode\" and u.\"Attr1Val\" IN ('PICKING','STORAGE') ");
+        sb.append(")as \"availableBins\" from ORDR o ");
+        sb.append("inner join RDR1 d on d.\"DocEntry\" = o.\"DocEntry\" and d.\"LineStatus\" = 'O' ");
+        sb.append("inner join OITW s on s.\"WhsCode\" = '");
         sb.append(warehouseCode);
-        sb.append("' and detalle.itemcode = saldo.itemcode where orden.docnum = ");
+        sb.append("' and d.\"ItemCode\" = s.\"ItemCode\" where o.\"DocNum\" = ");
         sb.append(orderNumber);
         try {
-            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el saldo disponible para la orden. ", e);
@@ -300,18 +299,18 @@ public class SalesOrderFacade {
 
     public Object[] retrieveStickerInfo(String orderNumbers, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select distinct cast(o.cardname as varchar(100))as cardname,cast(ISNULL(dir.StreetS,ISNULL(dir.Address2S,ISNULL(dir.Address3S,'')))as varchar(220))as address,cast(transp.name as varchar(50))as trans, ");
-        sb.append(" cast(dir.CityS as varchar(100))as city,ISNULL(cast(dep.Name as varchar(100)),'')as depart,cast(pg.PymntGroup as varchar(50))as pay,cast(o.CardCode as varchar(50))as cardcode ");
+        sb.append("select distinct cast(o.\"CardName\" as varchar(100))as cardname,cast(ifnull(d.\"StreetS\",ifnull(d.\"Address2S\",ifnull(d.\"Address3S\",'')))as varchar(220))as address,cast(t.\"Name\" as varchar(50))as trans, ");
+        sb.append(" cast(d.\"CityS\" as varchar(100))as city,ifnull(cast(p.\"Name\" as varchar(100)),'')as part,cast(pg.\"PymntGroup\" as varchar(50))as pay,cast(o.\"CardCode\" as varchar(50))as cardcode ");
         sb.append("from  ORDR o ");
-        sb.append("inner join RDR12 dir ON o.DocEntry=dir.DocEntry ");
-        sb.append("left  join [@BPCO_DEP] dep ON dep.Code=dir.StateS ");
-        sb.append("inner join [@transp] transp ON transp.code=o.u_transp ");
-        sb.append("inner join OCTG pg on pg.GroupNum=o.GroupNum ");
-        sb.append("where o.docnum IN (");
+        sb.append("inner join RDR12 d ON o.\"DocEntry\"=d.\"DocEntry\" ");
+        sb.append("left  join \"@BPCO_DEP\" p ON p.\"Code\"=d.\"StateS\" ");
+        sb.append("inner join \"@TRANSP\" t ON t.\"Code\"=o.\"U_TRANSP\" ");
+        sb.append("inner join OCTG pg on pg.\"GroupNum\"=o.\"GroupNum\" ");
+        sb.append("where o.\"DocNum\" IN (");
         sb.append(orderNumbers);
         sb.append(")");
         try {
-            return (Object[]) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (Object[]) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los datos para imprimir la etiqueta de packing. ", e);
@@ -319,38 +318,15 @@ public class SalesOrderFacade {
         return null;
     }
 
-    public String listNumAtCards(String orderNumbers, String companyName, boolean testing) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("select cast(numatcard as varchar(10)) from ordr where docnum in (");
-        sb.append(orderNumbers);
-        sb.append(") and numatcard is not null");
-        try {
-            List<String> numAtCardList = (List<String>) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
-            StringBuilder numAtCardText = new StringBuilder();
-            for (String numAtCard : numAtCardList) {
-                numAtCardText.append(numAtCard);
-                numAtCardText.append(",");
-            }
-            if (numAtCardText.length() == 0 || numAtCardText.toString().equals(",")) {
-                return "N/A";
-            }
-            numAtCardText.delete(numAtCardText.length() - 1, numAtCardText.length());
-            return numAtCardText.toString();
-        } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los numAtCard del packingList. ", e);
-            return "N/A";
-        }
-    }
-
     public List<Object[]> listPendingOrdersByInvoice(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select DISTINCT cast(e.DocNum as int) as entrega, cast(o.DocNum as int) as orden, cast(e.DocDate as date) as fechaEntrega, ");
-        sb.append("       cast(o.DocDate as date) as fechaOrden, cast(e.DocTotal as numeric(18,0)) as total, cast((select top 1 d.WhsCode from RDR1 d where d.DocEntry=o.DocEntry) as varchar(20)) as almacen ");
+        sb.append("select distinct cast(e.\"DocNum\" as int) as entrega, cast(o.\"DocNum\" as int) as orden, cast(e.\"DocDate\" as date) as fechaEntrega, ");
+        sb.append("      cast(o.\"DocDate\" as date) as fechaOrden, cast(e.\"DocTotal\" as numeric(18,0)) as total, cast((select max(d.\"WhsCode\") from RDR1 d where d.\"DocEntry\"=o.\"DocEntry\") as varchar(20)) as almacen ");
         sb.append("from  ORDR o ");
-        sb.append("inner join ODLN e ON o.DocNum = e.U_NUNFAC ");
-        sb.append("where e.CANCELED='N' and e.DocStatus='O' and e.DocType='I' and o.DocType='I' and o.CANCELED='N' and cast(o.DocDate as Date) between cast(GETDATE()-10 as date) and cast(GETDATE() as date)");
+        sb.append("inner join ODLN e ON o.\"DocNum\" = e.\"U_NUNFAC\" ");
+        sb.append("where e.\"CANCELED\"='N' and e.\"DocStatus\"='O' and e.\"DocType\"='I' and o.\"DocType\"='I' and o.\"CANCELED\"='N' and o.\"DocDate\" between ADD_DAYS(TO_DATE(current_date,'YYYY-MM-DD'),-10) and current_date");
         try {
-            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error listando las ordenes pendientes por facturar.");
@@ -360,21 +336,22 @@ public class SalesOrderFacade {
 
     public List<Object[]> listOrdersOfDay(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(GETDATE()-v.number as date)as Fecha,isnull(t.TotalOrder,0)as TotalOrder,isnull(t.Abiertas,0)as Abiertas,isnull(t.Cerradas,0)as Cerradas,isnull(t.Monto,0)as Monto ");
-        sb.append("from master.dbo.spt_values v ");
-        sb.append(" left join( ");
-        sb.append("  select cast(enc.DocDate as date)as Fecha,cast(COUNT(enc.DocNum)as int)as TotalOrder,");
-        sb.append("   (select cast(COUNT(DocNum)as int) from ORDR e where DocStatus='O' and cast(e.DocDate as date)=cast(enc.DocDate as date))as Abiertas, ");
-        sb.append("   (select cast(COUNT(DocNum)as int) from ORDR e where DocStatus='C' and cast(e.DocDate as date)=cast(enc.DocDate as date))as Cerradas, ");
-        sb.append("   SUM(cast(enc.DocTotal-enc.VatSum as numeric(18,2)))as Monto ");
-        sb.append("  from ORDR enc ");
-        sb.append("  where enc.CANCELED='N' and cast(enc.DocDate as date) between cast(GETDATE()-4 as date) and cast(GETDATE()as date) ");
-        sb.append("  group by enc.DocDate ");
-        sb.append(" )as t ON t.Fecha=cast(GETDATE()-v.number as date) ");
-        sb.append("where (name IS NULL)AND(number BETWEEN 0 AND 4) ");
-        sb.append("order by v.number desc");
+        sb.append("select cast(ADD_DAYS(TO_DATE(current_date,'YYYY-MM-DD'),v.\"U_Value\")as varchar(20))as Fecha, ");
+        sb.append(" ifnull(t.\"TotalOrder\",0)as TotalOrder,ifnull(t.\"Abiertas\",0)as Abiertas,ifnull(t.\"Cerradas\",0)as Cerradas,ifnull(t.\"Monto\",0)as Monto ");
+        sb.append("from \"@SPT_VALUES\" v ");
+        sb.append("left join( ");
+        sb.append(" select cast(enc.\"DocDate\" as date)as \"Fecha\",cast(count(enc.\"DocNum\")as int)as \"TotalOrder\", ");
+        sb.append("  (select cast(count(e.\"DocNum\")as int) from ORDR e where e.\"DocStatus\"='O' and cast(e.\"DocDate\" as date)=cast(enc.\"DocDate\" as date))as \"Abiertas\", ");
+        sb.append("  (select cast(count(e.\"DocNum\")as int) from ORDR e where e.\"DocStatus\"='C' and cast(e.\"DocDate\" as date)=cast(enc.\"DocDate\" as date))as \"Cerradas\", ");
+        sb.append("   sum(cast(enc.\"DocTotal\"-enc.\"VatSum\" as numeric(18,2)))as \"Monto\" ");
+        sb.append(" from ORDR enc ");
+        sb.append(" where enc.\"CANCELED\"='N' and enc.\"DocDate\" between ADD_DAYS(TO_DATE(current_date,'YYYY-MM-DD'),-4) and current_date ");
+        sb.append(" group by enc.\"DocDate\" ");
+        sb.append(")as t on t.\"Fecha\"=ADD_MONTHS(TO_DATE(current_date,'YYYY-MM-DD'),v.\"U_Value\") ");
+        sb.append("where v.\"U_Value\" between 1 and 4 ");
+        sb.append("order by v.\"U_Value\" asc");
         try {
-            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando las ordenes del dia para la empresa " + companyName, e);
@@ -384,78 +361,37 @@ public class SalesOrderFacade {
 
     public String getCardCode(String order) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(cardCode as varchar(20))as cardCode from ORDR where DocNum=");
+        sb.append("select cast(o.\"CardCode\" as varchar(20))as cardCode from ORDR o where o.\"DocNum\"=");
         sb.append(order);
         try {
-            return (String) persistenceConf.chooseSchema("IGB", false, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (String) persistenceConf.chooseSchema("IGB", false, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
         }
         return null;
     }
 
-    /*public void updatePickingOrderLine(Integer orderEntry, String item, String companyName, boolean testing) {
-        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaUpdate<SalesOrderDetail> cu = cb.createCriteriaUpdate(SalesOrderDetail.class);
-        Root<SalesOrderDetail> root = cu.from(SalesOrderDetail.class);
-
-        cu.set(root.get(SalesOrderDetail_.uPicking), "Y");
-        cu.where(cb.and(cb.equal(root.get(SalesOrderDetail_.docEntry), orderEntry)), cb.equal(root.get(SalesOrderDetail_.itemCode), item));
-        try {
-            em.createQuery(cu).executeUpdate();
-        } catch (NoResultException ex) {
-        } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el campo [uPicking] en el detalle de la orden #{0} para el item {0}", new Object[]{orderEntry, item});
-        }
-    }*/
 
     public boolean closeOrderLines(Integer orderEntry, HashSet<String> items, String companyName, boolean testing) {
-        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaUpdate<SalesOrderDetail> cu = cb.createCriteriaUpdate(SalesOrderDetail.class);
-        Root<SalesOrderDetail> root = cu.from(SalesOrderDetail.class);
+        String itms = "";
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA);
+        StringBuilder sb = new StringBuilder();
+        sb.append("update RDR1 set \"LineStatus\"='C' where \"DocEntry\"=");
+        sb.append(orderEntry);
+        sb.append(" and \"ItemCode\" in (");
 
-        Expression<String> parentExpression = root.get(SalesOrderDetail_.itemCode);
-        Predicate parentPredicate = parentExpression.in(items);
+        for (String it : items) {
+            itms += "'" + it + "',";
+        }
 
-        cu.set(root.get(SalesOrderDetail_.lineStatus), 'C');
-        cu.where(cb.and(cb.equal(root.get(SalesOrderDetail_.docEntry), orderEntry)), parentPredicate);
+        sb.append(itms.substring(0, itms.length() - 1));
+        sb.append(")");
         try {
-            em.createQuery(cu).executeUpdate();
+            em.createNativeQuery(sb.toString()).executeUpdate();
             return true;
         } catch (NoResultException ex) {
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar las lineas de la orden {0} para los productos que no tienen saldo: {1}", new Object[]{orderEntry, parentExpression});
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar las lineas de la orden {0} para los productos que no tienen saldo: {1}", new Object[]{orderEntry, items});
         }
         return false;
     }
-
-    /*public boolean modifySalesOrderQuantity(Integer orderEntry, String itemCode, Integer newQuantity, BigDecimal price, String companyName, boolean testing) {
-        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaUpdate<SalesOrderDetail> cu = cb.createCriteriaUpdate(SalesOrderDetail.class);
-        Root<SalesOrderDetail> root = cu.from(SalesOrderDetail.class);
-
-        cu.set(root.get(SalesOrderDetail_.quantity), newQuantity);
-        cu.set(root.get(SalesOrderDetail_.openQty), newQuantity);
-        cu.set(root.get(SalesOrderDetail_.openCreQty), newQuantity);
-        cu.set(root.get(SalesOrderDetail_.packQty), newQuantity);
-        cu.set(root.get(SalesOrderDetail_.pcQuantity), newQuantity);
-        cu.set(root.get(SalesOrderDetail_.invQty), newQuantity);
-        cu.set(root.get(SalesOrderDetail_.openInvQty), newQuantity);
-        cu.set(root.get(SalesOrderDetail_.lineTotal), price.multiply(new BigDecimal(newQuantity)));
-        cu.set(root.get(SalesOrderDetail_.openSum), price.multiply(new BigDecimal(newQuantity)));
-        cu.set(root.get(SalesOrderDetail_.totalSumSy), price.multiply(new BigDecimal(newQuantity)));
-        cu.set(root.get(SalesOrderDetail_.openSumSys), price.multiply(new BigDecimal(newQuantity)));
-
-        cu.where(cb.and(cb.equal(root.get(SalesOrderDetail_.itemCode), itemCode)), cb.equal(root.get(SalesOrderDetail_.docEntry), orderEntry));
-        try {
-            em.createQuery(cu).executeUpdate();
-            return true;
-        } catch (NoResultException ex) {
-        } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al modificar la cantidad del item {1} para la orden {0}", new Object[]{orderEntry, itemCode});
-        }
-        return false;
-    }*/
 }

@@ -17,8 +17,6 @@ import java.util.logging.Logger;
 public class ShippingOrderFacade {
     private static final Logger CONSOLE = Logger.getLogger(ShippingOrder.class.getSimpleName());
     private static final String DB_TYPE_WALI = Constants.DATABASE_TYPE_WALI;
-    private static final String DB_TYPE_MSSQL = Constants.DATABASE_TYPE_MSSQL;
-
     @EJB
     private PersistenceConf persistenceConf;
 
@@ -40,17 +38,5 @@ public class ShippingOrderFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar las transportadoras planilladas.", e);
         }
         return null;
-    }
-
-    public Integer getOrdersForShipping(String companyName, boolean testing) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("select cast(count(f.DocNum) as int) as ordenes from OINV f where f.U_SHIPPING = 'N' and f.U_TOT_CAJ > 0");
-        try {
-            return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_MSSQL).createNativeQuery(sb.toString()).getSingleResult();
-        } catch (NoResultException ex) {
-        } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el total de ordenes pendientes por shipping.", e);
-        }
-        return 0;
     }
 }

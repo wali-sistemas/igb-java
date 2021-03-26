@@ -25,10 +25,8 @@ import java.util.logging.Logger;
  */
 @Stateless
 public class PackingOrderFacade {
-
     private static final Logger CONSOLE = Logger.getLogger(PackingOrderFacade.class.getSimpleName());
     private static final String DB_TYPE_WALI = Constants.DATABASE_TYPE_WALI;
-
     @EJB
     private PersistenceConf persistenceConf;
 
@@ -37,10 +35,6 @@ public class PackingOrderFacade {
 
     public void create(PackingOrder packingOrder, String companyName, boolean testing) {
         persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).persist(packingOrder);
-    }
-
-    public PackingOrder edit(PackingOrder packingOrder, String companyName, boolean testing) {
-        return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).merge(packingOrder);
     }
 
     public PackingOrder find(Long idPackingOrder, String companyName, boolean testing) {
