@@ -22,17 +22,16 @@ import java.util.logging.Logger;
 @Stateless
 public class InvoiceFacade {
     private static final Logger CONSOLE = Logger.getLogger(InvoiceFacade.class.getSimpleName());
-    private static final String DB_TYPE = Constants.DATABASE_TYPE_MSSQL;
-
+    private static final String DB_TYPE_HANA = Constants.DATABASE_TYPE_HANA;
     @EJB
     private PersistenceConf persistenceConf;
 
     public Integer getDocNumInvoice(Long docEntry, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(f.DocNum as int) as DocNum from OINV f where f.DocEntry =");
+        sb.append("select cast(f.\"DocNum\" as int) as DocNum from OINV f where f.\"DocEntry\"=");
         sb.append(docEntry);
         try {
-            return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al cosultar el DocNum de la factura de id #[" + docEntry.toString() + "]", e);
             return null;
@@ -41,13 +40,13 @@ public class InvoiceFacade {
 
     public Integer getDocNumDelivery(String docNum, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select DISTINCT cast(d.BaseRef as int) as BaseRef ");
-        sb.append("from   OINV f ");
-        sb.append("inner  join INV1 d ON d.DocEntry = f.DocEntry where f.DocNum = '");
+        sb.append("select distinct cast(d.\"BaseRef\" as int) as BaseRef ");
+        sb.append("from OINV f ");
+        sb.append("inner join INV1 d ON d.\"DocEntry\"=f.\"DocEntry\" where f.\"DocNum\"='");
         sb.append(docNum);
         sb.append("'");
         try {
-            return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la entrega para la factura #[" + docNum + "]");
@@ -57,30 +56,30 @@ public class InvoiceFacade {
 
     public List<Object[]> findListInvoicesShipping(String transport, String invoice, String companyName, String warehouseCode, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select top 12 CAST(f.DocDate as date)as DocDate,CAST(f.U_TOT_CAJ as int)as Box,CAST(f.DocNum as varchar(10))as DocNum, ");
-        sb.append("       CAST(f.CardCode as varchar(20))as CardCode,CAST(f.CardName as varchar(100))as CardName, ");
-        sb.append("       CAST(t.Name as varchar(15))as Transport,CAST(d.StreetS as varchar(100))as Street, ");
-        sb.append("       CAST(l.Name as varchar(50))as Depart,CAST(d.CityS as varchar(50))as City,CAST(d.BlockS as varchar(20))as CodCity ");
-        sb.append("from  OINV f ");
-        sb.append("inner join INV12 d ON d.DocEntry = f.DocEntry ");
-        sb.append("inner join [@TRANSP] t ON t.Code = f.U_TRANSP ");
-        sb.append("inner join OCST l ON l.Code = d.StateS and l.Country = 'CO' ");
-        sb.append("where (select top 1 d.WhsCode from INV1 d where d.DocEntry = f.DocEntry)='");
+        sb.append("select cast(f.\"DocDate\" as date)as DocDate,cast(f.\"U_TOT_CAJ\" as int)as Box,cast(f.\"DocNum\" as varchar(10))as DocNum, ");
+        sb.append(" cast(f.\"CardCode\" as varchar(20))as CardCode,cast(f.\"CardName\" as varchar(100))as CardName, ");
+        sb.append(" cast(t.\"Name\" as varchar(15))as Transport,cast(d.\"StreetS\" as varchar(100))as Street, ");
+        sb.append(" cast(l.\"Name\" as varchar(50))as Depart,cast(d.\"CityS\" as varchar(50))as City,cast(d.\"BlockS\" as varchar(20))as CodCity ");
+        sb.append("from OINV f ");
+        sb.append("inner join INV12 d on d.\"DocEntry\"=f.\"DocEntry\" ");
+        sb.append("inner join \"@TRANSP\" t on t.\"Code\"=f.\"U_TRANSP\" ");
+        sb.append("inner join OCST l on l.\"Code\"=d.\"StateS\" and l.\"Country\"='CO' ");
+        sb.append("where(select max(d.\"WhsCode\")from INV1 d where d.\"DocEntry\" = f.\"DocEntry\")='");
         sb.append(warehouseCode);
-        sb.append("' and f.U_SHIPPING='N' and f.U_TOT_CAJ>0 ");
+        sb.append("' and f.\"U_SHIPPING\"='N' and f.\"U_TOT_CAJ\">0 ");
         if (!transport.equals("*")) {
-            sb.append("and cast(t.Name as varchar(15))='");
+            sb.append("and cast(t.\"Name\" as varchar(15))='");
             sb.append(transport);
             sb.append("' ");
         }
         if (!invoice.isEmpty()) {
-            sb.append("and f.DocNum='");
+            sb.append("and f.\"DocNum\"='");
             sb.append(invoice);
             sb.append("' ");
         }
-        sb.append("order by f.DocDate desc,t.Name ASC");
+        sb.append("order by f.\"DocDate\" desc,t.\"Name\" ASC limit 12");
         try {
-            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException e) {
         } catch (Exception ex) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando las facturas para shipping de la empresa [" + companyName + "]");
@@ -90,14 +89,14 @@ public class InvoiceFacade {
 
     public List<String> getListTransport(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select DISTINCT CAST(t.Name as varchar(15)) as Transport ");
-        sb.append("from   OINV f ");
-        sb.append("inner  join INV12 d ON d.DocEntry = f.DocEntry ");
-        sb.append("inner  join [@TRANSP] t ON t.Code = f.U_TRANSP ");
-        sb.append("inner  join OCST l ON l.Code = d.StateS and l.Country = 'CO' ");
-        sb.append("where  f.U_SHIPPING = 'N' and f.U_TOT_CAJ > 0 ");
+        sb.append("select distinct CAST(t.\"Name\" as varchar(15)) as Transport ");
+        sb.append("from OINV f ");
+        sb.append("inner join INV12 d on d.\"DocEntry\"=f.\"DocEntry\" ");
+        sb.append("inner join \"@TRANSP\" t on t.\"Code\"=f.\"U_TRANSP\" ");
+        sb.append("inner join OCST l on l.Code = d.StateS and l.Country='CO' ");
+        sb.append("where f.U_SHIPPING='N' and f.U_TOT_CAJ>0 ");
         try {
-            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException e) {
         } catch (Exception ex) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error listando las transportadoras.");
@@ -106,60 +105,58 @@ public class InvoiceFacade {
     }
 
     public void updateFieldShipping(Integer docNum, String companyName, boolean testing) {
-        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaUpdate<Invoice> cu = cb.createCriteriaUpdate(Invoice.class);
-        Root<Invoice> root = cu.from(Invoice.class);
-        cu.set(root.get(Invoice_.uShipping), 'S');
-        cu.where(cb.equal(root.get(Invoice_.docNum), docNum));
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA);
+        StringBuilder sb = new StringBuilder();
+        sb.append("update oinv set \"U_SHIPPING\"='S' where \"DocNum\"=");
+        sb.append(docNum);
         try {
-            em.createQuery(cu).executeUpdate();
+            em.createNativeQuery(sb.toString()).executeUpdate();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando el shipping para la factura #[" + docNum.toString() + "]");
         }
     }
 
     public void updateFieldTotalBox(Integer docNum, Integer totalBox, String companyName, boolean testing) {
-        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaUpdate<Invoice> cu = cb.createCriteriaUpdate(Invoice.class);
-        Root<Invoice> root = cu.from(Invoice.class);
-        cu.set(root.get(Invoice_.uTotalCaja), totalBox);
-        cu.where(cb.equal(root.get(Invoice_.docNum), docNum));
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA);
+        StringBuilder sb = new StringBuilder();
+        sb.append("update OINV set \"U_TOT_CAJ\"=");
+        sb.append(totalBox);
+        sb.append("where \"DocNum\"=");
+        sb.append(docNum);
         try {
-            em.createQuery(cu).executeUpdate();
+            em.createNativeQuery(sb.toString()).executeUpdate();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el total de cajas para la factura #[", docNum.toString() + "]");
         }
     }
 
-    public void updateNroGuia(String docNums, String guia, String companyName, boolean testing) {
-        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE);
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaUpdate<Invoice> cu = cb.createCriteriaUpdate(Invoice.class);
-        Root<Invoice> root = cu.from(Invoice.class);
-        cu.set(root.get(Invoice_.uGuia), guia);
-        cu.where(cb.equal(root.get(Invoice_.docNum), docNums));
+    public void updateNroGuia(String docNum, String guia, String companyName, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA);
+        StringBuilder sb = new StringBuilder();
+        sb.append("update OINV set \"U_UBIC1\"=");
+        sb.append(guia);
+        sb.append("where \"DocNum\"=");
+        sb.append(docNum);
         try {
-            em.createQuery(cu).executeUpdate();
+            em.createNativeQuery(sb.toString()).executeUpdate();
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar la guia para la(s) factura(s) #[", docNums.toString() + "]");
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar la guia para la(s) factura(s) #[", docNum.toString() + "]");
         }
     }
 
     public Object[] getShippingInformation(Integer DocNum, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(d.StreetS as varchar(45)) as Direccion, cast(CityS as varchar(30)) as Ciudad, cast(m.Name as varchar(30)) as Departamento, ");
-        sb.append("       cast(s.Phone2 as varchar(15)) as Telefono, cast(f.U_PESO_BRUTO as int) as Peso, cast(f.U_VR_DECLARADO as int) as ValorDeclarado, ");
-        sb.append("       cast(f.U_UBIC1 as varchar(15)) as guia, cast(f.U_OBSERVACION as varchar(45)) as Comentario, cast(t.Name as varchar(45)) as Transporte ");
-        sb.append("from   OINV f ");
-        sb.append("inner  join INV12 d ON d.DocEntry = f.DocEntry ");
-        sb.append("inner  join OCST  m ON m.Code = d.StateS AND m.Country = 'CO' ");
-        sb.append("inner  join OCRD  s ON s.CardCode = f.CardCode ");
-        sb.append("inner  join [@TRANSP] t ON t.Code = U_TRANSP where DocNum = ");
+        sb.append("select cast(d.\"StreetS\" as varchar(45)) as Direccion, cast(d.\"CityS\" as varchar(30)) as Ciudad, cast(m.\"Name\" as varchar(30)) as Departamento, ");
+        sb.append(" cast(s.\"Phone2\" as varchar(15)) as Telefono, cast(f.\"U_PESO_BRUTO\" as int) as Peso, cast(\"f.U_VR_DECLARADO\" as int) as ValorDeclarado, ");
+        sb.append(" cast(f.\"U_UBIC1\" as varchar(15)) as guia, cast(f.\"U_OBSERVACION\" as varchar(45)) as Comentario, cast(t.\"Name\" as varchar(45)) as Transporte ");
+        sb.append("from OINV f ");
+        sb.append("inner join INV12 d on d.\"DocEntry\" = f.\"DocEntry\" ");
+        sb.append("inner join OCST  m on m.\"Code\" = d.\"StateS\" AND m.\"Country\"='CO' ");
+        sb.append("inner join OCRD  s on s.\"CardCode\" = f.\"CardCode\" ");
+        sb.append("inner join \"@TRANSP\" t ON t.\"Code\" = \"U_TRANSP\" where f.\"DocNum\"=");
         sb.append(DocNum);
         try {
-            return (Object[]) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (Object[]) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la información para shipping de la factura #[" + DocNum.toString() + "]");
@@ -169,22 +166,22 @@ public class InvoiceFacade {
 
     public List<Object[]> getAnnualSales(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select CAST(t.año AS varchar(4)) as año, CAST(SUM(t.costoTotalVenta - t.costoTotalNota) as numeric(18,0)) AS costoTotal, CAST(SUM(t.valorTotalVenta - t.valorTotalNota) AS numeric(18,0)) AS valorTotal, ");
-        sb.append("CAST(((SUM(t.valorTotalVenta - t.valorTotalNota) - SUM(t.costoTotalVenta - t.costoTotalNota)) / SUM(t.valorTotalVenta - t.valorTotalNota)) * 100 as numeric(18,2)) AS margenAnual ");
-        sb.append("from ( select 'FV' as Doc, CAST(YEAR(f.DocDate) as varchar(4)) AS año, CAST(SUM((CAST(d.Quantity AS int) * CAST(d.StockPrice AS numeric(18,0)))) as numeric(18,0)) AS costoTotalVenta, 0 AS costoTotalNota, ");
-        sb.append("       CAST(SUM((CAST(d.LineTotal AS numeric(18,0)) - (CAST(d.LineTotal AS numeric(18,0)) * CAST(f.DiscPrcnt AS int))/100)) as numeric(18,0)) AS valorTotalVenta, 0 AS valorTotalNota ");
+        sb.append("select cast(t.\"ano\" as varchar(4)) as ano, cast(sum(t.costoTotalVenta - t.costoTotalNota) as numeric(18,0)) as costoTotal, cast(sum(t.valorTotalVenta - t.valorTotalNota) as numeric(18,0)) as valorTotal, ");
+        sb.append("cast(((sum(t.valorTotalVenta - t.valorTotalNota) - sum(t.costoTotalVenta - t.costoTotalNota)) / sum(t.valorTotalVenta - t.valorTotalNota)) * 100 as numeric(18,2)) as margenAnual ");
+        sb.append("from ( select 'FV' as Doc, cast(year(f.\"DocDate\") as varchar(4)) as \"ano\", cast(sum((cast(d.\"Quantity\" as int) * cast(d.\"StockPrice\" as numeric(18,0)))) as numeric(18,0)) as costoTotalVenta, 0 as costoTotalNota, ");
+        sb.append("       cast(sum((cast(d.\"LineTotal\" as numeric(18,0)) - (cast(d.\"LineTotal\" as numeric(18,0)) * cast(f.\"DiscPrcnt\" as int))/100)) as numeric(18,0)) as valorTotalVenta, 0 as valorTotalNota ");
         sb.append("from OINV f ");
-        sb.append("Inner Join INV1 d ON d.DocEntry = f.DocEntry ");
-        sb.append("Where f.DocType = 'I' and YEAR(f.DocDate) between YEAR(DATEADD (YEAR, -3, GETDATE())) AND YEAR(GETDATE()) Group by YEAR(f.DocDate) ");
+        sb.append("inner Join INV1 d on d.\"DocEntry\" = f.\"DocEntry\" ");
+        sb.append("where f.\"DocType\" = 'I' and f.\"DocDate\" between ADD_YEARS(TO_DATE(current_date,'YYYY-MM-DD'),-3) and current_date Group by year(f.\"DocDate\") ");
         sb.append("UNION ALL ");
-        sb.append("select 'NC' as Doc, CAST(YEAR(n.DocDate) as varchar(4)) AS año, 0 AS costoTotalVenta, CAST(SUM((CAST(d.Quantity AS int) * CAST(d.StockPrice AS numeric(18,0)))) as numeric(18,0)) AS costoTotalNota, 0 AS valorTotalVenta, ");
-        sb.append("       CAST(SUM((CAST(d.LineTotal AS numeric(18,0)) - (CAST(d.LineTotal AS numeric(18,0)) * CAST(n.DiscPrcnt AS int))/100)) as numeric(18,0)) AS valorTotalNota ");
+        sb.append("select 'NC' as Doc, cast(year(n.\"DocDate\") as varchar(4)) as \"ano\", 0 as costoTotalVenta, cast(sum((cast(d.\"Quantity\" as int) * cast(d.\"StockPrice\" as numeric(18,0)))) as numeric(18,0)) as costoTotalNota, 0 as valorTotalVenta, ");
+        sb.append("       cast(sum((cast(d.\"LineTotal\" as numeric(18,0)) - (cast(d.\"LineTotal\" as numeric(18,0)) * cast(n.\"DiscPrcnt\" as int))/100)) as numeric(18,0)) as valorTotalNota ");
         sb.append("from ORIN n ");
-        sb.append("Inner Join RIN1 d ON d.DocEntry = n.DocEntry ");
-        sb.append("Where n.DocType = 'I' and YEAR(n.DocDate) between YEAR(DATEADD (YEAR, -3, GETDATE())) AND YEAR(GETDATE()) ");
-        sb.append("Group by YEAR(n.DocDate) ) AS t Group by t.año");
+        sb.append("inner Join RIN1 d ON d.\"DocEntry\" = n.\"DocEntry\" ");
+        sb.append("where n.\"DocType\" = 'I' and n.\"DocDate\" between ADD_YEARS(TO_DATE(current_date,'YYYY-MM-DD'),-3) and current_date ");
+        sb.append("group by year(n.\"DocDate\")) as t group by t.\"ano\" order by t.\"ano\"");
         try {
-            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando las ventas anuales para la empresa [" + companyName + "]");
@@ -194,31 +191,31 @@ public class InvoiceFacade {
 
     public List<Object[]> getMonthlySales(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("Select CAST(DATENAME(month, DATEADD(month, MONTH(DATEADD(mm, number, GETDATE())), 0) - 1) AS varchar(20)) AS mes, CAST(YEAR(GETDATE()) AS varchar(4)) AS año, ");
-        sb.append("ISNULL(CAST(SUM(t.costoTotalVenta - t.costoTotalNota) AS numeric(18,0)),0) AS costoTotal, ");
-        sb.append("ISNULL(CAST(SUM(t.valorTotalVenta - t.valorTotalNota) AS numeric(18,0)),0) AS valorTotal, ");
-        sb.append("ISNULL(CAST(((SUM(t.valorTotalVenta - t.valorTotalNota) - SUM(t.costoTotalVenta - t.costoTotalNota)) / SUM(t.valorTotalVenta - t.valorTotalNota)) * 100 AS numeric(18,2)),0) AS margenAnual ");
-        sb.append("From master.dbo.spt_values v ");
-        sb.append("Left join ( Select 'FV' AS Doc, MONTH(f.DocDate) AS mm, DATENAME(MONTH, f.DocDate) AS mes, ");
-        sb.append("CAST(SUM((CAST(d.Quantity AS int) * CAST(d.StockPrice AS numeric(18,0)))) AS numeric(18,0)) AS costoTotalVenta, 0 AS costoTotalNota, ");
-        sb.append("CAST(SUM((CAST(d.LineTotal AS numeric(18,0)) - (CAST(d.LineTotal AS numeric(18,0)) * CAST(f.DiscPrcnt AS int))/100)) AS numeric(18,0)) AS valorTotalVenta, 0 AS valorTotalNota ");
-        sb.append("From OINV f ");
-        sb.append("Inner Join INV1 d ON d.DocEntry = f.DocEntry ");
-        sb.append("Where f.DocType = 'I' and YEAR(f.DocDate) = YEAR(GETDATE()) ");
-        sb.append("Group by DATENAME(MONTH, f.DocDate), YEAR(f.DocDate), MONTH(f.DocDate) UNION ALL ");
-        sb.append("Select 'NC' AS Doc, MONTH(n.DocDate) AS mm, DATENAME(MONTH, n.DocDate) AS mes, 0 AS costoTotalVenta,");
-        sb.append("CAST(SUM((CAST(d.Quantity AS int) * CAST(d.StockPrice AS numeric(18,0)))) AS numeric(18,0)) AS costoTotalNota, 0 AS valorTotalVenta, ");
-        sb.append("CAST(SUM((CAST(d.LineTotal AS numeric(18,0)) - (CAST(d.LineTotal AS numeric(18,0)) * CAST(ISNULL(n.DiscPrcnt,0) AS int))/100)) AS numeric(18,0)) AS valorTotalNota ");
-        sb.append("From ORIN n ");
-        sb.append("Inner Join RIN1 d ON d.DocEntry = n.DocEntry ");
-        sb.append("Where n.DocType = 'I' and YEAR(n.DocDate) = YEAR(GETDATE()) ");
-        sb.append("Group by DATENAME(MONTH, n.DocDate), YEAR(n.DocDate), MONTH(n.DocDate) ");
-        sb.append(") AS t ON t.mm = MONTH(DATEADD(mm, number, GETDATE())) ");
-        sb.append("Where (name IS NULL) AND (number BETWEEN 0 AND 11) ");
-        sb.append("Group By DATENAME(month, DATEADD(month, MONTH(DATEADD(mm, number, GETDATE())), 0) - 1), STR(MONTH(DATEADD(mm, number, GETDATE())), 2) ");
-        sb.append("Order BY STR(MONTH(DATEADD(mm, number, GETDATE())), 2) ASC");
+        sb.append("select cast(v.\"U_monthName\" as varchar(20))as mes, cast(year(current_date) as varchar(4)) as ano, ");
+        sb.append(" ifnull(cast(sum(t.\"costoTotalVenta\" - t.\"costoTotalNota\") as numeric(18,0)),0) as costoTotal, ");
+        sb.append(" ifnull(cast(sum(t.\"valorTotalVenta\" - t.\"valorTotalNota\") as numeric(18,0)),0) as valorTotal, ");
+        sb.append(" ifnull(cast(((sum(t.\"valorTotalVenta\" - t.\"valorTotalNota\") - sum(t.\"costoTotalVenta\" - t.\"costoTotalNota\")) / sum(t.\"valorTotalVenta\" - t.\"valorTotalNota\")) * 100 as numeric(18,2)),0) as margenAnual ");
+        sb.append("from \"@SPT_VALUES\" v ");
+        sb.append("left join (select 'FV' as Doc, month(f.\"DocDate\") as mm, monthname(f.\"DocDate\") as mes, ");
+        sb.append("cast(sum((cast(d.\"Quantity\" as int) * cast(d.\"StockPrice\" as numeric(18,0)))) as numeric(18,0)) as \"costoTotalVenta\", 0 as \"costoTotalNota\", ");
+        sb.append("cast(sum((cast(d.\"LineTotal\" as numeric(18,0)) - (cast(d.\"LineTotal\" as numeric(18,0)) * cast(f.\"DiscPrcnt\" as int))/100)) as numeric(18,0)) as \"valorTotalVenta\", 0 as \"valorTotalNota\" ");
+        sb.append("from OINV f ");
+        sb.append("inner join INV1 d on d.\"DocEntry\" = f.\"DocEntry\" ");
+        sb.append("where f.\"DocType\" = 'I' and year(f.\"DocDate\") = year(current_date) ");
+        sb.append("group by monthname(f.\"DocDate\"), year(f.\"DocDate\"), month(f.\"DocDate\") UNION ALL ");
+        sb.append("select 'NC' as Doc, month(n.\"DocDate\") as mm, monthname(n.\"DocDate\") as mes, 0 as \"costoTotalVenta\", ");
+        sb.append(" cast(sum((cast(d.\"Quantity\" as int) * cast(d.\"StockPrice\" as numeric(18,0)))) as numeric(18,0)) as \"costoTotalNota\", 0 as \"valorTotalVenta\", ");
+        sb.append(" cast(sum((cast(d.\"LineTotal\" as numeric(18,0)) - (cast(d.\"LineTotal\" as numeric(18,0)) * cast(ifnull(n.\"DiscPrcnt\",0) as int))/100)) as numeric(18,0)) as \"valorTotalNota\" ");
+        sb.append("from ORIN n ");
+        sb.append("inner join RIN1 d on d.\"DocEntry\" = n.\"DocEntry\" ");
+        sb.append("where n.\"DocType\" = 'I' and year(n.\"DocDate\") = year(current_date) ");
+        sb.append("group by monthname(n.\"DocDate\"), year(n.\"DocDate\"), month(n.\"DocDate\") ");
+        sb.append(") as t on t.mm = month(ADD_MONTHS(TO_DATE(current_date,'YYYY-MM-DD'),v.\"U_Value\")) ");
+        sb.append("where v.\"U_Value\" between 1 and 12 ");
+        sb.append("group by v.\"U_monthName\", cast(year(current_date) as varchar(4)),v.\"U_Value\" ");
+        sb.append("order by v.\"U_Value\" asc");
         try {
-            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando las ventas mensuales para la empresa [" + companyName + "]");
@@ -228,18 +225,30 @@ public class InvoiceFacade {
 
     public BigDecimal getInvoiceTotal(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("Select ISNULL(CAST(SUM(t.valorTotalVenta - t.valorTotalNota) AS numeric(18,0)),0) AS Facturado From ( ");
-        sb.append("Select CAST(SUM((CAST(d.LineTotal AS numeric(18,0)) - (CAST(d.LineTotal AS numeric(18,0)) * CAST(f.DiscPrcnt AS int))/100)) AS numeric(18,0)) AS valorTotalVenta, 0 AS valorTotalNota ");
-        sb.append("From OINV f Inner Join INV1 d ON d.DocEntry = f.DocEntry Where f.DocType = 'I' and YEAR(f.DocDate) = YEAR(GETDATE()) and MONTH(f.DocDate) = MONTH(GETDATE()) ");
+        sb.append("select ifnull(cast(sum(t.valorTotalVenta - t.valorTotalNota) as numeric(18,0)),0) as Facturado from ( ");
+        sb.append("select cast(sum((cast(d.\"LineTotal\" as numeric(18,0)) - (cast(d.\"LineTotal\" as numeric(18,0)) * cast(f.\"DiscPrcnt\" as int))/100)) as numeric(18,0)) as valorTotalVenta, 0 as valorTotalNota ");
+        sb.append("from OINV f inner join INV1 d ON d.\"DocEntry\" = f.\"DocEntry\" where f.\"DocType\" = 'I' and year(f.\"DocDate\") = year(current_date) and month(f.\"DocDate\") = month(current_date) ");
         sb.append("UNION ALL ");
-        sb.append("Select 0 AS valorTotalVenta, CAST(SUM((CAST(d.LineTotal AS numeric(18,0)) - (CAST(d.LineTotal AS numeric(18,0)) * CAST(ISNULL(n.DiscPrcnt,0) AS int))/100)) AS numeric(18,0)) AS valorTotalNota ");
-        sb.append("From ORIN n Inner Join RIN1 d ON d.DocEntry = n.DocEntry Where n.DocType = 'I' and YEAR(n.DocDate) = YEAR(GETDATE()) and MONTH(n.DocDate) = MONTH(GETDATE())) AS t");
+        sb.append("select 0 as valorTotalVenta, cast(sum((cast(d.\"LineTotal\" as numeric(18,0)) - (cast(d.\"LineTotal\" as numeric(18,0)) * cast(ifnull(n.\"DiscPrcnt\",0) as int))/100)) as numeric(18,0)) as valorTotalNota ");
+        sb.append("from ORIN n inner join RIN1 d ON d.\"DocEntry\" = n.\"DocEntry\" where n.\"DocType\" = 'I' and year(n.\"DocDate\") = year(current_date) and month(n.\"DocDate\") = month(current_date)) as t");
         try {
-            return (BigDecimal) persistenceConf.chooseSchema(companyName, testing, DB_TYPE).createNativeQuery(sb.toString()).getSingleResult();
+            return (BigDecimal) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el total facturado a la fecha para [" + companyName + "]", e);
         }
         return new BigDecimal(0);
+    }
+
+    public Integer getOrdersForShipping(String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(count(f.\"DocNum\") as int) as ordenes from OINV f where f.\"U_SHIPPING\" = 'N' and f.\"U_TOT_CAJ\" > 0");
+        try {
+            return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el total de ordenes pendientes por shipping.", e);
+        }
+        return 0;
     }
 }

@@ -51,12 +51,4 @@ public class GenericOperationsREST {
                                    @HeaderParam("X-Pruebas") boolean pruebas) {
         return Response.ok(new ResponseDTO(0, warehouseFacade.listBinEnabledWarehouses(companyName, pruebas))).build();
     }
-
-    @GET
-    @Path("warehouses/actives")
-    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    public Response listActivesWarehouses(@HeaderParam("X-Company-Name") String companyName,
-                                          @HeaderParam("X-Pruebas") boolean pruebas) {
-        return Response.ok(new ResponseDTO(0, warehouseFacade.listActiveWarehouses(companyName, pruebas))).build();
-    }
 }

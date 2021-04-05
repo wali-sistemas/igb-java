@@ -11,7 +11,6 @@ import co.igb.persistence.entity.Inventory;
 import co.igb.persistence.entity.InventoryDetail;
 import co.igb.persistence.entity.InventoryDifference;
 import co.igb.persistence.entity.PickingRecord;
-import co.igb.persistence.entity.SaldoUbicacion;
 import co.igb.persistence.entity.StockTransferDetail;
 import co.igb.persistence.facade.*;
 import co.igb.util.Constants;
@@ -289,7 +288,7 @@ public class StockTransferREST implements Serializable {
             return Response.ok(new ResponseDTO(-1, "No se recibió el código del almacén. Se recomienda cerrar sesión, borrar cookies e historial de navegación de Wali y volver a intentar")).build();
         }
 
-        List<SaldoUbicacion> stock = binLocationFacade.findLocationBalance(binCode, warehouseCode, companyName, pruebas);
+        List<Object[]> stock = binLocationFacade.findLocationBalance(binCode, warehouseCode, companyName, pruebas);
         if (stock == null || stock.isEmpty()) {
             return startCounting(binCode, warehouse, companyName, pruebas, 0L);
         }
@@ -302,22 +301,22 @@ public class StockTransferREST implements Serializable {
         transfer.setComments("Traslado para realizar inventario.");
 
         long linea = 0;
-        for (SaldoUbicacion s : stock) {
+        for (Object[] s : stock) {
             StockTransfersDTO.StockTransferLines.StockTransferLine line = new StockTransfersDTO.StockTransferLines.StockTransferLine();
             line.setLineNum(linea);
-            line.setItemCode(s.getItemCode());
-            line.setQuantity(s.getOnHandQty().doubleValue());
-            line.setWarehouseCode(s.getWhsCode());
-            line.setFromWarehouseCode(s.getWhsCode());
+            line.setItemCode((String) s[1]);
+            line.setQuantity((Double) s[3]);
+            line.setWarehouseCode((String) s[4]);
+            line.setFromWarehouseCode((String) s[4]);
 
             StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation outOperation =
                     new StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
 
             outOperation.setAllowNegativeQuantity("tNO");
             outOperation.setBaseLineNumber(linea);
-            outOperation.setBinAbsEntry(s.getUbicacion().getAbsEntry().longValue());
+            outOperation.setBinAbsEntry(Long.valueOf((Integer) s[2]));
             outOperation.setBinActionType("batFromWarehouse");
-            outOperation.setQuantity(s.getOnHandQty().doubleValue());
+            outOperation.setQuantity((Double) s[3]);
 
             StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation inOperation =
                     new StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation();
@@ -326,7 +325,7 @@ public class StockTransferREST implements Serializable {
             inOperation.setBaseLineNumber(linea);
             inOperation.setBinAbsEntry(binLocationFacade.getBinAbsInventory(companyName, warehouse, pruebas).longValue());
             inOperation.setBinActionType("batToWarehouse");
-            inOperation.setQuantity(s.getOnHandQty().doubleValue());
+            inOperation.setQuantity((Double) s[3]);
 
             List<StockTransfersDTO.StockTransferLines.StockTransferLine.StockTransferLinesBinAllocations.StockTransferLinesBinAllocation> binAllocations = new ArrayList<>();
             binAllocations.add(inOperation);
@@ -524,7 +523,7 @@ public class StockTransferREST implements Serializable {
             } catch (Exception ignored) {
             }
 
-            sendInconsistenciesEmail(employeeName, differences, inventory.getLocation());
+            //sendInconsistenciesEmail(employeeName, differences, inventory.getLocation());
             return Response.ok(differences).build();
         }
         return Response.ok(-1).build();
