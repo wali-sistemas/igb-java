@@ -84,7 +84,6 @@ public class PaymentsReceivedFacade {
         sb.append("   cast(d.\"AppliedSys\" as int) as \"Valor\", cast(r.\"DocDate\" as date) as \"fechaRecibo\" ");
         sb.append("   from ORCT r ");
         sb.append("   inner join RCT2 d on r.\"DocEntry\" = d.\"DocNum\" ");
-        sb.append("   inner join RCT2 d on r.\"DocEntry\" = d.\"DocNum\" ");
         sb.append("   inner join OJDT j on r.\"TransId\" = j.\"TransId\" ");
         sb.append("   inner join JDT1 t on t.\"TransId\" = j.\"TransId\" ");
         sb.append("   inner join OJDT f ON f.\"TransId\" = d.\"DocTransId\" ");
