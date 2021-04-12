@@ -47,7 +47,6 @@ import java.util.logging.Logger;
 @Path("report")
 public class ReportREST implements Serializable {
     private static final Logger CONSOLE = Logger.getLogger(ReportREST.class.getSimpleName());
-
     @Inject
     private IGBApplicationBean applicationBean;
     @EJB
@@ -82,7 +81,7 @@ public class ReportREST implements Serializable {
         List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, false, companyName, pruebas, warehouseCode);
         List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations(companyName, pruebas);
         Integer packing = packingListRecordFacade.getOrdersForPacking(companyName, pruebas);
-        Integer shiping = shippingOrderFacade.getOrdersForShipping(companyName, pruebas);
+        Integer shiping = invoiceFacade.getOrdersForShipping(companyName, pruebas);
 
         Integer[] contador = new Integer[]{0, 0, packing.intValue(), shiping};
         for (SalesOrderDTO s : orders) {
@@ -488,8 +487,9 @@ public class ReportREST implements Serializable {
         String cn = null;
         InitialContext initialContext = new InitialContext();
         if (dto.getOrigen().equals("S")) {
-            if (dto.getCompanyName().equals("IGB")) {
-                cn = "java:/IGBDS";
+            if (dto.getCompanyName().contains("IGB")) {
+                //cn = "java:/IGBDS";
+                cn = "java:/HANAIGBDS";
             } else {
                 cn = "java:/VARROCDS";
             }

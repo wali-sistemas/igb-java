@@ -18,10 +18,8 @@ import java.util.logging.Logger;
  */
 @Stateless
 public class LocationLimitFacade {
-
     private static final Logger CONSOLE = Logger.getLogger(LocationLimitFacade.class.getSimpleName());
-    private static final String DB_TYPE = Constants.DATABASE_TYPE_MSSQL;
-
+    private static final String DB_TYPE_HANA = Constants.DATABASE_TYPE_HANA;
     @EJB
     private PersistenceConf persistenceConf;
 
@@ -29,27 +27,26 @@ public class LocationLimitFacade {
     }
 
     public List<Object> listLocationsLimits(String itemCode, String binCode, String schema, boolean pruebas, String warehouseCode) {
-        EntityManager em = persistenceConf.chooseSchema(schema, pruebas, DB_TYPE);
+        EntityManager em = persistenceConf.chooseSchema(schema, pruebas, DB_TYPE_HANA);
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT CONVERT(VARCHAR(30),Code) AS code, CONVERT(VARCHAR(30),Name) AS Name, ");
-        sb.append("       CONVERT(VARCHAR(20),U_Ubicacion) AS U_Ubicacion, CONVERT(VARCHAR(20),U_Item) AS U_Item, ");
-        sb.append("       CONVERT(INT,U_CantMinima) AS U_CantMinima, CONVERT(int,U_CantMaxima) AS U_CantMaxima ");
-        sb.append("FROM   [@LIMITES_UBICACION] ");
-        sb.append("WHERE  (U_Ubicacion ");
+        sb.append("select cast(l.\"Code\" as varchar(30))as Code, cast(l.\"Name\" as varchar(30))as Name, ");
+        sb.append(" cast(l.\"U_Ubicacion\" as varchar(20))as U_Ubicacion, cast(l.\"U_Item\" as varchar(20))as U_Item, ");
+        sb.append(" cast(l.\"U_CantMinima\" as int)as U_CantMinima, cast(l.\"U_CantMaxima\" as int)as U_CantMaxima ");
+        sb.append("from \"@LIMITES_UBICACION\" l ");
+        sb.append("where (l.\"U_Ubicacion\" ");
 
         if (itemCode.equals("*")) {
-            sb.append("LIKE '");
+            sb.append("like '");
             sb.append(warehouseCode);
             sb.append("%')");
         } else {
             sb.append("= '");
             sb.append(binCode);
-            sb.append("' OR U_Item = '");
+            sb.append("' or l.\"U_Item\" = '");
             sb.append(itemCode);
             sb.append("')");
         }
-        sb.append(" ORDER BY U_Item, U_Ubicacion ASC");
-
+        sb.append(" order by l.\"U_Item\", l.\"U_Ubicacion\" asc");
         try {
             return em.createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException ex) {
@@ -60,17 +57,16 @@ public class LocationLimitFacade {
     }
 
     public boolean editLimit(String schema, boolean testing, LocationLimit limit) {
-        EntityManager em = persistenceConf.chooseSchema(schema, testing, DB_TYPE);
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaUpdate cu = cb.createCriteriaUpdate(LocationLimit.class);
-        Root limite = cu.from(LocationLimit.class);
-
-        cu.set(LocationLimit_.cantMaxima, limit.getCantMaxima());
-        cu.set(LocationLimit_.cantMinima, limit.getCantMinima());
-        cu.where(cb.equal(limite.get(LocationLimit_.code), limit.getCode()));
-
+        EntityManager em = persistenceConf.chooseSchema(schema, testing, DB_TYPE_HANA);
+        StringBuilder sb = new StringBuilder();
+        sb.append("update \"@LIMITES_UBICACION\" set \"U_CantMinima\"=");
+        sb.append(limit.getCantMinima());
+        sb.append(",\"U_CantMaxima\"=");
+        sb.append(limit.getCantMaxima());
+        sb.append("where \"Code\"='");
+        sb.append(limit.getCode());
         try {
-            em.createQuery(cu).executeUpdate();
+            em.createNativeQuery(sb.toString()).executeUpdate();
             return true;
         } catch (NoResultException ex) {
         } catch (Exception e) {
@@ -81,19 +77,17 @@ public class LocationLimitFacade {
 
     public boolean createLimit(String schema, boolean testing, LocationLimit limit) {
         StringBuilder sb = new StringBuilder();
-
-        sb.append("INSERT INTO [dbo].[@LIMITES_UBICACION] ");
-        sb.append("([Code], [Name], [U_Ubicacion], [U_Item], [U_CantMinima], [U_CantMaxima]) ");
-        sb.append("VALUES ('");
+        sb.append("insert into \"@LIMITES_UBICACION\" ");
+        sb.append("(\"Code\", \"Name\", \"U_Ubicacion\", \"U_Item\", \"U_CantMinima\", \"U_CantMaxima\") ");
+        sb.append("values ('");
         sb.append(limit.getCode()).append("', '");
         sb.append(limit.getName()).append("', '");
         sb.append(limit.getUbicacion()).append("', '");
         sb.append(limit.getItem()).append("', ");
         sb.append(limit.getCantMinima()).append(", ");
         sb.append(limit.getCantMaxima()).append(") ");
-
         try {
-            persistenceConf.chooseSchema(schema, testing, DB_TYPE).createNativeQuery(sb.toString()).executeUpdate();
+            persistenceConf.chooseSchema(schema, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).executeUpdate();
             return true;
         } catch (NoResultException ex) {
         } catch (Exception e) {
@@ -103,15 +97,13 @@ public class LocationLimitFacade {
     }
 
     public void deleteLimit(String code, String schema, boolean testing) {
-        EntityManager em = persistenceConf.chooseSchema(schema, testing, DB_TYPE);
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaDelete cd = cb.createCriteriaDelete(LocationLimit.class);
-        Root limit = cd.from(LocationLimit.class);
-
-        cd.where(cb.equal(limit.get(LocationLimit_.code), code));
-
+        EntityManager em = persistenceConf.chooseSchema(schema, testing, DB_TYPE_HANA);
+        StringBuilder sb = new StringBuilder();
+        sb.append("delete from \"@LIMITES_UBICACION\" where \"Code\"='");
+        sb.append(code);
+        sb.append("'");
         try {
-            em.createQuery(cd).executeUpdate();
+            em.createNativeQuery(sb.toString()).executeUpdate();
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al eliminar el limite de ubicacion. ", e);
@@ -119,15 +111,14 @@ public class LocationLimitFacade {
     }
 
     public String findLocationFixed(String itemCode, String schema, boolean testing) {
-        EntityManager em = persistenceConf.chooseSchema(schema, testing, DB_TYPE);
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<String> cq = cb.createQuery(String.class);
-        Root<LocationLimit> root = cq.from(LocationLimit.class);
-        cq.select(root.get(LocationLimit_.ubicacion));
-        cq.where(cb.equal(root.get(LocationLimit_.item), itemCode));
-
+        EntityManager em = persistenceConf.chooseSchema(schema, testing, DB_TYPE_HANA);
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(\"U_Ubicacion\" as varchar(20))as Ubicacion ");
+        sb.append("from \"@LIMITES_UBICACION\" where \"U_Item\"='");
+        sb.append(itemCode);
+        sb.append("'");
         try {
-            return em.createQuery(cq).getSingleResult();
+            return (String) em.createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la ubicacion fija.", e);

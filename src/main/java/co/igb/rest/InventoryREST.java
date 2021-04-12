@@ -33,7 +33,6 @@ import java.util.logging.Logger;
 @Path("inventory")
 public class InventoryREST {
     private static final Logger CONSOLE = Logger.getLogger(InventoryREST.class.getSimpleName());
-
     @EJB
     private InventoryFacade inventoryFacade;
     @EJB

@@ -18,7 +18,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "OIBQ")
 public class SaldoUbicacion implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -27,7 +26,7 @@ public class SaldoUbicacion implements Serializable {
     @Basic(optional = false)
     @Column(name = "ItemCode")
     private String itemCode;
-    @JoinColumn(name = "BinAbs", referencedColumnName = "absEntry")
+    @JoinColumn(name = "BinAbs", referencedColumnName = "AbsEntry")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private UbicacionSAP ubicacion;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
