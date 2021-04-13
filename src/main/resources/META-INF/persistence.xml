@@ -19,7 +19,7 @@
             <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.format_sql" value="false"/>
         </properties>
-    </persistence-unit>-->
+    </persistence-unit>
     <persistence-unit name="IGBPU" transaction-type="JTA">
         <jta-data-source>java:/IGBDS</jta-data-source>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
@@ -28,42 +28,36 @@
             <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.format_sql" value="false"/>
         </properties>
-    </persistence-unit>
-    <persistence-unit name="IGBPruebasPU" transaction-type="JTA">
-        <jta-data-source>java:/IGBPruebasDS</jta-data-source>
-        <exclude-unlisted-classes>false</exclude-unlisted-classes>
-        <properties>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
-            <property name="hibernate.show_sql" value="false"/>
-            <property name="hibernate.format_sql" value="false"/>
-        </properties>
-    </persistence-unit>
-    <persistence-unit name="VARROCPU" transaction-type="JTA">
-        <jta-data-source>java:/VARROCDS</jta-data-source>
-        <exclude-unlisted-classes>false</exclude-unlisted-classes>
-        <properties>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
-        </properties>
-    </persistence-unit>
-    <persistence-unit name="VARROCPruebasPU" transaction-type="JTA">
-        <jta-data-source>java:/VARROCPruebasDS</jta-data-source>
-        <exclude-unlisted-classes>false</exclude-unlisted-classes>
-        <properties>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
-        </properties>
-    </persistence-unit>
-    <persistence-unit name="VELEZPU" transaction-type="JTA">
-        <jta-data-source>java:/VELEZDS</jta-data-source>
-        <exclude-unlisted-classes>false</exclude-unlisted-classes>
-        <properties>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
-        </properties>
-    </persistence-unit>
+    </persistence-unit>-->
     <persistence-unit name="WMSPU" transaction-type="JTA">
         <jta-data-source>java:/WMSDS</jta-data-source>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
+        </properties>
+    </persistence-unit>
+    <persistence-unit name="HANAIGBPU" transaction-type="JTA">
+        <jta-data-source>java:/HANAIGBDS</jta-data-source>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
+            <property name="hibernate.globally_quoted_identifiers" value="true"/>
+        </properties>
+    </persistence-unit>
+    <persistence-unit name="HANAVARROCPU" transaction-type="JTA">
+        <jta-data-source>java:/HANAVARROCDS</jta-data-source>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
+            <property name="hibernate.globally_quoted_identifiers" value="true"/>
+        </properties>
+    </persistence-unit>
+    <persistence-unit name="HANAVELEZPU" transaction-type="JTA">
+        <jta-data-source>java:/HANAVELEZDS</jta-data-source>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
+            <property name="hibernate.globally_quoted_identifiers" value="true"/>
         </properties>
     </persistence-unit>
     <persistence-unit name="HANAIGBPU" transaction-type="JTA">
