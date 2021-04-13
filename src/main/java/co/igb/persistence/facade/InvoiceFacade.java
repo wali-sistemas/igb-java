@@ -191,7 +191,7 @@ public class InvoiceFacade {
 
     public List<Object[]> getMonthlySales(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(v.\"U_monthName\" as varchar(20))as mes, cast(year(current_date) as varchar(4)) as ano, ");
+        sb.append("select cast(v.\"U_MonthName\" as varchar(20))as mes, cast(year(current_date) as varchar(4)) as ano, ");
         sb.append(" ifnull(cast(sum(t.\"costoTotalVenta\" - t.\"costoTotalNota\") as numeric(18,0)),0) as costoTotal, ");
         sb.append(" ifnull(cast(sum(t.\"valorTotalVenta\" - t.\"valorTotalNota\") as numeric(18,0)),0) as valorTotal, ");
         sb.append(" ifnull(cast(((sum(t.\"valorTotalVenta\" - t.\"valorTotalNota\") - sum(t.\"costoTotalVenta\" - t.\"costoTotalNota\")) / sum(t.\"valorTotalVenta\" - t.\"valorTotalNota\")) * 100 as numeric(18,2)),0) as margenAnual ");
@@ -212,7 +212,7 @@ public class InvoiceFacade {
         sb.append("group by monthname(n.\"DocDate\"), year(n.\"DocDate\"), month(n.\"DocDate\") ");
         sb.append(") as t on t.mm = month(ADD_MONTHS(TO_DATE(current_date,'YYYY-MM-DD'),v.\"U_Value\")) ");
         sb.append("where v.\"U_Value\" between 1 and 12 ");
-        sb.append("group by v.\"U_monthName\", cast(year(current_date) as varchar(4)),v.\"U_Value\" ");
+        sb.append("group by v.\"U_MonthName\", cast(year(current_date) as varchar(4)),v.\"U_Value\" ");
         sb.append("order by v.\"U_Value\" asc");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();

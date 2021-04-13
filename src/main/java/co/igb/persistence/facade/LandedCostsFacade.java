@@ -28,7 +28,7 @@ public class LandedCostsFacade {
         EntityManager em = persistenceConf.chooseSchema(companyName, pruebas, DB_TYPE_HANA);
         StringBuilder sb = new StringBuilder();
         sb.append("select ifnull(t.\"costoCompra\",0)as ccompra,ifnull(t.\"costoLogistico\",0)as clog,ifnull(t.\"porcentaje\",0)as porc, ");
-        sb.append(" cast(v.\"U_monthName\" as varchar(20))as mes, ifnull(t.ano,year(current_date))as ano,v.\"U_Value\" as m# ");
+        sb.append(" cast(v.\"U_MonthName\" as varchar(20))as mes, ifnull(t.ano,year(current_date))as ano,v.\"U_Value\" as m# ");
         sb.append("from \"@SPT_VALUES\" v ");
         sb.append("left join(");
         sb.append(" select cast(sum(ca.\"DocTotal\")as numeric(18,0))as \"costoCompra\",cast(sum(ca.\"CostSum\")as numeric(18,0))as \"costoLogistico\", ");

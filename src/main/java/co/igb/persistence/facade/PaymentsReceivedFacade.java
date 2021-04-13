@@ -36,7 +36,7 @@ public class PaymentsReceivedFacade {
         sb.append("  case when y.\"DiasAtraso\"='Mayor de 360' then sum(y.\"Valor\") else 0 end as \"Mayor de 360\" ");
         sb.append(" from(");
         sb.append("   select cast(t.\"diasAtraso\" as varchar(1000)) as \"DiasAtraso\", SUM(cast(t.\"Valor\" as numeric(18,0))) as \"Valor\", ");
-        sb.append("    month(t.\"fechaRecibo\") as \"IdMes\", cast(v.\"U_monthName\" as varchar(20)) as \"Mes\" ");
+        sb.append("    month(t.\"fechaRecibo\") as \"IdMes\", cast(v.\"U_MonthName\" as varchar(20)) as \"Mes\" ");
         sb.append("   from (");
         sb.append("    select case when (DAYS_BETWEEN(r.\"DocDate\",f.\"DocDueDate\"))<0 then 'Sin vencer' ");
         sb.append("     when ((DAYS_BETWEEN(r.\"DocDate\",f.\"DocDueDate\"))>0 and (DAYS_BETWEEN(r.\"DocDate\",f.\"DocDueDate\"))<=20) then '0 a 20' ");
@@ -91,7 +91,7 @@ public class PaymentsReceivedFacade {
         sb.append("    and current_date and d.\"InvType\" IN ('24','30') and t.\"DebCred\"='C' and r.\"Canceled\"='N' ");
         sb.append("  ) as t");
         sb.append("  inner join \"@SPT_VALUES\" v on v.\"U_Value\" = month(t.\"fechaRecibo\") ");
-        sb.append("  group by t.\"diasAtraso\",t.\"fechaRecibo\",v.\"U_monthName\" ");
+        sb.append("  group by t.\"diasAtraso\",t.\"fechaRecibo\",v.\"U_MonthName\" ");
         sb.append(" )as y ");
         sb.append(" group by y.\"IdMes\",y.\"Mes\",y.\"DiasAtraso\" ");
         sb.append(")as z ");
