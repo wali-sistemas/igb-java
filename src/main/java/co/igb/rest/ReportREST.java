@@ -424,7 +424,7 @@ public class ReportREST implements Serializable {
                                      @QueryParam("month") String month,
                                      @HeaderParam("X-Company-Name") String companyName,
                                      @HeaderParam("X-Pruebas") boolean pruebas) {
-        return Response.ok(new ResponseDTO(0, landedCostsFacade.listPurchesesFactor(year, month, companyName, pruebas))).build();
+        return Response.ok(new ResponseDTO(0, landedCostsFacade.listPurchesesFactor(year, convertNameMonth(month), companyName, pruebas))).build();
     }
 
     @POST
@@ -567,5 +567,35 @@ public class ReportREST implements Serializable {
         } else {
             return false;
         }
+    }
+
+    private String convertNameMonth(String month) {
+        switch (month) {
+            case "Enero":
+                return "JANUARY";
+            case "Febrero":
+                return "FEBRUARY";
+            case "Marzo":
+                return "MARCH";
+            case "Abril":
+                return "APRIL";
+            case "Mayo":
+                return "MAY";
+            case "Junio":
+                return "JUNE";
+            case "Julio":
+                return "JULY";
+            case "Agosto":
+                return "AUGUST";
+            case "Septiembre":
+                return "SEPTEMBER";
+            case "Octubre":
+                return "OCTOBER";
+            case "Noviembre":
+                return "NOVEMBER";
+            case "Diciembre":
+                return "DECEMBER";
+        }
+        return "";
     }
 }
