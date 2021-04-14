@@ -68,7 +68,7 @@ public class PaymentsReceivedFacade {
         sb.append("   where year(r.\"DocDate\") = year(current_date) and r.\"DocDate\" between ADD_MONTHS(TO_DATE(current_date,'YYYY-MM-DD'),-10) ");
         sb.append("    and current_date and t.\"Account\">='11050505' and t.\"Account\"<='11250520' and r.\"Canceled\"='N' ");
         sb.append("  union all ");
-        sb.append("   select 'Sin vencer' as \"diasAtraso\",cast(r.\"NoDocSum\" as int) as \"Valor\",cast(r.\"DocDate\" as date) as \"fechaRecibo\" ");
+        sb.append("   select 'Sin vencer' as \"diasAtraso\",r.\"NoDocSum\" as \"Valor\",cast(r.\"DocDate\" as date) as \"fechaRecibo\" ");
         sb.append("   from ORCT r ");
         sb.append("   inner join OJDT j on r.\"TransId\" = j.\"TransId\" ");
         sb.append("   inner join JDT1 t on j.\"TransId\" = t.\"TransId\" ");
