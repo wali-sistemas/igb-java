@@ -210,7 +210,7 @@ public class InvoiceFacade {
         sb.append("inner join RIN1 d on d.\"DocEntry\" = n.\"DocEntry\" ");
         sb.append("where n.\"DocType\" = 'I' and year(n.\"DocDate\") = year(current_date) ");
         sb.append("group by monthname(n.\"DocDate\"), year(n.\"DocDate\"), month(n.\"DocDate\") ");
-        sb.append(") as t on t.mm = month(ADD_MONTHS(TO_DATE(current_date,'YYYY-MM-DD'),v.\"U_Value\")) ");
+        sb.append(") as t on t.mm = v.\"U_Value\" ");
         sb.append("where v.\"U_Value\" between 1 and 12 ");
         sb.append("group by v.\"U_MonthName\", cast(year(current_date) as varchar(4)),v.\"U_Value\" ");
         sb.append("order by v.\"U_Value\" asc");
