@@ -93,8 +93,8 @@ public class InvoiceFacade {
         sb.append("from OINV f ");
         sb.append("inner join INV12 d on d.\"DocEntry\"=f.\"DocEntry\" ");
         sb.append("inner join \"@TRANSP\" t on t.\"Code\"=f.\"U_TRANSP\" ");
-        sb.append("inner join OCST l on l.Code = d.StateS and l.Country='CO' ");
-        sb.append("where f.U_SHIPPING='N' and f.U_TOT_CAJ>0 ");
+        sb.append("inner join OCST l on l.\"Code\"=d.\"StateS\" and l.\"Country\"='CO' ");
+        sb.append("where f.\"U_SHIPPING\"='N' and f.\"U_TOT_CAJ\">0 ");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException e) {
