@@ -336,7 +336,7 @@ public class SalesOrderFacade {
 
     public List<Object[]> listOrdersOfDay(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(ADD_DAYS(TO_DATE(current_date,'YYYY-MM-DD'),v.\"U_Value\")as varchar(20))as Fecha, ");
+        sb.append("select cast(ADD_DAYS(TO_DATE(current_date,'YYYY-MM-DD'),-v.\"U_Value\")as varchar(20))as Fecha, ");
         sb.append(" ifnull(t.\"TotalOrder\",0)as TotalOrder,ifnull(t.\"Abiertas\",0)as Abiertas,ifnull(t.\"Cerradas\",0)as Cerradas,ifnull(t.\"Monto\",0)as Monto ");
         sb.append("from \"@SPT_VALUES\" v ");
         sb.append("left join( ");
@@ -347,8 +347,8 @@ public class SalesOrderFacade {
         sb.append(" from ORDR enc ");
         sb.append(" where enc.\"CANCELED\"='N' and enc.\"DocDate\" between ADD_DAYS(TO_DATE(current_date,'YYYY-MM-DD'),-4) and current_date ");
         sb.append(" group by enc.\"DocDate\" ");
-        sb.append(")as t on t.\"Fecha\"=ADD_MONTHS(TO_DATE(current_date,'YYYY-MM-DD'),v.\"U_Value\") ");
-        sb.append("where v.\"U_Value\" between 1 and 4 ");
+        sb.append(")as t on t.\"Fecha\"=ADD_DAYS(TO_DATE(current_date,'YYYY-MM-DD'),-v.\"U_Value\") ");
+        sb.append("where v.\"U_Value\" between 0 and 4 ");
         sb.append("order by v.\"U_Value\" asc");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
