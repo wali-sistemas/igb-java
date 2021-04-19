@@ -225,13 +225,13 @@ public class SalesOrderFacade {
         sb.append(" cast(count(o.\"DocNum\")as int)as Pedidos, ");
         sb.append(" cast(ifnull(sum(((((((o.\"DocTotal\"+o.\"DiscSum\")-o.\"VatSum\")-o.\"TotalExpns\")+o.\"WTSum\")-o.\"RoundDif\")-o.\"DiscSum\")),0)as numeric(18,0))as Total ");
         sb.append("from  ORDR o ");
-        sb.append("where o.\"DocStatus\"='O' and o.\"U_DESP\"='N' and o.\"DocDate\" between ADD_DAYS(TO_DATE(current_date,'YYYY-MM-DD'),-3) and current_date ");
+        sb.append("where o.\"DocStatus\"='O' and o.\"U_DESP\"='N' and o.\"DocDate\" between ADD_MONTHS(ADD_DAYS(current_date,-extract(day from current_date)+1),-1) and current_date ");
         sb.append("group by o.\"U_SEPARADOR\" ");
         sb.append("union all ");
         sb.append("select 'ENTREGA'as Estado,cast(count(e.\"DocNum\")as int)as Pedidos, ");
         sb.append(" cast(ifnull(sum(((((((e.\"DocTotal\"+e.\"DiscSum\")-e.\"VatSum\")-e.\"TotalExpns\")+e.\"WTSum\")-e.\"RoundDif\")-e.\"DiscSum\")),0)as numeric(18,0))as Total ");
         sb.append("from  ODLN e ");
-        sb.append("where e.\"CANCELED\"='N' and e.\"DocStatus\"='O' and e.\"DocType\"='I' and e.\"DocDate\" between ADD_DAYS(TO_DATE(current_date,'YYYY-MM-DD'),-3) and current_date ");
+        sb.append("where e.\"CANCELED\"='N' and e.\"DocStatus\"='O' and e.\"DocType\"='I' and e.\"DocDate\" between ADD_MONTHS(ADD_DAYS(current_date,-extract(day from current_date)+1),-1) and current_date ");
         sb.append("order by \"Estado\" ASC");
         try {
             return persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
