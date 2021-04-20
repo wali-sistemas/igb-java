@@ -201,7 +201,7 @@ public class InvoiceFacade {
         sb.append("cast(sum((cast(d.\"LineTotal\" as numeric(18,0)) - (cast(d.\"LineTotal\" as numeric(18,0)) * cast(f.\"DiscPrcnt\" as int))/100)) as numeric(18,0)) as \"valorTotalVenta\", 0 as \"valorTotalNota\" ");
         sb.append("from OINV f ");
         sb.append("inner join INV1 d on d.\"DocEntry\" = f.\"DocEntry\" ");
-        sb.append("where f.\"DocType\" = 'I' and year(f.\"DocDate\") = year(current_date) ");
+        sb.append("where f.\"DocType\" = 'I' and year(f.\"DocDate\") = year(current_date) and d.\"StockPrice\"<>0 ");
         sb.append("group by monthname(f.\"DocDate\"), year(f.\"DocDate\"), month(f.\"DocDate\") UNION ALL ");
         sb.append("select 'NC' as Doc, month(n.\"DocDate\") as mm, monthname(n.\"DocDate\") as mes, 0 as \"costoTotalVenta\", ");
         sb.append(" cast(sum((cast(d.\"Quantity\" as int) * cast(d.\"StockPrice\" as numeric(18,0)))) as numeric(18,0)) as \"costoTotalNota\", 0 as \"valorTotalVenta\", ");
