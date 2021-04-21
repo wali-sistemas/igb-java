@@ -108,33 +108,39 @@ public class PaymentsReceivedFacade {
 
     public List<Object[]> getByCollect(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(t.diasvencimiento as varchar(1000)) as DiasVencimiento, sum(cast(t.Valor as numeric(18,0))) as Valor ");
-        sb.append("from (select case when (DAYS_BETWEEN(fac.\"DocDueDate\",current_date))*-1 < 0 then '1. Sin vencer' ");
-        sb.append("when (DAYS_BETWEEN(fac.\"DocDueDate\",current_date))*-1 > 0 and (DAYS_BETWEEN(fac.\"DocDueDate\",current_date))*-1 <= 20 then '2. 0 a 20' ");
-        sb.append("when (DAYS_BETWEEN(fac.\"DocDueDate\",current_date))*-1 >= 21 and (DAYS_BETWEEN(fac.\"DocDueDate\",current_date))*-1 <= 55 then '3. 21 a 55' ");
-        sb.append("when (DAYS_BETWEEN(fac.\"DocDueDate\",current_date))*-1 >= 56 and (DAYS_BETWEEN(fac.\"DocDueDate\",current_date))*-1 <= 120 then '4. 56 a 120' ");
-        sb.append("when (DAYS_BETWEEN(fac.\"DocDueDate\",current_date))*-1 >= 121 and (DAYS_BETWEEN(fac.\"DocDueDate\",current_date))*-1 <= 360 then '5. 121 a 360' ");
-        sb.append("when (DAYS_BETWEEN(fac.\"DocDueDate\",current_date))*-1 > 361 then '6. Mayor de 360' ");
-        sb.append("else '1. Sin vencer' end as diasvencimiento,cast(fac.\"DocTotal\" as numeric(18,0)) - cast(fac.\"PaidToDate\" as numeric(18,0)) as Valor ");
-        sb.append("from OINV fac inner join OSLP ase ON fac.\"SlpCode\" = ase.\"SlpCode\" where fac.\"DocStatus\" = 'O' UNION ALL ");
-        sb.append("select case when (DAYS_BETWEEN(nc.\"DocDueDate\",current_date))*-1 < 0 then '1. Sin vencer' ");
-        sb.append("when (DAYS_BETWEEN(nc.\"DocDueDate\",current_date))*-1 > 0 and (DAYS_BETWEEN(nc.\"DocDueDate\",current_date))*-1 <= 20 then '2. 0 a 20' ");
-        sb.append("when (DAYS_BETWEEN(nc.\"DocDueDate\",current_date))*-1 >= 21 and (DAYS_BETWEEN(nc.\"DocDueDate\",current_date))*-1 <= 55 then '3. 21 a 55' ");
-        sb.append("when (DAYS_BETWEEN(nc.\"DocDueDate\",current_date))*-1 >= 56 and (DAYS_BETWEEN(nc.\"DocDueDate\",current_date))*-1 <= 120 then '4. 56 a 120' ");
-        sb.append("when (DAYS_BETWEEN(nc.\"DocDueDate\",current_date))*-1 >= 121 and (DAYS_BETWEEN(nc.\"DocDueDate\",current_date))*-1 <= 360 then '5. 121 a 360' ");
-        sb.append("when (DAYS_BETWEEN(nc.\"DocDueDate\",current_date))*-1 > 361 then '6. Mayor de 360' ");
-        sb.append("else '1. Sin vencer' end as diasvencimiento, (cast(nc.\"DocTotal\" as numeric(18,0))- (cast(nc.\"PaidToDate\" as numeric(18,0)))*-1) as Valor ");
-        sb.append("from ORIN nc inner join OSLP ase ON nc.\"SlpCode\" = ase.\"SlpCode\" where nc.\"DocStatus\" = 'O' UNION ALL ");
-        sb.append("select case when (DAYS_BETWEEN(rc.\"DocDueDate\",current_date))*-1 < 0 then '1. Sin vencer' ");
-        sb.append("when (DAYS_BETWEEN(rc.\"DocDueDate\",current_date))*-1 > 0 and (DAYS_BETWEEN(rc.\"DocDueDate\",current_date))*-1 <= 20 then '2. 0 a 20' ");
-        sb.append("when (DAYS_BETWEEN(rc.\"DocDueDate\",current_date))*-1 >= 21 and (DAYS_BETWEEN(rc.\"DocDueDate\",current_date))*-1 <= 55 then '3. 21 a 55' ");
-        sb.append("when (DAYS_BETWEEN(rc.\"DocDueDate\",current_date))*-1 >= 56 and (DAYS_BETWEEN(rc.\"DocDueDate\",current_date))*-1 <= 120 then '4. 56 a 120' ");
-        sb.append("when (DAYS_BETWEEN(rc.\"DocDueDate\",current_date))*-1 >= 121 and (DAYS_BETWEEN(rc.\"DocDueDate\",current_date))*-1 <= 360 then '5. 121 a 360' ");
-        sb.append("when (DAYS_BETWEEN(rc.\"DocDueDate\",current_date))*-1 > 361 then '6. Mayor de 360' ");
-        sb.append("else '1. Sin vencer' end as diasvercimiento, (cast(rc.\"OpenBal\" as numeric(18,0))*-1) as Valor ");
-        sb.append("from ORCT rc inner join OJDT oj ON rc.\"TransId\" = oj.\"TransId\" inner join JDT1 jt ON jt.\"TransId\" = jt.\"TransId\" inner join OCRD sn on sn.\"CardCode\" = rc.\"CardCode\" ");
-        sb.append("inner join OSLP ve ON ve.\"SlpCode\" = sn.\"SlpCode\" ");
-        sb.append("where jt.\"Account\" >='11050505' and jt.\"Account\" <='13050510' and rc.\"PayNoDoc\" = 'Y' and rc.\"Canceled\" = 'N' and rc.\"OpenBal\" <> 0 ) as t ");
+        sb.append("select cast(t.diasvencimiento as varchar(1000)) as DiasVencimiento, sum(cast((t.ValorFV-t.ValorNC-t.ValorRC) as numeric(18,0))) as Valor ");
+        sb.append("from (select case when (DAYS_BETWEEN(fac.\"DocDueDate\",current_date)) < 0 then '1. Sin vencer' ");
+        sb.append("  when (DAYS_BETWEEN(fac.\"DocDueDate\",current_date)) >= 0 and (DAYS_BETWEEN(fac.\"DocDueDate\",current_date)) <= 20 then '2. 0 a 20' ");
+        sb.append("  when (DAYS_BETWEEN(fac.\"DocDueDate\",current_date)) >= 21 and (DAYS_BETWEEN(fac.\"DocDueDate\",current_date)) <= 55 then '3. 21 a 55' ");
+        sb.append("  when (DAYS_BETWEEN(fac.\"DocDueDate\",current_date)) >= 56 and (DAYS_BETWEEN(fac.\"DocDueDate\",current_date)) <= 120 then '4. 56 a 120' ");
+        sb.append("  when (DAYS_BETWEEN(fac.\"DocDueDate\",current_date)) >= 121 and (DAYS_BETWEEN(fac.\"DocDueDate\",current_date)) <= 360 then '5. 121 a 360' ");
+        sb.append("  when (DAYS_BETWEEN(fac.\"DocDueDate\",current_date)) > 361 then '6. Mayor de 360' ");
+        sb.append("  else '1. Sin vencer' end as diasvencimiento,cast(fac.\"DocTotal\" as numeric(18,0)) - cast(fac.\"PaidToDate\" as numeric(18,0)) as ValorFV,0 as ValorNC,0 as ValorRC ");
+        sb.append(" from OINV fac ");
+        sb.append(" where fac.\"DocStatus\" = 'O' and fac.\"DocNum\" <> 339765 ");//TODO: FV excluida
+        sb.append("UNION ALL ");
+        sb.append(" select case when (DAYS_BETWEEN(nc.\"DocDueDate\",current_date)) < 0 then '1. Sin vencer' ");
+        sb.append("  when (DAYS_BETWEEN(nc.\"DocDueDate\",current_date)) >= 0 and (DAYS_BETWEEN(nc.\"DocDueDate\",current_date)) <= 20 then '2. 0 a 20' ");
+        sb.append("  when (DAYS_BETWEEN(nc.\"DocDueDate\",current_date)) >= 21 and (DAYS_BETWEEN(nc.\"DocDueDate\",current_date)) <= 55 then '3. 21 a 55' ");
+        sb.append("  when (DAYS_BETWEEN(nc.\"DocDueDate\",current_date)) >= 56 and (DAYS_BETWEEN(nc.\"DocDueDate\",current_date)) <= 120 then '4. 56 a 120' ");
+        sb.append("  when (DAYS_BETWEEN(nc.\"DocDueDate\",current_date)) >= 121 and (DAYS_BETWEEN(nc.\"DocDueDate\",current_date)) <= 360 then '5. 121 a 360' ");
+        sb.append("  when (DAYS_BETWEEN(nc.\"DocDueDate\",current_date)) > 361 then '6. Mayor de 360' ");
+        sb.append("  else '1. Sin vencer' end as diasvencimiento,0 as ValorFV,(cast(nc.\"DocTotal\" as numeric(18,0))- (cast(nc.\"PaidToDate\" as numeric(18,0)))) as ValorNC,0 as ValorRC ");
+        sb.append(" from ORIN nc ");
+        sb.append("UNION ALL ");
+        sb.append(" select distinct case when (DAYS_BETWEEN(rc.\"DocDueDate\",current_date)) < 0 then '1. Sin vencer' ");
+        sb.append("  when (DAYS_BETWEEN(rc.\"DocDueDate\",current_date)) >= 0 and (DAYS_BETWEEN(rc.\"DocDueDate\",current_date)) <= 20 then '2. 0 a 20' ");
+        sb.append("  when (DAYS_BETWEEN(rc.\"DocDueDate\",current_date)) >= 21 and (DAYS_BETWEEN(rc.\"DocDueDate\",current_date)) <= 55 then '3. 21 a 55' ");
+        sb.append("  when (DAYS_BETWEEN(rc.\"DocDueDate\",current_date)) >= 56 and (DAYS_BETWEEN(rc.\"DocDueDate\",current_date)) <= 120 then '4. 56 a 120' ");
+        sb.append("  when (DAYS_BETWEEN(rc.\"DocDueDate\",current_date)) >= 121 and (DAYS_BETWEEN(rc.\"DocDueDate\",current_date)) <= 360 then '5. 121 a 360' ");
+        sb.append("  when (DAYS_BETWEEN(rc.\"DocDueDate\",current_date)) > 361 then '6. Mayor de 360' ");
+        sb.append("  else '1. Sin vencer' end as diasvercimiento,0 as ValorFV,0 as ValorNC,(cast(rc.\"OpenBal\" as numeric(18,0))) as ValorRC ");
+        sb.append(" from ORCT rc ");
+        sb.append(" inner join OJDT oj ON rc.\"TransId\" = oj.\"TransId\" ");
+        sb.append(" inner join JDT1 jt ON jt.\"TransId\" = jt.\"TransId\" ");
+        sb.append(" inner join OCRD sn on sn.\"CardCode\" = rc.\"CardCode\" ");
+        sb.append(" where jt.\"Account\" >='11050505' and jt.\"Account\" <='13050510' and rc.\"PayNoDoc\" = 'Y' and rc.\"Canceled\" = 'N' and rc.\"OpenBal\" <> 0 and rc.\"DocNum\" <> 64266 ");//TODO: RC excluida
+        sb.append(") as t ");
         sb.append("group by t.diasvencimiento order by t.diasvencimiento");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
