@@ -121,7 +121,7 @@ public class InvoiceFacade {
         StringBuilder sb = new StringBuilder();
         sb.append("update OINV set \"U_TOT_CAJ\"=");
         sb.append(totalBox);
-        sb.append("where \"DocNum\"=");
+        sb.append(" where \"DocNum\"=");
         sb.append(docNum);
         try {
             em.createNativeQuery(sb.toString()).executeUpdate();
