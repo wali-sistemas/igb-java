@@ -46,7 +46,7 @@ public class PaymentsReceivedFacade {
         sb.append("    inner join OCRD s on s.\"CardCode\" = r.\"CardCode\" ");
         sb.append("    inner join OSLP v on v.\"SlpCode\" = s.\"SlpCode\" ");
         sb.append("    inner join OINV f on f.\"DocEntry\" = d.\"DocEntry\" ");
-        sb.append("    where r.\"Canceled\"='N' and year(r.\"DocDate\") = year(current_date) and t.\"Account\" in ('11100507','11100509','11100517','11100518','11100519','11250530','11250520') and d.\"InvType\"=13 ");
+        sb.append("    where r.\"Canceled\"='N' and year(r.\"DocDate\") = year(current_date) and r.\"TrsfrAcct\" in ('11100507','11100509','11100517','11100518','11100519','11250530','11250520') and d.\"InvType\"=13 ");
         sb.append("   union all ");
         sb.append("    select distinct n.\"DocDueDate\" as \"fechaVenc\",d.\"SumApplied\"*-1 as \"TotalPago\",cast(r.\"DocDate\" as date) as \"fechaRecibo\",DAYS_BETWEEN(n.\"DocDueDate\",r.\"DocDate\")as \"diasAtraso\", r.\"DocNum\",r.\"DocTotal\" as \"TotalDoc\",d.\"DocEntry\" ");
         sb.append("    from ORCT r ");
@@ -56,7 +56,7 @@ public class PaymentsReceivedFacade {
         sb.append("    inner join OCRD s on s.\"CardCode\" = r.\"CardCode\" ");
         sb.append("    inner join OSLP v on v.\"SlpCode\" = s.\"SlpCode\" ");
         sb.append("    inner join ORIN n on n.\"DocEntry\" = d.\"DocEntry\" ");
-        sb.append("    where r.\"Canceled\"='N' and year(r.\"DocDate\") = year(current_date) and t.\"Account\" in ('11100507','11100509','11100517','11100518','11100519','11250530','11250520') and r.\"Canceled\"='N' ");
+        sb.append("    where r.\"Canceled\"='N' and year(r.\"DocDate\") = year(current_date) and r.\"TrsfrAcct\" in ('11100507','11100509','11100517','11100518','11100519','11250530','11250520') and r.\"Canceled\"='N' ");
         sb.append("   union all ");
         sb.append("    select distinct f.\"TaxDate\" as \"fechaVenc\",d.\"SumApplied\" as \"TotalPago\",cast(r.\"DocDate\" as date) as \"fechaRecibo\",DAYS_BETWEEN(f.\"TaxDate\",r.\"DocDate\")as \"diasAtraso\", r.\"DocNum\",r.\"DocTotal\" as \"TotalDoc\",d.\"DocEntry\" ");
         sb.append("    from ORCT r ");
@@ -66,13 +66,13 @@ public class PaymentsReceivedFacade {
         sb.append("    inner join OSLP v on v.\"SlpCode\" = s.\"SlpCode\" ");
         sb.append("    inner join RCT2 d on r.\"DocEntry\" = d.\"DocNum\" ");
         sb.append("    inner join OJDT f ON f.\"TransId\" = d.\"DocTransId\" ");
-        sb.append("    where r.\"DocNum\" not in (304976,320135) and r.\"Canceled\"='N' and year(r.\"DocDate\")=year(current_date) and d.\"InvType\" IN ('24','30') and t.\"DebCred\"='C' and r.\"Canceled\"='N' ");
+        sb.append("    where r.\"Canceled\"='N' and year(r.\"DocDate\")=year(current_date) and r.\"TrsfrAcct\"<>'41350520' and d.\"InvType\" IN ('24','30') and t.\"DebCred\"='C' and r.\"Canceled\"='N' ");
         sb.append("   union all ");
         sb.append("    select distinct '' as \"fechaVenc\",r.\"NoDocSum\" as \"TotalPago\",cast(r.\"DocDate\" as date) as \"fechaRecibo\",'20' as \"diasAtraso\",r.\"DocNum\",r.\"DocTotal\" as \"TotalDoc\",0 as \"DocEntry\" ");
         sb.append("    from ORCT r ");
         sb.append("    inner join OJDT j on r.\"TransId\" = j.\"TransId\" ");
         sb.append("    inner join JDT1 t on j.\"TransId\" = t.\"TransId\" ");
-        sb.append("    where year(r.\"DocDate\")=year(current_date) and t.\"Account\" in ('11100507','11100509','11100517','11100518','11100519','11250530','11250520') and r.\"DocType\"='C' and r.\"Canceled\"='N' and r.\"PayNoDoc\"='Y' and r.\"NoDocSum\">0 ");
+        sb.append("    where year(r.\"DocDate\")=year(current_date) and r.\"TrsfrAcct\" in ('11100507','11100509','11100517','11100518','11100519','11250530','11250520') and r.\"DocType\"='C' and r.\"Canceled\"='N' and r.\"PayNoDoc\"='Y' and r.\"NoDocSum\">0 ");
         sb.append("   )as t ");
         sb.append("  inner join \"@SPT_VALUES\" v on v.\"U_Value\" = month(t.\"fechaRecibo\") ");
         sb.append("  group by t.\"diasAtraso\",t.\"fechaRecibo\",v.\"U_MonthName\" ");
