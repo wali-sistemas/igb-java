@@ -66,7 +66,7 @@ public class PaymentsReceivedFacade {
         sb.append("    inner join OSLP v on v.\"SlpCode\" = s.\"SlpCode\" ");
         sb.append("    inner join RCT2 d on r.\"DocEntry\" = d.\"DocNum\" ");
         sb.append("    inner join OJDT f ON f.\"TransId\" = d.\"DocTransId\" ");
-        sb.append("    where r.\"Canceled\"='N' and year(r.\"DocDate\")=year(current_date) and r.\"TrsfrAcct\"<>'41350520' and d.\"InvType\" IN ('24','30') and t.\"DebCred\"='C' and r.\"Canceled\"='N' ");
+        sb.append("    where r.\"Canceled\"='N' and year(r.\"DocDate\")=year(current_date) and r.\"TrsfrAcct\" not in('41350520','13050510') and d.\"InvType\" IN ('24','30') and t.\"DebCred\"='C' and r.\"Canceled\"='N' ");
         sb.append("   union all ");
         sb.append("    select distinct '' as \"fechaVenc\",r.\"NoDocSum\" as \"TotalPago\",cast(r.\"DocDate\" as date) as \"fechaRecibo\",'20' as \"diasAtraso\",r.\"DocNum\",r.\"DocTotal\" as \"TotalDoc\",0 as \"DocEntry\" ");
         sb.append("    from ORCT r ");
