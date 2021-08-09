@@ -126,8 +126,16 @@ public class SalesOrdersREST implements Serializable {
                 entity.setEmpId(dto.getEmployeeId());
                 entity.setOrderNumber(Integer.parseInt(orderId[0]));
                 entity.setStatus("open");
-                entity.setCustomerId(orderId[1]);
-                entity.setCustomerName(customerFacade.getCustomerName(orderId[1], companyName, pruebas));
+
+                if (orderId[1].contains("-")) {
+                    String[] parts = orderId[1].split("-");
+                    entity.setCustomerId(parts[0]);
+                    entity.setCustomerName(customerFacade.getCustomerName(parts[0], companyName, pruebas));
+                } else {
+                    entity.setCustomerId(orderId[1]);
+                    entity.setCustomerName(customerFacade.getCustomerName(orderId[1], companyName, pruebas));
+                }
+
                 entity.setCompany(companyName);
 
                 try {
@@ -213,5 +221,16 @@ public class SalesOrdersREST implements Serializable {
         }
         CONSOLE.log(Level.INFO, "Des-asignando orden [" + orderNumber + ']');
         return Response.ok(new ResponseDTO(aoFacade.deleteAssignedOrder(orderNumber, companyName, pruebas) ? 0 : 1, null)).build();
+    }
+
+    @GET
+    @Path("validate-order/{orderNumber}")
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response validateOrderAuthorized(@PathParam("orderNumber") String order,
+                                            @HeaderParam("X-Company-Name") String companyName,
+                                            @HeaderParam("X-Pruebas") boolean pruebas) {
+        return Response.ok(soFacade.validateOrderAuthorized(order, companyName, pruebas)).build();
     }
 }

@@ -86,7 +86,7 @@ public class SalesOrderFacade {
     public List<SalesOrderDTO> findOpenOrders(boolean showAll, boolean filterGroup, String schemaName, boolean testing, String warehouseCode) {
         EntityManager em = persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA);
         StringBuilder sb = new StringBuilder();
-        sb.append("select j.docnum, j.docdate, j.cardcode, j.cardname, j.confirmed, j.items, j.comments, j.address, j.transp ");
+        sb.append("select j.docnum, j.docdate, j.cardcode, j.cardname, j.confirmed, j.items, j.comments, j.address, j.transp, j.OvMDL ");
         sb.append("from (select f.*, COUNT(f.grupo) OVER (PARTITION BY f.cardcode) as \"ContGrupo\" from ( ");
         sb.append("select t.*, ROW_NUMBER() OVER (PARTITION BY t.cardcode order by t.cardcode) as grupo from ( ");
         sb.append("select distinct cast(enc.\"DocNum\" as varchar(10)) as docnum, ");
@@ -94,10 +94,12 @@ public class SalesOrderFacade {
         sb.append("cast(enc.\"CardName\" as varchar(100)) as cardname, cast(enc.\"Confirmed\" as varchar(1)) as confirmed, ");
         sb.append("cast((select count(1) from RDR1 det where det.\"DocEntry\" = enc.\"DocEntry\" and det.\"LineStatus\" = 'O') as int) as items, ");
         sb.append("cast(enc.\"Comments\" as varchar(254)) as comments, cast(enc.\"Address2\" as varchar(200)) as address, ");
-        sb.append("ifnull(cast(enc.\"U_TRANSP\" as varchar(4)),'') as transp from ORDR enc ");
+        sb.append("ifnull(cast(enc.\"U_TRANSP\" as varchar(4)),'') as transp, cast(mdl.\"DocNum\" as varchar(10))as OvMDL ");
+        sb.append("from ORDR enc ");
         sb.append("inner join RDR1 det on det.\"DocEntry\" = enc.\"DocEntry\" and det.\"WhsCode\" = '");
         sb.append(warehouseCode);
-        sb.append("' where enc.\"DocStatus\" = 'O' and enc.\"U_SEPARADOR\" IN ('APROBADO','PREPAGO','SEDE BOGOTA') and ");
+        sb.append("' left join ORDR mdl on enc.\"U_SERIAL\" = mdl.\"U_SERIAL\" and right(mdl.\"NumAtCard\",1)='M' ");
+        sb.append("where enc.\"DocStatus\" = 'O' and enc.\"U_SEPARADOR\" IN ('APROBADO','PREPAGO','SEDE BOGOTA') and ");
         sb.append("        year(enc.\"DocDate\") = year(current_date) and MONTH(enc.\"DocDate\") between MONTH(current_date)-1 and MONTH(current_date) ");
         if (!showAll) {
             sb.append("and enc.\"Confirmed\" = 'Y' ");
@@ -120,6 +122,7 @@ public class SalesOrderFacade {
                 order.setComments((String) row[6]);
                 order.setAddress((String) row[7]);
                 order.setTransp((String) row[8]);
+                order.setDocNumMDL((String) row[9]);
 
                 orders.add(order);
             }
@@ -394,4 +397,26 @@ public class SalesOrderFacade {
         }
         return false;
     }
+
+    public boolean validateOrderAuthorized(String order, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select o.\"DocNum\" ");
+        sb.append("from ORDR o ");
+        sb.append("where o.\"DocStatus\"='O' and o.\"Confirmed\"='Y' and o.\"U_SEPARADOR\" IN ('APROBADO','PREPAGO','SEDE BOGOTA') and o.\"DocNum\"='");
+        sb.append(order);
+        sb.append("'");
+        try {
+            int result = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult().hashCode();
+            if (result > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando si la orden " + order + " esta aprobada.");
+        }
+        return false;
+    }
+
 }

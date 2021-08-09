@@ -1,5 +1,6 @@
 package co.igb.rest;
 
+import co.igb.dto.PickingExpressOrderDTO;
 import co.igb.dto.ResponseDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.hanaws.client.deliveryNotes.DeliveryClient;
@@ -61,16 +62,16 @@ public class DeliveryREST {
     @Path("express")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response createDeliveryNote(Integer docNumOrder,
+    public Response createDeliveryNote(PickingExpressOrderDTO dto,
                                        @HeaderParam("X-Company-Name") String companyName,
                                        @HeaderParam("X-Employee") String userName,
                                        @HeaderParam("X-Pruebas") boolean pruebas) {
-        CONSOLE.log(Level.INFO, "Creando documento de entrega para la orden {0}", docNumOrder);
+        CONSOLE.log(Level.INFO, "Creando documento de entrega para la orden {0}", dto.getOrderSAP());
 
-        List<Object[]> packingRecords = deliveryNoteFacade.listRecords(docNumOrder, companyName, pruebas);
+        List<Object[]> packingRecords = deliveryNoteFacade.listRecords(dto.getOrderSAP(), "01", companyName, pruebas);
         if (packingRecords.isEmpty()) {
-            CONSOLE.log(Level.SEVERE, "No se encontraron registros para crear entrega de la orden {0}", docNumOrder);
-            return Response.ok(new ResponseDTO(-2, "No se encontraron registros para crear entrega de la orden " + docNumOrder)).build();
+            CONSOLE.log(Level.SEVERE, "No se encontraron registros para crear entrega de la orden {0}", dto.getOrderSAP());
+            return Response.ok(new ResponseDTO(-2, "No se encontraron registros para crear entrega de la orden " + dto.getOrderSAP())).build();
         }
 
         HashSet<Object[]> itemsMissing = new HashSet<>();
@@ -116,44 +117,44 @@ public class DeliveryREST {
             }
         }
         if (itemsMissing.isEmpty()) {
-            CONSOLE.log(Level.SEVERE, "Sin items pendientes para crear entrega automatica a la orden {0}", docNumOrder);
-            return Response.ok(new ResponseDTO(-2, "Sin items pendientes para crear entrega automatica a la orden " + docNumOrder)).build();
+            CONSOLE.log(Level.SEVERE, "Sin items pendientes para crear entrega automatica a la orden {0}", dto.getOrderSAP());
+            return Response.ok(new ResponseDTO(-2, "Sin items pendientes para crear entrega automatica a la orden " + dto.getOrderSAP())).build();
         }
 
         HashMap<String, DeliveryDTO.DocumentLines.DocumentLine> items = new HashMap<>();
         DeliveryDTO document = new DeliveryDTO();
         Integer orderDocEntry = null;
+        Integer orderNumber = (Integer) packingRecords.get(0)[0];
+
+        if (orderDocEntry == null) {
+            document.setSeries(Long.parseLong(getPropertyValue(Constants.DELIVERY_NOTE_SERIES, companyName)));
+            document.setCardCode((String) packingRecords.get(0)[1]);
+            String commentOV = (String) packingRecords.get(0)[6];
+            if (commentOV != null) {
+                //limitando caracteres no mayores a 254 para que lo acepte SAP
+                String commentWms = "Orden #" + orderNumber + " creada por " + userName + " desde WALI.";
+                if ((commentOV.length() + commentWms.length() - 254) > 0) {
+                    document.setComments(commentOV.substring(0, commentOV.length() - (commentOV.length() + commentWms.length() - 251)) + "..." + commentWms);
+                } else {
+                    document.setComments(commentOV + "." + commentWms);
+                }
+            } else {
+                document.setComments("Orden #" + orderNumber + " creada por " + userName + " desde WALI.");
+            }
+            document.setUtotcaj(0.0);
+            document.setUvrdeclarado((BigDecimal) packingRecords.get(0)[7]);
+            document.setUnunfac(orderNumber.toString());
+        }
+
         for (Object[] row : itemsMissing) {
-            Integer orderNumber = (Integer) row[0];
-            String customerId = (String) row[1];
             String itemCode = (String) row[2];
             Integer quantity = (Integer) row[3];
             Integer binAbs = (Integer) row[4];
             String binCode = (String) row[5];
-            String employee = userName;
+            orderDocEntry = (Integer) row[8];
 
-            if (orderDocEntry == null) {
-                document.setSeries(Long.parseLong(getPropertyValue(Constants.DELIVERY_NOTE_SERIES, companyName)));
-                document.setCardCode(customerId);
-                String commentOV = (String) row[6];
-                if (commentOV != null) {
-                    //limitando caracteres no mayores a 254 para que lo acepte SAP
-                    String commentWms = "Orden #" + orderNumber + " creada por " + employee + " desde WALI.";
-                    if ((commentOV.length() + commentWms.length() - 254) > 0) {
-                        document.setComments(commentOV.substring(0, commentOV.length() - (commentOV.length() + commentWms.length() - 251)) + "..." + commentWms);
-                    } else {
-                        document.setComments(commentOV + "." + commentWms);
-                    }
-                } else {
-                    document.setComments("Orden #" + orderNumber + " creada por " + employee + " desde WALI.");
-                }
-                document.setUtotcaj(0.0);
-                document.setUvrdeclarado((BigDecimal) row[7]);
-                document.setUnunfac(orderNumber.toString());
-                orderDocEntry = (Integer) row[8];
-                if (orderDocEntry == null || orderDocEntry <= 0) {
-                    return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-2, "Ocurrió un error al consultar el docEntry de la orden. ")).build();
-                }
+            if (orderDocEntry == null || orderDocEntry <= 0) {
+                return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-2, "Ocurrió un error al consultar el docEntry de la orden. ")).build();
             }
 
             DeliveryDTO.DocumentLines.DocumentLine line = new DeliveryDTO.DocumentLines.DocumentLine();
@@ -208,6 +209,40 @@ public class DeliveryREST {
             }
         });
 
+        //TODO: Listar items de la orden serializada que proviene de modula.
+        if (dto.getOrderMDL() != null) {
+            List<Object[]> itemsMDL = deliveryNoteFacade.listRecords(dto.getOrderMDL(), "30", companyName, pruebas);
+            if (itemsMDL.isEmpty()) {
+                CONSOLE.log(Level.SEVERE, "No se encontraron registros para crear entrega de la orden {0}", dto.getOrderMDL());
+                return Response.ok(new ResponseDTO(-2, "No se encontraron registros para crear entrega de la orden " + dto.getOrderMDL())).build();
+            }
+
+            for (Object[] obj : itemsMDL) {
+                Integer qtyMDL = (Integer) obj[3];
+                Integer binAbsMDL = (Integer) obj[4];
+                Integer docEntryMDL = (Integer) obj[8];
+                Integer baseLineNumMDL = (Integer) obj[9];
+
+                DeliveryDTO.DocumentLines.DocumentLine lineMDL = new DeliveryDTO.DocumentLines.DocumentLine();
+                lineMDL.setLineNum((long) itemsMDL.size());
+                lineMDL.setItemCode((String) obj[2]);
+                lineMDL.setQuantity(qtyMDL.doubleValue());
+                lineMDL.setWarehouseCode("30");
+                lineMDL.setBaseLine(baseLineNumMDL.longValue());
+                lineMDL.setBaseEntry(docEntryMDL.longValue());
+                lineMDL.setBaseType(Long.parseLong(getPropertyValue(Constants.SALES_ORDER_SERIES, companyName)));
+                lineMDL.setDocumentLinesBinAllocations(new ArrayList<DeliveryDTO.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation>());
+
+                DeliveryDTO.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation binAllocationMDL = new DeliveryDTO.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation();
+                binAllocationMDL.setAllowNegativeQuantity(Constants.SAP_STATUS_NO);
+                binAllocationMDL.setBaseLineNumber((long) itemsMDL.size());
+                binAllocationMDL.setBinAbsEntry(binAbsMDL.longValue());
+                binAllocationMDL.setQuantity(qtyMDL.doubleValue());
+                lineMDL.getDocumentLinesBinAllocations().add(binAllocationMDL);
+
+                itemsList.add(lineMDL);
+            }
+        }
         document.setDocumentLines(itemsList);
 
         //1. Login
