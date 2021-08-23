@@ -86,7 +86,7 @@ public class SalesOrderFacade {
     public List<SalesOrderDTO> findOpenOrders(boolean showAll, boolean filterGroup, String schemaName, boolean testing, String warehouseCode) {
         EntityManager em = persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA);
         StringBuilder sb = new StringBuilder();
-        sb.append("select j.docnum, j.docdate, j.cardcode, j.cardname, j.confirmed, j.items, j.comments, j.address, j.transp, j.OvMDL ");
+        sb.append("select j.docnum, j.docdate, j.cardcode, j.cardname, j.confirmed, j.items, j.comments, j.address, j.transp, j.ovMDL, j.contSer ");
         sb.append("from (select f.*, COUNT(f.grupo) OVER (PARTITION BY f.cardcode) as \"ContGrupo\" from ( ");
         sb.append("select t.*, ROW_NUMBER() OVER (PARTITION BY t.cardcode order by t.cardcode) as grupo from ( ");
         sb.append("select distinct cast(enc.\"DocNum\" as varchar(10)) as docnum, ");
@@ -94,11 +94,20 @@ public class SalesOrderFacade {
         sb.append("cast(enc.\"CardName\" as varchar(100)) as cardname, cast(enc.\"Confirmed\" as varchar(1)) as confirmed, ");
         sb.append("cast((select count(1) from RDR1 det where det.\"DocEntry\" = enc.\"DocEntry\" and det.\"LineStatus\" = 'O') as int) as items, ");
         sb.append("cast(enc.\"Comments\" as varchar(254)) as comments, cast(enc.\"Address2\" as varchar(200)) as address, ");
-        sb.append("ifnull(cast(enc.\"U_TRANSP\" as varchar(4)),'') as transp, cast(mdl.\"DocNum\" as varchar(10))as OvMDL ");
+        sb.append("ifnull(cast(enc.\"U_TRANSP\" as varchar(4)),'') as transp, ");
+        if (warehouseCode.equals("30")) {
+            sb.append("null as ovMDL, ");
+        } else {
+            sb.append("cast(mdl.\"DocNum\" as varchar(10))as ovMDL, ");
+        }
+        sb.append("(select cast(count(\"U_SERIAL\")as int) from ORDR where \"U_SERIAL\"=enc.\"U_SERIAL\")as contSer ");
         sb.append("from ORDR enc ");
         sb.append("inner join RDR1 det on det.\"DocEntry\" = enc.\"DocEntry\" and det.\"WhsCode\" = '");
         sb.append(warehouseCode);
-        sb.append("' left join ORDR mdl on enc.\"U_SERIAL\" = mdl.\"U_SERIAL\" and right(mdl.\"NumAtCard\",1)='M' ");
+        sb.append("' ");
+        if (warehouseCode.equals("01")) {
+            sb.append("left join ORDR mdl on enc.\"U_SERIAL\" = mdl.\"U_SERIAL\" and right(mdl.\"NumAtCard\",1)='M' ");
+        }
         sb.append("where enc.\"DocStatus\" = 'O' and enc.\"U_SEPARADOR\" IN ('APROBADO','PREPAGO','SEDE BOGOTA') and ");
         sb.append("        year(enc.\"DocDate\") = year(current_date) and MONTH(enc.\"DocDate\") between MONTH(current_date)-1 and MONTH(current_date) ");
         if (!showAll) {
@@ -106,7 +115,15 @@ public class SalesOrderFacade {
         }
         sb.append(") as t ) as f ) as j ");
         if (filterGroup) {
-            sb.append("where j.\"ContGrupo\" > 1 ");
+            if (warehouseCode.equals("30")) {
+                sb.append("where j.\"ContGrupo\" > 1 and j.contSer = 1 ");
+            } else {
+                sb.append("where j.\"ContGrupo\" > 1 ");
+            }
+        } else {
+            if (warehouseCode.equals("30")) {
+                sb.append("where j.contSer = 1 ");
+            }
         }
         sb.append("order by j.docdate, j.docnum");
         List<SalesOrderDTO> orders = new ArrayList<>();
