@@ -106,7 +106,7 @@ public class SalesOrderFacade {
         sb.append(warehouseCode);
         sb.append("' ");
         if (warehouseCode.equals("01")) {
-            sb.append("left join ORDR mdl on enc.\"U_SERIAL\" = mdl.\"U_SERIAL\" and right(mdl.\"NumAtCard\",1)='M' ");
+            sb.append("left join ORDR mdl on enc.\"U_SERIAL\" = mdl.\"U_SERIAL\" and right(mdl.\"NumAtCard\",1)='M' and mdl.\"DocStatus\"='O' ");
         }
         sb.append("where enc.\"DocStatus\" = 'O' and enc.\"U_SEPARADOR\" IN ('APROBADO','PREPAGO','SEDE BOGOTA') and ");
         sb.append("        year(enc.\"DocDate\") = year(current_date) and MONTH(enc.\"DocDate\") between MONTH(current_date)-1 and MONTH(current_date) ");
