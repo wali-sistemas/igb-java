@@ -224,7 +224,7 @@ public class DeliveryREST {
                 Integer baseLineNumMDL = (Integer) obj[9];
 
                 DeliveryDTO.DocumentLines.DocumentLine lineMDL = new DeliveryDTO.DocumentLines.DocumentLine();
-                lineMDL.setLineNum((long) items.size());
+                lineMDL.setLineNum((long) itemsList.size());
                 lineMDL.setItemCode((String) obj[2]);
                 lineMDL.setQuantity(qtyMDL.doubleValue());
                 lineMDL.setWarehouseCode("30");
@@ -235,7 +235,7 @@ public class DeliveryREST {
 
                 DeliveryDTO.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation binAllocationMDL = new DeliveryDTO.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation();
                 binAllocationMDL.setAllowNegativeQuantity(Constants.SAP_STATUS_NO);
-                binAllocationMDL.setBaseLineNumber((long) items.size());
+                binAllocationMDL.setBaseLineNumber((long) itemsList.size());
                 binAllocationMDL.setBinAbsEntry(binAbsMDL.longValue());
                 binAllocationMDL.setQuantity(qtyMDL.doubleValue());
                 lineMDL.getDocumentLinesBinAllocations().add(binAllocationMDL);
