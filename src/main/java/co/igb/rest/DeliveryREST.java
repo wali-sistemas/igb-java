@@ -19,10 +19,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
@@ -55,6 +52,158 @@ public class DeliveryREST {
             service = new DeliveryClient(Constants.HANAWS_SL_URL);
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "No fue posible iniciar la instancia de DeliveryServiceLayer. ", e);
+        }
+    }
+
+    @POST
+    @Path("modula")
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response createDeliveryNoteModula(Integer orderMDL,
+                                             @HeaderParam("X-Company-Name") String companyName,
+                                             @HeaderParam("X-Employee") String userName,
+                                             @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Iniciando creacion de entrega para las ordenes de solo wms-modula");
+
+        List<Object[]> orderRecords = deliveryNoteFacade.listRecords(orderMDL, "30", companyName, pruebas);
+        if (orderRecords.isEmpty()) {
+            CONSOLE.log(Level.SEVERE, "No se encontraron registros para crear entrega de la orden {0}", orderMDL);
+            return Response.ok(new ResponseDTO(-2, "No se encontraron registros para crear entrega de la orden " + orderMDL)).build();
+        }
+
+        HashMap<String, DeliveryDTO.DocumentLines.DocumentLine> items = new HashMap<>();
+        DeliveryDTO document = new DeliveryDTO();
+        Integer orderDocEntry = null;
+        Integer orderNumber = (Integer) orderRecords.get(0)[0];
+
+        if (orderDocEntry == null) {
+            document.setSeries(Long.parseLong(getPropertyValue(Constants.DELIVERY_NOTE_SERIES, companyName)));
+            document.setCardCode((String) orderRecords.get(0)[1]);
+            String commentOV = (String) orderRecords.get(0)[6];
+            if (commentOV != null) {
+                //limitando caracteres no mayores a 254 para que lo acepte SAP
+                String commentWms = "Orden #" + orderNumber + " creada por " + userName + " desde WALI.";
+                if ((commentOV.length() + commentWms.length() - 254) > 0) {
+                    document.setComments(commentOV.substring(0, commentOV.length() - (commentOV.length() + commentWms.length() - 251)) + "..." + commentWms);
+                } else {
+                    document.setComments(commentOV + "." + commentWms);
+                }
+            } else {
+                document.setComments("Orden #" + orderNumber + " creada por " + userName + " desde WALI.");
+            }
+            document.setUtotcaj(0.0);
+            document.setUvrdeclarado((BigDecimal) orderRecords.get(0)[7]);
+            document.setUnunfac(orderNumber.toString());
+        }
+
+        for (Object[] row : orderRecords) {
+            String itemCode = (String) row[2];
+            Integer quantity = (Integer) row[3];
+            Integer binAbs = (Integer) row[4];
+            String binCode = (String) row[5];
+            orderDocEntry = (Integer) row[8];
+
+            if (orderDocEntry == null || orderDocEntry <= 0) {
+                return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-2, "Ocurrió un error al consultar el docEntry de la orden. ")).build();
+            }
+
+            DeliveryDTO.DocumentLines.DocumentLine line = new DeliveryDTO.DocumentLines.DocumentLine();
+            if (!items.containsKey(itemCode)) {
+                //Si el item no se ha agregado a la orden
+                line.setLineNum((long) items.size());
+                line.setItemCode(itemCode);
+                line.setQuantity(quantity.doubleValue());
+                line.setWarehouseCode(binCode.substring(0, 2));
+
+                Integer baseLineNum = (Integer) row[9];
+                if (baseLineNum < 0) {
+                    CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el numero de linea de la orden {0}", orderNumber.toString());
+                    return Response.ok(new ResponseDTO(-2, "Ocurrio un error al consultar el numero de linea de la orden (baseLine) para el ítem [" + itemCode + "]. Es posible que la orden ya se haya cerrado")).build();
+                }
+                line.setBaseLine(baseLineNum.longValue());
+                line.setBaseEntry(orderDocEntry.longValue());
+                line.setBaseType(Long.parseLong(getPropertyValue(Constants.SALES_ORDER_SERIES, companyName)));
+                line.setDocumentLinesBinAllocations(new ArrayList<DeliveryDTO.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation>());
+
+                items.put(itemCode, line);
+            } else {
+                //Si el item ya se agrego a la orden
+                line = items.get(itemCode);
+                line.setQuantity(line.getQuantity() + quantity.doubleValue());
+            }
+
+            boolean quantityAdded = false;
+            for (DeliveryDTO.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation binAllocation : line.getDocumentLinesBinAllocations()) {
+                if (binAllocation.getBinAbsEntry().equals(binAbs.longValue())) {
+                    binAllocation.setQuantity(binAllocation.getQuantity() + quantity.doubleValue());
+                    quantityAdded = true;
+                    break;
+                }
+            }
+
+            if (!quantityAdded) {
+                DeliveryDTO.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation binAllocation = new DeliveryDTO.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation();
+                binAllocation.setAllowNegativeQuantity(Constants.SAP_STATUS_NO);
+                binAllocation.setBaseLineNumber(line.getLineNum());
+                binAllocation.setBinAbsEntry(binAbs.longValue());
+                binAllocation.setQuantity(quantity.doubleValue());
+                line.getDocumentLinesBinAllocations().add(binAllocation);
+            }
+        }
+
+        List<DeliveryDTO.DocumentLines.DocumentLine> itemsList = new ArrayList<>(items.values());
+        itemsList.sort(new Comparator<DeliveryDTO.DocumentLines.DocumentLine>() {
+            @Override
+            public int compare(DeliveryDTO.DocumentLines.DocumentLine o1, DeliveryDTO.DocumentLines.DocumentLine o2) {
+                return o1.getLineNum().compareTo(o2.getLineNum());
+            }
+        });
+
+        document.setDocumentLines(itemsList);
+
+        //1. Login
+        String sessionId = null;
+        try {
+            sessionId = sapFunctions.getSessionId(companyName.equals("IGBPruebas") ? "DBIGBTH" : companyName);
+            if (sessionId != null) {
+                CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error al iniciar sesion en el DI Server.")).build();
+            }
+        } catch (Exception ignored) {
+        }
+        //2. Registrar documento
+        Long docNum = -1L;
+        String errorMessage = null;
+        if (sessionId != null) {
+            try {
+                Gson gson = new Gson();
+                String JSON = gson.toJson(document);
+                CONSOLE.log(Level.INFO, JSON);
+                docNum = createDeliveryNoteService(document, sessionId);
+                CONSOLE.log(Level.INFO, "Se creo la entrega con DocNum={0}", docNum);
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
+                errorMessage = e.getMessage();
+            }
+        }
+        //3. Logout
+        if (sessionId != null) {
+            boolean resp = sapFunctions.returnSession(sessionId);
+            if (resp) {
+                CONSOLE.log(Level.INFO, "Se cerro la sesion [{0}] de DI Server correctamente", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la sesion de DI Server.")).build();
+            }
+        }
+        //4. Validar y retornar
+        if (docNum > 0) {
+            return Response.ok(new ResponseDTO(0, docNum)).build();
+        } else {
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error al crear la entrega. " + errorMessage)).build();
         }
     }
 
@@ -265,7 +414,7 @@ public class DeliveryREST {
                 Gson gson = new Gson();
                 String JSON = gson.toJson(document);
                 CONSOLE.log(Level.INFO, JSON);
-                docNum = createDeliveryNote(document, sessionId);
+                docNum = createDeliveryNoteService(document, sessionId);
                 CONSOLE.log(Level.INFO, "Se creo la entrega con DocNum={0}", docNum);
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
@@ -290,7 +439,7 @@ public class DeliveryREST {
         }
     }
 
-    private Long createDeliveryNote(DeliveryDTO document, String sessionId) {
+    private Long createDeliveryNoteService(DeliveryDTO document, String sessionId) {
         DeliveryRestDTO res = null;
         try {
             res = service.addDeliveryNote(document, sessionId);
