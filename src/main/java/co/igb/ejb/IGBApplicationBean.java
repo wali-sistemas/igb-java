@@ -58,7 +58,7 @@ public class IGBApplicationBean implements Serializable {
     private void initialize() {
         loadProperties();
         //consultarUbicacionesInventario();
-        consultarUbicacionesRecepcion();
+        //consultarUbicacionesRecepcion();
     }
 
     @GET
