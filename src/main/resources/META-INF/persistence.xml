@@ -60,6 +60,14 @@
             <property name="hibernate.globally_quoted_identifiers" value="true"/>
         </properties>
     </persistence-unit>
+    <persistence-unit name="HANAVARROCTESTPU" transaction-type="JTA">
+        <jta-data-source>java:/HANAVARROCTESTDS</jta-data-source>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
+            <property name="hibernate.globally_quoted_identifiers" value="true"/>
+        </properties>
+    </persistence-unit>
     <persistence-unit name="HANAVELEZPU" transaction-type="JTA">
         <jta-data-source>java:/HANAVELEZDS</jta-data-source>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
