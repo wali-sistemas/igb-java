@@ -177,7 +177,7 @@ public class StockTransferREST implements Serializable {
         //1. Login
         String sessionId = null;
         try {
-            sessionId = sapFunctions.getSessionId(companyName.equals("IGBPruebas") ? "DBIGBTH" : companyName);
+            sessionId = sapFunctions.getSessionId(companyName);
             if (sessionId != null) {
                 CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
             } else {
@@ -341,7 +341,7 @@ public class StockTransferREST implements Serializable {
         //1. Login
         String sessionId = null;
         try {
-            sessionId = sapFunctions.getSessionId(companyName.equals("IGBPruebas") ? "DBIGBTH" : companyName);
+            sessionId = sapFunctions.getSessionId(companyName);
             if (sessionId != null) {
                 CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
             } else {
@@ -470,7 +470,7 @@ public class StockTransferREST implements Serializable {
                 //1. Login
                 String sessionId = null;
                 try {
-                    sessionId = sapFunctions.getSessionId(companyName.equals("IGBPruebas") ? "DBIGBTH" : companyName);
+                    sessionId = sapFunctions.getSessionId(companyName);
                     if (sessionId != null) {
                         CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
                     } else {
@@ -604,7 +604,7 @@ public class StockTransferREST implements Serializable {
         //1. Login
         String sessionId = null;
         try {
-            sessionId = sapFunctions.getSessionId(companyName.equals("IGBPruebas") ? "DBIGBTH" : companyName);
+            sessionId = sapFunctions.getSessionId(companyName);
             if (sessionId != null) {
                 CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
             } else {
@@ -703,7 +703,7 @@ public class StockTransferREST implements Serializable {
         //1. Login
         String sessionId = null;
         try {
-            sessionId = sapFunctions.getSessionId(companyName.equals("IGBPruebas") ? "DBIGBTH" : companyName);
+            sessionId = sapFunctions.getSessionId(companyName);
             if (sessionId != null) {
                 CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
             } else {
@@ -788,7 +788,7 @@ public class StockTransferREST implements Serializable {
         //1. Login
         String sessionId = null;
         try {
-            sessionId = sapFunctions.getSessionId(companyName.equals("IGBPruebas") ? "DBIGBTH" : companyName);
+            sessionId = sapFunctions.getSessionId(companyName);
             if (sessionId != null) {
                 CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
             } else {
@@ -899,7 +899,7 @@ public class StockTransferREST implements Serializable {
         //1. Login
         String sessionId = null;
         try {
-            sessionId = sapFunctions.getSessionId(companyName.equals("IGBPruebas") ? "DBIGBTH" : companyName);
+            sessionId = sapFunctions.getSessionId(companyName);
             if (sessionId != null) {
                 CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
             } else {

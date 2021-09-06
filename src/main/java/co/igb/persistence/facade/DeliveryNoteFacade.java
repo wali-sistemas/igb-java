@@ -107,7 +107,7 @@ public class DeliveryNoteFacade {
         return null;
     }
 
-    public List<Object[]> listRecords(Integer docNum, String companyName, boolean testing) {
+    public List<Object[]> listRecords(Integer docNum, String whsCode, String companyName, boolean testing) {
         EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA);
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(t.\"DocNum\" as int)as DocNum,cast(t.\"CardCode\" as varchar(20))as CardCode,cast(t.\"ItemCode\" as varchar(20))as ItemCode, ");
@@ -118,14 +118,17 @@ public class DeliveryNoteFacade {
         sb.append("       select u.\"BinCode\", row_number() over(partition by d.\"ItemCode\" order by cast(u.\"Attr2Val\" as varchar(10)),cast(u.\"Attr3Val\" as int))as \"fila\" ");
         sb.append("       from  OIBQ s ");
         sb.append("       inner join OBIN u on u.\"AbsEntry\"=s.\"BinAbs\" and u.\"SysBin\"='N' and u.\"Attr1Val\" IN ('PICKING','STORAGE') ");
-        sb.append("       where s.\"OnHandQty\">=d.\"Quantity\" and s.\"ItemCode\"=d.\"ItemCode\" and s.\"WhsCode\"='01' and s.\"OnHandQty\">0 ");
-        sb.append("     )as t where t.\"fila\" = 1)as varchar(20))as \"BinCode\",o.\"DocNum\",o.\"CardCode\",o.\"Comments\", ");
+        sb.append("       where s.\"OnHandQty\">=d.\"Quantity\" and s.\"ItemCode\"=d.\"ItemCode\" and s.\"WhsCode\"='");
+        sb.append(whsCode);
+        sb.append("' and s.\"OnHandQty\">0)as t where t.\"fila\" = 1)as varchar(20))as \"BinCode\",o.\"DocNum\",o.\"CardCode\",o.\"Comments\", ");
         sb.append(" cast((o.\"DocTotal\"+o.\"DiscSum\"+o.\"WTSum\")-o.\"VatSum\"-o.\"TotalExpns\"-o.\"RoundDif\" as numeric(18,2))as \"ValorDeclarado\",o.\"DocEntry\",d.\"LineNum\",d.\"WhsCode\" ");
         sb.append(" from ORDR o ");
         sb.append(" inner join RDR1 d on d.\"DocEntry\"=o.\"DocEntry\" and d.\"LineStatus\"='O' ");
         sb.append(" where o.\"DocStatus\"='O' and o.\"DocNum\"=");
         sb.append(docNum);
-        sb.append(")as t ");
+        sb.append(" and d.\"WhsCode\"='");
+        sb.append(whsCode);
+        sb.append("')as t ");
         sb.append("left join OBIN u on u.\"BinCode\"=t.\"BinCode\" ");
         sb.append("order by u.\"Attr2Val\",\"Attr3Val\"");
         try {

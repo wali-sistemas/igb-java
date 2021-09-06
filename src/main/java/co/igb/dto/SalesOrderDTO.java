@@ -20,11 +20,12 @@ public class SalesOrderDTO {
     private String status;
     private String address;
     private String transp;
+    private String docNumMDL;
 
     public SalesOrderDTO() {
     }
 
-    public SalesOrderDTO(Long docEntry, String docNum, String series, String confirmed, Long salesPersonCode, Date docDate, String cardCode, String cardName, Integer items, String comments, String assignedPickingEmployee, String status, String address, String transp) {
+    public SalesOrderDTO(Long docEntry, String docNum, String series, String confirmed, Long salesPersonCode, Date docDate, String cardCode, String cardName, Integer items, String comments, String assignedPickingEmployee, String status, String address, String transp, String docNumMDL) {
         this.docEntry = docEntry;
         this.docNum = docNum;
         this.series = series;
@@ -39,6 +40,7 @@ public class SalesOrderDTO {
         this.status = status;
         this.address = address;
         this.transp = transp;
+        this.docNumMDL = docNumMDL;
     }
 
     public Long getDocEntry() {
@@ -153,6 +155,14 @@ public class SalesOrderDTO {
         this.transp = transp;
     }
 
+    public String getDocNumMDL() {
+        return docNumMDL;
+    }
+
+    public void setDocNumMDL(String docNumMDL) {
+        this.docNumMDL = docNumMDL;
+    }
+
     @Override
     public String toString() {
         return "SalesOrderDTO{" +
@@ -170,6 +180,7 @@ public class SalesOrderDTO {
                 ", status='" + status + '\'' +
                 ", address='" + address + '\'' +
                 ", transp='" + transp + '\'' +
+                ", docNumMDL='" + docNumMDL + '\'' +
                 '}';
     }
 }
