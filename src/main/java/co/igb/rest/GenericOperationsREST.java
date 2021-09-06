@@ -58,7 +58,7 @@ public class GenericOperationsREST {
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     public Response createJournalEntry(JournalEntryDTO dto) {
-        CONSOLE.log(Level.INFO, "Iniciando servicio de creacion de asiento de nomina en SAP para {0}");
+        CONSOLE.log(Level.INFO, "Iniciando servicio de creacion de asiento de nomina en SAP para la empresa {0}");
         return Response.ok(journalEntryEJB.createJournalEntry(dto, "VARROCPruebas")).build();
     }
 }
