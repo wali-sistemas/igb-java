@@ -2,15 +2,14 @@ package co.igb.rest;
 
 import co.igb.dto.ResponseDTO;
 import co.igb.ejb.IGBApplicationBean;
+import co.igb.ejb.JournalEntryEJB;
+import co.igb.hanaws.dto.journalEntries.JournalEntryDTO;
 import co.igb.persistence.facade.WarehouseFacade;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.logging.Level;
@@ -28,6 +27,8 @@ public class GenericOperationsREST {
     private IGBApplicationBean applicationBean;
     @EJB
     private WarehouseFacade warehouseFacade;
+    @EJB
+    private JournalEntryEJB journalEntryEJB;
 
     @GET
     @Path("companies")
@@ -50,5 +51,14 @@ public class GenericOperationsREST {
     public Response listWarehouses(@HeaderParam("X-Company-Name") String companyName,
                                    @HeaderParam("X-Pruebas") boolean pruebas) {
         return Response.ok(new ResponseDTO(0, warehouseFacade.listBinEnabledWarehouses(companyName, pruebas))).build();
+    }
+
+    @POST
+    @Path("add-journalEntry")
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    public Response createJournalEntry(JournalEntryDTO dto) {
+        CONSOLE.log(Level.INFO, "Iniciando servicio de creacion de asiento de nomina en SAP para {0}");
+        return Response.ok(journalEntryEJB.createJournalEntry(dto, "VARROCPruebas")).build();
     }
 }
