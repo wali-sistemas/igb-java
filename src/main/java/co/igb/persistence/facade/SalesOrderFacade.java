@@ -344,7 +344,7 @@ public class SalesOrderFacade {
         sb.append("      cast(o.\"DocDate\" as date) as fechaOrden, cast(e.\"DocTotal\" as numeric(18,0)) as total, cast((select max(d.\"WhsCode\") from RDR1 d where d.\"DocEntry\"=o.\"DocEntry\") as varchar(20)) as almacen ");
         sb.append("from  ORDR o ");
         sb.append("inner join ODLN e ON o.\"DocNum\" = e.\"U_NUNFAC\" ");
-        sb.append("where e.\"CANCELED\"='N' and e.\"DocStatus\"='O' and e.\"DocType\"='I' and o.\"DocType\"='I' and o.\"CANCELED\"='N' and o.\"DocDate\" between ADD_DAYS(TO_DATE(current_date,'YYYY-MM-DD'),-20) and current_date");
+        sb.append("where e.\"CANCELED\"='N' and e.\"DocStatus\"='O' and e.\"DocType\"='I' and o.\"DocType\"='I' and o.\"CANCELED\"='N' and o.\"DocDate\" between ADD_DAYS(TO_DATE(current_date,'YYYY-MM-DD'),-30) and current_date");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException ex) {

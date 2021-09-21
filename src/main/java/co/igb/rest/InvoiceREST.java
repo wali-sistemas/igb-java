@@ -191,13 +191,16 @@ public class InvoiceREST implements Serializable {
         }
 
         if (companyName.contains("IGB") && !itemRepsol) {
-            BigDecimal porcFlete = customerFacade.getCustomerFlete(invoice.getCardCode(), companyName, pruebas);
-            BigDecimal lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
-            if (porcFlete != null) {
-                InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
-                gasto.setExpenseCode(Constants.CODE_FLETE_GRABABLE);
-                gasto.setLineTotal(lineTotal.setScale(0, RoundingMode.CEILING));
-                gastos.add(gasto);
+            //TODO: validar si el cliente de IGB tiene checkList en el maestro de SN de deshabilitar flete
+            if (!customerFacade.disableFreightCollection(invoice.getCardCode(), companyName, pruebas).equals("Y")) {
+                BigDecimal porcFlete = customerFacade.getCustomerFlete(invoice.getCardCode(), companyName, pruebas);
+                BigDecimal lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
+                if (porcFlete != null) {
+                    InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
+                    gasto.setExpenseCode(Constants.CODE_FLETE_GRABABLE);
+                    gasto.setLineTotal(lineTotal.setScale(0, RoundingMode.CEILING));
+                    gastos.add(gasto);
+                }
             }
         }
         invoice.setDocumentAdditionalExpenses(gastos);
