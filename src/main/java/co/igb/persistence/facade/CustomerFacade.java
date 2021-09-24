@@ -4,6 +4,7 @@ import co.igb.util.Constants;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.persistence.NoResultException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.logging.Level;
@@ -62,6 +63,22 @@ public class CustomerFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el porcentaje de flete para el cliente #[" + customerId + "]");
             return null;
         }
+    }
+
+    public String disableFreightCollection(String cardCode, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(\"QryGroup16\" as varchar(1)) ");
+        sb.append("from OCRD ");
+        sb.append("where \"CardCode\"='");
+        sb.append(cardCode);
+        sb.append("'");
+        try {
+            return (String) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando si al cliente [" + cardCode + "] se le cobra flete");
+        }
+        return "N";
     }
 
     public List<Object[]> getWithholdingTaxData(String cardCode, String companyName, boolean testing) {
