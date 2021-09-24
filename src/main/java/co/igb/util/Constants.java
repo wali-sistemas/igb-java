@@ -70,4 +70,7 @@ public class Constants {
     public static final String SOUL_USER = "811011909";
     public static final String SOUL_PASSWORD = "IgbMp2020*";
     public static final String HANAWS_SL_URL = "https://slhana.igbcolombia.com:50000/b1s/";
+    public static final String CUBIC_WS_URL = "cubic.ws.url";
+    public static final String CUBIC_WS_USER = "cubic.ws.user";
+    public static final String CUBIC_WS_PASSWORD = "cubic.ws.password";
 }

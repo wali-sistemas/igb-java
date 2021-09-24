@@ -3,10 +3,12 @@ package co.igb.apiCubic.ejb;
 import co.igb.apiCubic.client.orden.CubicOrdenWS;
 import co.igb.apiCubic.dto.orden.CubicOrdenDTO;
 import co.igb.apiCubic.dto.orden.CubicOrdenRestDTO;
+import co.igb.ejb.IGBApplicationBean;
 import co.igb.util.Constants;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.InternalServerErrorException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,10 +21,13 @@ public class CubicOrdenEJB {
     private static final Logger CONSOLE = Logger.getLogger(CubicOrdenEJB.class.getSimpleName());
     private CubicOrdenWS service;
 
+    @Inject
+    private IGBApplicationBean appBean;
+
     @PostConstruct
     private void initialize() {
         try {
-            service = new CubicOrdenWS(Constants.CUBIC_WS_URL);
+            service = new CubicOrdenWS(appBean.obtenerValorPropiedad(Constants.CUBIC_WS_URL));
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "No fue posible iniciar la interface de cubic [WS_ORDENES]. ", e);
         }
@@ -30,7 +35,9 @@ public class CubicOrdenEJB {
 
     public CubicOrdenRestDTO addOrden(CubicOrdenDTO dto) {
         try {
-            return service.createOrder(dto);
+            String user = appBean.obtenerValorPropiedad(Constants.CUBIC_WS_USER);
+            String password = appBean.obtenerValorPropiedad(Constants.EMAIL_PASSWORD);
+            return service.createOrder(dto, user, password);
         } catch (InternalServerErrorException e) {
             if (e.getResponse().getStatus() == 500) {
                 CONSOLE.log(Level.WARNING, "La orden ya se encuentra creada en cubic.");
