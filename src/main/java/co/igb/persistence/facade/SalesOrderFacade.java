@@ -95,7 +95,7 @@ public class SalesOrderFacade {
         sb.append("cast((select count(1) from RDR1 det where det.\"DocEntry\" = enc.\"DocEntry\" and det.\"LineStatus\" = 'O') as int) as items, ");
         sb.append("cast(enc.\"Comments\" as varchar(254)) as comments, cast(enc.\"Address2\" as varchar(200)) as address, ");
         sb.append("ifnull(cast(enc.\"U_TRANSP\" as varchar(4)),'') as transp, ");
-        if (warehouseCode.equals("01") || warehouseCode.equals("13")) {
+        if (warehouseCode.equals("30") || warehouseCode.equals("13")) {
             sb.append("null as ovMDL, ");
         } else {
             sb.append("cast(mdl.\"DocNum\" as varchar(10))as ovMDL, ");
