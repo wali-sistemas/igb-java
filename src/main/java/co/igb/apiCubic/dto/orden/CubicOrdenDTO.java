@@ -3,6 +3,7 @@ package co.igb.apiCubic.dto.orden;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -170,9 +171,63 @@ public class CubicOrdenDTO implements Serializable {
 
             public static class Referencia {
                 protected String refPrincipal;
+                protected String descripcion;
+                protected BigDecimal valUnitario;
+                protected String codTipoProducto;
+                protected String codUnidadMedida;
+                protected String codPresentacion;
+                protected String codProcedencia;
 
                 public String getRefPrincipal() {
                     return refPrincipal;
+                }
+
+                public String getDescripcion() {
+                    return descripcion;
+                }
+
+                public void setDescripcion(String descripcion) {
+                    this.descripcion = descripcion;
+                }
+
+                public BigDecimal getValUnitario() {
+                    return valUnitario;
+                }
+
+                public void setValUnitario(BigDecimal valUnitario) {
+                    this.valUnitario = valUnitario;
+                }
+
+                public String getCodTipoProducto() {
+                    return codTipoProducto;
+                }
+
+                public void setCodTipoProducto(String codTipoProducto) {
+                    this.codTipoProducto = codTipoProducto;
+                }
+
+                public String getCodUnidadMedida() {
+                    return codUnidadMedida;
+                }
+
+                public void setCodUnidadMedida(String codUnidadMedida) {
+                    this.codUnidadMedida = codUnidadMedida;
+                }
+
+                public String getCodPresentacion() {
+                    return codPresentacion;
+                }
+
+                public void setCodPresentacion(String codPresentacion) {
+                    this.codPresentacion = codPresentacion;
+                }
+
+                public String getCodProcedencia() {
+                    return codProcedencia;
+                }
+
+                public void setCodProcedencia(String codProcedencia) {
+                    this.codProcedencia = codProcedencia;
                 }
 
                 public void setRefPrincipal(String refPrincipal) {

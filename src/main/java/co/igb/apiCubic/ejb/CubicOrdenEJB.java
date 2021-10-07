@@ -5,6 +5,7 @@ import co.igb.apiCubic.dto.orden.CubicOrdenDTO;
 import co.igb.apiCubic.dto.orden.CubicOrdenRestDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.util.Constants;
+import com.google.gson.Gson;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -36,7 +37,12 @@ public class CubicOrdenEJB {
     public CubicOrdenRestDTO addOrden(CubicOrdenDTO dto) {
         try {
             String user = appBean.obtenerValorPropiedad(Constants.CUBIC_WS_USER);
-            String password = appBean.obtenerValorPropiedad(Constants.EMAIL_PASSWORD);
+            String password = appBean.obtenerValorPropiedad(Constants.CUBIC_WS_PASSWORD);
+
+            Gson gson = new Gson();
+            String JSON = gson.toJson(dto);
+            CONSOLE.log(Level.INFO, JSON);
+
             return service.createOrder(dto, user, password);
         } catch (InternalServerErrorException e) {
             if (e.getResponse().getStatus() == 500) {
