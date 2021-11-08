@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -245,5 +246,21 @@ public class InvoiceFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el total de ordenes pendientes por shipping.", e);
         }
         return 0;
+    }
+
+    public List<Object[]> listDetailInvoice(String docNum, String companyname, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(d.\"ItemCode\" as varchar(20))as item,cast(d.\"Dscription\" as varchar(100))as itemName,cast(d.\"Quantity\" as int)as qty,cast(d.\"GrossBuyPr\" as numeric(18,2))as costo ");
+        sb.append("from OINV e ");
+        sb.append("inner join INV1 d on d.\"DocEntry\"=e.\"DocEntry\" ");
+        sb.append("where e.\"DocNum\"=");
+        sb.append(docNum);
+        try {
+            return persistenceConf.chooseSchema(companyname, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el detalle de la factura #" + docNum);
+        }
+        return new ArrayList<>();
     }
 }
