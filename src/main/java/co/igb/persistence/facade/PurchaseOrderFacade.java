@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -115,5 +116,77 @@ public class PurchaseOrderFacade {
         }
 
         return orders;
+    }
+
+    public List<Object[]> listTrackingOrder(String docNum, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(t.\"CONCEPTO\" as varchar(100))as concept,cast(t.\"INFO\" as varchar(100))as info,cast(o.\"DocNum\" as varchar(10))as orden, ");
+        sb.append(" cast(o.\"CardName\" as varchar(100))as Prov,cast(o.\"DocDate\" as date)as DocDate,cast(a.\"SlpName\" as varchar(50))as encargado, ");
+        sb.append(" cast(case when o.\"U_TIPO_EMPAQUE\"=01 then 'NO APLICA' when o.\"U_TIPO_EMPAQUE\"=04 then 'CONTENEDOR 40' when o.\"U_TIPO_EMPAQUE\"=05 then 'CONTENEDOR 40 HC' ");
+        sb.append("  when o.\"U_TIPO_EMPAQUE\"=02 then 'CARGA SUELTA' when o.\"U_TIPO_EMPAQUE\"=03 then 'CONTENEDOR 20' else '' end as varchar)as tipoEmpaque, ");
+        sb.append(" cast(case when o.\"U_TIPO_EMPAQUE\"=02 then o.\"U_CBM\" || ' CBM' else o.\"U_CANT_CONTE\" || ' CONTENEDOR' end as varchar)as nro ");
+        sb.append("from ( ");
+        sb.append(" select 'Origen' as Concepto,cast(e.\"Name\" as varchar(100))as Info,p.\"DocNum\" ");
+        sb.append(" from OPOR p ");
+        sb.append(" left join \"@PUERTO_PROV\" e on p.\"U_PUERTO_EMB\"=e.\"Code\" ");
+        sb.append(" where p.\"Series\"='48' ");
+        sb.append("union all ");
+        sb.append(" select 'Destino' as Concepto,cast(d.\"Name\" as varchar(100))as Info,p.\"DocNum\" ");
+        sb.append(" from OPOR p ");
+        sb.append(" left join \"@PUERTO_DES\" d on d.\"Code\"=p.\"U_PUERTO_DES\" ");
+        sb.append(" where p.\"Series\"='48' ");
+        sb.append("union all ");
+        sb.append(" select 'Embarque' as Concepto,cast(cast(p.\"U_F_EMBARQUE\" as date)as varchar)as Info,p.\"DocNum\" ");
+        sb.append(" from OPOR p ");
+        sb.append(" where p.\"Series\"='48' ");
+        sb.append("union all ");
+        sb.append(" select 'Arribo Puerto' as Concepto,cast(cast(p.\"U_F_ARRIB_PUERTO\" as date)as varchar)as Info,p.\"DocNum\" ");
+        sb.append(" from OPOR p ");
+        sb.append(" where p.\"Series\"='48' ");
+        sb.append("union all ");
+        sb.append(" select 'Arribo Cedi' as Concepto,cast(cast(p.\"U_Fecha_Arribo_CEDI\" as date)as varchar)as Info,p.\"DocNum\" ");
+        sb.append(" from OPOR p ");
+        sb.append(" where p.\"Series\"='48' ");
+        sb.append("union all ");
+        sb.append(" select 'Carga Puerto' as Concepto,ifnull(cast(cast(p.\"U_F_DOC_TRANSP\" as date)as varchar),'')as Info,p.\"DocNum\" ");
+        sb.append(" from OPOR p ");
+        sb.append(" where p.\"Series\"='48' ");
+        sb.append("union all ");
+        sb.append(" select 'Tiempo Tránsito' as Concepto,cast(days_between(p.\"U_F_EMBARQUE\",p.\"U_Fecha_Arribo_CEDI\")as varchar) || ' Días' as Info,p.\"DocNum\" ");
+        sb.append(" from OPOR p ");
+        sb.append(" where p.\"Series\"='48' ");
+        sb.append("union all ");
+        sb.append(" select 'Salida Puerto' as Concepto,ifnull(cast(cast(p.\"U_F_SALIDA_PUERTO\" as date)as varchar),'')as Info,p.\"DocNum\" ");
+        sb.append(" from OPOR p ");
+        sb.append(" where p.\"Series\"='48' ");
+        sb.append("union all ");
+        sb.append(" select 'Tiempo Puerto' as Concepto,cast(days_between(p.\"U_F_ARRIB_PUERTO\",p.\"U_F_SALIDA_PUERTO\")as varchar) || ' Días' as Info,p.\"DocNum\" ");
+        sb.append(" from OPOR p ");
+        sb.append(" where p.\"Series\"='48' ");
+        sb.append("union all ");
+        sb.append(" select 'Estado OC' as Concepto,cast(s.\"Name\" as varchar)as Info,p.\"DocNum\" ");
+        sb.append(" from OPOR p ");
+        sb.append(" left join \"@ESTADO_OC\" s on s.\"Code\"=p.\"U_ESTADO_OC\" ");
+        sb.append(" where p.\"Series\"='48' ");
+        sb.append("union all ");
+        sb.append(" select 'Documento BL' as Concepto,cast(p.\"U_DOC_TRANSP\" as varchar) as Info,p.\"DocNum\" ");
+        sb.append(" from OPOR p ");
+        sb.append(" where p.\"Series\"='48' ");
+        sb.append("union all ");
+        sb.append(" select 'Observación' as Concepto,cast(p.\"U_OBSERVACION\" as varchar) as Info,p.\"DocNum\" ");
+        sb.append(" from OPOR p ");
+        sb.append(" where p.\"Series\"='48' ");
+        sb.append(")as t ");
+        sb.append("inner join OPOR o on o.\"DocNum\"=t.\"DocNum\" ");
+        sb.append("inner join OSLP a on a.\"SlpCode\"=o.\"SlpCode\" ");
+        sb.append("where t.\"DocNum\"=");
+        sb.append(docNum);
+        try {
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar el tracking para la orden de compra # " + docNum, e);
+        }
+        return null;
     }
 }

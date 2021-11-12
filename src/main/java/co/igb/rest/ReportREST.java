@@ -69,6 +69,8 @@ public class ReportREST implements Serializable {
     private ShippingOrderFacade shippingOrderFacade;
     @EJB
     private LandedCostsFacade landedCostsFacade;
+    @EJB
+    private PurchaseOrderFacade purchaseOrderFacade;
 
     @GET
     @Path("reports-orders")
@@ -425,6 +427,32 @@ public class ReportREST implements Serializable {
                                      @HeaderParam("X-Company-Name") String companyName,
                                      @HeaderParam("X-Pruebas") boolean pruebas) {
         return Response.ok(new ResponseDTO(0, landedCostsFacade.listPurchesesFactor(year, convertNameMonth(month), companyName, pruebas))).build();
+    }
+
+    @GET
+    @Path("comex/tracking-order/{order}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response getTrackingOrder(@PathParam("order") String docNum,
+                                     @HeaderParam("X-Company-Name") String companyName,
+                                     @HeaderParam("X-Pruebas") boolean pruebas) {
+        List<TrackingOrderDTO> trackingOrder = new ArrayList<>();
+        List<Object[]> datails = purchaseOrderFacade.listTrackingOrder(docNum, companyName, pruebas);
+        for (Object[] obj : datails) {
+            TrackingOrderDTO dto = new TrackingOrderDTO();
+            dto.setConcept((String) obj[0]);
+            dto.setInformation((String) obj[1]);
+            dto.setOrder((String) obj[2]);
+            dto.setCardCode((String) obj[3]);
+            dto.setCreateDate((Date) obj[4]);
+            dto.setBuyer((String) obj[5]);
+            dto.setTypeShipment((String) obj[6]);
+            dto.setNroQty((String) obj[7]);
+            dto.setUserName(dto.getBuyer().substring(0,1));
+
+            trackingOrder.add(dto);
+        }
+        return Response.ok(trackingOrder).build();
     }
 
     @POST
