@@ -90,7 +90,7 @@ public class SalesOrderFacade {
         sb.append("from (select f.*, COUNT(f.grupo) OVER (PARTITION BY f.cardcode) as \"ContGrupo\" from ( ");
         sb.append("select t.*, ROW_NUMBER() OVER (PARTITION BY t.cardcode order by t.cardcode) as grupo from ( ");
         sb.append("select distinct cast(enc.\"DocNum\" as varchar(10)) as docnum, ");
-        sb.append("cast(enc.\"DocDate\" as date) as docdate, cast(enc.\"CardCode\" as varchar(20)) as cardcode, ");
+        sb.append("cast(enc.\"DocDueDate\" as date) as docdate, cast(enc.\"CardCode\" as varchar(20)) as cardcode, ");
         sb.append("cast(enc.\"CardName\" as varchar(100)) as cardname, cast(enc.\"Confirmed\" as varchar(1)) as confirmed, ");
         sb.append("cast((select count(1) from RDR1 det where det.\"DocEntry\" = enc.\"DocEntry\" and det.\"LineStatus\" = 'O') as int) as items, ");
         sb.append("cast(enc.\"Comments\" as varchar(254)) as comments, cast(enc.\"Address2\" as varchar(200)) as address, ");
