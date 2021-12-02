@@ -124,7 +124,7 @@ public class PurchaseOrderFacade {
         sb.append(" cast(o.\"CardName\" as varchar(100))as Prov,cast(o.\"DocDate\" as date)as DocDate,cast(a.\"SlpName\" as varchar(50))as encargado, ");
         sb.append(" cast(case when o.\"U_TIPO_EMPAQUE\"=01 then 'NO APLICA' when o.\"U_TIPO_EMPAQUE\"=04 then 'CONTENEDOR 40' when o.\"U_TIPO_EMPAQUE\"=05 then 'CONTENEDOR 40 HC' ");
         sb.append("  when o.\"U_TIPO_EMPAQUE\"=02 then 'CARGA SUELTA' when o.\"U_TIPO_EMPAQUE\"=03 then 'CONTENEDOR 20' else '' end as varchar)as tipoEmpaque, ");
-        sb.append(" cast(case when o.\"U_TIPO_EMPAQUE\"=02 then o.\"U_CBM\" || ' CBM' else o.\"U_CANT_CONTE\" || ' CONTENEDOR' end as varchar)as nro ");
+        sb.append(" cast(case when o.\"U_TIPO_EMPAQUE\"=02 then o.\"U_CBM\" || ' CBM' else o.\"U_CANT_CONTE\" || ' CONTENEDOR' end as varchar)as nro,ifnull(cast(o.\"U_LIQUID_COMEX\" as varchar(5)),'0')as liq ");
         sb.append("from ( ");
         sb.append(" select 'Origen' as Concepto,cast(e.\"Name\" as varchar(100))as Info,p.\"DocNum\" ");
         sb.append(" from OPOR p ");

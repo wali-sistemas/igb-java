@@ -17,12 +17,13 @@ public class TrackingOrderDTO {
     private String typeShipment;
     private String nroQty;
     private String buyer;
+    private String liquid;
     private Date createDate;
 
     public TrackingOrderDTO() {
     }
 
-    public TrackingOrderDTO(String concept, String information, String order, String cardCode, String userName, String typeShipment, String nroQty, String buyer, Date createDate) {
+    public TrackingOrderDTO(String concept, String information, String order, String cardCode, String userName, String typeShipment, String nroQty, String buyer, String liquid, Date createDate) {
         this.concept = concept;
         this.information = information;
         this.order = order;
@@ -31,6 +32,7 @@ public class TrackingOrderDTO {
         this.typeShipment = typeShipment;
         this.nroQty = nroQty;
         this.buyer = buyer;
+        this.liquid = liquid;
         this.createDate = createDate;
     }
 
@@ -106,6 +108,14 @@ public class TrackingOrderDTO {
         this.userName = userName;
     }
 
+    public String getLiquid() {
+        return liquid;
+    }
+
+    public void setLiquid(String liquid) {
+        this.liquid = liquid;
+    }
+
     @Override
     public String toString() {
         return "TrackingOrderDTO{" +
@@ -117,6 +127,7 @@ public class TrackingOrderDTO {
                 ", typeShipment='" + typeShipment + '\'' +
                 ", nroQty='" + nroQty + '\'' +
                 ", buyer='" + buyer + '\'' +
+                ", liquid='" + liquid + '\'' +
                 ", createDate=" + createDate +
                 '}';
     }
