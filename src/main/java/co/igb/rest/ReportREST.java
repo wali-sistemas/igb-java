@@ -448,6 +448,7 @@ public class ReportREST implements Serializable {
             dto.setBuyer((String) obj[5]);
             dto.setTypeShipment((String) obj[6]);
             dto.setNroQty((String) obj[7]);
+            dto.setLiquid((String) obj[8]);
             dto.setUserName(dto.getBuyer().substring(0,1));
 
             trackingOrder.add(dto);
