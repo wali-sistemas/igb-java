@@ -35,7 +35,7 @@ public class DeliveryNoteFacade {
         sb.append("from ODLN enc ");
         sb.append("inner join DLN1 det on det.\"DocEntry\"=enc.\"DocEntry\" ");
         sb.append("inner join DLN12 ad on ad.\"DocEntry\"=enc.\"DocEntry\" ");
-        sb.append("inner join \"@TRANSP_TAR\" t on t.\"Code\"=ad.\"BlockB\" ");
+        sb.append("left  join \"@TRANSP_TAR\" t on t.\"Code\"=ad.\"BlockB\" ");
         sb.append("inner join OCTG pay on pay.\"GroupNum\"=enc.\"GroupNum\" ");
         sb.append("where enc.\"DocNum\"=");
         sb.append(docNum);
