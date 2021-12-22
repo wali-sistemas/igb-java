@@ -86,7 +86,7 @@ public class SalesOrderFacade {
     public List<SalesOrderDTO> findOpenOrders(boolean showAll, boolean filterGroup, String schemaName, boolean testing, String warehouseCode) {
         EntityManager em = persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA);
         StringBuilder sb = new StringBuilder();
-        sb.append("select j.docnum, j.docdate, j.cardcode, j.cardname, j.confirmed, j.items, j.comments, j.address, j.transp, j.ovMDL, j.contSer ");
+        sb.append("select j.docnum, j.docdate, j.cardcode, j.cardname, j.confirmed, j.items, j.comments, j.address, j.transp, ifnull(j.ovMDL,''), j.contSer ");
         sb.append("from (select f.*, COUNT(f.grupo) OVER (PARTITION BY f.cardcode) as \"ContGrupo\" from ( ");
         sb.append("select t.*, ROW_NUMBER() OVER (PARTITION BY t.cardcode order by t.cardcode) as grupo from ( ");
         sb.append("select distinct cast(enc.\"DocNum\" as varchar(10)) as docnum, ");

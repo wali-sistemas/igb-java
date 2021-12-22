@@ -110,6 +110,7 @@ public class InvoiceREST implements Serializable {
         String deliveryComment = (String) deliveryData.get(0)[10];
         BigDecimal deliveryImpuesto = (BigDecimal) deliveryData.get(0)[12];
         Integer deliveryCreditDays = (Integer) deliveryData.get(0)[13];
+        BigDecimal porcFlete = (BigDecimal) deliveryData.get(0)[14];
 
         if (invoice.getSeries() == null) {
             invoice.setSeries(Long.parseLong(getPropertyValue("igb.invoice.series", companyName)));
@@ -193,7 +194,7 @@ public class InvoiceREST implements Serializable {
         if (companyName.contains("IGB") && !itemRepsol) {
             //TODO: validar si el cliente de IGB tiene checkList en el maestro de SN de deshabilitar flete
             if (!customerFacade.disableFreightCollection(invoice.getCardCode(), companyName, pruebas).equals("Y")) {
-                BigDecimal porcFlete = customerFacade.getCustomerFlete(invoice.getCardCode(), companyName, pruebas);
+                //BigDecimal porcFlete = customerFacade.getCustomerFlete(invoice.getCardCode(), companyName, pruebas);
                 BigDecimal lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
                 if (porcFlete != null) {
                     InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
