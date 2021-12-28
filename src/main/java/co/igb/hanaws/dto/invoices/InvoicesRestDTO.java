@@ -419,6 +419,106 @@ public class InvoicesRestDTO implements Serializable {
     protected String ununfac;
     @JsonProperty("U_Origen")
     protected String uOrigen;
+    @JsonProperty("U_AIU_ADMIN")
+    protected Double uAIUAadmin;
+    @JsonProperty("U_AIU_IMPRE")
+    protected Double uAIUimpre;
+    @JsonProperty("U_AIU_UTIL")
+    protected Double uAIUutil;
+    @JsonProperty("U_F_EN_DOC_FIN")
+    protected String uFENdocFin;
+    @JsonProperty("U_F_PAGO_FINAL")
+    protected String uFPagoFinal;
+    @JsonProperty("U_VLR_PAGO_FINAL")
+    protected Double uVLRpagoFinal;
+    @JsonProperty("U_CANT_CONTE")
+    protected String uCantConte;
+    @JsonProperty("U_LIQUID_COMEX")
+    protected String uLiquidComex;
+    @JsonProperty("U_addInFaElectronica_tipoND_FE")
+    protected String uAddInFaElectronicaTipoNDFE;
+    @JsonProperty("U_tipoNCC_FE")
+    protected String uTipoNCCFE;
+    @JsonProperty("U_fechaDocCont")
+    protected String uFechaDocCont;
+    @JsonProperty("U_FE_FechaTC")
+    protected String uFeFechaTC;
+    @JsonProperty("U_Doc_CR_FE")
+    protected String uDocCrFE;
+    @JsonProperty("U_CUFE")
+    protected String uCUFE;
+    @JsonProperty("U_DocAdicionales")
+    protected String uDocAdicionales;
+    @JsonProperty("U_addInFE_LinkFE")
+    protected String uAddInFeLinkFE;
+    @JsonProperty("U_addInFa_FVSerie")
+    protected String uAddInFaFvSerie;
+    @JsonProperty("U_addInFa_FVNum")
+    protected String uAddInFaFvNum;
+    @JsonProperty("U_NroFacContinFE")
+    protected String uNroFacContinFE;
+    @JsonProperty("U_tipoEmisionFE")
+    protected String uTipoEmisionFE;
+    @JsonProperty("U_CodigoQR")
+    protected String uCodigoQR;
+    @JsonProperty("U_SelloDigital")
+    protected String uSelloDigital;
+    @JsonProperty("U_tipo_NCV_FE")
+    protected String uTipoNCVFE;
+    @JsonProperty("U_CBM")
+    protected String uCBM;
+    @JsonProperty("U_condEntrega_FE")
+    protected String uCondEntregaFE;
+    @JsonProperty("U_DESPACHO_CONTADO")
+    protected Long uDespachoContado;
+    @JsonProperty("U_totalImpoCo")
+    protected Double uTotalImpoCo;
+    @JsonProperty("U_SERIAL")
+    protected String uSERIAL;
+    @JsonProperty("U_ESTADO_WMS")
+    protected String uEstadoWMS;
+    @JsonProperty("U_INCOTERMS")
+    protected String uINCOTERMS;
+    @JsonProperty("U_OK1_Fa_Export")
+    protected String uOK1FaExport;
+    @JsonProperty("U_TipoFacturacion")
+    protected String uTipoFacturacion;
+    @JsonProperty("U_tipoMandato")
+    protected String uTipoMandato;
+    @JsonProperty("U_tipoTransporte")
+    protected String uTipoTransporte;
+    @JsonProperty("U_F_CARGA_LISTA")
+    protected String uFCargaLista;
+    @JsonProperty("U_TIEMPO_TRANSITO")
+    protected String uTiempoTransito;
+    @JsonProperty("U_F_SALIDA_PUERTO")
+    protected String uFsalidaPuerto;
+    @JsonProperty("U_TIEMPO_PUERTO")
+    protected String uTiempoPuerto;
+    @JsonProperty("U_TIPO_CARGA")
+    protected String uTipoCarga;
+    @JsonProperty("U_TIEMPO_ENT_COMEX")
+    protected String uTiempoEntComex;
+    @JsonProperty("U_F_BOOKING")
+    protected String uFBOOKING;
+    @JsonProperty("U_TIEMPO_ESP_BOOKING")
+    protected String uTiempoEspBOOKING;
+    @JsonProperty("U_F_ESTIM_EMBARQUE")
+    protected String uFestimEmbarque;
+    @JsonProperty("U_F_CUTT_OFF")
+    protected String uFCUTTOFF;
+    @JsonProperty("U_F_REC_DOC_FINAL")
+    protected String uFrecDocFinal;
+    @JsonProperty("U_EMISION_BL")
+    protected String uEmisionBL;
+    @JsonProperty("U_INSPECCION")
+    protected String uInspeccion;
+    @JsonProperty("U_F_ARRIBO_CEDI_EST")
+    protected String uFAarriboCediEst;
+    @JsonProperty("U_NotificationBL")
+    protected String uNotificationBL;
+    @JsonProperty("U_F_ESTIM_PAGO")
+    protected String uFEstimPago;
     protected List<InvoicesRestDTO.DocumentLines.DocumentLine> documentLines;
     protected List<InvoicesRestDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense> documentAdditionalExpenses;
     protected List<InvoicesRestDTO.WithholdingTaxDataCollection.WithholdingTaxData> withholdingTaxDataCollection;
@@ -2123,6 +2223,406 @@ public class InvoicesRestDTO implements Serializable {
 
     public void setAddressExtension(AddressExtension addressExtension) {
         this.addressExtension = addressExtension;
+    }
+
+    public Double getuAIUAadmin() {
+        return uAIUAadmin;
+    }
+
+    public void setuAIUAadmin(Double uAIUAadmin) {
+        this.uAIUAadmin = uAIUAadmin;
+    }
+
+    public Double getuAIUimpre() {
+        return uAIUimpre;
+    }
+
+    public void setuAIUimpre(Double uAIUimpre) {
+        this.uAIUimpre = uAIUimpre;
+    }
+
+    public Double getuAIUutil() {
+        return uAIUutil;
+    }
+
+    public void setuAIUutil(Double uAIUutil) {
+        this.uAIUutil = uAIUutil;
+    }
+
+    public String getuFENdocFin() {
+        return uFENdocFin;
+    }
+
+    public void setuFENdocFin(String uFENdocFin) {
+        this.uFENdocFin = uFENdocFin;
+    }
+
+    public String getuFPagoFinal() {
+        return uFPagoFinal;
+    }
+
+    public void setuFPagoFinal(String uFPagoFinal) {
+        this.uFPagoFinal = uFPagoFinal;
+    }
+
+    public Double getuVLRpagoFinal() {
+        return uVLRpagoFinal;
+    }
+
+    public void setuVLRpagoFinal(Double uVLRpagoFinal) {
+        this.uVLRpagoFinal = uVLRpagoFinal;
+    }
+
+    public String getuCantConte() {
+        return uCantConte;
+    }
+
+    public void setuCantConte(String uCantConte) {
+        this.uCantConte = uCantConte;
+    }
+
+    public String getuLiquidComex() {
+        return uLiquidComex;
+    }
+
+    public void setuLiquidComex(String uLiquidComex) {
+        this.uLiquidComex = uLiquidComex;
+    }
+
+    public String getuAddInFaElectronicaTipoNDFE() {
+        return uAddInFaElectronicaTipoNDFE;
+    }
+
+    public void setuAddInFaElectronicaTipoNDFE(String uAddInFaElectronicaTipoNDFE) {
+        this.uAddInFaElectronicaTipoNDFE = uAddInFaElectronicaTipoNDFE;
+    }
+
+    public String getuTipoNCCFE() {
+        return uTipoNCCFE;
+    }
+
+    public void setuTipoNCCFE(String uTipoNCCFE) {
+        this.uTipoNCCFE = uTipoNCCFE;
+    }
+
+    public String getuFechaDocCont() {
+        return uFechaDocCont;
+    }
+
+    public void setuFechaDocCont(String uFechaDocCont) {
+        this.uFechaDocCont = uFechaDocCont;
+    }
+
+    public String getuFeFechaTC() {
+        return uFeFechaTC;
+    }
+
+    public void setuFeFechaTC(String uFeFechaTC) {
+        this.uFeFechaTC = uFeFechaTC;
+    }
+
+    public String getuDocCrFE() {
+        return uDocCrFE;
+    }
+
+    public void setuDocCrFE(String uDocCrFE) {
+        this.uDocCrFE = uDocCrFE;
+    }
+
+    public String getuCUFE() {
+        return uCUFE;
+    }
+
+    public void setuCUFE(String uCUFE) {
+        this.uCUFE = uCUFE;
+    }
+
+    public String getuDocAdicionales() {
+        return uDocAdicionales;
+    }
+
+    public void setuDocAdicionales(String uDocAdicionales) {
+        this.uDocAdicionales = uDocAdicionales;
+    }
+
+    public String getuAddInFeLinkFE() {
+        return uAddInFeLinkFE;
+    }
+
+    public void setuAddInFeLinkFE(String uAddInFeLinkFE) {
+        this.uAddInFeLinkFE = uAddInFeLinkFE;
+    }
+
+    public String getuAddInFaFvSerie() {
+        return uAddInFaFvSerie;
+    }
+
+    public void setuAddInFaFvSerie(String uAddInFaFvSerie) {
+        this.uAddInFaFvSerie = uAddInFaFvSerie;
+    }
+
+    public String getuAddInFaFvNum() {
+        return uAddInFaFvNum;
+    }
+
+    public void setuAddInFaFvNum(String uAddInFaFvNum) {
+        this.uAddInFaFvNum = uAddInFaFvNum;
+    }
+
+    public String getuNroFacContinFE() {
+        return uNroFacContinFE;
+    }
+
+    public void setuNroFacContinFE(String uNroFacContinFE) {
+        this.uNroFacContinFE = uNroFacContinFE;
+    }
+
+    public String getuTipoEmisionFE() {
+        return uTipoEmisionFE;
+    }
+
+    public void setuTipoEmisionFE(String uTipoEmisionFE) {
+        this.uTipoEmisionFE = uTipoEmisionFE;
+    }
+
+    public String getuCodigoQR() {
+        return uCodigoQR;
+    }
+
+    public void setuCodigoQR(String uCodigoQR) {
+        this.uCodigoQR = uCodigoQR;
+    }
+
+    public String getuSelloDigital() {
+        return uSelloDigital;
+    }
+
+    public void setuSelloDigital(String uSelloDigital) {
+        this.uSelloDigital = uSelloDigital;
+    }
+
+    public String getuTipoNCVFE() {
+        return uTipoNCVFE;
+    }
+
+    public void setuTipoNCVFE(String uTipoNCVFE) {
+        this.uTipoNCVFE = uTipoNCVFE;
+    }
+
+    public String getuCBM() {
+        return uCBM;
+    }
+
+    public void setuCBM(String uCBM) {
+        this.uCBM = uCBM;
+    }
+
+    public String getuCondEntregaFE() {
+        return uCondEntregaFE;
+    }
+
+    public void setuCondEntregaFE(String uCondEntregaFE) {
+        this.uCondEntregaFE = uCondEntregaFE;
+    }
+
+    public Long getuDespachoContado() {
+        return uDespachoContado;
+    }
+
+    public void setuDespachoContado(Long uDespachoContado) {
+        this.uDespachoContado = uDespachoContado;
+    }
+
+    public Double getuTotalImpoCo() {
+        return uTotalImpoCo;
+    }
+
+    public void setuTotalImpoCo(Double uTotalImpoCo) {
+        this.uTotalImpoCo = uTotalImpoCo;
+    }
+
+    public String getuSERIAL() {
+        return uSERIAL;
+    }
+
+    public void setuSERIAL(String uSERIAL) {
+        this.uSERIAL = uSERIAL;
+    }
+
+    public String getuEstadoWMS() {
+        return uEstadoWMS;
+    }
+
+    public void setuEstadoWMS(String uEstadoWMS) {
+        this.uEstadoWMS = uEstadoWMS;
+    }
+
+    public String getuINCOTERMS() {
+        return uINCOTERMS;
+    }
+
+    public void setuINCOTERMS(String uINCOTERMS) {
+        this.uINCOTERMS = uINCOTERMS;
+    }
+
+    public String getuOK1FaExport() {
+        return uOK1FaExport;
+    }
+
+    public void setuOK1FaExport(String uOK1FaExport) {
+        this.uOK1FaExport = uOK1FaExport;
+    }
+
+    public String getuTipoFacturacion() {
+        return uTipoFacturacion;
+    }
+
+    public void setuTipoFacturacion(String uTipoFacturacion) {
+        this.uTipoFacturacion = uTipoFacturacion;
+    }
+
+    public String getuTipoMandato() {
+        return uTipoMandato;
+    }
+
+    public void setuTipoMandato(String uTipoMandato) {
+        this.uTipoMandato = uTipoMandato;
+    }
+
+    public String getuTipoTransporte() {
+        return uTipoTransporte;
+    }
+
+    public void setuTipoTransporte(String uTipoTransporte) {
+        this.uTipoTransporte = uTipoTransporte;
+    }
+
+    public String getuFCargaLista() {
+        return uFCargaLista;
+    }
+
+    public void setuFCargaLista(String uFCargaLista) {
+        this.uFCargaLista = uFCargaLista;
+    }
+
+    public String getuTiempoTransito() {
+        return uTiempoTransito;
+    }
+
+    public void setuTiempoTransito(String uTiempoTransito) {
+        this.uTiempoTransito = uTiempoTransito;
+    }
+
+    public String getuFsalidaPuerto() {
+        return uFsalidaPuerto;
+    }
+
+    public void setuFsalidaPuerto(String uFsalidaPuerto) {
+        this.uFsalidaPuerto = uFsalidaPuerto;
+    }
+
+    public String getuTiempoPuerto() {
+        return uTiempoPuerto;
+    }
+
+    public void setuTiempoPuerto(String uTiempoPuerto) {
+        this.uTiempoPuerto = uTiempoPuerto;
+    }
+
+    public String getuTipoCarga() {
+        return uTipoCarga;
+    }
+
+    public void setuTipoCarga(String uTipoCarga) {
+        this.uTipoCarga = uTipoCarga;
+    }
+
+    public String getuTiempoEntComex() {
+        return uTiempoEntComex;
+    }
+
+    public void setuTiempoEntComex(String uTiempoEntComex) {
+        this.uTiempoEntComex = uTiempoEntComex;
+    }
+
+    public String getuFBOOKING() {
+        return uFBOOKING;
+    }
+
+    public void setuFBOOKING(String uFBOOKING) {
+        this.uFBOOKING = uFBOOKING;
+    }
+
+    public String getuTiempoEspBOOKING() {
+        return uTiempoEspBOOKING;
+    }
+
+    public void setuTiempoEspBOOKING(String uTiempoEspBOOKING) {
+        this.uTiempoEspBOOKING = uTiempoEspBOOKING;
+    }
+
+    public String getuFestimEmbarque() {
+        return uFestimEmbarque;
+    }
+
+    public void setuFestimEmbarque(String uFestimEmbarque) {
+        this.uFestimEmbarque = uFestimEmbarque;
+    }
+
+    public String getuFCUTTOFF() {
+        return uFCUTTOFF;
+    }
+
+    public void setuFCUTTOFF(String uFCUTTOFF) {
+        this.uFCUTTOFF = uFCUTTOFF;
+    }
+
+    public String getuFrecDocFinal() {
+        return uFrecDocFinal;
+    }
+
+    public void setuFrecDocFinal(String uFrecDocFinal) {
+        this.uFrecDocFinal = uFrecDocFinal;
+    }
+
+    public String getuEmisionBL() {
+        return uEmisionBL;
+    }
+
+    public void setuEmisionBL(String uEmisionBL) {
+        this.uEmisionBL = uEmisionBL;
+    }
+
+    public String getuInspeccion() {
+        return uInspeccion;
+    }
+
+    public void setuInspeccion(String uInspeccion) {
+        this.uInspeccion = uInspeccion;
+    }
+
+    public String getuFAarriboCediEst() {
+        return uFAarriboCediEst;
+    }
+
+    public void setuFAarriboCediEst(String uFAarriboCediEst) {
+        this.uFAarriboCediEst = uFAarriboCediEst;
+    }
+
+    public String getuNotificationBL() {
+        return uNotificationBL;
+    }
+
+    public void setuNotificationBL(String uNotificationBL) {
+        this.uNotificationBL = uNotificationBL;
+    }
+
+    public String getuFEstimPago() {
+        return uFEstimPago;
+    }
+
+    public void setuFEstimPago(String uFEstimPago) {
+        this.uFEstimPago = uFEstimPago;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
