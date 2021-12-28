@@ -136,6 +136,10 @@ public class PurchaseOrderFacade {
         sb.append(" left join \"@PUERTO_DES\" d on d.\"Code\"=p.\"U_PUERTO_DES\" ");
         sb.append(" where p.\"Series\"='48' ");
         sb.append("union all ");
+        sb.append(" select 'Carga Puerto Origen' as Concepto,ifnull(cast(cast(p.\"U_F_DOC_TRANSP\" as date)as varchar),'')as Info,p.\"DocNum\" ");
+        sb.append(" from OPOR p ");
+        sb.append(" where p.\"Series\"='48' ");
+        sb.append("union all ");
         sb.append(" select 'Embarque' as Concepto,cast(cast(p.\"U_F_EMBARQUE\" as date)as varchar)as Info,p.\"DocNum\" ");
         sb.append(" from OPOR p ");
         sb.append(" where p.\"Series\"='48' ");
@@ -148,15 +152,11 @@ public class PurchaseOrderFacade {
         sb.append(" from OPOR p ");
         sb.append(" where p.\"Series\"='48' ");
         sb.append("union all ");
-        sb.append(" select 'Carga Puerto' as Concepto,ifnull(cast(cast(p.\"U_F_DOC_TRANSP\" as date)as varchar),'')as Info,p.\"DocNum\" ");
-        sb.append(" from OPOR p ");
-        sb.append(" where p.\"Series\"='48' ");
-        sb.append("union all ");
         sb.append(" select 'Tiempo Tránsito' as Concepto,ifnull(cast(days_between(p.\"U_F_EMBARQUE\",p.\"U_Fecha_Arribo_CEDI\")as varchar),'Sin') || ' Días' as Info,p.\"DocNum\" ");
         sb.append(" from OPOR p ");
         sb.append(" where p.\"Series\"='48' ");
         sb.append("union all ");
-        sb.append(" select 'Salida Puerto' as Concepto,ifnull(cast(cast(p.\"U_F_SALIDA_PUERTO\" as date)as varchar),'')as Info,p.\"DocNum\" ");
+        sb.append(" select 'Salida Puerto Destino' as Concepto,ifnull(cast(cast(p.\"U_F_SALIDA_PUERTO\" as date)as varchar),'')as Info,p.\"DocNum\" ");
         sb.append(" from OPOR p ");
         sb.append(" where p.\"Series\"='48' ");
         sb.append("union all ");
