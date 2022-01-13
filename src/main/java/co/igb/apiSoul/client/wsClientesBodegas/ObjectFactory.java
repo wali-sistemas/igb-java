@@ -10,7 +10,7 @@ import javax.xml.namespace.QName;
 /**
  * This object contains factory methods for each 
  * Java content interface and Java element interface 
- * generated in the co.igb.apiSoul.client package. 
+ * generated in the co.igb.apiSoul.client.wsClientesBodegas package. 
  * <p>An ObjectFactory allows you to programatically 
  * construct new instances of the Java representation 
  * for XML content. The Java representation of XML 
@@ -25,14 +25,16 @@ import javax.xml.namespace.QName;
 public class ObjectFactory {
 
     private final static QName _RespConsultaInventario_QNAME = new QName("http://tempuri.org/", "RespConsultaInventario");
+    private final static QName _RespConsultarPaquetesxPedido_QNAME = new QName("http://tempuri.org/", "RespConsultarPaquetesxPedido");
     private final static QName _RespConsultaInventarioBodega_QNAME = new QName("http://tempuri.org/", "RespConsultaInventarioBodega");
     private final static QName _RespConsultaConteo_QNAME = new QName("http://tempuri.org/", "RespConsultaConteo");
+    private final static QName _RespConsultarGuiasxPedido_QNAME = new QName("http://tempuri.org/", "RespConsultarGuiasxPedido");
     private final static QName _RespSalidasEverfit_QNAME = new QName("http://tempuri.org/", "RespSalidasEverfit");
     private final static QName _RespReporteConteo_QNAME = new QName("http://tempuri.org/", "RespReporteConteo");
     private final static QName _RespConsultarEstadoPaquete_QNAME = new QName("http://tempuri.org/", "RespConsultarEstadoPaquete");
 
     /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: co.igb.apiSoul.client
+     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: co.igb.apiSoul.client.wsClientesBodegas
      * 
      */
     public ObjectFactory() {
@@ -55,43 +57,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ConsultarEstadoPaquete }
+     * Create an instance of {@link CrearProductoCatalogoResponse }
      * 
      */
-    public ConsultarEstadoPaquete createConsultarEstadoPaquete() {
-        return new ConsultarEstadoPaquete();
+    public CrearProductoCatalogoResponse createCrearProductoCatalogoResponse() {
+        return new CrearProductoCatalogoResponse();
     }
 
     /**
-     * Create an instance of {@link OrdenSalida }
+     * Create an instance of {@link RespConsultarProductoCatalogo }
      * 
      */
-    public OrdenSalida createOrdenSalida() {
-        return new OrdenSalida();
-    }
-
-    /**
-     * Create an instance of {@link ArrayOfClsBEOrdenSalidaWS }
-     * 
-     */
-    public ArrayOfClsBEOrdenSalidaWS createArrayOfClsBEOrdenSalidaWS() {
-        return new ArrayOfClsBEOrdenSalidaWS();
-    }
-
-    /**
-     * Create an instance of {@link OrdenSalidaResponse }
-     * 
-     */
-    public OrdenSalidaResponse createOrdenSalidaResponse() {
-        return new OrdenSalidaResponse();
-    }
-
-    /**
-     * Create an instance of {@link RespOrdenSalida }
-     * 
-     */
-    public RespOrdenSalida createRespOrdenSalida() {
-        return new RespOrdenSalida();
+    public RespConsultarProductoCatalogo createRespConsultarProductoCatalogo() {
+        return new RespConsultarProductoCatalogo();
     }
 
     /**
@@ -111,19 +89,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CargueInventario }
+     * Create an instance of {@link ConsultarPaquetesxPedidoResponse }
      * 
      */
-    public CargueInventario createCargueInventario() {
-        return new CargueInventario();
+    public ConsultarPaquetesxPedidoResponse createConsultarPaquetesxPedidoResponse() {
+        return new ConsultarPaquetesxPedidoResponse();
     }
 
     /**
-     * Create an instance of {@link ArrayOfClsBECargueInventarioWS }
+     * Create an instance of {@link RespConsultarPaquetesxPedido }
      * 
      */
-    public ArrayOfClsBECargueInventarioWS createArrayOfClsBECargueInventarioWS() {
-        return new ArrayOfClsBECargueInventarioWS();
+    public RespConsultarPaquetesxPedido createRespConsultarPaquetesxPedido() {
+        return new RespConsultarPaquetesxPedido();
     }
 
     /**
@@ -159,30 +137,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ConsultaInventario }
-     * 
-     */
-    public ConsultaInventario createConsultaInventario() {
-        return new ConsultaInventario();
-    }
-
-    /**
-     * Create an instance of {@link CargueInventarioResponse }
-     * 
-     */
-    public CargueInventarioResponse createCargueInventarioResponse() {
-        return new CargueInventarioResponse();
-    }
-
-    /**
-     * Create an instance of {@link RespCargueInventario }
-     * 
-     */
-    public RespCargueInventario createRespCargueInventario() {
-        return new RespCargueInventario();
-    }
-
-    /**
      * Create an instance of {@link ConsultaInventarioResponse }
      * 
      */
@@ -199,11 +153,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link RespConsultaConteo }
+     * Create an instance of {@link RespConsultarGuiasxPedido }
      * 
      */
-    public RespConsultaConteo createRespConsultaConteo() {
-        return new RespConsultaConteo();
+    public RespConsultarGuiasxPedido createRespConsultarGuiasxPedido() {
+        return new RespConsultarGuiasxPedido();
     }
 
     /**
@@ -215,11 +169,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ConsultaInventarioBodega }
+     * Create an instance of {@link ConsultarGuiasxPedidoResponse }
      * 
      */
-    public ConsultaInventarioBodega createConsultaInventarioBodega() {
-        return new ConsultaInventarioBodega();
+    public ConsultarGuiasxPedidoResponse createConsultarGuiasxPedidoResponse() {
+        return new ConsultarGuiasxPedidoResponse();
     }
 
     /**
@@ -228,14 +182,6 @@ public class ObjectFactory {
      */
     public ConsultarOrdenesSalidaEverfit createConsultarOrdenesSalidaEverfit() {
         return new ConsultarOrdenesSalidaEverfit();
-    }
-
-    /**
-     * Create an instance of {@link ConsultaConteosxDocTransporteResponse }
-     * 
-     */
-    public ConsultaConteosxDocTransporteResponse createConsultaConteosxDocTransporteResponse() {
-        return new ConsultaConteosxDocTransporteResponse();
     }
 
     /**
@@ -263,6 +209,142 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link OrdenSalida }
+     * 
+     */
+    public OrdenSalida createOrdenSalida() {
+        return new OrdenSalida();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfClsBEOrdenSalidaWS }
+     * 
+     */
+    public ArrayOfClsBEOrdenSalidaWS createArrayOfClsBEOrdenSalidaWS() {
+        return new ArrayOfClsBEOrdenSalidaWS();
+    }
+
+    /**
+     * Create an instance of {@link ConsultarEstadoPaquete }
+     * 
+     */
+    public ConsultarEstadoPaquete createConsultarEstadoPaquete() {
+        return new ConsultarEstadoPaquete();
+    }
+
+    /**
+     * Create an instance of {@link OrdenSalidaResponse }
+     * 
+     */
+    public OrdenSalidaResponse createOrdenSalidaResponse() {
+        return new OrdenSalidaResponse();
+    }
+
+    /**
+     * Create an instance of {@link RespOrdenSalida }
+     * 
+     */
+    public RespOrdenSalida createRespOrdenSalida() {
+        return new RespOrdenSalida();
+    }
+
+    /**
+     * Create an instance of {@link CargueInventario }
+     * 
+     */
+    public CargueInventario createCargueInventario() {
+        return new CargueInventario();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfClsBECargueInventarioWS }
+     * 
+     */
+    public ArrayOfClsBECargueInventarioWS createArrayOfClsBECargueInventarioWS() {
+        return new ArrayOfClsBECargueInventarioWS();
+    }
+
+    /**
+     * Create an instance of {@link CrearProductoCatalogo }
+     * 
+     */
+    public CrearProductoCatalogo createCrearProductoCatalogo() {
+        return new CrearProductoCatalogo();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfClsBEProductoCatalogo }
+     * 
+     */
+    public ArrayOfClsBEProductoCatalogo createArrayOfClsBEProductoCatalogo() {
+        return new ArrayOfClsBEProductoCatalogo();
+    }
+
+    /**
+     * Create an instance of {@link ConsultarPaquetesxPedido }
+     * 
+     */
+    public ConsultarPaquetesxPedido createConsultarPaquetesxPedido() {
+        return new ConsultarPaquetesxPedido();
+    }
+
+    /**
+     * Create an instance of {@link CargueInventarioResponse }
+     * 
+     */
+    public CargueInventarioResponse createCargueInventarioResponse() {
+        return new CargueInventarioResponse();
+    }
+
+    /**
+     * Create an instance of {@link RespCargueInventario }
+     * 
+     */
+    public RespCargueInventario createRespCargueInventario() {
+        return new RespCargueInventario();
+    }
+
+    /**
+     * Create an instance of {@link ConsultaInventario }
+     * 
+     */
+    public ConsultaInventario createConsultaInventario() {
+        return new ConsultaInventario();
+    }
+
+    /**
+     * Create an instance of {@link RespConsultaConteo }
+     * 
+     */
+    public RespConsultaConteo createRespConsultaConteo() {
+        return new RespConsultaConteo();
+    }
+
+    /**
+     * Create an instance of {@link ConsultaInventarioBodega }
+     * 
+     */
+    public ConsultaInventarioBodega createConsultaInventarioBodega() {
+        return new ConsultaInventarioBodega();
+    }
+
+    /**
+     * Create an instance of {@link ConsultaConteosxDocTransporteResponse }
+     * 
+     */
+    public ConsultaConteosxDocTransporteResponse createConsultaConteosxDocTransporteResponse() {
+        return new ConsultaConteosxDocTransporteResponse();
+    }
+
+    /**
+     * Create an instance of {@link ConsultarGuiasxPedido }
+     * 
+     */
+    public ConsultarGuiasxPedido createConsultarGuiasxPedido() {
+        return new ConsultarGuiasxPedido();
+    }
+
+    /**
      * Create an instance of {@link ArrayOfClsBEWsSalidasEverfit }
      * 
      */
@@ -284,6 +366,14 @@ public class ObjectFactory {
      */
     public ClsBEConsultaInventarioConteo createClsBEConsultaInventarioConteo() {
         return new ClsBEConsultaInventarioConteo();
+    }
+
+    /**
+     * Create an instance of {@link ClsBEProductoCatalogo }
+     * 
+     */
+    public ClsBEProductoCatalogo createClsBEProductoCatalogo() {
+        return new ClsBEProductoCatalogo();
     }
 
     /**
@@ -311,6 +401,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ArrayOfClsBEWsPaquetesxPedido }
+     * 
+     */
+    public ArrayOfClsBEWsPaquetesxPedido createArrayOfClsBEWsPaquetesxPedido() {
+        return new ArrayOfClsBEWsPaquetesxPedido();
+    }
+
+    /**
      * Create an instance of {@link ArrayOfClsBEConsultaInventarioBodega }
      * 
      */
@@ -327,11 +425,35 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ClsBEWsPaquetesxPedido }
+     * 
+     */
+    public ClsBEWsPaquetesxPedido createClsBEWsPaquetesxPedido() {
+        return new ClsBEWsPaquetesxPedido();
+    }
+
+    /**
      * Create an instance of {@link ClsBEPaquetexSalida }
      * 
      */
     public ClsBEPaquetexSalida createClsBEPaquetexSalida() {
         return new ClsBEPaquetexSalida();
+    }
+
+    /**
+     * Create an instance of {@link ClsBEGuiasxPedido }
+     * 
+     */
+    public ClsBEGuiasxPedido createClsBEGuiasxPedido() {
+        return new ClsBEGuiasxPedido();
+    }
+
+    /**
+     * Create an instance of {@link ArrayOfClsBEGuiasxPedido }
+     * 
+     */
+    public ArrayOfClsBEGuiasxPedido createArrayOfClsBEGuiasxPedido() {
+        return new ArrayOfClsBEGuiasxPedido();
     }
 
     /**
@@ -424,6 +546,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link RespConsultarPaquetesxPedido }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://tempuri.org/", name = "RespConsultarPaquetesxPedido")
+    public JAXBElement<RespConsultarPaquetesxPedido> createRespConsultarPaquetesxPedido(RespConsultarPaquetesxPedido value) {
+        return new JAXBElement<RespConsultarPaquetesxPedido>(_RespConsultarPaquetesxPedido_QNAME, RespConsultarPaquetesxPedido.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link RespConsultaInventarioBodega }{@code >}}
      * 
      */
@@ -439,6 +570,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://tempuri.org/", name = "RespConsultaConteo")
     public JAXBElement<RespConsultaConteo> createRespConsultaConteo(RespConsultaConteo value) {
         return new JAXBElement<RespConsultaConteo>(_RespConsultaConteo_QNAME, RespConsultaConteo.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link RespConsultarGuiasxPedido }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://tempuri.org/", name = "RespConsultarGuiasxPedido")
+    public JAXBElement<RespConsultarGuiasxPedido> createRespConsultarGuiasxPedido(RespConsultarGuiasxPedido value) {
+        return new JAXBElement<RespConsultarGuiasxPedido>(_RespConsultarGuiasxPedido_QNAME, RespConsultarGuiasxPedido.class, null, value);
     }
 
     /**
