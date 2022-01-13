@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="pObservaciones" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="pNroPedido" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="pCodigoSalida" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="aplicaPesoCatalogo" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="pOrdenSalida" type="{http://tempuri.org/}ArrayOfClsBEOrdenSalidaWS" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -46,6 +47,7 @@ import javax.xml.bind.annotation.XmlType;
     "pObservaciones",
     "pNroPedido",
     "pCodigoSalida",
+    "aplicaPesoCatalogo",
     "pOrdenSalida"
 })
 @XmlRootElement(name = "OrdenSalida")
@@ -60,6 +62,7 @@ public class OrdenSalida {
     protected String pObservaciones;
     protected String pNroPedido;
     protected String pCodigoSalida;
+    protected boolean aplicaPesoCatalogo;
     protected ArrayOfClsBEOrdenSalidaWS pOrdenSalida;
 
     /**
@@ -276,6 +279,22 @@ public class OrdenSalida {
      */
     public void setPCodigoSalida(String value) {
         this.pCodigoSalida = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad aplicaPesoCatalogo.
+     * 
+     */
+    public boolean isAplicaPesoCatalogo() {
+        return aplicaPesoCatalogo;
+    }
+
+    /**
+     * Define el valor de la propiedad aplicaPesoCatalogo.
+     * 
+     */
+    public void setAplicaPesoCatalogo(boolean value) {
+        this.aplicaPesoCatalogo = value;
     }
 
     /**

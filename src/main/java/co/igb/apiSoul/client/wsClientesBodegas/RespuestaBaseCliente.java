@@ -37,12 +37,15 @@ import javax.xml.bind.annotation.XmlType;
 })
 @XmlSeeAlso({
     RespConsultaInventarioBodega.class,
-    RespOrdenSalida.class,
+    RespConsultarProductoCatalogo.class,
     RespConsultarEstadoPaquete.class,
+    RespConsultarPaquetesxPedido.class,
     RespReporteConteo.class,
     RespSalidasEverfit.class,
-    RespCargueInventario.class,
     RespConsultaInventario.class,
+    RespConsultarGuiasxPedido.class,
+    RespOrdenSalida.class,
+    RespCargueInventario.class,
     RespConsultaConteo.class
 })
 public class RespuestaBaseCliente {

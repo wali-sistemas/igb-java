@@ -31,6 +31,15 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="OtrasCaracteristicas" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="CodigoProducto" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="Estado" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="Plu" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="Ancho" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="Largo" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="Alto" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="UnidaMedidaLongitud" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="Peso" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="UnidadMedidaPeso" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="NumeroLote" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="FechaVencimientoLote" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -54,7 +63,16 @@ import javax.xml.bind.annotation.XmlType;
     "cantidad",
     "otrasCaracteristicas",
     "codigoProducto",
-    "estado"
+    "estado",
+    "plu",
+    "ancho",
+    "largo",
+    "alto",
+    "unidaMedidaLongitud",
+    "peso",
+    "unidadMedidaPeso",
+    "numeroLote",
+    "fechaVencimientoLote"
 })
 public class ClsBECargueInventarioWS {
 
@@ -86,6 +104,24 @@ public class ClsBECargueInventarioWS {
     protected String codigoProducto;
     @XmlElement(name = "Estado")
     protected String estado;
+    @XmlElement(name = "Plu")
+    protected String plu;
+    @XmlElement(name = "Ancho")
+    protected String ancho;
+    @XmlElement(name = "Largo")
+    protected String largo;
+    @XmlElement(name = "Alto")
+    protected String alto;
+    @XmlElement(name = "UnidaMedidaLongitud")
+    protected String unidaMedidaLongitud;
+    @XmlElement(name = "Peso")
+    protected String peso;
+    @XmlElement(name = "UnidadMedidaPeso")
+    protected String unidadMedidaPeso;
+    @XmlElement(name = "NumeroLote")
+    protected String numeroLote;
+    @XmlElement(name = "FechaVencimientoLote")
+    protected String fechaVencimientoLote;
 
     /**
      * Obtiene el valor de la propiedad item.
@@ -421,6 +457,222 @@ public class ClsBECargueInventarioWS {
      */
     public void setEstado(String value) {
         this.estado = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad plu.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getPlu() {
+        return plu;
+    }
+
+    /**
+     * Define el valor de la propiedad plu.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setPlu(String value) {
+        this.plu = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad ancho.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getAncho() {
+        return ancho;
+    }
+
+    /**
+     * Define el valor de la propiedad ancho.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setAncho(String value) {
+        this.ancho = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad largo.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getLargo() {
+        return largo;
+    }
+
+    /**
+     * Define el valor de la propiedad largo.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setLargo(String value) {
+        this.largo = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad alto.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getAlto() {
+        return alto;
+    }
+
+    /**
+     * Define el valor de la propiedad alto.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setAlto(String value) {
+        this.alto = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad unidaMedidaLongitud.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUnidaMedidaLongitud() {
+        return unidaMedidaLongitud;
+    }
+
+    /**
+     * Define el valor de la propiedad unidaMedidaLongitud.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUnidaMedidaLongitud(String value) {
+        this.unidaMedidaLongitud = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad peso.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getPeso() {
+        return peso;
+    }
+
+    /**
+     * Define el valor de la propiedad peso.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setPeso(String value) {
+        this.peso = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad unidadMedidaPeso.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUnidadMedidaPeso() {
+        return unidadMedidaPeso;
+    }
+
+    /**
+     * Define el valor de la propiedad unidadMedidaPeso.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUnidadMedidaPeso(String value) {
+        this.unidadMedidaPeso = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad numeroLote.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getNumeroLote() {
+        return numeroLote;
+    }
+
+    /**
+     * Define el valor de la propiedad numeroLote.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setNumeroLote(String value) {
+        this.numeroLote = value;
+    }
+
+    /**
+     * Obtiene el valor de la propiedad fechaVencimientoLote.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getFechaVencimientoLote() {
+        return fechaVencimientoLote;
+    }
+
+    /**
+     * Define el valor de la propiedad fechaVencimientoLote.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setFechaVencimientoLote(String value) {
+        this.fechaVencimientoLote = value;
     }
 
 }
