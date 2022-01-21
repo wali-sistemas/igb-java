@@ -4,10 +4,10 @@ import co.igb.dto.ResponseDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.ejb.JournalEntryEJB;
 import co.igb.hanaws.dto.journalEntries.JournalEntryDTO;
+import co.igb.persistence.facade.TranspFacade;
 import co.igb.persistence.facade.WarehouseFacade;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import javax.ejb.*;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -29,6 +29,8 @@ public class GenericOperationsREST {
     private WarehouseFacade warehouseFacade;
     @EJB
     private JournalEntryEJB journalEntryEJB;
+    @EJB
+    private TranspFacade transpFacade;
 
     @GET
     @Path("companies")
@@ -60,5 +62,15 @@ public class GenericOperationsREST {
     public Response createJournalEntry(JournalEntryDTO dto) {
         CONSOLE.log(Level.INFO, "Iniciando servicio de creacion de asiento de nomina en SAP para la empresa {0}");
         return Response.ok(journalEntryEJB.createJournalEntry(dto, "VARROCPruebas")).build();
+    }
+
+    @GET
+    @Path("companies/transports")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response listTransportsActive(@HeaderParam("X-Company-Name") String companyName,
+                                         @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Listando transportadoras activas");
+        return Response.ok(transpFacade.listTranspActive(companyName, pruebas)).build();
     }
 }

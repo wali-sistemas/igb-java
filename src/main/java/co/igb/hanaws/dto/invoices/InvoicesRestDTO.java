@@ -470,7 +470,7 @@ public class InvoicesRestDTO implements Serializable {
     @JsonProperty("U_condEntrega_FE")
     protected String uCondEntregaFE;
     @JsonProperty("U_DESPACHO_CONTADO")
-    protected Long uDespachoContado;
+    protected String uDespachoContado;
     @JsonProperty("U_totalImpoCo")
     protected Double uTotalImpoCo;
     @JsonProperty("U_SERIAL")
@@ -2425,11 +2425,11 @@ public class InvoicesRestDTO implements Serializable {
         this.uCondEntregaFE = uCondEntregaFE;
     }
 
-    public Long getuDespachoContado() {
+    public String getuDespachoContado() {
         return uDespachoContado;
     }
 
-    public void setuDespachoContado(Long uDespachoContado) {
+    public void setuDespachoContado(String uDespachoContado) {
         this.uDespachoContado = uDespachoContado;
     }
 

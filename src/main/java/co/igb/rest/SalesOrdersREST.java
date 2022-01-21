@@ -95,6 +95,17 @@ public class SalesOrdersREST implements Serializable {
         }
     }
 
+    @GET
+    @Path("list/orders/magnum")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response listOpenOrdersMagnum(@HeaderParam("X-Company-Name") String companyName,
+                                         @HeaderParam("X-Warehouse-Code") String warehouseCode,
+                                         @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Listando ordenes abiertas de magnun cali-cartagena ");
+        return Response.ok(soFacade.findOpenOrdersMagnum(companyName, warehouseCode, pruebas)).build();
+    }
+
     @POST
     @Path("assign")
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
