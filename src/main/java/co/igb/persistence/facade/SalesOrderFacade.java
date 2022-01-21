@@ -150,6 +150,49 @@ public class SalesOrderFacade {
         return orders;
     }
 
+    public List<SalesOrderDTO> findOpenOrdersMagnum(String schemaName, String warehouseCode, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select distinct cast(enc.\"DocNum\" as varchar(10))as docnum, ");
+        sb.append(" cast(enc.\"DocDueDate\" as date)as docdate,cast(enc.\"CardCode\" as varchar(20))as cardcode,cast(enc.\"CardName\" as varchar(100))as cardname, ");
+        sb.append(" cast((select count(1) from RDR1 det where det.\"DocEntry\"=enc.\"DocEntry\" and det.\"LineStatus\"='O')as int)as items, ");
+        sb.append(" cast(enc.\"Comments\" as varchar(254))as comments,cast(enc.\"Address2\" as varchar(200))as address, ");
+        sb.append(" ifnull(cast(enc.\"U_TRANSP\" as varchar(4)),'')as transp,cast(det.\"WhsCode\" as varchar(4))as whscode, ");
+        sb.append(" cast((enc.\"DocTotal\"-enc.\"VatSum\"-enc.\"TotalExpns\"+enc.\"WTSum\")as numeric(18,2))as TotalDesc ");
+        sb.append(" cast(tt.\"U_MIN_SEG\" as numeric(18,2))as ValStandDecl,cast(tt.\"U_MIN_FLE\" as int)as UnidEmpStand ");
+        sb.append("from ORDR enc ");
+        sb.append("inner join RDR1 det on det.\"DocEntry\"=enc.\"DocEntry\" and det.\"WhsCode\" in ('05','26') ");
+        sb.append("inner join RDR12 lg on lg.\"DocEntry\"=enc.\"DocEntry\" ");
+        sb.append("inner join \"@TRANSP_TAR\" tt on tt.\"U_COD_TRA\"=enc.\"U_TRANSP\" and tt.\"Code\"=lg.\"U_MunicipioS\" ");
+        sb.append("where enc.\"DocStatus\"='O' and enc.\"U_SEPARADOR\" in ('APROBADO','PREPAGO','SEDE BOGOTA') ");
+        sb.append(" and year(enc.\"DocDate\")=year(current_date) and month(enc.\"DocDate\") between month(current_date)-1 and month(current_date) and enc.\"Confirmed\"='Y' ");
+        sb.append("order by whscode,docdate desc ");
+
+        List<SalesOrderDTO> orders = new ArrayList<>();
+        try {
+            for (Object[] row : (List<Object[]>) persistenceConf.chooseSchema(schemaName, testing, warehouseCode).createNativeQuery(sb.toString()).getResultList()) {
+                SalesOrderDTO order = new SalesOrderDTO();
+                order.setDocNum((String) row[0]);
+                order.setDocDate((Date) row[1]);
+                order.setCardCode((String) row[2]);
+                order.setCardName((String) row[3]);
+                order.setItems((Integer) row[4]);
+                order.setComments((String) row[5]);
+                order.setAddress((String) row[6]);
+                order.setTransp((String) row[7]);
+                order.setWhsCode((String) row[8]);
+                order.setSubTotal((BigDecimal) row[9]);
+                order.setVlrDeclarStand((BigDecimal) row[10]);
+                order.setUndEmpStand((Integer) row[11]);
+
+                orders.add(order);
+            }
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error listando las ordenes abiertas de magnum. ", e);
+        }
+        return orders;
+    }
+
     public List<Object[]> findOrdersStockAvailability(Integer orderNumber, List<String> itemCodes, String warehouseCode, String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(d.\"ItemCode\" as varchar(20)) itemCode, cast(d.\"OpenQty\" as int) openQuantity, cast(d.\"Quantity\" as int) quantity, ");

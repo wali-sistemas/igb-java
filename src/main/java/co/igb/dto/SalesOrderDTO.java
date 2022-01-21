@@ -1,5 +1,6 @@
 package co.igb.dto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -21,6 +22,10 @@ public class SalesOrderDTO {
     private String address;
     private String transp;
     private String docNumMDL;
+    private String whsCode;
+    private BigDecimal subTotal;
+    private BigDecimal vlrDeclarStand;
+    private Integer undEmpStand;
 
     public SalesOrderDTO() {
     }
@@ -163,6 +168,38 @@ public class SalesOrderDTO {
         this.docNumMDL = docNumMDL;
     }
 
+    public String getWhsCode() {
+        return whsCode;
+    }
+
+    public void setWhsCode(String whsCode) {
+        this.whsCode = whsCode;
+    }
+
+    public BigDecimal getSubTotal() {
+        return subTotal;
+    }
+
+    public void setSubTotal(BigDecimal subTotal) {
+        this.subTotal = subTotal;
+    }
+
+    public BigDecimal getVlrDeclarStand() {
+        return vlrDeclarStand;
+    }
+
+    public void setVlrDeclarStand(BigDecimal vlrDeclarStand) {
+        this.vlrDeclarStand = vlrDeclarStand;
+    }
+
+    public Integer getUndEmpStand() {
+        return undEmpStand;
+    }
+
+    public void setUndEmpStand(Integer undEmpStand) {
+        this.undEmpStand = undEmpStand;
+    }
+
     @Override
     public String toString() {
         return "SalesOrderDTO{" +
@@ -181,6 +218,10 @@ public class SalesOrderDTO {
                 ", address='" + address + '\'' +
                 ", transp='" + transp + '\'' +
                 ", docNumMDL='" + docNumMDL + '\'' +
+                ", whsCode='" + whsCode + '\'' +
+                ", subTotal=" + subTotal +
+                ", vlrDeclarStand=" + vlrDeclarStand +
+                ", undEmpStand=" + undEmpStand +
                 '}';
     }
 }
