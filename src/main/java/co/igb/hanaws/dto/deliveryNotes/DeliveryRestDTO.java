@@ -702,7 +702,7 @@ public class DeliveryRestDTO implements Serializable {
     @JsonProperty("U_Plantilla")
     protected Long uPlantilla;
     @JsonProperty("U_DESPACHO_CONTADO")
-    protected Long uDespachoContado;
+    protected String uDespachoContado;
     @JsonProperty("U_totalImpoCo")
     protected Double uTotalImpoCo;
     @JsonProperty("U_SERIAL")
@@ -3576,11 +3576,11 @@ public class DeliveryRestDTO implements Serializable {
         this.uPlantilla = uPlantilla;
     }
 
-    public Long getuDespachoContado() {
+    public String getuDespachoContado() {
         return uDespachoContado;
     }
 
-    public void setuDespachoContado(Long uDespachoContado) {
+    public void setuDespachoContado(String uDespachoContado) {
         this.uDespachoContado = uDespachoContado;
     }
 
