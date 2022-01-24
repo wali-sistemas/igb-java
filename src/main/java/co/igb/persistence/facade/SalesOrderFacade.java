@@ -157,7 +157,7 @@ public class SalesOrderFacade {
         sb.append(" cast((select count(1) from RDR1 det where det.\"DocEntry\"=enc.\"DocEntry\" and det.\"LineStatus\"='O')as int)as items, ");
         sb.append(" cast(enc.\"Comments\" as varchar(254))as comments,cast(enc.\"Address2\" as varchar(200))as address, ");
         sb.append(" ifnull(cast(enc.\"U_TRANSP\" as varchar(4)),'')as transp,cast(det.\"WhsCode\" as varchar(4))as whscode, ");
-        sb.append(" cast((enc.\"DocTotal\"-enc.\"VatSum\"-enc.\"TotalExpns\"+enc.\"WTSum\")as numeric(18,2))as TotalDesc ");
+        sb.append(" cast((enc.\"DocTotal\"-enc.\"VatSum\"-enc.\"TotalExpns\"+enc.\"WTSum\")as numeric(18,2))as TotalDesc, ");
         sb.append(" cast(tt.\"U_MIN_SEG\" as numeric(18,2))as ValStandDecl,cast(tt.\"U_MIN_FLE\" as int)as UnidEmpStand ");
         sb.append("from ORDR enc ");
         sb.append("inner join RDR1 det on det.\"DocEntry\"=enc.\"DocEntry\" and det.\"WhsCode\" in ('05','26') ");
