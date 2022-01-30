@@ -24,6 +24,18 @@ public class DeliveryDTO implements Serializable {
     protected String ununfac;
     @JsonProperty("U_VR_DECLARADO")
     protected BigDecimal uvrdeclarado;
+    @JsonProperty("U_TRANSP")
+    protected String utransp;
+    @JsonProperty("U_TOT_LIOS")
+    protected BigDecimal utotlios;
+    @JsonProperty("U_SEPARADOR")
+    protected String useparador;
+    @JsonProperty("U_DESPACHO_CONTADO")
+    protected String udespachoContado;
+    @JsonProperty("U_VLR_FLE")
+    protected BigDecimal uvlrfle;
+    @JsonProperty("U_PESO_BRUTO")
+    protected BigDecimal upesobruto;
     @JsonProperty("DocumentLines")
     protected List<DeliveryDTO.DocumentLines.DocumentLine> documentLines;
 
@@ -81,6 +93,54 @@ public class DeliveryDTO implements Serializable {
 
     public void setDocumentLines(List<DeliveryDTO.DocumentLines.DocumentLine> documentLines) {
         this.documentLines = documentLines;
+    }
+
+    public String getUtransp() {
+        return utransp;
+    }
+
+    public void setUtransp(String utransp) {
+        this.utransp = utransp;
+    }
+
+    public BigDecimal getUtotlios() {
+        return utotlios;
+    }
+
+    public void setUtotlios(BigDecimal utotlios) {
+        this.utotlios = utotlios;
+    }
+
+    public String getUseparador() {
+        return useparador;
+    }
+
+    public void setUseparador(String useparador) {
+        this.useparador = useparador;
+    }
+
+    public String getUdespachoContado() {
+        return udespachoContado;
+    }
+
+    public void setUdespachoContado(String udespachoContado) {
+        this.udespachoContado = udespachoContado;
+    }
+
+    public BigDecimal getUvlrfle() {
+        return uvlrfle;
+    }
+
+    public void setUvlrfle(BigDecimal uvlrfle) {
+        this.uvlrfle = uvlrfle;
+    }
+
+    public BigDecimal getUpesobruto() {
+        return upesobruto;
+    }
+
+    public void setUpesobruto(BigDecimal upesobruto) {
+        this.upesobruto = upesobruto;
     }
 
     public static class DocumentLines {

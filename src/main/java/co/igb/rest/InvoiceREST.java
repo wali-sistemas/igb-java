@@ -111,6 +111,8 @@ public class InvoiceREST implements Serializable {
         BigDecimal deliveryImpuesto = (BigDecimal) deliveryData.get(0)[12];
         Integer deliveryCreditDays = (Integer) deliveryData.get(0)[13];
         BigDecimal porcFlete = (BigDecimal) deliveryData.get(0)[14];
+        BigDecimal flete = (BigDecimal) deliveryData.get(0)[15];
+        String whsCode = (String) deliveryData.get(0)[16];
 
         if (invoice.getSeries() == null) {
             invoice.setSeries(Long.parseLong(getPropertyValue("igb.invoice.series", companyName)));
@@ -170,7 +172,6 @@ public class InvoiceREST implements Serializable {
                 BigDecimal baseMinima = (BigDecimal) row[2];
                 BigDecimal lineTotal = invoice.getBaseAmount().multiply(prctBsAmnt.divide(BigDecimal.valueOf(100)));
 
-
                 if (baseMinima.compareTo(invoice.getBaseAmount()) == -1) {
                     InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
                     gasto.setExpenseCode(expenseCode.longValue());
@@ -194,8 +195,14 @@ public class InvoiceREST implements Serializable {
         if (companyName.contains("IGB") && !itemRepsol) {
             //TODO: validar si el cliente de IGB tiene checkList en el maestro de SN de deshabilitar flete
             if (!customerFacade.disableFreightCollection(invoice.getCardCode(), companyName, pruebas).equals("Y")) {
-                //BigDecimal porcFlete = customerFacade.getCustomerFlete(invoice.getCardCode(), companyName, pruebas);
-                BigDecimal lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
+                BigDecimal lineTotal;
+                //TODO: Solo para bodegas de asociadas con magnum en IGB, se mapea el flete desde la entrega
+                if (whsCode.equals("05") || whsCode.equals("26")) {
+                    lineTotal = flete;
+                } else {
+                    lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
+                }
+
                 if (porcFlete != null) {
                     InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
                     gasto.setExpenseCode(Constants.CODE_FLETE_GRABABLE);
