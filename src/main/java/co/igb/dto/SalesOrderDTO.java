@@ -26,6 +26,9 @@ public class SalesOrderDTO {
     private BigDecimal subTotal;
     private BigDecimal vlrDeclarStand;
     private Integer undEmpStand;
+    private Integer qty;
+    private BigDecimal porcFlet;
+    private BigDecimal totalFlet;
 
     public SalesOrderDTO() {
     }
@@ -200,6 +203,30 @@ public class SalesOrderDTO {
         this.undEmpStand = undEmpStand;
     }
 
+    public Integer getQty() {
+        return qty;
+    }
+
+    public void setQty(Integer qty) {
+        this.qty = qty;
+    }
+
+    public BigDecimal getPorcFlet() {
+        return porcFlet;
+    }
+
+    public void setPorcFlet(BigDecimal porcFlet) {
+        this.porcFlet = porcFlet;
+    }
+
+    public BigDecimal getTotalFlet() {
+        return totalFlet;
+    }
+
+    public void setTotalFlet(BigDecimal totalFlet) {
+        this.totalFlet = totalFlet;
+    }
+
     @Override
     public String toString() {
         return "SalesOrderDTO{" +
@@ -222,6 +249,9 @@ public class SalesOrderDTO {
                 ", subTotal=" + subTotal +
                 ", vlrDeclarStand=" + vlrDeclarStand +
                 ", undEmpStand=" + undEmpStand +
+                ", qty=" + qty +
+                ", porcFlet=" + porcFlet +
+                ", totalFlet=" + totalFlet +
                 '}';
     }
 }

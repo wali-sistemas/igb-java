@@ -158,7 +158,9 @@ public class SalesOrderFacade {
         sb.append(" cast(enc.\"Comments\" as varchar(254))as comments,cast(enc.\"Address2\" as varchar(200))as address, ");
         sb.append(" ifnull(cast(enc.\"U_TRANSP\" as varchar(4)),'')as transp,cast(det.\"WhsCode\" as varchar(4))as whscode, ");
         sb.append(" cast((enc.\"DocTotal\"-enc.\"VatSum\"-enc.\"TotalExpns\"+enc.\"WTSum\")as numeric(18,2))as TotalDesc, ");
-        sb.append(" cast(tt.\"U_MIN_SEG\" as numeric(18,2))as ValStandDecl,cast(tt.\"U_MIN_FLE\" as int)as UnidEmpStand ");
+        sb.append(" cast(tt.\"U_MIN_SEG\" as numeric(18,2))as ValStandDecl,cast(tt.\"U_MIN_FLE\" as int)as UnidEmpStand, ");
+        sb.append(" cast((select sum(det.\"Quantity\") from RDR1 det where det.\"DocEntry\"=enc.\"DocEntry\" and det.\"LineStatus\"='O')as int)as qty, ");
+        sb.append(" ifnull(cast(tt.\"U_PORC_FLE_CLIE\" as numeric(4,2)),0) as porcFlete ");
         sb.append("from ORDR enc ");
         sb.append("inner join RDR1 det on det.\"DocEntry\"=enc.\"DocEntry\" and det.\"WhsCode\" in ('05','26') ");
         sb.append("inner join RDR12 lg on lg.\"DocEntry\"=enc.\"DocEntry\" ");
@@ -183,6 +185,9 @@ public class SalesOrderFacade {
                 order.setSubTotal((BigDecimal) row[9]);
                 order.setVlrDeclarStand((BigDecimal) row[10]);
                 order.setUndEmpStand((Integer) row[11]);
+                order.setQty((Integer) row[12]);
+                order.setPorcFlet((BigDecimal) row[13]);
+                order.setTotalFlet(order.getSubTotal().multiply(order.getPorcFlet().divide(BigDecimal.valueOf(100))));
 
                 orders.add(order);
             }
