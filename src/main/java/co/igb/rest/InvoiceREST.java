@@ -24,8 +24,6 @@ import javax.ws.rs.core.Response;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
@@ -113,6 +111,7 @@ public class InvoiceREST implements Serializable {
         BigDecimal porcFlete = (BigDecimal) deliveryData.get(0)[14];
         BigDecimal flete = (BigDecimal) deliveryData.get(0)[15];
         String whsCode = (String) deliveryData.get(0)[16];
+        String taxCode = (String) deliveryData.get(0)[17];
 
         if (invoice.getSeries() == null) {
             invoice.setSeries(Long.parseLong(getPropertyValue("igb.invoice.series", companyName)));
@@ -205,7 +204,20 @@ public class InvoiceREST implements Serializable {
 
                 if (porcFlete != null) {
                     InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
-                    gasto.setExpenseCode(Constants.CODE_FLETE_GRABABLE);
+
+                    switch (taxCode) {
+                        case "IVAG19":
+                            gasto.setExpenseCode(1l);//code flete gravados
+                            break;
+                        case "IVAEXCLU":
+                            gasto.setExpenseCode(2l);//code flete no gravados
+                            break;
+                        case "IVAVEXE":
+                            gasto.setExpenseCode(11l);//code flete exentos
+                            break;
+                    }
+
+                    gasto.setTaxCode(taxCode);
                     gasto.setLineTotal(lineTotal.setScale(0, RoundingMode.CEILING));
                     gastos.add(gasto);
                 }
