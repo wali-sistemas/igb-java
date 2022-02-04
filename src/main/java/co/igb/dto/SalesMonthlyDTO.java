@@ -14,16 +14,22 @@ public class SalesMonthlyDTO {
     private BigDecimal totalCost;
     private BigDecimal totalSale;
     private BigDecimal margeSale;
+    private BigDecimal descFin;
+    private BigDecimal totalDescFin;
+    private BigDecimal margeDesFin;
 
     public SalesMonthlyDTO() {
     }
 
-    public SalesMonthlyDTO(String month, String year, BigDecimal totalCost, BigDecimal totalSale, BigDecimal margeSale) {
+    public SalesMonthlyDTO(String month, String year, BigDecimal totalCost, BigDecimal totalSale, BigDecimal margeSale, BigDecimal descFin, BigDecimal totalDescFin, BigDecimal margeDesFin) {
         this.month = month;
         this.year = year;
         this.totalCost = totalCost;
         this.totalSale = totalSale;
         this.margeSale = margeSale;
+        this.descFin = descFin;
+        this.totalDescFin = totalDescFin;
+        this.margeDesFin = margeDesFin;
     }
 
     public String getMonth() {
@@ -66,6 +72,30 @@ public class SalesMonthlyDTO {
         this.margeSale = margeSale;
     }
 
+    public BigDecimal getDescFin() {
+        return descFin;
+    }
+
+    public void setDescFin(BigDecimal descFin) {
+        this.descFin = descFin;
+    }
+
+    public BigDecimal getTotalDescFin() {
+        return totalDescFin;
+    }
+
+    public void setTotalDescFin(BigDecimal totalDescFin) {
+        this.totalDescFin = totalDescFin;
+    }
+
+    public BigDecimal getMargeDesFin() {
+        return margeDesFin;
+    }
+
+    public void setMargeDesFin(BigDecimal margeDesFin) {
+        this.margeDesFin = margeDesFin;
+    }
+
     @Override
     public String toString() {
         return "SalesMonthlyDTO{" +
@@ -74,6 +104,9 @@ public class SalesMonthlyDTO {
                 ", totalCost=" + totalCost +
                 ", totalSale=" + totalSale +
                 ", margeSale=" + margeSale +
+                ", descFin=" + descFin +
+                ", totalDescFin=" + totalDescFin +
+                ", margeDesFin=" + margeDesFin +
                 '}';
     }
 }
