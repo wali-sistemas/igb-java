@@ -293,7 +293,7 @@ public class ReportREST implements Serializable {
         if (sales != null) {
             List<SalesAnnualDTO> listSales = new ArrayList<>();
             for (Object[] row : sales) {
-                listSales.add(new SalesAnnualDTO((String) row[0], (BigDecimal) row[1], (BigDecimal) row[2], (BigDecimal) row[3]));
+                listSales.add(new SalesAnnualDTO((String) row[0], (BigDecimal) row[1], (BigDecimal) row[2], (BigDecimal) row[3], (BigDecimal) row[4], (BigDecimal) row[5]));
             }
             CONSOLE.log(Level.INFO, "Retornando ventas anuales para [" + companyName + "]");
             return Response.ok(new ResponseDTO(listSales == null ? -1 : 0, listSales)).build();
@@ -313,7 +313,7 @@ public class ReportREST implements Serializable {
         if (sales != null || sales.size() <= 0) {
             List<SalesMonthlyDTO> listSales = new ArrayList<>();
             for (Object[] row : sales) {
-                listSales.add(new SalesMonthlyDTO((String) row[0], (String) row[1], (BigDecimal) row[2], (BigDecimal) row[3], (BigDecimal) row[4]));
+                listSales.add(new SalesMonthlyDTO((String) row[0], (String) row[1], (BigDecimal) row[2], (BigDecimal) row[3], (BigDecimal) row[4], (BigDecimal) row[5], (BigDecimal) row[6], (BigDecimal) row[7]));
             }
             CONSOLE.log(Level.INFO, "Retornando ventas mensuales para [" + companyName + "]");
             return Response.ok(new ResponseDTO(listSales == null ? -1 : 0, listSales)).build();
@@ -449,7 +449,7 @@ public class ReportREST implements Serializable {
             dto.setTypeShipment((String) obj[6]);
             dto.setNroQty((String) obj[7]);
             dto.setLiquid((String) obj[8]);
-            dto.setUserName(dto.getBuyer().substring(0,1));
+            dto.setUserName(dto.getBuyer().substring(0, 1));
 
             trackingOrder.add(dto);
         }
