@@ -35,7 +35,7 @@ public class LandedCostsFacade {
         sb.append("  cast((sum(ca.\"CostSum\")/sum(ca.\"DocTotal\")*100)as numeric(18,2))as \"porcentaje\",month(ca.\"DocDate\")as \"mes#\", ");
         sb.append("  cast(year(ca.\"DocDate\")as int)as ano ");
         sb.append(" from OIPF ca ");
-        sb.append(" where year(ca.\"DocDate\") between year(ADD_YEARS(TO_DATE(current_date,'YYYY-MM-DD'),-2)) and year(current_date)-1 ");
+        sb.append(" where year(ca.\"DocDate\") between year(ADD_YEARS(TO_DATE(current_date,'YYYY-MM-DD'),-3)) and year(current_date)-1 ");
         sb.append(" group by year(ca.\"DocDate\"),month(ca.\"DocDate\") ");
         sb.append(")as t ON t.\"mes#\"=v.\"U_Value\" ");
         sb.append("where v.\"U_Value\" between 1 and 12 ");
