@@ -484,6 +484,7 @@ public class DeliveryREST {
             document.setUpesobruto(dto.getPesoQty());
             document.setUdespachoContado(dto.getStatusOrder());
             document.setUvlrfle(dto.getVlrFlete());
+            document.setUseparador(userName);
         }
 
         for (Object[] row : orderRecords) {

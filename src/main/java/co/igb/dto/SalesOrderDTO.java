@@ -29,6 +29,7 @@ public class SalesOrderDTO {
     private Integer qty;
     private BigDecimal porcFlet;
     private BigDecimal totalFlet;
+    private String condPayment;
 
     public SalesOrderDTO() {
     }
@@ -227,6 +228,14 @@ public class SalesOrderDTO {
         this.totalFlet = totalFlet;
     }
 
+    public String getCondPayment() {
+        return condPayment;
+    }
+
+    public void setCondPayment(String condPayment) {
+        this.condPayment = condPayment;
+    }
+
     @Override
     public String toString() {
         return "SalesOrderDTO{" +
@@ -252,6 +261,7 @@ public class SalesOrderDTO {
                 ", qty=" + qty +
                 ", porcFlet=" + porcFlet +
                 ", totalFlet=" + totalFlet +
+                ", condPayment='" + condPayment + '\'' +
                 '}';
     }
 }
