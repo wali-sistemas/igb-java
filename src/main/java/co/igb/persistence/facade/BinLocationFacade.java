@@ -1,16 +1,11 @@
 package co.igb.persistence.facade;
 
-import co.igb.persistence.entity.SaldoUbicacion;
-import co.igb.persistence.entity.SaldoUbicacion_;
 import co.igb.util.Constants;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;

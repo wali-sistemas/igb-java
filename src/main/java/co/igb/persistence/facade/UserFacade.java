@@ -11,9 +11,7 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class UserFacade {
-
     private static final String DB_TYPE_WALI = Constants.DATABASE_TYPE_WALI;
-
     @EJB
     private PersistenceConf persistenceConf;
 

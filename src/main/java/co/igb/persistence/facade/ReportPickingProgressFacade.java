@@ -18,10 +18,8 @@ import java.util.logging.Logger;
  */
 @Stateless
 public class ReportPickingProgressFacade {
-
     private static final Logger CONSOLE = Logger.getLogger(ReportPickingProgressFacade.class.getSimpleName());
     private static final String DB_TYPE_WALI = Constants.DATABASE_TYPE_WALI;
-
     @EJB
     private PersistenceConf persistenceConf;
 
