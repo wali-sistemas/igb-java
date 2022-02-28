@@ -1,14 +1,12 @@
 package co.igb.persistence.facade;
 
 import co.igb.persistence.entity.LocationLimit;
-import co.igb.persistence.entity.LocationLimit_;
 import co.igb.util.Constants;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.criteria.*;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;

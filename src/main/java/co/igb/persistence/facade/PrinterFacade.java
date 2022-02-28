@@ -14,9 +14,7 @@ import java.util.List;
  */
 @Stateless
 public class PrinterFacade {
-
     private static final String DB_TYPE_WALI = Constants.DATABASE_TYPE_WALI;
-
     @EJB
     private PersistenceConf persistenceConf;
 

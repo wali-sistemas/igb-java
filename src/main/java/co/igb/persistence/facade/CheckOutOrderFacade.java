@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 public class CheckOutOrderFacade {
     private static final Logger CONSOLE = Logger.getLogger(PackingOrderFacade.class.getSimpleName());
     private static final String DB_TYPE_WALI = Constants.DATABASE_TYPE_WALI;
-
     @EJB
     private PersistenceConf persistenceConf;
 

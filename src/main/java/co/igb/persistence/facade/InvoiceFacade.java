@@ -22,6 +22,9 @@ public class InvoiceFacade {
     @EJB
     private PersistenceConf persistenceConf;
 
+    public InvoiceFacade() {
+    }
+
     public Integer getDocNumInvoice(Long docEntry, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(f.\"DocNum\" as int) as DocNum from OINV f where f.\"DocEntry\"=");
@@ -175,6 +178,10 @@ public class InvoiceFacade {
         sb.append(" inner join OCRD c ON f.\"CardCode\"=c.\"CardCode\" ");
         sb.append(" inner join OCST p ON c.\"State1\"=p.\"Code\" ");
         sb.append(" where f.\"DocDate\" between ADD_YEARS(TO_DATE(current_date,'YYYY-MM-DD'),-3) and current_date and p.\"Country\"='CO' and d.\"TaxOnly\"='N' ");
+        //TODO: Excluir Factura de venta por servicio en MOTOZONE.
+        if (companyName.contains("VARROC")) {
+            sb.append("and f.\"DocNum\"<>103233 ");
+        }
         sb.append(" group by year(f.\"DocDate\") ");
         sb.append("UNION ALL ");
         sb.append(" select 'NC' as Doc, cast(year(n.\"DocDate\") as varchar(4)) as \"ano\",0 as costoTotalVenta, cast(sum((cast(d.\"Quantity\" as int) * cast(d.\"StockPrice\" as numeric(18,0)))) as numeric(18,0))as costoTotalNota,0 as valorTotalVenta, ");
@@ -222,6 +229,10 @@ public class InvoiceFacade {
         sb.append("inner join OCRD c ON f.\"CardCode\"=c.\"CardCode\" ");
         sb.append("inner join OCST p ON c.\"State1\"=p.\"Code\" ");
         sb.append("where year(f.\"DocDate\")=year(current_date) and p.\"Country\"='CO' and d.\"TaxOnly\"='N' ");
+        //TODO: Excluir Factura de venta por servicio en MOTOZONE.
+        if (companyName.contains("VARROC")) {
+            sb.append("and f.\"DocNum\"<>103233 ");
+        }
         sb.append("group by monthname(f.\"DocDate\"), year(f.\"DocDate\"), month(f.\"DocDate\") ");
         sb.append("UNION ALL ");
         sb.append("select 'NC' as Doc, month(n.\"DocDate\") as mm, monthname(n.\"DocDate\") as mes, 0 as \"costoTotalVenta\", ");
@@ -265,6 +276,10 @@ public class InvoiceFacade {
         sb.append(" inner join OCRD c ON f.\"CardCode\"=c.\"CardCode\" ");
         sb.append(" inner join OCST p ON c.\"State1\"=p.\"Code\" ");
         sb.append(" where year(f.\"DocDate\")=year(current_date) and month(f.\"DocDate\")=month(current_date) and p.\"Country\"='CO' and d.\"TaxOnly\"='N' ");
+        //TODO: Excluir Factura de venta por servicio en MOTOZONE.
+        if (companyName.contains("VARROC")) {
+            sb.append("and f.\"DocNum\"<>103233 ");
+        }
         sb.append("UNION ALL ");
         sb.append(" select 0 as valorTotalVenta,cast(sum((cast(d.\"LineTotal\" as numeric(18,0))-(cast(d.\"LineTotal\" as numeric(18,0))*cast(ifnull(n.\"DiscPrcnt\",0) as int))/100))as numeric(18,0))as valorTotalNota,0 as valorTotalDescFin ");
         sb.append(" from ORIN n ");

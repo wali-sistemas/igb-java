@@ -25,10 +25,8 @@ import java.util.logging.Logger;
  */
 @Stateless
 public class PickingRecordFacade {
-
     private static final Logger CONSOLE = Logger.getLogger(PickingRecordFacade.class.getSimpleName());
     private static final String DB_TYPE_WALI = Constants.DATABASE_TYPE_WALI;
-
     @EJB
     private PersistenceConf persistenceConf;
 
