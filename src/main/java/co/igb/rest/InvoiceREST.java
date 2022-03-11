@@ -112,6 +112,7 @@ public class InvoiceREST implements Serializable {
         BigDecimal flete = (BigDecimal) deliveryData.get(0)[15];
         String whsCode = (String) deliveryData.get(0)[16];
         String taxCode = (String) deliveryData.get(0)[17];
+        String itemMarca = (String) deliveryData.get(0)[18];
 
         if (invoice.getSeries() == null) {
             invoice.setSeries(Long.parseLong(getPropertyValue("igb.invoice.series", companyName)));
@@ -182,21 +183,13 @@ public class InvoiceREST implements Serializable {
             }
         }
 
-        //flete aplica solo para IGB siempre y cuando no sean ítem REPSOL, MotoZone solo llantas y no se efectua por este medio.
-        boolean itemRepsol = false;
-        for (InvoicesDTO.DocumentLines.DocumentLine line : invoice.getDocumentLines()) {
-            if (line.getItemCode().substring(0, 2).equals("RP")) {
-                itemRepsol = true;
-                break;
-            }
-        }
-
-        if (companyName.contains("IGB") && !itemRepsol) {
-            //TODO: validar si el cliente de IGB tiene checkList en el maestro de SN de deshabilitar flete
-            if (!customerFacade.disableFreightCollection(invoice.getCardCode(), companyName, pruebas).equals("Y")) {
-                BigDecimal lineTotal;
-                //TODO: Solo para bodegas de asociadas con magnum en IGB, se mapea el flete desde la entrega
-                if (whsCode.equals("05") || whsCode.equals("26")) {
+        /***Validar si el cliente de IGB y MTZ, tiene marcado el atributo SIN FLETE en el maestro de SN***/
+        if (!customerFacade.disableFreightCollection(invoice.getCardCode(), companyName, pruebas).equals("Y")) {
+            BigDecimal lineTotal;
+            /***Validar gasto de flete por marca diferente a 54-REPSOL(Lubricante) en IGB y MTZ***/
+            if (!itemMarca.equals("54")) {
+                /***Validar solo en IGB, si el item corresponde a bodegas externas MAGNUM (Cali&Cartagena) se mapea el flete desde la entrega campo de usuario***/
+                if (companyName.contains("IGB") && (whsCode.equals("05") || whsCode.equals("26"))) {
                     lineTotal = flete;
                 } else {
                     lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
@@ -220,6 +213,8 @@ public class InvoiceREST implements Serializable {
                     gasto.setTaxCode(taxCode);
                     gasto.setLineTotal(lineTotal.setScale(0, RoundingMode.CEILING));
                     gastos.add(gasto);
+                } else {
+                    CONSOLE.log(Level.WARNING, "Ocurrio una novedad con el porcentaje de flete para el cliente {0} en la matris de transporte de {1}", new Object[]{cardCode, companyName});
                 }
             }
         }
