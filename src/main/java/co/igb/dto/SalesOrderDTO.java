@@ -30,6 +30,7 @@ public class SalesOrderDTO {
     private BigDecimal porcFlet;
     private BigDecimal totalFlet;
     private String condPayment;
+    private String marca;
 
     public SalesOrderDTO() {
     }
@@ -236,6 +237,14 @@ public class SalesOrderDTO {
         this.condPayment = condPayment;
     }
 
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
     @Override
     public String toString() {
         return "SalesOrderDTO{" +
@@ -262,6 +271,7 @@ public class SalesOrderDTO {
                 ", porcFlet=" + porcFlet +
                 ", totalFlet=" + totalFlet +
                 ", condPayment='" + condPayment + '\'' +
+                ", marca='" + marca + '\'' +
                 '}';
     }
 }
