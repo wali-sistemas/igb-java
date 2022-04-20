@@ -1,4 +1,4 @@
-package co.igb.apiTransport.client;
+package co.igb.apiTransport.client.saferbo;
 
 import co.igb.dto.ApiSaferboDTO;
 import co.igb.dto.ResponseCrearGuiaDTO;
