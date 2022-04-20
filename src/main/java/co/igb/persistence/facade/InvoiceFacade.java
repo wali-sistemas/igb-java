@@ -236,8 +236,13 @@ public class InvoiceFacade {
         sb.append("group by monthname(f.\"DocDate\"), year(f.\"DocDate\"), month(f.\"DocDate\") ");
         sb.append("UNION ALL ");
         sb.append("select 'NC' as Doc, month(n.\"DocDate\") as mm, monthname(n.\"DocDate\") as mes, 0 as \"costoTotalVenta\", ");
-        sb.append(" cast(sum((cast(d.\"Quantity\" as int) * cast(d.\"StockPrice\" as numeric(18,0)))) as numeric(18,0)) as \"costoTotalNota\", 0 as \"valorTotalVenta\", ");
-        sb.append(" cast(sum((cast(d.\"LineTotal\" as numeric(18,0)) - (cast(d.\"LineTotal\" as numeric(18,0)) * cast(ifnull(n.\"DiscPrcnt\",0) as int))/100)) as numeric(18,0)) as \"valorTotalNota\",0 as \"valorTotalDescFin\" ");
+        //TODO: Por instrucción de contabilidad, el costo de la nota se calcula de diferente
+        if (companyName.contains("IGB")) {
+            sb.append("sum(cast(case n.\"DocType\" when 'S' then (d.\"LineTotal\"-(d.\"LineTotal\"*(n.\"DiscPrcnt\")/100)) else (d.\"Quantity\"*d.\"StockPrice\")end as numeric(18,0)))as \"costoTotalNota\", ");
+        } else {
+            sb.append("cast(sum((cast(d.\"Quantity\" as int)*cast(d.\"StockPrice\" as numeric(18,0))))as numeric(18,0))as \"costoTotalNota\", ");
+        }
+        sb.append(" 0 as \"valorTotalVenta\",cast(sum((cast(d.\"LineTotal\" as numeric(18,0)) - (cast(d.\"LineTotal\" as numeric(18,0)) * cast(ifnull(n.\"DiscPrcnt\",0) as int))/100)) as numeric(18,0)) as \"valorTotalNota\",0 as \"valorTotalDescFin\" ");
         sb.append("from ORIN n ");
         sb.append("inner join RIN1 d on d.\"DocEntry\" = n.\"DocEntry\" ");
         sb.append("inner join OSLP a ON n.\"SlpCode\"=a.\"SlpCode\" ");

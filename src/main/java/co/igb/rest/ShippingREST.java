@@ -1,6 +1,6 @@
 package co.igb.rest;
 
-import co.igb.apiTransport.client.SaferboTransportClient;
+import co.igb.apiTransport.client.saferbo.SaferboTransportClient;
 import co.igb.dto.*;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.entity.ShippingOrder;
