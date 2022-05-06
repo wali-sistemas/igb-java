@@ -1,6 +1,6 @@
 package co.igb.rest;
 
-import co.igb.apiSoul.client.wsClientesBodegas.*;
+import co.igb.soulws.client.wsClientesBodegas.*;
 import co.igb.dto.ApiSoulStockDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.facade.ItemFacade;

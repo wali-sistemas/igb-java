@@ -2,7 +2,7 @@ package co.igb.rest;
 
 import co.igb.dto.GenericRESTResponseDTO;
 import co.igb.ejb.IGBApplicationBean;
-import co.igb.manager.client.SessionPoolManagerClient;
+import co.igb.managerws.client.SessionPoolManagerClient;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

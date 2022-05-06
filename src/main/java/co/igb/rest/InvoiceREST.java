@@ -8,6 +8,7 @@ import co.igb.hanaws.dto.invoices.InvoicesRestDTO;
 import co.igb.persistence.facade.CustomerFacade;
 import co.igb.persistence.facade.DeliveryNoteFacade;
 import co.igb.persistence.facade.InvoiceFacade;
+import co.igb.persistence.facade.SalesOrderFacade;
 import co.igb.util.Constants;
 import co.igb.util.IGBUtils;
 import com.google.gson.Gson;
@@ -45,6 +46,8 @@ public class InvoiceREST implements Serializable {
     private CustomerFacade customerFacade;
     @EJB
     private BasicSAPFunctions sapFunctions;
+    @EJB
+    private SalesOrderFacade salesOrderFacade;
     @Inject
     private IGBApplicationBean appBean;
 
@@ -113,6 +116,8 @@ public class InvoiceREST implements Serializable {
         String whsCode = (String) deliveryData.get(0)[16];
         String taxCode = (String) deliveryData.get(0)[17];
         String itemMarca = (String) deliveryData.get(0)[18];
+        String codTransp = (String) deliveryData.get(0)[19];
+        Integer order = (Integer) deliveryData.get(0)[20];
 
         if (invoice.getSeries() == null) {
             invoice.setSeries(Long.parseLong(getPropertyValue("igb.invoice.series", companyName)));
@@ -219,6 +224,15 @@ public class InvoiceREST implements Serializable {
             }
         }
         invoice.setDocumentAdditionalExpenses(gastos);
+
+        /***Actualizar transportadora en orden de IGB, según tabla de tarifas de transporte***/
+        if (companyName.contains("IGB")) {
+            try {
+                salesOrderFacade.updateUserFieldCodTransport(codTransp, order, companyName, pruebas);
+                invoice.setUtransp(codTransp);
+            } catch (Exception e) {
+            }
+        }
 
         /***Consultando tabla de retenciones***/
         List<Object[]> listRetencion = customerFacade.getWithholdingTaxData(invoice.getCardCode(), companyName, pruebas);

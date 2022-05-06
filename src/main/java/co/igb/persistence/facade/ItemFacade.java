@@ -7,7 +7,6 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.logging.Level;
@@ -59,7 +58,7 @@ public class ItemFacade {
         sb.append(whsCode);
         sb.append("' order by dub.\"BinCode\"");
         try {
-            return (List<Object[]>) persistenceConf.chooseSchema(companyName, pruebas, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, pruebas, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el stock del item " + itemCode + ".", e);
             return null;
@@ -78,7 +77,6 @@ public class ItemFacade {
         }
         try {
             return (BigDecimal) persistenceConf.chooseSchema(companyName, pruebas, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
-        } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el precio unitario para el item [" + itemCode + "]");
         }
@@ -97,7 +95,7 @@ public class ItemFacade {
         sb.append(itemCode);
         sb.append("'");
         try {
-            return (Object) em.createNativeQuery(sb.toString()).getSingleResult();
+            return em.createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al revisar el stock del item [" + itemCode + "] para la ubicacion [" + location + "]");
             return null;
