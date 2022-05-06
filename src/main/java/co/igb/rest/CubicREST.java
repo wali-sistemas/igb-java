@@ -1,7 +1,7 @@
 package co.igb.rest;
 
-import co.igb.apiCubic.dto.orden.CubicOrdenDTO;
-import co.igb.apiCubic.ejb.CubicOrdenEJB;
+import co.igb.cubicws.dto.orden.CubicOrdenDTO;
+import co.igb.cubicws.ejb.CubicOrdenEJB;
 import co.igb.persistence.facade.InvoiceFacade;
 
 import javax.ejb.EJB;

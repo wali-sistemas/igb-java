@@ -219,11 +219,11 @@ public class StockTransferREST implements Serializable {
                 Integer orderDocEntry = salesOrderFacade.getOrderDocEntry(itemTransfer.getOrderNumber(), companyName, pruebas);
                 Long lineNumItem = salesOrderFacade.getLineNum(itemTransfer.getOrderNumber(), itemTransfer.getItemCode(), companyName, pruebas);
 
-                ResponseDTO res = salesOrderEJB.modifySalesOrderQuantity(companyName, orderDocEntry, lineNumItem, itemTransfer.getQuantity());
+                /*ResponseDTO res = salesOrderEJB.modifySalesOrderQuantity(companyName, orderDocEntry, lineNumItem, itemTransfer.getQuantity());
 
                 if (res.getCode() < 0) {
                     return Response.ok(new ResponseDTO(-1, "Ocurrio un error al modificar la cantidad de la orden #[" + orderDocEntry.toString() + "]")).build();
-                }
+                }*/
             }
 
             try {

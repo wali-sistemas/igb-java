@@ -448,7 +448,6 @@ public class SalesOrderFacade {
         return null;
     }
 
-
     public boolean closeOrderLines(Integer orderEntry, HashSet<String> items, String companyName, boolean testing) {
         String itms = "";
         EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA);
@@ -494,4 +493,16 @@ public class SalesOrderFacade {
         return false;
     }
 
+    public void updateUserFieldCodTransport(String codTrasnp, Integer docNum, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("update ORDR set \"U_TRANSP\"=");
+        sb.append(codTrasnp);
+        sb.append(" where \"DocNum\"=");
+        sb.append(docNum);
+        try {
+            persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).executeUpdate();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando el codigo de transporte para la orden {0}", docNum);
+        }
+    }
 }

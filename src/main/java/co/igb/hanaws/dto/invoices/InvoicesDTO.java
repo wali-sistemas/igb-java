@@ -36,6 +36,8 @@ public class InvoicesDTO implements Serializable {
     protected Double utotcaj;
     @JsonProperty("U_NUNFAC")
     protected String ununfac;
+    @JsonProperty("U_TRANSP")
+    protected String utransp;
     @JsonProperty("DocumentLines")
     protected List<InvoicesDTO.DocumentLines.DocumentLine> documentLines;
     @JsonProperty("DocumentAdditionalExpenses")
@@ -137,6 +139,14 @@ public class InvoicesDTO implements Serializable {
 
     public void setUnunfac(String ununfac) {
         this.ununfac = ununfac;
+    }
+
+    public String getUtransp() {
+        return utransp;
+    }
+
+    public void setUtransp(String utransp) {
+        this.utransp = utransp;
     }
 
     public List<DocumentLines.DocumentLine> getDocumentLines() {
