@@ -33,7 +33,8 @@ public class DeliveryNoteFacade {
         sb.append(" cast(enc.\"DocTotal\"-enc.\"VatSum\" as numeric(18,2)) as valorNeto, cast(enc.\"VatSum\" as numeric(18,2)) as impuesto, ");
         sb.append(" cast(pay.\"ExtraDays\" as int) as days, ifnull(cast(t.\"U_PORC_FLE_CLIE\" as numeric(4,2)),0) as porcetajeFlete, ");
         sb.append(" cast(enc.\"U_VLR_FLE\" as numeric(18,2))as flete,cast(det.\"WhsCode\" as varchar(2))as WhsCode,cast(det.\"TaxCode\" as varchar(10))as taxCode, ");
-        sb.append(" cast(art.\"U_Marca\" as varchar(2))as marca, cast(t.\"U_COD_TRA\" as varchar(6))as codTransp, cast(enc.\"U_NUNFAC\" as int)as orden ");
+        sb.append(" cast(art.\"U_Marca\" as varchar(2))as marca, cast(case when det.\"WhsCode\" IN ('05','26') then enc.\"U_TRANSP\" else t.\"U_COD_TRA\" end as varchar(6))as codTransp, ");
+        sb.append(" cast(enc.\"U_NUNFAC\" as int)as orden ");
         sb.append("from ODLN enc ");
         sb.append("inner join DLN1 det on det.\"DocEntry\"=enc.\"DocEntry\" ");
         sb.append("inner join DLN12 ad on ad.\"DocEntry\"=enc.\"DocEntry\" ");
