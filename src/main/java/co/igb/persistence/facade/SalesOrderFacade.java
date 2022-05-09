@@ -171,7 +171,7 @@ public class SalesOrderFacade {
         sb.append("from ORDR enc ");
         sb.append("inner join RDR1 det on det.\"DocEntry\"=enc.\"DocEntry\" and det.\"WhsCode\" in ('05','26') ");
         sb.append("inner join RDR12 lg on lg.\"DocEntry\"=enc.\"DocEntry\" ");
-        sb.append("inner join \"@TRANSP_TAR\" tt on tt.\"U_COD_TRA\"=enc.\"U_TRANSP\" and tt.\"Code\"=lg.\"U_MunicipioS\" ");
+        sb.append("left join \"@TRANSP_TAR\" tt on tt.\"U_COD_TRA\"=enc.\"U_TRANSP\" and tt.\"Code\"=lg.\"U_MunicipioS\" ");
         sb.append("inner join \"OCTG\" pg on pg.\"GroupNum\"=enc.\"GroupNum\" ");
         sb.append("where enc.\"DocStatus\"='O' and enc.\"U_SEPARADOR\" in ('APROBADO','PREPAGO','SEDE BOGOTA') ");
         sb.append(" and year(enc.\"DocDate\")=year(current_date) and month(enc.\"DocDate\") between month(current_date)-1 and month(current_date) and enc.\"Confirmed\"='Y' ");

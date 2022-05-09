@@ -226,7 +226,7 @@ public class InvoiceREST implements Serializable {
         invoice.setDocumentAdditionalExpenses(gastos);
 
         /***Actualizar transportadora en orden de IGB, según tabla de tarifas de transporte***/
-        if (companyName.contains("IGB")) {
+        if (companyName.contains("IGB") && (!whsCode.equals("05") || !whsCode.equals("26"))) {
             try {
                 salesOrderFacade.updateUserFieldCodTransport(codTransp, order, companyName, pruebas);
                 invoice.setUtransp(codTransp);
