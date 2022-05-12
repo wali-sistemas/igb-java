@@ -173,7 +173,7 @@ public class PurchaseOrderFacade {
         sb.append(" from OPOR p ");
         sb.append(" where p.\"Series\"='48' ");
         sb.append("union all ");
-        sb.append(" select 'Observación' as Concepto,ifnull(cast(p.\"U_OBSERVACION\" as varchar),'')as Info,p.\"DocNum\" ");
+        sb.append(" select 'Observación' as Concepto,ifnull(cast(p.\"U_OBSERVACION\" as varchar(254)),'')as Info,p.\"DocNum\" ");
         sb.append(" from OPOR p ");
         sb.append(" where p.\"Series\"='48' ");
         sb.append(")as t ");
