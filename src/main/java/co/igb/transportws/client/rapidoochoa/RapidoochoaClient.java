@@ -3,6 +3,10 @@ package co.igb.transportws.client.rapidoochoa;
 import co.igb.transportws.dto.rapidoochoa.GuiaDTO;
 import co.igb.transportws.dto.rapidoochoa.GuiaResponseDTO;
 
+import co.igb.dto.ApiSaferboDTO;
+import co.igb.dto.ResponseCrearGuiaDTO;
+
+import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;

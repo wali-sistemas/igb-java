@@ -142,6 +142,7 @@ public class InvoiceREST implements Serializable {
             invoice.setVatSum(deliveryImpuesto);
             invoice.setuWUID(getPropertyValue("invoice.wuid", companyName));
             invoice.setUnunfac(docNum.toString());
+            invoice.setUtransp(codTransp);
         }
 
         if (deliveryComment != null) {
@@ -226,10 +227,9 @@ public class InvoiceREST implements Serializable {
         invoice.setDocumentAdditionalExpenses(gastos);
 
         /***Actualizar transportadora en orden de IGB, según tabla de tarifas de transporte***/
-        if (companyName.contains("IGB") && (!whsCode.equals("05") || !whsCode.equals("26"))) {
+        if (companyName.contains("IGB") && (whsCode.equals("01") || whsCode.equals("30"))) {
             try {
                 salesOrderFacade.updateUserFieldCodTransport(codTransp, order, companyName, pruebas);
-                invoice.setUtransp(codTransp);
             } catch (Exception e) {
             }
         }
