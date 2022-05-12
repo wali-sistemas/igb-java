@@ -178,10 +178,7 @@ public class InvoiceFacade {
         sb.append(" inner join OCRD c ON f.\"CardCode\"=c.\"CardCode\" ");
         sb.append(" inner join OCST p ON c.\"State1\"=p.\"Code\" ");
         sb.append(" where f.\"DocDate\" between ADD_YEARS(TO_DATE(current_date,'YYYY-MM-DD'),-3) and current_date and p.\"Country\"='CO' and d.\"TaxOnly\"='N' ");
-        //TODO: Excluir Factura de venta por servicio en MOTOZONE.
-        if (companyName.contains("VARROC")) {
-            sb.append("and f.\"DocNum\"<>103233 ");
-        }
+        sb.append("  and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
         sb.append(" group by year(f.\"DocDate\") ");
         sb.append("UNION ALL ");
         sb.append(" select 'NC' as Doc, cast(year(n.\"DocDate\") as varchar(4)) as \"ano\",0 as costoTotalVenta, cast(sum((cast(d.\"Quantity\" as int) * cast(d.\"StockPrice\" as numeric(18,0)))) as numeric(18,0))as costoTotalNota,0 as valorTotalVenta, ");
@@ -192,12 +189,14 @@ public class InvoiceFacade {
         sb.append(" inner join OCRD c ON n.\"CardCode\"=c.\"CardCode\" ");
         sb.append(" inner join OCST p ON c.\"State1\"=p.\"Code\" ");
         sb.append(" where n.\"DocDate\" between ADD_YEARS(TO_DATE(current_date,'YYYY-MM-DD'),-3) and current_date and p.\"Country\"='CO' and d.\"TaxOnly\"='N'");
+        sb.append("  and n.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
         sb.append(" group by year(n.\"DocDate\") ");
         sb.append("UNION ALL ");
         sb.append(" select 'DF' as Doc, cast(year(a.\"TaxDate\") as varchar(4)) as \"ano\", 0 as costoTotalVenta, 0 as costoTotalNota, 0 as valorTotalVenta,0 as valorTotalNota,cast(sum(d.\"Debit\"-d.\"Credit\") as numeric(18,2)) as valorTotalDescFin ");
         sb.append(" from OJDT a ");
         sb.append(" inner join JDT1 d on d.\"TransId\"=a.\"TransId\" ");
         sb.append(" where a.\"TaxDate\" between ADD_YEARS(TO_DATE(current_date,'YYYY-MM-DD'),-3) and current_date and a.\"Memo\"<>'P.133 períodos de cierre' and d.\"Account\" in ('41350520','41750540','41750525','41750530') ");
+        sb.append("  and a.\"TransId\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='AS') ");
         sb.append(" group by year(a.\"TaxDate\") ");
         sb.append(")as t ");
         sb.append("group by t.\"ano\" order by t.\"ano\"");
@@ -228,15 +227,11 @@ public class InvoiceFacade {
         sb.append("inner join OSLP a ON f.\"SlpCode\"=a.\"SlpCode\" ");
         sb.append("inner join OCRD c ON f.\"CardCode\"=c.\"CardCode\" ");
         sb.append("inner join OCST p ON c.\"State1\"=p.\"Code\" ");
-        sb.append("where year(f.\"DocDate\")=year(current_date) and p.\"Country\"='CO' and d.\"TaxOnly\"='N' ");
-        //TODO: Excluir Factura de venta por servicio en MOTOZONE.
-        if (companyName.contains("VARROC")) {
-            sb.append("and f.\"DocNum\"<>103233 ");
-        }
+        sb.append("where year(f.\"DocDate\")=year(current_date) and p.\"Country\"='CO' and d.\"TaxOnly\"='N' and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
         sb.append("group by monthname(f.\"DocDate\"), year(f.\"DocDate\"), month(f.\"DocDate\") ");
         sb.append("UNION ALL ");
         sb.append("select 'NC' as Doc, month(n.\"DocDate\") as mm, monthname(n.\"DocDate\") as mes, 0 as \"costoTotalVenta\", ");
-        //TODO: Por instrucción de contabilidad, el costo de la nota se calcula de diferente
+        //TODO: Por instrucción de contabilidad, el costo de la nota se calcula diferente
         if (companyName.contains("IGB")) {
             sb.append("sum(cast(case n.\"DocType\" when 'S' then (d.\"LineTotal\"-(d.\"LineTotal\"*(n.\"DiscPrcnt\")/100)) else (d.\"Quantity\"*d.\"StockPrice\")end as numeric(18,0)))as \"costoTotalNota\", ");
         } else {
@@ -248,14 +243,14 @@ public class InvoiceFacade {
         sb.append("inner join OSLP a ON n.\"SlpCode\"=a.\"SlpCode\" ");
         sb.append("inner join OCRD c ON n.\"CardCode\"=c.\"CardCode\" ");
         sb.append("inner join OCST p ON c.\"State1\"=p.\"Code\" ");
-        sb.append("where year(n.\"DocDate\")=year(current_date) and p.\"Country\"='CO' and d.\"TaxOnly\"='N' ");
+        sb.append("where year(n.\"DocDate\")=year(current_date) and p.\"Country\"='CO' and d.\"TaxOnly\"='N' and n.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
         sb.append("group by monthname(n.\"DocDate\"), year(n.\"DocDate\"), month(n.\"DocDate\") ");
         sb.append("UNION ALL ");
         sb.append("select 'DF' as Doc, month(a.\"TaxDate\") as mm, monthname(a.\"TaxDate\") as mes, 0 as \"costoTotalVenta\", 0 as \"costoTotalNota\", ");
         sb.append(" 0 as \"valorTotalVenta\", 0 as \"valorTotalNota\", cast(sum(d.\"Debit\"-d.\"Credit\") as numeric(18,2)) as \"valorTotalDescFin\" ");
         sb.append("from OJDT a ");
         sb.append("inner join JDT1 d on d.\"TransId\"=a.\"TransId\" ");
-        sb.append("where year(a.\"TaxDate\")=year(current_date) and a.\"Memo\"<>'P.133 períodos de cierre' and d.\"Account\" in ('41350520','41750540','41750525','41750530') ");
+        sb.append("where year(a.\"TaxDate\")=year(current_date) and a.\"Memo\"<>'P.133 períodos de cierre' and d.\"Account\" in ('41350520','41750540','41750525','41750530') and a.\"TransId\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='AS') ");
         sb.append("group by monthname(a.\"TaxDate\"), year(a.\"TaxDate\"), month(a.\"TaxDate\") ");
         sb.append(") as t on t.mm = v.\"U_Value\" ");
         sb.append("where v.\"U_Value\" between 1 and 12 ");
@@ -280,11 +275,7 @@ public class InvoiceFacade {
         sb.append(" inner join OSLP a ON f.\"SlpCode\"=a.\"SlpCode\" ");
         sb.append(" inner join OCRD c ON f.\"CardCode\"=c.\"CardCode\" ");
         sb.append(" inner join OCST p ON c.\"State1\"=p.\"Code\" ");
-        sb.append(" where year(f.\"DocDate\")=year(current_date) and month(f.\"DocDate\")=month(current_date) and p.\"Country\"='CO' and d.\"TaxOnly\"='N' ");
-        //TODO: Excluir Factura de venta por servicio en MOTOZONE.
-        if (companyName.contains("VARROC")) {
-            sb.append("and f.\"DocNum\"<>103233 ");
-        }
+        sb.append(" where year(f.\"DocDate\")=year(current_date) and month(f.\"DocDate\")=month(current_date) and p.\"Country\"='CO' and d.\"TaxOnly\"='N' and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
         sb.append("UNION ALL ");
         sb.append(" select 0 as valorTotalVenta,cast(sum((cast(d.\"LineTotal\" as numeric(18,0))-(cast(d.\"LineTotal\" as numeric(18,0))*cast(ifnull(n.\"DiscPrcnt\",0) as int))/100))as numeric(18,0))as valorTotalNota,0 as valorTotalDescFin ");
         sb.append(" from ORIN n ");
@@ -292,12 +283,12 @@ public class InvoiceFacade {
         sb.append(" inner join OSLP a ON n.\"SlpCode\"=a.\"SlpCode\" ");
         sb.append(" inner join OCRD c ON n.\"CardCode\"=c.\"CardCode\" ");
         sb.append(" inner join OCST p ON c.\"State1\"=p.\"Code\" ");
-        sb.append(" where year(n.\"DocDate\")=year(current_date) and month(n.\"DocDate\")=month(current_date) and p.\"Country\"='CO' and d.\"TaxOnly\"='N' ");
+        sb.append(" where year(n.\"DocDate\")=year(current_date) and month(n.\"DocDate\")=month(current_date) and p.\"Country\"='CO' and d.\"TaxOnly\"='N' and n.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
         sb.append("UNION ALL ");
         sb.append(" select 0 as valorTotalVenta,0 as valorTotalNota,cast(sum(d.\"Debit\"-d.\"Credit\") as numeric(18,2))as valorTotalDescFin ");
         sb.append(" from OJDT a ");
         sb.append(" inner join JDT1 d on d.\"TransId\"=a.\"TransId\" ");
-        sb.append(" where year(a.\"TaxDate\")=year(current_date) and month(a.\"TaxDate\")=month(current_date) and a.\"Memo\"<>'P.133 períodos de cierre' and d.\"Account\" in ('41350520','41750540','41750525','41750530') ");
+        sb.append(" where year(a.\"TaxDate\")=year(current_date) and month(a.\"TaxDate\")=month(current_date) and a.\"Memo\"<>'P.133 períodos de cierre' and d.\"Account\" in ('41350520','41750540','41750525','41750530') and a.\"TransId\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='AS') ");
         sb.append(")as t");
         try {
             return (BigDecimal) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();

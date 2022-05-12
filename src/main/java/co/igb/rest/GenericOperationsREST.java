@@ -6,6 +6,7 @@ import co.igb.ejb.JournalEntryEJB;
 import co.igb.hanaws.dto.journalEntries.JournalEntryDTO;
 import co.igb.persistence.facade.TranspFacade;
 import co.igb.persistence.facade.WarehouseFacade;
+import co.igb.transportws.ejb.RapidoochoaEJB;
 
 import javax.ejb.*;
 import javax.inject.Inject;
@@ -31,6 +32,8 @@ public class GenericOperationsREST {
     private JournalEntryEJB journalEntryEJB;
     @EJB
     private TranspFacade transpFacade;
+    @EJB
+    private RapidoochoaEJB rapidoochoaEJB;
 
     @GET
     @Path("companies")
@@ -72,5 +75,13 @@ public class GenericOperationsREST {
                                          @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Listando transportadoras activas");
         return Response.ok(transpFacade.listTranspActive(companyName, pruebas)).build();
+    }
+
+    @GET
+    @Path("rapidoochoa")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response crearGuia(@QueryParam("consecutivo") String consecutivo) {
+        return Response.ok(rapidoochoaEJB.createGuia(consecutivo)).build();
     }
 }
