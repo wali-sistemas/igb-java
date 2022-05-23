@@ -4,12 +4,12 @@ import co.igb.ejb.IGBApplicationBean;
 import co.igb.transportws.client.rapidoochoa.RapidoochoaClient;
 import co.igb.transportws.dto.rapidoochoa.GuiaDTO;
 import co.igb.transportws.dto.rapidoochoa.GuiaResponseDTO;
+import co.igb.transportws.dto.rapidoochoa.TokenResponseDTO;
 import co.igb.util.Constants;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.xml.ws.Response;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,39 +34,20 @@ public class RapidoochoaEJB {
 
     public String createToken() {
         try {
-            return service.createToken("cmFwaWRvb2Nob2E=", "1020466061", "Franco.4545");
+            TokenResponseDTO res = service.createToken("cmFwaWRvb2Nob2E=", "1020466061", "Franco.4545");
+            return res.getToken();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "No fue posible iniciar la interface de Rapido-Ochoa [WS_GUIAS]. ", e);
         }
         return "";
     }
 
-    public GuiaResponseDTO createGuia(String consecutivo) {
-        GuiaDTO dto = new GuiaDTO();
-        dto.setNmImpresionRemesa(consecutivo);
-        dto.setCdPoblacionOrigen("5001000");
-        dto.setCdPoblacionDestino("5615000");
-        dto.setNmPesoDeclarado("1");
-        dto.setNmUnidPorEmbalaje("1");
-        dto.setVmValorDeclarado("200000");
-        dto.setDsNombreRemitente("IGB");
-        dto.setDniCliente("811011909");
-        dto.setDsNombreDestinatario("1035866418");
-        dto.setDsNombreDestinatario("JADILSON GUISAO RESTREPO");
-        dto.setDsDireccionDestinatario("AV 34 F # 42 F 33");
-        dto.setDsTelefonoDestinatario("3226979043");
-        dto.setDsDocReferencia("366447");
-        dto.setDsDiceContener("PARTES Y REPUESTOS");
-        dto.setCdTipoDniDestinatario("1035866418");
-        dto.setVmValorOtros("0");
-        dto.setNmFormaDePago("CRÉDITO");
-
+    public GuiaResponseDTO createGuia(GuiaDTO dto) {
         String token = createToken();
 
         if (!token.isEmpty()) {
             try {
-                GuiaResponseDTO res = service.createGuia(dto, token);
-                return res;
+                return service.createGuia(dto, token);
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error creando la guia de transporte[Rapido-ochoa]", e);
             }

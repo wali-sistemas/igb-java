@@ -2,6 +2,7 @@ package co.igb.dto;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -19,11 +20,13 @@ public class InvoiceDTO {
     private String depart;
     private String city;
     private String codCity;
+    private BigDecimal valStandDecl;
+    private Integer unidEmpStand;
 
     public InvoiceDTO() {
     }
 
-    public InvoiceDTO(Date docDate, Integer box, String docNum, String cardCode, String cardName, String transport, String street, String depart, String city, String codCity) {
+    public InvoiceDTO(Date docDate, Integer box, String docNum, String cardCode, String cardName, String transport, String street, String depart, String city, String codCity, BigDecimal valStandDecl, Integer unidEmpStand) {
         this.docDate = docDate;
         this.box = box;
         this.docNum = docNum;
@@ -34,6 +37,8 @@ public class InvoiceDTO {
         this.depart = depart;
         this.city = city;
         this.codCity = codCity;
+        this.valStandDecl = valStandDecl;
+        this.unidEmpStand = unidEmpStand;
     }
 
     public Date getDocDate() {
@@ -116,6 +121,22 @@ public class InvoiceDTO {
         this.codCity = codCity;
     }
 
+    public BigDecimal getValStandDecl() {
+        return valStandDecl;
+    }
+
+    public void setValStandDecl(BigDecimal valStandDecl) {
+        this.valStandDecl = valStandDecl;
+    }
+
+    public Integer getUnidEmpStand() {
+        return unidEmpStand;
+    }
+
+    public void setUnidEmpStand(Integer unidEmpStand) {
+        this.unidEmpStand = unidEmpStand;
+    }
+
     @Override
     public String toString() {
         return "InvoiceDTO{" +
@@ -129,6 +150,8 @@ public class InvoiceDTO {
                 ", depart='" + depart + '\'' +
                 ", city='" + city + '\'' +
                 ", codCity='" + codCity + '\'' +
+                ", valStandDecl=" + valStandDecl +
+                ", unidEmpStand=" + unidEmpStand +
                 '}';
     }
 }

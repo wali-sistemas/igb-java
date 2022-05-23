@@ -1,48 +1,50 @@
 package co.igb.transportws.dto.rapidoochoa;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
 /**
  * @author jguisao
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class GuiaResponseDTO implements Serializable {
+    @JsonProperty("message")
     protected String message;
+    @JsonProperty("status")
     protected Integer status;
+    @JsonProperty("valores")
     protected Valor valores;
 
-    public GuiaResponseDTO() {
-    }
+    public static class Valor implements Serializable {
+        @JsonProperty("numero_guia")
+        protected String numeroGuia;
+        @JsonProperty("id_guia")
+        protected String idGuia;
+        @JsonProperty("link_impresion")
+        protected String linkImpresion;
 
-    public static class Valor {
-        protected String numero_guia;
-        protected String id_guia;
-        protected String link_impresion;
-
-        public String getNumero_guia() {
-            return numero_guia;
+        public String getNumeroGuia() {
+            return numeroGuia;
         }
 
-        public void setNumero_guia(String numero_guia) {
-            this.numero_guia = numero_guia;
+        public void setNumeroGuia(String numeroGuia) {
+            this.numeroGuia = numeroGuia;
         }
 
-        public String getId_guia() {
-            return id_guia;
+        public String getIdGuia() {
+            return idGuia;
         }
 
-        public void setId_guia(String id_guia) {
-            this.id_guia = id_guia;
+        public void setIdGuia(String idGuia) {
+            this.idGuia = idGuia;
         }
 
-        public String getLink_impresion() {
-            return link_impresion;
+        public String getLinkImpresion() {
+            return linkImpresion;
         }
 
-        public void setLink_impresion(String link_impresion) {
-            this.link_impresion = link_impresion;
+        public void setLinkImpresion(String linkImpresion) {
+            this.linkImpresion = linkImpresion;
         }
     }
 
