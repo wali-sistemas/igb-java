@@ -1,14 +1,9 @@
 package co.igb.transportws.dto.rapidoochoa;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import java.io.Serializable;
-
 /**
  * @author jguisao
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class GuiaDTO implements Serializable {
+public class GuiaDTO {
     private String nmImpresionRemesa;
     private String cdPoblacionOrigen;
     private String cdPoblacionDestino;
@@ -164,28 +159,5 @@ public class GuiaDTO implements Serializable {
 
     public void setNmFormaDePago(String nmFormaDePago) {
         this.nmFormaDePago = nmFormaDePago;
-    }
-
-    @Override
-    public String toString() {
-        return "GuiaDTO{" +
-                "nmImpresionRemesa='" + nmImpresionRemesa + '\'' +
-                ", cdPoblacionOrigen='" + cdPoblacionOrigen + '\'' +
-                ", cdPoblacionDestino='" + cdPoblacionDestino + '\'' +
-                ", nmPesoDeclarado='" + nmPesoDeclarado + '\'' +
-                ", nmUnidPorEmbalaje='" + nmUnidPorEmbalaje + '\'' +
-                ", vmValorDeclarado='" + vmValorDeclarado + '\'' +
-                ", dsNombreRemitente='" + dsNombreRemitente + '\'' +
-                ", dniCliente='" + dniCliente + '\'' +
-                ", dniDestinatario='" + dniDestinatario + '\'' +
-                ", dsNombreDestinatario='" + dsNombreDestinatario + '\'' +
-                ", dsDireccionDestinatario='" + dsDireccionDestinatario + '\'' +
-                ", dsTelefonoDestinatario='" + dsTelefonoDestinatario + '\'' +
-                ", dsDocReferencia='" + dsDocReferencia + '\'' +
-                ", dsDiceContener='" + dsDiceContener + '\'' +
-                ", cdTipoDniDestinatario='" + cdTipoDniDestinatario + '\'' +
-                ", vmValorOtros='" + vmValorOtros + '\'' +
-                ", nmFormaDePago='" + nmFormaDePago + '\'' +
-                '}';
     }
 }

@@ -226,12 +226,10 @@ public class InvoiceREST implements Serializable {
         }
         invoice.setDocumentAdditionalExpenses(gastos);
 
-        /***Actualizar transportadora en orden de IGB, según tabla de tarifas de transporte***/
-        if (companyName.contains("IGB") && (whsCode.equals("01") || whsCode.equals("30"))) {
-            try {
-                salesOrderFacade.updateUserFieldCodTransport(codTransp, order, companyName, pruebas);
-            } catch (Exception e) {
-            }
+        /***Actualizar transportadora en orden de venta, según tabla de tarifas de transporte, optenida en la consulta de entrega***/
+        try {
+            salesOrderFacade.updateUserFieldCodTransport(codTransp, order, companyName, pruebas);
+        } catch (Exception e) {
         }
 
         /***Consultando tabla de retenciones***/

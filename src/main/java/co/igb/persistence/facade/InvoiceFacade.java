@@ -58,10 +58,12 @@ public class InvoiceFacade {
         sb.append("select cast(f.\"DocDate\" as date)as DocDate,cast(f.\"U_TOT_CAJ\" as int)as Box,cast(f.\"DocNum\" as varchar(10))as DocNum, ");
         sb.append(" cast(f.\"CardCode\" as varchar(20))as CardCode,cast(f.\"CardName\" as varchar(100))as CardName, ");
         sb.append(" cast(t.\"Name\" as varchar(15))as Transport,cast(d.\"StreetS\" as varchar(100))as Street, ");
-        sb.append(" cast(l.\"Name\" as varchar(50))as Depart,cast(d.\"CityS\" as varchar(50))as City,cast(d.\"BlockS\" as varchar(20))as CodCity ");
+        sb.append(" cast(l.\"Name\" as varchar(50))as Depart,cast(d.\"CityS\" as varchar(50))as City,cast(d.\"BlockS\" as varchar(20))as CodCity, ");
+        sb.append(" cast(v.\"U_MIN_SEG\" as numeric(18,2))as ValStandDecl,cast(v.\"U_MIN_FLE\" as int)as UnidEmpStand ");
         sb.append("from OINV f ");
         sb.append("inner join INV12 d on d.\"DocEntry\"=f.\"DocEntry\" ");
         sb.append("inner join \"@TRANSP\" t on t.\"Code\"=f.\"U_TRANSP\" ");
+        sb.append("left join \"@TRANSP_TAR\" v on v.\"U_COD_TRA\"=f.\"U_TRANSP\" and v.\"Code\"=d.\"U_MunicipioS\" ");
         sb.append("inner join OCST l on l.\"Code\"=d.\"StateS\" and l.\"Country\"='CO' ");
         sb.append("where(select max(d.\"WhsCode\")from INV1 d where d.\"DocEntry\" = f.\"DocEntry\")='");
         sb.append(warehouseCode);
@@ -126,20 +128,6 @@ public class InvoiceFacade {
             em.createNativeQuery(sb.toString()).executeUpdate();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el total de cajas para la factura #[", docNum.toString() + "]");
-        }
-    }
-
-    public void updateNroGuia(String docNum, String guia, String companyName, boolean testing) {
-        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA);
-        StringBuilder sb = new StringBuilder();
-        sb.append("update OINV set \"U_UBIC1\"=");
-        sb.append(guia);
-        sb.append("where \"DocNum\"=");
-        sb.append(docNum);
-        try {
-            em.createNativeQuery(sb.toString()).executeUpdate();
-        } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar la guia para la(s) factura(s) #[", docNum.toString() + "]");
         }
     }
 
@@ -325,5 +313,19 @@ public class InvoiceFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el detalle de la factura #" + docNum);
         }
         return new ArrayList<>();
+    }
+
+    public void updateGuiaTransport(String docNum, String nroGuia, String companyname, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("update OINV set \"U_UBIC1\"='");
+        sb.append(nroGuia);
+        sb.append("' where \"DocNum\" in(");
+        sb.append(docNum);
+        sb.append(")");
+        try {
+            persistenceConf.chooseSchema(companyname, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).executeUpdate();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar la guia para la(s) factura(s) #[" + docNum.toString() + "]", e);
+        }
     }
 }

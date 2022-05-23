@@ -1,11 +1,15 @@
 package co.igb.rest;
 
-import co.igb.transportws.client.saferbo.SaferboTransportClient;
 import co.igb.dto.*;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.entity.ShippingOrder;
 import co.igb.persistence.facade.*;
+import co.igb.transportws.dto.rapidoochoa.GuiaDTO;
+import co.igb.transportws.dto.rapidoochoa.GuiaResponseDTO;
+import co.igb.transportws.ejb.RapidoochoaEJB;
+import co.igb.transportws.ejb.SaferboEJB;
 import co.igb.util.Constants;
+import com.google.gson.Gson;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -16,6 +20,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +45,10 @@ public class ShippingREST implements Serializable {
     private DeliveryNoteFacade deliveryNoteFacade;
     @EJB
     private CheckOutOrderFacade checkOutOrderFacade;
+    @EJB
+    private RapidoochoaEJB rapidoochoaEJB;
+    @EJB
+    private SaferboEJB saferboEJB;
 
     @POST
     @Path("add")
@@ -124,6 +133,8 @@ public class ShippingREST implements Serializable {
             dto.setDepart((String) row[7]);
             dto.setCity((String) row[8]);
             dto.setCodCity((String) row[9]);
+            dto.setValStandDecl((BigDecimal) row[10]);
+            dto.setUnidEmpStand((Integer) row[11]);
 
             shipping.add(dto);
         }
@@ -186,25 +197,48 @@ public class ShippingREST implements Serializable {
     public Response createGuiaSaferbo(ApiSaferboDTO dto,
                                       @HeaderParam("X-Company-Name") String companyName,
                                       @HeaderParam("X-Pruebas") boolean pruebas) {
-        SaferboTransportClient saferboClient = new SaferboTransportClient(appBean.obtenerValorPropiedad("igb.api.saferbo"));
-        ResponseCrearGuiaDTO respREST = null;
-        respREST = saferboClient.createGuia(dto);
+        CONSOLE.log(Level.INFO, "Iniciando creacion de guia con la transportadora Saferbo");
 
-
-        if (!respREST.getNumeroGuia().isEmpty() || !respREST.getNumeroGuia().equals(null)) {
-            CONSOLE.log(Level.INFO, "Creación de guia saferbo exitosa #{0}", respREST.getNumeroGuia());
+        ResponseCrearGuiaDTO response = saferboEJB.createGuia(dto);
+        if (!response.getNumeroGuia().isEmpty() || !response.getNumeroGuia().equals(null)) {
+            CONSOLE.log(Level.INFO, "Creación de guia saferbo exitosa #{0}", response.getNumeroGuia());
 
             //Actualizar en las facturas de SAP la guia campo
             try {
-                invoiceFacade.updateNroGuia(dto.getFactura(), respREST.getNumeroGuia(), companyName, pruebas);
+                invoiceFacade.updateGuiaTransport(dto.getFactura(), response.getNumeroGuia(), companyName, pruebas);
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar la guia en SAP para la empresa " + companyName, e);
             }
 
-            return Response.ok(new ResponseDTO(0, respREST.getNumeroGuia())).build();
+            return Response.ok(new ResponseDTO(0, response.getNumeroGuia())).build();
         } else {
-            CONSOLE.log(Level.SEVERE, respREST.getNumeroGuia());
+            CONSOLE.log(Level.SEVERE, response.getNumeroGuia());
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error al crear la guia para la transportadora saferbo.")).build();
+        }
+    }
+
+    @POST
+    @Path("add-guia-rapidoochoa/{docNum}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response createGuiaRapidoochoa(GuiaDTO dto,
+                                          @PathParam("docNum") String docNum,
+                                          @HeaderParam("X-Company-Name") String companyName,
+                                          @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Iniciando creacion de guia con la transportadora Rapidoochoa");
+
+        Gson gson = new Gson();
+        String JSON = gson.toJson(dto);
+        CONSOLE.log(Level.INFO, JSON);
+
+        GuiaResponseDTO res = rapidoochoaEJB.createGuia(dto);
+        if (res != null) {
+            invoiceFacade.updateGuiaTransport(docNum, res.getValores().getNumeroGuia(), companyName, pruebas);
+            return Response.ok(new ResponseDTO(0, res.getValores().getLinkImpresion())).build();
+        } else {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error creando la guia de transporte.");
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error creando la guia de transporte.")).build();
         }
     }
 }
