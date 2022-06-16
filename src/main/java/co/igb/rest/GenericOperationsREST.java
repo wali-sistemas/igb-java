@@ -76,12 +76,4 @@ public class GenericOperationsREST {
         CONSOLE.log(Level.INFO, "Listando transportadoras activas");
         return Response.ok(transpFacade.listTranspActive(companyName, pruebas)).build();
     }
-
-    @GET
-    @Path("rapidoochoa")
-    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response crearGuia(@QueryParam("consecutivo") String consecutivo) {
-        return Response.ok(rapidoochoaEJB.createGuia(consecutivo)).build();
-    }
 }

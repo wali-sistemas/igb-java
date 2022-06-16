@@ -42,7 +42,7 @@ public class RapidoochoaClient {
     }
 
     public GuiaResponseDTO createGuia(GuiaDTO dto, String token) {
-        return webTarget.path("carga/generarGuia").request(MediaType.APPLICATION_JSON + ";charset=utf-8").header("token", token)
+        return webTarget.path("carga/generarGuia").request().header("token", token)
                 .post(Entity.entity(dto, MediaType.APPLICATION_JSON + ";charset=utf-8"), GuiaResponseDTO.class);
     }
 }

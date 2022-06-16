@@ -165,7 +165,11 @@ public class InvoiceFacade {
         sb.append(" inner join OSLP a ON f.\"SlpCode\"=a.\"SlpCode\" ");
         sb.append(" inner join OCRD c ON f.\"CardCode\"=c.\"CardCode\" ");
         sb.append(" inner join OCST p ON c.\"State1\"=p.\"Code\" ");
-        sb.append(" where f.\"DocDate\" between ADD_YEARS(TO_DATE(current_date,'YYYY-MM-DD'),-3) and current_date and p.\"Country\"='CO' and d.\"TaxOnly\"='N' ");
+        sb.append(" where f.\"DocDate\" between ADD_YEARS(TO_DATE(current_date,'YYYY-MM-DD'),-3) and current_date and p.\"Country\"='CO' ");
+        //TODO: Solo impuesto aplica para IGB
+        if (companyName.contains("IGB")) {
+            sb.append(" and d.\"TaxOnly\"='N' ");
+        }
         sb.append("  and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
         sb.append(" group by year(f.\"DocDate\") ");
         sb.append("UNION ALL ");
@@ -176,7 +180,11 @@ public class InvoiceFacade {
         sb.append(" inner join OSLP a ON n.\"SlpCode\"=a.\"SlpCode\" ");
         sb.append(" inner join OCRD c ON n.\"CardCode\"=c.\"CardCode\" ");
         sb.append(" inner join OCST p ON c.\"State1\"=p.\"Code\" ");
-        sb.append(" where n.\"DocDate\" between ADD_YEARS(TO_DATE(current_date,'YYYY-MM-DD'),-3) and current_date and p.\"Country\"='CO' and d.\"TaxOnly\"='N'");
+        sb.append(" where n.\"DocDate\" between ADD_YEARS(TO_DATE(current_date,'YYYY-MM-DD'),-3) and current_date and p.\"Country\"='CO' ");
+        //TODO: Solo impuesto aplica para IGB
+        if (companyName.contains("IGB")) {
+            sb.append(" and d.\"TaxOnly\"='N' ");
+        }
         sb.append("  and n.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
         sb.append(" group by year(n.\"DocDate\") ");
         sb.append("UNION ALL ");
@@ -215,7 +223,11 @@ public class InvoiceFacade {
         sb.append("inner join OSLP a ON f.\"SlpCode\"=a.\"SlpCode\" ");
         sb.append("inner join OCRD c ON f.\"CardCode\"=c.\"CardCode\" ");
         sb.append("inner join OCST p ON c.\"State1\"=p.\"Code\" ");
-        sb.append("where year(f.\"DocDate\")=year(current_date) and p.\"Country\"='CO' and d.\"TaxOnly\"='N' and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
+        sb.append("where year(f.\"DocDate\")=year(current_date) and p.\"Country\"='CO' and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
+        //TODO: Solo impuesto aplica para IGB
+        if (companyName.contains("IGB")) {
+            sb.append(" and d.\"TaxOnly\"='N' ");
+        }
         sb.append("group by monthname(f.\"DocDate\"), year(f.\"DocDate\"), month(f.\"DocDate\") ");
         sb.append("UNION ALL ");
         sb.append("select 'NC' as Doc, month(n.\"DocDate\") as mm, monthname(n.\"DocDate\") as mes, 0 as \"costoTotalVenta\", ");
@@ -231,7 +243,11 @@ public class InvoiceFacade {
         sb.append("inner join OSLP a ON n.\"SlpCode\"=a.\"SlpCode\" ");
         sb.append("inner join OCRD c ON n.\"CardCode\"=c.\"CardCode\" ");
         sb.append("inner join OCST p ON c.\"State1\"=p.\"Code\" ");
-        sb.append("where year(n.\"DocDate\")=year(current_date) and p.\"Country\"='CO' and d.\"TaxOnly\"='N' and n.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
+        sb.append("where year(n.\"DocDate\")=year(current_date) and p.\"Country\"='CO' and n.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
+        //TODO: Solo impuesto aplica para IGB
+        if (companyName.contains("IGB")) {
+            sb.append(" and d.\"TaxOnly\"='N' ");
+        }
         sb.append("group by monthname(n.\"DocDate\"), year(n.\"DocDate\"), month(n.\"DocDate\") ");
         sb.append("UNION ALL ");
         sb.append("select 'DF' as Doc, month(a.\"TaxDate\") as mm, monthname(a.\"TaxDate\") as mes, 0 as \"costoTotalVenta\", 0 as \"costoTotalNota\", ");
@@ -263,7 +279,11 @@ public class InvoiceFacade {
         sb.append(" inner join OSLP a ON f.\"SlpCode\"=a.\"SlpCode\" ");
         sb.append(" inner join OCRD c ON f.\"CardCode\"=c.\"CardCode\" ");
         sb.append(" inner join OCST p ON c.\"State1\"=p.\"Code\" ");
-        sb.append(" where year(f.\"DocDate\")=year(current_date) and month(f.\"DocDate\")=month(current_date) and p.\"Country\"='CO' and d.\"TaxOnly\"='N' and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
+        sb.append(" where year(f.\"DocDate\")=year(current_date) and month(f.\"DocDate\")=month(current_date) and p.\"Country\"='CO' and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
+        //TODO: Solo impuesto aplica para IGB
+        if (companyName.contains("IGB")) {
+            sb.append(" and d.\"TaxOnly\"='N' ");
+        }
         sb.append("UNION ALL ");
         sb.append(" select 0 as valorTotalVenta,cast(sum((cast(d.\"LineTotal\" as numeric(18,0))-(cast(d.\"LineTotal\" as numeric(18,0))*cast(ifnull(n.\"DiscPrcnt\",0) as int))/100))as numeric(18,0))as valorTotalNota,0 as valorTotalDescFin ");
         sb.append(" from ORIN n ");
@@ -271,7 +291,11 @@ public class InvoiceFacade {
         sb.append(" inner join OSLP a ON n.\"SlpCode\"=a.\"SlpCode\" ");
         sb.append(" inner join OCRD c ON n.\"CardCode\"=c.\"CardCode\" ");
         sb.append(" inner join OCST p ON c.\"State1\"=p.\"Code\" ");
-        sb.append(" where year(n.\"DocDate\")=year(current_date) and month(n.\"DocDate\")=month(current_date) and p.\"Country\"='CO' and d.\"TaxOnly\"='N' and n.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
+        sb.append(" where year(n.\"DocDate\")=year(current_date) and month(n.\"DocDate\")=month(current_date) and p.\"Country\"='CO' and n.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
+        //TODO: Solo impuesto aplica para IGB
+        if (companyName.contains("IGB")) {
+            sb.append(" and d.\"TaxOnly\"='N' ");
+        }
         sb.append("UNION ALL ");
         sb.append(" select 0 as valorTotalVenta,0 as valorTotalNota,cast(sum(d.\"Debit\"-d.\"Credit\") as numeric(18,2))as valorTotalDescFin ");
         sb.append(" from OJDT a ");
