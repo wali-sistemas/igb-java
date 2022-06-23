@@ -134,7 +134,7 @@ public class InvoiceFacade {
     public Object[] getShippingInformation(Integer DocNum, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(d.\"StreetS\" as varchar(45)) as Direccion, cast(d.\"CityS\" as varchar(30)) as Ciudad, cast(m.\"Name\" as varchar(30)) as Departamento, ");
-        sb.append(" cast(s.\"Phone2\" as varchar(15)) as Telefono, cast(f.\"U_PESO_BRUTO\" as int) as Peso, cast(\"f.U_VR_DECLARADO\" as int) as ValorDeclarado, ");
+        sb.append(" cast(s.\"Phone2\" as varchar(15)) as Telefono, cast(f.\"U_PESO_BRUTO\" as int) as Peso, cast(f.\"U_VR_DECLARADO\" as int) as ValorDeclarado, ");
         sb.append(" cast(f.\"U_UBIC1\" as varchar(15)) as guia, cast(f.\"U_OBSERVACION\" as varchar(45)) as Comentario, cast(t.\"Name\" as varchar(45)) as Transporte ");
         sb.append("from OINV f ");
         sb.append("inner join INV12 d on d.\"DocEntry\" = f.\"DocEntry\" ");
@@ -339,10 +339,12 @@ public class InvoiceFacade {
         return new ArrayList<>();
     }
 
-    public void updateGuiaTransport(String docNum, String nroGuia, String companyname, boolean testing) {
+    public void updateGuiaTransport(String docNum, String nroGuia, String urlGuia, String companyname, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("update OINV set \"U_UBIC1\"='");
         sb.append(nroGuia);
+        sb.append("',\"U_nwr_Tag\"='");
+        sb.append(urlGuia);
         sb.append("' where \"DocNum\" in(");
         sb.append(docNum);
         sb.append(")");

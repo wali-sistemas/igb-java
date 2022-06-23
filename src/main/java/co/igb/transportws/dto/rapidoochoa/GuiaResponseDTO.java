@@ -15,6 +15,10 @@ public class GuiaResponseDTO implements Serializable {
     @JsonProperty("valores")
     protected Valor valores;
 
+    public GuiaResponseDTO(Integer status) {
+        this.status = status;
+    }
+
     public static class Valor implements Serializable {
         @JsonProperty("numero_guia")
         protected String numeroGuia;
