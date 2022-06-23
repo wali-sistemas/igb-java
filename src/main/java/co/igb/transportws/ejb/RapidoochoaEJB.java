@@ -52,6 +52,6 @@ public class RapidoochoaEJB {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error creando la guia de transporte[Rapido-ochoa]", e);
             }
         }
-        return null;
+        return new GuiaResponseDTO(409);
     }
 }

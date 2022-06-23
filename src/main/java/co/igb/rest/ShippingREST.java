@@ -207,7 +207,7 @@ public class ShippingREST implements Serializable {
 
             //Actualizar en las facturas de SAP la guia campo
             try {
-                invoiceFacade.updateGuiaTransport(dto.getFactura(), response.getNumeroGuia(), companyName, pruebas);
+                invoiceFacade.updateGuiaTransport(dto.getFactura(), response.getNumeroGuia(), "", companyName, pruebas);
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar la guia en SAP para la empresa " + companyName, e);
             }
@@ -241,8 +241,8 @@ public class ShippingREST implements Serializable {
         GuiaResponseDTO res = rapidoochoaEJB.createGuia(dto);
         if (res.getStatus().equals(200)) {
             try {
-                invoiceFacade.updateGuiaTransport(docNum, res.getValores().getNumeroGuia(), companyName, pruebas);
-                transpFacade.updateSerieLast(02, Integer.parseInt(res.getValores().getNumeroGuia()), companyName, pruebas);
+                invoiceFacade.updateGuiaTransport(docNum, res.getValores().getNumeroGuia(), res.getValores().getLinkImpresion(), companyName, pruebas);
+                transpFacade.updateSerieLast(02, serie, companyName, pruebas);
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el nro de guia en la factura #{0} para {1}", new Object[]{docNum, companyName});
             }
