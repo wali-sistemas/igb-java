@@ -210,45 +210,82 @@ public class InvoiceFacade {
         sb.append("select cast(v.\"U_MonthName\" as varchar(20))as mes, cast(year(current_date) as varchar(4)) as ano, ");
         sb.append(" ifnull(cast(sum(t.\"costoTotalVenta\" - t.\"costoTotalNota\") as numeric(18,0)),0) as costoTotal, ");
         sb.append(" ifnull(cast(sum(t.\"valorTotalVenta\" - t.\"valorTotalNota\") as numeric(18,0)),0) as valorTotal, ");
-        sb.append(" ifnull(cast(((sum(t.\"valorTotalVenta\" - t.\"valorTotalNota\") - sum(t.\"costoTotalVenta\" - t.\"costoTotalNota\")) / sum(t.\"valorTotalVenta\" - t.\"valorTotalNota\")) * 100 as numeric(18,2)),0) as margenAnual, ");
+        sb.append(" ifnull(cast(((sum(t.\"valorTotalVenta\"-t.\"valorTotalNota\")-sum(t.\"costoTotalVenta\"-t.\"costoTotalNota\"))/nullif(sum(t.\"valorTotalVenta\"-t.\"valorTotalNota\"),0))*100 as numeric(18,2)),0)as margenAnual, ");
         sb.append(" ifnull(cast(sum(t.\"valorTotalDescFin\") as numeric(18,0)),0) as descFin, ");
         sb.append(" ifnull(cast(sum(t.\"valorTotalVenta\" - t.\"valorTotalNota\" - t.\"valorTotalDescFin\") as numeric(18,0)),0) as valorTotalDescFin, ");
-        sb.append(" ifnull(cast(((sum(t.\"valorTotalVenta\"-t.\"valorTotalNota\"-t.\"valorTotalDescFin\")-sum(t.\"costoTotalVenta\"-t.\"costoTotalNota\"))/sum(t.\"valorTotalVenta\"-t.\"valorTotalNota\"-t.\"valorTotalDescFin\"))*100 as numeric(18,2)),0)as margenAnualDescFin ");
+        sb.append(" ifnull(cast(((sum(t.\"valorTotalVenta\"-t.\"valorTotalNota\"-t.\"valorTotalDescFin\")-sum(t.\"costoTotalVenta\"-t.\"costoTotalNota\"))/nullif(sum(t.\"valorTotalVenta\"-t.\"valorTotalNota\"-t.\"valorTotalDescFin\"),0))*100 as numeric(18,2)),0)as margenAnualDescFin ");
         sb.append("from \"@SPT_VALUES\" v ");
-        sb.append("left join (select 'FV' as Doc, month(f.\"DocDate\") as mm, monthname(f.\"DocDate\") as mes, ");
-        sb.append("cast(sum((cast(d.\"Quantity\" as int) * cast(d.\"StockPrice\" as numeric(18,0)))) as numeric(18,0)) as \"costoTotalVenta\", 0 as \"costoTotalNota\", ");
-        sb.append("cast(sum((cast(d.\"LineTotal\" as numeric(18,0)) - (cast(d.\"LineTotal\" as numeric(18,0)) * cast(f.\"DiscPrcnt\" as int))/100)) as numeric(18,0)) as \"valorTotalVenta\",0 as \"valorTotalNota\",0 as \"valorTotalDescFin\" ");
-        sb.append("from OINV f ");
-        sb.append("inner join INV1 d on d.\"DocEntry\"=f.\"DocEntry\" ");
-        sb.append("inner join OSLP a ON f.\"SlpCode\"=a.\"SlpCode\" ");
-        sb.append("inner join OCRD c ON f.\"CardCode\"=c.\"CardCode\" ");
-        sb.append("inner join OCST p ON c.\"State1\"=p.\"Code\" ");
-        sb.append("where year(f.\"DocDate\")=year(current_date) and p.\"Country\"='CO' and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
-        //TODO: Solo impuesto aplica para IGB
-        if (companyName.contains("IGB")) {
-            sb.append(" and d.\"TaxOnly\"='N' ");
-        }
-        sb.append("group by monthname(f.\"DocDate\"), year(f.\"DocDate\"), month(f.\"DocDate\") ");
-        sb.append("UNION ALL ");
-        sb.append("select 'NC' as Doc, month(n.\"DocDate\") as mm, monthname(n.\"DocDate\") as mes, 0 as \"costoTotalVenta\", ");
-        //TODO: Por instrucción de contabilidad, el costo de la nota se calcula diferente
-        if (companyName.contains("IGB")) {
-            sb.append("sum(cast(case n.\"DocType\" when 'S' then (d.\"LineTotal\"-(d.\"LineTotal\"*(n.\"DiscPrcnt\")/100)) else (d.\"Quantity\"*d.\"StockPrice\")end as numeric(18,0)))as \"costoTotalNota\", ");
+        sb.append("left join (");
+        if (companyName.contains("VARROC")) {
+            sb.append("select t.Doc,t.mm,t.mes,sum(t.\"costoTotalVenta\")as \"costoTotalVenta\",sum(t.\"costoTotalNota\")as \"costoTotalNota\",sum(t.\"valorTotalVenta\")as \"valorTotalVenta\",sum(t.\"valorTotalNota\")as \"valorTotalNota\",sum(t.\"valorTotalDescFin\")as \"valorTotalDescFin\" ");
+            sb.append("from ( ");
+            sb.append(" select 'FV' as Doc,month(f.\"DocDate\")as mm,monthname(f.\"DocDate\")as mes, ");
+            sb.append("  cast(sum((cast(d.\"Quantity\" as int)*cast(d.\"StockPrice\" as numeric(18,0))))as numeric(18,0))as \"costoTotalVenta\",0 as \"costoTotalNota\", ");
+            sb.append("  case when d.\"TaxOnly\"='N' then cast(sum((cast(d.\"LineTotal\" as numeric(18,0))-(cast(d.\"LineTotal\" as numeric(18,0))*cast(f.\"DiscPrcnt\" as int))/100))as numeric(18,0)) else 0 end as \"valorTotalVenta\", ");
+            sb.append("  0 as \"valorTotalNota\",0 as \"valorTotalDescFin\" ");
+            sb.append(" from OINV f ");
+            sb.append(" inner join INV1 d on d.\"DocEntry\"=f.\"DocEntry\" ");
+            sb.append(" inner join OSLP a ON f.\"SlpCode\"=a.\"SlpCode\" ");
+            sb.append(" inner join OCRD c ON f.\"CardCode\"=c.\"CardCode\" ");
+            sb.append(" inner join OCST p ON c.\"State1\"=p.\"Code\" ");
+            sb.append(" where year(f.\"DocDate\")=year(current_date) and p.\"Country\"='CO' and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
+            sb.append(" group by monthname(f.\"DocDate\"),year(f.\"DocDate\"),month(f.\"DocDate\"),d.\"TaxOnly\" ");
+            sb.append(")as t ");
+            sb.append("group by t.Doc,t.mm,t.mes ");
         } else {
-            sb.append("cast(sum((cast(d.\"Quantity\" as int)*cast(d.\"StockPrice\" as numeric(18,0))))as numeric(18,0))as \"costoTotalNota\", ");
+            sb.append("select 'FV' as Doc, month(f.\"DocDate\") as mm, monthname(f.\"DocDate\") as mes, ");
+            sb.append("cast(sum((cast(d.\"Quantity\" as int) * cast(d.\"StockPrice\" as numeric(18,0)))) as numeric(18,0)) as \"costoTotalVenta\", 0 as \"costoTotalNota\", ");
+            sb.append("cast(sum((cast(d.\"LineTotal\" as numeric(18,0)) - (cast(d.\"LineTotal\" as numeric(18,0)) * cast(f.\"DiscPrcnt\" as int))/100)) as numeric(18,0)) as \"valorTotalVenta\",0 as \"valorTotalNota\",0 as \"valorTotalDescFin\" ");
+            sb.append("from OINV f ");
+            sb.append("inner join INV1 d on d.\"DocEntry\"=f.\"DocEntry\" ");
+            sb.append("inner join OSLP a ON f.\"SlpCode\"=a.\"SlpCode\" ");
+            sb.append("inner join OCRD c ON f.\"CardCode\"=c.\"CardCode\" ");
+            sb.append("inner join OCST p ON c.\"State1\"=p.\"Code\" ");
+            sb.append("where year(f.\"DocDate\")=year(current_date) and p.\"Country\"='CO' and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
+            //TODO: Solo impuesto aplica para IGB
+            if (companyName.contains("IGB")) {
+                sb.append(" and d.\"TaxOnly\"='N' ");
+            }
+            sb.append("group by monthname(f.\"DocDate\"), year(f.\"DocDate\"), month(f.\"DocDate\") ");
         }
-        sb.append(" 0 as \"valorTotalVenta\",cast(sum((cast(d.\"LineTotal\" as numeric(18,0)) - (cast(d.\"LineTotal\" as numeric(18,0)) * cast(ifnull(n.\"DiscPrcnt\",0) as int))/100)) as numeric(18,0)) as \"valorTotalNota\",0 as \"valorTotalDescFin\" ");
-        sb.append("from ORIN n ");
-        sb.append("inner join RIN1 d on d.\"DocEntry\" = n.\"DocEntry\" ");
-        sb.append("inner join OSLP a ON n.\"SlpCode\"=a.\"SlpCode\" ");
-        sb.append("inner join OCRD c ON n.\"CardCode\"=c.\"CardCode\" ");
-        sb.append("inner join OCST p ON c.\"State1\"=p.\"Code\" ");
-        sb.append("where year(n.\"DocDate\")=year(current_date) and p.\"Country\"='CO' and n.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
-        //TODO: Solo impuesto aplica para IGB
-        if (companyName.contains("IGB")) {
-            sb.append(" and d.\"TaxOnly\"='N' ");
+        sb.append("UNION ALL ");
+        if (companyName.contains("VARROC")) {
+            sb.append("select t.Doc,t.mm,t.mes,sum(t.\"costoTotalVenta\")as \"costoTotalVenta\",sum(t.\"costoTotalNota\")as \"costoTotalNota\",sum(t.\"valorTotalVenta\")as \"valorTotalVenta\",sum(t.\"valorTotalNota\")as \"valorTotalNota\",sum(t.\"valorTotalDescFin\")as \"valorTotalDescFin\" ");
+            sb.append("from ( ");
+            sb.append(" select 'NC' as Doc,month(n.\"DocDate\")as mm,monthname(n.\"DocDate\")as mes,0 as \"costoTotalVenta\", ");
+            sb.append("  cast(sum((cast(d.\"Quantity\" as int)*cast(d.\"StockPrice\" as numeric(18,0))))as numeric(18,0))as \"costoTotalNota\",0 as \"valorTotalVenta\", ");
+            sb.append("  case when d.\"TaxOnly\"='N' then cast(sum((cast(d.\"LineTotal\" as numeric(18,0))-(cast(d.\"LineTotal\" as numeric(18,0))*cast(ifnull(n.\"DiscPrcnt\",0) as int))/100))as numeric(18,0)) else 0 end as \"valorTotalNota\", ");
+            sb.append("  0 as \"valorTotalDescFin\" ");
+            sb.append(" from ORIN n ");
+            sb.append(" inner join RIN1 d on d.\"DocEntry\"=n.\"DocEntry\" ");
+            sb.append(" inner join OSLP a ON n.\"SlpCode\"=a.\"SlpCode\" ");
+            sb.append(" inner join OCRD c ON n.\"CardCode\"=c.\"CardCode\" ");
+            sb.append(" inner join OCST p ON c.\"State1\"=p.\"Code\" ");
+            sb.append(" where year(n.\"DocDate\")=year(current_date) and p.\"Country\"='CO' and n.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
+            sb.append(" group by monthname(n.\"DocDate\"),year(n.\"DocDate\"),month(n.\"DocDate\"),d.\"TaxOnly\" ");
+            sb.append(")as t ");
+            sb.append("group by t.Doc,t.mm,t.mes ");
+        } else {
+            sb.append("select 'NC' as Doc, month(n.\"DocDate\") as mm, monthname(n.\"DocDate\") as mes, 0 as \"costoTotalVenta\", ");
+            //TODO: Por instrucción de contabilidad, el costo de la nota se calcula diferente
+            if (companyName.contains("IGB")) {
+                sb.append("sum(cast(case n.\"DocType\" when 'S' then (d.\"LineTotal\"-(d.\"LineTotal\"*(n.\"DiscPrcnt\")/100)) else (d.\"Quantity\"*d.\"StockPrice\")end as numeric(18,0)))as \"costoTotalNota\", ");
+            } else {
+                sb.append("cast(sum((cast(d.\"Quantity\" as int)*cast(d.\"StockPrice\" as numeric(18,0))))as numeric(18,0))as \"costoTotalNota\", ");
+            }
+            sb.append(" 0 as \"valorTotalVenta\",cast(sum((cast(d.\"LineTotal\" as numeric(18,0)) - (cast(d.\"LineTotal\" as numeric(18,0)) * cast(ifnull(n.\"DiscPrcnt\",0) as int))/100)) as numeric(18,0)) as \"valorTotalNota\",0 as \"valorTotalDescFin\" ");
+            sb.append("from ORIN n ");
+            sb.append("inner join RIN1 d on d.\"DocEntry\" = n.\"DocEntry\" ");
+            sb.append("inner join OSLP a ON n.\"SlpCode\"=a.\"SlpCode\" ");
+            sb.append("inner join OCRD c ON n.\"CardCode\"=c.\"CardCode\" ");
+            sb.append("inner join OCST p ON c.\"State1\"=p.\"Code\" ");
+            sb.append("where year(n.\"DocDate\")=year(current_date) and p.\"Country\"='CO' and n.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
+            //TODO: Solo impuesto aplica para IGB
+            if (companyName.contains("IGB")) {
+                sb.append(" and d.\"TaxOnly\"='N' ");
+            }
+            sb.append("group by monthname(n.\"DocDate\"), year(n.\"DocDate\"), month(n.\"DocDate\") ");
         }
-        sb.append("group by monthname(n.\"DocDate\"), year(n.\"DocDate\"), month(n.\"DocDate\") ");
         sb.append("UNION ALL ");
         sb.append("select 'DF' as Doc, month(a.\"TaxDate\") as mm, monthname(a.\"TaxDate\") as mes, 0 as \"costoTotalVenta\", 0 as \"costoTotalNota\", ");
         sb.append(" 0 as \"valorTotalVenta\", 0 as \"valorTotalNota\", cast(sum(d.\"Debit\"-d.\"Credit\") as numeric(18,2)) as \"valorTotalDescFin\" ");
@@ -273,28 +310,59 @@ public class InvoiceFacade {
         StringBuilder sb = new StringBuilder();
         sb.append("select ifnull(cast(sum(t.valorTotalVenta-t.valorTotalNota-t.valorTotalDescFin) as numeric(18,0)),0)as Facturado ");
         sb.append("from ( ");
-        sb.append(" select cast(sum((cast(d.\"LineTotal\" as numeric(18,0))-(cast(d.\"LineTotal\" as numeric(18,0))*cast(f.\"DiscPrcnt\" as int))/100))as numeric(18,0))as valorTotalVenta,0 as valorTotalNota,0 as valorTotalDescFin ");
-        sb.append(" from OINV f ");
-        sb.append(" inner join INV1 d ON d.\"DocEntry\"=f.\"DocEntry\" ");
-        sb.append(" inner join OSLP a ON f.\"SlpCode\"=a.\"SlpCode\" ");
-        sb.append(" inner join OCRD c ON f.\"CardCode\"=c.\"CardCode\" ");
-        sb.append(" inner join OCST p ON c.\"State1\"=p.\"Code\" ");
-        sb.append(" where year(f.\"DocDate\")=year(current_date) and month(f.\"DocDate\")=month(current_date) and p.\"Country\"='CO' and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
-        //TODO: Solo impuesto aplica para IGB
-        if (companyName.contains("IGB")) {
-            sb.append(" and d.\"TaxOnly\"='N' ");
+        if (companyName.contains("VARROC")) {
+            sb.append("select sum(t.valorTotalVenta)as valorTotalVenta,sum(valorTotalNota)as valorTotalNota,sum(valorTotalDescFin)as valorTotalDescFin ");
+            sb.append("from ( ");
+            sb.append(" select case when d.\"TaxOnly\"='N' then cast(sum((cast(d.\"LineTotal\" as numeric(18,0))-(cast(d.\"LineTotal\" as numeric(18,0))*cast(f.\"DiscPrcnt\" as int))/100))as numeric(18,0)) else 0 end as valorTotalVenta, ");
+            sb.append("  0 as valorTotalNota,0 as valorTotalDescFin ");
+            sb.append(" from OINV f ");
+            sb.append(" inner join INV1 d ON d.\"DocEntry\"=f.\"DocEntry\" ");
+            sb.append(" inner join OSLP a ON f.\"SlpCode\"=a.\"SlpCode\" ");
+            sb.append(" inner join OCRD c ON f.\"CardCode\"=c.\"CardCode\" ");
+            sb.append(" inner join OCST p ON c.\"State1\"=p.\"Code\" ");
+            sb.append(" where year(f.\"DocDate\")=year(current_date) and month(f.\"DocDate\")=month(current_date) and p.\"Country\"='CO' and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
+            sb.append(" group by d.\"TaxOnly\" ");
+            sb.append(")as t ");
+        } else {
+            sb.append("select cast(sum((cast(d.\"LineTotal\" as numeric(18,0))-(cast(d.\"LineTotal\" as numeric(18,0))*cast(f.\"DiscPrcnt\" as int))/100))as numeric(18,0))as valorTotalVenta,0 as valorTotalNota,0 as valorTotalDescFin ");
+            sb.append("from OINV f ");
+            sb.append("inner join INV1 d ON d.\"DocEntry\"=f.\"DocEntry\" ");
+            sb.append("inner join OSLP a ON f.\"SlpCode\"=a.\"SlpCode\" ");
+            sb.append("inner join OCRD c ON f.\"CardCode\"=c.\"CardCode\" ");
+            sb.append("inner join OCST p ON c.\"State1\"=p.\"Code\" ");
+            sb.append("where year(f.\"DocDate\")=year(current_date) and month(f.\"DocDate\")=month(current_date) and p.\"Country\"='CO' and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
+            //TODO: Solo impuesto aplica para IGB
+            if (companyName.contains("IGB")) {
+                sb.append(" and d.\"TaxOnly\"='N' ");
+            }
         }
         sb.append("UNION ALL ");
-        sb.append(" select 0 as valorTotalVenta,cast(sum((cast(d.\"LineTotal\" as numeric(18,0))-(cast(d.\"LineTotal\" as numeric(18,0))*cast(ifnull(n.\"DiscPrcnt\",0) as int))/100))as numeric(18,0))as valorTotalNota,0 as valorTotalDescFin ");
-        sb.append(" from ORIN n ");
-        sb.append(" inner join RIN1 d ON d.\"DocEntry\"=n.\"DocEntry\" ");
-        sb.append(" inner join OSLP a ON n.\"SlpCode\"=a.\"SlpCode\" ");
-        sb.append(" inner join OCRD c ON n.\"CardCode\"=c.\"CardCode\" ");
-        sb.append(" inner join OCST p ON c.\"State1\"=p.\"Code\" ");
-        sb.append(" where year(n.\"DocDate\")=year(current_date) and month(n.\"DocDate\")=month(current_date) and p.\"Country\"='CO' and n.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
-        //TODO: Solo impuesto aplica para IGB
-        if (companyName.contains("IGB")) {
-            sb.append(" and d.\"TaxOnly\"='N' ");
+        if (companyName.contains("VARROC")) {
+            sb.append("select sum(t.valorTotalVenta)as valorTotalVenta,sum(t.valorTotalNota)as valorTotalNota,sum(t.valorTotalDescFin)as valorTotalDescFin ");
+            sb.append("from ( ");
+            sb.append(" select 0 as valorTotalVenta, ");
+            sb.append("  case when d.\"TaxOnly\"='N' then cast(sum((cast(d.\"LineTotal\"as numeric(18,0))-(cast(d.\"LineTotal\"as numeric(18,0))*cast(ifnull(n.\"DiscPrcnt\",0)as int))/100))as numeric (18,0)) else 0 end as valorTotalNota, ");
+            sb.append("  0 as valorTotalDescFin ");
+            sb.append(" from ORIN n ");
+            sb.append(" inner join RIN1 d ON d.\"DocEntry\"=n.\"DocEntry\" ");
+            sb.append(" inner join OSLP a ON n.\"SlpCode\"=a.\"SlpCode\" ");
+            sb.append(" inner join OCRD c ON n.\"CardCode\"=c.\"CardCode\" ");
+            sb.append(" inner join OCST p ON c.\"State1\"=p.\"Code\" ");
+            sb.append(" where year(n.\"DocDate\")=year(current_date) and month(n.\"DocDate\")=month(current_date) and p.\"Country\"='CO' and n.\"DocNum\" not in (select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
+            sb.append(" group by d.\"TaxOnly\" ");
+            sb.append(")as t ");
+        } else {
+            sb.append("select 0 as valorTotalVenta,cast(sum((cast(d.\"LineTotal\" as numeric(18,0))-(cast(d.\"LineTotal\" as numeric(18,0))*cast(ifnull(n.\"DiscPrcnt\",0) as int))/100))as numeric(18,0))as valorTotalNota,0 as valorTotalDescFin ");
+            sb.append("from ORIN n ");
+            sb.append("inner join RIN1 d ON d.\"DocEntry\"=n.\"DocEntry\" ");
+            sb.append("inner join OSLP a ON n.\"SlpCode\"=a.\"SlpCode\" ");
+            sb.append("inner join OCRD c ON n.\"CardCode\"=c.\"CardCode\" ");
+            sb.append("inner join OCST p ON c.\"State1\"=p.\"Code\" ");
+            sb.append("where year(n.\"DocDate\")=year(current_date) and month(n.\"DocDate\")=month(current_date) and p.\"Country\"='CO' and n.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
+            //TODO: Solo impuesto aplica para IGB
+            if (companyName.contains("IGB")) {
+                sb.append(" and d.\"TaxOnly\"='N' ");
+            }
         }
         sb.append("UNION ALL ");
         sb.append(" select 0 as valorTotalVenta,0 as valorTotalNota,cast(sum(d.\"Debit\"-d.\"Credit\") as numeric(18,2))as valorTotalDescFin ");
