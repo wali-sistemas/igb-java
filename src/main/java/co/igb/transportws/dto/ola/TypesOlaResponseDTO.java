@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @author jguisao
  */
-public class TypesResponseDTO {
+public class TypesOlaResponseDTO {
     protected String status;
     protected String mensaje;
     protected List<Data> data;

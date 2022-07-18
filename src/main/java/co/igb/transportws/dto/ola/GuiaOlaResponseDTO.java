@@ -1,15 +1,19 @@
 package co.igb.transportws.dto.ola;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import java.util.List;
 
 /**
  * @author jguisao
  */
-public class GuiaResponseDTO {
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class GuiaOlaResponseDTO {
     protected String status;
     protected String mensaje;
     protected Data data;
-    protected List<Object> error;
+    protected List<Error> error;
 
     public String getStatus() {
         return status;
@@ -35,11 +39,11 @@ public class GuiaResponseDTO {
         this.data = data;
     }
 
-    public List<Object> getError() {
+    public List<Error> getError() {
         return error;
     }
 
-    public void setError(List<Object> error) {
+    public void setError(List<Error> error) {
         this.error = error;
     }
 
@@ -106,6 +110,18 @@ public class GuiaResponseDTO {
 
         public void setNumeroenvio(String numeroenvio) {
             this.numeroenvio = numeroenvio;
+        }
+    }
+
+    public static class Error {
+        protected String error;
+
+        public String getError() {
+            return error;
+        }
+
+        public void setError(String error) {
+            this.error = error;
         }
     }
 }

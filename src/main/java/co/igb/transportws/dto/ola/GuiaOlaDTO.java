@@ -3,7 +3,7 @@ package co.igb.transportws.dto.ola;
 /**
  * @author jguisao
  */
-public class GuiaDTO {
+public class GuiaOlaDTO {
     private String codigocliente;
     private String apikey;
     private String tipoflete;
@@ -27,7 +27,7 @@ public class GuiaDTO {
     private String adicionales;
     private String cartaporte;
 
-    public GuiaDTO() {
+    public GuiaOlaDTO() {
     }
 
     public String getCodigocliente() {
