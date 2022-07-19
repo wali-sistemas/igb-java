@@ -237,7 +237,7 @@ public class ShippingREST implements Serializable {
 
         Integer serie = transpFacade.getSerieStart(02, companyName, pruebas);
         serie++;
-        dto.setNmImpresionRemesa("PR0" + serie);
+        dto.setNmImpresionRemesa(serie.toString());
 
         Gson gson = new Gson();
         String JSON = gson.toJson(dto);
