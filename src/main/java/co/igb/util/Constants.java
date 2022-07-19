@@ -71,8 +71,10 @@ public class Constants {
     public static final String HANAWS_SL_URL = "https://slhana.igbcolombia.com:50000/b1s/";
     public static final String RAPIDO_OCHOA_WS_URL = "https://rapidoochoa.tmsolutions.com.co/tmland/webservices/";
     public static final String OLA_WS_API_URL = "igb.ola.api.url";
-    public static final String OLA_WS_API_CODIGO = "igb.ola.api.codigo";
-    public static final String OLA_WS_API_KEY = "igb.ola.api.key";
+    public static final String IGB_OLA_WS_API_CODIGO = "igb.ola.api.codigo";
+    public static final String IGB_OLA_WS_API_KEY = "igb.ola.api.key";
+    public static final String MTZ_OLA_WS_API_CODIGO = "mtz.ola.api.codigo";
+    public static final String MTZ_OLA_WS_API_KEY = "mtz.ola.api.key";
     public static final String CUBIC_WS_URL = "cubic.ws.url";
     public static final String CUBIC_WS_USER = "cubic.ws.user";
     public static final String CUBIC_WS_PASSWORD = "cubic.ws.password";

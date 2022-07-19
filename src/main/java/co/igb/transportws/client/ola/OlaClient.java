@@ -1,6 +1,7 @@
 package co.igb.transportws.client.ola;
 
-import co.igb.transportws.dto.ola.GuiaDTO;
+import co.igb.transportws.dto.ola.GuiaOlaDTO;
+import co.igb.transportws.dto.ola.PrintOlaDTO;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -25,13 +26,23 @@ public class OlaClient {
         webTarget = client.target(BASE_URI).path(path);
     }
 
-    public String postTipoFletes(GuiaDTO dto) {
+    public String postTipoFletes(GuiaOlaDTO dto) {
         return webTarget.path("tipofletes").request(MediaType.TEXT_HTML)
                 .post(Entity.entity(dto, MediaType.APPLICATION_JSON), String.class);
     }
 
-    public String postGenerarGuia(GuiaDTO dto) {
+    public String postGenerarGuia(GuiaOlaDTO dto) {
         return webTarget.path("generarenvio").request(MediaType.TEXT_HTML)
+                .post(Entity.entity(dto, MediaType.APPLICATION_JSON), String.class);
+    }
+
+    public String postImpresionGuia(PrintOlaDTO dto) {
+        return webTarget.path("impresionguia").request(MediaType.TEXT_HTML)
+                .post(Entity.entity(dto, MediaType.APPLICATION_JSON), String.class);
+    }
+
+    public String postImpresionRotulos(PrintOlaDTO dto) {
+        return webTarget.path("impresionrotulos").request(MediaType.TEXT_HTML)
                 .post(Entity.entity(dto, MediaType.APPLICATION_JSON), String.class);
     }
 }

@@ -4,8 +4,11 @@ import co.igb.dto.*;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.entity.ShippingOrder;
 import co.igb.persistence.facade.*;
+import co.igb.transportws.dto.ola.GuiaOlaDTO;
+import co.igb.transportws.dto.ola.GuiaOlaResponseDTO;
 import co.igb.transportws.dto.rapidoochoa.GuiaDTO;
 import co.igb.transportws.dto.rapidoochoa.GuiaResponseDTO;
+import co.igb.transportws.ejb.OlaEJB;
 import co.igb.transportws.ejb.RapidoochoaEJB;
 import co.igb.transportws.ejb.SaferboEJB;
 import co.igb.util.Constants;
@@ -51,6 +54,8 @@ public class ShippingREST implements Serializable {
     private SaferboEJB saferboEJB;
     @EJB
     private TranspFacade transpFacade;
+    @EJB
+    private OlaEJB olaEJB;
 
     @POST
     @Path("add")
@@ -248,6 +253,49 @@ public class ShippingREST implements Serializable {
             }
             CONSOLE.log(Level.INFO, "Creacion exitosa de guia #{0} con la transportadora Rapidoochoa", res.getValores().getIdGuia());
             return Response.ok(new ResponseDTO(0, res.getValores().getLinkImpresion())).build();
+        } else {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error creando la guia con la transportadora Rapidoochoa");
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error creando la guia con la transportadora Rapidoochoa")).build();
+        }
+    }
+
+    @POST
+    @Path("add-guia-ola/{docNum}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response createGuiaOla(GuiaOlaDTO dto,
+                                  @PathParam("docNum") String docNum,
+                                  @HeaderParam("X-Company-Name") String companyName,
+                                  @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Iniciando creacion de guia con la transportadora Ola");
+
+        Gson gson = new Gson();
+        String JSON = gson.toJson(dto);
+        CONSOLE.log(Level.INFO, JSON);
+
+        GuiaOlaResponseDTO res = olaEJB.generateGuia(dto, companyName);
+        if (res.getStatus().equals("OK")) {
+            String urlGuia = olaEJB.printGuia(res.getData().getNumeroenvio(), companyName);
+            if (urlGuia != null) {
+                try {
+                    invoiceFacade.updateGuiaTransport(docNum, res.getData().getNumeroenvio(), urlGuia, companyName, pruebas);
+                    String urlRotulo = olaEJB.printRotulo(res.getData().getNumeroenvio(), companyName);
+                    if (urlGuia != null) {
+                        CONSOLE.log(Level.INFO, "Creacion exitosa de guia #{0} con la transportadora Ola", res.getData().getNumeroenvio());
+                        return Response.ok(new ResponseDTO(0, new Object[]{urlGuia, urlRotulo})).build();
+                    } else {
+                        CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando los rotulos para la guia #" + res.getData().getNumeroenvio() + "de la trasnportadora Ola");
+                        return Response.ok(new ResponseDTO(0, new Object[]{urlGuia, null})).build();
+                    }
+                } catch (Exception e) {
+                    CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el nro de guia en la factura #{0} para {1}", new Object[]{docNum, companyName});
+                    return Response.ok(new ResponseDTO(-1, "Ocurrio un error al actualizar el nro de guia en la factura " + docNum)).build();
+                }
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error imprimiendo el rotulo para la guia #{0} trasnportadora Ola", res.getData().getNumeroenvio());
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error imprimiendo el rotulo para la guia " + res.getData())).build();
+            }
         } else {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error creando la guia con la transportadora Rapidoochoa");
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error creando la guia con la transportadora Rapidoochoa")).build();
