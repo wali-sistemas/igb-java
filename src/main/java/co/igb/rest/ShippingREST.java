@@ -274,7 +274,7 @@ public class ShippingREST implements Serializable {
         String JSON = gson.toJson(dto);
         CONSOLE.log(Level.INFO, JSON);
 
-        GuiaOlaResponseDTO res = olaEJB.generateGuia(dto);
+        GuiaOlaResponseDTO res = olaEJB.generateGuia(dto, companyName);
         if (res.getStatus().equals("OK")) {
             String urlGuia = olaEJB.printGuia(res.getData().getNumeroenvio(), companyName);
             if (urlGuia != null) {
