@@ -67,7 +67,7 @@ public class InvoiceFacade {
         sb.append("inner join OCST l on l.\"Code\"=d.\"StateS\" and l.\"Country\"='CO' ");
         sb.append("where(select max(d.\"WhsCode\")from INV1 d where d.\"DocEntry\" = f.\"DocEntry\")='");
         sb.append(warehouseCode);
-        sb.append("' and f.\"U_SHIPPING\"='N' and f.\"U_TOT_CAJ\">0 ");
+        sb.append("' and f.\"U_SHIPPING\"='N' and (f.\"U_TOT_CAJ\">=0 or f.\"U_TOT_CAJ\" is null) ");
         if (!transport.equals("*")) {
             sb.append("and cast(t.\"Name\" as varchar(15))='");
             sb.append(transport);
@@ -78,7 +78,7 @@ public class InvoiceFacade {
             sb.append(invoice);
             sb.append("' ");
         }
-        sb.append("order by f.\"DocDate\" desc,t.\"Name\" ASC limit 12");
+        sb.append("order by f.\"DocDate\" desc,t.\"Name\" ASC limit 100");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException e) {
