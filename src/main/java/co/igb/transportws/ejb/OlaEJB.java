@@ -39,10 +39,10 @@ public class OlaEJB {
 
         if (companyName.equals("IGB")) {
             dto.setCodigocliente(appBean.obtenerValorPropiedad(Constants.IGB_OLA_WS_API_CODIGO));
-            dto.setApikey(appBean.obtenerValorPropiedad(Constants.IGB_OLA_WS_API_CODIGO));
+            dto.setApikey(appBean.obtenerValorPropiedad(Constants.IGB_OLA_WS_API_KEY));
         } else {
             dto.setCodigocliente(appBean.obtenerValorPropiedad(Constants.MTZ_OLA_WS_API_CODIGO));
-            dto.setApikey(appBean.obtenerValorPropiedad(Constants.MTZ_OLA_WS_API_CODIGO));
+            dto.setApikey(appBean.obtenerValorPropiedad(Constants.MTZ_OLA_WS_API_KEY));
         }
 
         try {
@@ -59,10 +59,10 @@ public class OlaEJB {
     public GuiaOlaResponseDTO generateGuia(GuiaOlaDTO dto, String companyName) {
         if (companyName.equals("IGB")) {
             dto.setCodigocliente(appBean.obtenerValorPropiedad(Constants.IGB_OLA_WS_API_CODIGO));
-            dto.setApikey(appBean.obtenerValorPropiedad(Constants.IGB_OLA_WS_API_CODIGO));
+            dto.setApikey(appBean.obtenerValorPropiedad(Constants.IGB_OLA_WS_API_KEY));
         } else {
             dto.setCodigocliente(appBean.obtenerValorPropiedad(Constants.MTZ_OLA_WS_API_CODIGO));
-            dto.setApikey(appBean.obtenerValorPropiedad(Constants.MTZ_OLA_WS_API_CODIGO));
+            dto.setApikey(appBean.obtenerValorPropiedad(Constants.MTZ_OLA_WS_API_KEY));
         }
 
         try {
@@ -81,10 +81,10 @@ public class OlaEJB {
 
         if (companyName.equals("IGB")) {
             dto.setCodigocliente(appBean.obtenerValorPropiedad(Constants.IGB_OLA_WS_API_CODIGO));
-            dto.setApikey(appBean.obtenerValorPropiedad(Constants.IGB_OLA_WS_API_CODIGO));
+            dto.setApikey(appBean.obtenerValorPropiedad(Constants.IGB_OLA_WS_API_KEY));
         } else {
             dto.setCodigocliente(appBean.obtenerValorPropiedad(Constants.MTZ_OLA_WS_API_CODIGO));
-            dto.setApikey(appBean.obtenerValorPropiedad(Constants.MTZ_OLA_WS_API_CODIGO));
+            dto.setApikey(appBean.obtenerValorPropiedad(Constants.MTZ_OLA_WS_API_KEY));
         }
         dto.setParamguia(guia);
 
@@ -120,10 +120,10 @@ public class OlaEJB {
 
         if (companyName.equals("IGB")) {
             dto.setCodigocliente(appBean.obtenerValorPropiedad(Constants.IGB_OLA_WS_API_CODIGO));
-            dto.setApikey(appBean.obtenerValorPropiedad(Constants.IGB_OLA_WS_API_CODIGO));
+            dto.setApikey(appBean.obtenerValorPropiedad(Constants.IGB_OLA_WS_API_KEY));
         } else {
             dto.setCodigocliente(appBean.obtenerValorPropiedad(Constants.MTZ_OLA_WS_API_CODIGO));
-            dto.setApikey(appBean.obtenerValorPropiedad(Constants.MTZ_OLA_WS_API_CODIGO));
+            dto.setApikey(appBean.obtenerValorPropiedad(Constants.MTZ_OLA_WS_API_KEY));
         }
         dto.setParamguia(guia);
 
