@@ -145,7 +145,7 @@ public class OlaEJB {
                     CONSOLE.log(Level.SEVERE, "Ocurrio un error guardando el rotulo PDF para la guia #" + guia + " de la transportadora Ola", e);
                 }
 
-                return appBean.obtenerValorPropiedad("url.shared") + companyName + "/shipping/ola/guia/" + guia + ".pdf";
+                return appBean.obtenerValorPropiedad("url.shared") + companyName + "/shipping/ola/rotulo/" + guia + ".pdf";
             }
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "No fue pisible iniciar la interface de OLA [WS_IMPRIMIR_ROTULOS]. ", e);
