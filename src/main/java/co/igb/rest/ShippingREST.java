@@ -196,6 +196,15 @@ public class ShippingREST implements Serializable {
         return Response.ok(new ResponseDTO(0, detailBox)).build();
     }
 
+    @GET
+    @Path("list-destination-ola")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response listDestinationOla(@HeaderParam("X-Company-Name") String companyName,
+                                       @HeaderParam("X-Pruebas") boolean pruebas) {
+        return Response.ok(new ResponseDTO(0, olaEJB.listDestinations(companyName))).build();
+    }
+
     @POST
     @Path("add-guia-saferbo")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})

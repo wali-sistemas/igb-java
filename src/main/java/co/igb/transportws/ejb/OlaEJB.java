@@ -153,4 +153,28 @@ public class OlaEJB {
 
         return null;
     }
+
+    public DestinationsOlaResponseDTO listDestinations(String companyName) {
+        DestinationsOlaDTO dto = new DestinationsOlaDTO();
+
+        if (companyName.equals("IGB")) {
+            dto.setCodigocliente(appBean.obtenerValorPropiedad(Constants.IGB_OLA_WS_API_CODIGO));
+            dto.setApikey(appBean.obtenerValorPropiedad(Constants.IGB_OLA_WS_API_KEY));
+            dto.setOrigen("1");
+        } else {
+            dto.setCodigocliente(appBean.obtenerValorPropiedad(Constants.MTZ_OLA_WS_API_CODIGO));
+            dto.setApikey(appBean.obtenerValorPropiedad(Constants.MTZ_OLA_WS_API_KEY));
+            dto.setOrigen("2");
+        }
+
+        try {
+            String res = service.postCiudadesDestino(dto);
+            DestinationsOlaResponseDTO destinationsDTO = new ObjectMapper().readValue(res, DestinationsOlaResponseDTO.class);
+
+            return destinationsDTO;
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "No fue pisible iniciar la interface de OLA [WS_GENERAR_GUIAS]. ", e);
+        }
+        return null;
+    }
 }

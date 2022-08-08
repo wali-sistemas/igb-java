@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @author jguisao
  */
-public class TypesOlaResponseDTO {
+public class DestinationsOlaResponseDTO {
     protected String status;
     protected String mensaje;
     protected List<Data> data;
@@ -37,6 +37,7 @@ public class TypesOlaResponseDTO {
     public static class Data {
         protected String codigo;
         protected String nombre;
+        protected String dep;
 
         public String getCodigo() {
             return codigo;
@@ -52,6 +53,14 @@ public class TypesOlaResponseDTO {
 
         public void setNombre(String nombre) {
             this.nombre = nombre;
+        }
+
+        public String getDep() {
+            return dep;
+        }
+
+        public void setDep(String dep) {
+            this.dep = dep;
         }
     }
 }

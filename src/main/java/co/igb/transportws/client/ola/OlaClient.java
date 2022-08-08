@@ -1,5 +1,6 @@
 package co.igb.transportws.client.ola;
 
+import co.igb.transportws.dto.ola.DestinationsOlaDTO;
 import co.igb.transportws.dto.ola.GuiaOlaDTO;
 import co.igb.transportws.dto.ola.PrintOlaDTO;
 
@@ -43,6 +44,11 @@ public class OlaClient {
 
     public String postImpresionRotulos(PrintOlaDTO dto) {
         return webTarget.path("impresionrotulos").request(MediaType.TEXT_HTML)
+                .post(Entity.entity(dto, MediaType.APPLICATION_JSON), String.class);
+    }
+
+    public String postCiudadesDestino(DestinationsOlaDTO dto) {
+        return webTarget.path("ciudadesdestino").request(MediaType.TEXT_HTML)
                 .post(Entity.entity(dto, MediaType.APPLICATION_JSON), String.class);
     }
 }
