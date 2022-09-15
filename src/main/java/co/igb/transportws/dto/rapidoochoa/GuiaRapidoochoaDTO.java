@@ -3,7 +3,7 @@ package co.igb.transportws.dto.rapidoochoa;
 /**
  * @author jguisao
  */
-public class GuiaDTO {
+public class GuiaRapidoochoaDTO {
     private String nmImpresionRemesa;
     private String cdPoblacionOrigen;
     private String cdPoblacionDestino;
@@ -22,7 +22,7 @@ public class GuiaDTO {
     private String vmValorOtros;
     private String nmFormaDePago;
 
-    public GuiaDTO() {
+    public GuiaRapidoochoaDTO() {
     }
 
     public String getNmImpresionRemesa() {

@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * @author jguisao
  */
-public class GuiaResponseDTO implements Serializable {
+public class GuiaRapidoochoaResponseDTO implements Serializable {
     @JsonProperty("message")
     protected String message;
     @JsonProperty("status")

@@ -2,9 +2,9 @@ package co.igb.transportws.ejb;
 
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.transportws.client.rapidoochoa.RapidoochoaClient;
-import co.igb.transportws.dto.rapidoochoa.GuiaDTO;
-import co.igb.transportws.dto.rapidoochoa.GuiaResponseDTO;
-import co.igb.transportws.dto.rapidoochoa.TokenResponseDTO;
+import co.igb.transportws.dto.rapidoochoa.GuiaRapidoochoaDTO;
+import co.igb.transportws.dto.rapidoochoa.GuiaRapidoochoaResponseDTO;
+import co.igb.transportws.dto.rapidoochoa.TokenRapidoochoaResponseDTO;
 import co.igb.util.Constants;
 
 import javax.annotation.PostConstruct;
@@ -34,7 +34,7 @@ public class RapidoochoaEJB {
 
     public String createToken() {
         try {
-            TokenResponseDTO res = service.createToken("cmFwaWRvb2Nob2E=", "1020466061", "Franco.4545");
+            TokenRapidoochoaResponseDTO res = service.createToken("cmFwaWRvb2Nob2E=", "1020466061", "Franco.4545");
             return res.getToken();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "No fue posible iniciar la interface de Rapido-Ochoa [WS_GUIAS]. ", e);
@@ -42,7 +42,7 @@ public class RapidoochoaEJB {
         return "";
     }
 
-    public GuiaResponseDTO createGuia(GuiaDTO dto) {
+    public GuiaRapidoochoaResponseDTO createGuia(GuiaRapidoochoaDTO dto) {
         String token = createToken();
 
         if (!token.isEmpty()) {
@@ -53,7 +53,7 @@ public class RapidoochoaEJB {
             }
         }
 
-        GuiaResponseDTO res = new GuiaResponseDTO();
+        GuiaRapidoochoaResponseDTO res = new GuiaRapidoochoaResponseDTO();
         res.setStatus(409);
 
         return res;

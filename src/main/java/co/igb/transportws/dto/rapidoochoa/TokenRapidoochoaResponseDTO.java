@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author jguisao
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TokenResponseDTO implements Serializable {
+public class TokenRapidoochoaResponseDTO implements Serializable {
     protected String token;
 
     public String getToken() {

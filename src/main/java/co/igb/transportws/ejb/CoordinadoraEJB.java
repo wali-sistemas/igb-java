@@ -46,7 +46,7 @@ public class CoordinadoraEJB {
         header.setNombreRemitente("IGB");
         header.setDireccionRemitente("CALLE 98 SUR # 48-225 BOD 114");
         header.setTelefonoRemitente("4442025");
-        header.setCiudadRemitente("05001000");
+        header.setCiudadRemitente("05380000");//La Estrella
         header.setCodigoCuenta(2);
         header.setNivelServicio(1);
         header.setUsuario(appBean.obtenerValorPropiedad(Constants.COORDINADORA_WS_USER));

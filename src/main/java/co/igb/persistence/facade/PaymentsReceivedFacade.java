@@ -46,7 +46,12 @@ public class PaymentsReceivedFacade {
         sb.append("    inner join OCRD s on s.\"CardCode\" = r.\"CardCode\" ");
         sb.append("    inner join OSLP v on v.\"SlpCode\" = s.\"SlpCode\" ");
         sb.append("    inner join OINV f on f.\"DocEntry\" = d.\"DocEntry\" ");
-        sb.append("    where r.\"Canceled\"='N' and year(r.\"DocDate\") = year(current_date) and r.\"TrsfrAcct\" in ('11100507','11100509','11100517','11100518','11100519','11250530','11250520') and d.\"InvType\"=13 ");
+        sb.append("    where r.\"Canceled\"='N' and year(r.\"DocDate\") = year(current_date) and d.\"InvType\"=13 and r.\"TrsfrAcct\" in ");
+        if (companyName.contains("IGB")) {
+            sb.append("('11100507','11100509','11100517','11100518','11100519','11250530','11250520') ");
+        } else {
+            sb.append("('11100506','11100507','11100510','11100518','11100519','11250525','13050510') ");
+        }
         sb.append("   union all ");
         sb.append("    select distinct n.\"DocDueDate\" as \"fechaVenc\",d.\"SumApplied\"*-1 as \"TotalPago\",cast(r.\"DocDate\" as date) as \"fechaRecibo\",DAYS_BETWEEN(n.\"DocDueDate\",r.\"DocDate\")as \"diasAtraso\", r.\"DocNum\",r.\"DocTotal\" as \"TotalDoc\",d.\"DocEntry\" ");
         sb.append("    from ORCT r ");
@@ -56,7 +61,12 @@ public class PaymentsReceivedFacade {
         sb.append("    inner join OCRD s on s.\"CardCode\" = r.\"CardCode\" ");
         sb.append("    inner join OSLP v on v.\"SlpCode\" = s.\"SlpCode\" ");
         sb.append("    inner join ORIN n on n.\"DocEntry\" = d.\"DocEntry\" ");
-        sb.append("    where r.\"Canceled\"='N' and year(r.\"DocDate\") = year(current_date) and r.\"TrsfrAcct\" in ('11100507','11100509','11100517','11100518','11100519','11250530','11250520') and r.\"Canceled\"='N' ");
+        sb.append("    where r.\"Canceled\"='N' and year(r.\"DocDate\") = year(current_date) and r.\"Canceled\"='N' and r.\"TrsfrAcct\" in ");
+        if (companyName.contains("IGB")) {
+            sb.append("('11100507','11100509','11100517','11100518','11100519','11250530','11250520') ");
+        } else {
+            sb.append("('11100506','11100507','11100510','11100518','11100519','11250525','13050510') ");
+        }
         sb.append("   union all ");
         sb.append("    select distinct f.\"TaxDate\" as \"fechaVenc\",d.\"SumApplied\" as \"TotalPago\",cast(r.\"DocDate\" as date) as \"fechaRecibo\",DAYS_BETWEEN(f.\"TaxDate\",r.\"DocDate\")as \"diasAtraso\", r.\"DocNum\",r.\"DocTotal\" as \"TotalDoc\",d.\"DocEntry\" ");
         sb.append("    from ORCT r ");
@@ -72,7 +82,12 @@ public class PaymentsReceivedFacade {
         sb.append("    from ORCT r ");
         sb.append("    inner join OJDT j on r.\"TransId\" = j.\"TransId\" ");
         sb.append("    inner join JDT1 t on j.\"TransId\" = t.\"TransId\" ");
-        sb.append("    where year(r.\"DocDate\")=year(current_date) and r.\"TrsfrAcct\" in ('11100507','11100509','11100517','11100518','11100519','11250530','11250520') and r.\"DocType\"='C' and r.\"Canceled\"='N' and r.\"PayNoDoc\"='Y' and r.\"NoDocSum\">0 ");
+        sb.append("    where year(r.\"DocDate\")=year(current_date) and r.\"DocType\"='C' and r.\"Canceled\"='N' and r.\"PayNoDoc\"='Y' and r.\"NoDocSum\">0 and r.\"TrsfrAcct\" in ");
+        if (companyName.contains("IGB")) {
+            sb.append("('11100507','11100509','11100517','11100518','11100519','11250530','11250520') ");
+        } else {
+            sb.append("('11100506','11100507','11100510','11100518','11100519','11250525','13050510') ");
+        }
         sb.append("   )as t ");
         sb.append("  inner join \"@SPT_VALUES\" v on v.\"U_Value\" = month(t.\"fechaRecibo\") ");
         sb.append("  group by t.\"diasAtraso\",t.\"fechaRecibo\",v.\"U_MonthName\" ");
