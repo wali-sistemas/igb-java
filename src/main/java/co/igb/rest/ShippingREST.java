@@ -4,13 +4,13 @@ import co.igb.dto.*;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.entity.ShippingOrder;
 import co.igb.persistence.facade.*;
+import co.igb.transportws.dto.coordinadora.GuiaCoordinadoraResponseDTO;
 import co.igb.transportws.dto.ola.GuiaOlaDTO;
 import co.igb.transportws.dto.ola.GuiaOlaResponseDTO;
-import co.igb.transportws.dto.rapidoochoa.GuiaDTO;
-import co.igb.transportws.dto.rapidoochoa.GuiaResponseDTO;
-import co.igb.transportws.ejb.OlaEJB;
-import co.igb.transportws.ejb.RapidoochoaEJB;
-import co.igb.transportws.ejb.SaferboEJB;
+import co.igb.transportws.dto.rapidoochoa.GuiaRapidoochoaDTO;
+import co.igb.transportws.dto.rapidoochoa.GuiaRapidoochoaResponseDTO;
+import co.igb.transportws.dto.transprensa.GuiaTransprensaResponseDTO;
+import co.igb.transportws.ejb.*;
 import co.igb.util.Constants;
 import com.google.gson.Gson;
 
@@ -56,6 +56,10 @@ public class ShippingREST implements Serializable {
     private TranspFacade transpFacade;
     @EJB
     private OlaEJB olaEJB;
+    @EJB
+    private CoordinadoraEJB coordinadoraEJB;
+    @EJB
+    private TransprensaEJB transprensaEJB;
 
     @POST
     @Path("add")
@@ -212,6 +216,7 @@ public class ShippingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response createGuiaSaferbo(ApiSaferboDTO dto,
                                       @HeaderParam("X-Company-Name") String companyName,
+                                      @HeaderParam("X-Employee") String username,
                                       @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Iniciando creacion de guia con la transportadora Saferbo");
 
@@ -221,7 +226,7 @@ public class ShippingREST implements Serializable {
 
             //Actualizar en las facturas de SAP la guia campo
             try {
-                invoiceFacade.updateGuiaTransport(dto.getFactura(), response.getNumeroGuia(), "", companyName, pruebas);
+                invoiceFacade.updateGuiaTransport(dto.getFactura(), response.getNumeroGuia(), "", username, dto.getArUnidades(), dto.getValorDeclarado(), dto.getDsKilos(), companyName, pruebas);
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar la guia en SAP para la empresa " + companyName, e);
             }
@@ -238,9 +243,10 @@ public class ShippingREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response createGuiaRapidoochoa(GuiaDTO dto,
+    public Response createGuiaRapidoochoa(GuiaRapidoochoaDTO dto,
                                           @PathParam("docNum") String docNum,
                                           @HeaderParam("X-Company-Name") String companyName,
+                                          @HeaderParam("X-Employee") String username,
                                           @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Iniciando creacion de guia con la transportadora Rapidoochoa");
 
@@ -252,10 +258,10 @@ public class ShippingREST implements Serializable {
         String JSON = gson.toJson(dto);
         CONSOLE.log(Level.INFO, JSON);
 
-        GuiaResponseDTO res = rapidoochoaEJB.createGuia(dto);
+        GuiaRapidoochoaResponseDTO res = rapidoochoaEJB.createGuia(dto);
         if (res.getStatus().equals(200)) {
             try {
-                invoiceFacade.updateGuiaTransport(docNum, res.getValores().getNumeroGuia(), res.getValores().getLinkImpresion(), companyName, pruebas);
+                invoiceFacade.updateGuiaTransport(docNum, res.getValores().getNumeroGuia(), res.getValores().getLinkImpresion(), username, dto.getNmUnidPorEmbalaje(), dto.getVmValorDeclarado(), dto.getNmPesoDeclarado(), companyName, pruebas);
                 transpFacade.updateSerieLast(02, serie, companyName, pruebas);
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el nro de guia en la factura #{0} para {1}", new Object[]{docNum, companyName});
@@ -276,6 +282,7 @@ public class ShippingREST implements Serializable {
     public Response createGuiaOla(GuiaOlaDTO dto,
                                   @PathParam("docNum") String docNum,
                                   @HeaderParam("X-Company-Name") String companyName,
+                                  @HeaderParam("X-Employee") String username,
                                   @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Iniciando creacion de guia con la transportadora Ola");
 
@@ -288,7 +295,7 @@ public class ShippingREST implements Serializable {
             String urlGuia = olaEJB.printGuia(res.getData().getNumeroenvio(), companyName);
             if (urlGuia != null) {
                 try {
-                    invoiceFacade.updateGuiaTransport(docNum, res.getData().getNumeroenvio(), urlGuia, companyName, pruebas);
+                    invoiceFacade.updateGuiaTransport(docNum, res.getData().getNumeroenvio(), urlGuia, username, dto.getUnidades(), dto.getVlrmcia(), dto.getKilos(), companyName, pruebas);
                     String urlRotulo = olaEJB.printRotulo(res.getData().getNumeroenvio(), companyName);
                     if (urlGuia != null) {
                         CONSOLE.log(Level.INFO, "Creacion exitosa de guia #{0} con la transportadora Ola", res.getData().getNumeroenvio());
@@ -303,11 +310,83 @@ public class ShippingREST implements Serializable {
                 }
             } else {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error imprimiendo el rotulo para la guia #{0} trasnportadora Ola", res.getData().getNumeroenvio());
-                return Response.ok(new ResponseDTO(-1, "Ocurrio un error imprimiendo el rotulo para la guia " + res.getData())).build();
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error imprimiendo el rotulo para la guia " + res.getData().getNumeroenvio())).build();
             }
         } else {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error creando la guia con la transportadora Rapidoochoa");
-            return Response.ok(new ResponseDTO(-1, "Ocurrio un error creando la guia con la transportadora Rapidoochoa")).build();
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error creando la guia con la transportadora Ola")).build();
+        }
+    }
+
+    @POST
+    @Path("add-guia-coordinadora/{docNum}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response createGuiaCoordinadora(ApiCoordinadoraDTO dto,
+                                           @PathParam("docNum") String docNum,
+                                           @HeaderParam("X-Company-Name") String companyName,
+                                           @HeaderParam("X-Employee") String username,
+                                           @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Iniciando creacion de guia con la transportadora Coordinadora");
+
+        GuiaCoordinadoraResponseDTO res = coordinadoraEJB.generateGuia(dto, companyName);
+        if (res != null) {
+            if (res.getPdfGuia() != null) {
+                try {
+                    invoiceFacade.updateGuiaTransport(docNum, res.getCodigoRemision(), res.getPdfGuia(), username, String.valueOf(dto.getUnidades()), String.valueOf(dto.getValorDeclarado()), String.valueOf(dto.getPeso()), companyName, pruebas);
+                    if (res.getPdfRotulo() != null) {
+                        CONSOLE.log(Level.INFO, "Creacion exitosa de guia #{0} con la transportadora Coordinadora", res.getCodigoRemision());
+                        return Response.ok(new ResponseDTO(0, new Object[]{res.getPdfGuia(), res.getPdfRotulo()})).build();
+                    } else {
+                        CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando los rotulos para la guia #" + res.getCodigoRemision() + "de la trasnportadora Coordinadora");
+                        return Response.ok(new ResponseDTO(0, new Object[]{res.getPdfGuia(), null})).build();
+                    }
+                } catch (Exception e) {
+                    CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el nro de guia en la factura #{0} para {1}", new Object[]{docNum, companyName});
+                    return Response.ok(new ResponseDTO(-1, "Ocurrio un error al actualizar el nro de guia en la factura " + docNum)).build();
+                }
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error imprimiendo el rotulo para la guia #{0} trasnportadora Coordinadora", res.getCodigoRemision());
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error imprimiendo el rotulo para la guia " + res.getCodigoRemision())).build();
+            }
+        } else {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error creando la guia con la transportadora Coordinadora");
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error creando la guia con la transportadora Coordinadora")).build();
+        }
+    }
+
+    @POST
+    @Path("add-guia-transprensa/{docNum}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response createGuiaTransprensa(ApiTransprensaDTO dto,
+                                          @PathParam("docNum") String docNum,
+                                          @HeaderParam("X-Company-Name") String companyName,
+                                          @HeaderParam("X-Employee") String username,
+                                          @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Iniciando creacion de guia con la transportadora Transprensa");
+
+        GuiaTransprensaResponseDTO res = transprensaEJB.addGuia(dto);
+        if (res.isSuccess()) {
+            try {
+                String urlRotulo = transprensaEJB.getRotuloGuia(res.getData().get(0).getRemesa());
+                if (urlRotulo != null) {
+                    invoiceFacade.updateGuiaTransport(docNum, res.getData().get(0).getRemesa(), urlRotulo, username, dto.getCant(), dto.getVlrDecl(), dto.getPeso(), companyName, pruebas);
+                    CONSOLE.log(Level.INFO, "Creacion exitosa de guia #{0} con la transportadora Transprensa", res.getData().get(0).getRemesa());
+                    return Response.ok(new ResponseDTO(0, new Object[]{null, urlRotulo})).build();
+                } else {
+                    CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando los rotulos para la guia #" + res.getData().get(0).getRemesa() + "de la trasnportadora Transprensa");
+                    return Response.ok(new ResponseDTO(0, new Object[]{null, null})).build();
+                }
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el nro de guia en la factura #{0} para {1}", new Object[]{docNum, companyName});
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error al actualizar el nro de guia en la factura " + docNum)).build();
+            }
+        } else {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error creando la guia con la transportadora Transprensa." + res.getMsj());
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error creando la guia con la transportadora Transprensa. " + res.getMsj())).build();
         }
     }
 }

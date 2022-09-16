@@ -1,5 +1,7 @@
 package co.igb.transportws.client.transprensa;
 
+import co.igb.transportws.dto.transprensa.GuiaTransprensaDTO;
+import co.igb.transportws.dto.transprensa.GuiaTransprensaResponseDTO;
 import co.igb.transportws.dto.transprensa.RotuloTransprensaDTO;
 import co.igb.transportws.dto.transprensa.RotuloTrasnprensaResponseDTO;
 
@@ -36,5 +38,15 @@ public class TransprensaClient {
 
         return webTarget.path("ConsultaRotulo").request().headers(headers)
                 .post(Entity.entity(dto, MediaType.APPLICATION_JSON), RotuloTrasnprensaResponseDTO.class);
+    }
+
+    public GuiaTransprensaResponseDTO addRemesaCredito(String user, String pass, String codCliente, GuiaTransprensaDTO dto) {
+        MultivaluedMap<String, Object> headers = new MultivaluedHashMap<>();
+        headers.add("UsuarioCliente", user);
+        headers.add("PswdCliente", pass);
+        headers.add("CodigoCliente", codCliente);
+
+        return webTarget.path("RemesaCredito").request().headers(headers)
+                .post(Entity.entity(dto, MediaType.APPLICATION_JSON), GuiaTransprensaResponseDTO.class);
     }
 }
