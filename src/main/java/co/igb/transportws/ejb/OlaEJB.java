@@ -71,7 +71,7 @@ public class OlaEJB {
 
             return guiaResponseDTO;
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "No fue pisible iniciar la interface de OLA [WS_GENERAR_GUIAS]. ", e);
+            CONSOLE.log(Level.SEVERE, "No fue posible iniciar la interface de OLA [WS_GENERAR_GUIAS]. ", e);
         }
         return null;
     }
@@ -109,7 +109,7 @@ public class OlaEJB {
                 return appBean.obtenerValorPropiedad("url.shared") + companyName + "/shipping/ola/guia/" + guia + ".pdf";
             }
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "No fue pisible iniciar la interface de OLA [WS_IMPRIMIR_GUIA]. ", e);
+            CONSOLE.log(Level.SEVERE, "No fue posible iniciar la interface de OLA [WS_IMPRIMIR_GUIA]. ", e);
         }
 
         return null;
@@ -148,7 +148,7 @@ public class OlaEJB {
                 return appBean.obtenerValorPropiedad("url.shared") + companyName + "/shipping/ola/rotulo/" + guia + ".pdf";
             }
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "No fue pisible iniciar la interface de OLA [WS_IMPRIMIR_ROTULOS]. ", e);
+            CONSOLE.log(Level.SEVERE, "No fue posible iniciar la interface de OLA [WS_IMPRIMIR_ROTULOS]. ", e);
         }
 
         return null;
@@ -173,7 +173,7 @@ public class OlaEJB {
 
             return destinationsDTO;
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "No fue pisible iniciar la interface de OLA [WS_GENERAR_GUIAS]. ", e);
+            CONSOLE.log(Level.SEVERE, "No fue posible iniciar la interface de OLA [WS_GENERAR_GUIAS]. ", e);
         }
         return null;
     }

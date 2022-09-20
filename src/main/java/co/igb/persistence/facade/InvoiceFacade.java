@@ -413,12 +413,22 @@ public class InvoiceFacade {
         return new ArrayList<>();
     }
 
-    public void updateGuiaTransport(String docNum, String nroGuia, String urlGuia, String companyname, boolean testing) {
+    public void updateGuiaTransport(String docNum, String nroGuia, String urlGuia, String username, String totalBox, String vlrDecl, String peso, String companyname, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("update OINV set \"U_UBIC1\"='");
         sb.append(nroGuia);
         sb.append("',\"U_nwr_Tag\"='");
         sb.append(urlGuia);
+        sb.append("',\"U_SEPARADOR\"='");
+        sb.append(username);
+        sb.append("',\"U_TOT_CAJ\"='");
+        sb.append(totalBox);
+        sb.append("',\"U_VLR_SEG\"='");
+        sb.append(vlrDecl);
+        sb.append("',\"U_PESO_BRUTO\"='");
+        sb.append(peso);
+        sb.append("',\"U_VR_DECLARADO\"='");
+        sb.append(vlrDecl);
         sb.append("' where \"DocNum\" in(");
         sb.append(docNum);
         sb.append(")");

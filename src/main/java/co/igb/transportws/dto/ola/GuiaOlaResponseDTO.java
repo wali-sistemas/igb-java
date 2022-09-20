@@ -7,7 +7,6 @@ import java.util.List;
 /**
  * @author jguisao
  */
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GuiaOlaResponseDTO {
     protected String status;

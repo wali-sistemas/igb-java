@@ -78,4 +78,11 @@ public class Constants {
     public static final String CUBIC_WS_URL = "cubic.ws.url";
     public static final String CUBIC_WS_USER = "cubic.ws.user";
     public static final String CUBIC_WS_PASSWORD = "cubic.ws.password";
+    public static final String COORDINADORA_WS_URL = "igb.coordinadora.api.url";
+    public static final String COORDINADORA_WS_USER = "igb.coordinadora.api.user";
+    public static final String COORDINADORA_WS_PASSWORD = "igb.coordinadora.api.password";
+    public static final String TRANSPRENSA_WS_URL = "igb.transprensa.api.url";
+    public static final String TRANSPRENSA_WS_USER = "igb.transprensa.api.user";
+    public static final String TRANSPRENSA_WS_PASSWORD = "igb.transprensa.api.password";
+    public static final String TRANSPRENSA_WS_CODIGO = "igb.transprensa.api.codigo";
 }
