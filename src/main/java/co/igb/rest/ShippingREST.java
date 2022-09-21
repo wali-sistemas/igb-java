@@ -297,7 +297,7 @@ public class ShippingREST implements Serializable {
                 try {
                     invoiceFacade.updateGuiaTransport(docNum, res.getData().getNumeroenvio(), urlGuia, username, dto.getUnidades(), dto.getVlrmcia(), dto.getKilos(), companyName, pruebas);
                     String urlRotulo = olaEJB.printRotulo(res.getData().getNumeroenvio(), companyName);
-                    if (urlGuia != null) {
+                    if (urlRotulo != null) {
                         CONSOLE.log(Level.INFO, "Creacion exitosa de guia #{0} con la transportadora Ola", res.getData().getNumeroenvio());
                         return Response.ok(new ResponseDTO(0, new Object[]{urlGuia, urlRotulo})).build();
                     } else {
