@@ -51,7 +51,7 @@ public class CoordinadoraEJB {
         header.setNivelServicio(1);
         header.setUsuario(appBean.obtenerValorPropiedad(Constants.COORDINADORA_WS_USER));
         header.setClave(appBean.obtenerValorPropiedad(Constants.COORDINADORA_WS_PASSWORD));
-        header.setIdRotulo("44");
+        header.setIdRotulo("55");
         //Destinatario
         header.setNombreDestinatario(dto.getNameDestination());
         header.setDireccionDestinatario(dto.getAddressDestination());
@@ -92,8 +92,24 @@ public class CoordinadoraEJB {
 
         try {
             GuiaCoordinadoraResponseDTO res = service.addGuia(header);
-            String urlGuia = convertFile(res.getPdfGuia(), "guia", res.getCodigoRemision(), companyName);
-            String urlRotulo = convertFile(res.getPdfRotulo(), "rotulo", res.getCodigoRemision(), companyName);
+
+            StringBuilder sbRotulo = new StringBuilder();
+            //TODO: Se recorre la cadena Base64 del rotulo, para almacearlo en un StringBuilder porque un String no soporta tantos carácteres
+            for (int i = res.getPdfRotulo().length() - 1; i >= 0; i--) {
+                String fileReverse = "";
+                fileReverse = fileReverse + res.getPdfRotulo().charAt(i);
+                sbRotulo.append(fileReverse);
+            }
+            String urlRotulo = convertFile(sbRotulo, "rotulo", res.getCodigoRemision(), companyName);
+
+            StringBuilder sbGuia = new StringBuilder();
+            //TODO: Se recorre la cadena Base64 de la guia, para almacearlo en un StringBuilder porque un String no soporta tantos carácteres
+            for (int i = res.getPdfGuia().length() - 1; i >= 0; i--) {
+                String fileReverse = "";
+                fileReverse = fileReverse + res.getPdfGuia().charAt(i);
+                sbGuia.append(fileReverse);
+            }
+            String urlGuia = convertFile(sbGuia, "guia", res.getCodigoRemision(), companyName);
 
             res.setPdfGuia(urlGuia);
             res.setPdfRotulo(urlRotulo);
@@ -105,9 +121,10 @@ public class CoordinadoraEJB {
         return null;
     }
 
-    private String convertFile(String file, String typeDoc, String guia, String companyName) {
-        try (FileOutputStream fos = new FileOutputStream(file);) {
-            byte[] decoder = Base64.getDecoder().decode(file);
+    private String convertFile(StringBuilder sb, String typeDoc, String guia, String companyName) {
+        //TODO: Se procede a decodificar la cadena Base64 a pdf
+        try (FileOutputStream fos = new FileOutputStream(sb.reverse().toString());) {
+            byte[] decoder = Base64.getDecoder().decode(sb.reverse().toString());
             fos.write(decoder);
             CONSOLE.log(Level.INFO, "Archivo de guia #{0} de transportadora Coordinadora guardado", guia);
         } catch (Exception e) {

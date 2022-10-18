@@ -1,6 +1,7 @@
 package co.igb.persistence.facade;
 
 import co.igb.dto.PurchaseOrderDTO;
+import co.igb.dto.UserFieldDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.util.Constants;
 import co.igb.util.IGBUtils;
@@ -12,6 +13,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -188,5 +190,106 @@ public class PurchaseOrderFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar el tracking para la orden de compra # " + docNum, e);
         }
         return null;
+    }
+
+    public Object[] loadUserFields(String docNum, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(\"DocNum\" as int)as docNum,cast(\"U_TRANSP\" as varchar)as transp,cast(\"U_F_EMBARQUE\" as date)as fEmbarque,cast(\"U_TERM_NEG\" as varchar)as termNeg, ");
+        sb.append(" cast(\"U_MOD_TRANSP\" as varchar)as modTranp,cast(\"U_PUERTO_DES\" as varchar)as puertDes,cast(\"U_ESTADO_OC\" as varchar)as estOC,cast(\"U_EMBARCADO\" as varchar)as embarc, ");
+        sb.append(" cast(\"U_DOC_TRANSP\" as varchar)as docTras,cast(\"U_F_DOC_TRANSP\" as date)as fDocTras,cast(\"U_F_ARRIB_PUERTO\" as date)as fArribPuert,cast(\"U_F_ARRIB_ALMA\" as date)as fArribAlm, ");
+        sb.append(" cast(\"U_TIPO_EMPAQUE\" as varchar)as tipoEmp,cast(\"U_OBSERVACION\" as varchar)as observ,cast(\"U_PUERTO_EMB\" as varchar)as puertEmb,cast(\"U_TRANSP_TERR\" as varchar)as transpTerr, ");
+        sb.append(" cast(\"U_Fecha_Arribo_CEDI\" as date)as fArriboCed,cast(\"U_CANT_CONTE\" as int)as cantCont,cast(\"U_CBM\" as varchar)as cbm,cast(\"U_F_CARGA_LISTA\" as date)as fCargaList, ");
+        sb.append(" cast(\"U_TIEMPO_TRANSITO\" as varchar)as tiempTrans,cast(\"U_F_SALIDA_PUERTO\" as date)as fSalPuert,cast(\"U_TIEMPO_PUERTO\" as varchar)as tiempPuert, ");
+        sb.append(" cast(\"U_TIEMPO_ENT_COMEX\" as varchar)as tiempEntComex,cast(\"U_F_BOOKING\" as date)as fbooking, cast(\"U_TIEMPO_ESP_BOOKING\" as varchar)as tiempEspBooking,");
+        sb.append(" cast(\"U_F_ESTIM_EMBARQUE\" as date)as fEstimEmb,cast(\"U_F_REC_DOC_FINAL\" as date)as fRecDocFin,cast(\"U_EMISION_BL\" as varchar)as emisBL,cast(\"U_INSPECCION\" as varchar)as insp, ");
+        sb.append(" cast(\"U_F_ARRIBO_CEDI_EST\" as date)as fArribCedEst,cast(\"U_NotificationBL\" as varchar)as notifBL,cast(\"U_LIQUID_COMEX\" as varchar)as liqComex,cast(\"U_F_LIQUIDACION\" as date)as fLiq, ");
+        sb.append(" cast(\"U_F_LIB_BL\" as date)as fLibBL,cast(\"U_CONDUCTOR\" as varchar)as conduct,cast(\"U_CEDULA_CON\" as varchar)as cedulCond,cast(\"U_PLACA\" as varchar)as placa, ");
+        sb.append(" cast(\"U_CONTENEDOR\" as varchar)as contened,cast(\"U_PRECINTO\" as varchar) as precint,cast(\"U_ENVIAR_DATOS_CON\" as varchar)as enviarDatos,cast(\"U_Vendedor_2\" as varchar)as vendedor ");
+        sb.append("from OPOR e ");
+        sb.append("where e.\"DocNum\"=");
+        sb.append(docNum);
+        try {
+            return (Object[]) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultado los UDF para la orden de compra #" + docNum + " en " + companyName, e);
+        }
+        return null;
+    }
+
+    public void updateFieldUser(UserFieldDTO dto, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("update OPOR set ");
+        sb.append("\"U_TRANSP\"='");
+        sb.append(dto.getTransp());
+        sb.append("',\"U_F_EMBARQUE\"='");
+        sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getEmbarc()));
+        sb.append("',\"U_TERM_NEG\"='");
+        sb.append(dto.getTermNeg());
+        sb.append("',\"U_MOD_TRANSP\"='");
+        sb.append(dto.getModTranp());
+        sb.append("',\"U_PUERTO_DES\"='");
+        sb.append(dto.getPuertDes());
+        sb.append("',\"U_TRANSP_TERR\"='");
+        sb.append(dto.getTranspTerr());
+        sb.append("',\"U_Fecha_Arribo_CEDI\"='");
+        sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFarriboCed()));
+        sb.append("',\"U_CANT_CONTE\"=");
+        sb.append(dto.getCantCont());
+        sb.append(",\"U_CBM\"='");
+        sb.append(dto.getCbm());
+        sb.append("',\"U_F_CARGA_LISTA\"='");
+        sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFcargaList()));
+        sb.append("',\"U_TIEMPO_TRANSITO\"='");
+        sb.append(dto.getTiempTrans());
+        sb.append("',\"U_F_SALIDA_PUERTO\"='");
+        sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFsalPuert()));
+        sb.append("',\"U_TIEMPO_PUERTO\"='");
+        sb.append(dto.getTiempPuert());
+        sb.append("',\"U_TIEMPO_ENT_COMEX\"='");
+        sb.append(dto.getTiempEntComex());
+        sb.append("',\"U_F_BOOKING\"='");
+        sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFbooking()));
+        sb.append("',\"U_TIEMPO_ESP_BOOKING\"='");
+        sb.append(dto.getTiempEspBooking());
+        sb.append("',\"U_F_ESTIM_EMBARQUE\"='");
+        sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFestimEmb()));
+        sb.append("',\"U_F_REC_DOC_FINAL\"='");
+        sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFrecDocFin()));
+        sb.append("',\"U_EMISION_BL\"='");
+        sb.append(dto.getEmisBL());
+        sb.append("',\"U_INSPECCION\"='");
+        sb.append(dto.getInsp());
+        sb.append("',\"U_F_ARRIBO_CEDI_EST\"='");
+        sb.append(dto.getFarribCedEst());
+        sb.append("',\"U_NotificationBL\"='");
+        sb.append(dto.getNotifBL());
+        sb.append("',\"U_LIQUID_COMEX\"='");
+        sb.append(dto.getLiqComex());
+        sb.append("',\"U_F_LIQUIDACION\"='");
+        sb.append(dto.getFliq());
+        sb.append("',\"U_F_LIB_BL\"='");
+        sb.append(dto.getFlibBL());
+        sb.append("',\"U_CONDUCTOR\"='");
+        sb.append(dto.getConduct());
+        sb.append("',\"U_CEDULA_CON\"='");
+        sb.append(dto.getCedulCond());
+        sb.append("',\"U_PLACA\"='");
+        sb.append(dto.getPlaca());
+        sb.append("',\"U_CONTENEDOR\"='");
+        sb.append(dto.getContened());
+        sb.append("',\"U_PRECINTO\"='");
+        sb.append(dto.getPrecint());
+        sb.append("',\"U_ENVIAR_DATOS_CON\"='");
+        sb.append(dto.getEnviarDatos());
+        sb.append("',\"U_Vendedor_2\"='");
+        sb.append(dto.getVendedor());
+        sb.append("' where \"DocNum\"=");
+        sb.append(dto.getDocNum());
+        try {
+            //persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).executeUpdate();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando los campos de usuario para la orden de compra #" + dto.getDocNum() + " en " + companyName);
+        }
     }
 }
