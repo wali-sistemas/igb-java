@@ -7,6 +7,7 @@ import co.igb.b1ws.client.purchasedeliverynote.PurchaseDeliveryNotesService;
 import co.igb.dto.PurchaseOrderDTO;
 import co.igb.dto.PurchaseOrderLineDTO;
 import co.igb.dto.ResponseDTO;
+import co.igb.dto.UserFieldDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.facade.PurchaseOrderFacade;
 import co.igb.util.IGBUtils;
@@ -14,13 +15,7 @@ import co.igb.util.IGBUtils;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.datatype.DatatypeFactory;
@@ -40,7 +35,6 @@ import java.util.logging.Logger;
 @Path("reception")
 public class ReceptionREST implements Serializable {
     private static final Logger CONSOLE = Logger.getLogger(ReceptionREST.class.getSimpleName());
-
     @EJB
     private PurchaseOrderFacade poFacade;
     @EJB
@@ -70,6 +64,79 @@ public class ReceptionREST implements Serializable {
                               @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Consultando orden #{0}", docNum);
         return Response.ok(poFacade.find(docNum, companyName, pruebas)).build();
+    }
+
+    @GET
+    @Path("load/order/udf/{docNum}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    public Response loadOrderUDF(@PathParam("docNum") String docNum,
+                                 @HeaderParam("X-Company-Name") String companyName,
+                                 @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Consultando los campos de usuario para la orden de compra #{0}", docNum);
+        Object[] obj = poFacade.loadUserFields(docNum, companyName, pruebas);
+
+        UserFieldDTO dto = new UserFieldDTO();
+        dto.setTransp((String) obj[1]);
+        dto.setFembarque((Date) obj[2]);
+        dto.setTermNeg((String) obj[3]);
+        dto.setModTranp((String) obj[4]);
+        dto.setPuertDes((String) obj[5]);
+        dto.setEstOC((String) obj[6]);
+        dto.setEmbarc((String) obj[7]);
+        dto.setDocTras((String) obj[8]);
+        dto.setFdocTras((Date) obj[9]);
+        dto.setFarribPuert((Date) obj[10]);
+        dto.setFarribAlm((Date) obj[11]);
+        dto.setTipoEmp((String) obj[12]);
+        dto.setObserv((String) obj[13]);
+        dto.setPuertEmb((String) obj[14]);
+        dto.setTranspTerr((String) obj[15]);
+        dto.setFarriboCed((Date) obj[16]);
+        dto.setCantCont((int) obj[17]);
+        dto.setCbm((String) obj[18]);
+        dto.setFcargaList((Date) obj[19]);
+        dto.setTiempTrans((String) obj[20]);
+        dto.setFsalPuert((Date) obj[21]);
+        dto.setTiempPuert((String) obj[22]);
+        dto.setTiempEntComex((String) obj[23]);
+        dto.setFbooking((Date) obj[24]);
+        dto.setTiempEspBooking((String) obj[25]);
+        dto.setFestimEmb((Date) obj[26]);
+        dto.setFrecDocFin((Date) obj[27]);
+        dto.setEmisBL((String) obj[28]);
+        dto.setInsp((String) obj[29]);
+        dto.setFarribCedEst((Date) obj[30]);
+        dto.setNotifBL((String) obj[31]);
+        dto.setLiqComex((String) obj[32]);
+        dto.setFliq((Date) obj[33]);
+        dto.setFlibBL((Date) obj[34]);
+        dto.setConduct((String) obj[35]);
+        dto.setCedulCond((String) obj[36]);
+        dto.setPlaca((String) obj[37]);
+        dto.setContened((String) obj[38]);
+        dto.setPrecint((String) obj[39]);
+        dto.setEnviarDatos((String) obj[40]);
+        dto.setVendedor((String) obj[41]);
+
+        return Response.ok(dto).build();
+    }
+
+    @PUT
+    @Path("update/order/udf")
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    public Response updateOrderUDF(UserFieldDTO dto,
+                                   @HeaderParam("X-Company-Name") String companyName,
+                                   @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Inciando actualizacion de campos de usuario para la orden de compra #{0} en {1}", new Object[]{dto.getDocNum(), companyName});
+        try {
+            poFacade.updateFieldUser(dto, companyName, pruebas);
+            CONSOLE.log(Level.INFO, "Ocurrio un error actualizando los campos de usuario para la orden de compra");
+            return Response.ok(new ResponseDTO(0, "Exito actualizando los campos de usuario para la orden de compra " + dto.getDocNum())).build();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando los campos de usuario para la orden de compra #" + dto.getDocNum());
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error actualizando los campos de usuario para la orden de compra")).build();
+        }
     }
 
     @POST
