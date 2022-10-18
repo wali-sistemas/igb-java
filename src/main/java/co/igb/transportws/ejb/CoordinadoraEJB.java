@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -100,7 +101,7 @@ public class CoordinadoraEJB {
                 fileReverse = fileReverse + res.getPdfRotulo().charAt(i);
                 sbRotulo.append(fileReverse);
             }
-            String urlRotulo = convertFile(sbRotulo, "rotulo", res.getCodigoRemision(), companyName);
+            String urlRotulo = convertFile(sbRotulo.reverse(), "rotulo", res.getCodigoRemision(), companyName);
 
             StringBuilder sbGuia = new StringBuilder();
             //TODO: Se recorre la cadena Base64 de la guia, para almacearlo en un StringBuilder porque un String no soporta tantos carácteres
@@ -109,7 +110,7 @@ public class CoordinadoraEJB {
                 fileReverse = fileReverse + res.getPdfGuia().charAt(i);
                 sbGuia.append(fileReverse);
             }
-            String urlGuia = convertFile(sbGuia, "guia", res.getCodigoRemision(), companyName);
+            String urlGuia = convertFile(sbGuia.reverse(), "guia", res.getCodigoRemision(), companyName);
 
             res.setPdfGuia(urlGuia);
             res.setPdfRotulo(urlRotulo);
@@ -123,8 +124,11 @@ public class CoordinadoraEJB {
 
     private String convertFile(StringBuilder sb, String typeDoc, String guia, String companyName) {
         //TODO: Se procede a decodificar la cadena Base64 a pdf
-        try (FileOutputStream fos = new FileOutputStream(sb.reverse().toString());) {
-            byte[] decoder = Base64.getDecoder().decode(sb.reverse().toString());
+        String rutaFile = appBean.obtenerValorPropiedad("url.archivo") + companyName + File.separator + "shipping" + File.separator + "coordinadora" + File.separator + typeDoc + File.separator + guia + ".pdf";
+        File file = new File(rutaFile);
+
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            byte[] decoder = Base64.getDecoder().decode(sb.toString());
             fos.write(decoder);
             CONSOLE.log(Level.INFO, "Archivo de guia #{0} de transportadora Coordinadora guardado", guia);
         } catch (Exception e) {
