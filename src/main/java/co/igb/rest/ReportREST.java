@@ -456,6 +456,32 @@ public class ReportREST implements Serializable {
         return Response.ok(trackingOrder).build();
     }
 
+    @GET
+    @Path("comex/time-operation")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response getTimeOperation(@HeaderParam("X-Company-Name") String companyName,
+                                     @HeaderParam("X-Pruebas") boolean pruebas,
+                                     @QueryParam("year") Integer year,
+                                     @QueryParam("month") Integer month) {
+        List<Object[]> list = purchaseOrderFacade.listTimeOperation(year, month, companyName, pruebas);
+        List<TimeOperationDTO> timeOperations = new ArrayList<>();
+        for (Object[] obj : list) {
+            TimeOperationDTO dto = new TimeOperationDTO();
+            dto.setYear((Integer) obj[0]);
+            dto.setMonth((Integer) obj[1]);
+            dto.setNameMonth((String) obj[2]);
+            dto.setUserName((String) obj[3]);
+            dto.setTimeEstCargaS((Integer) obj[4]);
+            dto.setTimeRealCargaS((BigDecimal) obj[5]);
+            dto.setTimeEstContainer((Integer) obj[6]);
+            dto.setTimeRealContainer((BigDecimal) obj[7]);
+
+            timeOperations.add(dto);
+        }
+        return Response.ok(timeOperations).build();
+    }
+
     @POST
     @Path("generate-report/")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})

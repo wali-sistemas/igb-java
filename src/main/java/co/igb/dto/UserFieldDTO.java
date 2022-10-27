@@ -25,15 +25,15 @@ public class UserFieldDTO {
     private String puertEmb;
     private String transpTerr;
     private Date farriboCed;
-    private int cantCont;
+    private Integer cantCont;
     private String cbm;
     private Date fcargaList;
     private String tiempTrans;
     private Date fsalPuert;
     private String tiempPuert;
-    private String tiempEntComex;
+    private Integer tiempEntComex;
     private Date fbooking;
-    private String tiempEspBooking;
+    private Integer tiempEspBooking;
     private Date festimEmb;
     private Date frecDocFin;
     private String emisBL;
@@ -44,7 +44,7 @@ public class UserFieldDTO {
     private Date fliq;
     private Date flibBL;
     private String conduct;
-    private String cedulCond;
+    private Integer cedulCond;
     private String placa;
     private String contened;
     private String precint;
@@ -55,7 +55,7 @@ public class UserFieldDTO {
     public UserFieldDTO() {
     }
 
-    public UserFieldDTO(String transp, Date fembarque, String termNeg, String modTranp, String puertDes, String estOC, String embarc, String docTras, Date fdocTras, Date farribPuert, Date farribAlm, String tipoEmp, String observ, String puertEmb, String transpTerr, Date farriboCed, int cantCont, String cbm, Date fcargaList, String tiempTrans, Date fsalPuert, String tiempPuert, String tiempEntComex, Date fbooking, String tiempEspBooking, Date festimEmb, Date frecDocFin, String emisBL, String insp, Date farribCedEst, String notifBL, String liqComex, Date fliq, Date flibBL, String conduct, String cedulCond, String placa, String contened, String precint, String enviarDatos, String vendedor) {
+    public UserFieldDTO(String transp, Date fembarque, String termNeg, String modTranp, String puertDes, String estOC, String embarc, String docTras, Date fdocTras, Date farribPuert, Date farribAlm, String tipoEmp, String observ, String puertEmb, String transpTerr, Date farriboCed, Integer cantCont, String cbm, Date fcargaList, String tiempTrans, Date fsalPuert, String tiempPuert, Integer tiempEntComex, Date fbooking, Integer tiempEspBooking, Date festimEmb, Date frecDocFin, String emisBL, String insp, Date farribCedEst, String notifBL, String liqComex, Date fliq, Date flibBL, String conduct, Integer cedulCond, String placa, String contened, String precint, String enviarDatos, String vendedor, String docNum) {
         this.transp = transp;
         this.fembarque = fembarque;
         this.termNeg = termNeg;
@@ -97,6 +97,7 @@ public class UserFieldDTO {
         this.precint = precint;
         this.enviarDatos = enviarDatos;
         this.vendedor = vendedor;
+        this.docNum = docNum;
     }
 
     public String getTransp() {
@@ -227,11 +228,11 @@ public class UserFieldDTO {
         this.farriboCed = farriboCed;
     }
 
-    public int getCantCont() {
+    public Integer getCantCont() {
         return cantCont;
     }
 
-    public void setCantCont(int cantCont) {
+    public void setCantCont(Integer cantCont) {
         this.cantCont = cantCont;
     }
 
@@ -275,11 +276,11 @@ public class UserFieldDTO {
         this.tiempPuert = tiempPuert;
     }
 
-    public String getTiempEntComex() {
+    public Integer getTiempEntComex() {
         return tiempEntComex;
     }
 
-    public void setTiempEntComex(String tiempEntComex) {
+    public void setTiempEntComex(Integer tiempEntComex) {
         this.tiempEntComex = tiempEntComex;
     }
 
@@ -291,11 +292,11 @@ public class UserFieldDTO {
         this.fbooking = fbooking;
     }
 
-    public String getTiempEspBooking() {
+    public Integer getTiempEspBooking() {
         return tiempEspBooking;
     }
 
-    public void setTiempEspBooking(String tiempEspBooking) {
+    public void setTiempEspBooking(Integer tiempEspBooking) {
         this.tiempEspBooking = tiempEspBooking;
     }
 
@@ -379,11 +380,11 @@ public class UserFieldDTO {
         this.conduct = conduct;
     }
 
-    public String getCedulCond() {
+    public Integer getCedulCond() {
         return cedulCond;
     }
 
-    public void setCedulCond(String cedulCond) {
+    public void setCedulCond(Integer cedulCond) {
         this.cedulCond = cedulCond;
     }
 
@@ -433,5 +434,53 @@ public class UserFieldDTO {
 
     public void setDocNum(String docNum) {
         this.docNum = docNum;
+    }
+
+    @Override
+    public String toString() {
+        return "UserFieldDTO{" +
+                "transp='" + transp + '\'' +
+                ", fembarque=" + fembarque +
+                ", termNeg='" + termNeg + '\'' +
+                ", modTranp='" + modTranp + '\'' +
+                ", puertDes='" + puertDes + '\'' +
+                ", estOC='" + estOC + '\'' +
+                ", embarc='" + embarc + '\'' +
+                ", docTras='" + docTras + '\'' +
+                ", fdocTras=" + fdocTras +
+                ", farribPuert=" + farribPuert +
+                ", farribAlm=" + farribAlm +
+                ", tipoEmp='" + tipoEmp + '\'' +
+                ", observ='" + observ + '\'' +
+                ", puertEmb='" + puertEmb + '\'' +
+                ", transpTerr='" + transpTerr + '\'' +
+                ", farriboCed=" + farriboCed +
+                ", cantCont=" + cantCont +
+                ", cbm='" + cbm + '\'' +
+                ", fcargaList=" + fcargaList +
+                ", tiempTrans='" + tiempTrans + '\'' +
+                ", fsalPuert=" + fsalPuert +
+                ", tiempPuert='" + tiempPuert + '\'' +
+                ", tiempEntComex=" + tiempEntComex +
+                ", fbooking=" + fbooking +
+                ", tiempEspBooking=" + tiempEspBooking +
+                ", festimEmb=" + festimEmb +
+                ", frecDocFin=" + frecDocFin +
+                ", emisBL='" + emisBL + '\'' +
+                ", insp='" + insp + '\'' +
+                ", farribCedEst=" + farribCedEst +
+                ", notifBL='" + notifBL + '\'' +
+                ", liqComex='" + liqComex + '\'' +
+                ", fliq=" + fliq +
+                ", flibBL=" + flibBL +
+                ", conduct='" + conduct + '\'' +
+                ", cedulCond=" + cedulCond +
+                ", placa='" + placa + '\'' +
+                ", contened='" + contened + '\'' +
+                ", precint='" + precint + '\'' +
+                ", enviarDatos='" + enviarDatos + '\'' +
+                ", vendedor='" + vendedor + '\'' +
+                ", docNum='" + docNum + '\'' +
+                '}';
     }
 }
