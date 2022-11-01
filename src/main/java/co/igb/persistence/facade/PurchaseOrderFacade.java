@@ -324,29 +324,37 @@ public class PurchaseOrderFacade {
 
     public List<Object[]> listTimeOperation(Integer year, Integer month, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select t.yy,t.mm,t.nameMes,t.userName,sum(t.timeEstCs)as timeEstCs,cast(avg(t.timeRealCs)as numeric(10,2))as timeRealCs,sum(timeEstCt)as timeEstCt,cast(avg(timeRealCt)as numeric(10,2))as timeRealCt ");
+        sb.append("select f.yy,f.mm,f.nameMes,f.userName,sum(f.timeEstCs)as timeEstCs,sum(f.timeRealCs)as timeRealCs,sum(f.timeEstCt)as timeEstCt,sum(f.timeRealCt)as timeRealCt ");
         sb.append("from( ");
-        sb.append(" select cast(year(pe.\"DocDueDate\")as int)as yy,cast(m.\"U_Value\" as int)as mm,cast(m.\"U_MonthName\" as varchar(30))as nameMes, ");
-        sb.append("  cast(ifnull(pe.\"U_Vendedor_2\",'SIN ASIGNAR')as varchar(100))as userName,10 as timeEstCs, ");
-        sb.append("  cast(ifnull(days_between(pe.\"U_F_ARRIB_PUERTO\",pe.\"U_Fecha_Arribo_CEDI\"),0)as decimal(10,2))as timeRealCs,0 as timeEstCt,0 as timeRealCt ");
-        sb.append(" from OPOR pe ");
-        sb.append(" inner join \"@SPT_VALUES\" m on month(pe.\"DocDueDate\")=m.\"U_Value\" ");
-        sb.append(" where pe.\"Series\"='48' and pe.\"U_ESTADO_OC\" in('07','09') and pe.\"U_TIPO_EMPAQUE\"=02 and year(pe.\"DocDueDate\")='");
+        sb.append(" select t.yy,t.mm,t.nameMes,t.userName,sum(t.timeEstCs)as timeEstCs,avg(t.timeRealCs)as timeRealCs,sum(timeEstCt)as timeEstCt,avg(timeRealCt)as timeRealCt ");
+        sb.append(" from( ");
+        sb.append("  select cast(year(pe.\"DocDueDate\")as varchar(5))as yy,cast(m.\"U_Value\" as int)as mm,cast(m.\"U_MonthName\" as varchar(30))as nameMes, ");
+        sb.append("   cast(ifnull(pe.\"U_Vendedor_2\",'SIN ASIGNAR')as varchar(100))as userName,0 as timeEstCs,0 as timeRealCs,8 as timeEstCt, ");
+        sb.append("   cast(ifnull(days_between(pe.\"U_F_ARRIB_PUERTO\",pe.\"U_Fecha_Arribo_CEDI\"),0)as decimal(10,2))as timeRealCt ");
+        sb.append("  from OPOR pe ");
+        sb.append("  inner join \"@SPT_VALUES\" m on month(pe.\"DocDueDate\")=m.\"U_Value\" ");
+        sb.append("  where pe.\"Series\"='48' and pe.\"U_ESTADO_OC\" in('07','09') and pe.\"U_TIPO_EMPAQUE\"<>02 and year(pe.\"DocDueDate\")='");
         sb.append(year);
         sb.append("' and m.\"U_Value\"=");
         sb.append(month);
-        sb.append(" union all ");
-        sb.append(" select cast(year(pe.\"DocDueDate\")as varchar(5))as yy,cast(m.\"U_Value\" as int)as mm,cast(m.\"U_MonthName\" as varchar(30))as nameMes, ");
-        sb.append("  cast(ifnull(pe.\"U_Vendedor_2\",'SIN ASIGNAR')as varchar(100))as userName,0 as timeEstCs,0 as timeRealCs,8 as timeEstCt, ");
-        sb.append("  cast(ifnull(days_between(pe.\"U_F_ARRIB_PUERTO\",pe.\"U_Fecha_Arribo_CEDI\"),0)as decimal(10,2))as timeRealCt ");
-        sb.append(" from OPOR pe ");
-        sb.append(" inner join \"@SPT_VALUES\" m on month(pe.\"DocDueDate\")=m.\"U_Value\" ");
-        sb.append(" where pe.\"Series\"='48' and pe.\"U_ESTADO_OC\" in('07','09') and pe.\"U_TIPO_EMPAQUE\"<>02 and year(pe.\"DocDueDate\")='");
+        sb.append(" )as t ");
+        sb.append(" group by t.yy,t.mm,t.nameMes,t.userName ");
+        sb.append("union all ");
+        sb.append(" select t.yy,t.mm,t.nameMes,t.userName,sum(t.timeEstCs)as timeEstCs,avg(t.timeRealCs)as timeRealCs,sum(timeEstCt)as timeEstCt,avg(timeRealCt)as timeRealCt ");
+        sb.append(" from( ");
+        sb.append("  select cast(year(pe.\"DocDueDate\")as int)as yy,cast(m.\"U_Value\" as int)as mm,cast(m.\"U_MonthName\" as varchar(30))as nameMes,");
+        sb.append("   cast(ifnull(pe.\"U_Vendedor_2\",'SIN ASIGNAR')as varchar(100))as userName,10 as timeEstCs, ");
+        sb.append("   cast(ifnull(days_between(pe.\"U_F_ARRIB_PUERTO\",pe.\"U_Fecha_Arribo_CEDI\"),0)as decimal(10,2))as timeRealCs,0 as timeEstCt,0 as timeRealCt ");
+        sb.append("  from OPOR pe ");
+        sb.append("  inner join \"@SPT_VALUES\" m on month(pe.\"DocDueDate\")=m.\"U_Value\" ");
+        sb.append("  where pe.\"Series\"='48' and pe.\"U_ESTADO_OC\" in('07','09') and pe.\"U_TIPO_EMPAQUE\"=02 and year(pe.\"DocDueDate\")='");
         sb.append(year);
         sb.append("' and m.\"U_Value\"=");
         sb.append(month);
-        sb.append(")as t ");
-        sb.append("group by t.yy,t.mm,t.nameMes,t.userName");
+        sb.append(" )as t ");
+        sb.append(" group by t.yy,t.mm,t.nameMes,t.userName ");
+        sb.append(")as f ");
+        sb.append("group by f.yy,f.mm,f.nameMes,f.userName");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException ex) {
