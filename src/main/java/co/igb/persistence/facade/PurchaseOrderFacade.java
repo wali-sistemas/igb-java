@@ -200,10 +200,10 @@ public class PurchaseOrderFacade {
         sb.append(" cast(\"U_TIPO_EMPAQUE\" as varchar)as tipoEmp,cast(\"U_OBSERVACION\" as varchar)as observ,cast(\"U_PUERTO_EMB\" as varchar)as puertEmb,cast(\"U_TRANSP_TERR\" as varchar)as transpTerr, ");
         sb.append(" cast(\"U_Fecha_Arribo_CEDI\" as date)as fArriboCed,cast(\"U_CANT_CONTE\" as int)as cantCont,cast(\"U_CBM\" as varchar)as cbm,cast(\"U_F_CARGA_LISTA\" as date)as fCargaList, ");
         sb.append(" cast(\"U_TIEMPO_TRANSITO\" as varchar)as tiempTrans,cast(\"U_F_SALIDA_PUERTO\" as date)as fSalPuert,cast(\"U_TIEMPO_PUERTO\" as varchar)as tiempPuert, ");
-        sb.append(" cast(\"U_TIEMPO_ENT_COMEX\" as varchar)as tiempEntComex,cast(\"U_F_BOOKING\" as date)as fbooking, cast(\"U_TIEMPO_ESP_BOOKING\" as varchar)as tiempEspBooking,");
+        sb.append(" cast(\"U_TIEMPO_ENT_COMEX\" as int)as tiempEntComex,cast(\"U_F_BOOKING\" as date)as fbooking, cast(\"U_TIEMPO_ESP_BOOKING\" as int)as tiempEspBooking,");
         sb.append(" cast(\"U_F_ESTIM_EMBARQUE\" as date)as fEstimEmb,cast(\"U_F_REC_DOC_FINAL\" as date)as fRecDocFin,cast(\"U_EMISION_BL\" as varchar)as emisBL,cast(\"U_INSPECCION\" as varchar)as insp, ");
         sb.append(" cast(\"U_F_ARRIBO_CEDI_EST\" as date)as fArribCedEst,cast(\"U_NotificationBL\" as varchar)as notifBL,cast(\"U_LIQUID_COMEX\" as varchar)as liqComex,cast(\"U_F_LIQUIDACION\" as date)as fLiq, ");
-        sb.append(" cast(\"U_F_LIB_BL\" as date)as fLibBL,cast(\"U_CONDUCTOR\" as varchar)as conduct,cast(\"U_CEDULA_CON\" as varchar)as cedulCond,cast(\"U_PLACA\" as varchar)as placa, ");
+        sb.append(" cast(\"U_F_LIB_BL\" as date)as fLibBL,cast(\"U_CONDUCTOR\" as varchar)as conduct,cast(\"U_CEDULA_CON\" as int)as cedulCond,cast(\"U_PLACA\" as varchar)as placa, ");
         sb.append(" cast(\"U_CONTENEDOR\" as varchar)as contened,cast(\"U_PRECINTO\" as varchar) as precint,cast(\"U_ENVIAR_DATOS_CON\" as varchar)as enviarDatos,cast(\"U_Vendedor_2\" as varchar)as vendedor ");
         sb.append("from OPOR e ");
         sb.append("where e.\"DocNum\"=");
@@ -223,7 +223,10 @@ public class PurchaseOrderFacade {
         sb.append("\"U_TRANSP\"='");
         sb.append(dto.getTransp());
         sb.append("',\"U_F_EMBARQUE\"='");
-        sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getEmbarc()));
+        try {
+            sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFembarque()));
+        } catch (Exception e) {
+        }
         sb.append("',\"U_TERM_NEG\"='");
         sb.append(dto.getTermNeg());
         sb.append("',\"U_MOD_TRANSP\"='");
@@ -233,48 +236,72 @@ public class PurchaseOrderFacade {
         sb.append("',\"U_TRANSP_TERR\"='");
         sb.append(dto.getTranspTerr());
         sb.append("',\"U_Fecha_Arribo_CEDI\"='");
-        sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFarriboCed()));
+        try {
+            sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFarriboCed()));
+        } catch (Exception e) {
+        }
         sb.append("',\"U_CANT_CONTE\"=");
         sb.append(dto.getCantCont());
         sb.append(",\"U_CBM\"='");
         sb.append(dto.getCbm());
         sb.append("',\"U_F_CARGA_LISTA\"='");
-        sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFcargaList()));
+        try {
+            sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFcargaList()));
+        } catch (Exception e) {
+        }
         sb.append("',\"U_TIEMPO_TRANSITO\"='");
         sb.append(dto.getTiempTrans());
         sb.append("',\"U_F_SALIDA_PUERTO\"='");
-        sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFsalPuert()));
+        try {
+            sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFsalPuert()));
+        } catch (Exception e) {
+        }
         sb.append("',\"U_TIEMPO_PUERTO\"='");
         sb.append(dto.getTiempPuert());
-        sb.append("',\"U_TIEMPO_ENT_COMEX\"='");
+        sb.append("',\"U_TIEMPO_ENT_COMEX\"=");
         sb.append(dto.getTiempEntComex());
-        sb.append("',\"U_F_BOOKING\"='");
-        sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFbooking()));
-        sb.append("',\"U_TIEMPO_ESP_BOOKING\"='");
+        sb.append(",\"U_F_BOOKING\"='");
+        try {
+            sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFbooking()));
+        } catch (Exception e) {
+        }
+        sb.append("',\"U_TIEMPO_ESP_BOOKING\"=");
         sb.append(dto.getTiempEspBooking());
-        sb.append("',\"U_F_ESTIM_EMBARQUE\"='");
-        sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFestimEmb()));
+        sb.append(",\"U_F_ESTIM_EMBARQUE\"='");
+        try {
+            sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFestimEmb()));
+        } catch (Exception e) {
+        }
         sb.append("',\"U_F_REC_DOC_FINAL\"='");
-        sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFrecDocFin()));
+        try {
+            sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFrecDocFin()));
+        } catch (Exception e) {
+        }
         sb.append("',\"U_EMISION_BL\"='");
         sb.append(dto.getEmisBL());
         sb.append("',\"U_INSPECCION\"='");
         sb.append(dto.getInsp());
         sb.append("',\"U_F_ARRIBO_CEDI_EST\"='");
-        sb.append(dto.getFarribCedEst());
+        try {
+            sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFarribCedEst()));
+        } catch (Exception e) {
+        }
         sb.append("',\"U_NotificationBL\"='");
         sb.append(dto.getNotifBL());
         sb.append("',\"U_LIQUID_COMEX\"='");
         sb.append(dto.getLiqComex());
         sb.append("',\"U_F_LIQUIDACION\"='");
-        sb.append(dto.getFliq());
-        sb.append("',\"U_F_LIB_BL\"='");
-        sb.append(dto.getFlibBL());
+        try {
+            sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFliq()));
+            sb.append("',\"U_F_LIB_BL\"='");
+            sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFlibBL()));
+        } catch (Exception e) {
+        }
         sb.append("',\"U_CONDUCTOR\"='");
         sb.append(dto.getConduct());
-        sb.append("',\"U_CEDULA_CON\"='");
+        sb.append("',\"U_CEDULA_CON\"=");
         sb.append(dto.getCedulCond());
-        sb.append("',\"U_PLACA\"='");
+        sb.append(",\"U_PLACA\"='");
         sb.append(dto.getPlaca());
         sb.append("',\"U_CONTENEDOR\"='");
         sb.append(dto.getContened());
@@ -284,12 +311,56 @@ public class PurchaseOrderFacade {
         sb.append(dto.getEnviarDatos());
         sb.append("',\"U_Vendedor_2\"='");
         sb.append(dto.getVendedor());
+        sb.append("',\"U_OBSERVACION\"='");
+        sb.append(dto.getObserv());
         sb.append("' where \"DocNum\"=");
         sb.append(dto.getDocNum());
         try {
-            //persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).executeUpdate();
+            persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).executeUpdate();
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando los campos de usuario para la orden de compra #" + dto.getDocNum() + " en " + companyName);
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando los campos de usuario para la orden de compra #" + dto.getDocNum() + " en " + companyName, e);
         }
+    }
+
+    public List<Object[]> listTimeOperation(Integer year, Integer month, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select f.yy,f.mm,f.nameMes,f.userName,sum(f.timeEstCs)as timeEstCs,sum(f.timeRealCs)as timeRealCs,sum(f.timeEstCt)as timeEstCt,sum(f.timeRealCt)as timeRealCt ");
+        sb.append("from( ");
+        sb.append(" select t.yy,t.mm,t.nameMes,t.userName,sum(t.timeEstCs)as timeEstCs,avg(t.timeRealCs)as timeRealCs,sum(timeEstCt)as timeEstCt,avg(timeRealCt)as timeRealCt ");
+        sb.append(" from( ");
+        sb.append("  select cast(year(pe.\"DocDueDate\")as varchar(5))as yy,cast(m.\"U_Value\" as int)as mm,cast(m.\"U_MonthName\" as varchar(30))as nameMes, ");
+        sb.append("   cast(ifnull(pe.\"U_Vendedor_2\",'SIN ASIGNAR')as varchar(100))as userName,0 as timeEstCs,0 as timeRealCs,8 as timeEstCt, ");
+        sb.append("   cast(ifnull(days_between(pe.\"U_F_ARRIB_PUERTO\",pe.\"U_Fecha_Arribo_CEDI\"),0)as decimal(10,2))as timeRealCt ");
+        sb.append("  from OPOR pe ");
+        sb.append("  inner join \"@SPT_VALUES\" m on month(pe.\"DocDueDate\")=m.\"U_Value\" ");
+        sb.append("  where pe.\"Series\"='48' and pe.\"U_ESTADO_OC\" in('07','09') and pe.\"U_TIPO_EMPAQUE\"<>02 and year(pe.\"DocDueDate\")='");
+        sb.append(year);
+        sb.append("' and m.\"U_Value\"=");
+        sb.append(month);
+        sb.append(" )as t ");
+        sb.append(" group by t.yy,t.mm,t.nameMes,t.userName ");
+        sb.append("union all ");
+        sb.append(" select t.yy,t.mm,t.nameMes,t.userName,sum(t.timeEstCs)as timeEstCs,avg(t.timeRealCs)as timeRealCs,sum(timeEstCt)as timeEstCt,avg(timeRealCt)as timeRealCt ");
+        sb.append(" from( ");
+        sb.append("  select cast(year(pe.\"DocDueDate\")as int)as yy,cast(m.\"U_Value\" as int)as mm,cast(m.\"U_MonthName\" as varchar(30))as nameMes,");
+        sb.append("   cast(ifnull(pe.\"U_Vendedor_2\",'SIN ASIGNAR')as varchar(100))as userName,10 as timeEstCs, ");
+        sb.append("   cast(ifnull(days_between(pe.\"U_F_ARRIB_PUERTO\",pe.\"U_Fecha_Arribo_CEDI\"),0)as decimal(10,2))as timeRealCs,0 as timeEstCt,0 as timeRealCt ");
+        sb.append("  from OPOR pe ");
+        sb.append("  inner join \"@SPT_VALUES\" m on month(pe.\"DocDueDate\")=m.\"U_Value\" ");
+        sb.append("  where pe.\"Series\"='48' and pe.\"U_ESTADO_OC\" in('07','09') and pe.\"U_TIPO_EMPAQUE\"=02 and year(pe.\"DocDueDate\")='");
+        sb.append(year);
+        sb.append("' and m.\"U_Value\"=");
+        sb.append(month);
+        sb.append(" )as t ");
+        sb.append(" group by t.yy,t.mm,t.nameMes,t.userName ");
+        sb.append(")as f ");
+        sb.append("group by f.yy,f.mm,f.nameMes,f.userName");
+        try {
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el tiempo de operacion de comex en " + companyName, e);
+        }
+        return new ArrayList<>();
     }
 }

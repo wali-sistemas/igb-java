@@ -98,9 +98,9 @@ public class ReceptionREST implements Serializable {
         dto.setTiempTrans((String) obj[20]);
         dto.setFsalPuert((Date) obj[21]);
         dto.setTiempPuert((String) obj[22]);
-        dto.setTiempEntComex((String) obj[23]);
+        dto.setTiempEntComex((Integer) obj[23]);
         dto.setFbooking((Date) obj[24]);
-        dto.setTiempEspBooking((String) obj[25]);
+        dto.setTiempEspBooking((Integer) obj[25]);
         dto.setFestimEmb((Date) obj[26]);
         dto.setFrecDocFin((Date) obj[27]);
         dto.setEmisBL((String) obj[28]);
@@ -111,7 +111,7 @@ public class ReceptionREST implements Serializable {
         dto.setFliq((Date) obj[33]);
         dto.setFlibBL((Date) obj[34]);
         dto.setConduct((String) obj[35]);
-        dto.setCedulCond((String) obj[36]);
+        dto.setCedulCond((Integer) obj[36]);
         dto.setPlaca((String) obj[37]);
         dto.setContened((String) obj[38]);
         dto.setPrecint((String) obj[39]);
@@ -131,11 +131,11 @@ public class ReceptionREST implements Serializable {
         CONSOLE.log(Level.INFO, "Inciando actualizacion de campos de usuario para la orden de compra #{0} en {1}", new Object[]{dto.getDocNum(), companyName});
         try {
             poFacade.updateFieldUser(dto, companyName, pruebas);
-            CONSOLE.log(Level.INFO, "Ocurrio un error actualizando los campos de usuario para la orden de compra");
-            return Response.ok(new ResponseDTO(0, "Exito actualizando los campos de usuario para la orden de compra " + dto.getDocNum())).build();
+            CONSOLE.log(Level.INFO, "Exito actualizando los campos de usuario para la orden de compra #{0}", dto.getDocNum());
+            return Response.ok(new ResponseDTO(0, "Exito actualizando los campos de usuario para la orden de compra #" + dto.getDocNum())).build();
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando los campos de usuario para la orden de compra #" + dto.getDocNum());
-            return Response.ok(new ResponseDTO(-1, "Ocurrio un error actualizando los campos de usuario para la orden de compra")).build();
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando los campos de usuario para la orden de compra #" + dto.getDocNum() + " en " + companyName);
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error actualizando los campos de usuario para la orden de compra #" + dto.getDocNum())).build();
         }
     }
 
