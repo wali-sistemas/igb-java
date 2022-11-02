@@ -482,6 +482,58 @@ public class ReportREST implements Serializable {
         return Response.ok(timeOperations).build();
     }
 
+    @GET
+    @Path("comex/time-liquid")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response getTimeLiquid(@HeaderParam("X-Company-Name") String companyName,
+                                  @HeaderParam("X-Pruebas") boolean pruebas,
+                                  @QueryParam("year") Integer year,
+                                  @QueryParam("month") Integer month) {
+        List<Object[]> list = purchaseOrderFacade.listTimeLiquid(year, month, companyName, pruebas);
+        List<TimeLiquidDTO> timeLiquids = new ArrayList<>();
+        for (Object[] obj : list) {
+            TimeLiquidDTO dto = new TimeLiquidDTO();
+            dto.setYear((Integer) obj[0]);
+            dto.setMonth((Integer) obj[1]);
+            dto.setNameMonth((String) obj[2]);
+            dto.setUserName((String) obj[3]);
+            dto.setTimeEstCargaS((Integer) obj[4]);
+            dto.setTimeRealCargaS((BigDecimal) obj[5]);
+            dto.setTimeEstContainer((Integer) obj[6]);
+            dto.setTimeRealContainer((BigDecimal) obj[7]);
+
+            timeLiquids.add(dto);
+        }
+        return Response.ok(timeLiquids).build();
+    }
+
+    @GET
+    @Path("comex/booking")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response getBooking(@HeaderParam("X-Company-Name") String companyName,
+                               @HeaderParam("X-Pruebas") boolean pruebas,
+                               @QueryParam("year") Integer year,
+                               @QueryParam("month") Integer month) {
+        List<Object[]> list = purchaseOrderFacade.listBooking(year, month, companyName, pruebas);
+        List<BookingDTO> bookings = new ArrayList<>();
+        for (Object[] obj : list) {
+            BookingDTO dto = new BookingDTO();
+            dto.setYear((Integer) obj[0]);
+            dto.setMonth((Integer) obj[1]);
+            dto.setNameMonth((String) obj[2]);
+            dto.setUserName((String) obj[3]);
+            dto.setTimeEstCargaS((Integer) obj[4]);
+            dto.setTimeRealCargaS((BigDecimal) obj[5]);
+            dto.setTimeEstContainer((Integer) obj[6]);
+            dto.setTimeRealContainer((BigDecimal) obj[7]);
+
+            bookings.add(dto);
+        }
+        return Response.ok(bookings).build();
+    }
+
     @POST
     @Path("generate-report/")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
