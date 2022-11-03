@@ -11,6 +11,7 @@ import co.igb.dto.UserFieldDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.facade.PurchaseOrderFacade;
 import co.igb.util.IGBUtils;
+import com.google.gson.Gson;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -23,6 +24,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
@@ -77,39 +79,42 @@ public class ReceptionREST implements Serializable {
 
         UserFieldDTO dto = new UserFieldDTO();
         dto.setTransp((String) obj[1]);
-        dto.setFembarque((Date) obj[2]);
+        try {
+            dto.setFembarque(new SimpleDateFormat("yyyy-MM-dd").format(obj[2]));
+            dto.setFdocTras(new SimpleDateFormat("yyyy-MM-dd").format(obj[9]));
+            dto.setFarribPuert(new SimpleDateFormat("yyyy-MM-dd").format(obj[10]));
+            dto.setFarribAlm(new SimpleDateFormat("yyyy-MM-dd").format(obj[11]));
+            dto.setFarriboCed(new SimpleDateFormat("yyyy-MM-dd").format(obj[16]));
+            dto.setFcargaList(new SimpleDateFormat("yyyy-MM-dd").format(obj[19]));
+            dto.setFsalPuert(new SimpleDateFormat("yyyy-MM-dd").format(obj[21]));
+            dto.setFbooking(new SimpleDateFormat("yyyy-MM-dd").format(obj[24]));
+            dto.setFestimEmb(new SimpleDateFormat("yyyy-MM-dd").format(obj[26]));
+            dto.setFrecDocFin(new SimpleDateFormat("yyyy-MM-dd").format(obj[27]));
+            dto.setFarribCedEst(new SimpleDateFormat("yyyy-MM-dd").format(obj[30]));
+            dto.setFliq(new SimpleDateFormat("yyyy-MM-dd").format(obj[33]));
+            dto.setFlibBL(new SimpleDateFormat("yyyy-MM-dd").format(obj[34]));
+        } catch (Exception e) {
+        }
         dto.setTermNeg((String) obj[3]);
         dto.setModTranp((String) obj[4]);
         dto.setPuertDes((String) obj[5]);
         dto.setEstOC((String) obj[6]);
         dto.setEmbarc((String) obj[7]);
         dto.setDocTras((String) obj[8]);
-        dto.setFdocTras((Date) obj[9]);
-        dto.setFarribPuert((Date) obj[10]);
-        dto.setFarribAlm((Date) obj[11]);
         dto.setTipoEmp((String) obj[12]);
         dto.setObserv((String) obj[13]);
         dto.setPuertEmb((String) obj[14]);
         dto.setTranspTerr((String) obj[15]);
-        dto.setFarriboCed((Date) obj[16]);
         dto.setCantCont((int) obj[17]);
         dto.setCbm((String) obj[18]);
-        dto.setFcargaList((Date) obj[19]);
         dto.setTiempTrans((String) obj[20]);
-        dto.setFsalPuert((Date) obj[21]);
         dto.setTiempPuert((String) obj[22]);
         dto.setTiempEntComex((Integer) obj[23]);
-        dto.setFbooking((Date) obj[24]);
         dto.setTiempEspBooking((Integer) obj[25]);
-        dto.setFestimEmb((Date) obj[26]);
-        dto.setFrecDocFin((Date) obj[27]);
         dto.setEmisBL((String) obj[28]);
         dto.setInsp((String) obj[29]);
-        dto.setFarribCedEst((Date) obj[30]);
         dto.setNotifBL((String) obj[31]);
         dto.setLiqComex((String) obj[32]);
-        dto.setFliq((Date) obj[33]);
-        dto.setFlibBL((Date) obj[34]);
         dto.setConduct((String) obj[35]);
         dto.setCedulCond((Integer) obj[36]);
         dto.setPlaca((String) obj[37]);
@@ -129,11 +134,15 @@ public class ReceptionREST implements Serializable {
                                    @HeaderParam("X-Company-Name") String companyName,
                                    @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Inciando actualizacion de campos de usuario para la orden de compra #{0} en {1}", new Object[]{dto.getDocNum(), companyName});
-        try {
-            poFacade.updateFieldUser(dto, companyName, pruebas);
+
+        Gson gson = new Gson();
+        String json = gson.toJson(dto);
+        CONSOLE.log(Level.INFO, json);
+
+        if (poFacade.updateFieldUser(dto, companyName, pruebas)) {
             CONSOLE.log(Level.INFO, "Exito actualizando los campos de usuario para la orden de compra #{0}", dto.getDocNum());
             return Response.ok(new ResponseDTO(0, "Exito actualizando los campos de usuario para la orden de compra #" + dto.getDocNum())).build();
-        } catch (Exception e) {
+        } else {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando los campos de usuario para la orden de compra #" + dto.getDocNum() + " en " + companyName);
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error actualizando los campos de usuario para la orden de compra #" + dto.getDocNum())).build();
         }

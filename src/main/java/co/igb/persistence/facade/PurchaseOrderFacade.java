@@ -13,7 +13,6 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -217,16 +216,13 @@ public class PurchaseOrderFacade {
         return null;
     }
 
-    public void updateFieldUser(UserFieldDTO dto, String companyName, boolean testing) {
+    public boolean updateFieldUser(UserFieldDTO dto, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("update OPOR set ");
         sb.append("\"U_TRANSP\"='");
         sb.append(dto.getTransp());
         sb.append("',\"U_F_EMBARQUE\"='");
-        try {
-            sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFembarque()));
-        } catch (Exception e) {
-        }
+        sb.append(dto.getFembarque());
         sb.append("',\"U_TERM_NEG\"='");
         sb.append(dto.getTermNeg());
         sb.append("',\"U_MOD_TRANSP\"='");
@@ -236,67 +232,43 @@ public class PurchaseOrderFacade {
         sb.append("',\"U_TRANSP_TERR\"='");
         sb.append(dto.getTranspTerr());
         sb.append("',\"U_Fecha_Arribo_CEDI\"='");
-        try {
-            sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFarriboCed()));
-        } catch (Exception e) {
-        }
+        sb.append(dto.getFarriboCed());
         sb.append("',\"U_CANT_CONTE\"=");
         sb.append(dto.getCantCont());
         sb.append(",\"U_CBM\"='");
         sb.append(dto.getCbm());
         sb.append("',\"U_F_CARGA_LISTA\"='");
-        try {
-            sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFcargaList()));
-        } catch (Exception e) {
-        }
+        sb.append(dto.getFcargaList());
         sb.append("',\"U_TIEMPO_TRANSITO\"='");
         sb.append(dto.getTiempTrans());
         sb.append("',\"U_F_SALIDA_PUERTO\"='");
-        try {
-            sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFsalPuert()));
-        } catch (Exception e) {
-        }
+        sb.append(dto.getFsalPuert());
         sb.append("',\"U_TIEMPO_PUERTO\"='");
         sb.append(dto.getTiempPuert());
         sb.append("',\"U_TIEMPO_ENT_COMEX\"=");
         sb.append(dto.getTiempEntComex());
         sb.append(",\"U_F_BOOKING\"='");
-        try {
-            sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFbooking()));
-        } catch (Exception e) {
-        }
+        sb.append(dto.getFbooking());
         sb.append("',\"U_TIEMPO_ESP_BOOKING\"=");
         sb.append(dto.getTiempEspBooking());
         sb.append(",\"U_F_ESTIM_EMBARQUE\"='");
-        try {
-            sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFestimEmb()));
-        } catch (Exception e) {
-        }
+        sb.append(dto.getFestimEmb());
         sb.append("',\"U_F_REC_DOC_FINAL\"='");
-        try {
-            sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFrecDocFin()));
-        } catch (Exception e) {
-        }
+        sb.append(dto.getFrecDocFin());
         sb.append("',\"U_EMISION_BL\"='");
         sb.append(dto.getEmisBL());
         sb.append("',\"U_INSPECCION\"='");
         sb.append(dto.getInsp());
         sb.append("',\"U_F_ARRIBO_CEDI_EST\"='");
-        try {
-            sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFarribCedEst()));
-        } catch (Exception e) {
-        }
+        sb.append(dto.getFarribCedEst());
         sb.append("',\"U_NotificationBL\"='");
         sb.append(dto.getNotifBL());
         sb.append("',\"U_LIQUID_COMEX\"='");
         sb.append(dto.getLiqComex());
         sb.append("',\"U_F_LIQUIDACION\"='");
-        try {
-            sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFliq()));
-            sb.append("',\"U_F_LIB_BL\"='");
-            sb.append(new SimpleDateFormat("yyyy-MM-dd").format(dto.getFlibBL()));
-        } catch (Exception e) {
-        }
+        sb.append(dto.getFliq());
+        sb.append("',\"U_F_LIB_BL\"='");
+        sb.append(dto.getFlibBL());
         sb.append("',\"U_CONDUCTOR\"='");
         sb.append(dto.getConduct());
         sb.append("',\"U_CEDULA_CON\"=");
@@ -313,13 +285,23 @@ public class PurchaseOrderFacade {
         sb.append(dto.getVendedor());
         sb.append("',\"U_OBSERVACION\"='");
         sb.append(dto.getObserv());
+        sb.append("',\"U_F_ARRIB_PUERTO\"='");
+        sb.append(dto.getFarribPuert());
+        sb.append("', \"U_F_ARRIB_ALMA\"='");
+        sb.append(dto.getFarribAlm());
         sb.append("' where \"DocNum\"=");
         sb.append(dto.getDocNum());
+
+        CONSOLE.log(Level.INFO, sb.toString());
         try {
             persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).executeUpdate();
+            return true;
+        } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando los campos de usuario para la orden de compra #" + dto.getDocNum() + " en " + companyName, e);
+            return false;
         }
+        return false;
     }
 
     public List<Object[]> listTimeOperation(Integer year, Integer month, String companyName, boolean testing) {
