@@ -2,47 +2,45 @@ package co.igb.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.util.Date;
-
 /**
  * @author jguisao
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserFieldDTO {
     private String transp;
-    private Date fembarque;
+    private String fembarque;
     private String termNeg;
     private String modTranp;
     private String puertDes;
     private String estOC;
     private String embarc;
     private String docTras;
-    private Date fdocTras;
-    private Date farribPuert;
-    private Date farribAlm;
+    private String fdocTras;
+    private String farribPuert;
+    private String farribAlm;
     private String tipoEmp;
     private String observ;
     private String puertEmb;
     private String transpTerr;
-    private Date farriboCed;
+    private String farriboCed;
     private Integer cantCont;
     private String cbm;
-    private Date fcargaList;
+    private String fcargaList;
     private String tiempTrans;
-    private Date fsalPuert;
+    private String fsalPuert;
     private String tiempPuert;
     private Integer tiempEntComex;
-    private Date fbooking;
+    private String fbooking;
     private Integer tiempEspBooking;
-    private Date festimEmb;
-    private Date frecDocFin;
+    private String festimEmb;
+    private String frecDocFin;
     private String emisBL;
     private String insp;
-    private Date farribCedEst;
+    private String farribCedEst;
     private String notifBL;
     private String liqComex;
-    private Date fliq;
-    private Date flibBL;
+    private String fliq;
+    private String flibBL;
     private String conduct;
     private Integer cedulCond;
     private String placa;
@@ -55,7 +53,7 @@ public class UserFieldDTO {
     public UserFieldDTO() {
     }
 
-    public UserFieldDTO(String transp, Date fembarque, String termNeg, String modTranp, String puertDes, String estOC, String embarc, String docTras, Date fdocTras, Date farribPuert, Date farribAlm, String tipoEmp, String observ, String puertEmb, String transpTerr, Date farriboCed, Integer cantCont, String cbm, Date fcargaList, String tiempTrans, Date fsalPuert, String tiempPuert, Integer tiempEntComex, Date fbooking, Integer tiempEspBooking, Date festimEmb, Date frecDocFin, String emisBL, String insp, Date farribCedEst, String notifBL, String liqComex, Date fliq, Date flibBL, String conduct, Integer cedulCond, String placa, String contened, String precint, String enviarDatos, String vendedor, String docNum) {
+    public UserFieldDTO(String transp, String fembarque, String termNeg, String modTranp, String puertDes, String estOC, String embarc, String docTras, String fdocTras, String farribPuert, String farribAlm, String tipoEmp, String observ, String puertEmb, String transpTerr, String farriboCed, Integer cantCont, String cbm, String fcargaList, String tiempTrans, String fsalPuert, String tiempPuert, Integer tiempEntComex, String fbooking, Integer tiempEspBooking, String festimEmb, String frecDocFin, String emisBL, String insp, String farribCedEst, String notifBL, String liqComex, String fliq, String flibBL, String conduct, Integer cedulCond, String placa, String contened, String precint, String enviarDatos, String vendedor, String docNum) {
         this.transp = transp;
         this.fembarque = fembarque;
         this.termNeg = termNeg;
@@ -108,11 +106,11 @@ public class UserFieldDTO {
         this.transp = transp;
     }
 
-    public Date getFembarque() {
+    public String getFembarque() {
         return fembarque;
     }
 
-    public void setFembarque(Date fembarque) {
+    public void setFembarque(String fembarque) {
         this.fembarque = fembarque;
     }
 
@@ -164,27 +162,27 @@ public class UserFieldDTO {
         this.docTras = docTras;
     }
 
-    public Date getFdocTras() {
+    public String getFdocTras() {
         return fdocTras;
     }
 
-    public void setFdocTras(Date fdocTras) {
+    public void setFdocTras(String fdocTras) {
         this.fdocTras = fdocTras;
     }
 
-    public Date getFarribPuert() {
+    public String getFarribPuert() {
         return farribPuert;
     }
 
-    public void setFarribPuert(Date farribPuert) {
+    public void setFarribPuert(String farribPuert) {
         this.farribPuert = farribPuert;
     }
 
-    public Date getFarribAlm() {
+    public String getFarribAlm() {
         return farribAlm;
     }
 
-    public void setFarribAlm(Date farribAlm) {
+    public void setFarribAlm(String farribAlm) {
         this.farribAlm = farribAlm;
     }
 
@@ -220,11 +218,11 @@ public class UserFieldDTO {
         this.transpTerr = transpTerr;
     }
 
-    public Date getFarriboCed() {
+    public String getFarriboCed() {
         return farriboCed;
     }
 
-    public void setFarriboCed(Date farriboCed) {
+    public void setFarriboCed(String farriboCed) {
         this.farriboCed = farriboCed;
     }
 
@@ -244,11 +242,11 @@ public class UserFieldDTO {
         this.cbm = cbm;
     }
 
-    public Date getFcargaList() {
+    public String getFcargaList() {
         return fcargaList;
     }
 
-    public void setFcargaList(Date fcargaList) {
+    public void setFcargaList(String fcargaList) {
         this.fcargaList = fcargaList;
     }
 
@@ -260,11 +258,11 @@ public class UserFieldDTO {
         this.tiempTrans = tiempTrans;
     }
 
-    public Date getFsalPuert() {
+    public String getFsalPuert() {
         return fsalPuert;
     }
 
-    public void setFsalPuert(Date fsalPuert) {
+    public void setFsalPuert(String fsalPuert) {
         this.fsalPuert = fsalPuert;
     }
 
@@ -284,11 +282,11 @@ public class UserFieldDTO {
         this.tiempEntComex = tiempEntComex;
     }
 
-    public Date getFbooking() {
+    public String getFbooking() {
         return fbooking;
     }
 
-    public void setFbooking(Date fbooking) {
+    public void setFbooking(String fbooking) {
         this.fbooking = fbooking;
     }
 
@@ -300,19 +298,19 @@ public class UserFieldDTO {
         this.tiempEspBooking = tiempEspBooking;
     }
 
-    public Date getFestimEmb() {
+    public String getFestimEmb() {
         return festimEmb;
     }
 
-    public void setFestimEmb(Date festimEmb) {
+    public void setFestimEmb(String festimEmb) {
         this.festimEmb = festimEmb;
     }
 
-    public Date getFrecDocFin() {
+    public String getFrecDocFin() {
         return frecDocFin;
     }
 
-    public void setFrecDocFin(Date frecDocFin) {
+    public void setFrecDocFin(String frecDocFin) {
         this.frecDocFin = frecDocFin;
     }
 
@@ -332,11 +330,11 @@ public class UserFieldDTO {
         this.insp = insp;
     }
 
-    public Date getFarribCedEst() {
+    public String getFarribCedEst() {
         return farribCedEst;
     }
 
-    public void setFarribCedEst(Date farribCedEst) {
+    public void setFarribCedEst(String farribCedEst) {
         this.farribCedEst = farribCedEst;
     }
 
@@ -356,19 +354,19 @@ public class UserFieldDTO {
         this.liqComex = liqComex;
     }
 
-    public Date getFliq() {
+    public String getFliq() {
         return fliq;
     }
 
-    public void setFliq(Date fliq) {
+    public void setFliq(String fliq) {
         this.fliq = fliq;
     }
 
-    public Date getFlibBL() {
+    public String getFlibBL() {
         return flibBL;
     }
 
-    public void setFlibBL(Date flibBL) {
+    public void setFlibBL(String flibBL) {
         this.flibBL = flibBL;
     }
 
