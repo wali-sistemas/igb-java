@@ -81,17 +81,49 @@ public class ReceptionREST implements Serializable {
         dto.setTransp((String) obj[1]);
         try {
             dto.setFembarque(new SimpleDateFormat("yyyy-MM-dd").format(obj[2]));
+        } catch (Exception e) {
+        }
+        try {
             dto.setFdocTras(new SimpleDateFormat("yyyy-MM-dd").format(obj[9]));
+        } catch (Exception e) {
+        }
+        try {
             dto.setFarribPuert(new SimpleDateFormat("yyyy-MM-dd").format(obj[10]));
-            dto.setFarribAlm(new SimpleDateFormat("yyyy-MM-dd").format(obj[11]));
+        } catch (Exception e) {
+        }
+        try {
             dto.setFarriboCed(new SimpleDateFormat("yyyy-MM-dd").format(obj[16]));
+        } catch (Exception e) {
+        }
+        try {
             dto.setFcargaList(new SimpleDateFormat("yyyy-MM-dd").format(obj[19]));
+        } catch (Exception e) {
+        }
+        try {
             dto.setFsalPuert(new SimpleDateFormat("yyyy-MM-dd").format(obj[21]));
+        } catch (Exception e) {
+        }
+        try {
             dto.setFbooking(new SimpleDateFormat("yyyy-MM-dd").format(obj[24]));
+        } catch (Exception e) {
+        }
+        try {
             dto.setFestimEmb(new SimpleDateFormat("yyyy-MM-dd").format(obj[26]));
+        } catch (Exception e) {
+        }
+        try {
             dto.setFrecDocFin(new SimpleDateFormat("yyyy-MM-dd").format(obj[27]));
+        } catch (Exception e) {
+        }
+        try {
             dto.setFarribCedEst(new SimpleDateFormat("yyyy-MM-dd").format(obj[30]));
+        } catch (Exception e) {
+        }
+        try {
             dto.setFliq(new SimpleDateFormat("yyyy-MM-dd").format(obj[33]));
+        } catch (Exception e) {
+        }
+        try {
             dto.setFlibBL(new SimpleDateFormat("yyyy-MM-dd").format(obj[34]));
         } catch (Exception e) {
         }
@@ -123,7 +155,10 @@ public class ReceptionREST implements Serializable {
         dto.setEnviarDatos((String) obj[40]);
         dto.setVendedor((String) obj[41]);
 
-        return Response.ok(dto).build();
+        return Response.ok(dto).
+
+                build();
+
     }
 
     @PUT
