@@ -155,10 +155,7 @@ public class ReceptionREST implements Serializable {
         dto.setEnviarDatos((String) obj[40]);
         dto.setVendedor((String) obj[41]);
 
-        return Response.ok(dto).
-
-                build();
-
+        return Response.ok(dto).build();
     }
 
     @PUT
