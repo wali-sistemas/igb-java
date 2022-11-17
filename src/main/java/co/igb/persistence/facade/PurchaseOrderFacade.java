@@ -203,7 +203,8 @@ public class PurchaseOrderFacade {
         sb.append(" cast(\"U_F_ESTIM_EMBARQUE\" as date)as fEstimEmb,cast(\"U_F_REC_DOC_FINAL\" as date)as fRecDocFin,cast(\"U_EMISION_BL\" as varchar)as emisBL,cast(\"U_INSPECCION\" as varchar)as insp, ");
         sb.append(" cast(\"U_F_ARRIBO_CEDI_EST\" as date)as fArribCedEst,cast(\"U_NotificationBL\" as varchar)as notifBL,cast(\"U_LIQUID_COMEX\" as varchar)as liqComex,cast(\"U_F_LIQUIDACION\" as date)as fLiq, ");
         sb.append(" cast(\"U_F_LIB_BL\" as date)as fLibBL,cast(\"U_CONDUCTOR\" as varchar)as conduct,ifnull(cast(\"U_CEDULA_CON\" as int),0)as cedulCond,cast(\"U_PLACA\" as varchar)as placa, ");
-        sb.append(" cast(\"U_CONTENEDOR\" as varchar)as contened,cast(\"U_PRECINTO\" as varchar) as precint,cast(\"U_ENVIAR_DATOS_CON\" as varchar)as enviarDatos,cast(\"U_Vendedor_2\" as varchar)as vendedor ");
+        sb.append(" cast(\"U_CONTENEDOR\" as varchar)as contened,cast(\"U_PRECINTO\" as varchar) as precint,cast(\"U_ENVIAR_DATOS_CON\" as varchar)as enviarDatos,cast(\"U_Vendedor_2\" as varchar)as vendedor, ");
+        sb.append(" cast(\"DocDate\" as date)as DocDate ");
         sb.append("from OPOR e ");
         sb.append("where e.\"DocNum\"=");
         sb.append(docNum);
@@ -289,6 +290,18 @@ public class PurchaseOrderFacade {
         sb.append(dto.getFarribPuert());
         sb.append("', \"U_F_ARRIB_ALMA\"='");
         sb.append(dto.getFarribAlm());
+        sb.append("', \"U_DOC_TRANSP\"='");
+        sb.append(dto.getDocTras());
+        sb.append("', \"U_ESTADO_OC\"='");
+        sb.append(dto.getEstOC());
+        sb.append("', \"U_EMBARCADO\"='");
+        sb.append(dto.getEmbarc());
+        sb.append("', \"U_F_DOC_TRANSP\"='");
+        sb.append(dto.getFdocTras());
+        sb.append("', \"U_TIPO_EMPAQUE\"='");
+        sb.append(dto.getTipoEmp());
+        sb.append("', \"U_PUERTO_EMB\"='");
+        sb.append(dto.getPuertEmb());
         sb.append("' where \"DocNum\"=");
         sb.append(dto.getDocNum());
 

@@ -26,6 +26,7 @@ public class GuiaOlaDTO {
     private String correod;
     private String adicionales;
     private String cartaporte;
+    private String tipoenvio;
 
     public GuiaOlaDTO() {
     }
@@ -204,5 +205,13 @@ public class GuiaOlaDTO {
 
     public void setCartaporte(String cartaporte) {
         this.cartaporte = cartaporte;
+    }
+
+    public String getTipoenvio() {
+        return tipoenvio;
+    }
+
+    public void setTipoenvio(String tipoenvio) {
+        this.tipoenvio = tipoenvio;
     }
 }

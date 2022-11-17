@@ -49,11 +49,12 @@ public class UserFieldDTO {
     private String enviarDatos;
     private String vendedor;
     private String docNum;
+    private String docDate;
 
     public UserFieldDTO() {
     }
 
-    public UserFieldDTO(String transp, String fembarque, String termNeg, String modTranp, String puertDes, String estOC, String embarc, String docTras, String fdocTras, String farribPuert, String farribAlm, String tipoEmp, String observ, String puertEmb, String transpTerr, String farriboCed, Integer cantCont, String cbm, String fcargaList, String tiempTrans, String fsalPuert, String tiempPuert, Integer tiempEntComex, String fbooking, Integer tiempEspBooking, String festimEmb, String frecDocFin, String emisBL, String insp, String farribCedEst, String notifBL, String liqComex, String fliq, String flibBL, String conduct, Integer cedulCond, String placa, String contened, String precint, String enviarDatos, String vendedor, String docNum) {
+    public UserFieldDTO(String transp, String fembarque, String termNeg, String modTranp, String puertDes, String estOC, String embarc, String docTras, String fdocTras, String farribPuert, String farribAlm, String tipoEmp, String observ, String puertEmb, String transpTerr, String farriboCed, Integer cantCont, String cbm, String fcargaList, String tiempTrans, String fsalPuert, String tiempPuert, Integer tiempEntComex, String fbooking, Integer tiempEspBooking, String festimEmb, String frecDocFin, String emisBL, String insp, String farribCedEst, String notifBL, String liqComex, String fliq, String flibBL, String conduct, Integer cedulCond, String placa, String contened, String precint, String enviarDatos, String vendedor, String docNum, String docDate) {
         this.transp = transp;
         this.fembarque = fembarque;
         this.termNeg = termNeg;
@@ -96,6 +97,7 @@ public class UserFieldDTO {
         this.enviarDatos = enviarDatos;
         this.vendedor = vendedor;
         this.docNum = docNum;
+        this.docDate = docDate;
     }
 
     public String getTransp() {
@@ -434,43 +436,51 @@ public class UserFieldDTO {
         this.docNum = docNum;
     }
 
+    public String getDocDate() {
+        return docDate;
+    }
+
+    public void setDocDate(String docDate) {
+        this.docDate = docDate;
+    }
+
     @Override
     public String toString() {
         return "UserFieldDTO{" +
                 "transp='" + transp + '\'' +
-                ", fembarque=" + fembarque +
+                ", fembarque='" + fembarque + '\'' +
                 ", termNeg='" + termNeg + '\'' +
                 ", modTranp='" + modTranp + '\'' +
                 ", puertDes='" + puertDes + '\'' +
                 ", estOC='" + estOC + '\'' +
                 ", embarc='" + embarc + '\'' +
                 ", docTras='" + docTras + '\'' +
-                ", fdocTras=" + fdocTras +
-                ", farribPuert=" + farribPuert +
-                ", farribAlm=" + farribAlm +
+                ", fdocTras='" + fdocTras + '\'' +
+                ", farribPuert='" + farribPuert + '\'' +
+                ", farribAlm='" + farribAlm + '\'' +
                 ", tipoEmp='" + tipoEmp + '\'' +
                 ", observ='" + observ + '\'' +
                 ", puertEmb='" + puertEmb + '\'' +
                 ", transpTerr='" + transpTerr + '\'' +
-                ", farriboCed=" + farriboCed +
+                ", farriboCed='" + farriboCed + '\'' +
                 ", cantCont=" + cantCont +
                 ", cbm='" + cbm + '\'' +
-                ", fcargaList=" + fcargaList +
+                ", fcargaList='" + fcargaList + '\'' +
                 ", tiempTrans='" + tiempTrans + '\'' +
-                ", fsalPuert=" + fsalPuert +
+                ", fsalPuert='" + fsalPuert + '\'' +
                 ", tiempPuert='" + tiempPuert + '\'' +
                 ", tiempEntComex=" + tiempEntComex +
-                ", fbooking=" + fbooking +
+                ", fbooking='" + fbooking + '\'' +
                 ", tiempEspBooking=" + tiempEspBooking +
-                ", festimEmb=" + festimEmb +
-                ", frecDocFin=" + frecDocFin +
+                ", festimEmb='" + festimEmb + '\'' +
+                ", frecDocFin='" + frecDocFin + '\'' +
                 ", emisBL='" + emisBL + '\'' +
                 ", insp='" + insp + '\'' +
-                ", farribCedEst=" + farribCedEst +
+                ", farribCedEst='" + farribCedEst + '\'' +
                 ", notifBL='" + notifBL + '\'' +
                 ", liqComex='" + liqComex + '\'' +
-                ", fliq=" + fliq +
-                ", flibBL=" + flibBL +
+                ", fliq='" + fliq + '\'' +
+                ", flibBL='" + flibBL + '\'' +
                 ", conduct='" + conduct + '\'' +
                 ", cedulCond=" + cedulCond +
                 ", placa='" + placa + '\'' +
@@ -479,6 +489,7 @@ public class UserFieldDTO {
                 ", enviarDatos='" + enviarDatos + '\'' +
                 ", vendedor='" + vendedor + '\'' +
                 ", docNum='" + docNum + '\'' +
+                ", docDate='" + docDate + '\'' +
                 '}';
     }
 }

@@ -24,6 +24,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -127,6 +128,10 @@ public class ReceptionREST implements Serializable {
             dto.setFlibBL(new SimpleDateFormat("yyyy-MM-dd").format(obj[34]));
         } catch (Exception e) {
         }
+        try {
+            dto.setDocDate(new SimpleDateFormat("yyyy-MM-dd").format(obj[42]));
+        } catch (Exception e) {
+        }
         dto.setTermNeg((String) obj[3]);
         dto.setModTranp((String) obj[4]);
         dto.setPuertDes((String) obj[5]);
@@ -164,8 +169,18 @@ public class ReceptionREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     public Response updateOrderUDF(UserFieldDTO dto,
                                    @HeaderParam("X-Company-Name") String companyName,
-                                   @HeaderParam("X-Pruebas") boolean pruebas) {
+                                   @HeaderParam("X-Pruebas") boolean pruebas) throws ParseException {
         CONSOLE.log(Level.INFO, "Inciando actualizacion de campos de usuario para la orden de compra #{0} en {1}", new Object[]{dto.getDocNum(), companyName});
+
+        Long daysTiempTrans = calculateTime(dto.getFembarque(), dto.getFarriboCed());
+        Long daysTiempPuer = calculateTime(dto.getFarribPuert(), dto.getFsalPuert());
+        Long daysTiempEntComex = calculateTime(dto.getDocDate(), dto.getFcargaList());
+        Long daysTiempEspBooking = calculateTime(dto.getFcargaList(), dto.getFbooking());
+
+        dto.setTiempTrans(daysTiempTrans.toString());
+        dto.setTiempPuert(daysTiempPuer.toString());
+        dto.setTiempEntComex(daysTiempEntComex.intValue());
+        dto.setTiempEspBooking(daysTiempEspBooking.intValue());
 
         Gson gson = new Gson();
         String json = gson.toJson(dto);
@@ -184,11 +199,11 @@ public class ReceptionREST implements Serializable {
     @Path("receive-items")
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    public Response receiveAndClose(
-            PurchaseOrderDTO order,
-            @HeaderParam("X-Company-Name") String companyName,
-            @HeaderParam("X-Warehouse-Code") String warehouseCode) {
+    public Response receiveAndClose(PurchaseOrderDTO order,
+                                    @HeaderParam("X-Company-Name") String companyName,
+                                    @HeaderParam("X-Warehouse-Code") String warehouseCode) {
         CONSOLE.log(Level.INFO, "Generando entrada de mercancia con los siguientes datos {0}", order);
+
         Document document = new Document();
         document.setCardCode(order.getCardCode());
         document.setSeries(Long.parseLong(getPropertyValue("igb.purchase.delivery.note.series", companyName)));
@@ -199,7 +214,6 @@ public class ReceptionREST implements Serializable {
         document.setFederalTaxID(order.getCardCode().substring(1));
         document.setDocDate(dateToXML(new Date()));
         document.setDocDueDate(dateToXML(new Date()));
-
         document.setUTRANSP(order.getUtransp());
         document.setUDESP(order.getUdesp());
         document.setUFEMBARQUE(dateToXML(order.getUfembarque()));
@@ -326,8 +340,26 @@ public class ReceptionREST implements Serializable {
         header.setSessionID(sessionId);
         CONSOLE.log(Level.INFO, "Creando entrada de mercancia en SAP con sessionId [{0}]", sessionId);
         AddResponse response = service.getPurchaseDeliveryNotesServiceSoap12().add(add, header);
-        return response.getDocumentParams().getDocEntry();
 
+        return response.getDocumentParams().getDocEntry();
+    }
+
+    private Long calculateTime(String dateStart, String dateEnd) throws ParseException {
+        if (dateStart == null || dateEnd == null) {
+            return 0l;
+        } else if (!dateStart.isEmpty() && !dateEnd.isEmpty()) {
+            Date fecha1 = new SimpleDateFormat("yyyy-MM-dd").parse(dateStart);
+            Date fecha2 = new SimpleDateFormat("yyyy-MM-dd").parse(dateEnd);
+            Long startTime = fecha1.getTime();
+            Long endTime = fecha2.getTime();
+            Long dayStart = (long) Math.floor(startTime / (1000 * 60 * 60 * 24)); // convertimos a dias, para que no afecten cambios de hora
+            Long dayEnd = (long) Math.floor(endTime / (1000 * 60 * 60 * 24)); // convertimos a dias, para que no afecten cambios de hora
+            Long days = dayEnd - dayStart;
+
+            return days;
+        } else {
+            return 0l;
+        }
     }
 
     private XMLGregorianCalendar dateToXML(Date date) {
