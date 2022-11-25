@@ -659,7 +659,7 @@ public class StockTransferREST implements Serializable {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error retornando la respuesta de la creacion del traslado. ", e.getMessage());
             return -1l;
         }
-        return res.getDocEntry();
+        return res.getDocNum();
     }
 
     private Long adjustMissingQuantity(SingleItemTransferDTO itemTransfer, Integer expectedQuantity, String companyName, String warehouseCode, String employeeName, boolean pruebas) throws Exception {
@@ -798,12 +798,12 @@ public class StockTransferREST implements Serializable {
         } catch (Exception ignored) {
         }
         //2. Registrar documento
-        Long docEntry = -1L;
+        Long docNum = -1L;
         String errorMessage = null;
         if (sessionId != null) {
             try {
-                docEntry = createTransferDocument(document, sessionId);
-                CONSOLE.log(Level.INFO, "Se creo la transferencia docEntry={0}", docEntry);
+                docNum = createTransferDocument(document, sessionId);
+                CONSOLE.log(Level.INFO, "Se creo la transferencia docNum={0}", docNum);
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
                 errorMessage = e.getMessage();
@@ -820,9 +820,9 @@ public class StockTransferREST implements Serializable {
             }
         }
         //4. Validar y retornar
-        if (docEntry > 0) {
+        if (docNum > 0) {
             try {
-                return Response.ok(new ResponseDTO(0, docEntry)).build();
+                return Response.ok(new ResponseDTO(0, docNum)).build();
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "There was an error recording the operation to the MySQL database. ", e);
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ResponseDTO(-1, "Ocurrió un error al procesar la solicitud. Valida si el traslado se realizó correctamente en SAP y reinicia sesión en Wali")).build();
@@ -909,12 +909,12 @@ public class StockTransferREST implements Serializable {
         } catch (Exception ignored) {
         }
         //2. Registrar documento
-        Long docEntry = -1L;
+        Long docNum = -1L;
         String errorMessage = null;
         if (sessionId != null) {
             try {
-                docEntry = createTransferDocument(document, sessionId);
-                CONSOLE.log(Level.INFO, "Se creo el traslado docEntry={0}", docEntry);
+                docNum = createTransferDocument(document, sessionId);
+                CONSOLE.log(Level.INFO, "Se creo el traslado docNum={0}", docNum);
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el traslado. ", e);
                 errorMessage = e.getMessage();
@@ -931,9 +931,9 @@ public class StockTransferREST implements Serializable {
             }
         }
         //4. Validar y retornar
-        if (docEntry > 0) {
+        if (docNum > 0) {
             try {
-                return Response.ok(new ResponseDTO(0, docEntry)).build();
+                return Response.ok(new ResponseDTO(0, docNum)).build();
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "There was an error recording the operation to the MySQL database. ", e);
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ResponseDTO(-1, "Ocurrió un error al procesar la solicitud. Valida si el traslado entre almacenes se realizó correctamente en SAP y reinicia sesión en Wali")).build();

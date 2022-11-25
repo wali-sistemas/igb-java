@@ -585,6 +585,12 @@ public class ReportREST implements Serializable {
                 } else {
                     return new ResponseDTO(-2, "Las ordenes no corresponde al mismo cliente.");
                 }
+            case "transferStock":
+                reportName = dto.getId() + ".pdf";
+                report = JasperCompileManager.compileReportToFile(applicationBean.obtenerValorPropiedad("url.jasper") + dto.getCompanyName() + File.separator + dto.getDocumento()
+                        + File.separator + dto.getDocumento() + ".jrxml");
+                rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + dto.getDocumento() + File.separator + reportName;
+                break;
             default:
                 reportName = "";
                 break;
@@ -598,7 +604,8 @@ public class ReportREST implements Serializable {
                 //cn = "java:/IGBDS";
                 cn = "java:/HANAIGBDS";
             } else {
-                cn = "java:/VARROCDS";
+                //cn = "java:/VARROCDS";
+                cn = "HANAVARROCPU";
             }
         } else {
             cn = "java:/MySQLDS";
