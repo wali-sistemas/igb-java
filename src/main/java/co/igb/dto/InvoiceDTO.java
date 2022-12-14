@@ -22,11 +22,12 @@ public class InvoiceDTO {
     private String codCity;
     private BigDecimal valStandDecl;
     private Integer unidEmpStand;
+    private String rexpedition;
 
     public InvoiceDTO() {
     }
 
-    public InvoiceDTO(Date docDate, Integer box, String docNum, String cardCode, String cardName, String transport, String street, String depart, String city, String codCity, BigDecimal valStandDecl, Integer unidEmpStand) {
+    public InvoiceDTO(Date docDate, Integer box, String docNum, String cardCode, String cardName, String transport, String street, String depart, String city, String codCity, BigDecimal valStandDecl, Integer unidEmpStand, String rexpedition) {
         this.docDate = docDate;
         this.box = box;
         this.docNum = docNum;
@@ -39,6 +40,7 @@ public class InvoiceDTO {
         this.codCity = codCity;
         this.valStandDecl = valStandDecl;
         this.unidEmpStand = unidEmpStand;
+        this.rexpedition = rexpedition;
     }
 
     public Date getDocDate() {
@@ -137,6 +139,14 @@ public class InvoiceDTO {
         this.unidEmpStand = unidEmpStand;
     }
 
+    public String getRexpedition() {
+        return rexpedition;
+    }
+
+    public void setRexpedition(String rexpedition) {
+        this.rexpedition = rexpedition;
+    }
+
     @Override
     public String toString() {
         return "InvoiceDTO{" +
@@ -152,6 +162,7 @@ public class InvoiceDTO {
                 ", codCity='" + codCity + '\'' +
                 ", valStandDecl=" + valStandDecl +
                 ", unidEmpStand=" + unidEmpStand +
+                ", rexpedition='" + rexpedition + '\'' +
                 '}';
     }
 }
