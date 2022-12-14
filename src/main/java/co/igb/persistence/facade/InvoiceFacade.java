@@ -59,7 +59,7 @@ public class InvoiceFacade {
         sb.append(" cast(f.\"CardCode\" as varchar(20))as CardCode,cast(f.\"CardName\" as varchar(100))as CardName, ");
         sb.append(" cast(t.\"Name\" as varchar(15))as Transport,cast(d.\"StreetS\" as varchar(100))as Street, ");
         sb.append(" cast(l.\"Name\" as varchar(50))as Depart,cast(d.\"CityS\" as varchar(50))as City,cast(d.\"BlockS\" as varchar(20))as CodCity, ");
-        sb.append(" cast(v.\"U_MIN_SEG\" as numeric(18,2))as ValStandDecl,cast(v.\"U_MIN_FLE\" as int)as UnidEmpStand ");
+        sb.append(" cast(v.\"U_MIN_SEG\" as numeric(18,2))as ValStandDecl,cast(v.\"U_MIN_FLE\" as int)as UnidEmpStand,cast(v.\"U_REXPEDICION\" as varchar(1))as Rexp ");
         sb.append("from OINV f ");
         sb.append("inner join INV12 d on d.\"DocEntry\"=f.\"DocEntry\" ");
         sb.append("inner join \"@TRANSP\" t on t.\"Code\"=f.\"U_TRANSP\" ");

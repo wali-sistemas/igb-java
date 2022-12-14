@@ -146,6 +146,7 @@ public class ShippingREST implements Serializable {
             dto.setCodCity((String) row[9]);
             dto.setValStandDecl((BigDecimal) row[10]);
             dto.setUnidEmpStand((Integer) row[11]);
+            dto.setRexpedition((String) row[12]);
 
             shipping.add(dto);
         }
