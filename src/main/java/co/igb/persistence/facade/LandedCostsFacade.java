@@ -65,12 +65,12 @@ public class LandedCostsFacade {
     public List<Object[]> listImportsCosto(String companyName, boolean pruebas) {
         EntityManager em = persistenceConf.chooseSchema(companyName, pruebas, DB_TYPE_HANA);
         StringBuilder sb = new StringBuilder();
-        sb.append("select r.\"Mes\",sum(r.\"2019\")as \"2019\",sum(r.\"2020\")as \"2020\",sum(r.\"2021\")as \"2021\",sum(r.\"2022\")as \"2022\"  ");
+        sb.append("select r.\"Mes\",sum(r.\"2020\")as \"2020\",sum(r.\"2021\")as \"2021\",sum(r.\"2022\")as \"2022\",sum(r.\"2023\")as \"2023\" ");
         sb.append("from (select t.\"Ano\",t.\"Mes\", ");
-        sb.append("      case when t.\"Ano\"='2019' then sum(t.\"CostoLogistico\") else 0 end as \"2019\", ");
         sb.append("      case when t.\"Ano\"='2020' then sum(t.\"CostoLogistico\") else 0 end as \"2020\", ");
         sb.append("      case when t.\"Ano\"='2021' then sum(t.\"CostoLogistico\") else 0 end as \"2021\", ");
-        sb.append("      case when t.\"Ano\"='2022' then sum(t.\"CostoLogistico\") else 0 end as \"2022\" ");
+        sb.append("      case when t.\"Ano\"='2022' then sum(t.\"CostoLogistico\") else 0 end as \"2022\", ");
+        sb.append("      case when t.\"Ano\"='2023' then sum(t.\"CostoLogistico\") else 0 end as \"2023\" ");
         sb.append("     from(select case month(ca.\"DocDate\") ");
         sb.append("          when 1  then 'Enero'");
         sb.append("          when 2  then 'Febrero'");
