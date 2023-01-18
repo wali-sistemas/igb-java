@@ -76,4 +76,12 @@
             <property name="hibernate.globally_quoted_identifiers" value="true"/>
         </properties>
     </persistence-unit>
+    <persistence-unit name="HANAREDPLASPU" transaction-type="JTA">
+        <jta-data-source>java:/HANAREDPLASDS</jta-data-source>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
+            <property name="hibernate.globally_quoted_identifiers" value="true"/>
+        </properties>
+    </persistence-unit>
 </persistence>
