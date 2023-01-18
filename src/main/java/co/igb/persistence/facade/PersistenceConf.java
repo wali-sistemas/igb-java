@@ -23,6 +23,8 @@ public class PersistenceConf {
     private EntityManager emHANAIGBTEST;
     @PersistenceContext(unitName = "HANAVARROCTESTPU")
     private EntityManager emHANAVARROCTEST;
+    @PersistenceContext(unitName = "HANAREDPLASPU")
+    private EntityManager emHANAREDPLAS;
 
     public EntityManager chooseSchema(String companyName, boolean testing, String dbType) {
         if (dbType.equalsIgnoreCase(Constants.DATABASE_TYPE_WALI)) {
@@ -43,6 +45,8 @@ public class PersistenceConf {
                     return emHANAVELEZ;
                 case "IGBPruebas":
                     return emHANAIGBTEST;
+                case "REDPLAS":
+                    return emHANAREDPLAS;
                 default:
                     return null;
             }

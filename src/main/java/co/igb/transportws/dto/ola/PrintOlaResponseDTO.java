@@ -5,6 +5,7 @@ package co.igb.transportws.dto.ola;
  */
 public class PrintOlaResponseDTO {
     protected String status;
+    protected String guia;
     protected String mensaje;
     protected String data;
 
@@ -14,6 +15,14 @@ public class PrintOlaResponseDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getGuia() {
+        return guia;
+    }
+
+    public void setGuia(String guia) {
+        this.guia = guia;
     }
 
     public String getMensaje() {

@@ -25,7 +25,7 @@ public class WarehouseFacade {
 
     public List<WarehouseDTO> listBinEnabledWarehouses(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(\"WhsCode\" as varchar(15)) as code, cast(\"WhsName\" as varchar(100)) as name, cast(\"DftBinAbs\" as int) as dftBinAbs from OWHS where \"BinActivat\" = 'Y' order by cast(\"WhsCode\" as varchar(15))");
+        sb.append("select cast(\"WhsCode\" as varchar(15))as code,cast(\"WhsName\" as varchar(100))as name,cast(\"DftBinAbs\" as int)as dftBinAbs from OWHS where \"BinActivat\"='Y' and \"Block\"<>'Y' order by \"U_VLGX_OF\" ASC");
         try {
             List<Object[]> results = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
             List<WarehouseDTO> warehouses = new ArrayList<>();
