@@ -449,7 +449,7 @@ public class DeliveryREST {
                                              @HeaderParam("X-Company-Name") String companyName,
                                              @HeaderParam("X-Employee") String userName,
                                              @HeaderParam("X-Pruebas") boolean pruebas) {
-        CONSOLE.log(Level.INFO, "Iniciando creacion de entrega para las ordenes de solo wms-modula");
+        CONSOLE.log(Level.INFO, "Iniciando creacion de entrega para las ordenes de magnum");
 
         List<Object[]> orderRecords = deliveryNoteFacade.listRecords(dto.getDocNum(), dto.getWhsCode(), companyName, pruebas);
         if (orderRecords.isEmpty()) {

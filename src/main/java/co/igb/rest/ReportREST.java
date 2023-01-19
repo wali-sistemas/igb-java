@@ -599,13 +599,30 @@ public class ReportREST implements Serializable {
         //Se crea la coneccion con la base de datos
         String cn = null;
         InitialContext initialContext = new InitialContext();
+        //Origen: S=SAP W=WALI
         if (dto.getOrigen().equals("S")) {
-            if (dto.getCompanyName().contains("IGB")) {
-                //cn = "java:/IGBDS";
-                cn = "java:/HANAIGBDS";
-            } else {
-                //cn = "java:/VARROCDS";
-                cn = "HANAVARROCPU";
+            switch (dto.getCompanyName()) {
+                case "IGB":
+                    cn = "java:/HANAIGBDS";
+                    break;
+                case "VARROC":
+                    cn = "java:/HANAVARROCDS";
+                    break;
+                case "REDPLAS":
+                    cn = "java:/HANAREDPLASDS";
+                    break;
+                case "IGBPruebas":
+                    cn = "java:/HANAIGBTESTDS";
+                    break;
+                case "VARROCPruebas":
+                    cn = "java:/HANAVARROCTESTDS";
+                    break;
+                case "REDPLASPruebas":
+                    cn = "java:/HANAREDPLASTESTDS";
+                    break;
+                default:
+                    cn = "";
+                    break;
             }
         } else {
             cn = "java:/MySQLDS";
