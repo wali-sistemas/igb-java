@@ -11,7 +11,7 @@ public class SalesOrderDTO {
     private String docNum;
     private String series;
     private String confirmed;
-    private Long salesPersonCode;
+    private Integer salesPersonCode;
     private Date docDate;
     private String cardCode;
     private String cardName;
@@ -35,7 +35,7 @@ public class SalesOrderDTO {
     public SalesOrderDTO() {
     }
 
-    public SalesOrderDTO(Long docEntry, String docNum, String series, String confirmed, Long salesPersonCode, Date docDate, String cardCode, String cardName, Integer items, String comments, String assignedPickingEmployee, String status, String address, String transp, String docNumMDL) {
+    public SalesOrderDTO(Long docEntry, String docNum, String series, String confirmed, Integer salesPersonCode, Date docDate, String cardCode, String cardName, Integer items, String comments, String assignedPickingEmployee, String status, String address, String transp, String docNumMDL) {
         this.docEntry = docEntry;
         this.docNum = docNum;
         this.series = series;
@@ -85,11 +85,11 @@ public class SalesOrderDTO {
         this.series = series;
     }
 
-    public Long getSalesPersonCode() {
+    public Integer getSalesPersonCode() {
         return salesPersonCode;
     }
 
-    public void setSalesPersonCode(Long salesPersonCode) {
+    public void setSalesPersonCode(Integer salesPersonCode) {
         this.salesPersonCode = salesPersonCode;
     }
 

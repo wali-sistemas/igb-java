@@ -178,6 +178,14 @@ public class InvoiceFacade {
         }
         sb.append("  and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
         sb.append(" group by year(f.\"DocDate\") ");
+
+        //TODO: Aplica solo para REDPLAS, carga de saldos iniciales
+        if (companyName.contains("REDPLAS")) {
+            sb.append(" UNION ALL ");
+            sb.append("select 'FV' as Doc, cast(\"U_ANO\" as varchar(4))as \"ano\",0 as costoTotalVenta,0 as costoTotalNota,   cast(sum(\"U_VALOR\")as numeric(18,0))as valorTotalVenta,0 as valorTotalNota,0 as valorTotalDescFin ");
+            sb.append("from \"@HIST_VENTAS\" ");
+            sb.append("group by \"U_ANO\" ");
+        }
         sb.append("UNION ALL ");
         sb.append(" select 'NC' as Doc, cast(year(n.\"DocDate\") as varchar(4)) as \"ano\",0 as costoTotalVenta, cast(sum((cast(d.\"Quantity\" as int) * cast(d.\"StockPrice\" as numeric(18,0)))) as numeric(18,0))as costoTotalNota,0 as valorTotalVenta, ");
         sb.append("  cast(sum((cast(d.\"LineTotal\" as numeric(18,0)) - (cast(d.\"LineTotal\" as numeric(18,0)) * cast(n.\"DiscPrcnt\" as int))/100)) as numeric(18,0)) as valorTotalNota,0 as valorTotalDescFin ");
