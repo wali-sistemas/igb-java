@@ -218,7 +218,7 @@ public class DeliveryREST {
                                        @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Creando documento de entrega para la orden {0}", dto.getOrderSAP());
 
-        List<Object[]> packingRecords = deliveryNoteFacade.listRecords(dto.getOrderSAP(), "01", companyName, pruebas);
+        List<Object[]> packingRecords = deliveryNoteFacade.listRecords(dto.getOrderSAP(), companyName.contains("VARROC") ? "13" : "01", companyName, pruebas);
         if (packingRecords.isEmpty()) {
             CONSOLE.log(Level.SEVERE, "No se encontraron registros para crear entrega de la orden {0}", dto.getOrderSAP());
             return Response.ok(new ResponseDTO(-2, "No se encontraron registros para crear entrega de la orden " + dto.getOrderSAP())).build();

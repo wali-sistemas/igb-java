@@ -31,7 +31,7 @@ public class LandedCostsFacade {
         sb.append(" cast(v.\"U_MonthName\" as varchar(20))as mes, ifnull(t.ano,year(current_date))as ano,v.\"U_Value\" as m# ");
         sb.append("from \"@SPT_VALUES\" v ");
         sb.append("left join(");
-        sb.append(" select cast(sum(ca.\"DocTotal\")as numeric(18,0))as \"costoCompra\",cast(sum(ca.\"CostSum\")as numeric(18,0))as \"costoLogistico\", ");
+        sb.append(" select cast(sum(ca.\"DocTotal\"-ca.\"CostSum\")as numeric(18,0))as \"costoCompra\",cast(sum(ca.\"CostSum\")as numeric(18,0))as \"costoLogistico\", ");
         sb.append("  cast((sum(ca.\"CostSum\")/sum(ca.\"DocTotal\")*100)as numeric(18,2))as \"porcentaje\",month(ca.\"DocDate\")as \"mes#\", ");
         sb.append("  cast(year(ca.\"DocDate\")as int)as ano ");
         sb.append(" from OIPF ca ");
@@ -44,7 +44,7 @@ public class LandedCostsFacade {
         sb.append(" cast(v.\"U_MonthName\" as varchar(20))as mes, ifnull(t.ano,year(current_date))as ano,v.\"U_Value\" as m# ");
         sb.append("from \"@SPT_VALUES\" v ");
         sb.append("left join(");
-        sb.append(" select cast(sum(ca.\"DocTotal\")as numeric(18,0))as \"costoCompra\",cast(sum(ca.\"CostSum\")as numeric(18,0))as \"costoLogistico\", ");
+        sb.append(" select cast(sum(ca.\"DocTotal\"-ca.\"CostSum\")as numeric(18,0))as \"costoCompra\",cast(sum(ca.\"CostSum\")as numeric(18,0))as \"costoLogistico\", ");
         sb.append("  cast((sum(ca.\"CostSum\")/sum(ca.\"DocTotal\")*100)as numeric(18,2))as \"porcentaje\",month(ca.\"DocDate\")as \"mes#\", ");
         sb.append("  cast(year(ca.\"DocDate\")as int)as ano ");
         sb.append(" from OIPF ca ");
