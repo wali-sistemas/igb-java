@@ -251,10 +251,6 @@ public class ShippingREST implements Serializable {
                                           @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Iniciando creacion de guia con la transportadora Rapidoochoa");
 
-        Integer serie = transpFacade.getSerieStart(02, companyName, pruebas);
-        serie++;
-        dto.setNmImpresionRemesa(serie.toString());
-
         Gson gson = new Gson();
         String JSON = gson.toJson(dto);
         CONSOLE.log(Level.INFO, JSON);
@@ -263,7 +259,6 @@ public class ShippingREST implements Serializable {
         if (res.getStatus().equals(200)) {
             try {
                 invoiceFacade.updateGuiaTransport(docNum, res.getValores().getNumeroGuia(), res.getValores().getLinkImpresion(), username, dto.getNmUnidPorEmbalaje(), dto.getVmValorDeclarado(), dto.getNmPesoDeclarado(), companyName, pruebas);
-                transpFacade.updateSerieLast(02, serie, companyName, pruebas);
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el nro de guia en la factura #{0} para {1}", new Object[]{docNum, companyName});
             }
