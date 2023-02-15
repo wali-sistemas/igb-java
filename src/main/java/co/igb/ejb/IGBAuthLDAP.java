@@ -133,11 +133,12 @@ public class IGBAuthLDAP {
                         String name = (String) attrs.get(Constants.LDAP_NAME_FIELD).get();
                         String surname = (String) attrs.get(Constants.LDAP_LASTNAME_FIELD).get();
                         String completeName = (String) attrs.get(Constants.LDAP_FULLNAME_FIELD).get();
+                        String companyName = (String) attrs.get(Constants.LDAP_OFFICENAME_FIELD).get();
 
                         Attribute memberOf = attrs.get(Constants.LDAP_MEMBEROF_FIELD);
                         if (memberOf != null && memberOf.contains(Constants.LDAP_MEMBEROF_FILTER)) {
                             ctx1.close();
-                            return new UserDTO(username, name, surname, email, completeName);
+                            return new UserDTO(username, name, surname, email, completeName, companyName);
                         } else {
                             CONSOLE.log(Level.SEVERE, "El usuario {0} no pertenece al grupo WMS y por lo tanto no tiene permitido iniciar sesion en la aplicacion");
                         }
@@ -183,8 +184,9 @@ public class IGBAuthLDAP {
                             String name = (String) attrs.get(Constants.LDAP_NAME_FIELD).get();
                             String surname = (String) attrs.get(Constants.LDAP_LASTNAME_FIELD).get();
                             String completeName = (String) attrs.get(Constants.LDAP_FULLNAME_FIELD).get();
+                            String companyName = (String) attrs.get(Constants.LDAP_OFFICENAME_FIELD).get();
 
-                            users.add(new UserDTO((String) usuario.get(), name, surname, email, completeName));
+                            users.add(new UserDTO((String) usuario.get(), name, surname, email, completeName, companyName));
                         }
                     } catch (NullPointerException e) {
                         CONSOLE.log(Level.INFO, "El usuario {0} no tiene email en LDAP. ", usuario.get());

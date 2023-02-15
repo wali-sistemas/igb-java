@@ -27,12 +27,13 @@ public class UserDTO implements Comparable<UserDTO> {
         this.password = password;
     }
 
-    public UserDTO(String username, String name, String surname, String email, String completeName) {
+    public UserDTO(String username, String name, String surname, String email, String completeName, String selectedCompany) {
         this.username = username;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.completeName = completeName;
+        this.selectedCompany = selectedCompany;
     }
 
     public Integer getOrdenesAsignadas() {

@@ -21,6 +21,7 @@ public class Constants {
     public static final String LDAP_NAME_FIELD = "givenname";
     public static final String LDAP_LASTNAME_FIELD = "sn";
     public static final String LDAP_FULLNAME_FIELD = "cn";
+    public static final String LDAP_OFFICENAME_FIELD = "physicalDeliveryOfficeName";
     public static final String LDAP_MEMBEROF_FIELD = "memberOf";
     public static final String LDAP_MEMBEROF_FILTER = "CN=WMS,OU=Usuarios,DC=igbcolombia,DC=local";
     public static final String NO_FILTER_TEMPLATES = "igb.no-filter.templates";
@@ -65,7 +66,7 @@ public class Constants {
     public static final String DATABASE_TYPE_WALI = "WMS";
     public static final String BIN_ACTION_TYPE_FROM = "batFromWarehouse";
     public static final String BIN_ACTION_TYPE_TO = "batToWarehouse";
-    public static final String[] LDAP_ATTR_IDS = {"name", "givenName", "description", "sAMAccountname", "userPrincipalName", "sn", "distinguishedName", "cn", "mail", "memberOf"};
+    public static final String[] LDAP_ATTR_IDS = {"name", "givenName", "description", "sAMAccountname", "userPrincipalName", "sn", "distinguishedName", "cn", "mail", "memberOf", "physicalDeliveryOfficeName"};
     public static final String SOUL_USER = "811011909";
     public static final String SOUL_PASSWORD = "IgbMp2020*";
     public static final String HANAWS_SL_URL = "https://slhana.igbcolombia.com:50000/b1s/";
