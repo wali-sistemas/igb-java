@@ -114,7 +114,7 @@ public class ReportREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response obtainReportsEmployeeAssigned(@HeaderParam("X-Company-Name") String companyName,
                                                   @HeaderParam("X-Pruebas") boolean pruebas) {
-        List<UserDTO> users = authenticator.listEmployeesInGroup(applicationBean.obtenerValorPropiedad("igb.employee.group"));
+        List<UserDTO> users = authenticator.listEmployeesInGroup(applicationBean.obtenerValorPropiedad("igb.employee.group"), companyName);
 
         if (users != null && !users.isEmpty()) {
             for (UserDTO u : users) {
