@@ -188,15 +188,16 @@ public class UserREST {
     @GET
     @Path("list/{groupName}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    public Response listEmployees(@PathParam("groupName") String groupName) {
-        return Response.ok(authenticator.listEmployeesInGroup(groupName)).build();
+    public Response listEmployees(@PathParam("groupName") String groupName,
+                                  @HeaderParam("X-Company-Name") String companyName) {
+        return Response.ok(authenticator.listEmployeesInGroup(groupName, companyName)).build();
     }
 
     @GET
     @Path("validate-user-admin/{user}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     public Response validateUserGroup(@PathParam("user") String user) {
-        for (UserDTO u : authenticator.listEmployeesInGroup(applicationBean.obtenerValorPropiedad("ldap.administrator.group"))) {
+        for (UserDTO u : authenticator.listEmployeesInGroup(applicationBean.obtenerValorPropiedad("ldap.administrator.group"), null)) {
             if (u.getUsername().equals(user)) {
                 return Response.ok(new ResponseDTO(0, true)).build();
             }
@@ -208,7 +209,7 @@ public class UserREST {
     @Path("access/{username}/{module}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     public Response approveUserAccess(@PathParam("username") String username,
-                                      @PathParam("module")String module,
+                                      @PathParam("module") String module,
                                       @HeaderParam("X-Company-Name") String companyName,
                                       @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Validando si el usuario " + username + " puede acceder al modulo " + module);
@@ -221,7 +222,7 @@ public class UserREST {
         //check if user belongs to any of them
         for (String ldapGroup : allowedGroups) {
             //listar empleados en el grupo
-            List<UserDTO> users = authenticator.listEmployeesInGroup(ldapGroup);
+            List<UserDTO> users = authenticator.listEmployeesInGroup(ldapGroup, null);
             for (UserDTO user : users) {
                 if (user.getUsername().equalsIgnoreCase(username)) {
                     CONSOLE.log(Level.INFO, "El usuario " + username + " puede acceder al modulo " + module + " porque pertenece al grupo " + ldapGroup);

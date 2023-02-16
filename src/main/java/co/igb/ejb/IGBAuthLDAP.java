@@ -152,7 +152,7 @@ public class IGBAuthLDAP {
         return null;
     }
 
-    public List<UserDTO> listEmployeesInGroup(String groupName) {
+    public List<UserDTO> listEmployeesInGroup(String groupName, String companyName) {
         List<UserDTO> users = new ArrayList<>();
         Hashtable<String, Object> auth = new Hashtable<>();
         auth.put(Context.INITIAL_CONTEXT_FACTORY, getProp(Constants.INITIAL_CONTEXT_FACTORY));
@@ -184,9 +184,13 @@ public class IGBAuthLDAP {
                             String name = (String) attrs.get(Constants.LDAP_NAME_FIELD).get();
                             String surname = (String) attrs.get(Constants.LDAP_LASTNAME_FIELD).get();
                             String completeName = (String) attrs.get(Constants.LDAP_FULLNAME_FIELD).get();
-                            String companyName = (String) attrs.get(Constants.LDAP_OFFICENAME_FIELD).get();
+                            String office = (String) attrs.get(Constants.LDAP_OFFICENAME_FIELD).get();
 
-                            users.add(new UserDTO((String) usuario.get(), name, surname, email, completeName, companyName));
+                            if (companyName == null) {
+                                users.add(new UserDTO((String) usuario.get(), name, surname, email, completeName, office));
+                            } else if (companyName.equals(office)) {
+                                users.add(new UserDTO((String) usuario.get(), name, surname, email, completeName, office));
+                            }
                         }
                     } catch (NullPointerException e) {
                         CONSOLE.log(Level.INFO, "El usuario {0} no tiene email en LDAP. ", usuario.get());
