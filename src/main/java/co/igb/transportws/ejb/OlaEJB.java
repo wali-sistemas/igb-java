@@ -1,5 +1,6 @@
 package co.igb.transportws.ejb;
 
+import co.igb.dto.PrintSticketOlaDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.transportws.client.ola.OlaClient;
 import co.igb.transportws.dto.ola.*;
@@ -149,6 +150,31 @@ public class OlaEJB {
             }
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "No fue posible iniciar la interface de OLA [WS_IMPRIMIR_ROTULOS]. ", e);
+        }
+
+        return null;
+    }
+
+    public String printSticker(String guia, String companyName) {
+        PrintSticketOlaDTO dto = new PrintSticketOlaDTO();
+
+        if (companyName.equals("IGB")) {
+            dto.setCodigocliente(appBean.obtenerValorPropiedad(Constants.IGB_OLA_WS_API_CODIGO));
+            dto.setApikey(appBean.obtenerValorPropiedad(Constants.IGB_OLA_WS_API_KEY));
+        } else {
+            dto.setCodigocliente(appBean.obtenerValorPropiedad(Constants.MTZ_OLA_WS_API_CODIGO));
+            dto.setApikey(appBean.obtenerValorPropiedad(Constants.MTZ_OLA_WS_API_KEY));
+        }
+        dto.setGuia(guia);
+        //TODO: tipo 1=10cm x 6cm, 2=10cm x 10cm
+        dto.setTipo("2");
+
+        try {
+            String response = service.postImpresionSticker(dto);
+            PrintOlaResponseDTO printOlaResponseDTO = new ObjectMapper().readValue(response, PrintOlaResponseDTO.class);
+            return printOlaResponseDTO.getRutapdf();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "No fue posible iniciar la interface de OLA [WS_IMPRIMIR_STICKER]. ", e);
         }
 
         return null;

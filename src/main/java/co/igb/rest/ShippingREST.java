@@ -314,6 +314,15 @@ public class ShippingREST implements Serializable {
         }
     }
 
+    @GET
+    @Path("print-sticker-ola/{guia}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response printStickerOla(@PathParam("guia") String guia,
+                                    @HeaderParam("X-Company-Name") String companyName) {
+        return Response.ok(new ResponseDTO(0, olaEJB.printSticker(guia, companyName))).build();
+    }
+
     @POST
     @Path("add-guia-coordinadora/{docNum}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
