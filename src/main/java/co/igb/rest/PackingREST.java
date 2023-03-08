@@ -289,7 +289,7 @@ public class PackingREST implements Serializable {
     }
 
     @POST
-    @Path("delivery")
+    @Path("deliveryV1")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response createDeliveryNote(Integer idPackingOrder,
@@ -423,6 +423,155 @@ public class PackingREST implements Serializable {
                 Gson gson = new Gson();
                 String JSON = gson.toJson(document);
                 CONSOLE.log(Level.INFO, JSON);
+                docNum = createDeliveryNote(document, sessionId);
+                CONSOLE.log(Level.INFO, "Se creo la entrega con DocNum={0}", docNum);
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
+                errorMessage = e.getMessage();
+            }
+        }
+        //3. Logout
+        if (sessionId != null) {
+            boolean resp = sapFunctions.returnSession(sessionId);
+            if (resp) {
+                CONSOLE.log(Level.INFO, "Se cerro la sesion [{0}] de DI Server correctamente", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al cerrar la sesion [{0}] de DI Server", sessionId);
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la sesion de DI Server.")).build();
+            }
+        }
+        //4. Validar y retornar
+        if (docNum > 0) {
+            return Response.ok(new ResponseDTO(0, docNum)).build();
+        } else {
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error al crear la entrega. " + errorMessage)).build();
+            //return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ResponseDTO(-1, "Ocurrio un error al crear la entrega. " + errorMessage)).build();
+        }
+    }
+
+    @POST
+    @Path("delivery")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response createDeliveryNoteV2(Integer idPackingOrder,
+                                         @HeaderParam("X-Company-Name") String companyName,
+                                         @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Creando documento de entrega para packing orden {0}", idPackingOrder);
+
+        List<Object[]> packingRecords = plFacade.listRecords(idPackingOrder, companyName, pruebas, true);
+        if (packingRecords.isEmpty()) {
+            return Response.ok(new ResponseDTO(-1, "No se encontraron registros de packing pendientes por entregar")).build();
+        }
+        //Valida el estado de la orden. Si esta cerrada, informa el error
+        String orderStatus = salesOrderFacade.getOrderStatus((Integer) packingRecords.get(0)[2], companyName, pruebas);
+        if (orderStatus == null || !orderStatus.equals(Constants.SAP_STATUS_OPEN)) {
+            return Response.ok(new ResponseDTO(-2, "La órden no se encuentra abierta y por lo tanto no se puede proceder con el proceso de packing")).build();
+        }
+
+        DeliveryDTO document = new DeliveryDTO();
+
+        Integer orderDocEntry = null;
+        Integer orderNumber = (Integer) packingRecords.get(0)[2];
+        String customerId = (String) packingRecords.get(0)[3];
+        String employee = (String) packingRecords.get(0)[14];
+        String commentOV = salesOrderFacade.getOrderComment(orderNumber, companyName, pruebas);
+
+        if (commentOV != null) {
+            //limitando caracteres no mayores a 254 para que lo acepte SAP
+            String commentWms = "Orden #" + orderNumber + " creada por " + employee + " desde WALI.";
+            if ((commentOV.length() + commentWms.length() - 254) > 0) {
+                document.setComments(commentOV.substring(0, commentOV.length() - (commentOV.length() + commentWms.length() - 251)) + "..." + commentWms);
+            } else {
+                document.setComments(commentOV + "." + commentWms);
+            }
+        } else {
+            document.setComments("Orden #" + orderNumber + " creada por " + employee + " desde WALI.");
+        }
+        //Encabezado
+        document.setSeries(Long.parseLong(getPropertyValue(Constants.DELIVERY_NOTE_SERIES, companyName)));
+        document.setCardCode(customerId);
+        document.setUtotcaj(plFacade.getTotalBoxNumber(orderNumber, companyName, pruebas).doubleValue());
+        document.setUvrdeclarado(salesOrderFacade.getValorDeclarado(orderNumber, companyName, pruebas));
+        document.setUnunfac(orderNumber.toString());
+
+        orderDocEntry = salesOrderFacade.getOrderDocEntry(orderNumber, companyName, pruebas);
+        if (orderDocEntry == null || orderDocEntry <= 0) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "Ocurrió un error al consultar los datos de la orden. ")).build();
+        }
+
+        List<DeliveryDTO.DocumentLines.DocumentLine> itemsList = new ArrayList<>();
+        List<DeliveryDTO.DocumentLines.DocumentLine.DocumentLinesBinAllocations> binsList = new ArrayList<>();
+        for (Object[] row : packingRecords) {
+            DeliveryDTO.DocumentLines.DocumentLine line = new DeliveryDTO.DocumentLines.DocumentLine();
+            String itemCode = (String) row[7];
+            Integer quantity = (Integer) row[9];
+            Integer binAbs = (Integer) row[10];
+            String binCode = (String) row[11];
+
+            try {
+                Long baseLineNum = salesOrderFacade.getLineNum(orderNumber, itemCode, companyName, pruebas);
+                if (baseLineNum < 0) {
+                    return Response.ok(new ResponseDTO(-1, "Ocurrio un error al consultar el numero de linea de la orden (baseLine) para el ítem [" + itemCode + "]. Es posible que la orden de compra ya se haya cerrado")).build();
+                }
+                line.setBaseLine(baseLineNum);
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el numero de linea de la orden " + orderNumber.toString(), e);
+                return Response.ok(new ResponseDTO(-1, e.getMessage())).build();
+            }
+
+            //Detalle
+            line.setLineNum((long) itemsList.size());
+            line.setItemCode(itemCode);
+            line.setQuantity(quantity.doubleValue());
+            line.setWarehouseCode(binCode.substring(0, 2));
+            line.setBaseEntry(orderDocEntry.longValue());
+            line.setBaseType(Long.parseLong(getPropertyValue(Constants.SALES_ORDER_SERIES, companyName)));
+            line.setDocumentLinesBinAllocations(new ArrayList<DeliveryDTO.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation>());
+
+            //Ubicacion
+            boolean quantityAdded = false;
+            for (DeliveryDTO.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation binAllocation : line.getDocumentLinesBinAllocations()) {
+                if (binAllocation.getBinAbsEntry().equals(binAbs.longValue())) {
+                    binAllocation.setQuantity(binAllocation.getQuantity() + quantity.doubleValue());
+                    quantityAdded = true;
+                    break;
+                }
+            }
+
+            if (!quantityAdded) {
+                DeliveryDTO.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation binAllocation = new DeliveryDTO.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation();
+                binAllocation.setAllowNegativeQuantity(Constants.SAP_STATUS_NO);
+                binAllocation.setBaseLineNumber(line.getLineNum());
+                binAllocation.setBinAbsEntry(binAbs.longValue());
+                binAllocation.setQuantity(quantity.doubleValue());
+                line.getDocumentLinesBinAllocations().add(binAllocation);
+            }
+            itemsList.add(line);
+        }
+
+        document.setDocumentLines(itemsList);
+
+        Gson gson = new Gson();
+        String JSON = gson.toJson(document);
+        CONSOLE.log(Level.INFO, JSON);
+
+        //1. Login
+        String sessionId = null;
+        try {
+            sessionId = sapFunctions.getSessionId(companyName);
+            if (sessionId != null) {
+                CONSOLE.log(Level.INFO, "Se inicio sesion en DI Server satisfactoriamente. SessionID={0}", sessionId);
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al iniciar sesion en el DI Server.");
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error al iniciar sesion en el DI Server.")).build();
+            }
+        } catch (Exception ignored) {
+        }
+        //2. Registrar documento
+        Long docNum = -1L;
+        String errorMessage = null;
+        if (sessionId != null) {
+            try {
                 docNum = createDeliveryNote(document, sessionId);
                 CONSOLE.log(Level.INFO, "Se creo la entrega con DocNum={0}", docNum);
             } catch (Exception e) {
