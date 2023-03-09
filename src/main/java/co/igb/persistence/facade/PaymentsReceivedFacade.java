@@ -213,7 +213,7 @@ public class PaymentsReceivedFacade {
         sb.append(" inner join OJDT oj ON rc.\"TransId\" = oj.\"TransId\" ");
         sb.append(" inner join JDT1 jt ON jt.\"TransId\" = jt.\"TransId\" ");
         sb.append(" inner join OCRD sn on sn.\"CardCode\" = rc.\"CardCode\" ");
-        sb.append(" where jt.\"Account\" >='11050505' and jt.\"Account\" <='13050510' and rc.\"PayNoDoc\" = 'Y' and rc.\"Canceled\" = 'N' and rc.\"OpenBal\" <> 0 and rc.\"DocNum\" <> 64266 ");//TODO: RC excluida
+        sb.append(" where jt.\"Account\" >='11050505' and jt.\"Account\" <='13050510' and rc.\"PayNoDoc\" = 'Y' and rc.\"Canceled\" = 'N' and rc.\"OpenBal\" <> 0 and rc.\"DocNum\" not in (select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='PR') ");
         sb.append(") as t ");
         sb.append("group by t.diasvencimiento order by t.diasvencimiento");
         try {
