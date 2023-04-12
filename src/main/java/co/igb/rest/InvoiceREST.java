@@ -1,5 +1,6 @@
 package co.igb.rest;
 
+import co.igb.dto.InvoicesCashDTO;
 import co.igb.dto.ResponseDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.hanaws.client.invoices.InvoicesClient;
@@ -315,6 +316,56 @@ public class InvoiceREST implements Serializable {
         } else {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new ResponseDTO(-1, "Ocurrio un error al crear la factura. " + errorMessage)).build();
         }
+    }
+
+    @GET
+    @Path("cash-invoices")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response listCashInvoices(@HeaderParam("X-Company-Name") String companyName,
+                                     @HeaderParam("X-Employee") String userName,
+                                     @HeaderParam("X-Pruebas") boolean pruebas) {
+        List<Object[]> rows = invoiceFacade.listCashInvoicesForShipping(companyName, pruebas);
+        if (rows.isEmpty()) {
+            CONSOLE.log(Level.SEVERE, "No se encontraron facturas de contado para despachar en {0}", companyName);
+            return Response.ok(new ResponseDTO(-1, "No se encontraron facturas de contado para despachar")).build();
+        }
+
+        List<InvoicesCashDTO> invoices = new ArrayList<>();
+        for (Object[] obj : rows) {
+            InvoicesCashDTO dto = new InvoicesCashDTO();
+            dto.setDocNum((String) obj[0]);
+            dto.setCardCode((String) obj[1]);
+            dto.setCardName((String) obj[2]);
+            dto.setSlpName((String) obj[3]);
+            dto.setDocDate((Date) obj[4]);
+            dto.setDay((Integer) obj[5]);
+            dto.setDocTotal((BigDecimal) obj[6]);
+            dto.setBalance((BigDecimal) obj[7]);
+            dto.setStatus((String) obj[8]);
+            dto.setCategory((String) obj[9]);
+            dto.setLocation((String) obj[10]);
+
+            invoices.add(dto);
+        }
+        return Response.ok(new ResponseDTO(0, invoices)).build();
+    }
+
+    @PUT
+    @Path("cash-invoice/update-status")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response updateStatusCashInvoice(@QueryParam("docnum") Integer docNum,
+                                            @QueryParam("status") String status,
+                                            @HeaderParam("X-Company-Name") String companyName,
+                                            @HeaderParam("X-Employee") String userName,
+                                            @HeaderParam("X-Pruebas") boolean pruebas) {
+        try {
+            invoiceFacade.updateStatusCashInvoice(docNum, status, new SimpleDateFormat("yyyy-MM-dd hh-mm-ss").format(new Date()) + ":" + userName + "-Actualizo estado:" + status, companyName, pruebas);
+        } catch (Exception e) {
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error actualizando ")).build();
+        }
+        return Response.ok(new ResponseDTO(0, "Actualización exitosa")).build();
     }
 
     private Long createInvoice(InvoicesDTO document, String sessionId) {
