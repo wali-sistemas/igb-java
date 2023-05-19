@@ -655,7 +655,7 @@ public class ReportREST implements Serializable {
             /*Impresora String printer = "RICOH Aficio MP 2851 PCL 5e"; /*impresoraFacade.obtenerImpresoraSucursal(dto.getSucursal(), "DOC");
             if (printer != null && printer.getIdImpresora() != null && printer.getIdImpresora() != 0) {*/
 
-            PrintService myPrintService = findPrintService("KyoceraCediP3055"/*printer.getNombreImpresoraServidor()*/);
+            PrintService myPrintService = findPrintService("KyoceraFacturacion"/*printer.getNombreImpresoraServidor()*/);
 
             PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
             pras.add(Sides.DUPLEX);

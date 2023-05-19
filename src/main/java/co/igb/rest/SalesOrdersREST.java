@@ -1,6 +1,7 @@
 package co.igb.rest;
 
 import co.igb.dto.OrderAssignmentDTO;
+import co.igb.dto.OrderEnlistmentDTO;
 import co.igb.dto.ResponseDTO;
 import co.igb.dto.SalesOrderDTO;
 import co.igb.ejb.IGBApplicationBean;
@@ -20,6 +21,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -243,5 +245,42 @@ public class SalesOrdersREST implements Serializable {
                                             @HeaderParam("X-Company-Name") String companyName,
                                             @HeaderParam("X-Pruebas") boolean pruebas) {
         return Response.ok(soFacade.validateOrderAuthorized(order, companyName, pruebas)).build();
+    }
+
+    @GET
+    @Path("order-enlistment")
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response listOrdersForEnlistment(@HeaderParam("X-Company-Name") String companyName,
+                                            @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Listando ordenes para alistamiento en la empresa ", companyName);
+
+        List<Object[]> objs = soFacade.listOrdersForEnlistment(companyName, pruebas);
+        if (objs.isEmpty()) {
+            CONSOLE.log(Level.WARNING, "No se encontraron ordenes para alistamiento ", companyName);
+            return Response.ok(new ResponseDTO(-1, "No se encontraron ordenes para alistamiento.")).build();
+        }
+
+        List<OrderEnlistmentDTO> orderEnlistmentDTO = new ArrayList<>();
+        for (Object[] obj : objs) {
+            OrderEnlistmentDTO dto = new OrderEnlistmentDTO();
+            dto.setStatus((String) obj[0]);
+            dto.setDocNumSAP((String) obj[1]);
+            dto.setDocNumMDL((String) obj[2]);
+            dto.setCardCode((String) obj[3]);
+            dto.setCardName((String) obj[4]);
+            dto.setSlpName((String) obj[5]);
+            dto.setRegion((String) obj[6]);
+            dto.setDocDate((Date) obj[7]);
+            dto.setDocTotal((BigDecimal) obj[8]);
+            dto.setPayCond((String) obj[9]);
+            dto.setCupo((BigDecimal) obj[10]);
+            dto.setBalance((BigDecimal) obj[11]);
+            dto.setDayVenc((Integer) obj[12]);
+            dto.setPromDay((Integer) obj[13]);
+
+            orderEnlistmentDTO.add(dto);
+        }
+        return Response.ok(new ResponseDTO(0, orderEnlistmentDTO)).build();
     }
 }
