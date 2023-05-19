@@ -505,4 +505,71 @@ public class SalesOrderFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando el codigo de transporte para la orden {0}", docNum);
         }
     }
+
+    public List<Object[]> listOrdersForEnlistment(String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select t.*, ");
+        sb.append(" ifnull((select cast(sum(rc2.\"Vlrec\"*DAYS_BETWEEN(rc2.\"Fecha_FA\",rc2.\"Fecha_RC\"))/sum(rc2.\"Vlrec\")as int) ");
+        sb.append("  from(select rc1.\"Fecha_RC\" as \"Fecha_RC\",rc1.\"Vlrec\" as \"Vlrec\",rc1.\"Fecha_FA\" as \"Fecha_FA\",rc1.\"CardCode\" ");
+        sb.append("   from(select dc3.\"CardCode\" as \"CardCode\",dc3.\"Tipo_Doc\" as \"Tipo_Doc\",dc3.\"NroDoc\" as \"NroDoc\",dc3.\"Fecha_RC\" as \"Fecha_RC\",dc3.\"NroRec\" as \"NroRec\",dc3.\"Vlrec\" as \"Vlrec\",f.\"DocDate\" as \"Fecha_FA\" ");
+        sb.append("    from(select dc1.\"CardCode\" as \"CardCode\",dc1.\"Tipo_Doc\" as \"Tipo_Doc\",dc1.\"NroDoc\" as \"NroDoc\",dc1.\"Fecha_RC\" as \"Fecha_RC\",dc2.\"NroRec\" as \"NroRec\",dc2.\"Vlrec\" as \"Vlrec\" ");
+        sb.append("     from(select o.\"CardCode\" as \"CardCode\",o.\"ObjType\" as \"Tipo_Doc\",o.\"DocNum\" as \"NroDoc\",o.\"TaxDate\" as \"Fecha_RC\" ");
+        sb.append("      from ORCT o ");
+        sb.append("      inner join OCRD c on c.\"CardCode\"=o.\"CardCode\" ");
+        sb.append("      inner join \"@PARAMETROS\" p on p.\"Code\"='02' ");
+        sb.append("       where o.\"CardCode\"=c.\"CardCode\" and o.\"DocDate\">=ADD_MONTHS(current_date,-10) and o.\"DocDate\"<=current_date and o.\"Canceled\"='N' ");
+        sb.append("     )as dc1 ");
+        sb.append("     inner join(select dc1.\"Tipo_Doc\" as \"Tipo_Doc\",dc1.\"NroDoc\" as \"NroDoc\",dc1.\"Fecha_RC\" as \"Fecha_RC\",o.\"ReconNum\" as \"NroRec\",i.\"ReconSum\" as \"Vlrec\",dc1.\"CardCode\" ");
+        sb.append("      from(select o.\"CardCode\" as \"CardCode\",o.\"ObjType\" as \"Tipo_Doc\",o.\"DocEntry\" as \"DocEntry_Doc\",o.\"DocNum\" as \"NroDoc\",o.\"TaxDate\" as \"Fecha_RC\",0 as \"NroRec\", 0 as \"Vlrec\" ");
+        sb.append("       from ORCT o ");
+        sb.append("       inner join OCRD c on c.\"CardCode\"=o.\"CardCode\" ");
+        sb.append("       inner join \"@PARAMETROS\" p on p.\"Code\"='02' ");
+        sb.append("       where o.\"CardCode\"=c.\"CardCode\" and o.\"DocDate\">=ADD_MONTHS(current_date,-10) and o.\"DocDate\"<=current_date and o.\"Canceled\"='N' ");
+        sb.append("      )as dc1 ");
+        sb.append("      left join ITR1 i on i.\"SrcObjTyp\"=dc1.\"Tipo_Doc\" and i.\"SrcObjAbs\"=dc1.\"DocEntry_Doc\" ");
+        sb.append("      left join OITR o on o.\"ReconNum\"=i.\"ReconNum\" ");
+        sb.append("      where o.\"Canceled\"='N' and o.\"ReconType\"<>7 and o.\"ReconType\"<>5 ");
+        sb.append("     )as dc2 on (dc1.\"CardCode\"=dc2.\"CardCode\" and dc1.\"Tipo_Doc\"=dc2.\"Tipo_Doc\" and dc1.\"NroDoc\"=dc2.\"NroDoc\") ");
+        sb.append("    )as dc3 ");
+        sb.append("   inner join OITR o on o.\"ReconNum\"=dc3.\"NroRec\" ");
+        sb.append("   inner join ITR1 i on i.\"ReconNum\"=o.\"ReconNum\" and i.\"SrcObjTyp\"='13' ");
+        sb.append("   inner join OINV f on f.\"DocEntry\"=i.\"SrcObjAbs\" ");
+        sb.append("   where dc3.\"Tipo_Doc\"='24' and f.\"DocSubType\"<>'DN' ");
+        sb.append("  )as rc1 ");
+        sb.append("  group by rc1.\"CardCode\",rc1.\"Tipo_Doc\",rc1.\"NroDoc\",rc1.\"Fecha_RC\",rc1.\"NroRec\",rc1.\"Vlrec\",rc1.\"Fecha_FA\" ");
+        sb.append(" )as rc2 ");
+        sb.append(" where rc2.\"CardCode\"=t.cardCode ");
+        sb.append(" group by rc2.\"CardCode\"),0)as PromDay ");
+        sb.append("from( ");
+        sb.append(" select distinct cast(o.\"U_SEPARADOR\" as varchar)as estado,cast(o.\"DocNum\" as varchar)as cedi, ");
+        sb.append("  ifnull(cast((select distinct r.\"DocNum\" from ORDR r inner join RDR1 d on r.\"DocEntry\"=d.\"DocEntry\" where r.\"U_SERIAL\"=o.\"U_SERIAL\" and d.\"WhsCode\"='30' and r.\"DocStatus\"='O')as varchar),'')as modula, ");
+        sb.append("  cast(o.\"CardCode\" as varchar)as cardCode,cast(o.\"CardName\" as varchar)as cardName,cast(a.\"SlpName\" as varchar)as slpName,cast(a.\"Memo\" as varchar)as region,cast(o.\"DocDate\" as date)as docDate, ");
+        sb.append("  cast(o.\"DocTotal\" as numeric(18,2))as docTotal,case when o.\"GroupNum\"=-1 then 'CONTADO' else 'CRÉDITO' end as payCond,cast(c.\"CreditLine\" as numeric(18,2))as cupo,cast(c.\"Balance\" as numeric(18,2))as saldo, ");
+        sb.append("  ifnull(cast((select days_between(current_date,add_days(min(f.\"DocDueDate\"),10))*-1 from oinv f where f.\"DocStatus\"='O' and days_between(current_date,add_days(f.\"DocDueDate\",10))<0 and f.\"CardCode\"=c.\"CardCode\" group by f.\"CardCode\")as int),0)as dayVenc ");
+        sb.append(" from ORDR o ");
+        sb.append(" inner join RDR1 d on o.\"DocEntry\"=d.\"DocEntry\" ");
+        sb.append(" inner join OSLP a on a.\"SlpCode\"=o.\"SlpCode\" ");
+        sb.append(" inner join OCRD c on o.\"CardCode\"=c.\"CardCode\" ");
+        sb.append(" where o.\"DocStatus\"='O' and o.\"U_DESP\"='N' and year(o.\"DocDate\")=year(current_date) and month(o.\"DocDate\") between month(current_date)-1 and month(current_date) and d.\"WhsCode\"<>'30' ");
+        sb.append("union all ");
+        sb.append(" select distinct cast(o.\"U_SEPARADOR\" as varchar)as estado,cast(0 as varchar)as cedi,cast(o.\"DocNum\" as varchar)as modula, ");
+        sb.append("  cast(o.\"CardCode\" as varchar)as cardCode,cast(o.\"CardName\" as varchar)as cardName,cast(a.\"SlpName\" as varchar)as slpName, cast(a.\"Memo\" as varchar)as region,cast(o.\"DocDate\" as date)as docDate, ");
+        sb.append("  cast(o.\"DocTotal\" as numeric(18,2))as docTotal,case when o.\"GroupNum\"=-1 then 'CONTADO' else 'CRÉDITO' end as payCond,cast(c.\"CreditLine\" as numeric(18,2))as cupo,cast(c.\"Balance\" as numeric(18,2))as saldo, ");
+        sb.append("  ifnull(cast((select days_between(current_date,add_days(min(f.\"DocDueDate\"),10))*-1 from oinv f where f.\"DocStatus\"='O' and days_between(current_date,add_days(f.\"DocDueDate\",10))<0 and f.\"CardCode\"=c.\"CardCode\" group by f.\"CardCode\")as int),0)as dayVenc ");
+        sb.append(" from ORDR o ");
+        sb.append(" inner join RDR1 d on o.\"DocEntry\"=d.\"DocEntry\" ");
+        sb.append(" inner join OSLP a on a.\"SlpCode\"=o.\"SlpCode\" ");
+        sb.append(" inner join OCRD c on o.\"CardCode\"=c.\"CardCode\" ");
+        sb.append(" where o.\"DocStatus\"='O' and o.\"U_DESP\"='N' and year(o.\"DocDate\")=year(current_date) and month(o.\"DocDate\") between month(current_date)-1 and month(current_date) and d.\"WhsCode\"='30' ");
+        sb.append(")as t ");
+        sb.append("where t.estado not in ('APROBADO','PREPAGO','FACTURAR') ");
+        sb.append("order by 1,2 asc");
+        try {
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error listando las ordenes para alistamiento en " + companyName, e);
+        }
+        return new ArrayList<>();
+    }
 }
