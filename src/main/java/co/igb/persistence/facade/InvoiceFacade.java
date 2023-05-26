@@ -461,4 +461,41 @@ public class InvoiceFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar la guia para la(s) factura(s) #[" + docNum.toString() + "]", e);
         }
     }
+
+    public List<Object[]> listCashInvoicesForShipping(String companyname, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select distinct cast(\"DocNum\" as varchar(10))as docNum,cast(\"CardCode\" as varchar(20))as cardCode,cast(\"CardName\" as varchar(100))as cardName, ");
+        sb.append(" cast(\"SlpName\" as varchar(100))as slpName,cast(f.\"DocDate\" as date)as docDate,cast(days_between(f.\"DocDate\",current_date) as int)as day, ");
+        sb.append(" cast(\"DocTotal\" as numeric(18,0))as docTotal,cast(\"DocTotal\"-\"PaidToDate\" as numeric(18,0))as balance,cast(\"U_DESPACHO_CONTADO\" as varchar(50))as status, ");
+        sb.append(" case when d.\"WhsCode\" in('01','30') then 'REPUESTOS' else 'LLANTAS' end category,cast(a.\"Memo\" as varchar(50))as location ");
+        sb.append("from OINV f ");
+        sb.append("inner join OSLP a ON f.\"SlpCode\" = a.\"SlpCode\" ");
+        sb.append("inner join INV1 d ON f.\"DocEntry\" = d.\"DocEntry\" ");
+        sb.append("where \"GroupNum\"='-1'and (\"U_DESPACHO_CONTADO\" is null or \"U_DESPACHO_CONTADO\"='En Proceso') and f.\"DocNum\">'525000' and ");
+        sb.append(" d.\"ItemCode\" not in ('INTMORA','FLETES','DESCUENTO') and f.\"DocType\"='I' and f.\"SlpCode\" not in ('15','22','81')");
+        try {
+            return persistenceConf.chooseSchema(companyname, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar las facturas de contado para despachar en " + companyname, e);
+        }
+        return new ArrayList<>();
+    }
+
+    public void updateStatusCashInvoice(Integer docNum, String status, String note, String companyname, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("update OINV ");
+        sb.append("set \"U_DESPACHO_CONTADO\"='");
+        sb.append(status);
+        sb.append("',\"U_nwr_Note\"='");
+        sb.append(note);
+        sb.append("' where \"DocNum\" ='");
+        sb.append(docNum);
+        sb.append("'");
+        try {
+            persistenceConf.chooseSchema(companyname, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).executeUpdate();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al actulizar el estado (Despacho-Contado) para la factura " + docNum + " en " + companyname, e);
+        }
+    }
 }
