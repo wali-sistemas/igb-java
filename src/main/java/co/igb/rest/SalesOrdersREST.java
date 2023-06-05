@@ -22,6 +22,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -168,7 +169,6 @@ public class SalesOrdersREST implements Serializable {
 
     @GET
     @Path("orders/{username}")
-    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listAssignedOrders(@PathParam("username") String username,
@@ -191,7 +191,6 @@ public class SalesOrdersREST implements Serializable {
 
     @GET
     @Path("stock/{orderNumber}")
-    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listAvailableStock(
@@ -224,7 +223,8 @@ public class SalesOrdersREST implements Serializable {
 
     @DELETE
     @Path("reset-assigned/{orderNumber}")
-    @Consumes({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Response deleteAssignedOrder(@PathParam("orderNumber") Integer orderNumber,
                                         @HeaderParam("X-Company-Name") String companyName,
@@ -238,7 +238,6 @@ public class SalesOrdersREST implements Serializable {
 
     @GET
     @Path("validate-order/{orderNumber}")
-    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response validateOrderAuthorized(@PathParam("orderNumber") String order,
@@ -249,15 +248,15 @@ public class SalesOrdersREST implements Serializable {
 
     @GET
     @Path("order-enlistment")
-    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listOrdersForEnlistment(@HeaderParam("X-Company-Name") String companyName,
                                             @HeaderParam("X-Pruebas") boolean pruebas) {
-        CONSOLE.log(Level.INFO, "Listando ordenes para alistamiento en la empresa ", companyName);
+        CONSOLE.log(Level.INFO, "Listando ordenes para alistamiento en {0}", companyName);
 
         List<Object[]> objs = soFacade.listOrdersForEnlistment(companyName, pruebas);
         if (objs.isEmpty()) {
-            CONSOLE.log(Level.WARNING, "No se encontraron ordenes para alistamiento ", companyName);
+            CONSOLE.log(Level.WARNING, "No se encontraron ordenes para alistamiento en {0}", companyName);
             return Response.ok(new ResponseDTO(-1, "No se encontraron ordenes para alistamiento.")).build();
         }
 
@@ -282,5 +281,28 @@ public class SalesOrdersREST implements Serializable {
             orderEnlistmentDTO.add(dto);
         }
         return Response.ok(new ResponseDTO(0, orderEnlistmentDTO)).build();
+    }
+
+    @POST
+    @Path("approve-status")
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response approveStatusOrder(List<String> orders,
+                                       @HeaderParam("X-Company-Name") String companyName,
+                                       @HeaderParam("X-Employee") String userName,
+                                       @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Iniciando aprobacion de estado de la orden(es) {0} para {1}", new Object[]{orders, companyName});
+
+        for (String order : orders) {
+            try {
+                soFacade.updateUserFieldApproveOrder(order, "APROBADO", new SimpleDateFormat("yyyy-MM-dd hh-mm-ss").format(new Date()) + ":" + userName + "-Aprobo orden desde WALI", companyName, pruebas);
+                CONSOLE.log(Level.INFO, "Orden {0} aprobada para separar", order);
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error aprobando la orden " + order + " en " + companyName);
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error aprobando la orden " + order + " en " + companyName)).build();
+            }
+        }
+        return Response.ok(new ResponseDTO(0, "Orden(es) aprobada exitosamente.")).build();
     }
 }
