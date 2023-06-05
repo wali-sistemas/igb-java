@@ -572,4 +572,21 @@ public class SalesOrderFacade {
         }
         return new ArrayList<>();
     }
+
+    public void updateUserFieldApproveOrder(String docNum, String status, String note, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("update ORDR ");
+        sb.append("set \"U_SEPARADOR\"='");
+        sb.append(status);
+        sb.append("',\"Confirmed\"='Y', ");
+        sb.append("\"U_nwr_Note\"='");
+        sb.append(note);
+        sb.append("' where \"DocNum\"=");
+        sb.append(docNum);
+        try {
+            persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).executeUpdate();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error aprobando la orden " + docNum + " para ser separada por " + companyName, e);
+        }
+    }
 }

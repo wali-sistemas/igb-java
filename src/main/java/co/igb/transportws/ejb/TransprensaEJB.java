@@ -104,7 +104,7 @@ public class TransprensaEJB {
         detalle.setDetallePeso(dto.getPeso());
         detalle.setDetalleVolumen(dto.getVolumen());
         detalle.setDetalleValorDeclarado(dto.getVlrDecl());
-        detalle.setDetalleProductoCodigo("23");
+        detalle.setDetalleProductoCodigo("3559");
         detalle.setDetalleCantidad(dto.getCant());
         detalle.setDetalleDescripcion(dto.getDescripcion());
         detalles.add(detalle);

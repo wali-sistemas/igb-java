@@ -87,6 +87,7 @@ public class DeliveryNoteFacade {
         sb.append("from ODLN e ");
         sb.append("inner join DLN1 d on e.\"DocEntry\"=d.\"DocEntry\" where e.\"DocNum\"=");
         sb.append(docNum);
+        sb.append(" limit 1");
         try {
             return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException ex) {
