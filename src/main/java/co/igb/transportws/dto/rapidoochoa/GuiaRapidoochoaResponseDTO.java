@@ -3,6 +3,7 @@ package co.igb.transportws.dto.rapidoochoa;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author jguisao
@@ -22,6 +23,72 @@ public class GuiaRapidoochoaResponseDTO implements Serializable {
         protected String idGuia;
         @JsonProperty("link_impresion")
         protected String linkImpresion;
+        @JsonProperty("impresion")
+        protected Impresion impresion;
+
+        public static class Impresion {
+            @JsonProperty("link_impresion_rotulos")
+            protected String linkImpresionRotulos;
+            @JsonProperty("link_impresion")
+            protected String linkImpresion;
+            @JsonProperty("codigos_zpl")
+            protected List<CodigosZPL> codigos_zpl;
+            @JsonProperty("link_impresion_full")
+            protected String linkImpresionFull;
+
+            public static class CodigosZPL {
+                @JsonProperty("zpl")
+                protected String zpl;
+
+                public String getZpl() {
+                    return zpl;
+                }
+
+                public void setZpl(String zpl) {
+                    this.zpl = zpl;
+                }
+            }
+
+            public String getLinkImpresionRotulos() {
+                return linkImpresionRotulos;
+            }
+
+            public void setLinkImpresionRotulos(String linkImpresionRotulos) {
+                this.linkImpresionRotulos = linkImpresionRotulos;
+            }
+
+            public String getLinkImpresion() {
+                return linkImpresion;
+            }
+
+            public void setLinkImpresion(String linkImpresion) {
+                this.linkImpresion = linkImpresion;
+            }
+
+            public List<CodigosZPL> getCodigos_zpl() {
+                return codigos_zpl;
+            }
+
+            public void setCodigos_zpl(List<CodigosZPL> codigos_zpl) {
+                this.codigos_zpl = codigos_zpl;
+            }
+
+            public String getLinkImpresionFull() {
+                return linkImpresionFull;
+            }
+
+            public void setLinkImpresionFull(String linkImpresionFull) {
+                this.linkImpresionFull = linkImpresionFull;
+            }
+        }
+
+        public Impresion getImpresion() {
+            return impresion;
+        }
+
+        public void setImpresion(Impresion impresion) {
+            this.impresion = impresion;
+        }
 
         public String getNumeroGuia() {
             return numeroGuia;
