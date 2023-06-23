@@ -1,31 +1,31 @@
 package co.igb.transportws.dto.transprensa;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author jguisao
  */
 public class RotuloTransprensaDTO implements Serializable {
-    protected List<Remesa> remesas;
+    @JsonProperty("guia_inicial")
+    protected String guiaInicial;
+    @JsonProperty("guia_final")
+    protected String guiaFinal;
 
-    public List<Remesa> getRemesas() {
-        return remesas;
+    public String getGuiaInicial() {
+        return guiaInicial;
     }
 
-    public void setRemesas(List<Remesa> remesas) {
-        this.remesas = remesas;
+    public void setGuiaInicial(String guiaInicial) {
+        this.guiaInicial = guiaInicial;
     }
 
-    public static class Remesa implements Serializable {
-        protected String remesa;
+    public String getGuiaFinal() {
+        return guiaFinal;
+    }
 
-        public String getRemesa() {
-            return remesa;
-        }
-
-        public void setRemesa(String remesa) {
-            this.remesa = remesa;
-        }
+    public void setGuiaFinal(String guiaFinal) {
+        this.guiaFinal = guiaFinal;
     }
 }

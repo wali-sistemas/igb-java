@@ -39,13 +39,8 @@ public class TransprensaEJB {
 
     public String getRotuloGuia(String guia) {
         RotuloTransprensaDTO dto = new RotuloTransprensaDTO();
-        List<RotuloTransprensaDTO.Remesa> remesas = new ArrayList<>();
-
-        RotuloTransprensaDTO.Remesa remesa = new RotuloTransprensaDTO.Remesa();
-        remesa.setRemesa(guia);
-
-        remesas.add(remesa);
-        dto.setRemesas(remesas);
+        dto.setGuiaInicial(guia);
+        dto.setGuiaFinal("");
 
         Gson gson = new Gson();
         String JSON = gson.toJson(dto);
@@ -81,7 +76,7 @@ public class TransprensaEJB {
         remitente.setRemitenteCiudadCodigo(dto.getCodCiudadr());
         guia.setRemitente(remitente);
         //Destinatario
-        destino.setDestinatarioCodigo("001");
+        destino.setDestinatarioCodigo("");
         destino.setTipoDocumentoDestinatarioCodigo("1");
         destino.setDestinatarioDocumento(dto.getDocumentod());
         destino.setDestinatarioNombre(dto.getNombred());
@@ -99,17 +94,19 @@ public class TransprensaEJB {
         guia.setDocumentoCliente(dto.getDocumentod());
         guia.setRemesaObservacion(dto.getObservacion());
         guia.setRemesaCodigo("");
+        guia.setFormaPago("");
+        guia.setOtrosValores("");
         //Detalle
-        List<GuiaTransprensaDTO.Detalle> detalles = new ArrayList<>();
+        List<GuiaTransprensaDTO.Detalle> detail = new ArrayList<>();
         detalle.setDetallePeso(dto.getPeso());
         detalle.setDetalleVolumen(dto.getVolumen());
         detalle.setDetalleValorDeclarado(dto.getVlrDecl());
         detalle.setDetalleProductoCodigo("3559");
         detalle.setDetalleCantidad(dto.getCant());
         detalle.setDetalleDescripcion(dto.getDescripcion());
-        detalles.add(detalle);
+        detail.add(detalle);
 
-        guia.setDetalles(detalles);
+        guia.setDetalle(detail);
 
         Gson gson = new Gson();
         String JSON = gson.toJson(guia);
