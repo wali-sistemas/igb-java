@@ -20,7 +20,7 @@ public class GuiaTransprensaDTO implements Serializable {
     @JsonProperty("destinatario")
     protected Destinatario destinatario;
     @JsonProperty("detalle")
-    protected List<Detalle> detalles;
+    protected List<Detalle> detalle;
     @JsonProperty("CentroCosto")
     protected String centroCosto;
     @JsonProperty("OrdenCarga")
@@ -33,6 +33,10 @@ public class GuiaTransprensaDTO implements Serializable {
     protected String remesaObservacion;
     @JsonProperty("RemesaCodigo")
     protected String remesaCodigo;
+    @JsonProperty("FormaPago")
+    protected String formaPago;
+    @JsonProperty("OtrosValores")
+    protected String otrosValores;
 
     public String getCiudadCodigoOrigen() {
         return ciudadCodigoOrigen;
@@ -74,12 +78,12 @@ public class GuiaTransprensaDTO implements Serializable {
         this.destinatario = destinatario;
     }
 
-    public List<Detalle> getDetalles() {
-        return detalles;
+    public List<Detalle> getDetalle() {
+        return detalle;
     }
 
-    public void setDetalles(List<Detalle> detalles) {
-        this.detalles = detalles;
+    public void setDetalle(List<Detalle> detalle) {
+        this.detalle = detalle;
     }
 
     public String getCentroCosto() {
@@ -128,6 +132,22 @@ public class GuiaTransprensaDTO implements Serializable {
 
     public void setRemesaCodigo(String remesaCodigo) {
         this.remesaCodigo = remesaCodigo;
+    }
+
+    public String getFormaPago() {
+        return formaPago;
+    }
+
+    public void setFormaPago(String formaPago) {
+        this.formaPago = formaPago;
+    }
+
+    public String getOtrosValores() {
+        return otrosValores;
+    }
+
+    public void setOtrosValores(String otrosValores) {
+        this.otrosValores = otrosValores;
     }
 
     public static class Remitente implements Serializable {
