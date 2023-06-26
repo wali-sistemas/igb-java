@@ -41,35 +41,25 @@ public class RotuloTrasnprensaResponseDTO implements Serializable {
     }
 
     public static class Data implements Serializable {
-        @JsonProperty("remesa")
-        protected String remesa;
-        @JsonProperty("valor")
-        protected String valor;
-        @JsonProperty("rotulo")
-        protected String rotulo;
+        @JsonProperty("guias")
+        protected String guias;
+        @JsonProperty("url_impresion")
+        protected String url_impresion;
 
-        public String getRemesa() {
-            return remesa;
+        public String getGuias() {
+            return guias;
         }
 
-        public void setRemesa(String remesa) {
-            this.remesa = remesa;
+        public void setGuias(String guias) {
+            this.guias = guias;
         }
 
-        public String getValor() {
-            return valor;
+        public String getUrl_impresion() {
+            return url_impresion;
         }
 
-        public void setValor(String valor) {
-            this.valor = valor;
-        }
-
-        public String getRotulo() {
-            return rotulo;
-        }
-
-        public void setRotulo(String rotulo) {
-            this.rotulo = rotulo;
+        public void setUrl_impresion(String url_impresion) {
+            this.url_impresion = url_impresion;
         }
     }
 }

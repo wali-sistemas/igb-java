@@ -50,7 +50,7 @@ public class TransprensaEJB {
             RotuloTrasnprensaResponseDTO res = service.consultarRotulo(appBean.obtenerValorPropiedad(Constants.TRANSPRENSA_WS_USER), appBean.obtenerValorPropiedad(Constants.TRANSPRENSA_WS_PASSWORD), appBean.obtenerValorPropiedad(Constants.TRANSPRENSA_WS_CODIGO), dto);
 
             if (res.isSuccess()) {
-                return res.getData().get(0).getRotulo();
+                return res.getData().get(0).getUrl_impresion();
             } else {
                 return null;
             }
@@ -113,7 +113,7 @@ public class TransprensaEJB {
         CONSOLE.log(Level.INFO, JSON);
 
         try {
-             return service.addRemesaCredito(appBean.obtenerValorPropiedad(Constants.TRANSPRENSA_WS_USER), appBean.obtenerValorPropiedad(Constants.TRANSPRENSA_WS_PASSWORD), appBean.obtenerValorPropiedad(Constants.TRANSPRENSA_WS_CODIGO), guia);
+            return service.addRemesaCredito(appBean.obtenerValorPropiedad(Constants.TRANSPRENSA_WS_USER), appBean.obtenerValorPropiedad(Constants.TRANSPRENSA_WS_PASSWORD), appBean.obtenerValorPropiedad(Constants.TRANSPRENSA_WS_CODIGO), guia);
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "No fue posible iniciar la interface de TRANSPRENSA [WS_CREAR_REMESA]. ", e);
         }

@@ -382,7 +382,7 @@ public class ShippingREST implements Serializable {
                     CONSOLE.log(Level.INFO, "Creacion exitosa de guia #{0} con la transportadora Transprensa", res.getData().get(0).getRemesa());
                     return Response.ok(new ResponseDTO(0, new Object[]{null, urlRotulo})).build();
                 } else {
-                    CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando los rotulos para la guia #" + res.getData().get(0).getRemesa() + "de la trasnportadora Transprensa");
+                    CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando los rotulos para la guia #" + res.getData().get(0).getRemesa() + " de la trasnportadora Transprensa");
                     return Response.ok(new ResponseDTO(0, new Object[]{null, null})).build();
                 }
             } catch (Exception e) {
