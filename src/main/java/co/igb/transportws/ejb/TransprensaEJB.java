@@ -39,8 +39,8 @@ public class TransprensaEJB {
 
     public String getRotuloGuia(String guia) {
         RotuloTransprensaDTO dto = new RotuloTransprensaDTO();
-        dto.setGuiaInicial(guia);
-        dto.setGuiaFinal("");
+        dto.setGuia_inicial(guia);
+        dto.setGuia_final("");
 
         Gson gson = new Gson();
         String JSON = gson.toJson(dto);
