@@ -1,41 +1,35 @@
 package co.igb.transportws.dto.transprensa;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 
 /**
  * @author jguisao
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class RotuloTransprensaDTO implements Serializable {
-    @JsonProperty("guia_inicial")
-    protected String guiaInicial;
-    @JsonProperty("guia_final")
-    protected String guiaFinal;
+    protected String guia_inicial;
+    protected String guia_final;
 
-    public String getGuiaInicial() {
-        return guiaInicial;
+    public String getGuia_inicial() {
+        return guia_inicial;
     }
 
-    public void setGuiaInicial(String guiaInicial) {
-        this.guiaInicial = guiaInicial;
+    public void setGuia_inicial(String guia_inicial) {
+        this.guia_inicial = guia_inicial;
     }
 
-    public String getGuiaFinal() {
-        return guiaFinal;
+    public String getGuia_final() {
+        return guia_final;
     }
 
-    public void setGuiaFinal(String guiaFinal) {
-        this.guiaFinal = guiaFinal;
+    public void setGuia_final(String guia_final) {
+        this.guia_final = guia_final;
     }
 
     @Override
     public String toString() {
         return "RotuloTransprensaDTO{" +
-                "guia_inicial='" + guiaInicial + '\'' +
-                ", guia_final='" + guiaFinal + '\'' +
+                "guia_inicial='" + guia_inicial + '\'' +
+                ", guia_final='" + guia_final + '\'' +
                 '}';
     }
 }

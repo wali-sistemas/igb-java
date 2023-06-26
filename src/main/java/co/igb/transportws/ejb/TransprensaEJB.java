@@ -39,8 +39,8 @@ public class TransprensaEJB {
 
     public String getRotuloGuia(String guia) {
         RotuloTransprensaDTO dto = new RotuloTransprensaDTO();
-        dto.setGuiaInicial(guia);
-        dto.setGuiaFinal("");
+        dto.setGuia_inicial(guia);
+        dto.setGuia_final("");
 
         Gson gson = new Gson();
         String JSON = gson.toJson(dto);
@@ -113,7 +113,7 @@ public class TransprensaEJB {
         CONSOLE.log(Level.INFO, JSON);
 
         try {
-             return service.addRemesaCredito(appBean.obtenerValorPropiedad(Constants.TRANSPRENSA_WS_USER), appBean.obtenerValorPropiedad(Constants.TRANSPRENSA_WS_PASSWORD), appBean.obtenerValorPropiedad(Constants.TRANSPRENSA_WS_CODIGO), guia);
+            return service.addRemesaCredito(appBean.obtenerValorPropiedad(Constants.TRANSPRENSA_WS_USER), appBean.obtenerValorPropiedad(Constants.TRANSPRENSA_WS_PASSWORD), appBean.obtenerValorPropiedad(Constants.TRANSPRENSA_WS_CODIGO), guia);
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "No fue posible iniciar la interface de TRANSPRENSA [WS_CREAR_REMESA]. ", e);
         }
