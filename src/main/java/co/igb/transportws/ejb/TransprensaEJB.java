@@ -50,7 +50,7 @@ public class TransprensaEJB {
             RotuloTrasnprensaResponseDTO res = service.consultarRotulo(appBean.obtenerValorPropiedad(Constants.TRANSPRENSA_WS_USER), appBean.obtenerValorPropiedad(Constants.TRANSPRENSA_WS_PASSWORD), appBean.obtenerValorPropiedad(Constants.TRANSPRENSA_WS_CODIGO), dto);
 
             if (res.isSuccess()) {
-                return res.getData().get(0).getRotulo();
+                return res.getData().get(0).getUrl_impresion();
             } else {
                 return null;
             }
