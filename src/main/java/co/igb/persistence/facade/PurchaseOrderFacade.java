@@ -130,53 +130,101 @@ public class PurchaseOrderFacade {
         sb.append(" select 'Origen' as Concepto,ifnull(cast(e.\"Name\" as varchar(100)),'')as Info,p.\"DocNum\" ");
         sb.append(" from OPOR p ");
         sb.append(" left join \"@PUERTO_PROV\" e on p.\"U_PUERTO_EMB\"=e.\"Code\" ");
-        sb.append(" where p.\"Series\"='48' ");
+        if (companyName.contains("VARROC")) {
+            sb.append(" where p.\"Series\"='16' ");
+        } else {
+            sb.append(" where p.\"Series\"='48' ");
+        }
         sb.append("union all ");
         sb.append(" select 'Destino' as Concepto,ifnull(cast(d.\"Name\" as varchar(100)),'')as Info,p.\"DocNum\" ");
         sb.append(" from OPOR p ");
         sb.append(" left join \"@PUERTO_DES\" d on d.\"Code\"=p.\"U_PUERTO_DES\" ");
-        sb.append(" where p.\"Series\"='48' ");
+        if (companyName.contains("VARROC")) {
+            sb.append(" where p.\"Series\"='16' ");
+        } else {
+            sb.append(" where p.\"Series\"='48' ");
+        }
         sb.append("union all ");
         sb.append(" select 'Carga Puerto Origen' as Concepto,ifnull(cast(cast(p.\"U_F_DOC_TRANSP\" as date)as varchar),'')as Info,p.\"DocNum\" ");
         sb.append(" from OPOR p ");
-        sb.append(" where p.\"Series\"='48' ");
+        if (companyName.contains("VARROC")) {
+            sb.append(" where p.\"Series\"='16' ");
+        } else {
+            sb.append(" where p.\"Series\"='48' ");
+        }
         sb.append("union all ");
         sb.append(" select 'Embarque' as Concepto,ifnull(cast(cast(p.\"U_F_EMBARQUE\" as date)as varchar),'')as Info,p.\"DocNum\" ");
         sb.append(" from OPOR p ");
-        sb.append(" where p.\"Series\"='48' ");
+        if (companyName.contains("VARROC")) {
+            sb.append(" where p.\"Series\"='16' ");
+        } else {
+            sb.append(" where p.\"Series\"='48' ");
+        }
         sb.append("union all ");
         sb.append(" select 'Arribo Puerto' as Concepto,ifnull(cast(cast(p.\"U_F_ARRIB_PUERTO\" as date)as varchar),'')as Info,p.\"DocNum\" ");
         sb.append(" from OPOR p ");
-        sb.append(" where p.\"Series\"='48' ");
+        if (companyName.contains("VARROC")) {
+            sb.append(" where p.\"Series\"='16' ");
+        } else {
+            sb.append(" where p.\"Series\"='48' ");
+        }
         sb.append("union all ");
         sb.append(" select 'Arribo Cedi' as Concepto,ifnull(cast(cast(p.\"U_Fecha_Arribo_CEDI\" as date)as varchar),'')as Info,p.\"DocNum\" ");
         sb.append(" from OPOR p ");
-        sb.append(" where p.\"Series\"='48' ");
+        if (companyName.contains("VARROC")) {
+            sb.append(" where p.\"Series\"='16' ");
+        } else {
+            sb.append(" where p.\"Series\"='48' ");
+        }
         sb.append("union all ");
         sb.append(" select 'Tiempo Tránsito' as Concepto,ifnull(cast(days_between(p.\"U_F_EMBARQUE\",p.\"U_Fecha_Arribo_CEDI\")as varchar),'Sin') || ' Días' as Info,p.\"DocNum\" ");
         sb.append(" from OPOR p ");
-        sb.append(" where p.\"Series\"='48' ");
+        if (companyName.contains("VARROC")) {
+            sb.append(" where p.\"Series\"='16' ");
+        } else {
+            sb.append(" where p.\"Series\"='48' ");
+        }
         sb.append("union all ");
         sb.append(" select 'Salida Puerto Destino' as Concepto,ifnull(cast(cast(p.\"U_F_SALIDA_PUERTO\" as date)as varchar),'')as Info,p.\"DocNum\" ");
         sb.append(" from OPOR p ");
-        sb.append(" where p.\"Series\"='48' ");
+        if (companyName.contains("VARROC")) {
+            sb.append(" where p.\"Series\"='16' ");
+        } else {
+            sb.append(" where p.\"Series\"='48' ");
+        }
         sb.append("union all ");
         sb.append(" select 'Tiempo Puerto' as Concepto,ifnull(cast(days_between(p.\"U_F_ARRIB_PUERTO\",p.\"U_F_SALIDA_PUERTO\")as varchar),'Sin') || ' Días' as Info,p.\"DocNum\" ");
         sb.append(" from OPOR p ");
-        sb.append(" where p.\"Series\"='48' ");
+        if (companyName.contains("VARROC")) {
+            sb.append(" where p.\"Series\"='16' ");
+        } else {
+            sb.append(" where p.\"Series\"='48' ");
+        }
         sb.append("union all ");
         sb.append(" select 'Estado OC' as Concepto,ifnull(cast(s.\"Name\" as varchar),'')as Info,p.\"DocNum\" ");
         sb.append(" from OPOR p ");
         sb.append(" left join \"@ESTADO_OC\" s on s.\"Code\"=p.\"U_ESTADO_OC\" ");
-        sb.append(" where p.\"Series\"='48' ");
+        if (companyName.contains("VARROC")) {
+            sb.append(" where p.\"Series\"='16' ");
+        } else {
+            sb.append(" where p.\"Series\"='48' ");
+        }
         sb.append("union all ");
         sb.append(" select 'Documento BL' as Concepto,ifnull(cast(p.\"U_DOC_TRANSP\" as varchar),'')as Info,p.\"DocNum\" ");
         sb.append(" from OPOR p ");
-        sb.append(" where p.\"Series\"='48' ");
+        if (companyName.contains("VARROC")) {
+            sb.append(" where p.\"Series\"='16' ");
+        } else {
+            sb.append(" where p.\"Series\"='48' ");
+        }
         sb.append("union all ");
         sb.append(" select 'Observación' as Concepto,ifnull(cast(p.\"U_OBSERVACION\" as varchar(254)),'')as Info,p.\"DocNum\" ");
         sb.append(" from OPOR p ");
-        sb.append(" where p.\"Series\"='48' ");
+        if (companyName.contains("VARROC")) {
+            sb.append(" where p.\"Series\"='16' ");
+        } else {
+            sb.append(" where p.\"Series\"='48' ");
+        }
         sb.append(")as t ");
         sb.append("inner join OPOR o on o.\"DocNum\"=t.\"DocNum\" ");
         sb.append("inner join OSLP a on a.\"SlpCode\"=o.\"SlpCode\" ");
