@@ -106,8 +106,10 @@ public class ShippingREST implements Serializable {
         try {
             shippingOrderFacade.create(entity, companyName, pruebas);
             CONSOLE.log(Level.INFO, "Shiping creado para la factura #" + shippingDTO.getInvoice());
-            /***Actualizar campo shipping en factura SAP***/
-            invoiceFacade.updateFieldShipping(entity.getInvoiceNumber(), companyName, pruebas);
+            /***Actualizar campo shipping en factura SAP, si no es enviar a sede principal ***/
+            if (!shippingDTO.isSendToCedi()) {
+                invoiceFacade.updateFieldShipping(entity.getInvoiceNumber(), companyName, pruebas);
+            }
             return Response.ok(new ResponseDTO(0, "Shipping creado.")).build();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error creando el shipping para la factura #" + shippingDTO.getInvoice(), e);

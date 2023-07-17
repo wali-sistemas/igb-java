@@ -28,13 +28,16 @@ public class ShippingDTO {
     private String company;
     @JsonProperty("datetime_shipping")
     private Date fecha;
+    @JsonProperty("send_to_cedi")
+    private boolean sendToCedi;
 
     public ShippingDTO() {
     }
 
-    public ShippingDTO(int boxSum, String invoice) {
+    public ShippingDTO(int boxSum, String invoice, boolean sendToCedi) {
         this.boxSum = boxSum;
         this.invoice = invoice;
+        this.sendToCedi = sendToCedi;
     }
 
     public int getId() {
@@ -109,6 +112,14 @@ public class ShippingDTO {
         this.fecha = fecha;
     }
 
+    public boolean isSendToCedi() {
+        return sendToCedi;
+    }
+
+    public void setSendToCedi(boolean sendToCedi) {
+        this.sendToCedi = sendToCedi;
+    }
+
     @Override
     public String toString() {
         return "ShippingDTO{" +
@@ -121,6 +132,7 @@ public class ShippingDTO {
                 ", empId='" + empId + '\'' +
                 ", company='" + company + '\'' +
                 ", fecha=" + fecha +
+                ", sendToCedi=" + sendToCedi +
                 '}';
     }
 }
