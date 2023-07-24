@@ -21,11 +21,14 @@ public class OrderEnlistmentDTO {
     private BigDecimal balance;
     private Integer dayVenc;
     private Integer promDay;
+    private Integer discOrder;
+    private Integer discClient;
+    private Integer nroOrder;
 
     public OrderEnlistmentDTO() {
     }
 
-    public OrderEnlistmentDTO(String status, String docNumSAP, String docNumMDL, String cardCode, String cardName, String slpName, String region, Date docDate, BigDecimal docTotal, String payCond, BigDecimal cupo, BigDecimal balance, Integer dayVenc, Integer promDay) {
+    public OrderEnlistmentDTO(String status, String docNumSAP, String docNumMDL, String cardCode, String cardName, String slpName, String region, Date docDate, BigDecimal docTotal, String payCond, BigDecimal cupo, BigDecimal balance, Integer dayVenc, Integer promDay, Integer discOrder, Integer discClient, Integer nroOrder) {
         this.status = status;
         this.docNumSAP = docNumSAP;
         this.docNumMDL = docNumMDL;
@@ -40,6 +43,9 @@ public class OrderEnlistmentDTO {
         this.balance = balance;
         this.dayVenc = dayVenc;
         this.promDay = promDay;
+        this.discOrder = discOrder;
+        this.discClient = discClient;
+        this.nroOrder = nroOrder;
     }
 
     public String getStatus() {
@@ -154,6 +160,30 @@ public class OrderEnlistmentDTO {
         this.promDay = promDay;
     }
 
+    public Integer getDiscOrder() {
+        return discOrder;
+    }
+
+    public void setDiscOrder(Integer discOrder) {
+        this.discOrder = discOrder;
+    }
+
+    public Integer getDiscClient() {
+        return discClient;
+    }
+
+    public void setDiscClient(Integer discClient) {
+        this.discClient = discClient;
+    }
+
+    public Integer getNroOrder() {
+        return nroOrder;
+    }
+
+    public void setNroOrder(Integer nroOrder) {
+        this.nroOrder = nroOrder;
+    }
+
     @Override
     public String toString() {
         return "OrderEnlistmentDTO{" +
@@ -166,11 +196,14 @@ public class OrderEnlistmentDTO {
                 ", region='" + region + '\'' +
                 ", docDate=" + docDate +
                 ", docTotal=" + docTotal +
-                ", payCond=" + payCond +
+                ", payCond='" + payCond + '\'' +
                 ", cupo=" + cupo +
                 ", balance=" + balance +
                 ", dayVenc=" + dayVenc +
                 ", promDay=" + promDay +
+                ", discOrder=" + discOrder +
+                ", discClient=" + discClient +
+                ", nroOrder=" + nroOrder +
                 '}';
     }
 }
