@@ -539,13 +539,16 @@ public class SalesOrderFacade {
         sb.append("  group by rc1.\"CardCode\",rc1.\"Tipo_Doc\",rc1.\"NroDoc\",rc1.\"Fecha_RC\",rc1.\"NroRec\",rc1.\"Vlrec\",rc1.\"Fecha_FA\" ");
         sb.append(" )as rc2 ");
         sb.append(" where rc2.\"CardCode\"=t.cardCode ");
-        sb.append(" group by rc2.\"CardCode\"),0)as PromDay ");
+        sb.append(" group by rc2.\"CardCode\"),0)as PromDay, ");
+        sb.append(" case when cli.\"Discount\">0 then 1 else 0 end as DiscClient, ");
+        sb.append(" (select count(\"DocNum\") from ORDR where \"CardCode\"=cli.\"CardCode\" and \"DocStatus\"='O' and \"U_DESP\"='N' and year(\"DocDate\")=year(current_date) and month(\"DocDate\") between month(current_date)-1 and month(current_date))as #PED");
         sb.append("from( ");
         sb.append(" select distinct cast(o.\"U_SEPARADOR\" as varchar)as estado,cast(o.\"DocNum\" as varchar)as cedi, ");
         sb.append("  ifnull(cast((select distinct r.\"DocNum\" from ORDR r inner join RDR1 d on r.\"DocEntry\"=d.\"DocEntry\" where r.\"U_SERIAL\"=o.\"U_SERIAL\" and d.\"WhsCode\"='30' and r.\"DocStatus\"='O')as varchar),'')as modula, ");
         sb.append("  cast(o.\"CardCode\" as varchar)as cardCode,cast(o.\"CardName\" as varchar)as cardName,cast(a.\"SlpName\" as varchar)as slpName,cast(a.\"Memo\" as varchar)as region,cast(o.\"DocDate\" as date)as docDate, ");
         sb.append("  cast(o.\"DocTotal\" as numeric(18,2))as docTotal,case when o.\"GroupNum\"=-1 then 'CONTADO' else 'CRÉDITO' end as payCond,cast(c.\"CreditLine\" as numeric(18,2))as cupo,cast(c.\"Balance\" as numeric(18,2))as saldo, ");
-        sb.append("  ifnull(cast((select days_between(current_date,add_days(min(f.\"DocDueDate\"),10))*-1 from oinv f where f.\"DocStatus\"='O' and days_between(current_date,add_days(f.\"DocDueDate\",10))<0 and f.\"CardCode\"=c.\"CardCode\" group by f.\"CardCode\")as int),0)as dayVenc ");
+        sb.append("  ifnull(cast((select days_between(current_date,add_days(min(f.\"DocDueDate\"),10))*-1 from oinv f where f.\"DocStatus\"='O' and days_between(current_date,add_days(f.\"DocDueDate\",10))<0 and f.\"CardCode\"=c.\"CardCode\" group by f.\"CardCode\")as int),0)as dayVenc, ");
+        sb.append("  case when o.\"DiscPrcnt\">0 then 1 else 0 end as Discped ");
         sb.append(" from ORDR o ");
         sb.append(" inner join RDR1 d on o.\"DocEntry\"=d.\"DocEntry\" ");
         sb.append(" inner join OSLP a on a.\"SlpCode\"=o.\"SlpCode\" ");
@@ -555,15 +558,17 @@ public class SalesOrderFacade {
         sb.append(" select distinct cast(o.\"U_SEPARADOR\" as varchar)as estado,cast(0 as varchar)as cedi,cast(o.\"DocNum\" as varchar)as modula, ");
         sb.append("  cast(o.\"CardCode\" as varchar)as cardCode,cast(o.\"CardName\" as varchar)as cardName,cast(a.\"SlpName\" as varchar)as slpName, cast(a.\"Memo\" as varchar)as region,cast(o.\"DocDate\" as date)as docDate, ");
         sb.append("  cast(o.\"DocTotal\" as numeric(18,2))as docTotal,case when o.\"GroupNum\"=-1 then 'CONTADO' else 'CRÉDITO' end as payCond,cast(c.\"CreditLine\" as numeric(18,2))as cupo,cast(c.\"Balance\" as numeric(18,2))as saldo, ");
-        sb.append("  ifnull(cast((select days_between(current_date,add_days(min(f.\"DocDueDate\"),10))*-1 from oinv f where f.\"DocStatus\"='O' and days_between(current_date,add_days(f.\"DocDueDate\",10))<0 and f.\"CardCode\"=c.\"CardCode\" group by f.\"CardCode\")as int),0)as dayVenc ");
+        sb.append("  ifnull(cast((select days_between(current_date,add_days(min(f.\"DocDueDate\"),10))*-1 from oinv f where f.\"DocStatus\"='O' and days_between(current_date,add_days(f.\"DocDueDate\",10))<0 and f.\"CardCode\"=c.\"CardCode\" group by f.\"CardCode\")as int),0)as dayVenc, ");
+        sb.append("  case when o.\"DiscPrcnt\">0 then 1 else 0 end as Discped ");
         sb.append(" from ORDR o ");
         sb.append(" inner join RDR1 d on o.\"DocEntry\"=d.\"DocEntry\" ");
         sb.append(" inner join OSLP a on a.\"SlpCode\"=o.\"SlpCode\" ");
         sb.append(" inner join OCRD c on o.\"CardCode\"=c.\"CardCode\" ");
         sb.append(" where o.\"DocStatus\"='O' and o.\"U_DESP\"='N' and year(o.\"DocDate\")=year(current_date) and month(o.\"DocDate\") between month(current_date)-1 and month(current_date) and d.\"WhsCode\"='30' ");
         sb.append(")as t ");
+        sb.append("inner join OCRD cli on cardcode=cli.\"CardCode\" ");
         sb.append("where t.estado not in ('APROBADO','PREPAGO','FACTURAR') ");
-        sb.append("order by 1,2 asc");
+        sb.append("order by 4 asc");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException ex) {
