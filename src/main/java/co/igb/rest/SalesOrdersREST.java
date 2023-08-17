@@ -287,25 +287,35 @@ public class SalesOrdersREST implements Serializable {
     }
 
     @POST
-    @Path("approve-status")
+    @Path("update-status-order")
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response approveStatusOrder(List<String> orders,
+                                       @QueryParam("status") String status,
                                        @HeaderParam("X-Company-Name") String companyName,
                                        @HeaderParam("X-Employee") String userName,
                                        @HeaderParam("X-Pruebas") boolean pruebas) {
-        CONSOLE.log(Level.INFO, "Iniciando aprobacion de estado de la orden(es) {0} para {1}", new Object[]{orders, companyName});
+        CONSOLE.log(Level.INFO, "Iniciando actualizacion de estado [{0}] de la orden(es) [{1}] para {2}", new Object[]{status, orders, companyName});
+
+        String confirmed = "N";
+        if (status.isEmpty() || status == null) {
+            CONSOLE.log(Level.WARNING, "No se envio ningun estado para actualizar a las orden(es)");
+            return Response.ok(new ResponseDTO(-2, "No se envío ningún estado para actualizar a las orden(es)")).build();
+        } else {
+            if (status.equals("APROBADO")) {
+                confirmed = "Y";
+            }
+        }
 
         for (String order : orders) {
             try {
-                soFacade.updateUserFieldApproveOrder(order, "APROBADO", new SimpleDateFormat("yyyy-MM-dd hh-mm-ss").format(new Date()) + ":" + userName + "-Aprobo orden desde WALI", companyName, pruebas);
-                CONSOLE.log(Level.INFO, "Orden {0} aprobada para separar", order);
+                soFacade.updateUserFieldApproveOrder(order, status, new SimpleDateFormat("yyyy-MM-dd hh-mm-ss").format(new Date()) + ":" + userName + "[" + status + "] orden desde WALI", confirmed, companyName, pruebas);
             } catch (Exception e) {
-                CONSOLE.log(Level.SEVERE, "Ocurrio un error aprobando la orden " + order + " en " + companyName);
-                return Response.ok(new ResponseDTO(-1, "Ocurrio un error aprobando la orden " + order + " en " + companyName)).build();
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando el estado [" + status + "] a la orden " + order + " en " + companyName);
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error actualizando el estado [" + status + "] a la orden " + order + " en " + companyName)).build();
             }
         }
-        return Response.ok(new ResponseDTO(0, "Orden(es) aprobada exitosamente.")).build();
+        return Response.ok(new ResponseDTO(0, "Estado de orden(es) actualizadas exitosamente.")).build();
     }
 }

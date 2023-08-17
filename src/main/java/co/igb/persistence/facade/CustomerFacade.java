@@ -83,7 +83,7 @@ public class CustomerFacade {
 
     public List<Object[]> getWithholdingTaxData(String cardCode, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(di.\"WTCode\" as varchar(6)) as WTCode, cast(i.\"PrctBsAmnt\" as numeric(4,2)) as PrctBsAmnt, ");
+        sb.append("select cast(di.\"WTCode\" as varchar(6)) as WTCode, cast(i.\"PrctBsAmnt\" as numeric(18,2)) as PrctBsAmnt, ");
         sb.append(" cast(i.\"U_BP_Base_Mi\" as numeric(18,2)) as U_BP_Base_Mi, cast(i.\"U_Tipo\" as varchar(10)) as U_Tipo ");
         sb.append("from CRD4 di ");
         sb.append("inner join OWHT i on i.\"WTCode\"=di.\"WTCode\" ");
