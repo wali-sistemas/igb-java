@@ -57,8 +57,6 @@ public class IGBApplicationBean implements Serializable {
     @PostConstruct
     private void initialize() {
         loadProperties();
-        //consultarUbicacionesInventario();
-        //consultarUbicacionesRecepcion();
     }
 
     @GET
@@ -149,35 +147,6 @@ public class IGBApplicationBean implements Serializable {
         CONSOLE.log(Level.INFO, "Se cargaron ubicaciones de recepcion para {0} empresas", companies.length);
     }
 
-    /*private void consultarUbicacionesInventario() {
-        inventoryLocations = new HashMap<>();
-        String[] companies = props.getProperty(Constants.COMPANIES).split(";");
-        for (String company : companies) {
-            String[] confParts = company.split(",");
-            String databaseName = confParts[0].trim();
-
-            List<Object[]> bins = binFacade.findInventoryLocationId(databaseName, new Boolean(confParts[2].trim()));
-            if (bins != null) {
-                for (Object[] row : bins) {
-                    String warehouseCode = (String) row[0];
-                    if (inventoryLocations.containsKey(databaseName)) {
-                        inventoryLocations.get(databaseName).put(warehouseCode, (Integer) row[1]);
-                    } else {
-                        HashMap<String, Integer> entry = new HashMap<>();
-                        entry.put(warehouseCode, (Integer) row[1]);
-                        inventoryLocations.put(databaseName, entry);
-                    }
-                }
-            }
-        }
-        for (String databaseName : inventoryLocations.keySet()) {
-            for (String whsCode : inventoryLocations.get(databaseName).keySet()) {
-                CONSOLE.log(Level.INFO, String.format("{%s: {%s: %s}}", databaseName, whsCode, inventoryLocations.get(databaseName).get(whsCode)));
-            }
-        }
-        CONSOLE.log(Level.INFO, "Se cargaron ubicaciones de inventario para {0} empresas", companies.length);
-    }*/
-
     public String obtenerValorPropiedad(String prop) {
         return props.getProperty(prop);
     }
@@ -200,19 +169,34 @@ public class IGBApplicationBean implements Serializable {
     }
 
     public static void main(String[] args) {
+        String password = "4Ju#ZFrY7$pT"; // La contraseña para encriptar y desencriptar
+        String valueToEncrypt = "wms.med"; // El valor que deseas encriptar
+        args = valueToEncrypt.split("");
+
+        String encryptedValue = encrypt(args, password);
+        System.out.println("Valor encriptado: " + encryptedValue);
+
+        String decryptedValue = decrypt("mw1iW4v4lGhp9UMpeJ5Upg==", password);
+        System.out.println("Valor desencriptado: " + decryptedValue);
+    }
+
+    public static String encrypt(String[] args, String password) {
         String v = "Mtz2020*";
         args = v.split("");
         System.out.println(Arrays.toString(args));
 
         StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-        encryptor.setPassword(args[0]);
+        encryptor.setPassword(password);
 
-        System.out.println(encryptor.encrypt(args[1]));
+        return encryptor.encrypt(args[1]);
     }
 
-    /*public Integer getInventoryBinId(String companyName, String warehouseCode) {
-        return inventoryLocations.get(companyName).get(warehouseCode);
-    }*/
+    public static String decrypt(String encryptedValue, String password) {
+        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+        encryptor.setPassword(password);
+
+        return encryptor.decrypt(encryptedValue);
+    }
 
     public Integer getReceptionBinId(String companyName, String warehouseCode) {
         return receptionLocations.get(companyName).get(warehouseCode);
