@@ -540,15 +540,20 @@ public class SalesOrderFacade {
         sb.append(" )as rc2 ");
         sb.append(" where rc2.\"CardCode\"=t.cardCode ");
         sb.append(" group by rc2.\"CardCode\"),0)as PromDay, ");
-        sb.append(" case when cli.\"Discount\">0 then 1 else 0 end as DiscClient, ");
+        sb.append(" cast(cli.\"Discount\" as int)as DiscClient, ");
         sb.append(" cast((select count(\"DocNum\") from ORDR where \"CardCode\"=cli.\"CardCode\" and \"DocStatus\"='O' and \"U_DESP\"='N' and year(\"DocDate\")=year(current_date) and month(\"DocDate\") between month(current_date)-1 and month(current_date))as int)as nroPed ");
         sb.append("from( ");
-        sb.append(" select distinct cast(o.\"U_SEPARADOR\" as varchar)as estado,cast(o.\"DocNum\" as varchar)as cedi, ");
+        sb.append(" select distinct case when o.\"U_SEPARADOR\"='' then 'SIN ASIGNAR' else cast(ifnull(o.\"U_SEPARADOR\",'SIN ASIGNAR')as varchar) end as estado,cast(o.\"DocNum\" as varchar)as cedi, ");
         sb.append("  ifnull(cast((select distinct r.\"DocNum\" from ORDR r inner join RDR1 d on r.\"DocEntry\"=d.\"DocEntry\" where r.\"U_SERIAL\"=o.\"U_SERIAL\" and d.\"WhsCode\"='30' and r.\"DocStatus\"='O')as varchar),'')as modula, ");
-        sb.append("  cast(o.\"CardCode\" as varchar)as cardCode,cast(o.\"CardName\" as varchar)as cardName,cast(a.\"SlpName\" as varchar)as slpName,cast(a.\"Memo\" as varchar)as region,cast(o.\"DocDate\" as date)as docDate, ");
-        sb.append("  cast(o.\"DocTotal\" as numeric(18,2))as docTotal,case when o.\"GroupNum\"=-1 then 'CONTADO' else 'CRÉDITO' end as payCond,cast(c.\"CreditLine\" as numeric(18,2))as cupo,cast(c.\"Balance\" as numeric(18,2))as saldo, ");
+        sb.append("  cast(o.\"CardCode\" as varchar)as cardCode,cast(o.\"CardName\" as varchar)as cardName,cast(a.\"SlpName\" as varchar)as slpName, ");
+        if (companyName.contains("IGB")) {
+            sb.append("cast(a.\"Memo\" as varchar)as region, ");
+        } else {
+            sb.append("cast(a.\"U_REGIONAL\" as varchar)as region, ");
+        }
+        sb.append("  cast(o.\"DocDate\" as date)as docDate,cast(o.\"DocTotal\" as numeric(18,2))as docTotal,case when o.\"GroupNum\"=-1 then 'CONTADO' else 'CRÉDITO' end as payCond,cast(c.\"CreditLine\" as numeric(18,2))as cupo,cast(c.\"Balance\" as numeric(18,2))as saldo, ");
         sb.append("  ifnull(cast((select days_between(current_date,add_days(min(f.\"DocDueDate\"),10))*-1 from oinv f where f.\"DocStatus\"='O' and days_between(current_date,add_days(f.\"DocDueDate\",10))<0 and f.\"CardCode\"=c.\"CardCode\" group by f.\"CardCode\")as int),0)as dayVenc, ");
-        sb.append("  case when o.\"DiscPrcnt\">0 then 1 else 0 end as Discped ");
+        sb.append("  case when o.\"DiscPrcnt\">0 then 1 else 0 end as DiscPed ");
         sb.append(" from ORDR o ");
         sb.append(" inner join RDR1 d on o.\"DocEntry\"=d.\"DocEntry\" ");
         sb.append(" inner join OSLP a on a.\"SlpCode\"=o.\"SlpCode\" ");
