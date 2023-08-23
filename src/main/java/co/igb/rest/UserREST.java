@@ -100,7 +100,7 @@ public class UserREST {
                 try {
                     user = getUserInfoFromLdap(user, true, user.getSelectedCompany(), pruebas);
                 } catch (IGBAuthenticationException ex) {
-                    CONSOLE.log(Level.SEVERE, "Ocurrio un ");
+                    CONSOLE.log(Level.SEVERE, "Ocurrio un error al autenticar al usuario (Post-LDAP)");
                     return Response.ok(new AuthenticationResponseDTO(1, "Ocurrio un error al autenticar al usuario (Post-LDAP). ")).build();
                 }
             } catch (Exception e) {
