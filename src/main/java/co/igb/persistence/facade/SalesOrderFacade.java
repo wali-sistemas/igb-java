@@ -10,6 +10,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -101,7 +102,7 @@ public class SalesOrderFacade {
             sb.append("ifnull(cast(enc.\"U_TRANSP\" as varchar(4)),'') as transp, ");
             sb.append("null as marca, ");
         }
-        if (warehouseCode.equals("30") || warehouseCode.equals("13")) {
+        if (warehouseCode.equals("30") || warehouseCode.equals("13") || warehouseCode.equals("32")) {
             sb.append("null as ovMDL, ");
         } else {
             sb.append("cast(mdl.\"DocNum\" as varchar(10))as ovMDL, ");
@@ -581,6 +582,8 @@ public class SalesOrderFacade {
         sb.append(confirmed);
         sb.append("',\"U_nwr_Note\"='");
         sb.append(note);
+        sb.append("',\"DocDueDate\"='");
+        sb.append(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         sb.append("' where \"DocNum\"=");
         sb.append(docNum);
         try {

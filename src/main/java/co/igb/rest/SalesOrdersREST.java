@@ -303,7 +303,7 @@ public class SalesOrdersREST implements Serializable {
             CONSOLE.log(Level.WARNING, "No se envio ningun estado para actualizar a las orden(es)");
             return Response.ok(new ResponseDTO(-2, "No se envío ningún estado para actualizar a las orden(es)")).build();
         } else {
-            if (status.equals("APROBADO")) {
+            if (status.equals("APROBADO") || status.equals("PREPAGO")) {
                 confirmed = "Y";
             }
         }
