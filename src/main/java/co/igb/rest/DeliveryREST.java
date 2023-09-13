@@ -218,8 +218,8 @@ public class DeliveryREST {
                                        @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Creando documento de entrega para la orden {0}", dto.getOrderSAP());
 
-        List<Object[]> packingRecords = deliveryNoteFacade.listRecords(dto.getOrderSAP(), companyName.contains("VARROC") ? "13" : "01", companyName, pruebas);
-        if (packingRecords.isEmpty()) {
+        List<Object[]> itemsSAP = deliveryNoteFacade.listRecords(dto.getOrderSAP(), companyName.contains("VARROC") ? "13" : "01", companyName, pruebas);
+        if (itemsSAP.isEmpty()) {
             CONSOLE.log(Level.SEVERE, "No se encontraron registros para crear entrega de la orden {0}", dto.getOrderSAP());
             return Response.ok(new ResponseDTO(-2, "No se encontraron registros para crear entrega de la orden " + dto.getOrderSAP())).build();
         }
@@ -227,7 +227,7 @@ public class DeliveryREST {
         HashSet<Object[]> itemsMissing = new HashSet<>();
         HashSet<String> itemsOut = new HashSet<>();
         Integer docEntrySAP = null;
-        for (Object[] obj : packingRecords) {
+        for (Object[] obj : itemsSAP) {
             if (obj[4] == null) {
                 //validar si hay más stock en otras ubicaciones
                 List<Object[]> bins = soFacade.findOrdersStockAvailability((Integer) obj[0], new ArrayList<>(Collections.singleton((String) obj[2])), (String) obj[10], companyName, pruebas);
@@ -274,12 +274,12 @@ public class DeliveryREST {
         HashMap<String, DeliveryDTO.DocumentLines.DocumentLine> items = new HashMap<>();
         DeliveryDTO document = new DeliveryDTO();
         Integer orderDocEntry = null;
-        Integer orderNumber = (Integer) packingRecords.get(0)[0];
+        Integer orderNumber = (Integer) itemsSAP.get(0)[0];
 
         if (orderDocEntry == null) {
             document.setSeries(Long.parseLong(getPropertyValue(Constants.DELIVERY_NOTE_SERIES, companyName)));
-            document.setCardCode((String) packingRecords.get(0)[1]);
-            String commentOV = (String) packingRecords.get(0)[6];
+            document.setCardCode((String) itemsSAP.get(0)[1]);
+            String commentOV = (String) itemsSAP.get(0)[6];
             if (commentOV != null) {
                 //limitando caracteres no mayores a 254 para que lo acepte SAP
                 String commentWms = "Orden #" + orderNumber + " creada por " + userName + " desde WALI.";
@@ -292,7 +292,7 @@ public class DeliveryREST {
                 document.setComments("Orden #" + orderNumber + " creada por " + userName + " desde WALI.");
             }
             document.setUtotcaj(0.0);
-            document.setUvrdeclarado((BigDecimal) packingRecords.get(0)[7]);
+            document.setUvrdeclarado((BigDecimal) itemsSAP.get(0)[7]);
             document.setUnunfac(orderNumber.toString());
         }
 
@@ -434,6 +434,10 @@ public class DeliveryREST {
         }
         //4. Validar y retornar
         if (docNum > 0) {
+            //TODO: Agregar ítems
+
+
+
             return Response.ok(new ResponseDTO(0, docNum)).build();
         } else {
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error al crear la entrega. " + errorMessage)).build();
