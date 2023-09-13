@@ -214,11 +214,12 @@ public class DeliveryREST {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response createDeliveryNote(PickingExpressOrderDTO dto,
                                        @HeaderParam("X-Company-Name") String companyName,
+                                       @HeaderParam("X-Warehouse-Code") String whsCode,
                                        @HeaderParam("X-Employee") String userName,
                                        @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Creando documento de entrega para la orden {0}", dto.getOrderSAP());
 
-        List<Object[]> itemsSAP = deliveryNoteFacade.listRecords(dto.getOrderSAP(), companyName.contains("VARROC") ? "13" : "01", companyName, pruebas);
+        List<Object[]> itemsSAP = deliveryNoteFacade.listRecords(dto.getOrderSAP(), whsCode, companyName, pruebas);
         if (itemsSAP.isEmpty()) {
             CONSOLE.log(Level.SEVERE, "No se encontraron registros para crear entrega de la orden {0}", dto.getOrderSAP());
             return Response.ok(new ResponseDTO(-2, "No se encontraron registros para crear entrega de la orden " + dto.getOrderSAP())).build();
