@@ -538,7 +538,8 @@ public class ReportREST implements Serializable {
     @Path("generate-report/")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public ResponseDTO generateReport(PrintReportDTO dto) throws Exception {
+    public ResponseDTO generateReport(@HeaderParam("X-Warehouse-Code") String whsCode,
+                                      PrintReportDTO dto) throws Exception {
         String reportName = null;
         String report = null;
         String rutaArchivo = applicationBean.obtenerValorPropiedad("url.archivo");
@@ -639,12 +640,12 @@ public class ReportREST implements Serializable {
                 mapa.put("filtro", dto.getFiltro());
             }
         //}
-        generarInforme(report, rutaArchivo, dto, mapa, connection);
+        generarInforme(report, rutaArchivo, dto, mapa, connection, dto.getCompanyName(), whsCode);
         connection.close();
         return new ResponseDTO(0, rutaArchivo);
     }
 
-    private void generarInforme(String report, String rutaArchivo, PrintReportDTO dto, Map<String, Object> mapa, Connection connection) throws JRException, IOException, PrinterException {
+    private void generarInforme(String report, String rutaArchivo, PrintReportDTO dto, Map<String, Object> mapa, Connection connection, String companyName, String whsCode) throws JRException, IOException, PrinterException {
         JasperPrint jasperPrint = JasperFillManager.fillReport(report, mapa, connection);
         JasperExportManager.exportReportToPdfFile(jasperPrint, rutaArchivo);
         PDDocument document = PDDocument.load(new File(rutaArchivo));
@@ -655,7 +656,12 @@ public class ReportREST implements Serializable {
             /*Impresora String printer = "RICOH Aficio MP 2851 PCL 5e"; /*impresoraFacade.obtenerImpresoraSucursal(dto.getSucursal(), "DOC");
             if (printer != null && printer.getIdImpresora() != null && printer.getIdImpresora() != 0) {*/
 
-            PrintService myPrintService = findPrintService("KyoceraCediP3055"/*printer.getNombreImpresoraServidor()*/);
+            PrintService myPrintService = null;
+            if (companyName.contains("IGB")) {
+                myPrintService = findPrintService("KyoceraCediP3055"/*printer.getNombreImpresoraServidor()*/);
+            } else if (companyName.contains("VARROC") && whsCode.equals("32")) {
+                myPrintService = findPrintService("KyoceraCediP3045");
+            }
 
             PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
             pras.add(Sides.DUPLEX);
