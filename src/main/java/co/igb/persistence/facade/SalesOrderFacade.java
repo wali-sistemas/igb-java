@@ -562,7 +562,7 @@ public class SalesOrderFacade {
         sb.append(" where o.\"DocStatus\"='O' and o.\"U_DESP\"='N' and year(o.\"DocDate\")=year(current_date) and month(o.\"DocDate\") between month(current_date)-1 and month(current_date) ");
         sb.append(")as t ");
         sb.append("inner join OCRD cli on cardcode=cli.\"CardCode\" ");
-        sb.append("where t.estado not in ('APROBADO','PREPAGO','FACTURAR') ");
+        sb.append("where t.estado not in ('APROBADO','PREPAGO','FACTURAR','REVISAR','RETENIDO') ");
         sb.append("order by 4 asc");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
