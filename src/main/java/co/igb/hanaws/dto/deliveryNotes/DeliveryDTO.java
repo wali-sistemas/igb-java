@@ -1,5 +1,6 @@
 package co.igb.hanaws.dto.deliveryNotes;
 
+import co.igb.hanaws.dto.invoices.InvoicesDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -38,6 +39,8 @@ public class DeliveryDTO implements Serializable {
     protected BigDecimal upesobruto;
     @JsonProperty("DocumentLines")
     protected List<DeliveryDTO.DocumentLines.DocumentLine> documentLines;
+    @JsonProperty("DocumentAdditionalExpenses")
+    protected List<DeliveryDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense> documentAdditionalExpenses;
 
     public String getCardCode() {
         return cardCode;
@@ -141,6 +144,14 @@ public class DeliveryDTO implements Serializable {
 
     public void setUpesobruto(BigDecimal upesobruto) {
         this.upesobruto = upesobruto;
+    }
+
+    public List<DocumentAdditionalExpenses.DocumentAdditionalExpense> getDocumentAdditionalExpenses() {
+        return documentAdditionalExpenses;
+    }
+
+    public void setDocumentAdditionalExpenses(List<DocumentAdditionalExpenses.DocumentAdditionalExpense> documentAdditionalExpenses) {
+        this.documentAdditionalExpenses = documentAdditionalExpenses;
     }
 
     public static class DocumentLines {
@@ -273,6 +284,81 @@ public class DeliveryDTO implements Serializable {
         }
     }
 
+    public static class DocumentAdditionalExpenses {
+        public static class DocumentAdditionalExpense {
+            @JsonProperty("ExpenseCode")
+            protected Long expenseCode;
+            @JsonProperty("LineTotal")
+            protected BigDecimal lineTotal;
+            @JsonProperty("TaxCode")
+            protected String taxCode;
+            @JsonProperty("BaseDocEntry")
+            protected long baseDocEntry;
+            @JsonProperty("BaseDocLine")
+            protected long baseDocLine;
+            @JsonProperty("BaseDocType")
+            protected long baseDocType;
+            @JsonProperty("BaseDocumentReference")
+            protected long baseDocumentReference;
+
+            public Long getExpenseCode() {
+                return expenseCode;
+            }
+
+            public void setExpenseCode(Long expenseCode) {
+                this.expenseCode = expenseCode;
+            }
+
+            public BigDecimal getLineTotal() {
+                return lineTotal;
+            }
+
+            public void setLineTotal(BigDecimal lineTotal) {
+                this.lineTotal = lineTotal;
+            }
+
+            public String getTaxCode() {
+                return taxCode;
+            }
+
+            public void setTaxCode(String taxCode) {
+                this.taxCode = taxCode;
+            }
+
+            public long getBaseDocEntry() {
+                return baseDocEntry;
+            }
+
+            public void setBaseDocEntry(long baseDocEntry) {
+                this.baseDocEntry = baseDocEntry;
+            }
+
+            public long getBaseDocLine() {
+                return baseDocLine;
+            }
+
+            public void setBaseDocLine(long baseDocLine) {
+                this.baseDocLine = baseDocLine;
+            }
+
+            public long getBaseDocType() {
+                return baseDocType;
+            }
+
+            public void setBaseDocType(long baseDocType) {
+                this.baseDocType = baseDocType;
+            }
+
+            public long getBaseDocumentReference() {
+                return baseDocumentReference;
+            }
+
+            public void setBaseDocumentReference(long baseDocumentReference) {
+                this.baseDocumentReference = baseDocumentReference;
+            }
+        }
+    }
+
     @Override
     public String toString() {
         return "DeliveryDTO{" +
@@ -282,7 +368,14 @@ public class DeliveryDTO implements Serializable {
                 ", utotcaj=" + utotcaj +
                 ", ununfac='" + ununfac + '\'' +
                 ", uvrdeclarado=" + uvrdeclarado +
+                ", utransp='" + utransp + '\'' +
+                ", utotlios=" + utotlios +
+                ", useparador='" + useparador + '\'' +
+                ", udespachoContado='" + udespachoContado + '\'' +
+                ", uvlrfle=" + uvlrfle +
+                ", upesobruto=" + upesobruto +
                 ", documentLines=" + documentLines +
+                ", documentAdditionalExpenses=" + documentAdditionalExpenses +
                 '}';
     }
 }

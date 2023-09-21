@@ -24,6 +24,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -228,6 +229,13 @@ public class DeliveryREST {
         HashSet<Object[]> itemsMissing = new HashSet<>();
         HashSet<String> itemsOut = new HashSet<>();
         Integer docEntrySAP = null;
+        Integer orderNumber = (Integer) itemsSAP.get(0)[0];
+        Integer orderEntry = (Integer) itemsSAP.get(0)[8];
+        BigDecimal lineTotalFlet = (BigDecimal) itemsSAP.get(0)[11];
+        String taxCodeFlet = (String) itemsSAP.get(0)[12];
+        Integer lineNumFlet = (Integer) itemsSAP.get(0)[13];
+        Integer objTypeFlet = (Integer) itemsSAP.get(0)[14];
+
         for (Object[] obj : itemsSAP) {
             if (obj[4] == null) {
                 //validar si hay más stock en otras ubicaciones
@@ -275,7 +283,6 @@ public class DeliveryREST {
         HashMap<String, DeliveryDTO.DocumentLines.DocumentLine> items = new HashMap<>();
         DeliveryDTO document = new DeliveryDTO();
         Integer orderDocEntry = null;
-        Integer orderNumber = (Integer) itemsSAP.get(0)[0];
 
         if (orderDocEntry == null) {
             document.setSeries(Long.parseLong(getPropertyValue(Constants.DELIVERY_NOTE_SERIES, companyName)));
@@ -396,6 +403,30 @@ public class DeliveryREST {
         }
         document.setDocumentLines(itemsList);
 
+        /***Agregando gastos de flete en la entrega, solo para motozone***/
+        if (companyName.contains("VARROC") && lineTotalFlet.compareTo(BigDecimal.ZERO) > 0) {
+            List<DeliveryDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense> gastos = new ArrayList<>();
+            DeliveryDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new DeliveryDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
+            switch (taxCodeFlet) {
+                case "IVAG19":
+                    gasto.setExpenseCode(6l);//flete
+                    break;
+                case "IVAEXCLU":
+                    gasto.setExpenseCode(2l);//flete no gravados
+                    break;
+            }
+
+            gasto.setBaseDocEntry(orderEntry);
+            gasto.setBaseDocType(objTypeFlet);
+            gasto.setBaseDocLine(lineNumFlet);
+            gasto.setBaseDocumentReference(orderNumber);
+            gasto.setTaxCode(taxCodeFlet);
+            gasto.setLineTotal(lineTotalFlet.setScale(0, RoundingMode.CEILING));
+            gastos.add(gasto);
+
+            document.setDocumentAdditionalExpenses(gastos);
+        }
+
         //1. Login
         String sessionId = null;
         try {
@@ -435,8 +466,7 @@ public class DeliveryREST {
         }
         //4. Validar y retornar
         if (docNum > 0) {
-            //TODO: Agregar ítems
-
+            //TODO: Agregar ítems a la tabla de pickinExpress
 
 
             return Response.ok(new ResponseDTO(0, docNum)).build();
