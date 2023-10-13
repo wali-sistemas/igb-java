@@ -14,6 +14,9 @@ public class PrintReportDTO {
     private String origen;
     private String filtro;
     private boolean imprimir;
+    private String year;
+    private String month;
+    private String day;
 
     public PrintReportDTO() {
     }
@@ -81,6 +84,30 @@ public class PrintReportDTO {
 
     public void setFiltro(String filtro) {
         this.filtro = filtro;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
     }
 
     @Override

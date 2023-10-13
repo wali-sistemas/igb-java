@@ -2,6 +2,7 @@ package co.igb.persistence.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -16,9 +17,6 @@ public class PickingExpress implements Serializable {
     @Column(name = "idpicking_express")
     private Long id;
     @Basic(optional = false)
-    @Column(name = "docEntry")
-    private Integer docEntry;
-    @Basic(optional = false)
     @Column(name = "docNum")
     private String docNum;
     @Basic(optional = false)
@@ -28,14 +26,14 @@ public class PickingExpress implements Serializable {
     @Column(name = "lineNum")
     private Integer lineNum;
     @Basic(optional = false)
-    @Column(name = "item_code")
+    @Column(name = "itemCode")
     private String itemCode;
     @Basic(optional = false)
     @Column(name = "qty")
     private Integer qty;
     @Basic(optional = false)
     @Column(name = "whsCode")
-    private Integer whsCode;
+    private String whsCode;
     @Basic(optional = false)
     @Column(name = "binCode")
     private String binCode;
@@ -45,6 +43,19 @@ public class PickingExpress implements Serializable {
     @Basic(optional = false)
     @Column(name = "comments")
     private String comments;
+    @Basic(optional = false)
+    @Column(name = "companyName")
+    private String companyName;
+    @Basic(optional = false)
+    @Column(name = "empId")
+    private String empId;
+    @Basic(optional = false)
+    @Column(name = "docDate")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date docDate;
+    @Basic(optional = false)
+    @Column(name = "status")
+    private String status;
 
     public PickingExpress() {
     }
@@ -55,14 +66,6 @@ public class PickingExpress implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Integer getDocEntry() {
-        return docEntry;
-    }
-
-    public void setDocEntry(Integer docEntry) {
-        this.docEntry = docEntry;
     }
 
     public String getDocNum() {
@@ -105,11 +108,11 @@ public class PickingExpress implements Serializable {
         this.qty = qty;
     }
 
-    public Integer getWhsCode() {
+    public String getWhsCode() {
         return whsCode;
     }
 
-    public void setWhsCode(Integer whsCode) {
+    public void setWhsCode(String whsCode) {
         this.whsCode = whsCode;
     }
 
@@ -135,6 +138,38 @@ public class PickingExpress implements Serializable {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getEmpId() {
+        return empId;
+    }
+
+    public void setEmpId(String empId) {
+        this.empId = empId;
+    }
+
+    public Date getDocDate() {
+        return docDate;
+    }
+
+    public void setDocDate(Date docDate) {
+        this.docDate = docDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override
@@ -166,16 +201,19 @@ public class PickingExpress implements Serializable {
     public String toString() {
         return "PickingExpress{" +
                 "id=" + id +
-                ", docEntry=" + docEntry +
                 ", docNum='" + docNum + '\'' +
                 ", cardCode='" + cardCode + '\'' +
                 ", lineNum=" + lineNum +
                 ", itemCode='" + itemCode + '\'' +
                 ", qty=" + qty +
-                ", whsCode=" + whsCode +
+                ", whsCode='" + whsCode + '\'' +
                 ", binCode='" + binCode + '\'' +
                 ", binAbs=" + binAbs +
                 ", comments='" + comments + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", empId='" + empId + '\'' +
+                ", docDate=" + docDate +
+                ", status='" + status + '\'' +
                 '}';
     }
 }
