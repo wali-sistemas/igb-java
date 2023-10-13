@@ -592,6 +592,12 @@ public class ReportREST implements Serializable {
                         + File.separator + dto.getDocumento() + ".jrxml");
                 rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + dto.getDocumento() + File.separator + reportName;
                 break;
+            case "paystub":
+                reportName = dto.getId() + ".pdf";
+                report = JasperCompileManager.compileReportToFile(applicationBean.obtenerValorPropiedad("url.jasper") + dto.getCompanyName() + File.separator + "employee" +
+                        File.separator + dto.getDocumento() + File.separator + dto.getDocumento() + ".jrxml");
+                rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + "employee" + File.separator + dto.getDocumento() + File.separator + reportName;
+                break;
             default:
                 reportName = "";
                 break;
@@ -600,7 +606,7 @@ public class ReportREST implements Serializable {
         //Se crea la coneccion con la base de datos
         String cn = null;
         InitialContext initialContext = new InitialContext();
-        //Origen: S=SAP W=WALI
+        //Origen: S=SAP W=WALI N=NOMINA
         if (dto.getOrigen().equals("S")) {
             switch (dto.getCompanyName()) {
                 case "IGB":
@@ -625,6 +631,15 @@ public class ReportREST implements Serializable {
                     cn = "";
                     break;
             }
+        } else if (dto.getOrigen().equals("N")) {
+            switch (dto.getCompanyName()) {
+                case "IGB":
+                    cn = "java:/IGBNOVAWEBDS";
+                    break;
+                default:
+                    cn = "";
+                    break;
+            }
         } else {
             cn = "java:/MySQLDS";
         }
@@ -633,13 +648,18 @@ public class ReportREST implements Serializable {
 
         //Se mandan los parametros al Jasper
         Map<String, Object> mapa = new HashMap<>();
-        if (dto.getId() != 0) {
+        if (dto.getDocumento().equals("paystub")) {
             mapa.put("id", dto.getId());
-        } else //if (dto.getDocumento().equals("shipping") || dto.getDocumento().equals("pickingExpress")) {
-            if (dto.getFiltro() != null) {
+            mapa.put("year", dto.getYear());
+            mapa.put("month", dto.getMonth());
+            mapa.put("day", dto.getDay());
+        } else {
+            if (dto.getId() != 0) {
+                mapa.put("id", dto.getId());
+            } else if (dto.getFiltro() != null) {
                 mapa.put("filtro", dto.getFiltro());
             }
-        //}
+        }
         generarInforme(report, rutaArchivo, dto, mapa, connection, dto.getCompanyName(), whsCode);
         connection.close();
         return new ResponseDTO(0, rutaArchivo);

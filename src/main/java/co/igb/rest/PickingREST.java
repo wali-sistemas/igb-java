@@ -129,12 +129,11 @@ public class PickingREST implements Serializable {
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response findNextItemToPick(
-            @PathParam("username") String username,
-            @QueryParam("orderNumber") Integer orderNumber,
-            @HeaderParam("X-Company-Name") String companyName,
-            @HeaderParam("X-Warehouse-Code") String warehouseCode,
-            @HeaderParam("X-Pruebas") boolean pruebas) {
+    public Response findNextItemToPick(@PathParam("username") String username,
+                                       @QueryParam("orderNumber") Integer orderNumber,
+                                       @HeaderParam("X-Company-Name") String companyName,
+                                       @HeaderParam("X-Warehouse-Code") String warehouseCode,
+                                       @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Buscando siguiente item para packing para el usuario {0} ", username);
         List<PickingWarningDTO> warnings = new ArrayList<>();
 
