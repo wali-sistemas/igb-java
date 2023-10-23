@@ -7,8 +7,10 @@ import co.igb.ejb.IGBApplicationBean;
 import co.igb.hanaws.client.deliveryNotes.DeliveryClient;
 import co.igb.hanaws.dto.deliveryNotes.DeliveryDTO;
 import co.igb.hanaws.dto.deliveryNotes.DeliveryRestDTO;
+import co.igb.persistence.entity.PickingExpress;
 import co.igb.persistence.facade.BinLocationFacade;
 import co.igb.persistence.facade.DeliveryNoteFacade;
+import co.igb.persistence.facade.PickingExpressFacade;
 import co.igb.persistence.facade.SalesOrderFacade;
 import co.igb.util.Constants;
 import co.igb.util.IGBUtils;
@@ -45,6 +47,8 @@ public class DeliveryREST {
     private BasicSAPFunctions sapFunctions;
     @EJB
     private DeliveryNoteFacade deliveryNoteFacade;
+    @EJB
+    private PickingExpressFacade pickingExpressFacade;
     @Inject
     private IGBApplicationBean appBean;
 
@@ -467,8 +471,27 @@ public class DeliveryREST {
         //4. Validar y retornar
         if (docNum > 0) {
             //TODO: Agregar ítems a la tabla de pickinExpress
-
-
+            for (DeliveryDTO.DocumentLines.DocumentLine detail : document.getDocumentLines()) {
+                PickingExpress entity = new PickingExpress();
+                entity.setDocNum(docNum.toString());
+                entity.setCardCode(document.getCardCode());
+                entity.setLineNum(detail.getLineNum().intValue());
+                entity.setItemCode(detail.getItemCode());
+                entity.setQty(detail.getQuantity().intValue());
+                entity.setWhsCode(detail.getWarehouseCode());
+                entity.setBinCode(blFacade.getBinCode(detail.getDocumentLinesBinAllocations().get(0).getBinAbsEntry().intValue(), companyName, pruebas));
+                entity.setBinAbs(detail.getDocumentLinesBinAllocations().get(0).getBinAbsEntry().intValue());
+                entity.setComments(document.getComments());
+                entity.setCompanyName(companyName);
+                entity.setEmpId(userName);
+                entity.setDocDate(new Date());
+                entity.setStatus("P");
+                try {
+                    pickingExpressFacade.create(entity, companyName, pruebas);
+                } catch (Exception e) {
+                    CONSOLE.log(Level.SEVERE, "Ocurrio un error registrando el pickingExpress de la orden " + docNum + " para " + companyName, e);
+                }
+            }
             return Response.ok(new ResponseDTO(0, docNum)).build();
         } else {
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error al crear la entrega. " + errorMessage)).build();
