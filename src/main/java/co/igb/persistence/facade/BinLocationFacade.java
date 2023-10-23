@@ -93,6 +93,21 @@ public class BinLocationFacade {
         }
     }
 
+    public String getBinCode(Integer AbsEntry, String schema, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(u.\"BinCode\" as varchar(20))as BinCode ");
+        sb.append("from OBIN u ");
+        sb.append("where u.\"AbsEntry\"='");
+        sb.append(AbsEntry);
+        sb.append("'");
+        try {
+            return (String) persistenceConf.chooseSchema(schema, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el BinCode de una ubicacion. ", e);
+            return null;
+        }
+    }
+
     public Integer getBinAbsInventory(String companyName, String warehouse, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(o.\"AbsEntry\" as int)as AbsEntry from OBIN o where o.\"Attr1Val\"='INVENTORY' and o.\"Disabled\"='N' and o.\"WhsCode\"='");
