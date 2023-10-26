@@ -600,10 +600,12 @@ public class SalesOrderFacade {
         sb.append("from ORDR o ");
         sb.append("inner join RDR1 d on d.\"DocEntry\"=o.\"DocEntry\" and d.\"LineStatus\"='O' ");
         sb.append("left  join RDR3 f on d.\"DocEntry\"=f.\"DocEntry\" ");
-        sb.append("where o.\"DocStatus\"='O' and o.\"DocNum\"=");
+        sb.append("where o.\"DocStatus\"='O' and o.\"DocNum\"='");
         sb.append(docNum);
+        sb.append("' limit 1");
         try {
             return (Object[]) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando los gastos de la orden " + docNum + " en " + companyName, e);
         }

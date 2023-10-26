@@ -556,13 +556,13 @@ public class PackingREST implements Serializable {
         /***Agregando gastos de flete en la entrega, solo para motozone***/
         if (companyName.contains("VARROC")) {
             Object[] dataBills = salesOrderFacade.getBillsByOrder(orderNumber, companyName, pruebas);
-            if (dataBills != null) {
-                Integer docEntry = (Integer) dataBills[0];
-                BigDecimal lineTotalFlet = (BigDecimal) dataBills[1];
-                String taxCodeFlet = (String) dataBills[2];
-                Integer lineNumFlet = (Integer) dataBills[3];
-                Integer objTypeFlet = (Integer) dataBills[4];
+            Integer docEntry = (Integer) dataBills[0];
+            BigDecimal lineTotalFlet = (BigDecimal) dataBills[1];
+            String taxCodeFlet = (String) dataBills[2];
+            Integer lineNumFlet = (Integer) dataBills[3];
+            Integer objTypeFlet = (Integer) dataBills[4];
 
+            if (dataBills != null && lineTotalFlet.compareTo(BigDecimal.ZERO) > 0) {
                 List<DeliveryDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense> gastos = new ArrayList<>();
                 DeliveryDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new DeliveryDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
                 switch (taxCodeFlet) {
@@ -583,8 +583,6 @@ public class PackingREST implements Serializable {
                 gastos.add(gasto);
 
                 document.setDocumentAdditionalExpenses(gastos);
-            } else {
-                return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "Ocurrió un error al consultar los gastos de la orden")).build();
             }
         }
 
