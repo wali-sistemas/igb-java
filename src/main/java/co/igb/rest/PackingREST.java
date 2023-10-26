@@ -583,6 +583,8 @@ public class PackingREST implements Serializable {
                 gastos.add(gasto);
 
                 document.setDocumentAdditionalExpenses(gastos);
+            } else {
+                return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "Ocurrió un error al consultar los gastos de la orden")).build();
             }
         }
 
