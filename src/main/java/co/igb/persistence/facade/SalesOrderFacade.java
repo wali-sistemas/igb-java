@@ -603,9 +603,9 @@ public class SalesOrderFacade {
         sb.append("where o.\"DocStatus\"='O' and o.\"DocNum\"=");
         sb.append(docNum);
         try {
-            return (Object[]) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createQuery(sb.toString()).getSingleResult();
+            return (Object[]) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando los gastos de la orden " + docNum + " en " + companyName);
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando los gastos de la orden " + docNum + " en " + companyName, e);
         }
         return null;
     }
