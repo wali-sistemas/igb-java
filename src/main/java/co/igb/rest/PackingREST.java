@@ -24,6 +24,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -550,6 +552,39 @@ public class PackingREST implements Serializable {
         }
 
         document.setDocumentLines(itemsList);
+
+        /***Agregando gastos de flete en la entrega, solo para motozone***/
+        if (companyName.contains("VARROC")) {
+            Object[] dataBills = salesOrderFacade.getBillsByOrder(orderNumber, companyName, pruebas);
+            if (dataBills != null) {
+                Integer docEntry = (Integer) dataBills[0];
+                BigDecimal lineTotalFlet = (BigDecimal) dataBills[1];
+                String taxCodeFlet = (String) dataBills[2];
+                Integer lineNumFlet = (Integer) dataBills[3];
+                Integer objTypeFlet = (Integer) dataBills[4];
+
+                List<DeliveryDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense> gastos = new ArrayList<>();
+                DeliveryDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new DeliveryDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
+                switch (taxCodeFlet) {
+                    case "IVAG19":
+                        gasto.setExpenseCode(6l);//flete
+                        break;
+                    case "IVAEXCLU":
+                        gasto.setExpenseCode(2l);//flete no gravados
+                        break;
+                }
+
+                gasto.setBaseDocEntry(docEntry.longValue());
+                gasto.setBaseDocType(objTypeFlet);
+                gasto.setBaseDocLine(lineNumFlet);
+                gasto.setBaseDocumentReference(orderNumber);
+                gasto.setTaxCode(taxCodeFlet);
+                gasto.setLineTotal(lineTotalFlet.setScale(0, RoundingMode.CEILING));
+                gastos.add(gasto);
+
+                document.setDocumentAdditionalExpenses(gastos);
+            }
+        }
 
         Gson gson = new Gson();
         String JSON = gson.toJson(document);

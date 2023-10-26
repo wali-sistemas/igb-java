@@ -592,4 +592,21 @@ public class SalesOrderFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error aprobando la orden " + docNum + " para ser separada por " + companyName, e);
         }
     }
+
+    public Object[] getBillsByOrder(Integer docNum, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(o.\"DocEntry\" as int)as docEntry,ifnull(cast(f.\"LineTotal\" as numeric(18,0)),0)as lineTotalF, ");
+        sb.append(" ifnull(cast(f.\"TaxCode\" as varchar),'')as taxcodeF,cast(f.\"LineNum\" as int)as LineNumF,cast(f.\"ObjType\" as int)as ObjTypeF ");
+        sb.append("from ORDR o ");
+        sb.append("inner join RDR1 d on d.\"DocEntry\"=o.\"DocEntry\" and d.\"LineStatus\"='O' ");
+        sb.append("left  join RDR3 f on d.\"DocEntry\"=f.\"DocEntry\" ");
+        sb.append("where o.\"DocStatus\"='O' and o.\"DocNum\"=");
+        sb.append(docNum);
+        try {
+            return (Object[]) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createQuery(sb.toString()).getSingleResult();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando los gastos de la orden " + docNum + " en " + companyName);
+        }
+        return null;
+    }
 }
