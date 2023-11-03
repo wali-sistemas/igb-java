@@ -38,5 +38,6 @@ public class ApplicationConfig extends Application {
         resources.add(co.igb.rest.SoulREST.class);
         resources.add(co.igb.rest.DeliveryREST.class);
         resources.add(co.igb.rest.CubicREST.class);
+        resources.add(co.igb.rest.BusinessPartnersREST.class);
     }
 }
