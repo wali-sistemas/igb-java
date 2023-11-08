@@ -994,8 +994,9 @@ public class PackingREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";chaset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response findOrdersPendingByInvoice(@HeaderParam("X-Company-Name") String companyName,
+                                               @HeaderParam("X-Warehouse-Code") String whsCode,
                                                @HeaderParam("X-Pruebas") boolean pruebas) {
-        List<Object[]> orders = salesOrderFacade.listPendingOrdersByInvoice(companyName, pruebas);
+        List<Object[]> orders = salesOrderFacade.listPendingOrdersByInvoice(companyName, whsCode, pruebas);
         return Response.ok(new ResponseDTO(orders == null ? -1 : 0, orders)).build();
     }
 }
