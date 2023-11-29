@@ -659,6 +659,12 @@ public class ReportREST implements Serializable {
             mapa.put("year", dto.getYear());
             mapa.put("month", dto.getMonth());
             mapa.put("day", dto.getDay());
+        } else if (dto.getDocumento().equals("jobCertify")) {
+            mapa.put("id", dto.getId());
+            mapa.put("year", dto.getYear());
+            mapa.put("month", dto.getMonth());
+            mapa.put("day", dto.getDay());
+            mapa.put("sendto", dto.getFiltro());
         } else {
             if (dto.getId() != 0) {
                 mapa.put("id", dto.getId());
