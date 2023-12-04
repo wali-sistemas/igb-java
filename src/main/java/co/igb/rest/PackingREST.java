@@ -313,8 +313,9 @@ public class PackingREST implements Serializable {
         HashMap<String, DeliveryDTO.DocumentLines.DocumentLine> items = new HashMap<>();
         DeliveryDTO document = new DeliveryDTO();
         Integer orderDocEntry = null;
+        Integer orderNumber = (Integer) packingRecords.get(0)[2];
         for (Object[] row : packingRecords) {
-            Integer orderNumber = (Integer) row[2];
+            //Integer orderNumber = (Integer) row[2];
             String customerId = (String) row[3];
             String itemCode = (String) row[7];
             Integer quantity = (Integer) row[9];
@@ -404,6 +405,39 @@ public class PackingREST implements Serializable {
         });
 
         document.setDocumentLines(itemsList);
+
+        /***Agregando gastos de flete en la entrega, solo para motozone***/
+        if (companyName.contains("VARROC")) {
+            Object[] dataBills = salesOrderFacade.getBillsByOrder(orderNumber, companyName, pruebas);
+            Integer docEntry = (Integer) dataBills[0];
+            BigDecimal lineTotalFlet = (BigDecimal) dataBills[1];
+            String taxCodeFlet = (String) dataBills[2];
+            Integer lineNumFlet = (Integer) dataBills[3];
+            Integer objTypeFlet = (Integer) dataBills[4];
+
+            if (dataBills != null && lineTotalFlet.compareTo(BigDecimal.ZERO) > 0) {
+                List<DeliveryDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense> gastos = new ArrayList<>();
+                DeliveryDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new DeliveryDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
+                switch (taxCodeFlet) {
+                    case "IVAG19":
+                        gasto.setExpenseCode(6l);//flete
+                        break;
+                    case "IVAEXCLU":
+                        gasto.setExpenseCode(2l);//flete no gravados
+                        break;
+                }
+
+                gasto.setBaseDocEntry(docEntry.longValue());
+                gasto.setBaseDocType(objTypeFlet);
+                gasto.setBaseDocLine(lineNumFlet);
+                gasto.setBaseDocumentReference(orderNumber);
+                gasto.setTaxCode(taxCodeFlet);
+                gasto.setLineTotal(lineTotalFlet.setScale(0, RoundingMode.CEILING));
+                gastos.add(gasto);
+
+                document.setDocumentAdditionalExpenses(gastos);
+            }
+        }
 
         //1. Login
         String sessionId = null;
