@@ -119,6 +119,10 @@ public class InvoiceREST implements Serializable {
         String itemMarca = (String) deliveryData.get(0)[18];
         String codTransp = (String) deliveryData.get(0)[19];
         Integer order = (Integer) deliveryData.get(0)[20];
+        BigDecimal lineTotalFlet = (BigDecimal) deliveryData.get(0)[21];
+        String taxCodeFlet = (String) deliveryData.get(0)[22];
+        Integer lineNumFlet = (Integer) deliveryData.get(0)[23];
+        Integer objTypeFlet = (Integer) deliveryData.get(0)[24];
 
         if (invoice.getSeries() == null) {
             invoice.setSeries(Long.parseLong(getPropertyValue("igb.invoice.series", companyName)));
@@ -226,6 +230,30 @@ public class InvoiceREST implements Serializable {
             }
         }
         invoice.setDocumentAdditionalExpenses(gastos);
+
+        /***Agregando gastos de flete en la entrega, solo para motozone***/
+        if (companyName.contains("VARROC") && lineTotalFlet.compareTo(BigDecimal.ZERO) > 0) {
+            List<InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense> gastosFlete = new ArrayList<>();
+            InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gastoFlete = new InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
+            switch (taxCodeFlet) {
+                case "IVAG19":
+                    gastoFlete.setExpenseCode(6l);//flete
+                    break;
+                case "IVAEXCLU":
+                    gastoFlete.setExpenseCode(2l);//flete no gravados
+                    break;
+            }
+
+            gastoFlete.setBaseDocEntry(delDocEntry);
+            gastoFlete.setBaseDocType(objTypeFlet);
+            gastoFlete.setBaseDocLine(lineNumFlet);
+            gastoFlete.setBaseDocumentReference(docNum);
+            gastoFlete.setTaxCode(taxCodeFlet);
+            gastoFlete.setLineTotal(lineTotalFlet.setScale(0, RoundingMode.CEILING));
+            gastos.add(gastoFlete);
+
+            invoice.setDocumentAdditionalExpenses(gastosFlete);
+        }
 
         /***Actualizar transportadora en orden de venta, según tabla de tarifas de transporte, optenida en la consulta de entrega***/
         try {
