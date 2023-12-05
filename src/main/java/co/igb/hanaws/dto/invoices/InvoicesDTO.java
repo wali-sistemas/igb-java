@@ -256,14 +256,6 @@ public class InvoicesDTO implements Serializable {
             protected BigDecimal lineTotal;
             @JsonProperty("TaxCode")
             protected String taxCode;
-            @JsonProperty("BaseDocEntry")
-            protected long baseDocEntry;
-            @JsonProperty("BaseDocLine")
-            protected long baseDocLine;
-            @JsonProperty("BaseDocType")
-            protected long baseDocType;
-            @JsonProperty("BaseDocumentReference")
-            protected long baseDocumentReference;
 
             public Long getExpenseCode() {
                 return expenseCode;
@@ -287,38 +279,6 @@ public class InvoicesDTO implements Serializable {
 
             public void setTaxCode(String taxCode) {
                 this.taxCode = taxCode;
-            }
-
-            public long getBaseDocEntry() {
-                return baseDocEntry;
-            }
-
-            public void setBaseDocEntry(long baseDocEntry) {
-                this.baseDocEntry = baseDocEntry;
-            }
-
-            public long getBaseDocLine() {
-                return baseDocLine;
-            }
-
-            public void setBaseDocLine(long baseDocLine) {
-                this.baseDocLine = baseDocLine;
-            }
-
-            public long getBaseDocType() {
-                return baseDocType;
-            }
-
-            public void setBaseDocType(long baseDocType) {
-                this.baseDocType = baseDocType;
-            }
-
-            public long getBaseDocumentReference() {
-                return baseDocumentReference;
-            }
-
-            public void setBaseDocumentReference(long baseDocumentReference) {
-                this.baseDocumentReference = baseDocumentReference;
             }
         }
     }

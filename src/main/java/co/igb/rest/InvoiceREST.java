@@ -231,30 +231,6 @@ public class InvoiceREST implements Serializable {
         }
         invoice.setDocumentAdditionalExpenses(gastos);
 
-        /***Agregando gastos de flete en la entrega, solo para motozone***/
-        if (companyName.contains("VARROC") && lineTotalFlet.compareTo(BigDecimal.ZERO) > 0) {
-            List<InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense> gastosFlete = new ArrayList<>();
-            InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gastoFlete = new InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
-            switch (taxCodeFlet) {
-                case "IVAG19":
-                    gastoFlete.setExpenseCode(6l);//flete
-                    break;
-                case "IVAEXCLU":
-                    gastoFlete.setExpenseCode(2l);//flete no gravados
-                    break;
-            }
-
-            gastoFlete.setBaseDocEntry(delDocEntry);
-            gastoFlete.setBaseDocType(objTypeFlet);
-            gastoFlete.setBaseDocLine(lineNumFlet);
-            gastoFlete.setBaseDocumentReference(docNum);
-            gastoFlete.setTaxCode(taxCodeFlet);
-            gastoFlete.setLineTotal(lineTotalFlet.setScale(0, RoundingMode.CEILING));
-            gastos.add(gastoFlete);
-
-            invoice.setDocumentAdditionalExpenses(gastosFlete);
-        }
-
         /***Actualizar transportadora en orden de venta, según tabla de tarifas de transporte, optenida en la consulta de entrega***/
         try {
             salesOrderFacade.updateUserFieldCodTransport(codTransp, order, companyName, pruebas);
