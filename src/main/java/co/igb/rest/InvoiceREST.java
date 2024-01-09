@@ -119,6 +119,10 @@ public class InvoiceREST implements Serializable {
         String itemMarca = (String) deliveryData.get(0)[18];
         String codTransp = (String) deliveryData.get(0)[19];
         Integer order = (Integer) deliveryData.get(0)[20];
+        BigDecimal lineTotalFlet = (BigDecimal) deliveryData.get(0)[21];
+        String taxCodeFlet = (String) deliveryData.get(0)[22];
+        Integer lineNumFlet = (Integer) deliveryData.get(0)[23];
+        Integer objTypeFlet = (Integer) deliveryData.get(0)[24];
 
         if (invoice.getSeries() == null) {
             invoice.setSeries(Long.parseLong(getPropertyValue("igb.invoice.series", companyName)));
