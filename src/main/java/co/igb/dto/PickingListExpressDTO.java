@@ -1,92 +1,66 @@
-package co.igb.persistence.entity;
+package co.igb.dto;
 
-import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 
 /**
  * @author jguisao
  */
-@Entity
-@Table(name = "picking_express")
-public class PickingExpress implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "idpicking_express")
-    private Long id;
-    @Basic(optional = false)
-    @Column(name = "docNum")
-    private String docNum;
-    @Basic(optional = false)
-    @Column(name = "cardCode")
-    private String cardCode;
-    @Basic(optional = false)
-    @Column(name = "lineNum")
-    private Integer lineNum;
-    @Basic(optional = false)
-    @Column(name = "itemCode")
-    private String itemCode;
-    @Basic(optional = false)
-    @Column(name = "qty")
-    private Integer qty;
-    @Basic(optional = false)
-    @Column(name = "whsCode")
-    private String whsCode;
-    @Basic(optional = false)
-    @Column(name = "binCode")
-    private String binCode;
-    @Basic(optional = false)
-    @Column(name = "binAbs")
-    private Integer binAbs;
-    @Basic(optional = false)
-    @Column(name = "comments")
-    private String comments;
-    @Basic(optional = false)
-    @Column(name = "companyName")
-    private String companyName;
-    @Basic(optional = false)
-    @Column(name = "empId")
-    private String empId;
-    @Basic(optional = false)
-    @Column(name = "docDate")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date docDate;
-    @Basic(optional = false)
-    @Column(name = "status")
-    private String status;
-    @Basic(optional = false)
-    @Column(name = "empIdSet")
-    private String empIdSet;
-    @Basic(optional = false)
-    @Column(name = "qtyConfirm")
-    private Integer qtyConfirm;
-    @Basic(optional = false)
-    @Column(name = "docDateConfirm")
-    private Date docDateConfirm;
-    @Basic(optional = false)
-    @Column(name = "observation")
-    private String observation;
-    @Basic(optional = false)
-    @Column(name = "itemName")
-    private String itemName;
-    @Basic(optional = false)
-    @Column(name = "binType")
-    private String binType;
-    @Basic(optional = false)
-    @Column(name = "binSequence")
-    private Integer binSequence;
+public class PickingListExpressDTO {
+    public Integer idPickingExpress;
+    public String docNum;
+    public String cardCode;
+    public Integer lineNum;
+    public String itemCode;
+    public String itemName;
+    public Integer qty;
+    public String whsCode;
+    public String binCode;
+    public Integer binAbs;
+    public String binType;
+    public Integer binSequence;
+    public String comments;
+    public String companyName;
+    public String empId;
+    public Date docDate;
+    public String status;
+    public String empIdSet;
+    public Integer qtyConfirm;
+    public Date docDateConfirm;
+    public String observation;
 
-    public PickingExpress() {
+    public PickingListExpressDTO() {
     }
 
-    public Long getId() {
-        return id;
+    public PickingListExpressDTO(Integer idPickingExpress, String docNum, String cardCode, Integer lineNum, String itemCode, String itemName, Integer qty, String whsCode, String binCode, Integer binAbs, String binType, Integer binSequence, String comments, String companyName, String empId, Date docDate, String status, String empIdSet, Integer qtyConfirm, Date docDateConfirm, String observation) {
+        this.idPickingExpress = idPickingExpress;
+        this.docNum = docNum;
+        this.cardCode = cardCode;
+        this.lineNum = lineNum;
+        this.itemCode = itemCode;
+        this.itemName = itemName;
+        this.qty = qty;
+        this.whsCode = whsCode;
+        this.binCode = binCode;
+        this.binAbs = binAbs;
+        this.binType = binType;
+        this.binSequence = binSequence;
+        this.comments = comments;
+        this.companyName = companyName;
+        this.empId = empId;
+        this.docDate = docDate;
+        this.status = status;
+        this.empIdSet = empIdSet;
+        this.qtyConfirm = qtyConfirm;
+        this.docDateConfirm = docDateConfirm;
+        this.observation = observation;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Integer getIdPickingExpress() {
+        return idPickingExpress;
+    }
+
+    public void setIdPickingExpress(Integer idPickingExpress) {
+        this.idPickingExpress = idPickingExpress;
     }
 
     public String getDocNum() {
@@ -250,42 +224,20 @@ public class PickingExpress implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final PickingExpress other = (PickingExpress) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public String toString() {
-        return "PickingExpress{" +
-                "id=" + id +
+        return "PickingListExpressDTO{" +
+                "idPickingExpress=" + idPickingExpress +
                 ", docNum='" + docNum + '\'' +
                 ", cardCode='" + cardCode + '\'' +
                 ", lineNum=" + lineNum +
                 ", itemCode='" + itemCode + '\'' +
+                ", itemName='" + itemName + '\'' +
                 ", qty=" + qty +
                 ", whsCode='" + whsCode + '\'' +
                 ", binCode='" + binCode + '\'' +
                 ", binAbs=" + binAbs +
+                ", binType='" + binType + '\'' +
+                ", binSequence='" + binSequence + '\'' +
                 ", comments='" + comments + '\'' +
                 ", companyName='" + companyName + '\'' +
                 ", empId='" + empId + '\'' +
@@ -295,9 +247,6 @@ public class PickingExpress implements Serializable {
                 ", qtyConfirm=" + qtyConfirm +
                 ", docDateConfirm=" + docDateConfirm +
                 ", observation='" + observation + '\'' +
-                ", itemName='" + itemName + '\'' +
-                ", binType='" + binType + '\'' +
-                ", binSequence='" + binSequence + '\'' +
                 '}';
     }
 }

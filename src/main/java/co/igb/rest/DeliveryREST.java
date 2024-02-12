@@ -2,16 +2,14 @@ package co.igb.rest;
 
 import co.igb.dto.DeliveryNoteMagnumDTO;
 import co.igb.dto.PickingExpressOrderDTO;
+import co.igb.dto.PickingListExpressDTO;
 import co.igb.dto.ResponseDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.hanaws.client.deliveryNotes.DeliveryClient;
 import co.igb.hanaws.dto.deliveryNotes.DeliveryDTO;
 import co.igb.hanaws.dto.deliveryNotes.DeliveryRestDTO;
 import co.igb.persistence.entity.PickingExpress;
-import co.igb.persistence.facade.BinLocationFacade;
-import co.igb.persistence.facade.DeliveryNoteFacade;
-import co.igb.persistence.facade.PickingExpressFacade;
-import co.igb.persistence.facade.SalesOrderFacade;
+import co.igb.persistence.facade.*;
 import co.igb.util.Constants;
 import co.igb.util.IGBUtils;
 import com.google.gson.Gson;
@@ -49,6 +47,8 @@ public class DeliveryREST {
     private DeliveryNoteFacade deliveryNoteFacade;
     @EJB
     private PickingExpressFacade pickingExpressFacade;
+    @EJB
+    private ItemFacade itemFacade;
     @Inject
     private IGBApplicationBean appBean;
 
@@ -59,6 +59,68 @@ public class DeliveryREST {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "No fue posible iniciar la instancia de DeliveryServiceLayer. ", e);
         }
+    }
+
+    @GET
+    @Path("list-open-delivery")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response listOpenDeliveries(@HeaderParam("X-Company-Name") String companyName,
+                                       @HeaderParam("X-Employee") String userName,
+                                       @HeaderParam("X-Pruebas") boolean pruebas) {
+        return Response.ok(new ResponseDTO(0, deliveryNoteFacade.listOpenDelivery(companyName, pruebas))).build();
+    }
+
+    @GET
+    @Path("nextitem-pick-list-express/{usernameset}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response findNextItemToPickListExpress(@PathParam("usernameset") String usernameset,
+                                                  @QueryParam("deliveryNumber") String deliveryNumber,
+                                                  @HeaderParam("X-Company-Name") String companyName,
+                                                  @HeaderParam("X-Warehouse-Code") String warehouseCode,
+                                                  @HeaderParam("X-Pruebas") boolean pruebas) {
+        List<Object[]> objects = pickingExpressFacade.listPickingExpressBySeller(deliveryNumber, usernameset, companyName, pruebas);
+
+        List<PickingListExpressDTO> detailItems = new ArrayList<>();
+        for (Object[] obj : objects) {
+            PickingListExpressDTO dto = new PickingListExpressDTO();
+            dto.setIdPickingExpress((Integer) obj[0]);
+            dto.setDocNum((String) obj[1]);
+            dto.setCardCode((String) obj[2]);
+            dto.setLineNum((Integer) obj[3]);
+            dto.setItemCode((String) obj[4]);
+            dto.setQty((Integer) obj[5]);
+            dto.setWhsCode((String) obj[6]);
+            dto.setBinCode((String) obj[7]);
+            dto.setBinAbs((Integer) obj[8]);
+            dto.setComments((String) obj[9]);
+            dto.setCompanyName((String) obj[10]);
+            dto.setEmpId((String) obj[11]);
+            dto.setDocDate((Date) obj[12]);
+            dto.setStatus((String) obj[13]);
+            dto.setEmpIdSet((String) obj[14]);
+            dto.setQtyConfirm((Integer) obj[15]);
+            dto.setDocDateConfirm((Date) obj[16]);
+            dto.setObservation((String) obj[17]);
+            dto.setItemName((String) obj[18]);
+            dto.setBinType((String) obj[19]);
+            dto.setBinSequence((Integer) obj[20]);
+            detailItems.add(dto);
+        }
+        return Response.ok(new ResponseDTO(0, detailItems)).build();
+    }
+
+    @POST
+    @Path("checkitem-pick-list-express")
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response checkItemToPickListExpress(PickingListExpressDTO dto,
+                                               @HeaderParam("X-Company-Name") String companyName,
+                                               @HeaderParam("X-Employee") String userName,
+                                               @HeaderParam("X-Pruebas") boolean pruebas) {
+        return Response.ok(new ResponseDTO(0, pickingExpressFacade.updateItemToPickListExpress(dto, userName, companyName, pruebas))).build();
     }
 
     @POST
@@ -215,6 +277,7 @@ public class DeliveryREST {
 
     @POST
     @Path("express")
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response createDeliveryNote(PickingExpressOrderDTO dto,
@@ -486,6 +549,11 @@ public class DeliveryREST {
                 entity.setEmpId(userName);
                 entity.setDocDate(new Date());
                 entity.setStatus("P");
+                entity.setItemName(itemFacade.getItemName(detail.getItemCode(), companyName, pruebas));
+                Object obj = blFacade.getLocationAttributes(entity.getBinCode(), entity.getWhsCode(), companyName, pruebas);
+                Object[] objBin = (Object[]) obj;
+                entity.setBinType((String) objBin[3]);
+                entity.setBinSequence((Integer) objBin[7]);
                 try {
                     pickingExpressFacade.create(entity, companyName, pruebas);
                 } catch (Exception e) {

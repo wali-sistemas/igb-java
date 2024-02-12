@@ -150,4 +150,19 @@ public class DeliveryNoteFacade {
         }
         return new ArrayList<>();
     }
+
+    public List<String> listOpenDelivery(String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select distinct cast(d.\"BaseRef\" as varchar(10))as BaseRef ");
+        sb.append("from ODLN e ");
+        sb.append("inner join DLN1 d on e.\"DocEntry\"=d.\"DocEntry\" ");
+        sb.append("where e.\"DocStatus\"='O' ");
+        try {
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error listando las entregas abiertas para la empresa " + companyName);
+        }
+        return new ArrayList<>();
+    }
 }
