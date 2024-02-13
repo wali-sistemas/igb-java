@@ -272,7 +272,7 @@ public class BinLocationFacade {
         sb.append("select cast(o.\"AbsEntry\" as int)as AbsEntry,cast(o.\"BinCode\" as varchar(20))as BinCode, ");
         sb.append(" cast(o.\"Attr1Abs\" as int)as Attr1Abs,cast(o.\"Attr1Val\" as varchar(20))as Attr1Val, ");
         sb.append(" cast(o.\"Attr2Abs\" as int)as Attr2Abs,cast(o.\"Attr2Val\" as varchar(20))as Attr2Val, ");
-        sb.append(" cast(o.\"Attr3Abs\" as int)as Attr3Abs,cast(o.\"Attr3Val\" as varchar(20))as Attr3Val ");
+        sb.append(" cast(o.\"Attr3Abs\" as int)as Attr3Abs,cast(o.\"Attr3Val\" as int)as Attr3Val ");
         sb.append("from OBIN o ");
         sb.append("where \"BinCode\"='");
         sb.append(binCode);
