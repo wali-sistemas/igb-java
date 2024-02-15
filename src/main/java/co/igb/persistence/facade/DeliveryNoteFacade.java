@@ -151,17 +151,31 @@ public class DeliveryNoteFacade {
         return new ArrayList<>();
     }
 
-    public List<String> listOpenDelivery(String companyName, boolean testing) {
+    public List<Object[]> listOpenDelivery(String companyName, String whsCode, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select distinct cast(d.\"BaseRef\" as varchar(10))as BaseRef ");
+        sb.append("select distinct cast(e.\"DocNum\" as varchar(10))as delivey, ");
+        sb.append(" (select STRING_AGG(\"numOrder\", ',') ");
+        sb.append("  from ( ");
+        sb.append("   select distinct cast(d.\"BaseRef\" as varchar(10))as \"numOrder\" ");
+        sb.append("   from DLN1 d ");
+        sb.append("   where d.\"DocEntry\"=e.\"DocEntry\" ");
+        sb.append("  )as orders ");
+        sb.append(" )as orders,cast(e.\"CardName\" as varchar(250))as cardName ");
         sb.append("from ODLN e ");
         sb.append("inner join DLN1 d on e.\"DocEntry\"=d.\"DocEntry\" ");
-        sb.append("where e.\"DocStatus\"='O' ");
+        sb.append("where e.\"DocStatus\"='O' and d.\"WhsCode\" ");
+        if (companyName.contains("VARROC")) {
+            sb.append("=");
+            sb.append(whsCode);
+        } else {
+            sb.append("in (01,30) ");
+        }
+        sb.append(" order by 1 asc");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException ex) {
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error listando las entregas abiertas para la empresa " + companyName);
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error listando las entregas abiertas para la empresa " + companyName, e);
         }
         return new ArrayList<>();
     }

@@ -1,9 +1,6 @@
 package co.igb.rest;
 
-import co.igb.dto.DeliveryNoteMagnumDTO;
-import co.igb.dto.PickingExpressOrderDTO;
-import co.igb.dto.PickingListExpressDTO;
-import co.igb.dto.ResponseDTO;
+import co.igb.dto.*;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.hanaws.client.deliveryNotes.DeliveryClient;
 import co.igb.hanaws.dto.deliveryNotes.DeliveryDTO;
@@ -66,9 +63,25 @@ public class DeliveryREST {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listOpenDeliveries(@HeaderParam("X-Company-Name") String companyName,
+                                       @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                        @HeaderParam("X-Employee") String userName,
                                        @HeaderParam("X-Pruebas") boolean pruebas) {
-        return Response.ok(new ResponseDTO(0, deliveryNoteFacade.listOpenDelivery(companyName, pruebas))).build();
+        List<Object[]> deliveryPendingSAP = deliveryNoteFacade.listOpenDelivery(companyName, warehouseCode, pruebas);
+        List<String> pickListExpressClosed = pickingExpressFacade.listPickingExpressClosed(companyName, pruebas);
+
+        for (String delivery : pickListExpressClosed) {
+            int orderIndex = -1;
+            for (int i = 0; i < deliveryPendingSAP.size(); i++) {
+                if (deliveryPendingSAP.get(i)[0].equals(delivery)) {
+                    orderIndex = i;
+                    break;
+                }
+            }
+            if (orderIndex >= 0) {
+                deliveryPendingSAP.remove(orderIndex);
+            }
+        }
+        return Response.ok(new ResponseDTO(0, deliveryPendingSAP)).build();
     }
 
     @GET
@@ -80,35 +93,54 @@ public class DeliveryREST {
                                                   @HeaderParam("X-Company-Name") String companyName,
                                                   @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                                   @HeaderParam("X-Pruebas") boolean pruebas) {
-        List<Object[]> objects = pickingExpressFacade.listPickingExpressBySeller(deliveryNumber, usernameset, companyName, pruebas);
+        Object[] obj = pickingExpressFacade.listPickingExpressBySeller(deliveryNumber, usernameset, companyName, pruebas);
+        if (obj == null) {
+            CONSOLE.log(Level.WARNING, "No se encontraron registros pendientes para picking list de la entrega {0} en {1}", new Object[]{deliveryNumber, companyName});
+            boolean resp = pickingExpressFacade.updateStatusPickListExpress(deliveryNumber, "F", companyName, pruebas);
+            if (!resp) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error finalizando el picking list express para la entrega" + deliveryNumber + " en " + companyName);
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error finalizando el picking list express para la entrega " + deliveryNumber + " en " + companyName)).build();
+            }
+        }
 
         List<PickingListExpressDTO> detailItems = new ArrayList<>();
-        for (Object[] obj : objects) {
-            PickingListExpressDTO dto = new PickingListExpressDTO();
-            dto.setIdPickingExpress((Integer) obj[0]);
-            dto.setDocNum((String) obj[1]);
-            dto.setCardCode((String) obj[2]);
-            dto.setLineNum((Integer) obj[3]);
-            dto.setItemCode((String) obj[4]);
-            dto.setQty((Integer) obj[5]);
-            dto.setWhsCode((String) obj[6]);
-            dto.setBinCode((String) obj[7]);
-            dto.setBinAbs((Integer) obj[8]);
-            dto.setComments((String) obj[9]);
-            dto.setCompanyName((String) obj[10]);
-            dto.setEmpId((String) obj[11]);
-            dto.setDocDate((Date) obj[12]);
-            dto.setStatus((String) obj[13]);
-            dto.setEmpIdSet((String) obj[14]);
-            dto.setQtyConfirm((Integer) obj[15]);
-            dto.setDocDateConfirm((Date) obj[16]);
-            dto.setObservation((String) obj[17]);
-            dto.setItemName((String) obj[18]);
-            dto.setBinType((String) obj[19]);
-            dto.setBinSequence((Integer) obj[20]);
-            detailItems.add(dto);
-        }
+        PickingListExpressDTO dto = new PickingListExpressDTO();
+        dto.setIdPickingExpress((Integer) obj[0]);
+        dto.setDocNum((String) obj[1]);
+        dto.setCardCode((String) obj[2]);
+        dto.setLineNum((Integer) obj[3]);
+        dto.setItemCode((String) obj[4]);
+        dto.setQty((Integer) obj[5]);
+        dto.setWhsCode((String) obj[6]);
+        dto.setBinCode((String) obj[7]);
+        dto.setBinAbs((Integer) obj[8]);
+        dto.setComments((String) obj[9]);
+        dto.setCompanyName((String) obj[10]);
+        dto.setEmpId((String) obj[11]);
+        dto.setDocDate((Date) obj[12]);
+        dto.setStatus((String) obj[13]);
+        dto.setEmpIdSet((String) obj[14]);
+        dto.setQtyConfirm((Integer) obj[15]);
+        dto.setDocDateConfirm((Date) obj[16]);
+        dto.setObservation((String) obj[17]);
+        dto.setItemName((String) obj[18]);
+        dto.setBinType((String) obj[19]);
+        dto.setBinSequence((Integer) obj[20]);
+        detailItems.add(dto);
+
         return Response.ok(new ResponseDTO(0, detailItems)).build();
+    }
+
+    @GET
+    @Path("assign-employee-pick-list-express/{delivery}/{empId}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response listOpenDeliveries(@PathParam("delivery") String docNum,
+                                       @PathParam("empId") String empId,
+                                       @HeaderParam("X-Company-Name") String companyName,
+                                       @HeaderParam("X-Warehouse-Code") String warehouseCode,
+                                       @HeaderParam("X-Pruebas") boolean pruebas) {
+        return Response.ok(new ResponseDTO(0, pickingExpressFacade.assignEmployeeToPickListExpress(empId, docNum, companyName, pruebas))).build();
     }
 
     @POST
@@ -554,6 +586,7 @@ public class DeliveryREST {
                 Object[] objBin = (Object[]) obj;
                 entity.setBinType((String) objBin[3]);
                 entity.setBinSequence((Integer) objBin[7]);
+                entity.setLineStatus("P");
                 try {
                     pickingExpressFacade.create(entity, companyName, pruebas);
                 } catch (Exception e) {

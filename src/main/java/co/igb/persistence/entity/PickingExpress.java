@@ -77,6 +77,9 @@ public class PickingExpress implements Serializable {
     @Basic(optional = false)
     @Column(name = "binSequence")
     private Integer binSequence;
+    @Basic(optional = false)
+    @Column(name = "lineStatus")
+    private String lineStatus;
 
     public PickingExpress() {
     }
@@ -249,6 +252,14 @@ public class PickingExpress implements Serializable {
         this.binSequence = binSequence;
     }
 
+    public String getLineStatus() {
+        return lineStatus;
+    }
+
+    public void setLineStatus(String lineStatus) {
+        this.lineStatus = lineStatus;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -297,7 +308,8 @@ public class PickingExpress implements Serializable {
                 ", observation='" + observation + '\'' +
                 ", itemName='" + itemName + '\'' +
                 ", binType='" + binType + '\'' +
-                ", binSequence='" + binSequence + '\'' +
+                ", binSequence=" + binSequence +
+                ", lineStatus='" + lineStatus + '\'' +
                 '}';
     }
 }
