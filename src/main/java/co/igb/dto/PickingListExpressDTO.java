@@ -27,11 +27,13 @@ public class PickingListExpressDTO {
     public Integer qtyConfirm;
     public Date docDateConfirm;
     public String observation;
+    public String orderNum;
+    public String typeOrderNum;
 
     public PickingListExpressDTO() {
     }
 
-    public PickingListExpressDTO(Integer idPickingExpress, String docNum, String cardCode, Integer lineNum, String itemCode, String itemName, Integer qty, String whsCode, String binCode, Integer binAbs, String binType, Integer binSequence, String comments, String companyName, String empId, Date docDate, String status, String empIdSet, Integer qtyConfirm, Date docDateConfirm, String observation) {
+    public PickingListExpressDTO(Integer idPickingExpress, String docNum, String cardCode, Integer lineNum, String itemCode, String itemName, Integer qty, String whsCode, String binCode, Integer binAbs, String binType, Integer binSequence, String comments, String companyName, String empId, Date docDate, String status, String empIdSet, Integer qtyConfirm, Date docDateConfirm, String observation, String orderNum, String typeOrderNum) {
         this.idPickingExpress = idPickingExpress;
         this.docNum = docNum;
         this.cardCode = cardCode;
@@ -53,6 +55,8 @@ public class PickingListExpressDTO {
         this.qtyConfirm = qtyConfirm;
         this.docDateConfirm = docDateConfirm;
         this.observation = observation;
+        this.orderNum = orderNum;
+        this.typeOrderNum = typeOrderNum;
     }
 
     public Integer getIdPickingExpress() {
@@ -223,6 +227,22 @@ public class PickingListExpressDTO {
         this.binSequence = binSequence;
     }
 
+    public String getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(String orderNum) {
+        this.orderNum = orderNum;
+    }
+
+    public String getTypeOrderNum() {
+        return typeOrderNum;
+    }
+
+    public void setTypeOrderNum(String typeOrderNum) {
+        this.typeOrderNum = typeOrderNum;
+    }
+
     @Override
     public String toString() {
         return "PickingListExpressDTO{" +
@@ -237,7 +257,7 @@ public class PickingListExpressDTO {
                 ", binCode='" + binCode + '\'' +
                 ", binAbs=" + binAbs +
                 ", binType='" + binType + '\'' +
-                ", binSequence='" + binSequence + '\'' +
+                ", binSequence=" + binSequence +
                 ", comments='" + comments + '\'' +
                 ", companyName='" + companyName + '\'' +
                 ", empId='" + empId + '\'' +
@@ -247,6 +267,8 @@ public class PickingListExpressDTO {
                 ", qtyConfirm=" + qtyConfirm +
                 ", docDateConfirm=" + docDateConfirm +
                 ", observation='" + observation + '\'' +
+                ", orderNum='" + orderNum + '\'' +
+                ", typeOrderNum='" + typeOrderNum + '\'' +
                 '}';
     }
 }

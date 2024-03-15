@@ -23,7 +23,11 @@ public class BusinessPartnerFacade {
     public List<Object[]> listSalesPersonActives(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(\"SlpCode\" as varchar(5))as slpCode,cast(\"SlpName\" as varchar(100))as slpName, ");
-        sb.append(" cast(\"Memo\" as varchar(100))as whsCodeTireDefault,cast(\"Telephone\" as varchar(100))as regional ");
+        if (companyName.contains("IGB")) {
+            sb.append(" cast(\"Telephone\" as varchar(100))as whsCodeTireDefault,'01'as whsCodePartsDefault,cast(\"Memo\" as varchar(100))as regional ");
+        } else {
+            sb.append(" cast(\"Memo\" as varchar(100))as whsCodeTireDefault,cast(\"Telephone\" as varchar(100))as whsCodePartsDefault,cast(\"U_REGIONAL\" as varchar(100))as regional ");
+        }
         sb.append("from OSLP ");
         sb.append("where \"Fax\"='Y' ");
         sb.append("order by \"SlpCode\" asc");

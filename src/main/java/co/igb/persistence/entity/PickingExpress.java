@@ -80,6 +80,9 @@ public class PickingExpress implements Serializable {
     @Basic(optional = false)
     @Column(name = "lineStatus")
     private String lineStatus;
+    @Basic(optional = false)
+    @Column(name = "orderNum")
+    private String orderNum;
 
     public PickingExpress() {
     }
@@ -260,6 +263,14 @@ public class PickingExpress implements Serializable {
         this.lineStatus = lineStatus;
     }
 
+    public String getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(String orderNum) {
+        this.orderNum = orderNum;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -310,6 +321,7 @@ public class PickingExpress implements Serializable {
                 ", binType='" + binType + '\'' +
                 ", binSequence=" + binSequence +
                 ", lineStatus='" + lineStatus + '\'' +
+                ", orderNum='" + orderNum + '\'' +
                 '}';
     }
 }

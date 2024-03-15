@@ -93,42 +93,44 @@ public class DeliveryREST {
                                                   @HeaderParam("X-Company-Name") String companyName,
                                                   @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                                   @HeaderParam("X-Pruebas") boolean pruebas) {
-        Object[] obj = pickingExpressFacade.listPickingExpressBySeller(deliveryNumber, usernameset, companyName, pruebas);
+        Object[] obj = pickingExpressFacade.listPickingExpressBySeller(deliveryNumber, usernameset, warehouseCode, companyName, pruebas);
         if (obj == null) {
             CONSOLE.log(Level.WARNING, "No se encontraron registros pendientes para picking list de la entrega {0} en {1}", new Object[]{deliveryNumber, companyName});
             boolean resp = pickingExpressFacade.updateStatusPickListExpress(deliveryNumber, "F", companyName, pruebas);
             if (!resp) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error finalizando el picking list express para la entrega" + deliveryNumber + " en " + companyName);
                 return Response.ok(new ResponseDTO(-1, "Ocurrio un error finalizando el picking list express para la entrega " + deliveryNumber + " en " + companyName)).build();
+            } else {
+                return Response.ok(new ResponseDTO(1, "No se encontraron ordenes asignadas para picking.")).build();
             }
+        } else {
+            List<PickingListExpressDTO> detailItems = new ArrayList<>();
+            PickingListExpressDTO dto = new PickingListExpressDTO();
+            dto.setIdPickingExpress((Integer) obj[0]);
+            dto.setDocNum((String) obj[1]);
+            dto.setCardCode((String) obj[2]);
+            dto.setLineNum((Integer) obj[3]);
+            dto.setItemCode((String) obj[4]);
+            dto.setQty((Integer) obj[5]);
+            dto.setWhsCode((String) obj[6]);
+            dto.setBinCode(dto.getWhsCode().equals("30") ? "MDL(" + (String) obj[22] + ")" : (String) obj[7]);
+            dto.setBinAbs((Integer) obj[8]);
+            dto.setComments((String) obj[9]);
+            dto.setCompanyName((String) obj[10]);
+            dto.setEmpId((String) obj[11]);
+            dto.setDocDate((Date) obj[12]);
+            dto.setStatus((String) obj[13]);
+            dto.setEmpIdSet((String) obj[14]);
+            dto.setQtyConfirm((Integer) obj[15]);
+            dto.setDocDateConfirm((Date) obj[16]);
+            dto.setObservation((String) obj[17]);
+            dto.setItemName((String) obj[18]);
+            dto.setBinType((String) obj[19]);
+            dto.setBinSequence((Integer) obj[20]);
+            dto.setOrderNum((String) obj[22]);
+            detailItems.add(dto);
+            return Response.ok(new ResponseDTO(0, detailItems)).build();
         }
-
-        List<PickingListExpressDTO> detailItems = new ArrayList<>();
-        PickingListExpressDTO dto = new PickingListExpressDTO();
-        dto.setIdPickingExpress((Integer) obj[0]);
-        dto.setDocNum((String) obj[1]);
-        dto.setCardCode((String) obj[2]);
-        dto.setLineNum((Integer) obj[3]);
-        dto.setItemCode((String) obj[4]);
-        dto.setQty((Integer) obj[5]);
-        dto.setWhsCode((String) obj[6]);
-        dto.setBinCode((String) obj[7]);
-        dto.setBinAbs((Integer) obj[8]);
-        dto.setComments((String) obj[9]);
-        dto.setCompanyName((String) obj[10]);
-        dto.setEmpId((String) obj[11]);
-        dto.setDocDate((Date) obj[12]);
-        dto.setStatus((String) obj[13]);
-        dto.setEmpIdSet((String) obj[14]);
-        dto.setQtyConfirm((Integer) obj[15]);
-        dto.setDocDateConfirm((Date) obj[16]);
-        dto.setObservation((String) obj[17]);
-        dto.setItemName((String) obj[18]);
-        dto.setBinType((String) obj[19]);
-        dto.setBinSequence((Integer) obj[20]);
-        detailItems.add(dto);
-
-        return Response.ok(new ResponseDTO(0, detailItems)).build();
     }
 
     @GET
@@ -150,9 +152,16 @@ public class DeliveryREST {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response checkItemToPickListExpress(PickingListExpressDTO dto,
                                                @HeaderParam("X-Company-Name") String companyName,
+                                               @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                                @HeaderParam("X-Employee") String userName,
                                                @HeaderParam("X-Pruebas") boolean pruebas) {
-        return Response.ok(new ResponseDTO(0, pickingExpressFacade.updateItemToPickListExpress(dto, userName, companyName, pruebas))).build();
+        if (dto.getTypeOrderNum().equals("MODULA")) {
+            dto.setWhsCode("30");
+            return Response.ok(new ResponseDTO(0, pickingExpressFacade.updateOrderToPickListExpress(dto, userName, companyName, pruebas))).build();
+        } else {
+            dto.setWhsCode(warehouseCode);
+            return Response.ok(new ResponseDTO(0, pickingExpressFacade.updateItemToPickListExpress(dto, userName, companyName, pruebas))).build();
+        }
     }
 
     @POST
@@ -587,6 +596,7 @@ public class DeliveryREST {
                 entity.setBinType((String) objBin[3]);
                 entity.setBinSequence((Integer) objBin[7]);
                 entity.setLineStatus("P");
+                entity.setOrderNum(detail.getWarehouseCode() == "30" ? dto.getOrderMDL().toString() : dto.getOrderSAP().toString());
                 try {
                     pickingExpressFacade.create(entity, companyName, pruebas);
                 } catch (Exception e) {
