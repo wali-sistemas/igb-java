@@ -38,13 +38,32 @@ public class PickingExpressFacade {
         return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).find(PickingExpress.class, idPackingExpress);
     }
 
-    public Object[] listPickingExpressBySeller(String docNum, String empIdSet, String companyName, boolean testing) {
+    public Object[] listPickingExpressBySeller(String docNumDelivery, String empIdSet, String whsCode, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select top 1 * from picking_express where (lineStatus='' or lineStatus is null or lineStatus='P') and docNum=");
-        sb.append(docNum);
+        sb.append("select top 1 * from (");
+        sb.append(" select idpicking_express,docNum,cardCode,lineNum,itemCode,qty,whsCode,binCode,binAbs,comments,companyName,empId,cast(docDate as date)as docdate,status,empIdSet,qtyConfirm,docDateConfirm,observation,itemName,binType,binSequence,lineStatus,orderNum ");
+        sb.append(" from picking_express ");
+        sb.append(" where (lineStatus='' or lineStatus is null or lineStatus='P') and docNum=");
+        sb.append(docNumDelivery);
         sb.append(" and empId='");
         sb.append(empIdSet);
-        sb.append("' order by binType, binSequence");
+        sb.append("' and companyName='");
+        sb.append(companyName);
+        sb.append("' and whsCode=");
+        sb.append(whsCode);
+        sb.append("union all ");
+        sb.append(" select 0 as idpicking_express,docNum,cardCode,0 as lineNum,'MDL-ORD(' + orderNum + ')' as itemCode,sum(qty)as qty,whsCode,binCode,binAbs,comments,companyName,empId,cast(docDate as date)as docdate,status,empIdSet,qtyConfirm,docDateConfirm,observation,'RECOGER CANASTAS COMPLETADAS POR MODULA PTL(PICK TO LIGHT)' as itemName,binType,binSequence,lineStatus,orderNum ");
+        sb.append(" from picking_express ");
+        sb.append(" where (lineStatus='' or lineStatus is null or lineStatus='P') and docNum=");
+        sb.append(docNumDelivery);
+        sb.append("and empId='");
+        sb.append(empIdSet);
+        sb.append("' and companyName='");
+        sb.append(companyName);
+        sb.append("' and whsCode=30 ");
+        sb.append(" group by docNum,cardCode,orderNum,whsCode,binCode,binAbs,comments,companyName,empId,cast(docDate as date),status,empIdSet,qtyConfirm,docDateConfirm,observation,binType,binSequence,lineStatus ");
+        sb.append(")as t ");
+        sb.append("order by t.whsCode desc,t.binType asc,t.binSequence asc");
         try {
             return (Object[]) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException ex) {
@@ -72,10 +91,10 @@ public class PickingExpressFacade {
         CriteriaUpdate<PickingExpress> cu = cb.createCriteriaUpdate(PickingExpress.class);
         Root<PickingExpress> root = cu.from(PickingExpress.class);
         cu.set(root.get(PickingExpress_.empId), empId);
-        cu.where(cb.equal(root.get(PickingExpress_.docNum), delivery));
+        cu.where(cb.and(cb.equal(root.get(PickingExpress_.docNum), delivery)), cb.equal(root.get(PickingExpress_.companyName), companyName));
         try {
             int rows = em.createQuery(cu).executeUpdate();
-            if (rows == 1) {
+            if (rows > 1) {
                 return true;
             }
         } catch (NoResultException ex) {
@@ -95,7 +114,7 @@ public class PickingExpressFacade {
         cu.set(root.get(PickingExpress_.docDateConfirm), new Date());
         cu.set(root.get(PickingExpress_.observation), dto.getObservation());
         cu.set(root.get(PickingExpress_.lineStatus), "F");
-        cu.where(cb.equal(root.get(PickingExpress_.id), dto.getIdPickingExpress()));
+        cu.where(cb.and(cb.equal(root.get(PickingExpress_.id), dto.getIdPickingExpress()), cb.equal(root.get(PickingExpress_.companyName), companyName), cb.equal(root.get(PickingExpress_.whsCode), dto.getWhsCode())));
         try {
             int rows = em.createQuery(cu).executeUpdate();
             if (rows == 1) {
@@ -103,7 +122,30 @@ public class PickingExpressFacade {
             }
         } catch (NoResultException ex) {
         } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error confirmando el pickingListExpress " + dto.getIdPickingExpress() + " de la entrega " + dto.getDocNum() + " en " + companyName, e);
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error confirmando el pickingListExpress #" + dto.getIdPickingExpress() + " de la entrega " + dto.getDocNum() + " en " + companyName, e);
+        }
+        return false;
+    }
+
+    public boolean updateOrderToPickListExpress(PickingListExpressDTO dto, String empIdSet, String companyName, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaUpdate<PickingExpress> cu = cb.createCriteriaUpdate(PickingExpress.class);
+        Root<PickingExpress> root = cu.from(PickingExpress.class);
+        cu.set(root.get(PickingExpress_.empIdSet), empIdSet);
+        cu.set(root.get(PickingExpress_.qtyConfirm), dto.getQtyConfirm());
+        cu.set(root.get(PickingExpress_.docDateConfirm), new Date());
+        cu.set(root.get(PickingExpress_.observation), dto.getObservation());
+        cu.set(root.get(PickingExpress_.lineStatus), "F");
+        cu.where(cb.and(cb.equal(root.get(PickingExpress_.whsCode), dto.getWhsCode()), cb.and(cb.equal(root.get(PickingExpress_.companyName), companyName)), cb.and(cb.equal(root.get(PickingExpress_.orderNum), dto.getOrderNum()))));
+        try {
+            int rows = em.createQuery(cu).executeUpdate();
+            if (rows >= 1) {
+                return true;
+            }
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error confirmando el pickingListExpress de la orden de MODULA #" + dto.getOrderNum() + " en " + companyName, e);
         }
         return false;
     }
@@ -117,7 +159,7 @@ public class PickingExpressFacade {
         cu.where(cb.equal(root.get(PickingExpress_.docNum), delivery));
         try {
             int rows = em.createQuery(cu).executeUpdate();
-            if (rows == 1) {
+            if (rows >= 1) {
                 return true;
             }
         } catch (NoResultException ex) {
