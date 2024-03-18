@@ -32,9 +32,10 @@ public class BusinessPartnersREST implements Serializable {
     @Path("sales-person")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response getSalesPersonActives(@HeaderParam("X-Company-Name") String companyName,
+    public Response getSalesPersonActives(@QueryParam("email") String email,
+                                          @HeaderParam("X-Company-Name") String companyName,
                                           @HeaderParam("X-Pruebas") boolean pruebas) {
-        return Response.ok(businessPartnerFacade.listSalesPersonActives(companyName, pruebas)).build();
+        return Response.ok(businessPartnerFacade.listSalesPersonActives(companyName, email, pruebas)).build();
     }
 
     @GET

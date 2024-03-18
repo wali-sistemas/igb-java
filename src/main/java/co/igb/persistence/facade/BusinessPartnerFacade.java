@@ -20,7 +20,7 @@ public class BusinessPartnerFacade {
     @EJB
     private PersistenceConf persistenceConf;
 
-    public List<Object[]> listSalesPersonActives(String companyName, boolean testing) {
+    public List<Object[]> listSalesPersonActives(String companyName, String email, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(\"SlpCode\" as varchar(5))as slpCode,cast(\"SlpName\" as varchar(100))as slpName, ");
         if (companyName.contains("IGB")) {
@@ -30,6 +30,11 @@ public class BusinessPartnerFacade {
         }
         sb.append("from OSLP ");
         sb.append("where \"Fax\"='Y' ");
+        if (email != null) {
+            sb.append(" and \"Memo\" in (select distinct \"Memo\" from OSLP where \"Email\"='");
+            sb.append(email);
+            sb.append("') ");
+        }
         sb.append("order by \"SlpCode\" asc");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
@@ -40,3 +45,7 @@ public class BusinessPartnerFacade {
         return new ArrayList<>();
     }
 }
+
+
+
+

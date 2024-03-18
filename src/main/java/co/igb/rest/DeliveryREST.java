@@ -101,7 +101,7 @@ public class DeliveryREST {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error finalizando el picking list express para la entrega" + deliveryNumber + " en " + companyName);
                 return Response.ok(new ResponseDTO(-1, "Ocurrio un error finalizando el picking list express para la entrega " + deliveryNumber + " en " + companyName)).build();
             } else {
-                return Response.ok(new ResponseDTO(1, "No se encontraron ordenes asignadas para picking.")).build();
+                return Response.ok(new ResponseDTO(1, "No se encontraron entregas asignadas para picking list express.")).build();
             }
         } else {
             List<PickingListExpressDTO> detailItems = new ArrayList<>();
