@@ -94,7 +94,7 @@ public class PickingExpressFacade {
         cu.where(cb.and(cb.equal(root.get(PickingExpress_.docNum), delivery)), cb.equal(root.get(PickingExpress_.companyName), companyName));
         try {
             int rows = em.createQuery(cu).executeUpdate();
-            if (rows > 1) {
+            if (rows >= 1) {
                 return true;
             }
         } catch (NoResultException ex) {
