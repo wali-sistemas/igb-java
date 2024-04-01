@@ -151,7 +151,7 @@ public class DeliveryNoteFacade {
         return new ArrayList<>();
     }
 
-    public List<Object[]> listOpenDelivery(String companyName, String whsCode, boolean testing) {
+    public List<Object[]> listOpenDelivery(String whsCode, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select distinct cast(e.\"DocNum\" as varchar(10))as delivey, ");
         sb.append(" (select STRING_AGG(\"numOrder\", ',') ");
@@ -163,7 +163,7 @@ public class DeliveryNoteFacade {
         sb.append(" )as orders,cast(e.\"CardName\" as varchar(250))as cardName ");
         sb.append("from ODLN e ");
         sb.append("inner join DLN1 d on e.\"DocEntry\"=d.\"DocEntry\" ");
-        sb.append("where e.\"DocStatus\"='O' and d.\"WhsCode\" ");
+        sb.append("where e.\"U_SEPARADOR\"='PEND-PICKING-LIST-EXPRESS' and d.\"WhsCode\" ");
         if (companyName.contains("VARROC")) {
             sb.append("=");
             sb.append(whsCode);
@@ -178,5 +178,18 @@ public class DeliveryNoteFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error listando las entregas abiertas para la empresa " + companyName, e);
         }
         return new ArrayList<>();
+    }
+
+    public void updateUserFieldSeparador(String docNum, String separador, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("update ODLN set \"U_SEPARADOR\"='");
+        sb.append(separador);
+        sb.append("' where \"DocNum\"=");
+        sb.append(docNum);
+        try {
+            persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).executeUpdate();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+        }
     }
 }

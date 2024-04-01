@@ -66,7 +66,7 @@ public class DeliveryREST {
                                        @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                        @HeaderParam("X-Employee") String userName,
                                        @HeaderParam("X-Pruebas") boolean pruebas) {
-        List<Object[]> deliveryPendingSAP = deliveryNoteFacade.listOpenDelivery(companyName, warehouseCode, pruebas);
+        List<Object[]> deliveryPendingSAP = deliveryNoteFacade.listOpenDelivery(warehouseCode, companyName, pruebas);
         List<String> pickListExpressClosed = pickingExpressFacade.listPickingExpressClosed(companyName, pruebas);
 
         for (String delivery : pickListExpressClosed) {
@@ -101,6 +101,12 @@ public class DeliveryREST {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error finalizando el picking list express para la entrega" + deliveryNumber + " en " + companyName);
                 return Response.ok(new ResponseDTO(-1, "Ocurrio un error finalizando el picking list express para la entrega " + deliveryNumber + " en " + companyName)).build();
             } else {
+                try {
+                    deliveryNoteFacade.updateUserFieldSeparador(deliveryNumber, "OK-PICKING-LIST-EXPRESS", companyName, pruebas);
+                } catch (Exception e) {
+                    CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando el UDF-nombre-separador para la entrega " + deliveryNumber + " en " + companyName, e);
+                    return Response.ok(new ResponseDTO(-1, "Ocurrio un error actualizando el UDF-nombre-separador para la entrega " + deliveryNumber + " en " + companyName)).build();
+                }
                 return Response.ok(new ResponseDTO(1, "No se encontraron entregas asignadas para picking list express.")).build();
             }
         } else {
@@ -410,6 +416,7 @@ public class DeliveryREST {
             document.setUtotcaj(0.0);
             document.setUvrdeclarado((BigDecimal) itemsSAP.get(0)[7]);
             document.setUnunfac(orderNumber.toString());
+            document.setUseparador("PEND-PICKING-LIST-EXPRESS");
         }
 
         for (Object[] row : itemsMissing) {

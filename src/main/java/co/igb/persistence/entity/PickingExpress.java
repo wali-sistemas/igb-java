@@ -51,7 +51,6 @@ public class PickingExpress implements Serializable {
     private String empId;
     @Basic(optional = false)
     @Column(name = "docDate")
-    @Temporal(TemporalType.TIMESTAMP)
     private Date docDate;
     @Basic(optional = false)
     @Column(name = "status")
