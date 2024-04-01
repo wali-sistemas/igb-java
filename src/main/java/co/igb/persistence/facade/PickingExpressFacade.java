@@ -38,37 +38,42 @@ public class PickingExpressFacade {
         return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).find(PickingExpress.class, idPackingExpress);
     }
 
-    public Object[]  listPickingExpressBySeller(String docNumDelivery, String empIdSet, String whsCode, String companyName, boolean testing) {
+    public Object[] listPickingExpressBySeller(String docNumDelivery, String empIdSet, String whsCode, Integer position, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select top 1 cast(t.idpicking_express as int)as id,cast(t.docNum as varchar)as docNum,cast(t.cardCode as varchar)as cardCode,cast(t.lineNum as int)as lineNum, ");
-        sb.append(" cast(t.itemCode as varchar)as itemCode,cast(t.qty as int)as qty,cast(t.whsCode as varchar)as whsCode,cast(t.binCode as varchar)as binCode,cast(t.binAbs as int)as binAbs, ");
-        sb.append(" cast(t.comments as varchar)as comments,cast(t.companyName as varchar)as companyName,cast(t.empId as varchar)as empId,cast(t.docDate as datetime)as docDate,cast(t.status as varchar)as status, ");
-        sb.append(" cast(t.empIdSet as varchar)as empIdSet,cast(t.qtyConfirm as int)as qtyConfirm,cast(t.docDateConfirm as datetime)as docDateConfirm,cast(t.observation as varchar)as observation, ");
-        sb.append(" cast(t.itemName as varchar(100))as itemName,cast(t.binType as varchar)as binType,cast(t.binSequence as int)as binSequence,cast(t.lineStatus as varchar)as lineStatus,cast(t.orderNum as varchar)as orderNum ");
-        sb.append("from ( ");
-        sb.append(" select idpicking_express,docNum,cardCode,lineNum,itemCode,qty,whsCode,binCode,binAbs,comments,companyName,empId,cast(docDate as datetime)as docdate,status,empIdSet,qtyConfirm,docDateConfirm,observation,itemName,binType,binSequence,lineStatus,orderNum ");
-        sb.append(" from picking_express ");
-        sb.append(" where (lineStatus='' or lineStatus is null or lineStatus='P') and docNum=");
+        sb.append("select top 1 * from ( ");
+        sb.append(" select cast(t.idpicking_express as int)as id,cast(t.docNum as varchar)as docNum,cast(t.cardCode as varchar)as cardCode,cast(t.lineNum as int)as lineNum, ");
+        sb.append("  cast(t.itemCode as varchar)as itemCode,cast(t.qty as int)as qty,cast(t.whsCode as varchar)as whsCode,cast(t.binCode as varchar)as binCode,cast(t.binAbs as int)as binAbs, ");
+        sb.append("  cast(t.comments as varchar)as comments,cast(t.companyName as varchar)as companyName,cast(t.empId as varchar)as empId,cast(t.docDate as datetime)as docDate,cast(t.status as varchar)as status, ");
+        sb.append("  cast(t.empIdSet as varchar)as empIdSet,cast(t.qtyConfirm as int)as qtyConfirm,cast(t.docDateConfirm as datetime)as docDateConfirm,cast(t.observation as varchar)as observation, ");
+        sb.append("  cast(t.itemName as varchar(100))as itemName,cast(t.binType as varchar)as binType,cast(t.binSequence as int)as binSequence,cast(t.lineStatus as varchar)as lineStatus,cast(t.orderNum as varchar)as orderNum, ");
+        sb.append("  cast(row_number()over(order by t.whsCode desc,t.binType asc,t.binSequence asc)as int)as row,cast(count(*)over(partition by t.cardCode)as int)as countRow ");
+        sb.append(" from ( ");
+        sb.append("  select idpicking_express,docNum,cardCode,lineNum,itemCode,qty,whsCode,binCode,binAbs,comments,companyName,empId,cast(docDate as datetime)as docdate,status,empIdSet,qtyConfirm,docDateConfirm,observation,itemName,binType,binSequence,lineStatus,orderNum ");
+        sb.append("  from picking_express ");
+        sb.append("  where (lineStatus='' or lineStatus is null or lineStatus='P') and docNum=");
         sb.append(docNumDelivery);
-        sb.append(" and empId='");
+        sb.append("  and empId='");
         sb.append(empIdSet);
         sb.append("' and companyName='");
         sb.append(companyName);
         sb.append("' and whsCode=");
         sb.append(whsCode);
-        sb.append("union all ");
-        sb.append(" select 0 as idpicking_express,docNum,cardCode,0 as lineNum,'MDL-ORD(' + orderNum + ')' as itemCode,sum(qty)as qty,whsCode,binCode,binAbs,comments,companyName,empId,cast(docDate as datetime)as docdate,status,empIdSet,qtyConfirm,docDateConfirm,observation,'RECOGER CANASTAS COMPLETADAS POR MODULA PTL(PICK TO LIGHT)' as itemName,binType,binSequence,lineStatus,orderNum ");
-        sb.append(" from picking_express ");
-        sb.append(" where (lineStatus='' or lineStatus is null or lineStatus='P') and docNum=");
+        sb.append(" union all ");
+        sb.append("  select 0 as idpicking_express,docNum,cardCode,0 as lineNum,'MDL-ORD(' + orderNum + ')' as itemCode,sum(qty)as qty,whsCode,binCode,binAbs,comments,companyName,empId,cast(docDate as datetime)as docdate,status,empIdSet,qtyConfirm,docDateConfirm,observation,'RECOGER CANASTAS COMPLETADAS POR MODULA PTL(PICK TO LIGHT)' as itemName,binType,binSequence,lineStatus,orderNum ");
+        sb.append("  from picking_express ");
+        sb.append("  where (lineStatus='' or lineStatus is null or lineStatus='P') and docNum=");
         sb.append(docNumDelivery);
-        sb.append("and empId='");
+        sb.append("  and empId='");
         sb.append(empIdSet);
         sb.append("' and companyName='");
         sb.append(companyName);
         sb.append("' and whsCode=30 ");
-        sb.append(" group by docNum,cardCode,orderNum,whsCode,binCode,binAbs,comments,companyName,empId,cast(docDate as datetime),status,empIdSet,qtyConfirm,docDateConfirm,observation,binType,binSequence,lineStatus ");
-        sb.append(")as t ");
-        sb.append("order by t.whsCode desc,t.binType asc,t.binSequence asc");
+        sb.append("  group by docNum,cardCode,orderNum,whsCode,binCode,binAbs,comments,companyName,empId,cast(docDate as datetime),status,empIdSet,qtyConfirm,docDateConfirm,observation,binType,binSequence,lineStatus ");
+        sb.append(" )as t ");
+        sb.append(")as f ");
+        sb.append("where f.row=");
+        sb.append(position);
+        sb.append(" order by f.whsCode desc,f.binType asc,f.binSequence asc");
         try {
             return (Object[]) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException ex) {

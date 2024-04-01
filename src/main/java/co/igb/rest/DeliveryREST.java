@@ -90,10 +90,11 @@ public class DeliveryREST {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response findNextItemToPickListExpress(@PathParam("usernameset") String usernameset,
                                                   @QueryParam("deliveryNumber") String deliveryNumber,
+                                                  @QueryParam("position") Integer position,
                                                   @HeaderParam("X-Company-Name") String companyName,
                                                   @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                                   @HeaderParam("X-Pruebas") boolean pruebas) {
-        Object[] obj = pickingExpressFacade.listPickingExpressBySeller(deliveryNumber, usernameset, warehouseCode, companyName, pruebas);
+        Object[] obj = pickingExpressFacade.listPickingExpressBySeller(deliveryNumber, usernameset, warehouseCode, position, companyName, pruebas);
         if (obj == null) {
             CONSOLE.log(Level.WARNING, "No se encontraron registros pendientes para picking list de la entrega {0} en {1}", new Object[]{deliveryNumber, companyName});
             boolean resp = pickingExpressFacade.updateStatusPickListExpress(deliveryNumber, "F", companyName, pruebas);
@@ -134,6 +135,8 @@ public class DeliveryREST {
             dto.setBinType((String) obj[19]);
             dto.setBinSequence((Integer) obj[20]);
             dto.setOrderNum((String) obj[22]);
+            dto.setRow((Integer) obj[23]);
+            dto.setCountRow((Integer) obj[24]);
             detailItems.add(dto);
             return Response.ok(new ResponseDTO(0, detailItems)).build();
         }
