@@ -29,11 +29,13 @@ public class PickingListExpressDTO {
     public String observation;
     public String orderNum;
     public String typeOrderNum;
+    public Integer row;
+    public Integer countRow;
 
     public PickingListExpressDTO() {
     }
 
-    public PickingListExpressDTO(Integer idPickingExpress, String docNum, String cardCode, Integer lineNum, String itemCode, String itemName, Integer qty, String whsCode, String binCode, Integer binAbs, String binType, Integer binSequence, String comments, String companyName, String empId, Date docDate, String status, String empIdSet, Integer qtyConfirm, Date docDateConfirm, String observation, String orderNum, String typeOrderNum) {
+    public PickingListExpressDTO(Integer idPickingExpress, String docNum, String cardCode, Integer lineNum, String itemCode, String itemName, Integer qty, String whsCode, String binCode, Integer binAbs, String binType, Integer binSequence, String comments, String companyName, String empId, Date docDate, String status, String empIdSet, Integer qtyConfirm, Date docDateConfirm, String observation, String orderNum, String typeOrderNum, Integer row, Integer countRow) {
         this.idPickingExpress = idPickingExpress;
         this.docNum = docNum;
         this.cardCode = cardCode;
@@ -57,6 +59,8 @@ public class PickingListExpressDTO {
         this.observation = observation;
         this.orderNum = orderNum;
         this.typeOrderNum = typeOrderNum;
+        this.row = row;
+        this.countRow = countRow;
     }
 
     public Integer getIdPickingExpress() {
@@ -243,6 +247,22 @@ public class PickingListExpressDTO {
         this.typeOrderNum = typeOrderNum;
     }
 
+    public Integer getRow() {
+        return row;
+    }
+
+    public void setRow(Integer row) {
+        this.row = row;
+    }
+
+    public Integer getCountRow() {
+        return countRow;
+    }
+
+    public void setCountRow(Integer countRow) {
+        this.countRow = countRow;
+    }
+
     @Override
     public String toString() {
         return "PickingListExpressDTO{" +
@@ -269,6 +289,8 @@ public class PickingListExpressDTO {
                 ", observation='" + observation + '\'' +
                 ", orderNum='" + orderNum + '\'' +
                 ", typeOrderNum='" + typeOrderNum + '\'' +
+                ", row=" + row +
+                ", countRow=" + countRow +
                 '}';
     }
 }
