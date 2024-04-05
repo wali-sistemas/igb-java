@@ -31,7 +31,12 @@ public class BusinessPartnerFacade {
         sb.append("from OSLP ");
         sb.append("where \"Fax\"='Y' ");
         if (email != null) {
-            sb.append(" and \"Memo\" in (select distinct \"Memo\" from OSLP where \"Email\"='");
+            if (companyName.contains("IGB")) {
+                sb.append(" and \"Memo\" in ");
+            } else {
+                sb.append(" and \"U_REGIONAL\" in ");
+            }
+            sb.append(" (select distinct \"Memo\" from OSLP where \"Email\"='");
             sb.append(email);
             sb.append("') ");
         }
