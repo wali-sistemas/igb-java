@@ -23,18 +23,18 @@ public class BusinessPartnerFacade {
     public List<Object[]> listSalesPersonActives(String companyName, String email, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(\"SlpCode\" as varchar(5))as slpCode,cast(\"SlpName\" as varchar(100))as slpName, ");
-        if (companyName.contains("IGB")) {
-            sb.append(" cast(\"Telephone\" as varchar(100))as whsCodeTireDefault,'01'as whsCodePartsDefault,cast(\"Memo\" as varchar(100))as regional ");
-        } else {
+        if (!companyName.contains("IGB")) {
             sb.append(" cast(\"Memo\" as varchar(100))as whsCodeTireDefault,cast(\"Telephone\" as varchar(100))as whsCodePartsDefault,cast(\"U_REGIONAL\" as varchar(100))as regional ");
+        } else {
+            sb.append(" cast(\"Telephone\" as varchar(100))as whsCodeTireDefault,'01'as whsCodePartsDefault,cast(\"Memo\" as varchar(100))as regional ");
         }
         sb.append("from OSLP ");
         sb.append("where \"Fax\"='Y' ");
         if (email != null) {
-            if (companyName.contains("IGB")) {
-                sb.append(" and \"Memo\" in (select distinct \"Memo\" from OSLP where \"Email\"='");
-            } else {
+            if (!companyName.contains("IGB")) {
                 sb.append(" and \"U_REGIONAL\" in (select distinct \"U_REGIONAL\" from OSLP where \"Email\"='");
+            } else {
+                sb.append(" and \"Memo\" in (select distinct \"Memo\" from OSLP where \"Email\"='");
             }
             sb.append(email);
             sb.append("') ");
