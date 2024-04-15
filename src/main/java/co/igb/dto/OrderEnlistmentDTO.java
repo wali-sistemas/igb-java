@@ -24,11 +24,12 @@ public class OrderEnlistmentDTO {
     private Integer discOrder;
     private Integer discClient;
     private Integer nroOrder;
+    private String comments;
 
     public OrderEnlistmentDTO() {
     }
 
-    public OrderEnlistmentDTO(String status, String docNumSAP, String docNumMDL, String cardCode, String cardName, String slpName, String region, Date docDate, BigDecimal docTotal, String payCond, BigDecimal cupo, BigDecimal balance, Integer dayVenc, Integer promDay, Integer discOrder, Integer discClient, Integer nroOrder) {
+    public OrderEnlistmentDTO(String status, String docNumSAP, String docNumMDL, String cardCode, String cardName, String slpName, String region, Date docDate, BigDecimal docTotal, String payCond, BigDecimal cupo, BigDecimal balance, Integer dayVenc, Integer promDay, Integer discOrder, Integer discClient, Integer nroOrder, String comments) {
         this.status = status;
         this.docNumSAP = docNumSAP;
         this.docNumMDL = docNumMDL;
@@ -46,6 +47,7 @@ public class OrderEnlistmentDTO {
         this.discOrder = discOrder;
         this.discClient = discClient;
         this.nroOrder = nroOrder;
+        this.comments = comments;
     }
 
     public String getStatus() {
@@ -184,6 +186,14 @@ public class OrderEnlistmentDTO {
         this.nroOrder = nroOrder;
     }
 
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
     @Override
     public String toString() {
         return "OrderEnlistmentDTO{" +
@@ -204,6 +214,7 @@ public class OrderEnlistmentDTO {
                 ", discOrder=" + discOrder +
                 ", discClient=" + discClient +
                 ", nroOrder=" + nroOrder +
+                ", comments='" + comments + '\'' +
                 '}';
     }
 }
