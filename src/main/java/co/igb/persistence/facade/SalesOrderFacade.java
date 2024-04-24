@@ -561,7 +561,7 @@ public class SalesOrderFacade {
         }
         sb.append("  cast(o.\"DocDate\" as date)as docDate,cast(o.\"DocTotal\" as numeric(18,2))as docTotal,case when o.\"GroupNum\"=-1 then 'CONTADO' else 'CRÉDITO' end as payCond,cast(c.\"CreditLine\" as numeric(18,2))as cupo,cast(c.\"Balance\" as numeric(18,2))as saldo, ");
         sb.append("  ifnull(cast((select days_between(current_date,add_days(min(f.\"DocDueDate\"),10))*-1 from oinv f where f.\"DocStatus\"='O' and days_between(current_date,add_days(f.\"DocDueDate\",10))<0 and f.\"CardCode\"=c.\"CardCode\" group by f.\"CardCode\")as int),0)as dayVenc, ");
-        sb.append("  case when o.\"DiscPrcnt\">0 then 1 else 0 end as DiscPed ");
+        sb.append("  case when o.\"DiscPrcnt\">0 then 1 else 0 end as DiscPed,cast(o.\"Comments\" as varchar)as comments ");
         sb.append(" from ORDR o ");
         sb.append(" inner join RDR1 d on o.\"DocEntry\"=d.\"DocEntry\" ");
         sb.append(" inner join OSLP a on a.\"SlpCode\"=o.\"SlpCode\" ");

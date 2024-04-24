@@ -277,9 +277,10 @@ public class SalesOrdersREST implements Serializable {
             dto.setBalance((BigDecimal) obj[11]);
             dto.setDayVenc((Integer) obj[12]);
             dto.setDiscOrder((Integer) obj[13]);
-            dto.setPromDay((Integer) obj[14]);
-            dto.setDiscClient((Integer) obj[15]);
-            dto.setNroOrder((Integer) obj[16]);
+            dto.setComments((String) obj[14]);
+            dto.setPromDay((Integer) obj[15]);
+            dto.setDiscClient((Integer) obj[16]);
+            dto.setNroOrder((Integer) obj[17]);
 
             orderEnlistmentDTO.add(dto);
         }
