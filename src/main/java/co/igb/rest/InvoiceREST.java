@@ -197,7 +197,7 @@ public class InvoiceREST implements Serializable {
         /***Validar si el cliente de IGB y MTZ, tiene marcado el atributo SIN FLETE en el maestro de SN***/
         if (!customerFacade.disableFreightCollection(invoice.getCardCode(), companyName, pruebas).equals("Y")) {
             BigDecimal lineTotal;
-            /***Validar gasto de flete por marca diferente a 54-REPSOL(Lubricante) en IGB y MTZ***/
+            /***Validar gasto de flete por marca diferente a 54-REPSOL(Lubricante) y 112-ELF(Lubricante) en IGB y MTZ***/
             if (!itemMarca.equals("54")) {
                 /***Validar solo en IGB, si el item corresponde a bodegas externas MAGNUM (Cali&Cartagena) se mapea el flete desde la entrega campo de usuario***/
                 if (companyName.contains("IGB") && (whsCode.equals("05") || whsCode.equals("26"))) {
