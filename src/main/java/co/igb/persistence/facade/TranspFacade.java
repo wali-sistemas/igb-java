@@ -63,4 +63,22 @@ public class TranspFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando la ultima guia creada para la transportadora de codigo " + codTransp, e);
         }
     }
+
+    public boolean validateMainCity(String code, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select count(\"Code\") ");
+        sb.append("from \"@TRANSP_TAR\" ");
+        sb.append("where \"U_PRINCIPAL\"='Y' and \"Code\"=");
+        sb.append(code);
+        try {
+            if (persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult().equals(1)) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error validando la ciudad principal en " + companyName, e);
+        }
+        return false;
+    }
 }

@@ -60,6 +60,74 @@ public class ShippingREST implements Serializable {
     private CoordinadoraEJB coordinadoraEJB;
     @EJB
     private TransprensaEJB transprensaEJB;
+    @EJB
+    private GopackEJB gopackEJB;
+
+    @GET
+    @Path("list-transport")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response getListTransportInvoice(@HeaderParam("X-Company-Name") String companyName,
+                                            @HeaderParam("X-Pruebas") boolean pruebas) {
+        List<String> trans = invoiceFacade.getListTransport(companyName, pruebas);
+        return Response.ok(new ResponseDTO(trans == null ? -1 : 0, trans)).build();
+    }
+
+    @GET
+    @Path("list-transp-payroll")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response getListTranspPayroll(@HeaderParam("X-Company-Name") String companyName,
+                                         @HeaderParam("X-Pruebas") boolean pruebas) {
+        List<String> trans = shippingOrderFacade.listTransPayroll(companyName, pruebas);
+        return Response.ok(new ResponseDTO(trans == null ? -1 : 0, trans)).build();
+    }
+
+    @GET
+    @Path("detail-container/{invoice}/{box}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response getDetailContainer(@PathParam("invoice") String docNum,
+                                       @PathParam("box") Integer box,
+                                       @HeaderParam("X-Company-Name") String companyName,
+                                       @HeaderParam("X-Pruebas") boolean pruebas) {
+        if (docNum == null || docNum.isEmpty() || box == null || box < 0) {
+            CONSOLE.log(Level.SEVERE, "Sin datos para realizar la consulta.");
+            return Response.ok(new ResponseDTO(-1, "Sin datos para realizar la consulta.")).build();
+        }
+
+        Integer delivery = invoiceFacade.getDocNumDelivery(docNum, companyName, pruebas);
+        if (delivery == null) {
+            CONSOLE.log(Level.SEVERE, "No se encontro la entrega en SAP para la factura #[" + docNum + "].");
+            return Response.ok(new ResponseDTO(-1, "No se encontro la entrega en SAP.")).build();
+        }
+
+        List<Object[]> detailBox = checkOutOrderFacade.getListItemsBox(delivery, box, companyName, pruebas);
+        if (detailBox == null || detailBox.size() <= 0) {
+            CONSOLE.log(Level.SEVERE, "No existe registro en check-out para la entrega #[" + delivery.toString() + "].");
+            return Response.ok(new ResponseDTO(-1, "No existe registro en check-out.")).build();
+        }
+
+        return Response.ok(new ResponseDTO(0, detailBox)).build();
+    }
+
+    @GET
+    @Path("list-destination-ola")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response listDestinationOla(@HeaderParam("X-Company-Name") String companyName,
+                                       @HeaderParam("X-Pruebas") boolean pruebas) {
+        return Response.ok(new ResponseDTO(0, olaEJB.listDestinations(companyName))).build();
+    }
+
+    @GET
+    @Path("print-sticker-ola/{guia}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response printStickerOla(@PathParam("guia") String guia,
+                                    @HeaderParam("X-Company-Name") String companyName) {
+        return Response.ok(new ResponseDTO(0, olaEJB.printSticker(guia, companyName))).build();
+    }
 
     @POST
     @Path("add")
@@ -82,7 +150,6 @@ public class ShippingREST implements Serializable {
         entity.setDeliveryNumber(entrega);
         entity.setInvoiceNumber(Integer.parseInt(shippingDTO.getInvoice()));
         entity.setBoxSumShipping(shippingDTO.getBoxSum());
-        //TODO: Estado cerrado por default
         entity.setStatus(Constants.STATUS_CLOSED);
         entity.setEmpId(userName);
         entity.setCompanyName(companyName);
@@ -153,63 +220,6 @@ public class ShippingREST implements Serializable {
             shipping.add(dto);
         }
         return Response.ok(new ResponseDTO(0, shipping)).build();
-    }
-
-    @GET
-    @Path("list-transport")
-    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response getListTransportInvoice(@HeaderParam("X-Company-Name") String companyName,
-                                            @HeaderParam("X-Pruebas") boolean pruebas) {
-        List<String> trans = invoiceFacade.getListTransport(companyName, pruebas);
-        return Response.ok(new ResponseDTO(trans == null ? -1 : 0, trans)).build();
-    }
-
-    @GET
-    @Path("list-transp-payroll")
-    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response getListTranspPayroll(@HeaderParam("X-Company-Name") String companyName,
-                                         @HeaderParam("X-Pruebas") boolean pruebas) {
-        List<String> trans = shippingOrderFacade.listTransPayroll(companyName, pruebas);
-        return Response.ok(new ResponseDTO(trans == null ? -1 : 0, trans)).build();
-    }
-
-    @GET
-    @Path("detail-container/{invoice}/{box}")
-    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response getDetailContainer(@PathParam("invoice") String docNum,
-                                       @PathParam("box") Integer box,
-                                       @HeaderParam("X-Company-Name") String companyName,
-                                       @HeaderParam("X-Pruebas") boolean pruebas) {
-        if (docNum == null || docNum.isEmpty() || box == null || box < 0) {
-            CONSOLE.log(Level.SEVERE, "Sin datos para realizar la consulta.");
-            return Response.ok(new ResponseDTO(-1, "Sin datos para realizar la consulta.")).build();
-        }
-
-        Integer delivery = invoiceFacade.getDocNumDelivery(docNum, companyName, pruebas);
-        if (delivery == null) {
-            CONSOLE.log(Level.SEVERE, "No se encontro la entrega en SAP para la factura #[" + docNum + "].");
-            return Response.ok(new ResponseDTO(-1, "No se encontro la entrega en SAP.")).build();
-        }
-
-        List<Object[]> detailBox = checkOutOrderFacade.getListItemsBox(delivery, box, companyName, pruebas);
-        if (detailBox == null || detailBox.size() <= 0) {
-            CONSOLE.log(Level.SEVERE, "No existe registro en check-out para la entrega #[" + delivery.toString() + "].");
-            return Response.ok(new ResponseDTO(-1, "No existe registro en check-out.")).build();
-        }
-
-        return Response.ok(new ResponseDTO(0, detailBox)).build();
-    }
-
-    @GET
-    @Path("list-destination-ola")
-    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response listDestinationOla(@HeaderParam("X-Company-Name") String companyName,
-                                       @HeaderParam("X-Pruebas") boolean pruebas) {
-        return Response.ok(new ResponseDTO(0, olaEJB.listDestinations(companyName))).build();
     }
 
     @POST
@@ -316,15 +326,6 @@ public class ShippingREST implements Serializable {
         }
     }
 
-    @GET
-    @Path("print-sticker-ola/{guia}")
-    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response printStickerOla(@PathParam("guia") String guia,
-                                    @HeaderParam("X-Company-Name") String companyName) {
-        return Response.ok(new ResponseDTO(0, olaEJB.printSticker(guia, companyName))).build();
-    }
-
     @POST
     @Path("add-guia-coordinadora/{docNum}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
@@ -395,5 +396,22 @@ public class ShippingREST implements Serializable {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error creando la guia con la transportadora Transprensa." + res.getMsj());
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error creando la guia con la transportadora Transprensa. " + res.getMsj())).build();
         }
+    }
+
+    @POST
+    @Path("add-guia-gopack/{docNum}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response createGuiaGoPack(ApiTransprensaDTO dto,
+                                     @PathParam("docNum") String docNum,
+                                     @HeaderParam("X-Company-Name") String companyName,
+                                     @HeaderParam("X-Employee") String username,
+                                     @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Iniciando creacion de guia con la transportadora Go-Pack");
+
+        String resp = gopackEJB.getToken(companyName);
+
+        return Response.ok(resp).build();
     }
 }

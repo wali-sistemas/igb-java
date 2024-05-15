@@ -6,10 +6,7 @@ import co.igb.ejb.IGBApplicationBean;
 import co.igb.hanaws.client.invoices.InvoicesClient;
 import co.igb.hanaws.dto.invoices.InvoicesDTO;
 import co.igb.hanaws.dto.invoices.InvoicesRestDTO;
-import co.igb.persistence.facade.CustomerFacade;
-import co.igb.persistence.facade.DeliveryNoteFacade;
-import co.igb.persistence.facade.InvoiceFacade;
-import co.igb.persistence.facade.SalesOrderFacade;
+import co.igb.persistence.facade.*;
 import co.igb.util.Constants;
 import co.igb.util.IGBUtils;
 import com.google.gson.Gson;
@@ -49,6 +46,8 @@ public class InvoiceREST implements Serializable {
     private BasicSAPFunctions sapFunctions;
     @EJB
     private SalesOrderFacade salesOrderFacade;
+    @EJB
+    private TranspFacade transpFacade;
     @Inject
     private IGBApplicationBean appBean;
 
@@ -123,6 +122,9 @@ public class InvoiceREST implements Serializable {
         String taxCodeFlet = (String) deliveryData.get(0)[22];
         Integer lineNumFlet = (Integer) deliveryData.get(0)[23];
         Integer objTypeFlet = (Integer) deliveryData.get(0)[24];
+        String codeCdadDest = (String) deliveryData.get(0)[25];
+        String nameCdadDest = (String) deliveryData.get(0)[26];
+        Integer sumQty = (Integer) deliveryData.get(0)[27];
 
         if (invoice.getSeries() == null) {
             invoice.setSeries(Long.parseLong(getPropertyValue("igb.invoice.series", companyName)));
@@ -205,10 +207,8 @@ public class InvoiceREST implements Serializable {
                 } else {
                     lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
                 }
-
                 if (porcFlete != null) {
                     InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
-
                     switch (taxCode) {
                         case "IVAG19":
                             gasto.setExpenseCode(1l);//code flete gravados
@@ -220,12 +220,34 @@ public class InvoiceREST implements Serializable {
                             gasto.setExpenseCode(11l);//code flete exentos
                             break;
                     }
-
                     gasto.setTaxCode(taxCode);
                     gasto.setLineTotal(lineTotal.setScale(0, RoundingMode.CEILING));
                     gastos.add(gasto);
                 } else {
                     CONSOLE.log(Level.WARNING, "Ocurrio una novedad con el porcentaje de flete para el cliente {0} en la matris de transporte de {1}", new Object[]{cardCode, companyName});
+                }
+            } else {
+                /***Validar si el destino no es ciudad principal se cobra flete para los lubricantes***/
+                if (!transpFacade.validateMainCity(codeCdadDest, companyName, pruebas)) {
+                    /***Validar regla de negocio en las cantidades de los lubricantes, si es menor a 24 und, se cobra flete***/
+                    if (sumQty < 24) {
+                        lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
+                        InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
+                        switch (taxCode) {
+                            case "IVAG19":
+                                gasto.setExpenseCode(1l);//code flete gravados
+                                break;
+                            case "IVAEXCLU":
+                                gasto.setExpenseCode(2l);//code flete no gravados
+                                break;
+                            case "IVAVEXE":
+                                gasto.setExpenseCode(11l);//code flete exentos
+                                break;
+                        }
+                        gasto.setTaxCode(taxCode);
+                        gasto.setLineTotal(lineTotal.setScale(0, RoundingMode.CEILING));
+                        gastos.add(gasto);
+                    }
                 }
             }
         }
