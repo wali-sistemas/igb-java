@@ -4,8 +4,6 @@ import co.igb.ejb.IGBApplicationBean;
 import co.igb.transportws.client.gopack.GopackClient;
 import co.igb.transportws.dto.gopack.LoginGoPackDTO;
 import co.igb.transportws.dto.gopack.LoginGoPackResponseDTO;
-import co.igb.transportws.dto.transprensa.RotuloTransprensaDTO;
-import co.igb.transportws.dto.transprensa.RotuloTrasnprensaResponseDTO;
 import co.igb.util.Constants;
 import com.google.gson.Gson;
 
@@ -34,7 +32,7 @@ public class GopackEJB {
         }
     }
 
-    public String getToken(String companyName) {
+    private String createToken(String companyName) {
         LoginGoPackDTO dto = new LoginGoPackDTO();
 
         if (companyName.contains("IGB")) {

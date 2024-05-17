@@ -72,11 +72,11 @@ public class Constants {
     public static final String HANAWS_SL_URL = "https://slhana.igbcolombia.com:50000/b1s/";
     public static final String RAPIDO_OCHOA_WS_URL = "https://rapidoochoa.tmsolutions.com.co/tmland/webservices/";
     public static final String OLA_WS_API_URL = "igb.ola.api.url";
-    public static final String GOPACK_WS_API_URL = "igb.gopack.api.url";
-    public static final String IGB_GOPACK_WS_API_USER = "IGB.MOTORCYCLE";
-    public static final String MTZ_GOPACK_WS_API_USER = "Igb0407";
-    public static final String IGB_GOPACK_WS_API_PASSWORD = "MOTO.ZONE";
-    public static final String MTZ_GOPACK_WS_API_PASSWORD = "Moto1107";
+    public static final String GOPACK_WS_API_URL = "gopack.api.url";
+    public static final String IGB_GOPACK_WS_API_USER = "igb.gopack.api.user";
+    public static final String MTZ_GOPACK_WS_API_USER = "mtz.gopack.api.user";
+    public static final String IGB_GOPACK_WS_API_PASSWORD = "igb.gopack.api.password";
+    public static final String MTZ_GOPACK_WS_API_PASSWORD = "mtz.gopack.api.password";
     public static final String IGB_OLA_WS_API_CODIGO = "igb.ola.api.codigo";
     public static final String IGB_OLA_WS_API_KEY = "igb.ola.api.key";
     public static final String MTZ_OLA_WS_API_CODIGO = "mtz.ola.api.codigo";

@@ -8,15 +8,9 @@ import java.io.Serializable;
  * @author jguisao
  */
 public class LoginGoPackResponseDTO implements Serializable {
-    @JsonProperty("success")
     private boolean success;
-    @JsonProperty("data")
     private Data data;
-    @JsonProperty("msg")
     private String msg;
-
-    public LoginGoPackResponseDTO() {
-    }
 
     public boolean isSuccess() {
         return success;
@@ -113,34 +107,6 @@ public class LoginGoPackResponseDTO implements Serializable {
             public void setEmpresa_codigo_cs(String empresa_codigo_cs) {
                 this.empresa_codigo_cs = empresa_codigo_cs;
             }
-
-            @Override
-            public String toString() {
-                return "Usuario{" +
-                        "usuarioCodigo='" + usuarioCodigo + '\'' +
-                        ", usuarioNombre='" + usuarioNombre + '\'' +
-                        ", usuarioCambioclave=" + usuarioCambioclave +
-                        ", empresaNombre='" + empresaNombre + '\'' +
-                        ", empresa_codigo_cs='" + empresa_codigo_cs + '\'' +
-                        '}';
-            }
         }
-
-        @Override
-        public String toString() {
-            return "Data{" +
-                    "usuario=" + usuario +
-                    ", token='" + token + '\'' +
-                    '}';
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "LoginGoPackResponseDTO{" +
-                "success=" + success +
-                ", data=" + data +
-                ", msg='" + msg + '\'' +
-                '}';
     }
 }

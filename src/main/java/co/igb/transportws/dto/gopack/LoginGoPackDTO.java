@@ -2,17 +2,16 @@ package co.igb.transportws.dto.gopack;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+
 /**
  * @author jguisao
  */
-public class LoginGoPackDTO {
+public class LoginGoPackDTO implements Serializable {
     @JsonProperty("usuario_login")
     private String usuarioLogin;
     @JsonProperty("usuario_password")
     private String usuarioPassword;
-
-    public LoginGoPackDTO() {
-    }
 
     public String getUsuarioLogin() {
         return usuarioLogin;
@@ -33,8 +32,8 @@ public class LoginGoPackDTO {
     @Override
     public String toString() {
         return "LoginGoPackDTO{" +
-                "usuarioLogin='" + usuarioLogin + '\'' +
-                ", usuarioPassword='" + usuarioPassword + '\'' +
+                "usuario_login='" + usuarioLogin + '\'' +
+                ", usuario_password='" + usuarioPassword + '\'' +
                 '}';
     }
 }

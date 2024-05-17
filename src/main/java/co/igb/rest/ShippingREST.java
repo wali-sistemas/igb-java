@@ -410,8 +410,8 @@ public class ShippingREST implements Serializable {
                                      @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Iniciando creacion de guia con la transportadora Go-Pack");
 
-        String resp = gopackEJB.getToken(companyName);
+        //String resp = gopackEJB.getToken(companyName);
 
-        return Response.ok(resp).build();
+        return Response.ok().build();
     }
 }

@@ -125,6 +125,7 @@ public class InvoiceREST implements Serializable {
         String codeCdadDest = (String) deliveryData.get(0)[25];
         String nameCdadDest = (String) deliveryData.get(0)[26];
         Integer sumQty = (Integer) deliveryData.get(0)[27];
+        BigDecimal subTotal = (BigDecimal) deliveryData.get(0)[28];
 
         if (invoice.getSeries() == null) {
             invoice.setSeries(Long.parseLong(getPropertyValue("igb.invoice.series", companyName)));
@@ -230,7 +231,7 @@ public class InvoiceREST implements Serializable {
                 /***Validar si el destino no es ciudad principal se cobra flete para los lubricantes***/
                 if (!transpFacade.validateMainCity(codeCdadDest, companyName, pruebas)) {
                     /***Validar regla de negocio en las cantidades de los lubricantes, si es menor a 24 und, se cobra flete***/
-                    if (sumQty < 24) {
+                    if (sumQty < 24 || subTotal.compareTo(BigDecimal.valueOf(500000.00)) >= 0) {
                         lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
                         InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
                         switch (taxCode) {

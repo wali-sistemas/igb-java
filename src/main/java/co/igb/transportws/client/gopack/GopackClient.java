@@ -27,7 +27,9 @@ public class GopackClient {
     }
 
     public LoginGoPackResponseDTO getToken(LoginGoPackDTO dto) {
-        return webTarget.path("?api=servicio.Seguridad.login").request()
+        return webTarget.path("")
+                .queryParam("api", "servicio.Seguridad.login")
+                .request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity(dto, MediaType.APPLICATION_JSON), LoginGoPackResponseDTO.class);
     }
 }
