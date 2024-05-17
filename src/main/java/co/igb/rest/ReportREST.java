@@ -646,10 +646,10 @@ public class ReportREST implements Serializable {
         } else if (dto.getOrigen().equals("N")) {
             switch (dto.getCompanyName()) {
                 case "IGB":
-                    cn = "java:/IGBNOVAWEBDS";
+                    cn = "java:/IGBNOVAWEBNUBEDS";
                     break;
                 case "VARROC":
-                    cn = "java:/MTZNOVAWEBDS";
+                    cn = "java:/MTZNOVAWEBNUBEDS";
                     break;
                 default:
                     cn = "";

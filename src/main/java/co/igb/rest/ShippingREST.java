@@ -403,14 +403,14 @@ public class ShippingREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response createGuiaGoPack(ApiTransprensaDTO dto,
+    public Response createGuiaGoPack(ApiGoPackDTO dto,
                                      @PathParam("docNum") String docNum,
                                      @HeaderParam("X-Company-Name") String companyName,
                                      @HeaderParam("X-Employee") String username,
                                      @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Iniciando creacion de guia con la transportadora Go-Pack");
 
-        //String resp = gopackEJB.getToken(companyName);
+        String resp = gopackEJB.createGuia(dto, companyName);
 
         return Response.ok().build();
     }
