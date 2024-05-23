@@ -201,7 +201,30 @@ public class InvoiceREST implements Serializable {
         if (!customerFacade.disableFreightCollection(invoice.getCardCode(), companyName, pruebas).equals("Y")) {
             BigDecimal lineTotal;
             /***Validar gasto de flete por marca diferente a 54-REPSOL(Lubricante) y 112-ELF(Lubricante) en IGB y MTZ***/
-            if (!itemMarca.equals("54") || !itemMarca.equals("112")) {
+            if (itemMarca.equals("54") || itemMarca.equals("112")) {
+                /***Validar si el destino no es ciudad principal se cobra flete para los lubricantes***/
+                if (!transpFacade.validateMainCity(codeCdadDest, companyName, pruebas)) {
+                    /***Validar regla de negocio en las cantidades de los lubricantes, si es menor a 24 und, se cobra flete***/
+                    if (sumQty < 24 || subTotal.compareTo(BigDecimal.valueOf(500000.00)) >= 0) {
+                        lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
+                        InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
+                        switch (taxCode) {
+                            case "IVAG19":
+                                gasto.setExpenseCode(1l);//code flete gravados
+                                break;
+                            case "IVAEXCLU":
+                                gasto.setExpenseCode(2l);//code flete no gravados
+                                break;
+                            case "IVAVEXE":
+                                gasto.setExpenseCode(11l);//code flete exentos
+                                break;
+                        }
+                        gasto.setTaxCode(taxCode);
+                        gasto.setLineTotal(lineTotal.setScale(0, RoundingMode.CEILING));
+                        gastos.add(gasto);
+                    }
+                }
+            } else {
                 /***Validar solo en IGB, si el item corresponde a bodegas externas MAGNUM (Cali&Cartagena) se mapea el flete desde la entrega campo de usuario***/
                 if (companyName.contains("IGB") && (whsCode.equals("05") || whsCode.equals("26"))) {
                     lineTotal = flete;
@@ -226,29 +249,6 @@ public class InvoiceREST implements Serializable {
                     gastos.add(gasto);
                 } else {
                     CONSOLE.log(Level.WARNING, "Ocurrio una novedad con el porcentaje de flete para el cliente {0} en la matris de transporte de {1}", new Object[]{cardCode, companyName});
-                }
-            } else {
-                /***Validar si el destino no es ciudad principal se cobra flete para los lubricantes***/
-                if (!transpFacade.validateMainCity(codeCdadDest, companyName, pruebas)) {
-                    /***Validar regla de negocio en las cantidades de los lubricantes, si es menor a 24 und, se cobra flete***/
-                    if (sumQty < 24 || subTotal.compareTo(BigDecimal.valueOf(500000.00)) >= 0) {
-                        lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
-                        InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
-                        switch (taxCode) {
-                            case "IVAG19":
-                                gasto.setExpenseCode(1l);//code flete gravados
-                                break;
-                            case "IVAEXCLU":
-                                gasto.setExpenseCode(2l);//code flete no gravados
-                                break;
-                            case "IVAVEXE":
-                                gasto.setExpenseCode(11l);//code flete exentos
-                                break;
-                        }
-                        gasto.setTaxCode(taxCode);
-                        gasto.setLineTotal(lineTotal.setScale(0, RoundingMode.CEILING));
-                        gastos.add(gasto);
-                    }
                 }
             }
         }
