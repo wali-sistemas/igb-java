@@ -71,32 +71,30 @@ public class GopackEJB {
 
         String token = createToken(companyName);
         if (token != null) {
-            guiaGoPackDTO.setCiudadOrigen("11001000");
-            guiaGoPackDTO.setCiudadDestino("11001000");
+            guiaGoPackDTO.setCiudadOrigen(dto.getCodCiudadr());
+            guiaGoPackDTO.setCiudadDestino(dto.getCodCiudadd());
             guiaGoPackDTO.setRemesaFecha(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
-            guiaGoPackDTO.setRemitenteDocumento("811011909-9");
-            guiaGoPackDTO.setRemitenteNombre("IGB MOTORCYCLE PARTS");
-            guiaGoPackDTO.setRemitenteDireccion("CALLE 98 SUR #48-225 BOD 114");
-            guiaGoPackDTO.setRemitenteTelefono("6044442025");
+            guiaGoPackDTO.setRemitenteDocumento(dto.getDocumentor());
+            guiaGoPackDTO.setRemitenteNombre(dto.getNombrer());
+            guiaGoPackDTO.setRemitenteDireccion(dto.getDireccionr());
+            guiaGoPackDTO.setRemitenteTelefono(dto.getTelefonor());
             guiaGoPackDTO.setRemitenteEmail("analistatransporte@igbcolombia.com");
             guiaGoPackDTO.setRemitenteTipodoc("2");
-
-            guiaGoPackDTO.setDestinatarioDocumento("1035866418");
-            guiaGoPackDTO.setDestinatarioNombre("JADILSON GUISAO RESTREPO");
-            guiaGoPackDTO.setDestinatarioDireccion("AV 34 F # 42 F 33");
-            guiaGoPackDTO.setDestinatarioTelefono("3226979043");
-            guiaGoPackDTO.setDestinatarioEmail("sistemas2@igbcolombia.com");
+            guiaGoPackDTO.setDestinatarioDocumento(dto.getDocumentod());
+            guiaGoPackDTO.setDestinatarioNombre(dto.getNombred());
+            guiaGoPackDTO.setDestinatarioDireccion(dto.getDirecciond());
+            guiaGoPackDTO.setDestinatarioTelefono(dto.getTelefonod());
+            guiaGoPackDTO.setDestinatarioEmail("analistatransporte@igbcolombia.com");
             guiaGoPackDTO.setDestinatarioTipodoc("1");
-
             guiaGoPackDTO.setRemesaTiposervicio("7");
             guiaGoPackDTO.setRemesaFormapago("5");
-            guiaGoPackDTO.setRemesaCantidad("1");
-            guiaGoPackDTO.setRemesaPeso("100");
-            guiaGoPackDTO.setRemesaVolumen("0");
-            guiaGoPackDTO.setRemesaValordeclarado("1200000");
-            guiaGoPackDTO.setRemesaObservacion("ejemplo de creacion ws empresa (IGB) por favor cancelar");
-            guiaGoPackDTO.setRemesaDocumentocliente("523652");
-            guiaGoPackDTO.setRemesaDicecontener("RESPUESTOS");
+            guiaGoPackDTO.setRemesaCantidad(dto.getCant());
+            guiaGoPackDTO.setRemesaPeso(dto.getPeso());
+            guiaGoPackDTO.setRemesaVolumen(dto.getVolumen());
+            guiaGoPackDTO.setRemesaValordeclarado(dto.getVlrDecl());
+            guiaGoPackDTO.setRemesaObservacion(dto.getObservacion());
+            guiaGoPackDTO.setRemesaDocumentocliente(dto.getFactura());
+            guiaGoPackDTO.setRemesaDicecontener(dto.getDescripcion());
             guiaGoPackDTO.setRemesaProducto("2577");
             guiaGoPackDTO.setRemesaFlete("0");
             guiaGoPackDTO.setRemesaManejo("0");

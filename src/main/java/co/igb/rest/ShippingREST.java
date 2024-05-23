@@ -410,8 +410,13 @@ public class ShippingREST implements Serializable {
                                      @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Iniciando creacion de guia con la transportadora Go-Pack");
 
-        String resp = gopackEJB.createGuia(dto, companyName);
-
-        return Response.ok().build();
+        String guia = gopackEJB.createGuia(dto, companyName);
+        if (guia == null) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error creando la guia con la transportadora Go-Pack");
+            return Response.ok(new ResponseDTO(0, new Object[]{null, null})).build();
+        } else {
+            CONSOLE.log(Level.INFO, "Creacion exitosa de guia #{0} con la transportadora Go-Pack", guia);
+            return Response.ok(new ResponseDTO(0, new Object[]{null, "https://silogtran.cesred.net/index.php?page=Despacho.Remesacliente_008.Home&remesa_codigo=" + guia})).build();
+        }
     }
 }
