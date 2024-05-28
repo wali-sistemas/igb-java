@@ -91,4 +91,7 @@ public class Constants {
     public static final String TRANSPRENSA_WS_USER = "igb.transprensa.api.user";
     public static final String TRANSPRENSA_WS_PASSWORD = "igb.transprensa.api.password";
     public static final String TRANSPRENSA_WS_CODIGO = "igb.transprensa.api.codigo";
+    public static final String SAFERBO_WS_URL = "igb.api.url";
+    public static final String IGB_SAFERBO_WS_CODIGO = "igb.saferbo.api.codigo";
+    public static final String MTZ_SAFERBO_WS_CODIGO = "mtz.saferbo.api.codigo";
 }

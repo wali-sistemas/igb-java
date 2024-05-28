@@ -9,6 +9,7 @@ import co.igb.transportws.dto.ola.GuiaOlaDTO;
 import co.igb.transportws.dto.ola.GuiaOlaResponseDTO;
 import co.igb.transportws.dto.rapidoochoa.GuiaRapidoochoaDTO;
 import co.igb.transportws.dto.rapidoochoa.GuiaRapidoochoaResponseDTO;
+import co.igb.transportws.dto.saferbo.GuiaSaferboResponseDTO;
 import co.igb.transportws.dto.transprensa.GuiaTransprensaResponseDTO;
 import co.igb.transportws.ejb.*;
 import co.igb.util.Constants;
@@ -223,30 +224,28 @@ public class ShippingREST implements Serializable {
     }
 
     @POST
-    @Path("add-guia-saferbo")
+    @Path("add-guia-saferbo/{docnum}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response createGuiaSaferbo(ApiSaferboDTO dto,
+                                      @PathParam("docnum") String docNum,
                                       @HeaderParam("X-Company-Name") String companyName,
                                       @HeaderParam("X-Employee") String username,
                                       @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Iniciando creacion de guia con la transportadora Saferbo");
 
-        ResponseCrearGuiaDTO response = saferboEJB.createGuia(dto);
-        if (!response.getNumeroGuia().isEmpty() || !response.getNumeroGuia().equals(null)) {
-            CONSOLE.log(Level.INFO, "Creación de guia saferbo exitosa #{0}", response.getNumeroGuia());
-
-            //Actualizar en las facturas de SAP la guia campo
+        GuiaSaferboResponseDTO res = saferboEJB.createGuia(dto, companyName);
+        if (!res.getNumeroguia().isEmpty() || !res.getNumeroguia().equals(null)) {
+            CONSOLE.log(Level.INFO, "Creación de guia saferbo exitosa #{0}", res.getNumeroguia());
             try {
-                invoiceFacade.updateGuiaTransport(dto.getFactura(), response.getNumeroGuia(), "", username, dto.getArUnidades(), dto.getValorDeclarado(), dto.getDsKilos(), companyName, pruebas);
+                invoiceFacade.updateGuiaTransport(dto.getFactura(), res.getNumeroguia(), "", username, dto.getCant(), dto.getVlrDecl(), dto.getPeso(), companyName, pruebas);
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar la guia en SAP para la empresa " + companyName, e);
             }
-
-            return Response.ok(new ResponseDTO(0, response.getNumeroGuia())).build();
+            return Response.ok(new ResponseDTO(0, new Object[]{res.getImpresionguia(), res.getImpresionzebra()})).build();
         } else {
-            CONSOLE.log(Level.SEVERE, response.getNumeroGuia());
+            CONSOLE.log(Level.SEVERE, res.getNumeroguia());
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error al crear la guia para la transportadora saferbo.")).build();
         }
     }
@@ -283,12 +282,12 @@ public class ShippingREST implements Serializable {
     }
 
     @POST
-    @Path("add-guia-ola/{docNum}")
+    @Path("add-guia-ola/{docnum}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response createGuiaOla(GuiaOlaDTO dto,
-                                  @PathParam("docNum") String docNum,
+                                  @PathParam("docnum") String docNum,
                                   @HeaderParam("X-Company-Name") String companyName,
                                   @HeaderParam("X-Employee") String username,
                                   @HeaderParam("X-Pruebas") boolean pruebas) {
@@ -327,12 +326,12 @@ public class ShippingREST implements Serializable {
     }
 
     @POST
-    @Path("add-guia-coordinadora/{docNum}")
+    @Path("add-guia-coordinadora/{docnum}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response createGuiaCoordinadora(ApiCoordinadoraDTO dto,
-                                           @PathParam("docNum") String docNum,
+                                           @PathParam("docnum") String docNum,
                                            @HeaderParam("X-Company-Name") String companyName,
                                            @HeaderParam("X-Employee") String username,
                                            @HeaderParam("X-Pruebas") boolean pruebas) {
@@ -365,12 +364,12 @@ public class ShippingREST implements Serializable {
     }
 
     @POST
-    @Path("add-guia-transprensa/{docNum}")
+    @Path("add-guia-transprensa/{docnum}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response createGuiaTransprensa(ApiTransprensaDTO dto,
-                                          @PathParam("docNum") String docNum,
+                                          @PathParam("docnum") String docNum,
                                           @HeaderParam("X-Company-Name") String companyName,
                                           @HeaderParam("X-Employee") String username,
                                           @HeaderParam("X-Pruebas") boolean pruebas) {
@@ -399,12 +398,12 @@ public class ShippingREST implements Serializable {
     }
 
     @POST
-    @Path("add-guia-gopack/{docNum}")
+    @Path("add-guia-gopack/{docnum}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response createGuiaGoPack(ApiGoPackDTO dto,
-                                     @PathParam("docNum") String docNum,
+                                     @PathParam("docnum") String docNum,
                                      @HeaderParam("X-Company-Name") String companyName,
                                      @HeaderParam("X-Employee") String username,
                                      @HeaderParam("X-Pruebas") boolean pruebas) {
@@ -415,6 +414,11 @@ public class ShippingREST implements Serializable {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error creando la guia con la transportadora Go-Pack");
             return Response.ok(new ResponseDTO(0, new Object[]{null, null})).build();
         } else {
+            try {
+                invoiceFacade.updateGuiaTransport(docNum, guia, "https://silogtran.cesred.net/index.php?page=Despacho.Remesacliente_008.Home&remesa_codigo=" + guia, username, String.valueOf(dto.getCant()), String.valueOf(dto.getVlrDecl()), String.valueOf(dto.getPeso()), companyName, pruebas);
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar la guia en SAP para la empresa " + companyName, e);
+            }
             CONSOLE.log(Level.INFO, "Creacion exitosa de guia #{0} con la transportadora Go-Pack", guia);
             return Response.ok(new ResponseDTO(0, new Object[]{null, "https://silogtran.cesred.net/index.php?page=Despacho.Remesacliente_008.Home&remesa_codigo=" + guia})).build();
         }
