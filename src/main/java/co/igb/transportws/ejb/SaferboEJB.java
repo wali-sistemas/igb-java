@@ -47,7 +47,7 @@ public class SaferboEJB {
         dto.setTipoacceso("1");
         dto.setTipodatos("2");
         if (companyname.contains("IGB")){
-            dto.setDscodigocliente("017750");
+            dto.setDscodigocliente("017749");
         } else {
             dto.setDscodigocliente("014587");
         }
@@ -55,8 +55,8 @@ public class SaferboEJB {
         dto.setDsnombrer("");
         dto.setDstelr("");
         dto.setDsdirr("");
-        dto.setIdnegociacion("2");
-        dto.setIdtipoenvio("3");
+        dto.setIdnegociacion("1");
+        dto.setIdtipoenvio("1");
         dto.setIdtipoliquidacion("1");
         dto.setIdtarifaxtrayecto("2");
         dto.setDsunidad("1");
