@@ -48,7 +48,6 @@ public class GuiaSaferboDTO implements Serializable {
     private String dsteld;
     private String dsdird;
     private String dsvalorrecaudar;
-    private String arunidades;
     private String idconsec;
     private String solocotizar;
     private String generarguia;
@@ -304,14 +303,6 @@ public class GuiaSaferboDTO implements Serializable {
 
     public void setDsvalorrecaudar(String dsvalorrecaudar) {
         this.dsvalorrecaudar = dsvalorrecaudar;
-    }
-
-    public String getArunidades() {
-        return arunidades;
-    }
-
-    public void setArunidades(String arunidades) {
-        this.arunidades = arunidades;
     }
 
     public String getIdconsec() {

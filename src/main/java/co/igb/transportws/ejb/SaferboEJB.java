@@ -69,7 +69,6 @@ public class SaferboEJB {
         dto.setDsnitd(apiSaferboDTO.getDocumentod());
         dto.setDsnombred(apiSaferboDTO.getNombred());
         dto.setDsdird(apiSaferboDTO.getDirecciond());
-        dto.setArunidades(apiSaferboDTO.getCant());
         dto.setDsvalorrecaudar("0");
         dto.setIdconsec("0");
         dto.setSolocotizar("0");
