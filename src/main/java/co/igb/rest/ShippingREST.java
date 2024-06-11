@@ -217,6 +217,7 @@ public class ShippingREST implements Serializable {
             dto.setValStandDecl((BigDecimal) row[10]);
             dto.setUnidEmpStand((Integer) row[11]);
             dto.setRexpedition((String) row[12]);
+            dto.setPhone((String) row[13]);
 
             shipping.add(dto);
         }
