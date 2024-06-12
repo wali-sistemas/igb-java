@@ -126,6 +126,7 @@ public class InvoiceREST implements Serializable {
         String nameCdadDest = (String) deliveryData.get(0)[26];
         Integer sumQty = (Integer) deliveryData.get(0)[27];
         BigDecimal subTotal = (BigDecimal) deliveryData.get(0)[28];
+        String mainCity = (String) deliveryData.get(0)[29];
 
         if (invoice.getSeries() == null) {
             invoice.setSeries(Long.parseLong(getPropertyValue("igb.invoice.series", companyName)));
@@ -202,8 +203,8 @@ public class InvoiceREST implements Serializable {
             BigDecimal lineTotal;
             /***Validar gasto de flete por marca diferente a 54-REPSOL(Lubricante) y 112-ELF(Lubricante) en IGB y MTZ***/
             if (itemMarca.equals("54") || itemMarca.equals("112")) {
-                /***Validar si el destino no es ciudad principal se cobra flete para los lubricantes***/
-                if (!transpFacade.validateMainCity(codeCdadDest, companyName, pruebas)) {
+                /***Validar si el destino NO es ciudad principal se cobra flete para los lubricantes***/
+                if (mainCity.equals("N")) {
                     /***Validar regla de negocio en las cantidades de los lubricantes, si es menor a 24 und, se cobra flete***/
                     if (sumQty < 24 || subTotal.compareTo(BigDecimal.valueOf(500000.00)) >= 0) {
                         lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
