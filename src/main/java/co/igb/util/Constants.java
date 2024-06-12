@@ -22,6 +22,7 @@ public class Constants {
     public static final String LDAP_LASTNAME_FIELD = "sn";
     public static final String LDAP_FULLNAME_FIELD = "cn";
     public static final String LDAP_OFFICENAME_FIELD = "physicalDeliveryOfficeName";
+    public static final String LDAP_DESCRIPTION_FIELD = "description";
     public static final String LDAP_MEMBEROF_FIELD = "memberOf";
     public static final String LDAP_MEMBEROF_FILTER = "CN=WMS,OU=Usuarios,DC=igbcolombia,DC=local";
     public static final String NO_FILTER_TEMPLATES = "igb.no-filter.templates";

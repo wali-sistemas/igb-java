@@ -134,11 +134,12 @@ public class IGBAuthLDAP {
                         String surname = (String) attrs.get(Constants.LDAP_LASTNAME_FIELD).get();
                         String completeName = (String) attrs.get(Constants.LDAP_FULLNAME_FIELD).get();
                         String companyName = (String) attrs.get(Constants.LDAP_OFFICENAME_FIELD).get();
+                        String description = (String) attrs.get(Constants.LDAP_DESCRIPTION_FIELD).get();
 
                         Attribute memberOf = attrs.get(Constants.LDAP_MEMBEROF_FIELD);
                         if (memberOf != null && memberOf.contains(Constants.LDAP_MEMBEROF_FILTER)) {
                             ctx1.close();
-                            return new UserDTO(username, name, surname, email, completeName, companyName);
+                            return new UserDTO(username, name, surname, email, completeName, companyName, description);
                         } else {
                             CONSOLE.log(Level.SEVERE, "El usuario {0} no pertenece al grupo WMS y por lo tanto no tiene permitido iniciar sesion en la aplicacion");
                         }
@@ -185,12 +186,15 @@ public class IGBAuthLDAP {
                             String surname = (String) attrs.get(Constants.LDAP_LASTNAME_FIELD).get();
                             String completeName = (String) attrs.get(Constants.LDAP_FULLNAME_FIELD).get();
                             String office = (String) attrs.get(Constants.LDAP_OFFICENAME_FIELD).get();
+                            String description = (String) attrs.get(Constants.LDAP_DESCRIPTION_FIELD).get();
 
-                            if (companyName == null) {
+                            users.add(new UserDTO((String) usuario.get(), name, surname, email, completeName, office, description));
+                            /*if (companyName == null) {
                                 users.add(new UserDTO((String) usuario.get(), name, surname, email, completeName, office));
                             } else if (companyName.equals(office)) {
                                 users.add(new UserDTO((String) usuario.get(), name, surname, email, completeName, office));
-                            }
+
+                            }*/
                         }
                     } catch (NullPointerException e) {
                         CONSOLE.log(Level.INFO, "El usuario {0} no tiene email en LDAP. ", usuario.get());
