@@ -18,6 +18,7 @@ public class UserDTO implements Comparable<UserDTO> {
     private String token;
     private String selectedCompany;
     private String warehouseCode;
+    private String organization;
 
     public UserDTO() {
     }
@@ -27,13 +28,14 @@ public class UserDTO implements Comparable<UserDTO> {
         this.password = password;
     }
 
-    public UserDTO(String username, String name, String surname, String email, String completeName, String selectedCompany) {
+    public UserDTO(String username, String name, String surname, String email, String completeName, String selectedCompany, String organization) {
         this.username = username;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.completeName = completeName;
         this.selectedCompany = selectedCompany;
+        this.organization = organization;
     }
 
     public Integer getOrdenesAsignadas() {
@@ -116,10 +118,20 @@ public class UserDTO implements Comparable<UserDTO> {
         this.warehouseCode = warehouseCode;
     }
 
+    public String getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(String organization) {
+        this.organization = organization;
+    }
+
     @Override
     public String toString() {
         return "UserDTO{" +
-                "username='" + username + '\'' +
+                "ordenesAsignadas=" + ordenesAsignadas +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +
@@ -127,6 +139,7 @@ public class UserDTO implements Comparable<UserDTO> {
                 ", token='" + token + '\'' +
                 ", selectedCompany='" + selectedCompany + '\'' +
                 ", warehouseCode='" + warehouseCode + '\'' +
+                ", organization='" + organization + '\'' +
                 '}';
     }
 

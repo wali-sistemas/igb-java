@@ -59,8 +59,8 @@ public class SaferboEJB {
         dto.setIdtipoenvio("1");
         dto.setIdtipoliquidacion("1");
         dto.setIdtarifaxtrayecto("2");
-        dto.setDsunidad("1");
-        dto.setDskilos("1");
+        dto.setDsunidad(apiSaferboDTO.getCant());
+        dto.setDskilos(apiSaferboDTO.getPeso());
         dto.setDsvalordec(apiSaferboDTO.getVlrDecl());
         dto.setDsobs1("FV #" + apiSaferboDTO.getFactura());
         dto.setDsobs2(apiSaferboDTO.getDescripcion());
