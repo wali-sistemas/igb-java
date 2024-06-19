@@ -94,7 +94,12 @@ public class DeliveryREST {
                                                   @HeaderParam("X-Company-Name") String companyName,
                                                   @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                                   @HeaderParam("X-Pruebas") boolean pruebas) {
-        Object[] obj = pickingExpressFacade.listPickingExpressBySeller(deliveryNumber, usernameset, warehouseCode, position, companyName, pruebas);
+        String docNum = "";
+        for (String obj : deliveryNumber.split(",")) {
+            docNum = docNum + "," + obj.substring(0, 6);
+        }
+
+        Object[] obj = pickingExpressFacade.listPickingExpressBySeller(docNum.substring(1, docNum.length()), usernameset, warehouseCode, position, companyName, pruebas);
         if (obj == null) {
             CONSOLE.log(Level.WARNING, "No se encontraron registros pendientes para picking list de la entrega {0} en {1}", new Object[]{deliveryNumber, companyName});
             boolean resp = pickingExpressFacade.updateStatusPickListExpress(deliveryNumber, "F", companyName, pruebas);
@@ -151,7 +156,14 @@ public class DeliveryREST {
                                        @HeaderParam("X-Company-Name") String companyName,
                                        @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                        @HeaderParam("X-Pruebas") boolean pruebas) {
-        return Response.ok(new ResponseDTO(0, pickingExpressFacade.assignEmployeeToPickListExpress(empId, docNum, companyName, pruebas))).build();
+        for (String obj : docNum.split(",")) {
+            try {
+                pickingExpressFacade.assignEmployeeToPickListExpress(obj.substring(0, 6), empId, companyName, pruebas);
+            } catch (Exception e) {
+                return Response.ok(new ResponseDTO(0, false)).build();
+            }
+        }
+        return Response.ok(new ResponseDTO(0, true)).build();
     }
 
     @POST

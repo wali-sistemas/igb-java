@@ -156,13 +156,14 @@ public class DeliveryNoteFacade {
     public List<Object[]> listOpenDelivery(String whsCode, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select distinct cast(e.\"DocNum\" as varchar(10))as delivey, ");
+        sb.append(" concat(concat('(',");
         sb.append(" (select STRING_AGG(\"numOrder\", ',') ");
         sb.append("  from ( ");
         sb.append("   select distinct cast(d.\"BaseRef\" as varchar(10))as \"numOrder\" ");
         sb.append("   from DLN1 d ");
         sb.append("   where d.\"DocEntry\"=e.\"DocEntry\" ");
         sb.append("  )as orders ");
-        sb.append(" )as orders,cast(e.\"CardName\" as varchar(250))as cardName ");
+        sb.append(" )),')')as orders,cast(concat(replace(replace(replace(replace(replace(e.\"CardName\",'/',''),'&',''),'Ñ','N'),'ª',''),'¥',''),'|')as varchar(250))as cardName ");
         sb.append("from ODLN e ");
         sb.append("inner join DLN1 d on e.\"DocEntry\"=d.\"DocEntry\" ");
         sb.append("where e.\"U_SEPARADOR\"='PEND-PICKING-LIST-EXPRESS' and d.\"WhsCode\" ");
@@ -172,7 +173,8 @@ public class DeliveryNoteFacade {
         } else {
             sb.append("in (01,30) ");
         }
-        sb.append(" order by 1 asc");
+        sb.append(" and year(e.\"DocDate\")=year(current_date) and month(e.\"DocDate\")=month(current_date) ");
+        sb.append("order by 1 asc");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException ex) {
