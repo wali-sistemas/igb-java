@@ -50,9 +50,9 @@ public class PickingExpressFacade {
         sb.append(" from ( ");
         sb.append("  select idpicking_express,docNum,cardCode,lineNum,itemCode,qty,whsCode,binCode,binAbs,comments,companyName,empId,cast(docDate as datetime)as docdate,status,empIdSet,qtyConfirm,docDateConfirm,observation,itemName,binType,binSequence,lineStatus,orderNum ");
         sb.append("  from picking_express ");
-        sb.append("  where (lineStatus='' or lineStatus is null or lineStatus='P') and docNum=");
+        sb.append("  where (lineStatus='' or lineStatus is null or lineStatus='P') and docNum in(");
         sb.append(docNumDelivery);
-        sb.append("  and empId='");
+        sb.append(")  and empId='");
         sb.append(empIdSet);
         sb.append("' and companyName='");
         sb.append(companyName);
@@ -61,9 +61,9 @@ public class PickingExpressFacade {
         sb.append(" union all ");
         sb.append("  select 0 as idpicking_express,docNum,cardCode,0 as lineNum,'MDL-ORD(' + orderNum + ')' as itemCode,sum(qty)as qty,whsCode,binCode,binAbs,comments,companyName,empId,cast(docDate as datetime)as docdate,status,empIdSet,qtyConfirm,docDateConfirm,observation,'RECOGER CANASTAS COMPLETADAS POR MODULA PTL(PICK TO LIGHT)' as itemName,binType,binSequence,lineStatus,orderNum ");
         sb.append("  from picking_express ");
-        sb.append("  where (lineStatus='' or lineStatus is null or lineStatus='P') and docNum=");
+        sb.append("  where (lineStatus='' or lineStatus is null or lineStatus='P') and docNum in(");
         sb.append(docNumDelivery);
-        sb.append("  and empId='");
+        sb.append(")  and empId='");
         sb.append(empIdSet);
         sb.append("' and companyName='");
         sb.append(companyName);
