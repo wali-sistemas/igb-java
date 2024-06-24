@@ -83,9 +83,9 @@ public class ReportREST implements Serializable {
         List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, false, companyName, pruebas, warehouseCode);
         List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations(companyName, pruebas);
         Integer packing = packingListRecordFacade.getOrdersForPacking(companyName, pruebas);
-        Integer shiping = invoiceFacade.getOrdersForShipping(companyName, pruebas);
+        Integer shipping = invoiceFacade.getOrdersForShipping(companyName, pruebas);
 
-        Integer[] contador = new Integer[]{0, 0, packing.intValue(), shiping};
+        Integer[] contador = new Integer[]{0, 0, packing.intValue(), shipping};
         for (SalesOrderDTO s : orders) {
             boolean existe = false;
 

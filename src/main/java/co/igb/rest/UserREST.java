@@ -29,7 +29,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -177,7 +176,7 @@ public class UserREST {
                     .sign(algorithm);
             CONSOLE.log(Level.INFO, "Token generado: {0}", token);
             return token;
-        } catch (UnsupportedEncodingException | JWTCreationException e) {
+        } catch (JWTCreationException e) {
             //UnsupportedEncodingException: UTF-8 encoding not supported
             //JWTCreationException: Invalid Signing configuration / Couldn't convert Claims.
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al generar el token JWT. ", e);
