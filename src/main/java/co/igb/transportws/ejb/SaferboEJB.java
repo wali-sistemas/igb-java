@@ -6,8 +6,8 @@ import co.igb.transportws.client.saferbo.SaferboClient;
 import co.igb.transportws.dto.saferbo.GuiaSaferboDTO;
 import co.igb.transportws.dto.saferbo.GuiaSaferboResponseDTO;
 import co.igb.util.Constants;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;

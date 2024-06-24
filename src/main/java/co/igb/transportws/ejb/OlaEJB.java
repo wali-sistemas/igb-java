@@ -5,7 +5,7 @@ import co.igb.ejb.IGBApplicationBean;
 import co.igb.transportws.client.ola.OlaClient;
 import co.igb.transportws.dto.ola.*;
 import co.igb.util.Constants;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;

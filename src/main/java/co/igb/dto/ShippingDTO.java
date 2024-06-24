@@ -1,7 +1,7 @@
 package co.igb.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.util.Date;
 

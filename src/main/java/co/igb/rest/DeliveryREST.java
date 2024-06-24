@@ -94,24 +94,25 @@ public class DeliveryREST {
                                                   @HeaderParam("X-Company-Name") String companyName,
                                                   @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                                   @HeaderParam("X-Pruebas") boolean pruebas) {
-        String docNum = "";
+        String docNum = "", delivery = "";
         for (String obj : deliveryNumber.split(",")) {
             docNum = docNum + "," + obj.substring(0, 6);
         }
+        delivery = docNum.substring(1, docNum.length());
 
-        Object[] obj = pickingExpressFacade.listPickingExpressBySeller(docNum.substring(1, docNum.length()), usernameset, warehouseCode, position, companyName, pruebas);
+        Object[] obj = pickingExpressFacade.listPickingExpressBySeller(delivery, usernameset, warehouseCode, position, companyName, pruebas);
         if (obj == null) {
-            CONSOLE.log(Level.WARNING, "No se encontraron registros pendientes para picking list de la entrega {0} en {1}", new Object[]{deliveryNumber, companyName});
-            boolean resp = pickingExpressFacade.updateStatusPickListExpress(deliveryNumber, "F", companyName, pruebas);
+            CONSOLE.log(Level.WARNING, "No se encontraron registros pendientes para picking list de la entrega {0} en {1}", new Object[]{delivery, companyName});
+            boolean resp = pickingExpressFacade.updateStatusPickListExpress(delivery, "F", companyName, pruebas);
             if (!resp) {
-                CONSOLE.log(Level.SEVERE, "Ocurrio un error finalizando el picking list express para la entrega" + deliveryNumber + " en " + companyName);
-                return Response.ok(new ResponseDTO(-1, "Ocurrio un error finalizando el picking list express para la entrega " + deliveryNumber + " en " + companyName)).build();
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error finalizando el picking list express para la entrega" + delivery + " en " + companyName);
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error finalizando el picking list express para la entrega " + delivery + " en " + companyName)).build();
             } else {
                 try {
-                    deliveryNoteFacade.updateUserFieldSeparador(deliveryNumber, "OK-PICKING-LIST-EXPRESS", companyName, pruebas);
+                    deliveryNoteFacade.updateUserFieldSeparador(delivery, "OK-PICKING-LIST-EXPRESS", companyName, pruebas);
                 } catch (Exception e) {
-                    CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando el UDF-nombre-separador para la entrega " + deliveryNumber + " en " + companyName, e);
-                    return Response.ok(new ResponseDTO(-1, "Ocurrio un error actualizando el UDF-nombre-separador para la entrega " + deliveryNumber + " en " + companyName)).build();
+                    CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando el UDF-nombre-separador para la entrega " + delivery + " en " + companyName, e);
+                    return Response.ok(new ResponseDTO(-1, "Ocurrio un error actualizando el UDF-nombre-separador para la entrega " + delivery + " en " + companyName)).build();
                 }
                 return Response.ok(new ResponseDTO(1, "No se encontraron entregas asignadas para picking list express.")).build();
             }
