@@ -71,6 +71,8 @@ public class ReportREST implements Serializable {
     private LandedCostsFacade landedCostsFacade;
     @EJB
     private PurchaseOrderFacade purchaseOrderFacade;
+    @EJB
+    private DeliveryNoteFacade deliveryNoteFacade;
 
     @GET
     @Path("reports-orders")
@@ -546,6 +548,10 @@ public class ReportREST implements Serializable {
 
         switch (dto.getDocumento()) {
             case "delivery":
+                if (dto.getFiltro().equals("Orden")) {
+                    //TODO: consultar DocNum de la entrega por número de orden
+                    dto.setId(deliveryNoteFacade.getDocNumDeliveryNote(dto.getId(), dto.getCompanyName(), false));
+                }
                 reportName = dto.getId() + ".pdf";
                 report = JasperCompileManager.compileReportToFile(applicationBean.obtenerValorPropiedad("url.jasper") + dto.getCompanyName() + File.separator + dto.getDocumento()
                         + File.separator + dto.getDocumento() + ".jrxml");

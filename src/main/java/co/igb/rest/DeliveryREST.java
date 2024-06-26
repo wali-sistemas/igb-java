@@ -94,11 +94,11 @@ public class DeliveryREST {
                                                   @HeaderParam("X-Company-Name") String companyName,
                                                   @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                                   @HeaderParam("X-Pruebas") boolean pruebas) {
-        String docNum = "", delivery = "";
+        String docNum = "";
         for (String obj : deliveryNumber.split(",")) {
             docNum = docNum + "," + obj.substring(0, 6);
         }
-        delivery = docNum.substring(1, docNum.length());
+        String delivery = docNum.substring(1, docNum.length());
 
         Object[] obj = pickingExpressFacade.listPickingExpressBySeller(delivery, usernameset, warehouseCode, position, companyName, pruebas);
         if (obj == null) {
