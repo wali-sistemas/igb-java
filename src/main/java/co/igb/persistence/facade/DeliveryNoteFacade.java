@@ -71,8 +71,10 @@ public class DeliveryNoteFacade {
 
     public Integer getDocNumDeliveryNote(Integer orderNumber, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select distinct cast(d.\"DocNum\" as int)as DocNum ");
-        sb.append("from DLN1 d where d.\"BaseRef\"='");
+        sb.append("select distinct cast(e.\"DocNum\" as int)as DocNum ");
+        sb.append("from ODLN e ");
+        sb.append("inner join DLN1 d on e.\"DocEntry\"=d.\"DocEntry\" ");
+        sb.append("where d.\"BaseRef\"='");
         sb.append(orderNumber);
         sb.append("'");
         try {
