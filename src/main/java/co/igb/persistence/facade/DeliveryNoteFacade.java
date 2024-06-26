@@ -71,7 +71,7 @@ public class DeliveryNoteFacade {
 
     public Integer getDocNumDeliveryNote(Integer orderNumber, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select distinct cast(d.\"DocEntry\" as int)as DocEntry ");
+        sb.append("select distinct cast(d.\"DocNum\" as int)as DocNum ");
         sb.append("from DLN1 d where d.\"BaseRef\"='");
         sb.append(orderNumber);
         sb.append("'");
@@ -194,6 +194,7 @@ public class DeliveryNoteFacade {
             persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).executeUpdate();
         } catch (NoResultException ex) {
         } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando el campo de usuario [U_SEPARADOR] en " + companyName, e);
         }
     }
 }
