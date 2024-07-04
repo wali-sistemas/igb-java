@@ -548,11 +548,14 @@ public class ReportREST implements Serializable {
 
         switch (dto.getDocumento()) {
             case "delivery":
+                int orderNum = dto.getId();
                 if (dto.getFiltro().equals("Orden")) {
-                    //TODO: consultar DocNum de la entrega por número de orden
+                    //TODO: consultar DocNum de la entrega por número de orden, y guardar el pdf con nro de orden de venta
                     dto.setId(deliveryNoteFacade.getDocNumDeliveryNote(dto.getId(), dto.getCompanyName(), false));
+                    reportName = orderNum + ".pdf";
+                } else {
+                    reportName = dto.getId() + ".pdf";
                 }
-                reportName = dto.getId() + ".pdf";
                 report = JasperCompileManager.compileReportToFile(applicationBean.obtenerValorPropiedad("url.jasper") + dto.getCompanyName() + File.separator + dto.getDocumento()
                         + File.separator + dto.getDocumento() + ".jrxml");
                 rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + dto.getDocumento() + File.separator + reportName;
