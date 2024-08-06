@@ -7,6 +7,7 @@ public class GuiaRapidoochoaDTO {
     private String nmImpresionRemesa;
     private String cdPoblacionOrigen;
     private String cdPoblacionDestino;
+    private String cdTipoDniCliente;
     private String nmPesoDeclarado;
     private String nmUnidPorEmbalaje;
     private String vmValorDeclarado;
@@ -47,6 +48,14 @@ public class GuiaRapidoochoaDTO {
 
     public void setCdPoblacionDestino(String cdPoblacionDestino) {
         this.cdPoblacionDestino = cdPoblacionDestino;
+    }
+
+    public String getCdTipoDniCliente() {
+        return cdTipoDniCliente;
+    }
+
+    public void setCdTipoDniCliente(String cdTipoDniCliente) {
+        this.cdTipoDniCliente = cdTipoDniCliente;
     }
 
     public String getNmPesoDeclarado() {
