@@ -95,4 +95,5 @@ public class Constants {
     public static final String SAFERBO_WS_URL = "igb.api.url";
     public static final String IGB_SAFERBO_WS_CODIGO = "igb.saferbo.api.codigo";
     public static final String MTZ_SAFERBO_WS_CODIGO = "mtz.saferbo.api.codigo";
+    public static final String ALDIA_WS_URL = "igb.aldia.api.url";
 }
