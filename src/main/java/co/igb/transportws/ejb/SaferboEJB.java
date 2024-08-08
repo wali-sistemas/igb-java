@@ -46,10 +46,10 @@ public class SaferboEJB {
         dto.setDspeso(apiSaferboDTO.getPeso());
         dto.setTipoacceso("1");
         dto.setTipodatos("2");
-        if (companyname.contains("IGB")){
-            dto.setDscodigocliente("017749");
+        if (companyname.contains("IGB")) {
+            dto.setDscodigocliente(appBean.obtenerValorPropiedad(Constants.IGB_SAFERBO_WS_CODIGO));
         } else {
-            dto.setDscodigocliente("014587");
+            dto.setDscodigocliente(appBean.obtenerValorPropiedad(Constants.MTZ_SAFERBO_WS_CODIGO));
         }
         dto.setDsnitr("");
         dto.setDsnombrer("");

@@ -424,4 +424,18 @@ public class ShippingREST implements Serializable {
             return Response.ok(new ResponseDTO(0, new Object[]{null, "https://silogtran.cesred.net/index.php?page=Despacho.Remesacliente_008.Home&remesa_codigo=" + guia})).build();
         }
     }
+
+    @POST
+    @Path("add-guia-aldia/{docnum}")
+    @Produces()
+    @Consumes()
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response createGuiaAldia(ApiAldiaDTO dto,
+                                    @PathParam("docnum") String docNum,
+                                    @HeaderParam("X-Company-Name") String companyName,
+                                    @HeaderParam("X-Employee") String username,
+                                    @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Iniciando creacion de guia con la transportadora Aldia");
+        return null;
+    }
 }
