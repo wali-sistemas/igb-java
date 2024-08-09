@@ -601,12 +601,6 @@ public class ReportREST implements Serializable {
                         + File.separator + dto.getDocumento() + ".jrxml");
                 rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + dto.getDocumento() + File.separator + reportName;
                 break;
-            case "paystub":
-                reportName = dto.getId() + ".pdf";
-                report = JasperCompileManager.compileReportToFile(applicationBean.obtenerValorPropiedad("url.jasper") + dto.getCompanyName() + File.separator + "employee" +
-                        File.separator + dto.getDocumento() + File.separator + dto.getDocumento() + ".jrxml");
-                rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + "employee" + File.separator + dto.getDocumento() + File.separator + reportName;
-                break;
             case "jobCertify":
                 reportName = dto.getId() + ".pdf";
                 report = JasperCompileManager.compileReportToFile(applicationBean.obtenerValorPropiedad("url.jasper") + dto.getCompanyName() + File.separator + "employee" +
@@ -654,11 +648,26 @@ public class ReportREST implements Serializable {
             }
         } else if (dto.getOrigen().equals("N")) {
             switch (dto.getCompanyName()) {
-                case "IGB":
+                case "IGB_NOVAWEB":
                     cn = "java:/IGBNOVAWEBNUBEDS";
                     break;
-                case "VARROC":
+                case "MOTOZONE_NOVAWEB":
                     cn = "java:/MTZNOVAWEBNUBEDS";
+                    break;
+                case "VILNA_NOVAWEB":
+                    cn = "java:/VILNOVAWEBNUBEDS";
+                    break;
+                case "WALI_NOVAWEB":
+                    cn = "java:/WALNOVAWEBNUBEDS";
+                    break;
+                case "DIGITAL_NOVAWEB":
+                    cn = "java:/DIGNOVAWEBNUBEDS";
+                    break;
+                case "INVERSUR_NOVAWEB":
+                    cn = "java:/INVNOVAWEBNUBEDS";
+                    break;
+                case "MOTOREPUESTOS_NOVAWEB":
+                    cn = "java:/MOTNOVAWEBNUBEDS";
                     break;
                 default:
                     cn = "";
