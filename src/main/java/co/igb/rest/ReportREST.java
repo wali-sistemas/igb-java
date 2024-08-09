@@ -651,7 +651,7 @@ public class ReportREST implements Serializable {
                 case "IGB_NOVAWEB":
                     cn = "java:/IGBNOVAWEBNUBEDS";
                     break;
-                case "MOTOZONE_NOVAWEB":
+                case "MTZ_NOVAWEB":
                     cn = "java:/MTZNOVAWEBNUBEDS";
                     break;
                 case "VILNA_NOVAWEB":
@@ -660,7 +660,7 @@ public class ReportREST implements Serializable {
                 case "WALI_NOVAWEB":
                     cn = "java:/WALNOVAWEBNUBEDS";
                     break;
-                case "DIGITAL_NOVAWEB":
+                case "DSM_NOVAWEB":
                     cn = "java:/DIGNOVAWEBNUBEDS";
                     break;
                 case "INVERSUR_NOVAWEB":
