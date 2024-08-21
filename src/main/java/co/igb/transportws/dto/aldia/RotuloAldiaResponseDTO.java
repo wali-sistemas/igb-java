@@ -1,20 +1,19 @@
 package co.igb.transportws.dto.aldia;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author jguisao
  */
-public class GuiaAldiaResponseDTO implements Serializable {
-    private List<String> data;
+public class RotuloAldiaResponseDTO implements Serializable {
+    private String data;
     private Integer code;
 
-    public List<String> getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(List<String> data) {
+    public void setData(String data) {
         this.data = data;
     }
 

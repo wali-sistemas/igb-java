@@ -25,7 +25,7 @@ public class TranspFacade {
 
     public List<Object[]> listTranspActive(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(\"Code\" as varchar(2))as code,cast(\"Name\" as varchar(50))as name ");
+        sb.append("select cast(\"Code\" as varchar(6))as code,cast(\"Name\" as varchar(50))as name ");
         sb.append("from \"@TRANSP\" ");
         sb.append("where \"U_Activo\"='Y'");
         try {
