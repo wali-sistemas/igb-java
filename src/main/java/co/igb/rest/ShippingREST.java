@@ -4,6 +4,7 @@ import co.igb.dto.*;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.entity.ShippingOrder;
 import co.igb.persistence.facade.*;
+import co.igb.transportws.dto.aldia.GuiaAldiaResponseDTO;
 import co.igb.transportws.dto.coordinadora.GuiaCoordinadoraResponseDTO;
 import co.igb.transportws.dto.ola.GuiaOlaDTO;
 import co.igb.transportws.dto.ola.GuiaOlaResponseDTO;
@@ -23,9 +24,12 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -63,6 +67,8 @@ public class ShippingREST implements Serializable {
     private TransprensaEJB transprensaEJB;
     @EJB
     private GopackEJB gopackEJB;
+    @EJB
+    private AldiaEJB aldiaEJB;
 
     @GET
     @Path("list-transport")
@@ -427,8 +433,8 @@ public class ShippingREST implements Serializable {
 
     @POST
     @Path("add-guia-aldia/{docnum}")
-    @Produces()
-    @Consumes()
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response createGuiaAldia(ApiAldiaDTO dto,
                                     @PathParam("docnum") String docNum,
@@ -436,6 +442,37 @@ public class ShippingREST implements Serializable {
                                     @HeaderParam("X-Employee") String username,
                                     @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Iniciando creacion de guia con la transportadora Aldia");
-        return null;
+
+        GuiaAldiaResponseDTO res = aldiaEJB.createGuia(dto, companyName);
+        if (res.getCode().equals(200)) {
+            try {
+                String urlRotulo = aldiaEJB.getRotuloGuia(res.getData().get(0), companyName);
+                if (urlRotulo != null) {
+                    //convertir base64 a pdf
+                    File file = new File(appBean.obtenerValorPropiedad("url.archivo") + companyName + File.separator + "shipping" +
+                            File.separator + "aldia" + File.separator + "rotulo" + File.separator + res.getData().get(0) + ".pdf");
+                    try (FileOutputStream fos = new FileOutputStream(file)) {
+                        byte[] decoder = Base64.getDecoder().decode(urlRotulo);
+                        fos.write(decoder);
+                        CONSOLE.log(Level.INFO, "Archivo rotulo de guia #{0} de transportadora Aldia guardado", res.getData().get(0));
+                    } catch (Exception e) {
+                        CONSOLE.log(Level.SEVERE, "Ocurrio un error guardando el rotulo PDF para la guia #" + res.getData().get(0) + " de la transportadora Aldia", e);
+                    }
+
+                    invoiceFacade.updateGuiaTransport(docNum, res.getData().get(0), urlRotulo, username, dto.getCant(), dto.getVlrDecl(), dto.getPeso(), companyName, pruebas);
+                    CONSOLE.log(Level.INFO, "Creacion exitosa de guia #{0} con la transportadora Transprensa", res.getData().get(0));
+                    return Response.ok(new ResponseDTO(0, new Object[]{null, urlRotulo})).build();
+                } else {
+                    CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando los rotulos para la guia #" + res.getData().get(0) + " de la trasnportadora Aldia");
+                    return Response.ok(new ResponseDTO(0, new Object[]{null, null})).build();
+                }
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el nro de guia en la factura #{0} para {1}", new Object[]{docNum, companyName});
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error al actualizar el nro de guia en la factura " + docNum)).build();
+            }
+        } else {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error creando la guia con la transportadora Aldia." + res.getCode());
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error creando la guia con la transportadora Aldia. " + res.getCode())).build();
+        }
     }
 }

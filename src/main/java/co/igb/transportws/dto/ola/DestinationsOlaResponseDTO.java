@@ -38,6 +38,7 @@ public class DestinationsOlaResponseDTO {
         protected String codigo;
         protected String nombre;
         protected String dep;
+        protected String dane;
 
         public String getCodigo() {
             return codigo;
@@ -61,6 +62,14 @@ public class DestinationsOlaResponseDTO {
 
         public void setDep(String dep) {
             this.dep = dep;
+        }
+
+        public String getDane() {
+            return dane;
+        }
+
+        public void setDane(String dane) {
+            this.dane = dane;
         }
     }
 }

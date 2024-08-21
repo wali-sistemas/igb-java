@@ -138,7 +138,7 @@ public class OlaEJB {
                 File file = new File(appBean.obtenerValorPropiedad("url.archivo") + companyName + File.separator + "shipping" +
                         File.separator + "ola" + File.separator + "rotulo" + File.separator + guia + ".pdf");
 
-                try (FileOutputStream fos = new FileOutputStream(file);) {
+                try (FileOutputStream fos = new FileOutputStream(file)) {
                     byte[] decoder = Base64.getDecoder().decode(printOlaResponseDTO.getData());
                     fos.write(decoder);
                     CONSOLE.log(Level.INFO, "Archivo rotulo de guia #{0} de transportadora Ola guardado", guia);
