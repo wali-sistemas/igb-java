@@ -31,6 +31,7 @@ public class Constants {
     public static final String EMAIL_PORT = "mail.port";
     public static final String EMAIL_USERNAME = "mail.username";
     public static final String EMAIL_PASSWORD = "mail.password";
+    public static final String EMAIL_TEMPLATES = "mail.templates";
     public static final String EMAIL_FROM_INVENTORY_INCONSISTENCY = "mail.from.inventory.inconsistency";
     public static final String EMAIL_SUBJECT_INVENTORY_INCONSISTENCY = "mail.subject.inventory.inconsistency";
     public static final String EMAIL_MSG_INVENTORY_INCONSISTENCY = "mail.msg.inventory.inconsistency";

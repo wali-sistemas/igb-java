@@ -4,10 +4,8 @@ import co.igb.b1ws.client.purchasedeliverynote.Add;
 import co.igb.b1ws.client.purchasedeliverynote.AddResponse;
 import co.igb.b1ws.client.purchasedeliverynote.Document;
 import co.igb.b1ws.client.purchasedeliverynote.PurchaseDeliveryNotesService;
-import co.igb.dto.PurchaseOrderDTO;
-import co.igb.dto.PurchaseOrderLineDTO;
-import co.igb.dto.ResponseDTO;
-import co.igb.dto.UserFieldDTO;
+import co.igb.dto.*;
+import co.igb.ejb.EmailManager;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.persistence.facade.PurchaseOrderFacade;
 import co.igb.util.IGBUtils;
@@ -26,13 +24,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author dbotero
+ * @author jguisao
  */
 @Stateless
 @Path("reception")
@@ -44,6 +41,8 @@ public class ReceptionREST implements Serializable {
     private BasicSAPFunctions sapFunctions;
     @Inject
     private IGBApplicationBean appBean;
+    @Inject
+    private EmailManager emailManager;
 
     @GET
     @Path("list/orders")
@@ -159,6 +158,8 @@ public class ReceptionREST implements Serializable {
         dto.setPrecint((String) obj[39]);
         dto.setEnviarDatos((String) obj[40]);
         dto.setVendedor((String) obj[41]);
+        dto.setComprador((String) obj[43]);
+        dto.setEmailComprador((String) obj[44]);
 
         return Response.ok(dto).build();
     }
@@ -188,6 +189,30 @@ public class ReceptionREST implements Serializable {
 
         if (poFacade.updateFieldUser(dto, companyName, pruebas)) {
             CONSOLE.log(Level.INFO, "Exito actualizando los campos de usuario para la orden de compra #{0}", dto.getDocNum());
+            //notificar actualización de fecha de arribo al puerto
+            if (dto.isSendNotification()) {
+                try {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("docNum", dto.getDocNum());
+                    params.put("dateArribPuert", dto.getFarribPuert());
+                    params.put("vendedor", dto.getVendedor());
+                    params.put("comprador", dto.getComprador());
+
+                    if (companyName.contains("VARROC")) {
+                        params.put("footer", "email-mtz.png");
+                        params.put("companyName", "MOTOZONE S.A.S");
+                    } else {
+                        params.put("footer", "email-igb.png");
+                        params.put("companyName", "IGB S.A.S");
+                    }
+
+                    sendEmail("NotificationChangesInOrder", "soporte@igbcolombia.com", "Cambio (Fecha de Arribo al Puerto) Orden #" + dto.getDocNum(), dto.getEmailComprador(),
+                            "compras2@igbcolombia.com", "", null, params);
+                } catch (Exception e) {
+                    CONSOLE.log(Level.SEVERE, "Ocurrio un error enviando la notificacion de cambio de fecha arribo a puerto para la orden de compra #" + dto.getDocNum(), e);
+                    return Response.ok(new ResponseDTO(-1, "Ocurrio un error enviando la notificacion de cambio de fecha arribo al puerto para la orden de compra # " + dto.getDocNum())).build();
+                }
+            }
             return Response.ok(new ResponseDTO(0, "Exito actualizando los campos de usuario para la orden de compra #" + dto.getDocNum())).build();
         } else {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando los campos de usuario para la orden de compra #" + dto.getDocNum() + " en " + companyName);
@@ -327,6 +352,23 @@ public class ReceptionREST implements Serializable {
             return Response.ok(new ResponseDTO(0, docEntry)).build();
         } else {
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error al crear la entrada. " + errorMessage)).build();
+        }
+    }
+
+    private void sendEmail(String template, String from, String subject, String toAddress, String ccAddress, String bccAddress, List<String[]> adjuntos, Map<String, String> params) {
+        MailMessageDTO dtoMail = new MailMessageDTO();
+        dtoMail.setTemplateName(template);
+        dtoMail.setParams(params);
+        dtoMail.setAttachments(adjuntos);
+        dtoMail.setFrom(from);
+        dtoMail.setSubject(subject);
+        dtoMail.addToAddress(toAddress + ',' + ccAddress);
+        dtoMail.addBccAddress(bccAddress);
+        dtoMail.addBccAddress(ccAddress);
+        try {
+            emailManager.sendEmail(dtoMail);
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al enviar la notificacion. ", e);
         }
     }
 

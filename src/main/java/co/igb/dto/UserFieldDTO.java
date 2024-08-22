@@ -50,11 +50,14 @@ public class UserFieldDTO {
     private String vendedor;
     private String docNum;
     private String docDate;
+    private String comprador;
+    private String emailComprador;
+    private boolean sendNotification;
 
     public UserFieldDTO() {
     }
 
-    public UserFieldDTO(String transp, String fembarque, String termNeg, String modTranp, String puertDes, String estOC, String embarc, String docTras, String fdocTras, String farribPuert, String farribAlm, String tipoEmp, String observ, String puertEmb, String transpTerr, String farriboCed, Integer cantCont, String cbm, String fcargaList, String tiempTrans, String fsalPuert, String tiempPuert, Integer tiempEntComex, String fbooking, Integer tiempEspBooking, String festimEmb, String frecDocFin, String emisBL, String insp, String farribCedEst, String notifBL, String liqComex, String fliq, String flibBL, String conduct, Integer cedulCond, String placa, String contened, String precint, String enviarDatos, String vendedor, String docNum, String docDate) {
+    public UserFieldDTO(String transp, String fembarque, String termNeg, String modTranp, String puertDes, String estOC, String embarc, String docTras, String fdocTras, String farribPuert, String farribAlm, String tipoEmp, String observ, String puertEmb, String transpTerr, String farriboCed, Integer cantCont, String cbm, String fcargaList, String tiempTrans, String fsalPuert, String tiempPuert, Integer tiempEntComex, String fbooking, Integer tiempEspBooking, String festimEmb, String frecDocFin, String emisBL, String insp, String farribCedEst, String notifBL, String liqComex, String fliq, String flibBL, String conduct, Integer cedulCond, String placa, String contened, String precint, String enviarDatos, String vendedor, String docNum, String docDate, String comprador, String emailComprador, boolean sendNotification) {
         this.transp = transp;
         this.fembarque = fembarque;
         this.termNeg = termNeg;
@@ -98,6 +101,9 @@ public class UserFieldDTO {
         this.vendedor = vendedor;
         this.docNum = docNum;
         this.docDate = docDate;
+        this.comprador = comprador;
+        this.emailComprador = emailComprador;
+        this.sendNotification = sendNotification;
     }
 
     public String getTransp() {
@@ -444,6 +450,30 @@ public class UserFieldDTO {
         this.docDate = docDate;
     }
 
+    public boolean isSendNotification() {
+        return sendNotification;
+    }
+
+    public void setSendNotification(boolean sendNotification) {
+        this.sendNotification = sendNotification;
+    }
+
+    public String getComprador() {
+        return comprador;
+    }
+
+    public void setComprador(String comprador) {
+        this.comprador = comprador;
+    }
+
+    public String getEmailComprador() {
+        return emailComprador;
+    }
+
+    public void setEmailComprador(String emailComprador) {
+        this.emailComprador = emailComprador;
+    }
+
     @Override
     public String toString() {
         return "UserFieldDTO{" +
@@ -490,6 +520,9 @@ public class UserFieldDTO {
                 ", vendedor='" + vendedor + '\'' +
                 ", docNum='" + docNum + '\'' +
                 ", docDate='" + docDate + '\'' +
+                ", comprador='" + comprador + '\'' +
+                ", emailComprador='" + emailComprador + '\'' +
+                ", sendNotification=" + sendNotification +
                 '}';
     }
 }
