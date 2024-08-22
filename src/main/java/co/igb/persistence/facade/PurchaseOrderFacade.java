@@ -241,19 +241,20 @@ public class PurchaseOrderFacade {
 
     public Object[] loadUserFields(String docNum, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(\"DocNum\" as int)as docNum,cast(\"U_TRANSP\" as varchar)as transp,cast(\"U_F_EMBARQUE\" as date)as fEmbarque,cast(\"U_TERM_NEG\" as varchar)as termNeg, ");
-        sb.append(" cast(\"U_MOD_TRANSP\" as varchar)as modTranp,cast(\"U_PUERTO_DES\" as varchar)as puertDes,cast(\"U_ESTADO_OC\" as varchar)as estOC,cast(\"U_EMBARCADO\" as varchar)as embarc, ");
-        sb.append(" cast(\"U_DOC_TRANSP\" as varchar)as docTras,cast(\"U_F_DOC_TRANSP\" as date)as fDocTras,cast(\"U_F_ARRIB_PUERTO\" as date)as fArribPuert,cast(\"U_F_ARRIB_ALMA\" as date)as fArribAlm, ");
-        sb.append(" cast(\"U_TIPO_EMPAQUE\" as varchar)as tipoEmp,cast(\"U_OBSERVACION\" as varchar)as observ,cast(\"U_PUERTO_EMB\" as varchar)as puertEmb,cast(\"U_TRANSP_TERR\" as varchar)as transpTerr, ");
-        sb.append(" cast(\"U_Fecha_Arribo_CEDI\" as date)as fArriboCed,ifnull(cast(\"U_CANT_CONTE\" as int),0)as cantCont,cast(\"U_CBM\" as varchar)as cbm,cast(\"U_F_CARGA_LISTA\" as date)as fCargaList, ");
-        sb.append(" cast(\"U_TIEMPO_TRANSITO\" as varchar)as tiempTrans,cast(\"U_F_SALIDA_PUERTO\" as date)as fSalPuert,cast(\"U_TIEMPO_PUERTO\" as varchar)as tiempPuert, ");
-        sb.append(" ifnull(cast(\"U_TIEMPO_ENT_COMEX\" as int),0)as tiempEntComex,cast(\"U_F_BOOKING\" as date)as fbooking,ifnull(cast(\"U_TIEMPO_ESP_BOOKING\" as int),0)as tiempEspBooking, ");
-        sb.append(" cast(\"U_F_ESTIM_EMBARQUE\" as date)as fEstimEmb,cast(\"U_F_REC_DOC_FINAL\" as date)as fRecDocFin,cast(\"U_EMISION_BL\" as varchar)as emisBL,cast(\"U_INSPECCION\" as varchar)as insp, ");
-        sb.append(" cast(\"U_F_ARRIBO_CEDI_EST\" as date)as fArribCedEst,cast(\"U_NotificationBL\" as varchar)as notifBL,cast(\"U_LIQUID_COMEX\" as varchar)as liqComex,cast(\"U_F_LIQUIDACION\" as date)as fLiq, ");
-        sb.append(" cast(\"U_F_LIB_BL\" as date)as fLibBL,cast(\"U_CONDUCTOR\" as varchar)as conduct,ifnull(cast(\"U_CEDULA_CON\" as int),0)as cedulCond,cast(\"U_PLACA\" as varchar)as placa, ");
-        sb.append(" cast(\"U_CONTENEDOR\" as varchar)as contened,cast(\"U_PRECINTO\" as varchar) as precint,cast(\"U_ENVIAR_DATOS_CON\" as varchar)as enviarDatos,cast(\"U_Vendedor_2\" as varchar)as vendedor, ");
-        sb.append(" cast(\"DocDate\" as date)as DocDate ");
+        sb.append("select cast(\"DocNum\" as int)as docNum,ifnull(cast(\"U_TRANSP\" as varchar),'')as transp,ifnull(cast(\"U_F_EMBARQUE\" as date),'')as fEmbarque,ifnull(cast(\"U_TERM_NEG\" as varchar),'')as termNeg, ");
+        sb.append(" ifnull(cast(\"U_MOD_TRANSP\" as varchar),'')as modTranp,ifnull(cast(\"U_PUERTO_DES\" as varchar),'')as puertDes,ifnull(cast(\"U_ESTADO_OC\" as varchar),'')as estOC, ifnull(cast(\"U_EMBARCADO\" as varchar),'')as embarc, ");
+        sb.append(" ifnull(cast(\"U_DOC_TRANSP\" as varchar),'')as docTras,ifnull(cast(\"U_F_DOC_TRANSP\" as date),'')as fDocTras,ifnull(cast(\"U_F_ARRIB_PUERTO\" as date),'')as fArribPuert,ifnull(cast(\"U_F_ARRIB_ALMA\" as date),'')as fArribAlm, ");
+        sb.append(" ifnull(cast(\"U_TIPO_EMPAQUE\" as varchar),'')as tipoEmp,ifnull(cast(\"U_OBSERVACION\" as varchar),'')as observ,ifnull(cast(\"U_PUERTO_EMB\" as varchar),'')as puertEmb,ifnull(cast(\"U_TRANSP_TERR\" as varchar),'')as transpTerr, ");
+        sb.append(" ifnull(cast(\"U_Fecha_Arribo_CEDI\" as date),'')as fArriboCed,ifnull(cast(\"U_CANT_CONTE\" as int),0)as cantCont,ifnull(cast(\"U_CBM\" as varchar),'')as cbm,ifnull(cast(\"U_F_CARGA_LISTA\" as date),'')as fCargaList, ");
+        sb.append(" ifnull(cast(\"U_TIEMPO_TRANSITO\" as varchar),'')as tiempTrans,ifnull(cast(\"U_F_SALIDA_PUERTO\" as date),'')as fSalPuert,ifnull(cast(\"U_TIEMPO_PUERTO\" as varchar),'')as tiempPuert,ifnull(cast(\"U_TIEMPO_ENT_COMEX\" as int),0)as tiempEntComex, ");
+        sb.append(" ifnull(cast(\"U_F_BOOKING\" as date),'')as fbooking,ifnull(cast(\"U_TIEMPO_ESP_BOOKING\" as int),0)as tiempEspBooking,ifnull(cast(\"U_F_ESTIM_EMBARQUE\" as date),'')as fEstimEmb,ifnull(cast(\"U_F_REC_DOC_FINAL\" as date),'')as fRecDocFin, ");
+        sb.append(" ifnull(cast(\"U_EMISION_BL\" as varchar),'')as emisBL,ifnull(cast(\"U_INSPECCION\" as varchar),'')as insp,ifnull(cast(\"U_F_ARRIBO_CEDI_EST\" as date),'')as fArribCedEst,ifnull(cast(\"U_NotificationBL\" as varchar),'')as notifBL, ");
+        sb.append(" ifnull(cast(\"U_LIQUID_COMEX\" as varchar),'')as liqComex,ifnull(cast(\"U_F_LIQUIDACION\" as date),'')as fLiq,ifnull(cast(\"U_F_LIB_BL\" as date),'')as fLibBL,ifnull(cast(\"U_CONDUCTOR\" as varchar),'')as conduct, ");
+        sb.append(" ifnull(cast(\"U_CEDULA_CON\" as int),0)as cedulCond,ifnull(cast(\"U_PLACA\" as varchar),'')as placa,ifnull(cast(\"U_CONTENEDOR\" as varchar),'')as contened,ifnull(cast(\"U_PRECINTO\" as varchar),'')as precint, ");
+        sb.append(" ifnull(cast(\"U_ENVIAR_DATOS_CON\" as varchar),'')as enviarDatos,ifnull(cast(\"U_Vendedor_2\" as varchar),'')as vendedor,ifnull(cast(\"DocDate\" as date),'')as DocDate,ifnull(cast(s.\"SlpName\" as varchar),'')as Comprador, ");
+        sb.append(" ifnull(cast(s.\"Email\" as varchar),'grupocomex@igbcolombia.com')as EmailComprador ");
         sb.append("from OPOR e ");
+        sb.append("inner join OSLP s on s.\"SlpCode\"=e.\"SlpCode\" ");
         sb.append("where e.\"DocNum\"=");
         sb.append(docNum);
         try {

@@ -1,0 +1,80 @@
+<style type="text/css">
+    body, html, .body {
+        font-family: "Century Gothic";
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        color: #444;
+    }
+
+    hr {
+        color: #D9D6D6;
+        height: 1px;
+        border: 0;
+    }
+
+
+</style>
+<container>
+    <spacer size="16"></spacer>
+    <row>
+        <columns large="8">
+            <table style="width: 100%; text-align: center">
+                <tr>
+                    <td>
+                        <table style="width: 40%; text-align: left">
+                            <tr>
+                                <td style="text-align: center; font-size: 14px;">
+                                    <p>
+                                        <b style="color: #cb132d; font-size: 24px">Orden de Compra #${docNum} - ${companyName}</b>
+                                    </p>
+                                </td>
+                            </tr>
+                            <hr>
+                            <tr>
+                                <td>
+                                    <table style="width: 100%">
+                                        <tr>
+                                            <td style="width: 100%;">
+                                                <br/>
+                                                <b>Analista Comex: </b>${vendedor}
+                                                <br/>
+                                                <b>Fecha Arribo al Puerto: </b>${dateArribPuert}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <hr>
+                            <tr>
+                                <td>
+                                    <br/>
+                                    <P style="color: #fff; background: #333; text-align: center;">
+                                        Se realizaron cambios en la fecha de arribo al puerto.
+                                    </P>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b><b></b><i><br/>Este correo es solo informativo, por favor evite responderlo.</i></b></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="http://wali.igbcolombia.com:8080/shared/images/logo/${footer}"
+                                         alt="footer"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p><b>${companyName}</b> | Calle 98 Sur Nro. 48 - 225 | La Estrella, Colombia<br/>Tel.:
+                                        (57) (4) 444 2025 | Ext: 305<br/></p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </columns>
+    </row>
+</container>
