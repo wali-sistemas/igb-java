@@ -190,11 +190,23 @@ public class ReceptionREST implements Serializable {
         if (poFacade.updateFieldUser(dto, companyName, pruebas)) {
             CONSOLE.log(Level.INFO, "Exito actualizando los campos de usuario para la orden de compra #{0}", dto.getDocNum());
             //notificar actualización de fecha de arribo al puerto
-            if (dto.isSendNotification()) {
+            if (dto.isSendNotificationFarribPuert() || dto.isSendNotificationFembarque()) {
                 try {
                     Map<String, String> params = new HashMap<>();
                     params.put("docNum", dto.getDocNum());
-                    params.put("dateArribPuert", dto.getFarribPuert());
+
+                    if (dto.isSendNotificationFarribPuert()) {
+                        params.put("dateArribPuert", dto.getFarribPuert());
+                    } else {
+                        params.put("dateArribPuert", "No cambio");
+                    }
+
+                    if (dto.isSendNotificationFembarque()) {
+                        params.put("dateEmbarque", dto.getFembarque());
+                    } else {
+                        params.put("dateEmbarque", "No cambio");
+                    }
+
                     params.put("vendedor", dto.getVendedor());
                     params.put("comprador", dto.getComprador());
 
@@ -206,8 +218,8 @@ public class ReceptionREST implements Serializable {
                         params.put("companyName", "IGB S.A.S");
                     }
 
-                    sendEmail("NotificationChangesInOrder", "soporte@igbcolombia.com", "Cambio (Fecha de Arribo al Puerto) Orden #" + dto.getDocNum(), dto.getEmailComprador(),
-                            "compras2@igbcolombia.com", "", null, params);
+                    sendEmail("NotificationChangesInOrder", "soporte@igbcolombia.com", "Cambio en fechas Orden #" + dto.getDocNum(), dto.getEmailComprador(),
+                            "compras2@igbcolombia.com,compras@igbcolombia.com", "", null, params);
                 } catch (Exception e) {
                     CONSOLE.log(Level.SEVERE, "Ocurrio un error enviando la notificacion de cambio de fecha arribo a puerto para la orden de compra #" + dto.getDocNum(), e);
                     return Response.ok(new ResponseDTO(-1, "Ocurrio un error enviando la notificacion de cambio de fecha arribo al puerto para la orden de compra # " + dto.getDocNum())).build();
