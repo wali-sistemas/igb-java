@@ -27,7 +27,8 @@ public class TranspFacade {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(\"Code\" as varchar(6))as code,cast(\"Name\" as varchar(50))as name ");
         sb.append("from \"@TRANSP\" ");
-        sb.append("where \"U_Activo\"='Y'");
+        sb.append("where \"U_Activo\"='Y' ");
+        sb.append("order by 2");
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
         } catch (NoResultException ex) {
