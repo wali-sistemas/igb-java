@@ -38,6 +38,21 @@ public class TranspFacade {
         return new ArrayList<>();
     }
 
+    public List<Object[]> listTranspComexActive(String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(\"Code\" as varchar(6))as code,cast(\"Name\" as varchar(50))as name ");
+        sb.append("from \"@TRANSP\" ");
+        sb.append("where \"U_ActivoComex\"='Y' ");
+        sb.append("order by 2");
+        try {
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error listando las trasnportadoras activas");
+        }
+        return new ArrayList<>();
+    }
+
     public Integer getSerieStart(Integer codTransp, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(\"U_serieNext\" as int)as serie ");
