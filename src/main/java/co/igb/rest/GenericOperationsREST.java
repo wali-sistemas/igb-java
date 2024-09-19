@@ -76,4 +76,14 @@ public class GenericOperationsREST {
         CONSOLE.log(Level.INFO, "Listando transportadoras activas");
         return Response.ok(transpFacade.listTranspActive(companyName, pruebas)).build();
     }
+
+    @GET
+    @Path("companies/transports-comex")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response listTransportsComexActive(@HeaderParam("X-Company-Name") String companyName,
+                                              @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Listando transportadoras activas para comex");
+        return Response.ok(transpFacade.listTranspComexActive(companyName, pruebas)).build();
+    }
 }
