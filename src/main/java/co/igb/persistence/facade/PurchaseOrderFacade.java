@@ -177,7 +177,7 @@ public class PurchaseOrderFacade {
             sb.append(" where p.\"Series\"='48' ");
         }
         sb.append("union all ");
-        sb.append(" select 'Tiempo Tránsito' as Concepto,ifnull(cast(days_between(p.\"U_F_EMBARQUE\",p.\"U_Fecha_Arribo_CEDI\")as varchar),'Sin') || ' Días' as Info,p.\"DocNum\" ");
+        sb.append(" select 'Tiempo Tránsito' as Concepto,ifnull(cast(days_between(p.\"U_F_EMBARQUE\",p.\"U_F_ARRIB_PUERTO\")as varchar),'Sin') || ' Días' as Info,p.\"DocNum\" ");
         sb.append(" from OPOR p ");
         if (companyName.contains("VARROC")) {
             sb.append(" where p.\"Series\"='16' ");

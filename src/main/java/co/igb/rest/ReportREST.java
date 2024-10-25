@@ -719,7 +719,7 @@ public class ReportREST implements Serializable {
 
             PrintService myPrintService = null;
             if (companyName.contains("IGB")) {
-                myPrintService = findPrintService("KyoceraCediP3055"/*printer.getNombreImpresoraServidor()*/);
+                myPrintService = findPrintService("KyoceraFacturacion"/*"KyoceraCediP3055"*//*printer.getNombreImpresoraServidor()*/);
             } else if (companyName.contains("VARROC") && whsCode.equals("32")) {
                 myPrintService = findPrintService("KyoceraCediP3045");
             }
