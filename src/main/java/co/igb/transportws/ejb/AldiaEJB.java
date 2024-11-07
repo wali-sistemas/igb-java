@@ -11,7 +11,10 @@ import com.google.gson.Gson;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,7 +54,7 @@ public class AldiaEJB {
         CONSOLE.log(Level.INFO, JSON);
 
         try {
-            LoginAldiaResponseDTO res = service.getToken(dto);
+            LoginAldiaResponseDTO res = service.findToken(dto);
             return res.getAccessToken();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar un token de aldia para " + companyName, e);
@@ -115,7 +118,7 @@ public class AldiaEJB {
         return null;
     }
 
-    public String getRotuloGuia(String guia, String companyName) {
+    public String generateGuia(String guia, String companyName) {
         String token = createToken(companyName);
         if (token != null) {
             RotuloAldiaDTO.Data data = new RotuloAldiaDTO.Data();
@@ -130,11 +133,18 @@ public class AldiaEJB {
             CONSOLE.log(Level.INFO, JSON);
 
             try {
-                String res = service.getRotulo(dto, token);
+                String res = service.findRotulo(dto, token);
                 RotuloAldiaResponseDTO rotuloAldiaResponseDTO = new ObjectMapper().readValue(res, RotuloAldiaResponseDTO.class);
 
                 if (rotuloAldiaResponseDTO.getCode().equals(200)) {
-                    return rotuloAldiaResponseDTO.getData();
+                    StringBuilder sb = new StringBuilder();
+                    //TODO: Se recorre la cadena Base64 de la guia, para almacearlo en un StringBuilder porque un String no soporta tantos carácteres
+                    for (int i = rotuloAldiaResponseDTO.getData().length() - 1; i >= 0; i--) {
+                        String fileReverse = "";
+                        fileReverse = fileReverse + rotuloAldiaResponseDTO.getData().charAt(i);
+                        sb.append(fileReverse);
+                    }
+                    return convertFile(sb.reverse(), "guia", guia, companyName);
                 } else {
                     return null;
                 }
@@ -144,5 +154,39 @@ public class AldiaEJB {
             return null;
         }
         return null;
+    }
+
+    public void getCargarRemesa(String companyName) {
+        String token = createToken(companyName);
+        if (token != null) {
+            try {
+                String res = service.getCargarRemesa(token);
+                RotuloAldiaResponseDTO rotuloAldiaResponseDTO = new ObjectMapper().readValue(res, RotuloAldiaResponseDTO.class);
+
+                if (rotuloAldiaResponseDTO.getCode().equals(200) || rotuloAldiaResponseDTO.getCode().equals(204)) {
+                    CONSOLE.log(Level.INFO, "Carga de remesa Aldia exitosa.");
+                } else {
+                    CONSOLE.log(Level.WARNING, "Ocurrio una novedad cargando la remesa Aldia a la plataforma.");
+                }
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "No fue posible iniciar la interface de Aldia [WS_CARGA_REMESA]. ", e);
+            }
+        }
+    }
+
+    private String convertFile(StringBuilder sb, String typeDoc, String guia, String companyName) {
+        //TODO: Se procede a decodificar la cadena Base64 a pdf
+        String rutaFile = appBean.obtenerValorPropiedad("url.archivo") + companyName + File.separator + "shipping" + File.separator + "aldia" + File.separator + typeDoc + File.separator + guia + ".pdf";
+        File file = new File(rutaFile);
+
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            byte[] decoder = Base64.getDecoder().decode(sb.toString());
+            fos.write(decoder);
+            CONSOLE.log(Level.INFO, "Archivo de guia #{0} de transportadora Aldia guardado", guia);
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error guardando el PDF para la guia #" + guia + " de la transportadora Aldia", e);
+        }
+
+        return appBean.obtenerValorPropiedad("url.shared") + companyName + "/shipping/aldia/" + typeDoc + "/" + guia + ".pdf";
     }
 }

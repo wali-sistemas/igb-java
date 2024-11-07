@@ -446,21 +446,13 @@ public class ShippingREST implements Serializable {
         GuiaAldiaResponseDTO res = aldiaEJB.createGuia(dto, companyName);
         if (res.getCode().equals(200)) {
             try {
-                String urlRotulo = aldiaEJB.getRotuloGuia(res.getData().get(0), companyName);
-                if (urlRotulo != null) {
-                    //convertir base64 a pdf
-                    File file = new File(appBean.obtenerValorPropiedad("url.archivo") + companyName + File.separator + "shipping" +
-                            File.separator + "aldia" + File.separator + "rotulo" + File.separator + res.getData().get(0) + ".pdf");
-                    try (FileOutputStream fos = new FileOutputStream(file)) {
-                        byte[] decoder = Base64.getDecoder().decode(urlRotulo);
-                        fos.write(decoder);
-                        CONSOLE.log(Level.INFO, "Archivo rotulo de guia #{0} de transportadora Aldia guardado", res.getData().get(0));
-                    } catch (Exception e) {
-                        CONSOLE.log(Level.SEVERE, "Ocurrio un error guardando el rotulo PDF para la guia #" + res.getData().get(0) + " de la transportadora Aldia", e);
-                    }
+                //TODO: Cargar remesa a la plataforma antes de generar rotulo
+                aldiaEJB.getCargarRemesa(companyName);
 
+                String urlRotulo = aldiaEJB.generateGuia(res.getData().get(0), companyName);
+                if (urlRotulo != null) {
                     invoiceFacade.updateGuiaTransport(docNum, res.getData().get(0), urlRotulo, username, dto.getCant(), dto.getVlrDecl(), dto.getPeso(), companyName, pruebas);
-                    CONSOLE.log(Level.INFO, "Creacion exitosa de guia #{0} con la transportadora Transprensa", res.getData().get(0));
+                    CONSOLE.log(Level.INFO, "Creacion exitosa de guia #{0} con la transportadora Aldia", res.getData().get(0));
                     return Response.ok(new ResponseDTO(0, new Object[]{null, urlRotulo})).build();
                 } else {
                     CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando los rotulos para la guia #" + res.getData().get(0) + " de la trasnportadora Aldia");

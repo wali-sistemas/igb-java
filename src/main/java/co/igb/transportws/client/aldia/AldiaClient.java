@@ -27,7 +27,7 @@ public class AldiaClient {
         webTarget = client.target(BASE_URI).path(path);
     }
 
-    public LoginAldiaResponseDTO getToken(LoginAldiaDTO dto) {
+    public LoginAldiaResponseDTO findToken(LoginAldiaDTO dto) {
         return webTarget.path("auth/login").request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity(dto, MediaType.APPLICATION_JSON), LoginAldiaResponseDTO.class);
     }
@@ -40,11 +40,19 @@ public class AldiaClient {
                 .post(Entity.entity(dto, MediaType.APPLICATION_JSON), GuiaAldiaResponseDTO.class);
     }
 
-    public String getRotulo(RotuloAldiaDTO dto, String token) {
+    public String findRotulo(RotuloAldiaDTO dto, String token) {
         MultivaluedMap<String, Object> headers = new MultivaluedHashMap<>();
         headers.add("token", token);
 
         return webTarget.path("informes/etiquetaremesanuevo").request(MediaType.APPLICATION_JSON).headers(headers)
                 .post(Entity.entity(dto, MediaType.APPLICATION_JSON), String.class);
+    }
+
+    public String getCargarRemesa(String token) {
+        MultivaluedMap<String, Object> headers = new MultivaluedHashMap<>();
+        headers.add("token", token);
+
+        return webTarget.path("maestros/cargaRemesa").request(MediaType.APPLICATION_JSON).headers(headers)
+                .get(String.class);
     }
 }
