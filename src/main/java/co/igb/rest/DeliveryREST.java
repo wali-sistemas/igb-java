@@ -534,8 +534,8 @@ public class DeliveryREST {
         }
         document.setDocumentLines(itemsList);
 
-        /***Agregando gastos de flete en la entrega, solo para motozone***/
-        if (companyName.contains("VARROC") && lineTotalFlet.compareTo(BigDecimal.ZERO) > 0) {
+        /***Agregando gastos de flete en la entrega, solo para motozone y motorepuestos***/
+        if ((companyName.contains("VARROC") || companyName.contains("VELEZ")) && lineTotalFlet.compareTo(BigDecimal.ZERO) > 0) {
             List<DeliveryDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense> gastos = new ArrayList<>();
             DeliveryDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new DeliveryDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
             switch (taxCodeFlet) {
@@ -544,6 +544,9 @@ public class DeliveryREST {
                     break;
                 case "IVAEXCLU":
                     gasto.setExpenseCode(2l);//flete no gravados
+                    break;
+                case "IVAV01":
+                    gasto.setExpenseCode(2l);//flete para motorepuestos
                     break;
             }
 

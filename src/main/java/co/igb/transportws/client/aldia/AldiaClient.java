@@ -48,11 +48,19 @@ public class AldiaClient {
                 .post(Entity.entity(dto, MediaType.APPLICATION_JSON), String.class);
     }
 
-    public String getCargarRemesa(String token) {
+    public String findDocument(DocumentAldiaDTO dto, String token) {
+        MultivaluedMap<String, Object> headers = new MultivaluedHashMap<>();
+        headers.add("token", token);
+
+        return webTarget.path("informes/impresionlote").request(MediaType.APPLICATION_JSON).headers(headers)
+                .post(Entity.entity(dto, MediaType.APPLICATION_JSON), String.class);
+    }
+
+    public String postCargarRemesa(String token) {
         MultivaluedMap<String, Object> headers = new MultivaluedHashMap<>();
         headers.add("token", token);
 
         return webTarget.path("maestros/cargaRemesa").request(MediaType.APPLICATION_JSON).headers(headers)
-                .get(String.class);
+                .post(Entity.entity(null, MediaType.APPLICATION_JSON), String.class);
     }
 }

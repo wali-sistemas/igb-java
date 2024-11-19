@@ -6,6 +6,7 @@ import co.igb.persistence.entity.ShippingOrder;
 import co.igb.persistence.facade.*;
 import co.igb.transportws.dto.aldia.GuiaAldiaResponseDTO;
 import co.igb.transportws.dto.coordinadora.GuiaCoordinadoraResponseDTO;
+import co.igb.transportws.dto.exxe.GuiaExxeResponseDTO;
 import co.igb.transportws.dto.ola.GuiaOlaDTO;
 import co.igb.transportws.dto.ola.GuiaOlaResponseDTO;
 import co.igb.transportws.dto.rapidoochoa.GuiaRapidoochoaDTO;
@@ -24,12 +25,9 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -69,6 +67,8 @@ public class ShippingREST implements Serializable {
     private GopackEJB gopackEJB;
     @EJB
     private AldiaEJB aldiaEJB;
+    @EJB
+    private ExxeEJB exxeEJB;
 
     @GET
     @Path("list-transport")
@@ -449,13 +449,14 @@ public class ShippingREST implements Serializable {
                 //TODO: Cargar remesa a la plataforma antes de generar rotulo
                 aldiaEJB.getCargarRemesa(companyName);
 
-                String urlRotulo = aldiaEJB.generateGuia(res.getData().get(0), companyName);
-                if (urlRotulo != null) {
-                    invoiceFacade.updateGuiaTransport(docNum, res.getData().get(0), urlRotulo, username, dto.getCant(), dto.getVlrDecl(), dto.getPeso(), companyName, pruebas);
+                String resPrintDocument = aldiaEJB.generatePrintDocument(res.getData().get(0), companyName);
+                if (resPrintDocument != null) {
+                    invoiceFacade.updateGuiaTransport(docNum, res.getData().get(0), appBean.obtenerValorPropiedad("url.shared") + companyName + "/shipping/aldia/guia/" + res.getData().get(0) + ".pdf", username, dto.getCant(), dto.getVlrDecl(), dto.getPeso(), companyName, pruebas);
                     CONSOLE.log(Level.INFO, "Creacion exitosa de guia #{0} con la transportadora Aldia", res.getData().get(0));
-                    return Response.ok(new ResponseDTO(0, new Object[]{null, urlRotulo})).build();
+                    return Response.ok(new ResponseDTO(0, new Object[]{appBean.obtenerValorPropiedad("url.shared") + companyName + "/shipping/aldia/guia/" + res.getData().get(0) + ".pdf",
+                            appBean.obtenerValorPropiedad("url.shared") + companyName + "/shipping/aldia/rotulo/" + res.getData().get(0) + ".pdf"})).build();
                 } else {
-                    CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando los rotulos para la guia #" + res.getData().get(0) + " de la trasnportadora Aldia");
+                    CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando los documentos para la guia #" + res.getData().get(0) + " de la trasnportadora Aldia");
                     return Response.ok(new ResponseDTO(0, new Object[]{null, null})).build();
                 }
             } catch (Exception e) {
@@ -465,6 +466,36 @@ public class ShippingREST implements Serializable {
         } else {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error creando la guia con la transportadora Aldia." + res.getCode());
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error creando la guia con la transportadora Aldia. " + res.getCode())).build();
+        }
+    }
+
+    @POST
+    @Path("add-guia-exxe/{docnum}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Response createGuiaExxe(ApiExxeDTO dto,
+                                   @PathParam("docnum") String docNum,
+                                   @HeaderParam("X-Company-Name") String companyName,
+                                   @HeaderParam("X-Employee") String username,
+                                   @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Iniciando creacion de guia con la transportadora Exxe");
+
+        GuiaExxeResponseDTO res = exxeEJB.createGuia(dto, companyName);
+        if (res.getCode() == 1) {
+            String resPrintDocument = exxeEJB.generatePrintDocument(res.getDeliveryNumber(), companyName);
+            if (resPrintDocument != null) {
+                invoiceFacade.updateGuiaTransport(docNum, res.getDeliveryNumber(), appBean.obtenerValorPropiedad("url.shared") + companyName + "/shipping/exxe/guia/" + res.getDeliveryNumber() + ".pdf", username, dto.getCant(), dto.getVlrDecl(), dto.getPeso(), companyName, pruebas);
+                CONSOLE.log(Level.INFO, "Creacion exitosa de guia #{0} con la transportadora Exxe", res.getDeliveryNumber());
+                return Response.ok(new ResponseDTO(0, new Object[]{appBean.obtenerValorPropiedad("url.shared") + companyName + "/shipping/exxe/guia/" + res.getDeliveryNumber() + ".pdf",
+                        appBean.obtenerValorPropiedad("url.shared") + companyName + "/shipping/exxe/rotulo/" + res.getDeliveryNumber() + ".pdf"})).build();
+            } else {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando los documentos para la guia #" + res.getDeliveryNumber() + " de la trasnportadora Exxe");
+                return Response.ok(new ResponseDTO(0, new Object[]{null, null})).build();
+            }
+        } else {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error creando la guia con la transportadora Exxe." + res.getMessage());
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error creando la guia con la transportadora Exxe. " + res.getMessage())).build();
         }
     }
 }
