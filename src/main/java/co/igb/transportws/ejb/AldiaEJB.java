@@ -109,7 +109,7 @@ public class AldiaEJB {
             try {
                 return service.addGuia(guiaAldiaDTO, token);
             } catch (Exception e) {
-                CONSOLE.log(Level.SEVERE, "No fue posible iniciar la interface de Aldia [WS_TOKEN]. ", e);
+                CONSOLE.log(Level.SEVERE, "No fue posible iniciar la interface de Aldia [WS_CREATE_GUIA]. ", e);
             }
         } else {
             CONSOLE.log(Level.SEVERE, "Ocurrio una novedad consultando la disponibilidad del token para " + companyName);
@@ -118,38 +118,67 @@ public class AldiaEJB {
         return null;
     }
 
-    public String generateGuia(String guia, String companyName) {
+    public String generatePrintDocument(String guia, String companyName) {
         String token = createToken(companyName);
         if (token != null) {
-            RotuloAldiaDTO.Data data = new RotuloAldiaDTO.Data();
-            data.setRemesa1(guia);
-            data.setRemesa2(guia);
+            RotuloAldiaDTO.Data dataRotulo = new RotuloAldiaDTO.Data();
+            dataRotulo.setRemesa1(guia);
+            dataRotulo.setRemesa2(guia);
 
-            RotuloAldiaDTO dto = new RotuloAldiaDTO();
-            dto.setData(data);
+            RotuloAldiaDTO dtoRotulo = new RotuloAldiaDTO();
+            dtoRotulo.setData(dataRotulo);
 
-            Gson gson = new Gson();
-            String JSON = gson.toJson(dto);
-            CONSOLE.log(Level.INFO, JSON);
+            Gson gsonRotulo = new Gson();
+            String JSON1 = gsonRotulo.toJson(dtoRotulo);
+            CONSOLE.log(Level.INFO, JSON1);
 
             try {
-                String res = service.findRotulo(dto, token);
-                RotuloAldiaResponseDTO rotuloAldiaResponseDTO = new ObjectMapper().readValue(res, RotuloAldiaResponseDTO.class);
+                String resRotulo = service.findRotulo(dtoRotulo, token);
+                RotuloAldiaResponseDTO rotuloAldiaResponseDTO = new ObjectMapper().readValue(resRotulo, RotuloAldiaResponseDTO.class);
 
                 if (rotuloAldiaResponseDTO.getCode().equals(200)) {
-                    StringBuilder sb = new StringBuilder();
-                    //TODO: Se recorre la cadena Base64 de la guia, para almacearlo en un StringBuilder porque un String no soporta tantos carácteres
+                    //Consultar documento de remesa
+                    DocumentAldiaDTO.Data dataDocument = new DocumentAldiaDTO.Data();
+                    dataDocument.setRemesaRango1(guia);
+                    dataDocument.setRemesaRango2(guia);
+
+                    DocumentAldiaDTO dtoDocument = new DocumentAldiaDTO();
+                    dtoDocument.setData(dataDocument);
+
+                    Gson gsonDocument = new Gson();
+                    String JSON2 = gsonDocument.toJson(dtoDocument);
+                    CONSOLE.log(Level.INFO, JSON2);
+
+                    String resDocument = service.findDocument(dtoDocument, token);
+                    DocumentAldiaResponseDTO documentAldiaResponseDTO = new ObjectMapper().readValue(resDocument, DocumentAldiaResponseDTO.class);
+
+                    if (documentAldiaResponseDTO.getCode().equals(200)) {
+                        StringBuilder sbDocument = new StringBuilder();
+                        //TODO: Se recorre la cadena Base64 de la guia, para almacearlo en un StringBuilder porque un String no soporta tantos carácteres
+                        for (int i = documentAldiaResponseDTO.getData().length() - 1; i >= 0; i--) {
+                            String fileReverse = "";
+                            fileReverse = fileReverse + documentAldiaResponseDTO.getData().charAt(i);
+                            sbDocument.append(fileReverse);
+                        }
+                        convertFile(sbDocument.reverse(), "guia", guia, companyName);
+                    } else {
+                        CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el documento de remesa de la guia {0} en ALDIA. error={1}", new Object[]{guia, documentAldiaResponseDTO.getCode()});
+                    }
+
+                    StringBuilder sbRotulo = new StringBuilder();
+                    //TODO: Se recorre la cadena Base64 del rotulo, para almacearlo en un StringBuilder porque un String no soporta tantos carácteres
                     for (int i = rotuloAldiaResponseDTO.getData().length() - 1; i >= 0; i--) {
                         String fileReverse = "";
                         fileReverse = fileReverse + rotuloAldiaResponseDTO.getData().charAt(i);
-                        sb.append(fileReverse);
+                        sbRotulo.append(fileReverse);
                     }
-                    return convertFile(sb.reverse(), "guia", guia, companyName);
+                    return convertFile(sbRotulo.reverse(), "rotulo", guia, companyName);
                 } else {
+                    CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el rotulo de la guia {0} en ALDIA. error={1}", new Object[]{guia, rotuloAldiaResponseDTO.getCode()});
                     return null;
                 }
             } catch (Exception e) {
-                CONSOLE.log(Level.SEVERE, "No fue posible iniciar la interface de Aldia [WS_CONSULTAR_ROTULO]. ", e);
+                CONSOLE.log(Level.SEVERE, "No fue posible iniciar la interface de Aldia [WS_CREATE_GUIA]. ", e);
             }
             return null;
         }
@@ -160,7 +189,7 @@ public class AldiaEJB {
         String token = createToken(companyName);
         if (token != null) {
             try {
-                String res = service.getCargarRemesa(token);
+                String res = service.postCargarRemesa(token);
                 RotuloAldiaResponseDTO rotuloAldiaResponseDTO = new ObjectMapper().readValue(res, RotuloAldiaResponseDTO.class);
 
                 if (rotuloAldiaResponseDTO.getCode().equals(200) || rotuloAldiaResponseDTO.getCode().equals(204)) {

@@ -101,4 +101,7 @@ public class Constants {
     public static final String IGB_ALDIA_WS_PASSWORD = "igb.aldia.api.password";
     public static final String MTZ_ALDIA_WS_USER = "mtz.aldia.api.user";
     public static final String MTZ_ALDIA_WS_PASSWORD = "mtz.aldia.api.password";
+    public static final String EXXE_WS_URL = "exxe.api.url";
+    public static final String IGB_EXXE_WS_USER = "igb.exxe.api.user";
+    public static final String IGB_EXXE_WS_PASSWORD = "igb.exxe.api.password";
 }
