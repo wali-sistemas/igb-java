@@ -613,6 +613,12 @@ public class ReportREST implements Serializable {
                         File.separator + dto.getDocumento() + File.separator + dto.getDocumento() + ".jrxml");
                 rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + "employee" + File.separator + dto.getDocumento() + File.separator + reportName;
                 break;
+            case "assetRegister":
+                reportName = dto.getId() + ".pdf";
+                report = JasperCompileManager.compileReportToFile(applicationBean.obtenerValorPropiedad("url.jasper") + dto.getCompanyName() + File.separator + "employee" +
+                        File.separator + dto.getDocumento() + File.separator + dto.getDocumento() + ".jrxml");
+                rutaArchivo = rutaArchivo + dto.getCompanyName() + File.separator + "employee" + File.separator + dto.getDocumento() + File.separator + reportName;
+                break;
             default:
                 reportName = "";
                 break;
@@ -694,6 +700,10 @@ public class ReportREST implements Serializable {
             mapa.put("month", dto.getMonth());
             mapa.put("day", dto.getDay());
             mapa.put("sendto", dto.getFiltro());
+        } else if (dto.getDocumento().equals("assetRegister")) {
+            mapa.put("id", dto.getId());
+            mapa.put("filtro", dto.getFiltro());
+            mapa.put("filtroSec", dto.getFiltroSec());
         } else {
             if (dto.getId() != 0) {
                 mapa.put("id", dto.getId());

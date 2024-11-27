@@ -4,6 +4,7 @@ import co.igb.dto.ResponseDTO;
 import co.igb.ejb.IGBApplicationBean;
 import co.igb.ejb.JournalEntryEJB;
 import co.igb.hanaws.dto.journalEntries.JournalEntryDTO;
+import co.igb.persistence.facade.SalesPersonFacade;
 import co.igb.persistence.facade.TranspFacade;
 import co.igb.persistence.facade.WarehouseFacade;
 import co.igb.transportws.ejb.RapidoochoaEJB;
@@ -34,6 +35,8 @@ public class GenericOperationsREST {
     private TranspFacade transpFacade;
     @EJB
     private RapidoochoaEJB rapidoochoaEJB;
+    @EJB
+    private SalesPersonFacade salesPersonFacade;
 
     @GET
     @Path("companies")
@@ -85,5 +88,15 @@ public class GenericOperationsREST {
                                               @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Listando transportadoras activas para comex");
         return Response.ok(transpFacade.listTranspComexActive(companyName, pruebas)).build();
+    }
+
+    @GET
+    @Path("sales-person")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response listSalesPersonActive(@HeaderParam("X-Company-Name") String companyName,
+                                          @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.SEVERE, "Listando asesores de ventas activos");
+        return Response.ok(salesPersonFacade.listSalesPersonsActives(companyName, pruebas)).build();
     }
 }

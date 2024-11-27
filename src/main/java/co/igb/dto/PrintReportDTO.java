@@ -13,6 +13,7 @@ public class PrintReportDTO {
     private String companyName;
     private String origen;
     private String filtro;
+    private String filtroSec;
     private boolean imprimir;
     private String year;
     private String month;
@@ -110,6 +111,14 @@ public class PrintReportDTO {
         this.day = day;
     }
 
+    public String getFiltroSec() {
+        return filtroSec;
+    }
+
+    public void setFiltroSec(String filtroSec) {
+        this.filtroSec = filtroSec;
+    }
+
     @Override
     public String toString() {
         return "PrintReportDTO{" +
@@ -119,7 +128,11 @@ public class PrintReportDTO {
                 ", companyName='" + companyName + '\'' +
                 ", origen='" + origen + '\'' +
                 ", filtro='" + filtro + '\'' +
+                ", filtroSec='" + filtroSec + '\'' +
                 ", imprimir=" + imprimir +
+                ", year='" + year + '\'' +
+                ", month='" + month + '\'' +
+                ", day='" + day + '\'' +
                 '}';
     }
 }

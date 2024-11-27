@@ -865,7 +865,8 @@ public class PackingREST implements Serializable {
             if (documentType != null && documentType.equals("draft")) {
                 //responseInvoice = (ResponseDTO) invoiceREST.createDraft(((Long) responseDelivery.getContent()).intValue(), companyName, employee, pruebas).getEntity();
             } else if (documentType != null && documentType.equals("invoice")) {
-                responseInvoice = (ResponseDTO) invoiceREST.createInvoice(((Long) responseDelivery.getContent()).intValue(), companyName, employee, pruebas).getEntity();
+                InvoiceExpressDTO invoiceExpressDTO = new InvoiceExpressDTO((Integer) responseDelivery.getContent(), null);
+                responseInvoice = (ResponseDTO) invoiceREST.createInvoice(invoiceExpressDTO, companyName, employee, pruebas).getEntity();
             } else {
                 CONSOLE.log(Level.SEVERE, "La empresa no tiene configurado el tipo de documento (borrador o factura) que se debe crear");
                 return Response.ok(new ResponseDTO(-1, "La empresa no tiene configurado el tipo de documento (borrador o factura) que se debe crear")).build();

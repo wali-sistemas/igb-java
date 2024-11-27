@@ -1,5 +1,6 @@
 package co.igb.rest;
 
+import co.igb.dto.InvoiceExpressDTO;
 import co.igb.dto.InvoicesCashDTO;
 import co.igb.dto.ResponseDTO;
 import co.igb.ejb.IGBApplicationBean;
@@ -64,17 +65,17 @@ public class InvoiceREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response createInvoiceDocument(Integer deliveryDocEntry,
+    public Response createInvoiceDocument(InvoiceExpressDTO dto,
                                           @HeaderParam("X-Company-Name") String companyName,
                                           @HeaderParam("X-Employee") String userName,
                                           @HeaderParam("X-Pruebas") boolean pruebas) {
-        CONSOLE.log(Level.INFO, "Creando factura para deliveryNoteDocEntry={0}", deliveryDocEntry);
+        CONSOLE.log(Level.INFO, "Creando factura para deliveryNoteDocEntry={0}", dto.getDocNumDelivery());
 
         ResponseDTO responseInvoice = null;
         String documentType = IGBUtils.getProperParameter(appBean.obtenerValorPropiedad("igb.invoice.type"), companyName);
         CONSOLE.log(Level.INFO, "La empresa {0} usa el tipo de document {1}", new Object[]{companyName, documentType});
         if (documentType.equals("invoice")) {
-            responseInvoice = (ResponseDTO) createInvoice(deliveryDocEntry, companyName, userName, pruebas).getEntity();
+            responseInvoice = (ResponseDTO) createInvoice(dto, companyName, userName, pruebas).getEntity();
         } else {
             //responseInvoice = (ResponseDTO) createDraft(deliveryDocEntry, companyName, userName, pruebas).getEntity();
         }
@@ -86,13 +87,13 @@ public class InvoiceREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response createInvoice(Integer docNumDelivery,
+    public Response createInvoice(InvoiceExpressDTO dto,
                                   @HeaderParam("X-Company-Name") String companyName,
                                   @HeaderParam("X-Employee") String userName,
                                   @HeaderParam("X-Pruebas") boolean pruebas) {
-        CONSOLE.log(Level.INFO, "Creando factura para la entrega DocNum={0}", docNumDelivery);
+        CONSOLE.log(Level.INFO, "Creando factura para la entrega DocNum={0}", dto.getDocNumDelivery());
         //Consultar entrega
-        List<Object[]> deliveryData = dnFacade.getDeliveryNoteData(docNumDelivery, companyName, pruebas);
+        List<Object[]> deliveryData = dnFacade.getDeliveryNoteData(dto.getDocNumDelivery(), companyName, pruebas);
         if (deliveryData.isEmpty()) {
             return Response.ok(new ResponseDTO(-1, "No se encontraron datos de entrega para facturar")).build();
         }
@@ -106,6 +107,9 @@ public class InvoiceREST implements Serializable {
         Long deliveryObjectType = ((Integer) deliveryData.get(0)[2]).longValue();
         String cardCode = (String) deliveryData.get(0)[3];
         Long deliverySalesPersonCode = ((Integer) deliveryData.get(0)[4]).longValue();
+        if (companyName.contains("VELEZ")) {
+            deliverySalesPersonCode = Long.parseLong(dto.getSlpCode());
+        }
         Long deliveryContactCode = ((Integer) deliveryData.get(0)[5]).longValue();
         BigDecimal deliveryValorNeto = (BigDecimal) deliveryData.get(0)[11];
         String deliveryComment = (String) deliveryData.get(0)[10];
