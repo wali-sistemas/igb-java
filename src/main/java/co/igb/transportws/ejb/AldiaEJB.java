@@ -90,8 +90,8 @@ public class AldiaEJB {
             detail.setUnidades(dto.getCant());
             detail.setPeso(dto.getPeso());
             detail.setProducto(dto.getTipoEmpaque());
-            detail.setDocumentoRemitente(dto.getFactura());
-            detail.setRemision("");
+            detail.setDocumentoRemitente("NO REQUIERE RADICAR DOCUMENTOS");
+            detail.setRemision(dto.getFactura());
             detail.setValordeclarado(dto.getVlrDecl());
             detail.setDescripcion(dto.getDescripcion());
             detail.setVolumen(dto.getVolumen());

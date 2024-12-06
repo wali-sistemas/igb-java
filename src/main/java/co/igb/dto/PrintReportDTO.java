@@ -14,6 +14,7 @@ public class PrintReportDTO {
     private String origen;
     private String filtro;
     private String filtroSec;
+    private String comments;
     private boolean imprimir;
     private String year;
     private String month;
@@ -117,6 +118,14 @@ public class PrintReportDTO {
 
     public void setFiltroSec(String filtroSec) {
         this.filtroSec = filtroSec;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 
     @Override
