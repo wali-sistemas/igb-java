@@ -36,7 +36,7 @@ public class DeliveryNoteFacade {
         sb.append(" cast(art.\"U_Marca\" as varchar(4))as marca, cast(case when det.\"WhsCode\" IN ('05','26') then enc.\"U_TRANSP\" else t.\"U_COD_TRA\" end as varchar(6))as codTransp, ");
         sb.append(" cast(enc.\"U_NUNFAC\" as int)as orden,cast(ifnull(f.\"LineTotal\",0) as numeric(18,0))as lineTotalF,cast(f.\"TaxCode\" as varchar)as taxCodeF,cast(ifnull(f.\"LineNum\",0) as int)as \"LineNumF\",cast(f.\"ObjType\" as int)as ObjTypeF, ");
         sb.append(" cast(t.\"Code\" as varchar)as codCiudad,cast(t.\"U_CIUDAD\" as varchar)as nameCiudad,cast((select sum(d.\"Quantity\") from DLN1 d where d.\"DocEntry\"=det.\"DocEntry\")as int)as sumQty, ");
-        sb.append(" cast(det.\"LineTotal\"-(det.\"LineTotal\"*(enc.\"DiscPrcnt\")/100)as numeric(18,2))as Total,cast(t.\"U_PRINCIPAL\" as varchar)as mainCity ");
+        sb.append(" cast(det.\"LineTotal\"-(det.\"LineTotal\"*(enc.\"DiscPrcnt\")/100)as numeric(18,2))as Total,cast(t.\"U_PRINCIPAL\" as varchar)as mainCity,cast(art.\"U_Grupo\" as varchar)as grupo ");
         sb.append("from ODLN enc ");
         sb.append("inner join DLN1 det on det.\"DocEntry\"=enc.\"DocEntry\" ");
         sb.append("left  join DLN3 f on det.\"DocEntry\"=f.\"DocEntry\" ");

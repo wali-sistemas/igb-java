@@ -170,7 +170,7 @@ public class SalesOrderFacade {
         sb.append(" cast((select sum(det.\"Quantity\") from RDR1 det where det.\"DocEntry\"=enc.\"DocEntry\" and det.\"LineStatus\"='O')as int)as qty, ");
         sb.append(" ifnull(cast(tt.\"U_PORC_FLE_CLIE\" as numeric(4,2)),0)as porcFlete,cast(pg.\"PymntGroup\" as varchar(20))as condPayment ");
         sb.append("from ORDR enc ");
-        sb.append("inner join RDR1 det on det.\"DocEntry\"=enc.\"DocEntry\" and det.\"WhsCode\" in ('05','26') ");
+        sb.append("inner join RDR1 det on det.\"DocEntry\"=enc.\"DocEntry\" and det.\"WhsCode\" in ('05','26','35') ");
         sb.append("inner join RDR12 lg on lg.\"DocEntry\"=enc.\"DocEntry\" ");
         sb.append("left join \"@TRANSP_TAR\" tt on tt.\"U_COD_TRA\"=enc.\"U_TRANSP\" and tt.\"Code\"=lg.\"U_MunicipioS\" ");
         sb.append("inner join \"OCTG\" pg on pg.\"GroupNum\"=enc.\"GroupNum\" ");

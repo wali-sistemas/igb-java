@@ -131,6 +131,7 @@ public class InvoiceREST implements Serializable {
         Integer sumQty = (Integer) deliveryData.get(0)[27];
         BigDecimal subTotal = (BigDecimal) deliveryData.get(0)[28];
         String mainCity = (String) deliveryData.get(0)[29];
+        String itemGrupo = (String) deliveryData.get(0)[30];
 
         if (invoice.getSeries() == null) {
             invoice.setSeries(Long.parseLong(getPropertyValue("igb.invoice.series", companyName)));
@@ -209,8 +210,8 @@ public class InvoiceREST implements Serializable {
         if (companyName.contains("IGB") || companyName.contains("VARROC")) {
             if (!customerFacade.disableFreightCollection(invoice.getCardCode(), companyName, pruebas).equals("Y")) {
                 BigDecimal lineTotal;
-                /***Validar gasto de flete por marca diferente a 54-REPSOL(Lubricante) y 112-ELF(Lubricante) en IGB y MTZ***/
-                if (itemMarca.equals("54") || itemMarca.equals("112")) {
+                /***Validar gasto de flete por marca diferente a 54-REPSOL(Lubricante),112-ELF(Lubricante) y 81-REVO(Lubricante) en IGB y MTZ***/
+                if (itemMarca.equals("54") || itemMarca.equals("112") || (itemMarca.equals("81") && itemGrupo.equals("09"))) {
                     /***Validar si el destino NO es ciudad principal se cobra flete para los lubricantes***/
                     if (mainCity.equals("N")) {
                         /***Validar regla de negocio en las cantidades de los lubricantes, si es menor a 24 und, se cobra flete***/
@@ -242,8 +243,8 @@ public class InvoiceREST implements Serializable {
                         }
                     }
                 } else {
-                    /***Validar solo en IGB, si el item corresponde a bodegas externas MAGNUM (Cali&Cartagena) se mapea el flete desde la entrega campo de usuario***/
-                    if (companyName.contains("IGB") && (whsCode.equals("05") || whsCode.equals("26"))) {
+                    /***Validar solo en IGB, si el item corresponde a bodegas externas MAGNUM (Cali&Cartagena&Bogota) se mapea el flete desde la entrega campo de usuario***/
+                    if (companyName.contains("IGB") && (whsCode.equals("05") || whsCode.equals("26") || whsCode.equals("35"))) {
                         lineTotal = flete;
                     } else {
                         lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
