@@ -555,7 +555,7 @@ public class DeliveryREST {
             gasto.setBaseDocLine(lineNumFlet);
             gasto.setBaseDocumentReference(orderNumber);
             gasto.setTaxCode(taxCodeFlet);
-            gasto.setLineTotal(lineTotalFlet.setScale(0, RoundingMode.CEILING));
+            gasto.setLineTotal(lineTotalFlet.setScale(2, RoundingMode.HALF_UP));
             gastos.add(gasto);
 
             document.setDocumentAdditionalExpenses(gastos);
