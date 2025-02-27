@@ -287,7 +287,7 @@ public class InvoiceREST implements Serializable {
                 gasto.setBaseDocLine(lineNumFlet);
                 gasto.setBaseDocumentReference(17);
                 gasto.setTaxCode(taxCodeFlet);
-                gasto.setLineTotal(lineTotalFlet.setScale(0, RoundingMode.CEILING));
+                gasto.setLineTotal(lineTotalFlet.setScale(2, RoundingMode.CEILING));
                 gastos.add(gasto);
             }
         }
