@@ -124,7 +124,7 @@ public class DeliveryNoteFacade {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(t.\"DocNum\" as int)as DocNum,cast(t.\"CardCode\" as varchar(20))as CardCode,cast(t.\"ItemCode\" as varchar(20))as ItemCode, ");
         sb.append(" t.\"Quantity\",cast(u.\"AbsEntry\" as int)as BinAbs,t.\"BinCode\",cast(t.\"Comments\" as varchar(254))as Comments,t.\"ValorDeclarado\",cast(t.\"DocEntry\" as int)as DocEntry, ");
-        sb.append(" cast(t.\"LineNum\" as int)as LineNum,cast(t.\"WhsCode\" as varchar(10))as WhsCode,ifnull(cast(t.\"LineTotal\" as numeric(18,2)),0)as lineTotal, ");
+        sb.append(" cast(t.\"LineNum\" as int)as LineNum,cast(t.\"WhsCode\" as varchar(10))as WhsCode,ifnull(round(cast(t.\"LineTotal\" as numeric(18,4)),2),0)as lineTotal, ");
         sb.append(" ifnull(cast(t.\"TaxCode\" as varchar),'')as taxcode,cast(t.\"LineNumF\" as int)as LineNumF,cast(t.\"ObjType\" as int)as ObjType ");
         sb.append("from (select d.\"ItemCode\",cast(d.\"Quantity\" as int)as \"Quantity\", ");
         sb.append("      cast((select t.\"BinCode\" from (");
