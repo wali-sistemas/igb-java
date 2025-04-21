@@ -213,9 +213,9 @@ public class InvoiceREST implements Serializable {
                 /***Validar gasto de flete por marca diferente a 54-REPSOL(Lubricante),112-ELF(Lubricante) y 81-REVO(Lubricante) en IGB y MTZ***/
                 if (itemMarca.equals("54") || itemMarca.equals("112") || (itemMarca.equals("81") && itemGrupo.equals("09"))) {
                     /***Validar si el destino NO es ciudad principal se cobra flete para los lubricantes***/
-                    if (mainCity.equals("N")) {
+                    //if (mainCity.equals("N")) { // SOLO para el mes de Abril cualquier destino
                         /***Validar regla de negocio en las cantidades de los lubricantes, si es menor a 24 und, se cobra flete***/
-                        if (sumQty < 24 || subTotal.compareTo(BigDecimal.valueOf(500000.00)) >= 0) {
+                        if (sumQty < 24 || subTotal.compareTo(BigDecimal.valueOf(400000.00)) >= 0) {
                             lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
                             if (lineTotal.compareTo(BigDecimal.ZERO) > 0) {
                                 InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
@@ -241,7 +241,7 @@ public class InvoiceREST implements Serializable {
                                 CONSOLE.log(Level.WARNING, "Ocurrio una novedad con el porcentaje de flete para el cliente {0} en la matris de transporte de {1}", new Object[]{cardCode, companyName});
                             }
                         }
-                    }
+                    //}
                 } else {
                     /***Validar solo en IGB, si el item corresponde a bodegas externas MAGNUM (Cali&Cartagena&Bogota) se mapea el flete desde la entrega campo de usuario***/
                     if (companyName.contains("IGB") && (whsCode.equals("05") || whsCode.equals("26") || whsCode.equals("35"))) {
@@ -359,7 +359,7 @@ public class InvoiceREST implements Serializable {
                 Gson gson = new Gson();
                 String JSON = gson.toJson(invoice);
                 CONSOLE.log(Level.INFO, JSON);
-                docEntry = createInvoice(invoice, sessionId);
+                //docEntry = createInvoice(invoice, sessionId);
                 CONSOLE.log(Level.INFO, "Se creo la factura con docNum={0}", docEntry);
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
