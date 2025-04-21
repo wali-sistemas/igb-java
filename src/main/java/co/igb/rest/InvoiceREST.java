@@ -359,7 +359,7 @@ public class InvoiceREST implements Serializable {
                 Gson gson = new Gson();
                 String JSON = gson.toJson(invoice);
                 CONSOLE.log(Level.INFO, JSON);
-                //docEntry = createInvoice(invoice, sessionId);
+                docEntry = createInvoice(invoice, sessionId);
                 CONSOLE.log(Level.INFO, "Se creo la factura con docNum={0}", docEntry);
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el documento. ", e);
