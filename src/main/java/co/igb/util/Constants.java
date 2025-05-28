@@ -72,7 +72,10 @@ public class Constants {
     public static final String SOUL_USER = "811011909";
     public static final String SOUL_PASSWORD = "IgbMp2020*";
     public static final String HANAWS_SL_URL = "https://slhana.igbcolombia.com:50000/b1s/";
-    public static final String RAPIDO_OCHOA_WS_URL = "https://rapidoochoa.tmsolutions.com.co/tmland/webservices/";
+    public static final String RAPIDO_OCHOA_WS_URL = "ochoa.api.url";
+    public static final String RAPIDO_OCHOA_WS_TOKEN = "igb.ochoa.api.token";
+    public static final String RAPIDO_OCHOA_WS_USER = "igb.ochoa.api.user";
+    public static final String RAPIDO_OCHOA_WS_PASSWORD = "igb.ochoa.api.password";
     public static final String OLA_WS_API_URL = "igb.ola.api.url";
     public static final String GOPACK_WS_API_URL = "gopack.api.url";
     public static final String IGB_GOPACK_WS_API_USER = "igb.gopack.api.user";

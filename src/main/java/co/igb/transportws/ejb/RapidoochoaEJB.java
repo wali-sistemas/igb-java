@@ -26,7 +26,7 @@ public class RapidoochoaEJB {
     @PostConstruct
     private void initialize() {
         try {
-            service = new RapidoochoaClient(Constants.RAPIDO_OCHOA_WS_URL);
+            service = new RapidoochoaClient(appBean.obtenerValorPropiedad(Constants.RAPIDO_OCHOA_WS_URL));
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "No fue posible iniciar la interface de Rapido-ochoa [WS_GUIAS]. ", e);
         }
@@ -34,7 +34,7 @@ public class RapidoochoaEJB {
 
     public String createToken() {
         try {
-            TokenRapidoochoaResponseDTO res = service.createToken("cmFwaWRvb2Nob2E=", "1020466061", "Franco.4545");
+            TokenRapidoochoaResponseDTO res = service.createToken(appBean.obtenerValorPropiedad(Constants.RAPIDO_OCHOA_WS_TOKEN), appBean.obtenerValorPropiedad(Constants.RAPIDO_OCHOA_WS_USER), appBean.obtenerValorPropiedad(Constants.RAPIDO_OCHOA_WS_PASSWORD));
             return res.getToken();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "No fue posible iniciar la interface de Rapido-Ochoa [WS_GUIAS]. ", e);
