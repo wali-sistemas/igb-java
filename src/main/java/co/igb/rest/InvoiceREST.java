@@ -30,7 +30,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author dbotero
+ * @author jguisao
  */
 @Stateless
 @Path("invoice")
@@ -214,7 +214,7 @@ public class InvoiceREST implements Serializable {
                 if (itemMarca.equals("54") || itemMarca.equals("112") || (itemMarca.equals("81") && itemGrupo.equals("09"))) {
                     /***Validar si el destino NO es ciudad principal se cobra flete para los lubricantes***/
                     //if (mainCity.equals("N")) { // SOLO para el mes de Abril cualquier destino
-                    /***Validar regla de negocio en las cantidades de los lubricantes, si es menor a 24 und o el valor neto es menor a $400.000 se cobra flete***/
+                    /***Validar regla de negocio en las cantidades de los lubricantes, si es menor a 18 und o el valor neto es menor a $400.000 se cobra flete***/
                     if (sumQty < 18 && deliveryValorNeto.compareTo(BigDecimal.valueOf(500000.00)) <= 0) {
                         lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
                         if (lineTotal.compareTo(BigDecimal.ZERO) > 0) {
