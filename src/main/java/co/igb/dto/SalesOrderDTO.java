@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * @author dbotero
+ * @author jguisao
  */
 public class SalesOrderDTO {
     private Long docEntry;
@@ -31,11 +31,12 @@ public class SalesOrderDTO {
     private BigDecimal totalFlet;
     private String condPayment;
     private String marca;
+    private String promotion;
 
     public SalesOrderDTO() {
     }
 
-    public SalesOrderDTO(Long docEntry, String docNum, String series, String confirmed, Integer salesPersonCode, Date docDate, String cardCode, String cardName, Integer items, String comments, String assignedPickingEmployee, String status, String address, String transp, String docNumMDL) {
+    public SalesOrderDTO(Long docEntry, String docNum, String series, String confirmed, Integer salesPersonCode, Date docDate, String cardCode, String cardName, Integer items, String comments, String assignedPickingEmployee, String status, String address, String transp, String docNumMDL, String whsCode, BigDecimal subTotal, BigDecimal vlrDeclarStand, Integer undEmpStand, Integer qty, BigDecimal porcFlet, BigDecimal totalFlet, String condPayment, String marca, String promotion) {
         this.docEntry = docEntry;
         this.docNum = docNum;
         this.series = series;
@@ -51,6 +52,16 @@ public class SalesOrderDTO {
         this.address = address;
         this.transp = transp;
         this.docNumMDL = docNumMDL;
+        this.whsCode = whsCode;
+        this.subTotal = subTotal;
+        this.vlrDeclarStand = vlrDeclarStand;
+        this.undEmpStand = undEmpStand;
+        this.qty = qty;
+        this.porcFlet = porcFlet;
+        this.totalFlet = totalFlet;
+        this.condPayment = condPayment;
+        this.marca = marca;
+        this.promotion = promotion;
     }
 
     public Long getDocEntry() {
@@ -245,6 +256,14 @@ public class SalesOrderDTO {
         this.marca = marca;
     }
 
+    public String getPromotion() {
+        return promotion;
+    }
+
+    public void setPromotion(String promotion) {
+        this.promotion = promotion;
+    }
+
     @Override
     public String toString() {
         return "SalesOrderDTO{" +
@@ -272,6 +291,7 @@ public class SalesOrderDTO {
                 ", totalFlet=" + totalFlet +
                 ", condPayment='" + condPayment + '\'' +
                 ", marca='" + marca + '\'' +
+                ", promotion='" + promotion + '\'' +
                 '}';
     }
 }
