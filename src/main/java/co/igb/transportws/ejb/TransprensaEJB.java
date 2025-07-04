@@ -90,8 +90,8 @@ public class TransprensaEJB {
         guia.setTipoServicio("2");
         guia.setCentroCosto("1");
         guia.setOrdenCarga("");
-        guia.setOrdenCompra(dto.getFactura());
-        guia.setDocumentoCliente(dto.getDocumentod());
+        guia.setOrdenCompra("");
+        guia.setDocumentoCliente(dto.getFactura());
         guia.setRemesaObservacion(dto.getObservacion());
         guia.setRemesaCodigo("");
         guia.setFormaPago("");
