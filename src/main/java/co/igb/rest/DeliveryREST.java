@@ -381,10 +381,10 @@ public class DeliveryREST {
                         if ((qtyOrd > qtyBin) && (qtyComp <= qtyOrd)) {
                             qtyReal = qtyOrd - qtyComp;
                             if (qtyReal <= qtyBin) {
-                                itemsMissing.add(new Object[]{obj[0], obj[1], obj[2], qtyReal, objBin[3], objBin[5], obj[6], obj[7], obj[8], obj[9]});
+                                itemsMissing.add(new Object[]{obj[0], obj[1], obj[2], qtyReal, objBin[3], objBin[5], obj[6], obj[7], obj[8], obj[9], obj[15]});
                                 qtyComp += qtyReal;
                             } else {
-                                itemsMissing.add(new Object[]{obj[0], obj[1], obj[2], objBin[4], objBin[3], objBin[5], obj[6], obj[7], obj[8], obj[9]});
+                                itemsMissing.add(new Object[]{obj[0], obj[1], obj[2], objBin[4], objBin[3], objBin[5], obj[6], obj[7], obj[8], obj[9], obj[15]});
                                 qtyComp += (int) objBin[4];
                             }
                         }
@@ -395,7 +395,7 @@ public class DeliveryREST {
                     docEntrySAP = (Integer) obj[8];
                 }
             } else {
-                itemsMissing.add(new Object[]{obj[0], obj[1], obj[2], obj[3], obj[4], obj[5], obj[6], obj[7], obj[8], obj[9]});
+                itemsMissing.add(new Object[]{obj[0], obj[1], obj[2], obj[3], obj[4], obj[5], obj[6], obj[7], obj[8], obj[9], obj[15]});
             }
         }
 
@@ -441,6 +441,7 @@ public class DeliveryREST {
             Integer binAbs = (Integer) row[4];
             String binCode = (String) row[5];
             orderDocEntry = (Integer) row[8];
+            String taxOnly = (String) row[10];
 
             if (orderDocEntry == null || orderDocEntry <= 0) {
                 return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-2, "Ocurrió un error al consultar el docEntry de la orden. ")).build();
@@ -462,6 +463,7 @@ public class DeliveryREST {
                 line.setBaseLine(baseLineNum.longValue());
                 line.setBaseEntry(orderDocEntry.longValue());
                 line.setBaseType(Long.parseLong(getPropertyValue(Constants.SALES_ORDER_SERIES, companyName)));
+                line.setTaxOnly(taxOnly);
                 line.setDocumentLinesBinAllocations(new ArrayList<DeliveryDTO.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation>());
 
                 items.put(itemCode, line);
@@ -520,6 +522,7 @@ public class DeliveryREST {
                 lineMDL.setBaseLine(baseLineNumMDL.longValue());
                 lineMDL.setBaseEntry(docEntryMDL.longValue());
                 lineMDL.setBaseType(Long.parseLong(getPropertyValue(Constants.SALES_ORDER_SERIES, companyName)));
+                lineMDL.setTaxOnly((String) obj[15]);
                 lineMDL.setDocumentLinesBinAllocations(new ArrayList<DeliveryDTO.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation>());
 
                 DeliveryDTO.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation binAllocationMDL = new DeliveryDTO.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation();

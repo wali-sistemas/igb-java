@@ -1,6 +1,5 @@
 package co.igb.hanaws.dto.deliveryNotes;
 
-import co.igb.hanaws.dto.invoices.InvoicesDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -170,6 +169,8 @@ public class DeliveryDTO implements Serializable {
             protected Long baseEntry;
             @JsonProperty("BaseLine")
             protected Long baseLine;
+            @JsonProperty("TaxOnly")
+            protected String taxOnly;
             @JsonProperty("DocumentLinesBinAllocations")
             protected List<DeliveryDTO.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation> documentLinesBinAllocations;
 
@@ -227,6 +228,14 @@ public class DeliveryDTO implements Serializable {
 
             public void setBaseLine(Long baseLine) {
                 this.baseLine = baseLine;
+            }
+
+            public String getTaxOnly() {
+                return taxOnly;
+            }
+
+            public void setTaxOnly(String taxOnly) {
+                this.taxOnly = taxOnly;
             }
 
             public List<DeliveryDTO.DocumentLines.DocumentLine.DocumentLinesBinAllocations.DocumentLinesBinAllocation> getDocumentLinesBinAllocations() {
