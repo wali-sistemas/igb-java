@@ -311,7 +311,7 @@ public class SalesOrdersREST implements Serializable {
 
         for (String order : orders) {
             try {
-                soFacade.updateUserFieldApproveOrder(order, status, new SimpleDateFormat("yyyy-MM-dd hh-mm-ss").format(new Date()) + ":" + userName + "[" + status + "] orden desde WALI", confirmed, companyName, pruebas);
+                soFacade.updateUserFieldApproveOrder(order, status, new SimpleDateFormat("dd/MM/yyyy HH:MM").format(new Date()) + "-" + userName + "[" + status + "] orden desde WALI", confirmed, companyName, pruebas);
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando el estado [" + status + "] a la orden " + order + " en " + companyName);
                 return Response.ok(new ResponseDTO(-1, "Ocurrio un error actualizando el estado [" + status + "] a la orden " + order + " en " + companyName)).build();
