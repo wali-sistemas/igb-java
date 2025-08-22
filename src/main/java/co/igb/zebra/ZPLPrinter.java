@@ -39,7 +39,7 @@ public class ZPLPrinter {
             context.put("address4", dto.getAddressLine4());
             context.put("employee", dto.getEmployee());
             context.put("city", dto.getCity() + '-' + dto.getState());
-            context.put("container", dto.getInvoice() + '-' + String.format("%03d", dto.getBoxNumber()));
+            context.put("container", dto.getInvoice() + '|' + String.format("%03d", dto.getBoxNumber()));
             context.put("payment", dto.getPayment());
 
             StringWriter writer = new StringWriter();
@@ -50,22 +50,4 @@ public class ZPLPrinter {
             return null;
         }
     }
-
-    /*public static byte[] getPrintItemData(ZebraPrintItemDTO dto) {
-        try {
-            ClassLoader classLoader = ZPLPrinter.class.getClassLoader();
-            String templateText = IOUtils.toString(classLoader.getResourceAsStream("item.prn"), "UTF-8");
-            Velocity.init();
-            VelocityContext context = new VelocityContext();
-            context.put("itemCode", dto.getItemCode());
-            context.put("itemName", dto.getItemName());
-
-            StringWriter writer = new StringWriter();
-            Velocity.evaluate(context, writer, "TemplateName", templateText);
-            return writer.toString().getBytes();
-        } catch (Exception e) {
-            CONSOLE.log(Level.SEVERE, "Ocurrio un error al procesar la etiqueta de item. ", e);
-            return null;
-        }
-    }*/
 }
