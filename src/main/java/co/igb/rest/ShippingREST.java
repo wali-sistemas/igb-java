@@ -268,20 +268,22 @@ public class ShippingREST implements Serializable {
                                           @HeaderParam("X-Employee") String username,
                                           @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Iniciando creacion de guia con la transportadora Rapidoochoa");
+        dto.setNmImpresionRemesa(dto.getDsDocReferencia());
 
         Gson gson = new Gson();
         String JSON = gson.toJson(dto);
         CONSOLE.log(Level.INFO, JSON);
 
         GuiaRapidoochoaResponseDTO res = rapidoochoaEJB.createGuia(dto);
+
         if (res.getStatus().equals(200)) {
             try {
-                invoiceFacade.updateGuiaTransport(docNum, res.getValores().getNumeroGuia(), res.getValores().getLinkImpresion(), username, dto.getNmUnidPorEmbalaje(), dto.getVmValorDeclarado(), dto.getNmPesoDeclarado(), companyName, pruebas);
+                invoiceFacade.updateGuiaTransport(docNum, res.getValores().getNumeroGuia(), res.getValores().getImpresion().getLinkImpresionFull(), username, dto.getNmUnidPorEmbalaje(), dto.getVmValorDeclarado(), dto.getNmPesoDeclarado(), companyName, pruebas);
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el nro de guia en la factura #{0} para {1}", new Object[]{docNum, companyName});
             }
-            CONSOLE.log(Level.INFO, "Creacion exitosa de guia #{0} con la transportadora Rapidoochoa", res.getValores().getIdGuia());
-            return Response.ok(new ResponseDTO(0, res.getValores().getLinkImpresion())).build();
+            CONSOLE.log(Level.INFO, "Creacion exitosa de guia #{0} con la transportadora Rapidoochoa", res.getValores().getNumeroGuia());
+            return Response.ok(new ResponseDTO(0, new Object[]{res.getValores().getImpresion().getLinkImpresionFull(), res.getValores().getImpresion().getLinkImpresionRotulos()})).build();
         } else {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error creando la guia con la transportadora Rapidoochoa");
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error creando la guia con la transportadora Rapidoochoa")).build();
