@@ -449,12 +449,12 @@ public class SalesOrderFacade {
         return new ArrayList<>();
     }
 
-    public String getCardCode(String order) {
+    public String getCardCode(String order, String companyName) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(o.\"CardCode\" as varchar(20))as cardCode from ORDR o where o.\"DocNum\"=");
         sb.append(order);
         try {
-            return (String) persistenceConf.chooseSchema("IGB", false, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
+            return (String) persistenceConf.chooseSchema(companyName, false, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
         }
         return null;

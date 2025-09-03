@@ -586,7 +586,7 @@ public class ReportREST implements Serializable {
                 break;
             case "pickingExpressGroup":
                 //validar si las ordenes corresponden al mismo cliente, de lo contrario no continuar con multi-picking.
-                if (validateMultiPicking(dto.getFiltro())) {
+                if (validateMultiPicking(dto.getFiltro(), dto.getCompanyName())) {
                     reportName = dto.getFiltro() + ".pdf";
                     report = JasperCompileManager.compileReportToFile(applicationBean.obtenerValorPropiedad("url.jasper") + dto.getCompanyName() + File.separator + "pickingExpress"
                             + File.separator + dto.getDocumento() + ".jrxml");
@@ -763,11 +763,11 @@ public class ReportREST implements Serializable {
         return null;
     }
 
-    private boolean validateMultiPicking(String orders) {
+    private boolean validateMultiPicking(String orders, String companyName) {
         HashSet<String> clients = new HashSet<>();
         if (orders != null && orders.contains(",")) {
             for (String order : orders.split(",")) {
-                clients.add(salesOrderFacade.getCardCode(order));
+                clients.add(salesOrderFacade.getCardCode(order, companyName));
             }
         }
         if (clients.size() <= 1) {
