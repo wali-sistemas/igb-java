@@ -39,7 +39,7 @@ public class ZPLPrinter {
             context.put("address4", dto.getAddressLine4());
             context.put("employee", dto.getEmployee());
             context.put("city", dto.getCity() + '-' + dto.getState());
-            context.put("container", dto.getInvoice() + '|' + String.format("%03d", dto.getBoxNumber()));
+            context.put("container", dto.getInvoice() + '|' + String.format("%3d", dto.getBoxNumber()));
             context.put("payment", dto.getPayment());
 
             StringWriter writer = new StringWriter();
