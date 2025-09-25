@@ -23,6 +23,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -209,9 +210,9 @@ public class InvoiceREST implements Serializable {
         /***Validar si el cliente de IGB o MTZ, tiene marcado el atributo SIN FLETE en el maestro de SN***/
         if (companyName.contains("IGB") || companyName.contains("VARROC")) {
             if (!customerFacade.disableFreightCollection(invoice.getCardCode(), companyName, pruebas).equals("Y")) {
-                BigDecimal lineTotal;
-                /***Validar gasto de flete por marca diferente a 54-REPSOL(Lubricante),112-ELF(Lubricante) y 81-REVO(Lubricante) en IGB y MTZ***/
-                if (itemMarca.equals("54") || itemMarca.equals("112") || (itemMarca.equals("81") && itemGrupo.equals("09"))) {
+                BigDecimal lineTotal = new BigDecimal(BigInteger.ZERO);
+                /***Validar gasto de flete por marca diferente a 54-REPSOL(Lubricante),112-ELF(Lubricante) y 113-REVO(Lubricante) en IGB y MTZ***/
+                if (itemMarca.equals("54") || itemMarca.equals("112") || (itemMarca.equals("113") && itemGrupo.equals("09"))) {
                     /***Validar si el destino NO es ciudad principal se cobra flete para los lubricantes***/
                     //if (mainCity.equals("N")) { // SOLO para el mes de Abril cualquier destino
                     /***Validar regla de negocio en las cantidades de los lubricantes, si es menor a 18 und o el valor neto es menor a $400.000 se cobra flete***/
@@ -245,7 +246,15 @@ public class InvoiceREST implements Serializable {
                 } else {
                     /***Validar solo en IGB, si el item corresponde a bodegas externas MAGNUM (Cali&Cartagena&Bogota) se mapea el flete desde la entrega campo de usuario***/
                     if (companyName.contains("IGB") && (whsCode.equals("05") || whsCode.equals("26") || whsCode.equals("35"))) {
-                        lineTotal = flete;
+                        /***Validar gasto de flete por marca diferente a 54-REPSOL(Lubricante),112-ELF(Lubricante) y 113-REVO(Lubricante) en IGB***/
+                        if (itemMarca.equals("54") || itemMarca.equals("112") || (itemMarca.equals("113") && itemGrupo.equals("09"))) {
+                            /***Validar regla de negocio en las cantidades de los lubricantes, si es menor a 18 und o el valor neto es menor a $400.000 se cobra flete***/
+                            if (sumQty < 18 && deliveryValorNeto.compareTo(BigDecimal.valueOf(500000.00)) <= 0) {
+                                lineTotal = flete;
+                            }
+                        } else {
+                            lineTotal = flete;
+                        }
                     } else {
                         lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
                     }
