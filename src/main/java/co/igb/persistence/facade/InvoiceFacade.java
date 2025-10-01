@@ -209,11 +209,11 @@ public class InvoiceFacade {
         sb.append(" select 'DF' as Doc, cast(year(a.\"TaxDate\") as varchar(4)) as \"ano\", 0 as costoTotalVenta, 0 as costoTotalNota, 0 as valorTotalVenta,0 as valorTotalNota,cast(sum(d.\"Debit\"-d.\"Credit\") as numeric(18,2)) as valorTotalDescFin ");
         sb.append(" from OJDT a ");
         sb.append(" inner join JDT1 d on d.\"TransId\"=a.\"TransId\" ");
-        sb.append(" where a.\"TaxDate\" between ADD_YEARS(TO_DATE(current_date,'YYYY-MM-DD'),-3) and current_date and a.\"Memo\"<>'P.133 períodos de cierre' and ");
+        sb.append(" where a.\"TaxDate\" between ADD_YEARS(TO_DATE(current_date,'YYYY-MM-DD'),-3) and current_date and a.\"Memo\"<>'P.133 períodos de cierre' ");
         if (companyName.contains("IGB")) {
-            sb.append(" d.\"Account\" in ('41350520','41350521','41350522') ");
+            sb.append(" and d.\"Account\" in ('41350520','41350521','41350522') ");
         } else if (companyName.contains("VARROC")) {
-            sb.append(" d.\"Account\" in ('41350515','41350520','41350521') ");
+            sb.append(" and d.\"Account\" in ('41350515','41350520','41350521') ");
         }
         sb.append("  and a.\"TransId\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='AS') and a.\"TransType\" not in('13','14','30') ");
         sb.append(" group by year(a.\"TaxDate\") ");
@@ -318,11 +318,11 @@ public class InvoiceFacade {
         sb.append(" 0 as \"valorTotalVenta\", 0 as \"valorTotalNota\", cast(sum(d.\"Debit\"-d.\"Credit\") as numeric(18,2)) as \"valorTotalDescFin\" ");
         sb.append("from OJDT a ");
         sb.append("inner join JDT1 d on d.\"TransId\"=a.\"TransId\" ");
-        sb.append("where year(a.\"TaxDate\")=year(current_date) and a.\"Memo\"<>'P.133 períodos de cierre' and a.\"TransId\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='AS') and a.\"TransType\" not in('13','14','30') and ");
+        sb.append("where year(a.\"TaxDate\")=year(current_date) and a.\"Memo\"<>'P.133 períodos de cierre' and a.\"TransId\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='AS') and a.\"TransType\" not in('13','14','30') ");
         if (companyName.contains("IGB")) {
-            sb.append(" d.\"Account\" in ('41350520','41350521','41350522') ");
+            sb.append(" and d.\"Account\" in ('41350520','41350521','41350522') ");
         } else if (companyName.contains("VARROC")) {
-            sb.append(" d.\"Account\" in ('41350515','41350520','41350521') ");
+            sb.append(" and d.\"Account\" in ('41350515','41350520','41350521') ");
         }
         sb.append("group by monthname(a.\"TaxDate\"), year(a.\"TaxDate\"), month(a.\"TaxDate\") ");
         sb.append(") as t on t.mm = v.\"U_Value\" ");
@@ -404,11 +404,11 @@ public class InvoiceFacade {
         sb.append(" select 0 as valorTotalVenta,0 as valorTotalNota,cast(sum(d.\"Debit\"-d.\"Credit\") as numeric(18,2))as valorTotalDescFin ");
         sb.append(" from OJDT a ");
         sb.append(" inner join JDT1 d on d.\"TransId\"=a.\"TransId\" ");
-        sb.append(" where year(a.\"TaxDate\")=year(current_date) and month(a.\"TaxDate\")=month(current_date) and a.\"Memo\"<>'P.133 períodos de cierre' and a.\"TransId\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='AS') and a.\"TransType\" not in('13','14','30') and ");
+        sb.append(" where year(a.\"TaxDate\")=year(current_date) and month(a.\"TaxDate\")=month(current_date) and a.\"Memo\"<>'P.133 períodos de cierre' and a.\"TransId\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='AS') and a.\"TransType\" not in('13','14','30') ");
         if (companyName.contains("IGB")) {
-            sb.append(" d.\"Account\" in ('41350520','41350521','41350522') ");
+            sb.append(" and d.\"Account\" in ('41350520','41350521','41350522') ");
         } else if (companyName.contains("VARROC")) {
-            sb.append(" d.\"Account\" in ('41350515','41350520','41350521') ");
+            sb.append(" and d.\"Account\" in ('41350515','41350520','41350521') ");
         }
         sb.append(")as t");
         try {
