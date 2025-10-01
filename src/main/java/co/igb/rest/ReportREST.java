@@ -41,7 +41,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author YEIJARA
+ * @author jguisao
  */
 @Stateless
 @Path("report")

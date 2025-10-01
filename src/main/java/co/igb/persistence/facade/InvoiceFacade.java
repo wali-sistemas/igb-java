@@ -172,8 +172,12 @@ public class InvoiceFacade {
             sb.append(" and d.\"TaxOnly\"='N' ");
         }
         sb.append("  and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
+        if (companyName.contains("IGB")) {
+            sb.append(" and d.\"AcctCode\" not in('42358005','42358006','42358010','42358011','42358015','42358016','42505005','42100510') ");
+        } else if (companyName.contains("VARROC")) {
+            sb.append(" and d.\"AcctCode\" not in('42358005','42358010','42358015','42358016','42100510','42505005') ");
+        }
         sb.append(" group by year(f.\"DocDate\") ");
-
         //TODO: Aplica solo para REDPLAS, carga de saldos iniciales
         if (companyName.contains("REDPLAS")) {
             sb.append(" UNION ALL ");
@@ -195,18 +199,23 @@ public class InvoiceFacade {
             sb.append(" and d.\"TaxOnly\"='N' ");
         }
         sb.append("  and n.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
+        if (companyName.contains("IGB")) {
+            sb.append(" and d.\"AcctCode\" not in('42358005','42358006','42358010','42358011','42358015','42358016','42505005','42100510') ");
+        } else if (companyName.contains("VARROC")) {
+            sb.append(" and d.\"AcctCode\" not in('42358005','42358010','42358015','42358016','42100510','42505005') ");
+        }
         sb.append(" group by year(n.\"DocDate\") ");
         sb.append("UNION ALL ");
         sb.append(" select 'DF' as Doc, cast(year(a.\"TaxDate\") as varchar(4)) as \"ano\", 0 as costoTotalVenta, 0 as costoTotalNota, 0 as valorTotalVenta,0 as valorTotalNota,cast(sum(d.\"Debit\"-d.\"Credit\") as numeric(18,2)) as valorTotalDescFin ");
         sb.append(" from OJDT a ");
         sb.append(" inner join JDT1 d on d.\"TransId\"=a.\"TransId\" ");
         sb.append(" where a.\"TaxDate\" between ADD_YEARS(TO_DATE(current_date,'YYYY-MM-DD'),-3) and current_date and a.\"Memo\"<>'P.133 períodos de cierre' and ");
-        if (companyName.contains("VARROC")) {
-            sb.append("d.\"Account\" in ('41350515') and a.\"DocSeries\"='18' ");
-        } else {
-            sb.append("d.\"Account\" in ('41350520','41750540','41750525','41750530') ");
+        if (companyName.contains("IGB")) {
+            sb.append(" d.\"Account\" in ('41350520','41350521','41350522') ");
+        } else if (companyName.contains("VARROC")) {
+            sb.append(" d.\"Account\" in ('41350515','41350520','41350521') ");
         }
-        sb.append("  and a.\"TransId\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='AS') ");
+        sb.append("  and a.\"TransId\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='AS') and a.\"TransType\" not in('13','14','30') ");
         sb.append(" group by year(a.\"TaxDate\") ");
         sb.append(")as t ");
         sb.append("group by t.\"ano\" order by t.\"ano\"");
@@ -243,6 +252,7 @@ public class InvoiceFacade {
             sb.append(" inner join OCRD c ON f.\"CardCode\"=c.\"CardCode\" ");
             sb.append(" inner join OCST p ON c.\"State1\"=p.\"Code\" ");
             sb.append(" where year(f.\"DocDate\")=year(current_date) and p.\"Country\"='CO' and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
+            sb.append("  and d.\"AcctCode\" not in('42358005','42358010','42358015','42358016','42100510','42505005') ");
             sb.append(" group by monthname(f.\"DocDate\"),year(f.\"DocDate\"),month(f.\"DocDate\"),d.\"TaxOnly\" ");
             sb.append(")as t ");
             sb.append("group by t.Doc,t.mm,t.mes ");
@@ -256,6 +266,7 @@ public class InvoiceFacade {
             sb.append("inner join OCRD c ON f.\"CardCode\"=c.\"CardCode\" ");
             sb.append("inner join OCST p ON c.\"State1\"=p.\"Code\" ");
             sb.append("where year(f.\"DocDate\")=year(current_date) and p.\"Country\"='CO' and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
+            sb.append(" and d.\"AcctCode\" not in('42358005','42358006','42358010','42358011','42358015','42358016','42505005','42100510') ");
             //TODO: Solo impuesto aplica para IGB
             if (companyName.contains("IGB")) {
                 sb.append(" and d.\"TaxOnly\"='N' ");
@@ -276,6 +287,7 @@ public class InvoiceFacade {
             sb.append(" inner join OCRD c ON n.\"CardCode\"=c.\"CardCode\" ");
             sb.append(" inner join OCST p ON c.\"State1\"=p.\"Code\" ");
             sb.append(" where year(n.\"DocDate\")=year(current_date) and p.\"Country\"='CO' and n.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
+            sb.append("  and d.\"AcctCode\" not in('42358005','42358010','42358015','42358016','42100510','42505005') ");
             sb.append(" group by monthname(n.\"DocDate\"),year(n.\"DocDate\"),month(n.\"DocDate\"),d.\"TaxOnly\" ");
             sb.append(")as t ");
             sb.append("group by t.Doc,t.mm,t.mes ");
@@ -294,6 +306,7 @@ public class InvoiceFacade {
             sb.append("inner join OCRD c ON n.\"CardCode\"=c.\"CardCode\" ");
             sb.append("inner join OCST p ON c.\"State1\"=p.\"Code\" ");
             sb.append("where year(n.\"DocDate\")=year(current_date) and p.\"Country\"='CO' and n.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
+            sb.append(" and d.\"AcctCode\" not in('42358005','42358006','42358010','42358011','42358015','42358016','42505005','42100510') ");
             //TODO: Solo impuesto aplica para IGB
             if (companyName.contains("IGB")) {
                 sb.append(" and d.\"TaxOnly\"='N' ");
@@ -305,11 +318,11 @@ public class InvoiceFacade {
         sb.append(" 0 as \"valorTotalVenta\", 0 as \"valorTotalNota\", cast(sum(d.\"Debit\"-d.\"Credit\") as numeric(18,2)) as \"valorTotalDescFin\" ");
         sb.append("from OJDT a ");
         sb.append("inner join JDT1 d on d.\"TransId\"=a.\"TransId\" ");
-        sb.append("where year(a.\"TaxDate\")=year(current_date) and a.\"Memo\"<>'P.133 períodos de cierre' and a.\"TransId\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='AS') and ");
-        if (companyName.contains("VARROC")) {
-            sb.append(" d.\"Account\" in ('41350515') and a.\"DocSeries\"='18' ");
-        } else {
-            sb.append("d.\"Account\" in ('41350520','41750540','41750525','41750530') ");
+        sb.append("where year(a.\"TaxDate\")=year(current_date) and a.\"Memo\"<>'P.133 períodos de cierre' and a.\"TransId\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='AS') and a.\"TransType\" not in('13','14','30') and ");
+        if (companyName.contains("IGB")) {
+            sb.append(" d.\"Account\" in ('41350520','41350521','41350522') ");
+        } else if (companyName.contains("VARROC")) {
+            sb.append(" d.\"Account\" in ('41350515','41350520','41350521') ");
         }
         sb.append("group by monthname(a.\"TaxDate\"), year(a.\"TaxDate\"), month(a.\"TaxDate\") ");
         sb.append(") as t on t.mm = v.\"U_Value\" ");
@@ -340,6 +353,7 @@ public class InvoiceFacade {
             sb.append(" inner join OCRD c ON f.\"CardCode\"=c.\"CardCode\" ");
             sb.append(" inner join OCST p ON c.\"State1\"=p.\"Code\" ");
             sb.append(" where year(f.\"DocDate\")=year(current_date) and month(f.\"DocDate\")=month(current_date) and p.\"Country\"='CO' and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
+            sb.append("  and d.\"AcctCode\" not in('42358005','42358010','42358015','42358016','42100510','42505005') ");
             sb.append(" group by d.\"TaxOnly\" ");
             sb.append(")as t ");
         } else {
@@ -350,6 +364,7 @@ public class InvoiceFacade {
             sb.append("inner join OCRD c ON f.\"CardCode\"=c.\"CardCode\" ");
             sb.append("inner join OCST p ON c.\"State1\"=p.\"Code\" ");
             sb.append("where year(f.\"DocDate\")=year(current_date) and month(f.\"DocDate\")=month(current_date) and p.\"Country\"='CO' and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
+            sb.append(" and d.\"AcctCode\" not in('42358005','42358006','42358010','42358011','42358015','42358016','42505005','42100510') ");
             //TODO: Solo impuesto aplica para IGB
             if (companyName.contains("IGB")) {
                 sb.append(" and d.\"TaxOnly\"='N' ");
@@ -368,6 +383,7 @@ public class InvoiceFacade {
             sb.append(" inner join OCRD c ON n.\"CardCode\"=c.\"CardCode\" ");
             sb.append(" inner join OCST p ON c.\"State1\"=p.\"Code\" ");
             sb.append(" where year(n.\"DocDate\")=year(current_date) and month(n.\"DocDate\")=month(current_date) and p.\"Country\"='CO' and n.\"DocNum\" not in (select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
+            sb.append("  and d.\"AcctCode\" not in('42358005','42358010','42358015','42358016','42100510','42505005') ");
             sb.append(" group by d.\"TaxOnly\" ");
             sb.append(")as t ");
         } else {
@@ -378,6 +394,7 @@ public class InvoiceFacade {
             sb.append("inner join OCRD c ON n.\"CardCode\"=c.\"CardCode\" ");
             sb.append("inner join OCST p ON c.\"State1\"=p.\"Code\" ");
             sb.append("where year(n.\"DocDate\")=year(current_date) and month(n.\"DocDate\")=month(current_date) and p.\"Country\"='CO' and n.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
+            sb.append(" and d.\"AcctCode\" not in('42358005','42358006','42358010','42358011','42358015','42358016','42505005','42100510') ");
             //TODO: Solo impuesto aplica para IGB
             if (companyName.contains("IGB")) {
                 sb.append(" and d.\"TaxOnly\"='N' ");
@@ -387,11 +404,11 @@ public class InvoiceFacade {
         sb.append(" select 0 as valorTotalVenta,0 as valorTotalNota,cast(sum(d.\"Debit\"-d.\"Credit\") as numeric(18,2))as valorTotalDescFin ");
         sb.append(" from OJDT a ");
         sb.append(" inner join JDT1 d on d.\"TransId\"=a.\"TransId\" ");
-        sb.append(" where year(a.\"TaxDate\")=year(current_date) and month(a.\"TaxDate\")=month(current_date) and a.\"Memo\"<>'P.133 períodos de cierre' and a.\"TransId\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='AS') and ");
-        if (companyName.contains("VARROC")) {
-            sb.append("d.\"Account\" in ('41350515') and a.\"DocSeries\"='18' ");
-        } else {
-            sb.append("d.\"Account\" in ('41350520','41750540','41750525','41750530') ");
+        sb.append(" where year(a.\"TaxDate\")=year(current_date) and month(a.\"TaxDate\")=month(current_date) and a.\"Memo\"<>'P.133 períodos de cierre' and a.\"TransId\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='AS') and a.\"TransType\" not in('13','14','30') and ");
+        if (companyName.contains("IGB")) {
+            sb.append(" d.\"Account\" in ('41350520','41350521','41350522') ");
+        } else if (companyName.contains("VARROC")) {
+            sb.append(" d.\"Account\" in ('41350515','41350520','41350521') ");
         }
         sb.append(")as t");
         try {
