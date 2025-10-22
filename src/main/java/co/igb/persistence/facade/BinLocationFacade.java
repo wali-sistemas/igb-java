@@ -151,7 +151,7 @@ public class BinLocationFacade {
     public List<String> listBinLocations(String schema, boolean testing, String whsCode) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(t.BinCode as varchar(100))as BinCode ");
-        sb.append("from (select o.\"SL1Code\" + ifnull(o.\"SL2Code\",'')as BinCode, ");
+        sb.append("from (select ");
         sb.append("      sum(cast(q.\"OnHandQty\" as int))as Saldo,o.\"AbsEntry\",o.\"BinCode\" as BinCode ");
         sb.append("      from OBIN o ");
         sb.append("      inner join OIBQ q on q.\"BinAbs\"=o.\"AbsEntry\" ");
