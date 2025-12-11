@@ -73,6 +73,8 @@ public class ReportREST implements Serializable {
     private PurchaseOrderFacade purchaseOrderFacade;
     @EJB
     private DeliveryNoteFacade deliveryNoteFacade;
+    @EJB
+    private UserFacade userFacade;
 
     @GET
     @Path("reports-orders")
@@ -108,23 +110,6 @@ public class ReportREST implements Serializable {
         }
         CONSOLE.log(Level.INFO, "Retornando estados de ordenes en bodega general para la empresa [" + companyName + "]");
         return Response.ok(new ResponseDTO(0, contador)).build();
-    }
-
-    @GET
-    @Path("reports-employee-assigned")
-    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response obtainReportsEmployeeAssigned(@HeaderParam("X-Company-Name") String companyName,
-                                                  @HeaderParam("X-Pruebas") boolean pruebas) {
-        List<UserDTO> users = authenticator.listEmployeesInGroup(applicationBean.obtenerValorPropiedad("igb.employee.group"), companyName);
-
-        if (users != null && !users.isEmpty()) {
-            for (UserDTO u : users) {
-                u.setOrdenesAsignadas(assignedOrderFacade.countOrderEmployeeAssigneed(u.getUsername(), companyName, pruebas));
-            }
-        }
-
-        return Response.ok(new ResponseDTO(0, users)).build();
     }
 
     @GET
@@ -280,7 +265,6 @@ public class ReportREST implements Serializable {
                 }
             }
         }
-
         return Response.ok(new ResponseDTO(0, datos)).build();
     }
 
@@ -540,8 +524,8 @@ public class ReportREST implements Serializable {
     @Path("generate-report/")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public ResponseDTO generateReport(@HeaderParam("X-Warehouse-Code") String whsCode,
-                                      PrintReportDTO dto) throws Exception {
+    public ResponseDTO generateReport(PrintReportDTO dto,
+                                      @HeaderParam("X-Warehouse-Code") String whsCode) throws Exception {
         String reportName = null;
         String report = null;
         String rutaArchivo = applicationBean.obtenerValorPropiedad("url.archivo");

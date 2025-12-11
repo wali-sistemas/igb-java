@@ -1,47 +1,24 @@
 package co.igb.ejb;
 
-import co.igb.dto.AuthenticationResponseDTO;
-import co.igb.dto.UserDTO;
-import co.igb.util.Constants;
-
 import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.naming.Context;
-import javax.naming.NamingEnumeration;
-import javax.naming.NamingException;
-import javax.naming.directory.Attribute;
-import javax.naming.directory.Attributes;
-import javax.naming.directory.DirContext;
-import javax.naming.directory.InitialDirContext;
-import javax.naming.directory.SearchControls;
-import javax.naming.directory.SearchResult;
-import javax.naming.ldap.InitialLdapContext;
-import javax.naming.ldap.LdapContext;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author dbotero
  */
 @Stateless
 public class IGBAuthLDAP {
-
-    private static final Logger CONSOLE = Logger.getLogger(IGBAuthLDAP.class.getSimpleName());
+    /*private static final Logger CONSOLE = Logger.getLogger(IGBAuthLDAP.class.getSimpleName());
     @Inject
     private IGBApplicationBean aplicationBean;
 
     public IGBAuthLDAP() {
-    }
+    }*/
 
-    private String getProp(String key) {
+    /*private String getProp(String key) {
         return aplicationBean.obtenerValorPropiedad(key);
-    }
+    }*/
 
-    public AuthenticationResponseDTO authenticateUser(String username, String password) {
+    /*public AuthenticationResponseDTO authenticateUser(String username, String password) {
         Hashtable<String, Object> auth = new Hashtable<>();
         auth.put(Context.INITIAL_CONTEXT_FACTORY, getProp(Constants.INITIAL_CONTEXT_FACTORY));
         auth.put(Context.PROVIDER_URL, getProp(Constants.PROVIDER_URL));
@@ -92,9 +69,9 @@ public class IGBAuthLDAP {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error no identificado al validar el usuario contra el directorio activo. ", e);
         }
         return new AuthenticationResponseDTO(1, "Ocurrio un error no identificado al validar el usuario contra el directorio activo.");
-    }
+    }*/
 
-    public UserDTO getUserInfo(String username) {
+    /*public UserDTO getUserInfo(String username) {
         Hashtable<String, Object> auth = new Hashtable<>();
         auth.put(Context.INITIAL_CONTEXT_FACTORY, getProp(Constants.INITIAL_CONTEXT_FACTORY));
         auth.put(Context.PROVIDER_URL, getProp(Constants.PROVIDER_URL));
@@ -151,9 +128,9 @@ public class IGBAuthLDAP {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la informacion del usuario " + username + " en LDAP. ", e);
         }
         return null;
-    }
+    }*/
 
-    public List<UserDTO> listEmployeesInGroup(String groupName, String companyName) {
+    /*public List<UserDTO> listEmployeesInGroup(String groupName, String companyName) {
         List<UserDTO> users = new ArrayList<>();
         Hashtable<String, Object> auth = new Hashtable<>();
         auth.put(Context.INITIAL_CONTEXT_FACTORY, getProp(Constants.INITIAL_CONTEXT_FACTORY));
@@ -194,7 +171,7 @@ public class IGBAuthLDAP {
                             } else if (companyName.equals(office)) {
                                 users.add(new UserDTO((String) usuario.get(), name, surname, email, completeName, office));
 
-                            }*/
+                            }
                         }
                     } catch (NullPointerException e) {
                         CONSOLE.log(Level.INFO, "El usuario {0} no tiene email en LDAP. ", usuario.get());
@@ -207,5 +184,5 @@ public class IGBAuthLDAP {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al listar los usuarios del grupo " + nex, nex);
         }
         return users;
-    }
+    }*/
 }

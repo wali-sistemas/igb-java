@@ -173,7 +173,7 @@ public class InvoiceFacade {
         }
         sb.append("  and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
         if (companyName.contains("IGB")) {
-            sb.append(" and d.\"AcctCode\" not in('42358005','42358006','42358010','42358011','42358015','42358016','42505005','42100510') ");
+            sb.append(" and d.\"AcctCode\" not in('42358005','42358006','42358010','42358011','42358015','42358016','42505005','42100510','14650528') ");
         } else if (companyName.contains("VARROC")) {
             sb.append(" and d.\"AcctCode\" not in('42358005','42358010','42358015','42358016','42100510','42505005') ");
         }
@@ -200,7 +200,7 @@ public class InvoiceFacade {
         }
         sb.append("  and n.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
         if (companyName.contains("IGB")) {
-            sb.append(" and d.\"AcctCode\" not in('42358005','42358006','42358010','42358011','42358015','42358016','42505005','42100510') ");
+            sb.append(" and d.\"AcctCode\" not in('42358005','42358006','42358010','42358011','42358015','42358016','42505005','42100510','14650528') ");
         } else if (companyName.contains("VARROC")) {
             sb.append(" and d.\"AcctCode\" not in('42358005','42358010','42358015','42358016','42100510','42505005') ");
         }
@@ -266,7 +266,7 @@ public class InvoiceFacade {
             sb.append("inner join OCRD c ON f.\"CardCode\"=c.\"CardCode\" ");
             sb.append("inner join OCST p ON c.\"State1\"=p.\"Code\" ");
             sb.append("where year(f.\"DocDate\")=year(current_date) and p.\"Country\"='CO' and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
-            sb.append(" and d.\"AcctCode\" not in('42358005','42358006','42358010','42358011','42358015','42358016','42505005','42100510') ");
+            sb.append(" and d.\"AcctCode\" not in('42358005','42358006','42358010','42358011','42358015','42358016','42505005','42100510','14650528') ");
             //TODO: Solo impuesto aplica para IGB
             if (companyName.contains("IGB")) {
                 sb.append(" and d.\"TaxOnly\"='N' ");
@@ -306,7 +306,7 @@ public class InvoiceFacade {
             sb.append("inner join OCRD c ON n.\"CardCode\"=c.\"CardCode\" ");
             sb.append("inner join OCST p ON c.\"State1\"=p.\"Code\" ");
             sb.append("where year(n.\"DocDate\")=year(current_date) and p.\"Country\"='CO' and n.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
-            sb.append(" and d.\"AcctCode\" not in('42358005','42358006','42358010','42358011','42358015','42358016','42505005','42100510') ");
+            sb.append(" and d.\"AcctCode\" not in('42358005','42358006','42358010','42358011','42358015','42358016','42505005','42100510','14650528') ");
             //TODO: Solo impuesto aplica para IGB
             if (companyName.contains("IGB")) {
                 sb.append(" and d.\"TaxOnly\"='N' ");
@@ -364,7 +364,7 @@ public class InvoiceFacade {
             sb.append("inner join OCRD c ON f.\"CardCode\"=c.\"CardCode\" ");
             sb.append("inner join OCST p ON c.\"State1\"=p.\"Code\" ");
             sb.append("where year(f.\"DocDate\")=year(current_date) and month(f.\"DocDate\")=month(current_date) and p.\"Country\"='CO' and f.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='FV') ");
-            sb.append(" and d.\"AcctCode\" not in('42358005','42358006','42358010','42358011','42358015','42358016','42505005','42100510') ");
+            sb.append(" and d.\"AcctCode\" not in('42358005','42358006','42358010','42358011','42358015','42358016','42505005','42100510','14650528') ");
             //TODO: Solo impuesto aplica para IGB
             if (companyName.contains("IGB")) {
                 sb.append(" and d.\"TaxOnly\"='N' ");
@@ -394,7 +394,7 @@ public class InvoiceFacade {
             sb.append("inner join OCRD c ON n.\"CardCode\"=c.\"CardCode\" ");
             sb.append("inner join OCST p ON c.\"State1\"=p.\"Code\" ");
             sb.append("where year(n.\"DocDate\")=year(current_date) and month(n.\"DocDate\")=month(current_date) and p.\"Country\"='CO' and n.\"DocNum\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='NC') ");
-            sb.append(" and d.\"AcctCode\" not in('42358005','42358006','42358010','42358011','42358015','42358016','42505005','42100510') ");
+            sb.append(" and d.\"AcctCode\" not in('42358005','42358006','42358010','42358011','42358015','42358016','42505005','42100510','14650528') ");
             //TODO: Solo impuesto aplica para IGB
             if (companyName.contains("IGB")) {
                 sb.append(" and d.\"TaxOnly\"='N' ");
