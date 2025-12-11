@@ -39,6 +39,16 @@ public class User implements Serializable {
     @Column(name = "lastUpdate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdate;
+    @Column(name = "password")
+    private String password;
+    @Column(name = "rol")
+    private String rol;
+    @Column(name = "companyName")
+    private String companyName;
+    @Column(name = "memberOf")
+    private String memberOf;
+    @Column(name = "status")
+    private String status;
 
     public User() {
     }
@@ -83,6 +93,46 @@ public class User implements Serializable {
         this.lastUpdate = lastUpdate;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getMemberOf() {
+        return memberOf;
+    }
+
+    public void setMemberOf(String memberOf) {
+        this.memberOf = memberOf;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -110,7 +160,17 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" + "username=" + username + ", name=" + name + ", surname=" + surname + ", email=" + email + ", lastUpdate=" + lastUpdate + '}';
+        return "User{" +
+                "username='" + username + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", email='" + email + '\'' +
+                ", lastUpdate=" + lastUpdate +
+                ", password='" + password + '\'' +
+                ", rol='" + rol + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", memberOf='" + memberOf + '\'' +
+                ", status='" + status + '\'' +
+                '}';
     }
-
 }

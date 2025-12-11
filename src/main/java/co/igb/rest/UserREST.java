@@ -4,7 +4,6 @@ import co.igb.dto.AuthenticationResponseDTO;
 import co.igb.dto.ResponseDTO;
 import co.igb.dto.UserDTO;
 import co.igb.ejb.IGBApplicationBean;
-import co.igb.ejb.IGBAuthLDAP;
 import co.igb.exception.IGBAuthenticationException;
 import co.igb.persistence.entity.User;
 import co.igb.persistence.facade.GroupAllowedFacade;
@@ -29,20 +28,17 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * @author jguisao
+ */
 @Stateless
 @Path("user")
 public class UserREST {
     private static final Logger CONSOLE = Logger.getLogger(UserREST.class.getSimpleName());
-
-    @EJB
-    private IGBAuthLDAP authenticator;
     @EJB
     private UserFacade userFacade;
     @EJB
@@ -68,58 +64,73 @@ public class UserREST {
             return Response.ok(new AuthenticationResponseDTO(1, "No se enviaron todos los datos necesarios para iniciar sesion. ")).build();
         }
         //Autenticar con directorio activo
-        AuthenticationResponseDTO response = authenticator.authenticateUser(user.getUsername(), user.getPassword());
-        if (response.getCode() == 0) {
-            user.setPassword(null);
-            try {
-                User userData = userFacade.find(user.getUsername(), companyName, pruebas);
-                if (userData == null) {
-                    throw new NoResultException();
-                }
+        AuthenticationResponseDTO response = new AuthenticationResponseDTO(0, null);
+        //authenticator.authenticateUser(user.getUsername(), user.getPassword());
+        //if (response.getCode() == 0) {
+        //user.setPassword(null);
 
-                //diff in msec
-                long diff = System.currentTimeMillis() - userData.getLastUpdate().getTime();
-                //diff in days
-                long days = diff / (24 * 60 * 60 * 1000);
+        User userData = new User();
+        try {
+            userData = userFacade.find(user.getUsername(), companyName, pruebas);
+            if (userData == null) {
+                throw new NoResultException();
+            }
 
-                if (days > 3) {
-                    try {
-                        user = getUserInfoFromLdap(user, false, user.getSelectedCompany(), pruebas);
-                    } catch (IGBAuthenticationException e) {
-                        return Response.ok(new AuthenticationResponseDTO(1, "Ocurrio un error al autenticar al usuario (Post-LDAP). ")).build();
-                    }
-                } else {
-                    user.setEmail(userData.getEmail());
-                    user.setName(userData.getName());
-                    user.setSurname(userData.getSurname());
-                }
+            if (!userData.getUsername().equals(user.getUsername())) {
+                return Response.ok(new AuthenticationResponseDTO(1, "El usuario no existe.")).build();
+            }
 
-            } catch (NoResultException e) {
-                //No se tiene informacion del usuario. Consultar directorio activo y continuar
+            if (!userData.getPassword().equals(user.getPassword())) {
+                return Response.ok(new AuthenticationResponseDTO(1, "Clave invalida.")).build();
+            }
+
+            if (!userData.getStatus().equals("activo")) {
+                return Response.ok(new AuthenticationResponseDTO(1, "Clave deshabilitada.")).build();
+            }
+
+            //diff in msec
+            long diff = System.currentTimeMillis() - userData.getLastUpdate().getTime();
+            //diff in days
+            long days = diff / (24 * 60 * 60 * 1000);
+
+            if (days > 3) {
                 try {
-                    user = getUserInfoFromLdap(user, true, user.getSelectedCompany(), pruebas);
-                } catch (IGBAuthenticationException ex) {
-                    CONSOLE.log(Level.SEVERE, "Ocurrio un error al autenticar al usuario (Post-LDAP)");
-                    return Response.ok(new AuthenticationResponseDTO(1, "Ocurrio un error al autenticar al usuario (Post-LDAP). ")).build();
+                    userData = getUserInfoFromLdap(user.getUsername(), user.getPassword(), false, user.getSelectedCompany(), pruebas);
+                } catch (IGBAuthenticationException e) {
+                    return Response.ok(new AuthenticationResponseDTO(1, "Ocurrio un error al autenticar al usuario.")).build();
                 }
-            } catch (Exception e) {
-                CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la informacion del usuario en la base de datos. ", e);
-                return Response.ok(new AuthenticationResponseDTO(1, "Ocurrio un error al autenticar al usuario (MySQL-Query). ")).build();
+            } else {
+                user.setEmail(userData.getEmail());
+                user.setName(userData.getName());
+                user.setSurname(userData.getSurname());
+                user.setPassword(user.getPassword());
             }
-
-            String token = tokenizeData(user.getUsername(), user.getName(), user.getSurname(), user.getEmail());
-            if (token == null) {
-                return Response.ok(new AuthenticationResponseDTO(1, "Ocurrio un error al autenticar al usuario (JWT). ")).build();
-            }
+        } catch (NoResultException e) {
+            //No se tiene informacion del usuario. Consultar directorio activo y continuar
             try {
-                user.setWarehouseCode(getWarehouseCode(user.getSelectedCompany(), pruebas));
-            } catch (Exception e) {
-                return Response.ok(new AuthenticationResponseDTO(1, "Ocurrio un error al obtener el código del almacén. ")).build();
+                userData = getUserInfoFromLdap(user.getUsername(), user.getPassword(), true, user.getSelectedCompany(), pruebas);
+            } catch (IGBAuthenticationException ex) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al autenticar al usuario. ", ex);
+                return Response.ok(new AuthenticationResponseDTO(1, "Ocurrio un error al autenticar al usuario.")).build();
             }
-
-            user.setToken(token);
-            response.setUser(user);
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la informacion del usuario en la base de datos. ", e);
+            return Response.ok(new AuthenticationResponseDTO(1, "Ocurrio un error al autenticar al usuario.")).build();
         }
+
+        String token = tokenizeData(user.getUsername(), user.getName(), user.getSurname(), user.getEmail(), user.getPassword());
+        if (token == null) {
+            return Response.ok(new AuthenticationResponseDTO(1, "Ocurrio un error al autenticar al usuario.")).build();
+        }
+        try {
+            user.setWarehouseCode(getWarehouseCode(user.getSelectedCompany(), pruebas));
+        } catch (Exception e) {
+            return Response.ok(new AuthenticationResponseDTO(1, "Ocurrio un error al obtener el código del almacén.")).build();
+        }
+
+        user.setToken(token);
+        response.setUser(user);
+        //}
         return Response.ok(response).build();
     }
 
@@ -127,11 +138,13 @@ public class UserREST {
         return warehouseFacade.listBinEnabledWarehouses(companyName, pruebas).get(0).getCode();
     }
 
-    private UserDTO getUserInfoFromLdap(UserDTO user, boolean create, String companyName, boolean pruebas) throws IGBAuthenticationException {
-        UserDTO userDataLdap = authenticator.getUserInfo(user.getUsername());
+    private User getUserInfoFromLdap(String username, String password, boolean create, String companyName, boolean pruebas) throws IGBAuthenticationException {
+        //UserDTO userDataLdap = authenticator.getUserInfo(user.getUsername());
+        User userDataLdap = userFacade.find(username, companyName, pruebas);
+
         if (userDataLdap == null) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al obtener la informacion del usuario en LDAP (aunque ya se habia autenticado correctamente). ");
-            throw new IGBAuthenticationException("Ocurrio un error al autenticar al usuario (Post-LDAP). ");
+            throw new IGBAuthenticationException("Ocurrio un error al autenticar al usuario.");
         }
         User userDataSQL = new User();
         userDataSQL.setEmail(userDataLdap.getEmail());
@@ -139,29 +152,35 @@ public class UserREST {
         userDataSQL.setSurname(userDataLdap.getSurname());
         userDataSQL.setUsername(userDataLdap.getUsername());
         userDataSQL.setLastUpdate(new Date());
+        userDataSQL.setPassword(password);
+        userDataSQL.setRol(userDataLdap.getRol());
+        userDataSQL.setCompanyName(userDataLdap.getCompanyName());
+        userDataSQL.setMemberOf(userDataLdap.getMemberOf());
+        userDataSQL.setStatus(userDataLdap.getStatus());
 
         if (create) {
             try {
                 userFacade.create(userDataSQL, companyName, pruebas);
-                user = userDataLdap;
+                //user = userDataLdap;
             } catch (Exception ex) {
-                CONSOLE.log(Level.SEVERE, "Ocurrio un error al guardar la informacion del usuario en MySQL. ", ex);
-                throw new IGBAuthenticationException("Ocurrio un error al autenticar al usuario (MySQL-Save). ");
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al guardar la informacion del usuario. ", ex);
+                throw new IGBAuthenticationException("Ocurrio un error al autenticar al usuario.");
             }
         } else {
             try {
                 userFacade.edit(userDataSQL, companyName, pruebas);
-                user = userDataLdap;
+                //user = userDataLdap;
             } catch (Exception ex) {
-                CONSOLE.log(Level.SEVERE, "Ocurrio un error al guardar la informacion del usuario en MySQL. ", ex);
-                throw new IGBAuthenticationException("Ocurrio un error al autenticar al usuario (MySQL-Edit). ");
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error al guardar la informacion del usuario. ", ex);
+                throw new IGBAuthenticationException("Ocurrio un error al autenticar al usuario.");
             }
         }
-        user.setSelectedCompany(companyName);
-        return user;
+        //user.setCompanyName(companyName);
+        userDataSQL.setCompanyName(companyName);
+        return userDataSQL;
     }
 
-    private String tokenizeData(String username, String name, String surname, String email) {
+    private String tokenizeData(String username, String name, String surname, String email, String password) {
         try {
             GregorianCalendar expTime = new GregorianCalendar();
             expTime.add(Calendar.MINUTE, Integer.parseInt(applicationBean.obtenerValorPropiedad("jwt.exp")));
@@ -173,6 +192,7 @@ public class UserREST {
                     .withClaim("name", name)
                     .withClaim("surname", surname)
                     .withClaim("email", email)
+                    .withClaim("password", password)
                     .sign(algorithm);
             CONSOLE.log(Level.INFO, "Token generado: {0}", token);
             return token;
@@ -188,15 +208,18 @@ public class UserREST {
     @Path("list/{groupName}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     public Response listEmployees(@PathParam("groupName") String groupName,
-                                  @HeaderParam("X-Company-Name") String companyName) {
-        return Response.ok(authenticator.listEmployeesInGroup(groupName, companyName)).build();
+                                  @HeaderParam("X-Company-Name") String companyName,
+                                  @HeaderParam("X-Pruebas") boolean pruebas) {
+        return Response.ok(userFacade.findByMemberOf(groupName, companyName, pruebas)/*authenticator.listEmployeesInGroup(groupName, companyName)*/).build();
     }
 
     @GET
     @Path("validate-user-admin/{user}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    public Response validateUserGroup(@PathParam("user") String user) {
-        for (UserDTO u : authenticator.listEmployeesInGroup(applicationBean.obtenerValorPropiedad("ldap.administrator.group"), null)) {
+    public Response validateUserGroup(@PathParam("user") String user,
+                                      @HeaderParam("X-Company-Name") String companyName,
+                                      @HeaderParam("X-Pruebas") boolean pruebas) {
+        for (User u : userFacade.findByMemberOf(applicationBean.obtenerValorPropiedad("ldap.administrator.group"), companyName, pruebas)/*authenticator.listEmployeesInGroup(applicationBean.obtenerValorPropiedad("ldap.administrator.group")*/) {
             if (u.getUsername().equals(user)) {
                 return Response.ok(new ResponseDTO(0, true)).build();
             }
@@ -221,8 +244,10 @@ public class UserREST {
         //check if user belongs to any of them
         for (String ldapGroup : allowedGroups) {
             //listar empleados en el grupo
-            List<UserDTO> users = authenticator.listEmployeesInGroup(ldapGroup, null);
-            for (UserDTO user : users) {
+            //List<UserDTO> users = authenticator.listEmployeesInGroup(ldapGroup, null);
+            List<User> users = userFacade.findByMemberOf(ldapGroup, companyName, pruebas);
+
+            for (User user : users) {
                 if (user.getUsername().equalsIgnoreCase(username)) {
                     CONSOLE.log(Level.INFO, "El usuario " + username + " puede acceder al modulo " + module + " porque pertenece al grupo " + ldapGroup);
                     return Response.ok(new ResponseDTO(0, null)).build();
@@ -246,8 +271,10 @@ public class UserREST {
     @GET
     @Path("{username}")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
-    public Response getUserInfo(@PathParam("username") String username) {
-        CONSOLE.log(Level.INFO, "Consultando datos de usuario {0} del Directorio Activo. ", username);
-        return Response.ok(new ResponseDTO(0, authenticator.getUserInfo(username))).build();
+    public Response getUserInfo(@PathParam("username") String username,
+                                @HeaderParam("X-Company-Name") String companyName,
+                                @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Consultando datos de usuario {0} login. ", username);
+        return Response.ok(new ResponseDTO(0, userFacade.find(username, companyName, pruebas)/*authenticator.getUserInfo(username)*/)).build();
     }
 }
