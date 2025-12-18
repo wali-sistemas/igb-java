@@ -623,6 +623,9 @@ public class ReportREST implements Serializable {
                 case "REDPLAS":
                     cn = "java:/HANAREDPLASDS";
                     break;
+                case "VELEZ":
+                    cn = "java:/HANAVELEZDS";
+                    break;
                 case "IGBPruebas":
                     cn = "java:/HANAIGBTESTDS";
                     break;
