@@ -208,52 +208,13 @@ public class InvoiceREST implements Serializable {
             if (!customerFacade.disableFreightCollection(invoice.getCardCode(), companyName, pruebas).equals("Y")) {
                 BigDecimal lineTotal = new BigDecimal(BigInteger.ZERO);
                 //TODO: PROMO envio gratis mayor igual a 5M SOLO en IGB - válido hasta el 20 de diciembre 2025
-                if (companyName.contains("IGB") && sumOrdPromo.compareTo(BigDecimal.valueOf(5000000.00)) <= 0) {
-                    /***Validar gasto de flete por marca diferente a 54-REPSOL(Lubricante),112-ELF(Lubricante) y 113-REVO(Lubricante) en IGB y MTZ***/
-                    if (itemMarca.equals("54") || itemMarca.equals("112") || (itemMarca.equals("113") && itemGrupo.equals("09"))) {
-                        /***Validar si el destino NO es ciudad principal se cobra flete para los lubricantes***/
-                        /***Validar regla de negocio en las cantidades de los lubricantes, si es menor a 18 und o el valor neto es menor a $400.000 se cobra flete***/
-                        if (sumQty < 18 && deliveryValorNeto.compareTo(BigDecimal.valueOf(500000.00)) <= 0) {
-                            lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
-                            if (lineTotal.compareTo(BigDecimal.ZERO) > 0) {
-                                InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
-                                switch (taxCode) {
-                                    case "IVAG19":
-                                        gasto.setExpenseCode(1l);//code flete gravados
-                                        break;
-                                    case "IVAEXCLU":
-                                        gasto.setExpenseCode(2l);//code flete no gravados
-                                        break;
-                                    case "IVAVEXE":
-                                        gasto.setExpenseCode(11l);//code flete exentos
-                                        break;
-                                }
-                                gasto.setBaseDocEntry(-1);
-                                gasto.setBaseDocType(-1);
-                                gasto.setBaseDocLine(-1);
-                                gasto.setBaseDocumentReference(0);
-                                gasto.setTaxCode(taxCode);
-                                gasto.setLineTotal(lineTotal.setScale(0, RoundingMode.CEILING));
-                                gastos.add(gasto);
-                            } else {
-                                CONSOLE.log(Level.WARNING, "Ocurrio una novedad con el porcentaje de flete para el cliente {0} en la matris de transporte de {1}", new Object[]{cardCode, companyName});
-                            }
-                        }
-                    } else {
-                        /***Validar solo en IGB, si el item corresponde a bodegas externas MAGNUM (Cali&Cartagena&Bogota) se mapea el flete desde la entrega campo de usuario***/
-                        if (companyName.contains("IGB") && (whsCode.equals("05") || whsCode.equals("26") || whsCode.equals("35"))) {
-                            /***Validar gasto de flete por marca diferente a 54-REPSOL(Lubricante),112-ELF(Lubricante) y 113-REVO(Lubricante) en IGB***/
-                            if (itemMarca.equals("54") || itemMarca.equals("112") || (itemMarca.equals("113") && itemGrupo.equals("09"))) {
-                                /***Validar regla de negocio en las cantidades de los lubricantes, si es menor a 18 und o el valor neto es menor a $400.000 se cobra flete***/
-                                if (sumQty < 18 && deliveryValorNeto.compareTo(BigDecimal.valueOf(500000.00)) <= 0) {
-                                    lineTotal = flete;
-                                }
-                            } else {
-                                lineTotal = flete;
-                            }
-                        } else {
-                            lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
-                        }
+                //if (companyName.contains("IGB") && sumOrdPromo.compareTo(BigDecimal.valueOf(5000000.00)) <= 0) {
+                /***Validar gasto de flete por marca diferente a 54-REPSOL(Lubricante),112-ELF(Lubricante) y 113-REVO(Lubricante) en IGB y MTZ***/
+                if (itemMarca.equals("54") || itemMarca.equals("112") || (itemMarca.equals("113") && itemGrupo.equals("09"))) {
+                    /***Validar si el destino NO es ciudad principal se cobra flete para los lubricantes***/
+                    /***Validar regla de negocio en las cantidades de los lubricantes, si es menor a 18 und o el valor neto es menor a $400.000 se cobra flete***/
+                    if (sumQty < 18 && deliveryValorNeto.compareTo(BigDecimal.valueOf(500000.00)) <= 0) {
+                        lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
                         if (lineTotal.compareTo(BigDecimal.ZERO) > 0) {
                             InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
                             switch (taxCode) {
@@ -278,7 +239,46 @@ public class InvoiceREST implements Serializable {
                             CONSOLE.log(Level.WARNING, "Ocurrio una novedad con el porcentaje de flete para el cliente {0} en la matris de transporte de {1}", new Object[]{cardCode, companyName});
                         }
                     }
+                } else {
+                    /***Validar solo en IGB, si el item corresponde a bodegas externas MAGNUM (Cali&Cartagena&Bogota) se mapea el flete desde la entrega campo de usuario***/
+                    if (companyName.contains("IGB") && (whsCode.equals("05") || whsCode.equals("26") || whsCode.equals("35"))) {
+                        /***Validar gasto de flete por marca diferente a 54-REPSOL(Lubricante),112-ELF(Lubricante) y 113-REVO(Lubricante) en IGB***/
+                        if (itemMarca.equals("54") || itemMarca.equals("112") || (itemMarca.equals("113") && itemGrupo.equals("09"))) {
+                            /***Validar regla de negocio en las cantidades de los lubricantes, si es menor a 18 und o el valor neto es menor a $400.000 se cobra flete***/
+                            if (sumQty < 18 && deliveryValorNeto.compareTo(BigDecimal.valueOf(500000.00)) <= 0) {
+                                lineTotal = flete;
+                            }
+                        } else {
+                            lineTotal = flete;
+                        }
+                    } else {
+                        lineTotal = invoice.getBaseAmount().multiply(porcFlete.divide(BigDecimal.valueOf(100)));
+                    }
+                    if (lineTotal.compareTo(BigDecimal.ZERO) > 0) {
+                        InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense gasto = new InvoicesDTO.DocumentAdditionalExpenses.DocumentAdditionalExpense();
+                        switch (taxCode) {
+                            case "IVAG19":
+                                gasto.setExpenseCode(1l);//code flete gravados
+                                break;
+                            case "IVAEXCLU":
+                                gasto.setExpenseCode(2l);//code flete no gravados
+                                break;
+                            case "IVAVEXE":
+                                gasto.setExpenseCode(11l);//code flete exentos
+                                break;
+                        }
+                        gasto.setBaseDocEntry(-1);
+                        gasto.setBaseDocType(-1);
+                        gasto.setBaseDocLine(-1);
+                        gasto.setBaseDocumentReference(0);
+                        gasto.setTaxCode(taxCode);
+                        gasto.setLineTotal(lineTotal.setScale(0, RoundingMode.CEILING));
+                        gastos.add(gasto);
+                    } else {
+                        CONSOLE.log(Level.WARNING, "Ocurrio una novedad con el porcentaje de flete para el cliente {0} en la matris de transporte de {1}", new Object[]{cardCode, companyName});
+                    }
                 }
+                //}
             }
         } else {
             if (companyName.contains("VELEZ") && lineTotalFlet.compareTo(BigDecimal.ZERO) > 0) {
