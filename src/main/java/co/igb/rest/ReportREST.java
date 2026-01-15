@@ -314,7 +314,7 @@ public class ReportREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response getSalesCollectMonthly(@HeaderParam("X-Company-Name") String companyName,
                                            @HeaderParam("X-Pruebas") boolean pruebas) {
-        CONSOLE.log(Level.INFO, "Consultando el recaudo de ventas mensulaes para la empresa [" + companyName + "]");
+        CONSOLE.log(Level.INFO, "Consultando el recaudo de ventas mensuales para la empresa [" + companyName + "]");
         List<Object[]> listCollect = paymentsReceivedFacade.getCollectMonthly(companyName, pruebas);
         if (listCollect != null || listCollect.size() <= 0) {
             CONSOLE.log(Level.INFO, "Retornando recaudos mensuales para la empresa [" + companyName + "]");

@@ -172,7 +172,7 @@ public class SalesOrderFacade {
         sb.append(" (select cast(m.\"Name\" as varchar(30)) from OITM t inner join \"@MARCAS\" m on m.\"Code\"=t.\"U_Marca\" where t.\"ItemCode\"=det.\"ItemCode\")as marca, ");
         sb.append(" case when \"Dscription\" like 'COMBO%' then 'COMBO' else 'NO' end as promotion ");
         sb.append("from ORDR enc ");
-        sb.append("inner join RDR1 det on det.\"DocEntry\"=enc.\"DocEntry\" and det.\"WhsCode\" in ('05','26','35','45') ");
+        sb.append("inner join RDR1 det on det.\"DocEntry\"=enc.\"DocEntry\" and det.\"WhsCode\" in ('05','26','35','60') ");
         sb.append("inner join RDR12 lg on lg.\"DocEntry\"=enc.\"DocEntry\" ");
         sb.append("left join \"@TRANSP_TAR\" tt on tt.\"U_COD_TRA\"=enc.\"U_TRANSP\" and tt.\"Code\"=lg.\"U_MunicipioS\" ");
         sb.append("inner join \"OCTG\" pg on pg.\"GroupNum\"=enc.\"GroupNum\" ");

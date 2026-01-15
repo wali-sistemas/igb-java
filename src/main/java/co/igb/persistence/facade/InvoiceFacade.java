@@ -53,7 +53,7 @@ public class InvoiceFacade {
         return null;
     }
 
-    public List<Object[]> findListInvoicesShipping(String transport, String invoice, String companyName, String warehouseCode, boolean testing) {
+    public List<Object[]> findListInvoicesShipping(String transport, String invoice, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(f.\"DocDate\" as date)as DocDate,cast(f.\"U_TOT_CAJ\" as int)as Box,cast(f.\"DocNum\" as varchar(10))as DocNum, ");
         sb.append(" cast(f.\"CardCode\" as varchar(20))as CardCode,cast(f.\"CardName\" as varchar(100))as CardName, ");
@@ -67,7 +67,7 @@ public class InvoiceFacade {
         sb.append("left join \"@TRANSP_TAR\" v on v.\"U_COD_TRA\"=f.\"U_TRANSP\" and v.\"Code\"=d.\"U_MunicipioS\" ");
         sb.append("inner join OCST l on l.\"Code\"=d.\"StateS\" and l.\"Country\"='CO' ");
         sb.append("where(select max(d.\"WhsCode\")from INV1 d where d.\"DocEntry\" = f.\"DocEntry\")");
-        sb.append(" in('01','30','32','05','26','35','45') ");
+        sb.append(" in('01','30','32','05','26','35','60') ");
         sb.append("and f.\"U_SHIPPING\"='N' and (f.\"U_TOT_CAJ\">=0 or f.\"U_TOT_CAJ\" is null) ");
         if (!transport.equals("*")) {
             sb.append("and cast(t.\"Name\" as varchar(15))='");
