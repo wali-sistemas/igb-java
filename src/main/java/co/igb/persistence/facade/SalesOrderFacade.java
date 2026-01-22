@@ -328,7 +328,11 @@ public class SalesOrderFacade {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(ifnull(sum(((((((o.\"DocTotal\"+o.\"DiscSum\")-o.\"VatSum\")-o.\"TotalExpns\")+o.\"WTSum\")-o.\"RoundDif\")-o.\"DiscSum\")),0)as numeric(18,0))as TotalPedido ");
         sb.append("from ORDR o ");
-        sb.append("where o.\"DocStatus\"='O' and o.\"U_DESP\"='N' and o.\"DocDate\" between ADD_MONTHS(ADD_DAYS(current_date,-extract(day from current_date)+1),-1) and current_date AND o.\"DocNum\" not in (select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='OR') ");
+        if (schemaName.contains("REDPLAS")) {
+            sb.append("where o.\"DocStatus\"='O' and o.\"U_DESP\"='N' and o.\"DocDate\" between ADD_MONTHS(ADD_DAYS(current_date,-extract(day from current_date)+1),-1) and current_date AND o.\"DocNum\" not in (select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='OR') ");
+        } else {
+            sb.append("where o.\"CANCELED\"='N' AND YEAR(o.\"DocDate\")=YEAR(current_date) AND MONTH(o.\"DocDate\")=MONTH(current_date) AND o.\"DocNum\" not in (select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='OR') ");
+        }
         try {
             return (BigDecimal) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException ex) {
