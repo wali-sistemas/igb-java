@@ -32,11 +32,12 @@ public class SalesOrderDTO {
     private String condPayment;
     private String marca;
     private String promotion;
+    private String supplier;
 
     public SalesOrderDTO() {
     }
 
-    public SalesOrderDTO(Long docEntry, String docNum, String series, String confirmed, Integer salesPersonCode, Date docDate, String cardCode, String cardName, Integer items, String comments, String assignedPickingEmployee, String status, String address, String transp, String docNumMDL, String whsCode, BigDecimal subTotal, BigDecimal vlrDeclarStand, Integer undEmpStand, Integer qty, BigDecimal porcFlet, BigDecimal totalFlet, String condPayment, String marca, String promotion) {
+    public SalesOrderDTO(Long docEntry, String docNum, String series, String confirmed, Integer salesPersonCode, Date docDate, String cardCode, String cardName, Integer items, String comments, String assignedPickingEmployee, String status, String address, String transp, String docNumMDL, String whsCode, BigDecimal subTotal, BigDecimal vlrDeclarStand, Integer undEmpStand, Integer qty, BigDecimal porcFlet, BigDecimal totalFlet, String condPayment, String marca, String promotion, String supplier) {
         this.docEntry = docEntry;
         this.docNum = docNum;
         this.series = series;
@@ -62,6 +63,7 @@ public class SalesOrderDTO {
         this.condPayment = condPayment;
         this.marca = marca;
         this.promotion = promotion;
+        this.supplier = supplier;
     }
 
     public Long getDocEntry() {
@@ -264,6 +266,14 @@ public class SalesOrderDTO {
         this.promotion = promotion;
     }
 
+    public String getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(String supplier) {
+        this.supplier = supplier;
+    }
+
     @Override
     public String toString() {
         return "SalesOrderDTO{" +
@@ -292,6 +302,7 @@ public class SalesOrderDTO {
                 ", condPayment='" + condPayment + '\'' +
                 ", marca='" + marca + '\'' +
                 ", promotion='" + promotion + '\'' +
+                ", supplier='" + supplier + '\'' +
                 '}';
     }
 }

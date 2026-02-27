@@ -87,7 +87,7 @@ public class SalesOrderFacade {
     public List<SalesOrderDTO> findOpenOrders(boolean showAll, boolean filterGroup, String schemaName, boolean testing, String warehouseCode) {
         EntityManager em = persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA);
         StringBuilder sb = new StringBuilder();
-        sb.append("select j.docnum, j.docdate, j.cardcode, j.cardname, j.confirmed, j.items, j.comments, j.address, j.transp, ifnull(j.ovMDL,''), j.contSer, j.marca ");
+        sb.append("select j.docnum, j.docdate, j.cardcode, j.cardname, j.confirmed, j.items, j.comments, j.address, j.transp, ifnull(j.ovMDL,''), j.contSer, j.marca, j.proveedor ");
         sb.append("from (select f.*, COUNT(f.grupo) OVER (PARTITION BY f.cardcode) as \"ContGrupo\" from ( ");
         sb.append("select t.*, ROW_NUMBER() OVER (PARTITION BY t.cardcode order by t.cardcode) as grupo from ( ");
         sb.append("select distinct cast(enc.\"DocNum\" as varchar(10)) as docnum, ");
@@ -95,11 +95,12 @@ public class SalesOrderFacade {
         sb.append("cast(enc.\"CardName\" as varchar(100)) as cardname, cast(enc.\"Confirmed\" as varchar(1)) as confirmed, ");
         sb.append("cast((select count(1) from RDR1 det where det.\"DocEntry\" = enc.\"DocEntry\" and det.\"LineStatus\" = 'O') as int) as items, ");
         sb.append("cast(enc.\"Comments\" as varchar(254)) as comments, cast(enc.\"Address2\" as varchar(200)) as address, ");
-        if (schemaName.contains("VARROC")) {
-            sb.append("(select cast(t.\"Name\" as varchar(30)) from \"@TRANSP\" t where t.\"Code\"=enc.\"U_TRANSP\") as transp, ");
+        sb.append("(select cast(t.\"Name\" as varchar(30)) from \"@TRANSP\" t where t.\"Code\"=enc.\"U_TRANSP\") as transp, ");
+        if (schemaName.contains("VARROC") || schemaName.contains("VELEZ")) {
+            //sb.append("(select cast(t.\"Name\" as varchar(30)) from \"@TRANSP\" t where t.\"Code\"=enc.\"U_TRANSP\") as transp, ");
             sb.append("(select cast(m.\"Name\" as varchar(30)) from OITM t inner join \"@MARCAS\" m on m.\"Code\"=t.\"U_Marca\" where t.\"ItemCode\"=det.\"ItemCode\")as marca, ");
         } else {
-            sb.append("ifnull(cast(enc.\"U_TRANSP\" as varchar(4)),'') as transp, ");
+            //sb.append("ifnull(cast(enc.\"U_TRANSP\" as varchar(4)),'') as transp, ");
             sb.append("null as marca, ");
         }
         if (warehouseCode.equals("30") || warehouseCode.equals("13") || warehouseCode.equals("32")) {
@@ -107,7 +108,8 @@ public class SalesOrderFacade {
         } else {
             sb.append("cast(mdl.\"DocNum\" as varchar(10))as ovMDL, ");
         }
-        sb.append("(select cast(count(\"U_SERIAL\")as int) from ORDR where \"U_SERIAL\"=enc.\"U_SERIAL\")as contSer ");
+        sb.append("(select cast(count(\"U_SERIAL\")as int) from ORDR where \"U_SERIAL\"=enc.\"U_SERIAL\")as contSer, ");
+        sb.append("(select case when \"CardCode\"='P811011909' then 'IGB' when \"CardCode\"='P900255414' then 'MOTOZONE' when \"CardCode\"='P900998242' then 'MOTOREPUESTO' else 'SIN DEFINIR PROVEEDOR' end from OITM where \"ItemCode\"=det.\"ItemCode\")as proveedor ");
         sb.append("from ORDR enc ");
         sb.append("inner join RDR1 det on det.\"DocEntry\" = enc.\"DocEntry\" and det.\"WhsCode\" = '");
         sb.append(warehouseCode);
@@ -148,6 +150,7 @@ public class SalesOrderFacade {
                 order.setTransp((String) row[8]);
                 order.setDocNumMDL((String) row[9]);
                 order.setMarca((String) row[11]);
+                order.setSupplier((String) row[12]);
 
                 orders.add(order);
             }
@@ -172,7 +175,7 @@ public class SalesOrderFacade {
         sb.append(" (select cast(m.\"Name\" as varchar(30)) from OITM t inner join \"@MARCAS\" m on m.\"Code\"=t.\"U_Marca\" where t.\"ItemCode\"=det.\"ItemCode\")as marca, ");
         sb.append(" case when \"Dscription\" like 'COMBO%' then 'COMBO' else 'NO' end as promotion ");
         sb.append("from ORDR enc ");
-        sb.append("inner join RDR1 det on det.\"DocEntry\"=enc.\"DocEntry\" and det.\"WhsCode\" in ('05','26','35','45') ");
+        sb.append("inner join RDR1 det on det.\"DocEntry\"=enc.\"DocEntry\" and det.\"WhsCode\" in ('05','26','35','45','60') ");
         sb.append("inner join RDR12 lg on lg.\"DocEntry\"=enc.\"DocEntry\" ");
         sb.append("left join \"@TRANSP_TAR\" tt on tt.\"U_COD_TRA\"=enc.\"U_TRANSP\" and tt.\"Code\"=lg.\"U_MunicipioS\" ");
         sb.append("inner join \"OCTG\" pg on pg.\"GroupNum\"=enc.\"GroupNum\" ");
