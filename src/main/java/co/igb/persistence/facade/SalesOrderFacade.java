@@ -115,7 +115,7 @@ public class SalesOrderFacade {
         }
         sb.append("(select cast(count(\"U_SERIAL\")as int) from ORDR where \"U_SERIAL\"=enc.\"U_SERIAL\")as contSer, ");
         if (schemaName.contains("VELEZ")) {
-            sb.append("(select STRING_AGG(DocNumTxt, '  ' order by \"DocNum\" asc)as orders ");
+            sb.append("ifnull((select STRING_AGG(DocNumTxt, '  ' order by \"DocNum\" asc)as orders ");
             sb.append(" from ( ");
             sb.append("  select 'IGB ' || TO_VARCHAR(\"DocNum\")as DocNumTxt,\"DocNum\" ");
             sb.append("  from IGB.ORDR ");
@@ -125,7 +125,7 @@ public class SalesOrderFacade {
             sb.append("  from VARROC.ORDR ");
             sb.append("  where \"CardCode\"='C900998242' and \"NumAtCard\" like enc.\"NumAtCard\" || '%' ");
             sb.append(" )as y ");
-            sb.append(")as docRelacionado ");
+            sb.append("),cast(enc.\"NumAtCard\" as varchar(250)))as docRelacionado ");
         } else {
             sb.append("null as docRelacionado ");
         }
@@ -527,11 +527,13 @@ public class SalesOrderFacade {
         return false;
     }
 
-    public void updateUserFieldCodTransport(String codTrasnp, Integer docNum, String companyName, boolean testing) {
+    public void updateUserFieldTranspAndStatus(String codTrasnp, String status, Integer docNum, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("update ORDR set \"U_TRANSP\"=");
         sb.append(codTrasnp);
-        sb.append(" where \"DocNum\"=");
+        sb.append(",\"U_SEPARADOR\"='");
+        sb.append(status);
+        sb.append("' where \"DocNum\"=");
         sb.append(docNum);
         try {
             persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).executeUpdate();
