@@ -125,7 +125,7 @@ public class SalesOrderFacade {
             sb.append("  from VARROC.ORDR ");
             sb.append("  where \"CardCode\"='C900998242' and \"NumAtCard\" like enc.\"NumAtCard\" || '%' ");
             sb.append(" )as y ");
-            sb.append("),cast(enc.\"NumAtCard\" as varchar(250)))as docRelacionado ");
+            sb.append("),cast(enc.\"U_NUNFAC\" as varchar(250)))as docRelacionado ");
         } else {
             sb.append("null as docRelacionado ");
         }
@@ -147,9 +147,15 @@ public class SalesOrderFacade {
                 sb.append("where j.\"ContGrupo\" > 1 and j.contSer = 1 ");
             } else {
                 sb.append("where j.\"ContGrupo\" > 1 ");
+                if (schemaName.contains("VELEZ")) {
+                    sb.append("and j.docRelacionado is not null ");
+                }
             }
         } else if (warehouseCode.equals("30")) {
             sb.append("where j.contSer = 1 ");
+        }
+        if (schemaName.contains("VELEZ")) {
+            sb.append("where j.docRelacionado is not null ");
         }
         sb.append("order by j.docdate, j.docnum");
         List<SalesOrderDTO> orders = new ArrayList<>();
@@ -525,14 +531,16 @@ public class SalesOrderFacade {
         return false;
     }
 
-    public void updateUserFieldCodTransport(String codTrasnp, Integer docNum, String companyName, boolean testing) {
+    public void updateUserFieldTranspAndStatus(String codTrasnp, String status, Integer docNum, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("update ORDR set \"U_TRANSP\"=");
         sb.append(codTrasnp);
-        sb.append(" where \"DocNum\"=");
+        sb.append(",\"U_SEPARADOR\"='");
+        sb.append(status);
+        sb.append("' where \"DocNum\"=");
         sb.append(docNum);
         try {
-            persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).executeUpdate();
+            this.persistenceConf.chooseSchema(companyName, testing, "HANA").createNativeQuery(sb.toString()).executeUpdate();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando el codigo de transporte para la orden {0}", docNum);
         }
