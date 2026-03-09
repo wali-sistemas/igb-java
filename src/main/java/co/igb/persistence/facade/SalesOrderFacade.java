@@ -153,8 +153,7 @@ public class SalesOrderFacade {
             }
         } else if (warehouseCode.equals("30")) {
             sb.append("where j.contSer = 1 ");
-        }
-        if (schemaName.contains("VELEZ")) {
+        } else if (schemaName.contains("VELEZ")) {
             sb.append("where j.docRelacionado is not null ");
         }
         sb.append("order by j.docdate, j.docnum");
