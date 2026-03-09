@@ -148,10 +148,8 @@ public class SalesOrderFacade {
             } else {
                 sb.append("where j.\"ContGrupo\" > 1 ");
             }
-        } else {
-            if (warehouseCode.equals("30")) {
-                sb.append("where j.contSer = 1 ");
-            }
+        } else if (warehouseCode.equals("30")) {
+            sb.append("where j.contSer = 1 ");
         }
         sb.append("order by j.docdate, j.docnum");
         List<SalesOrderDTO> orders = new ArrayList<>();
@@ -527,13 +525,11 @@ public class SalesOrderFacade {
         return false;
     }
 
-    public void updateUserFieldTranspAndStatus(String codTrasnp, String status, Integer docNum, String companyName, boolean testing) {
+    public void updateUserFieldCodTransport(String codTrasnp, Integer docNum, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("update ORDR set \"U_TRANSP\"=");
         sb.append(codTrasnp);
-        sb.append(",\"U_SEPARADOR\"='");
-        sb.append(status);
-        sb.append("' where \"DocNum\"=");
+        sb.append(" where \"DocNum\"=");
         sb.append(docNum);
         try {
             persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).executeUpdate();
