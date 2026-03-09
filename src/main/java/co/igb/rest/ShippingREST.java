@@ -198,10 +198,9 @@ public class ShippingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response findInvoicesShipping(InvoiceDTO invoiceDTO,
                                          @HeaderParam("X-Company-Name") String companyName,
-                                         @HeaderParam("X-Pruebas") boolean pruebas,
-                                         @HeaderParam("X-Warehouse-Code") String warehouseCode) {
+                                         @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Listando facturas para realizar shipping de la empresa [" + companyName + "]");
-        List<Object[]> listInvoices = invoiceFacade.findListInvoicesShipping(invoiceDTO.getTransport(), invoiceDTO.getDocNum(), companyName, warehouseCode, pruebas);
+        List<Object[]> listInvoices = invoiceFacade.findListInvoicesShipping(invoiceDTO.getTransport(), invoiceDTO.getDocNum(), companyName, pruebas);
         List<InvoiceDTO> shipping = new ArrayList<>();
 
         if (listInvoices == null) {

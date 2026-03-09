@@ -87,7 +87,7 @@ public class SalesOrderFacade {
     public List<SalesOrderDTO> findOpenOrders(boolean showAll, boolean filterGroup, String schemaName, boolean testing, String warehouseCode) {
         EntityManager em = persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA);
         StringBuilder sb = new StringBuilder();
-        sb.append("select j.docnum, j.docdate, j.cardcode, j.cardname, j.confirmed, j.items, j.comments, j.address, j.transp, ifnull(j.ovMDL,''), j.contSer, j.marca, j.proveedor ");
+        sb.append("select j.docnum, j.docdate, j.cardcode, j.cardname, j.confirmed, j.items, j.comments, j.address, j.transp, ifnull(j.ovMDL,''), j.contSer, j.marca, j.docRelacionado ");
         sb.append("from (select f.*, COUNT(f.grupo) OVER (PARTITION BY f.cardcode) as \"ContGrupo\" from ( ");
         sb.append("select t.*, ROW_NUMBER() OVER (PARTITION BY t.cardcode order by t.cardcode) as grupo from ( ");
         sb.append("select distinct cast(enc.\"DocNum\" as varchar(10)) as docnum, ");
@@ -96,25 +96,44 @@ public class SalesOrderFacade {
         sb.append("cast((select count(1) from RDR1 det where det.\"DocEntry\" = enc.\"DocEntry\" and det.\"LineStatus\" = 'O') as int) as items, ");
         sb.append("cast(enc.\"Comments\" as varchar(254)) as comments, cast(enc.\"Address2\" as varchar(200)) as address, ");
         sb.append("(select cast(t.\"Name\" as varchar(30)) from \"@TRANSP\" t where t.\"Code\"=enc.\"U_TRANSP\") as transp, ");
-        if (schemaName.contains("VARROC") || schemaName.contains("VELEZ")) {
-            //sb.append("(select cast(t.\"Name\" as varchar(30)) from \"@TRANSP\" t where t.\"Code\"=enc.\"U_TRANSP\") as transp, ");
-            sb.append("(select cast(m.\"Name\" as varchar(30)) from OITM t inner join \"@MARCAS\" m on m.\"Code\"=t.\"U_Marca\" where t.\"ItemCode\"=det.\"ItemCode\")as marca, ");
+        if (schemaName.contains("VARROC")) {
+            sb.append("(select STRING_AGG(y.MarcaTxt, ', ' order by y.MarcaTxt asc)as marcas ");
+            sb.append(" from ( ");
+            sb.append("  select distinct CAST(m.\"Name\" as varchar(30))as MarcaTxt ");
+            sb.append("  from OITM t ");
+            sb.append("  inner join \"@MARCAS\" m on m.\"Code\"=t.\"U_Marca\" ");
+            sb.append("  where t.\"ItemCode\" in (select \"ItemCode\" from RDR1 where \"DocEntry\"=det.\"DocEntry\") ");
+            sb.append(" )as y ");
+            sb.append(")as marca, ");
         } else {
-            //sb.append("ifnull(cast(enc.\"U_TRANSP\" as varchar(4)),'') as transp, ");
             sb.append("null as marca, ");
         }
-        if (warehouseCode.equals("30") || warehouseCode.equals("13") || warehouseCode.equals("32")) {
-            sb.append("null as ovMDL, ");
-        } else {
+        if (schemaName.contains("IGB")) {
             sb.append("cast(mdl.\"DocNum\" as varchar(10))as ovMDL, ");
+        } else {
+            sb.append("null as ovMDL, ");
         }
         sb.append("(select cast(count(\"U_SERIAL\")as int) from ORDR where \"U_SERIAL\"=enc.\"U_SERIAL\")as contSer, ");
-        sb.append("(select case when \"CardCode\"='P811011909' then 'IGB' when \"CardCode\"='P900255414' then 'MOTOZONE' when \"CardCode\"='P900998242' then 'MOTOREPUESTO' else 'SIN DEFINIR PROVEEDOR' end from OITM where \"ItemCode\"=det.\"ItemCode\")as proveedor ");
+        if (schemaName.contains("VELEZ")) {
+            sb.append("ifnull((select STRING_AGG(DocNumTxt, '  ' order by \"DocNum\" asc)as orders ");
+            sb.append(" from ( ");
+            sb.append("  select 'IGB ' || TO_VARCHAR(\"DocNum\")as DocNumTxt,\"DocNum\" ");
+            sb.append("  from IGB.ORDR ");
+            sb.append("  where \"CardCode\"='C900998242' and \"NumAtCard\" like enc.\"NumAtCard\" || '%' ");
+            sb.append(" union all ");
+            sb.append("  select 'MTZ ' || TO_VARCHAR(\"DocNum\")as DocNumTxt,\"DocNum\" ");
+            sb.append("  from VARROC.ORDR ");
+            sb.append("  where \"CardCode\"='C900998242' and \"NumAtCard\" like enc.\"NumAtCard\" || '%' ");
+            sb.append(" )as y ");
+            sb.append("),cast(enc.\"U_NUNFAC\" as varchar(250)))as docRelacionado ");
+        } else {
+            sb.append("null as docRelacionado ");
+        }
         sb.append("from ORDR enc ");
         sb.append("inner join RDR1 det on det.\"DocEntry\" = enc.\"DocEntry\" and det.\"WhsCode\" = '");
         sb.append(warehouseCode);
         sb.append("' ");
-        if (warehouseCode.equals("01")) {
+        if (schemaName.contains("IGB")) {
             sb.append("left join ORDR mdl on enc.\"U_SERIAL\" = mdl.\"U_SERIAL\" and right(mdl.\"NumAtCard\",1)='M' and mdl.\"DocStatus\"='O' ");
         }
         sb.append("where enc.\"DocStatus\" = 'O' and enc.\"U_SEPARADOR\" IN ('APROBADO','PREPAGO','SEDE BOGOTA') and ");
@@ -128,11 +147,15 @@ public class SalesOrderFacade {
                 sb.append("where j.\"ContGrupo\" > 1 and j.contSer = 1 ");
             } else {
                 sb.append("where j.\"ContGrupo\" > 1 ");
+                if (schemaName.contains("VELEZ")) {
+                    sb.append("and j.docRelacionado is not null ");
+                }
             }
-        } else {
-            if (warehouseCode.equals("30")) {
-                sb.append("where j.contSer = 1 ");
-            }
+        } else if (warehouseCode.equals("30")) {
+            sb.append("where j.contSer = 1 ");
+        }
+        if (schemaName.contains("VELEZ")) {
+            sb.append("where j.docRelacionado is not null ");
         }
         sb.append("order by j.docdate, j.docnum");
         List<SalesOrderDTO> orders = new ArrayList<>();
@@ -150,7 +173,7 @@ public class SalesOrderFacade {
                 order.setTransp((String) row[8]);
                 order.setDocNumMDL((String) row[9]);
                 order.setMarca((String) row[11]);
-                order.setSupplier((String) row[12]);
+                order.setDocRelacionado((String) row[12]);
 
                 orders.add(order);
             }
@@ -508,14 +531,16 @@ public class SalesOrderFacade {
         return false;
     }
 
-    public void updateUserFieldCodTransport(String codTrasnp, Integer docNum, String companyName, boolean testing) {
+    public void updateUserFieldTranspAndStatus(String codTrasnp, String status, Integer docNum, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("update ORDR set \"U_TRANSP\"=");
         sb.append(codTrasnp);
-        sb.append(" where \"DocNum\"=");
+        sb.append(",\"U_SEPARADOR\"='");
+        sb.append(status);
+        sb.append("' where \"DocNum\"=");
         sb.append(docNum);
         try {
-            persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).executeUpdate();
+            this.persistenceConf.chooseSchema(companyName, testing, "HANA").createNativeQuery(sb.toString()).executeUpdate();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando el codigo de transporte para la orden {0}", docNum);
         }
