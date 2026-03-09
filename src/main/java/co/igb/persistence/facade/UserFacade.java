@@ -49,6 +49,9 @@ public class UserFacade {
         Root<User> root = cq.from(User.class);
         Predicate predicate = cb.like(cb.lower(root.get(User_.memberOf)), "%" + rol + "%");
         cq.select(root).where(predicate);
+        //Predicate predicateEqual = cb.equal(root.get(User_.companyName), companyName);
+        //Predicate predicateLike = cb.like(cb.lower(root.get(User_.memberOf)), "%" + rol + "%");
+        //cq.select(root).where(cb.and(predicateEqual,predicateLike));
         try {
             return em.createQuery(cq).getResultList();
         } catch (Exception e) {
