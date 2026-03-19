@@ -104,7 +104,7 @@ public class SalesOrderFacade {
             sb.append("  inner join \"@MARCAS\" m on m.\"Code\"=t.\"U_Marca\" ");
             sb.append("  where t.\"ItemCode\" in (select \"ItemCode\" from RDR1 where \"DocEntry\"=det.\"DocEntry\") ");
             sb.append(" )as y ");
-            sb.append(")as marca, ");
+            sb.append(")as marcas, ");
         } else {
             sb.append("null as marcas, ");
         }
