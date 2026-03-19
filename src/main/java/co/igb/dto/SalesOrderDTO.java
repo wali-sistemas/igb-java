@@ -33,11 +33,12 @@ public class SalesOrderDTO {
     private String marca;
     private String promotion;
     private String docRelacionado;
+    private String group;
 
     public SalesOrderDTO() {
     }
 
-    public SalesOrderDTO(Long docEntry, String docNum, String series, String confirmed, Integer salesPersonCode, Date docDate, String cardCode, String cardName, Integer items, String comments, String assignedPickingEmployee, String status, String address, String transp, String docNumMDL, String whsCode, BigDecimal subTotal, BigDecimal vlrDeclarStand, Integer undEmpStand, Integer qty, BigDecimal porcFlet, BigDecimal totalFlet, String condPayment, String marca, String promotion, String docRelacionado) {
+    public SalesOrderDTO(Long docEntry, String docNum, String series, String confirmed, Integer salesPersonCode, Date docDate, String cardCode, String cardName, Integer items, String comments, String assignedPickingEmployee, String status, String address, String transp, String docNumMDL, String whsCode, BigDecimal subTotal, BigDecimal vlrDeclarStand, Integer undEmpStand, Integer qty, BigDecimal porcFlet, BigDecimal totalFlet, String condPayment, String marca, String promotion, String docRelacionado, String group) {
         this.docEntry = docEntry;
         this.docNum = docNum;
         this.series = series;
@@ -64,6 +65,7 @@ public class SalesOrderDTO {
         this.marca = marca;
         this.promotion = promotion;
         this.docRelacionado = docRelacionado;
+        this.group = group;
     }
 
     public Long getDocEntry() {
@@ -274,6 +276,14 @@ public class SalesOrderDTO {
         this.docRelacionado = docRelacionado;
     }
 
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
     @Override
     public String toString() {
         return "SalesOrderDTO{" +
@@ -303,6 +313,7 @@ public class SalesOrderDTO {
                 ", marca='" + marca + '\'' +
                 ", promotion='" + promotion + '\'' +
                 ", docRelacionado='" + docRelacionado + '\'' +
+                ", group='" + group + '\'' +
                 '}';
     }
 }

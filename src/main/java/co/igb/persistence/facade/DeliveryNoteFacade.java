@@ -60,7 +60,7 @@ public class DeliveryNoteFacade {
         sb.append("select cast(d.\"ItemCode\" as varchar(20)) itemcode, cast(d.\"Quantity\" as int) quantity, cast(d.\"BaseRef\" as int) BaseRef ");
         sb.append("from ODLN e ");
         sb.append("inner join DLN1 d ON d.\"DocEntry\"=e.\"DocEntry\" ");
-        sb.append("where e.DocNum=");
+        sb.append("where e.\"DocNum\"=");
         sb.append(DocNum);
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
@@ -84,7 +84,7 @@ public class DeliveryNoteFacade {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el numero de la entrega. ", e);
         }
-        return 0;
+        return null;
     }
 
     public Integer getDocNumSalesOrder(Integer docNum, String companyName, boolean testing) {

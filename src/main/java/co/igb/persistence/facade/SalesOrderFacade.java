@@ -87,7 +87,7 @@ public class SalesOrderFacade {
     public List<SalesOrderDTO> findOpenOrders(boolean showAll, boolean filterGroup, String schemaName, boolean testing, String warehouseCode) {
         EntityManager em = persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA);
         StringBuilder sb = new StringBuilder();
-        sb.append("select j.docnum, j.docdate, j.cardcode, j.cardname, j.confirmed, j.items, j.comments, j.address, j.transp, ifnull(j.ovMDL,''), j.contSer, j.marca, j.docRelacionado ");
+        sb.append("select j.docnum, j.docdate, j.cardcode, j.cardname, j.confirmed, j.items, j.comments, j.address, j.transp, ifnull(j.ovMDL,''), j.contSer, j.marcas, j.docRelacionado, j.grupos ");
         sb.append("from (select f.*, COUNT(f.grupo) OVER (PARTITION BY f.cardcode) as \"ContGrupo\" from ( ");
         sb.append("select t.*, ROW_NUMBER() OVER (PARTITION BY t.cardcode order by t.cardcode) as grupo from ( ");
         sb.append("select distinct cast(enc.\"DocNum\" as varchar(10)) as docnum, ");
@@ -97,16 +97,28 @@ public class SalesOrderFacade {
         sb.append("cast(enc.\"Comments\" as varchar(254)) as comments, cast(enc.\"Address2\" as varchar(200)) as address, ");
         sb.append("(select cast(t.\"Name\" as varchar(30)) from \"@TRANSP\" t where t.\"Code\"=enc.\"U_TRANSP\") as transp, ");
         if (schemaName.contains("VARROC")) {
-            sb.append("(select STRING_AGG(y.MarcaTxt, ', ' order by y.MarcaTxt asc)as marcas ");
+            sb.append("(select STRING_AGG(y.marcaTxt, ', ' order by y.marcaTxt asc)as marcas ");
             sb.append(" from ( ");
-            sb.append("  select distinct CAST(m.\"Name\" as varchar(30))as MarcaTxt ");
+            sb.append("  select distinct CAST(m.\"Name\" as varchar(30))as marcaTxt ");
             sb.append("  from OITM t ");
             sb.append("  inner join \"@MARCAS\" m on m.\"Code\"=t.\"U_Marca\" ");
             sb.append("  where t.\"ItemCode\" in (select \"ItemCode\" from RDR1 where \"DocEntry\"=det.\"DocEntry\") ");
             sb.append(" )as y ");
             sb.append(")as marca, ");
         } else {
-            sb.append("null as marca, ");
+            sb.append("null as marcas, ");
+        }
+        if (schemaName.contains("VELEZ")) {
+            sb.append("(select STRING_AGG(y.grupoTxt, ', ' order by y.grupoTxt asc)as grupo ");
+            sb.append(" from ( ");
+            sb.append("  select distinct CAST(c.\"ItmsGrpNam\" as varchar(100))as grupoTxt ");
+            sb.append("  from OITM t ");
+            sb.append("  inner join OITB c on c.\"ItmsGrpCod\"=t.\"ItmsGrpCod\" ");
+            sb.append("  where t.\"ItemCode\" in (select \"ItemCode\" from RDR1 where \"DocEntry\"=det.\"DocEntry\") ");
+            sb.append(" )as y ");
+            sb.append(")as grupos, ");
+        } else {
+            sb.append("null as grupos, ");
         }
         if (schemaName.contains("IGB")) {
             sb.append("cast(mdl.\"DocNum\" as varchar(10))as ovMDL, ");
@@ -173,6 +185,7 @@ public class SalesOrderFacade {
                 order.setDocNumMDL((String) row[9]);
                 order.setMarca((String) row[11]);
                 order.setDocRelacionado((String) row[12]);
+                order.setGroup((String) row[13]);
 
                 orders.add(order);
             }
