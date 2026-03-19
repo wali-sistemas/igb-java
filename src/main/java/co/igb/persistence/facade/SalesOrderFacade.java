@@ -168,9 +168,6 @@ public class SalesOrderFacade {
         } else if (schemaName.contains("VELEZ")) {
             sb.append("where j.docRelacionado is not null ");
         }
-        if (schemaName.contains("VELEZ")) {
-            sb.append("where j.docRelacionado is not null ");
-        }
         sb.append("order by j.docdate, j.docnum");
         List<SalesOrderDTO> orders = new ArrayList<>();
         try {
