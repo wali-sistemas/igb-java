@@ -252,7 +252,52 @@ public class SalesOrderFacade {
 
     public List<Object[]> findOrdersStockAvailability(Integer orderNumber, List<String> itemCodes, String warehouseCode, String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(d.\"ItemCode\" as varchar(20)) itemCode, cast(d.\"OpenQty\" as int) openQuantity, cast(d.\"Quantity\" as int) quantity, ");
+        sb.append("select ifnull(t.itemCodeSon,t.itemCodeFather)as itemCode,t.openQuantity,ifnull((t.qtyListEmp*t.quantity),t.quantity)as quantity,t.binAbs,t.available,t.binCode,ifnull(t.itemNameSon,t.itemNameFather)as itemName,t.orderNumber,t.velocidad,t.secuencia,binType,t.itemCodeFather,t.itemNameFather ");
+        sb.append("from ( ");
+        sb.append(" select cast(d.\"ItemCode\" as varchar(20))as itemCodeFather,cast(d.\"OpenQty\" as int)as openQuantity,cast(d.\"Quantity\" as int)as quantity, ");
+        sb.append("  cast(s.\"BinAbs\" as int)as binAbs,cast(s.\"OnHandQty\" as int)as available,cast(u.\"BinCode\" as varchar(50))as binCode, ");
+        sb.append("  cast(d.\"Dscription\" as varchar(100))as itemNameFather,cast(o.\"DocNum\" as int) orderNumber,cast(u.\"Attr2Val\" as varchar(5))as velocidad, ");
+        sb.append("  cast(u.\"Attr3Val\" as int)as secuencia,cast(u.\"Attr1Val\" as varchar(10))as binType,null as itemCodeSon,null as itemNameSon,null as qtyListEmp ");
+        sb.append(" from ORDR o ");
+        sb.append(" inner join RDR1 d on d.\"DocEntry\" = o.\"DocEntry\" and d.\"LineStatus\"='O' ");
+        sb.append(" inner join OITM a on a.\"ItemCode\" = d.\"ItemCode\" and a.\"DataSource\"='O' ");
+        sb.append(" inner join OIBQ s on s.\"ItemCode\"=d.\"ItemCode\" and s.\"WhsCode\"='");
+        sb.append(warehouseCode);
+        sb.append("' and s.\"OnHandQty\">0");
+        sb.append(" inner join OBIN u on u.\"AbsEntry\"=s.\"BinAbs\" and u.\"SysBin\"='N' and u.\"Attr1Val\" in ('PICKING','STORAGE') ");
+        sb.append(" where o.\"DocNum\"= ");
+        sb.append(orderNumber);
+        sb.append(" union all ");
+        sb.append(" select cast(d.\"ItemCode\" as varchar(20))as itemCodeFather,cast(d.\"OpenQty\" as int)as openQuantity,cast(d.\"Quantity\" as int)as quantity, ");
+        sb.append("  cast(s.\"BinAbs\" as int)as binAbs,cast(s.\"OnHandQty\" as int)as available,cast(u.\"BinCode\" as varchar(50))as binCode, ");
+        sb.append("  cast(d.\"Dscription\" as varchar(100))as itemNameFather,cast(o.\"DocNum\" as int)as orderNumber,cast(u.\"Attr2Val\" as varchar(5))as velocidad, ");
+        sb.append("  cast(u.\"Attr3Val\" as int)as secuencia,cast(u.\"Attr1Val\" as varchar(10))as binType,cast(t.\"Code\" as varchar(20))as itemCodeSon,cast(c.\"ItemName\" as varchar(250))as itemNameSon,cast(t.\"Quantity\" as int)as qtyListEmp ");
+        sb.append(" from ORDR o ");
+        sb.append(" inner join RDR1 d on d.\"DocEntry\"=o.\"DocEntry\" and d.\"LineStatus\"='O' ");
+        sb.append(" inner join OITT h on d.\"ItemCode\"=h.\"Code\" ");
+        sb.append(" inner join ITT1 t on h.\"Code\"=t.\"Father\" ");
+        sb.append(" inner join OITM i on h.\"Code\"=i.\"ItemCode\" and i.\"DataSource\"='I' ");
+        sb.append(" inner join OITM c on t.\"Code\"=c.\"ItemCode\" ");
+        sb.append(" inner join OIBQ s on s.\"ItemCode\"=t.\"Code\" and s.\"WhsCode\"='");
+        sb.append(warehouseCode);
+        sb.append("' and s.\"OnHandQty\">0");
+        sb.append(" inner join OBIN u on u.\"AbsEntry\"=s.\"BinAbs\" and u.\"SysBin\"='N' and u.\"Attr1Val\" in ('PICKING','STORAGE') ");
+        sb.append(" where o.\"DocNum\"=");
+        sb.append(orderNumber);
+        sb.append(")as t ");
+        sb.append("where ifnull(t.itemCodeSon,t.itemCodeFather) in ");
+        if (itemCodes != null && !itemCodes.isEmpty()) {
+            sb.append("(");
+            for (String itemCode : itemCodes) {
+                sb.append("'");
+                sb.append(itemCode);
+                sb.append("',");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            sb.append(") ");
+        }
+        sb.append("order by t.velocidad,t.secuencia");
+        /*sb.append("select cast(d.\"ItemCode\" as varchar(20)) itemCode, cast(d.\"OpenQty\" as int) openQuantity, cast(d.\"Quantity\" as int) quantity, ");
         sb.append("cast(s.\"BinAbs\" as int) binAbs, cast(s.\"OnHandQty\" as int) available, cast(u.\"BinCode\" as varchar(50)) binCode, ");
         sb.append("cast(d.\"Dscription\" as varchar(100)) itemName, cast(o.\"DocNum\" as int) orderNumber, ");
         sb.append("cast(u.\"Attr2Val\" as varchar(5)) \"velocidad\", cast(u.\"Attr3Val\" as int) \"secuencia\", ");
@@ -273,7 +318,7 @@ public class SalesOrderFacade {
         sb.append("' and s.\"OnHandQty\" > 0 inner join OBIN u on u.\"AbsEntry\" = s.\"BinAbs\" and u.\"SysBin\" = 'N' ");
         sb.append("and u.\"Attr1Val\" IN ('PICKING','STORAGE') where o.\"DocNum\" = ");
         sb.append(orderNumber);
-        sb.append(" order by \"velocidad\", \"secuencia\" ");
+        sb.append(" order by \"velocidad\", \"secuencia\" ");*/
         CONSOLE.log(Level.FINE, sb.toString());
         try {
             return persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
@@ -309,7 +354,55 @@ public class SalesOrderFacade {
 
     public LinkedHashMap<String, Integer> listPendingItems(Integer orderNumber, String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(d.\"ItemCode\" as varchar(20))as \"ItemCode\", cast(d.\"Quantity\" as int)as pendingQuantity, ");
+        sb.append("select * from ( ");
+        sb.append(" select distinct cast(d.\"ItemCode\" as varchar(20))as \"ItemCode\",cast(d.\"Quantity\" as int)as pendingQuantity, ");
+        sb.append("  cast((select t.\"Attr2Val\" ");
+        sb.append("        from (select cast(u.\"Attr2Val\" as varchar(10))as \"Attr2Val\",row_number() over(partition by s.\"ItemCode\" order by cast(u.\"Attr2Val\" as varchar(10)),cast(u.\"Attr3Val\" as int))as \"fila\" ");
+        sb.append("              from OIBQ s ");
+        sb.append("              inner join OBIN u on u.\"AbsEntry\"=s.\"BinAbs\" and u.\"SysBin\"='N' and u.\"Attr1Val\" in ('PICKING','STORAGE') ");
+        sb.append("              where s.\"WhsCode\"=d.\"WhsCode\" and s.\"OnHandQty\">0 and s.\"ItemCode\"=d.\"ItemCode\" ");
+        sb.append("             )as t ");
+        sb.append("        where t.\"fila\"=1)as varchar(5))as \"Vel\", ");
+        sb.append("  cast((select r.\"Attr3Val\" ");
+        sb.append("        from (select cast(u.\"Attr3Val\" as int)as \"Attr3Val\",row_number() over(partition by s.\"ItemCode\" order by cast(u.\"Attr2Val\" as varchar(10)),cast(u.\"Attr3Val\" as int))as \"fila\" ");
+        sb.append("              from OIBQ s ");
+        sb.append("              inner join OBIN u on u.\"AbsEntry\"=s.\"BinAbs\" and u.\"SysBin\"='N' and u.\"Attr1Val\" in ('PICKING','STORAGE') ");
+        sb.append("              where s.\"WhsCode\"=d.\"WhsCode\" and s.\"OnHandQty\">0 and s.\"ItemCode\"=d.\"ItemCode\" ");
+        sb.append("             )as r ");
+        sb.append("         where r.\"fila\"=1)as int)as \"Sec\" ");
+        sb.append(" from ORDR o");
+        sb.append(" inner join RDR1 d on d.\"DocEntry\"=o.\"DocEntry\" and d.\"Quantity\">0 ");
+        sb.append(" inner join OITM a on a.\"ItemCode\" = d.\"ItemCode\" and a.\"DataSource\"='O' ");
+        sb.append(" where o.\"DocStatus\"='O' and d.\"LineStatus\"='O' and o.\"DocNum\"=");
+        sb.append(orderNumber);
+        sb.append(" union all ");
+        sb.append(" select distinct cast(t.\"Code\" as varchar(20))as \"ItemCode\",cast(d.\"Quantity\" as int)as pendingQuantity, ");
+        sb.append("  cast((select t.\"Attr2Val\" ");
+        sb.append("        from (select cast(u.\"Attr2Val\" as varchar(10))as \"Attr2Val\",row_number() over(partition by s.\"ItemCode\" order by cast(u.\"Attr2Val\" as varchar(10)),cast(u.\"Attr3Val\" as int))as \"fila\" ");
+        sb.append("              from OIBQ s ");
+        sb.append("              inner join OBIN u on u.\"AbsEntry\"=s.\"BinAbs\" and u.\"SysBin\"='N' and u.\"Attr1Val\" in ('PICKING','STORAGE') ");
+        sb.append("              where s.\"WhsCode\"=d.\"WhsCode\" and s.\"OnHandQty\">0 and s.\"ItemCode\"=t.\"Code\" ");
+        sb.append("             )as t ");
+        sb.append("        where t.\"fila\"=1)as varchar(5))as \"Vel\", ");
+        sb.append("  cast((select r.\"Attr3Val\" ");
+        sb.append("        from (select cast(u.\"Attr3Val\" as int)as \"Attr3Val\",row_number() over(partition by s.\"ItemCode\" order by cast(u.\"Attr2Val\" as varchar(10)),cast(u.\"Attr3Val\" as int))as \"fila\" ");
+        sb.append("              from OIBQ s ");
+        sb.append("              inner join OBIN u on u.\"AbsEntry\"=s.\"BinAbs\" and u.\"SysBin\"='N' and u.\"Attr1Val\" in ('PICKING','STORAGE') ");
+        sb.append("              where s.\"WhsCode\"=d.\"WhsCode\" and s.\"OnHandQty\">0 and s.\"ItemCode\"=t.\"Code\" ");
+        sb.append("             )as r ");
+        sb.append("        where r.\"fila\"=1)as int)as \"Sec\" ");
+        sb.append(" from ORDR o ");
+        sb.append(" inner join RDR1 d on d.\"DocEntry\"=o.\"DocEntry\" and d.\"Quantity\">0 ");
+        sb.append(" inner join OITT h on d.\"ItemCode\"=h.\"Code\" ");
+        sb.append(" inner join ITT1 t on h.\"Code\"=t.\"Father\" ");
+        sb.append(" inner join OITM i on h.\"Code\"=i.\"ItemCode\" ");
+        sb.append(" inner join OITM c on t.\"Code\"=c.\"ItemCode\" and c.\"DataSource\"='I' ");
+        sb.append(" where o.\"DocStatus\"='O' and d.\"LineStatus\"='O' and o.\"DocNum\"=");
+        sb.append(orderNumber);
+        sb.append(")as t ");
+        sb.append("order by t.\"Vel\",t.\"Sec\"");
+
+        /*sb.append("select cast(d.\"ItemCode\" as varchar(20))as \"ItemCode\", cast(d.\"Quantity\" as int)as pendingQuantity, ");
         sb.append(" cast((select t.\"Attr2Val\" from (select cast(u.\"Attr2Val\" as varchar(10))as \"Attr2Val\",row_number() over(partition by s.\"ItemCode\" order by cast(u.\"Attr2Val\" as varchar(10)),cast(u.\"Attr3Val\" as int))as \"fila\" ");
         sb.append(" from OIBQ s ");
         sb.append(" inner join OBIN u on u.\"AbsEntry\"=s.\"BinAbs\" and u.\"SysBin\"='N' and u.\"Attr1Val\" in ('PICKING','STORAGE') ");
@@ -322,7 +415,7 @@ public class SalesOrderFacade {
         sb.append("inner join RDR1 d on d.\"DocEntry\"=o.\"DocEntry\" and d.\"Quantity\">0 ");
         sb.append("where o.\"DocStatus\"='O' and d.\"LineStatus\"='O' and o.\"DocNum\"=");
         sb.append(orderNumber);
-        sb.append(" order by \"Vel\",\"Sec\"");
+        sb.append(" order by \"Vel\",\"Sec\"");*/
         try {
             LinkedHashMap<String, Integer> results = new LinkedHashMap<>();
             List<Object[]> rows = (List<Object[]>) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
@@ -366,7 +459,7 @@ public class SalesOrderFacade {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(sum((o.\"DocTotal\" - o.\"VatSum\" + o.\"DiscSum\" - o.\"TotalExpns\" + o.\"WTSum\") - o.\"DiscSum\") as numeric(18,0)) as TotalPedido ");
         sb.append("from ORDR o ");
-        sb.append("where o.\"U_SEPARADOR\"<>'FACTURADO' AND o.\"CANCELED\" = 'N' AND YEAR(o.\"DocDate\") = YEAR(current_date) AND MONTH(o.\"DocDate\") = MONTH(current_date) AND o.\"DocNum\" not in (select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='OR')");
+        sb.append("where o.\"CANCELED\" = 'N' AND YEAR(o.\"DocDate\") = YEAR(current_date) AND MONTH(o.\"DocDate\") = MONTH(current_date) AND o.\"DocNum\" not in (select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='OR')");
         try {
             return (BigDecimal) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException ex) {

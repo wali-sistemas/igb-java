@@ -1,5 +1,7 @@
 package co.igb.dto;
 
+import java.util.Objects;
+
 /**
  * @author dbotero
  */
@@ -16,6 +18,8 @@ public class SortedStockDTO implements Comparable<SortedStockDTO> {
     private String velocity;
     private Integer sequence;
     private String binLocationType;
+    private String itemCodeF;
+    private String itemNameF;
 
     public SortedStockDTO() {
     }
@@ -32,6 +36,8 @@ public class SortedStockDTO implements Comparable<SortedStockDTO> {
         velocity = (String) dbData[8];
         sequence = (Integer) dbData[9];
         binLocationType = (String) dbData[10];
+        itemCodeF = (String) dbData[11];
+        itemNameF = (String) dbData[12];
     }
 
     public String getItemCode() {
@@ -130,17 +136,114 @@ public class SortedStockDTO implements Comparable<SortedStockDTO> {
         this.binLocationType = binLocationType;
     }
 
+    public String getItemCodeF() {
+        return itemCodeF;
+    }
+
+    public void setItemCodeF(String itemCodeF) {
+        this.itemCodeF = itemCodeF;
+    }
+
+    public String getItemNameF() {
+        return itemNameF;
+    }
+
+    public void setItemNameF(String itemNameF) {
+        this.itemNameF = itemNameF;
+    }
+
     @Override
     public int compareTo(SortedStockDTO o) {
-        if (o == null || o.getBinCode() == null) {
+        if (o == null) {
             return 1;
         }
 
-        if (this.velocity.equals(o.getVelocity())) {
-            return this.sequence.compareTo(o.getSequence());
-        }
+        int result;
 
-        return this.velocity.compareTo(o.getVelocity());
+        result = compareNullable(this.velocity, o.velocity);
+        if (result != 0) return result;
+
+        result = compareNullable(this.sequence, o.sequence);
+        if (result != 0) return result;
+
+        result = compareNullable(this.binLocationType, o.binLocationType);
+        if (result != 0) return result;
+
+        result = compareNullable(this.itemCode, o.itemCode);
+        if (result != 0) return result;
+
+        result = compareNullable(this.itemCodeF, o.itemCodeF);
+        if (result != 0) return result;
+
+        result = Long.compare(this.binAbs, o.binAbs);
+        if (result != 0) return result;
+
+        result = compareNullable(this.binCode, o.binCode);
+        if (result != 0) return result;
+
+        result = Integer.compare(this.orderNumber, o.orderNumber);
+        if (result != 0) return result;
+
+        result = Integer.compare(this.availableQuantity, o.availableQuantity);
+        if (result != 0) return result;
+
+        result = Integer.compare(this.quantity, o.quantity);
+        if (result != 0) return result;
+
+        result = Integer.compare(this.openQuantity, o.openQuantity);
+        if (result != 0) return result;
+
+        return Integer.compare(this.pendingQuantity, o.pendingQuantity);
+    }
+
+    private static <T extends Comparable<? super T>> int compareNullable(T a, T b) {
+        if (a == null && b == null) return 0;
+        if (a == null) return -1;
+        if (b == null) return 1;
+        return a.compareTo(b);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        SortedStockDTO other = (SortedStockDTO) obj;
+
+        return openQuantity == other.openQuantity
+                && quantity == other.quantity
+                && binAbs == other.binAbs
+                && availableQuantity == other.availableQuantity
+                && orderNumber == other.orderNumber
+                && pendingQuantity == other.pendingQuantity
+                && Objects.equals(itemCode, other.itemCode)
+                && Objects.equals(itemName, other.itemName)
+                && Objects.equals(binCode, other.binCode)
+                && Objects.equals(velocity, other.velocity)
+                && Objects.equals(sequence, other.sequence)
+                && Objects.equals(binLocationType, other.binLocationType)
+                && Objects.equals(itemCodeF, other.itemCodeF)
+                && Objects.equals(itemNameF, other.itemNameF);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                itemCode,
+                itemName,
+                openQuantity,
+                quantity,
+                binAbs,
+                availableQuantity,
+                binCode,
+                orderNumber,
+                pendingQuantity,
+                velocity,
+                sequence,
+                binLocationType,
+                itemCodeF,
+                itemNameF
+        );
     }
 
     @Override
@@ -158,6 +261,8 @@ public class SortedStockDTO implements Comparable<SortedStockDTO> {
                 ", velocity='" + velocity + '\'' +
                 ", sequence=" + sequence +
                 ", binLocationType='" + binLocationType + '\'' +
+                ", itemCodeF='" + itemCodeF + '\'' +
+                ", itemNameF='" + itemNameF + '\'' +
                 '}';
     }
 }
