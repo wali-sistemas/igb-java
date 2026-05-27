@@ -152,12 +152,12 @@ public class InvoiceFacade {
         return null;
     }
 
-    public List<Object[]> getAnnualSales(String companyName, boolean testing) {
+    public List<Object[]> getAnnualSales(String companyName, boolean testing, boolean isTaller) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(t.\"ano\" as varchar(4)) as ano, cast(sum(t.costoTotalVenta - t.costoTotalNota) as numeric(18,0)) as costoTotal, cast(sum(t.valorTotalVenta - t.valorTotalNota) as numeric(18,0)) as valorTotal, ");
-        sb.append(" cast(((sum(t.valorTotalVenta - t.valorTotalNota) - sum(t.costoTotalVenta - t.costoTotalNota)) / sum(t.valorTotalVenta - t.valorTotalNota)) * 100 as numeric(18,2)) as margenAnual, ");
-        sb.append(" ifnull(cast(sum(t.valorTotalVenta - t.valorTotalNota - t.valorTotalDescFin) as numeric(18,0)),0)as valorTotalDescFin, ");
-        sb.append(" ifnull(cast(((sum(t.valorTotalVenta-t.valorTotalNota-t.valorTotalDescFin)-sum(t.costoTotalVenta-t.costoTotalNota))/sum(t.valorTotalVenta-t.valorTotalNota-t.valorTotalDescFin-t.valorTotalDescFin))*100 as numeric(18,2)),0)as margenAnualDescFin ");
+        sb.append(" ifnull(cast(((sum(t.valorTotalVenta - t.valorTotalNota) - sum(t.costoTotalVenta - t.costoTotalNota)) / nullif(sum(t.valorTotalVenta - t.valorTotalNota),0)) * 100 as numeric(18,2)),0) as margenAnual, ");
+        sb.append(" ifnull(cast(sum(t.valorTotalVenta - t.valorTotalNota - t.valorTotalDescFin) as numeric(18,0)),0) as valorTotalDescFin, ");
+        sb.append(" ifnull(cast(((sum(t.valorTotalVenta-t.valorTotalNota-t.valorTotalDescFin)-sum(t.costoTotalVenta-t.costoTotalNota))/nullif(sum(t.valorTotalVenta-t.valorTotalNota-t.valorTotalDescFin-t.valorTotalDescFin),0))*100 as numeric(18,2)),0) as margenAnualDescFin ");
         sb.append("from ( ");
         sb.append(" select 'FV' as Doc, cast(year(f.\"DocDate\") as varchar(4)) as \"ano\", cast(sum((cast(d.\"Quantity\" as int) * cast(d.\"StockPrice\" as numeric(18,0)))) as numeric(18,0)) as costoTotalVenta,0 as costoTotalNota, ");
         sb.append("  cast(sum((cast(d.\"LineTotal\" as numeric(18,0)) - (cast(d.\"LineTotal\" as numeric(18,0)) * cast(f.\"DiscPrcnt\" as int))/100)) as numeric(18,0)) as valorTotalVenta,0 as valorTotalNota,0 as valorTotalDescFin ");
@@ -176,6 +176,9 @@ public class InvoiceFacade {
             sb.append(" and d.\"AcctCode\" not in('42358005','42358006','42358010','42358011','42358015','42358016','42505005','42100510','14650528') ");
         } else if (companyName.contains("VARROC")) {
             sb.append(" and d.\"AcctCode\" not in('42358005','42358010','42358015','42358016','42100510','42505005') ");
+        }
+        if (isTaller) {
+            sb.append(" and a.\"Memo\"='TALLERES' ");
         }
         sb.append(" group by year(f.\"DocDate\") ");
         //TODO: Aplica solo para REDPLAS, carga de saldos iniciales
@@ -204,11 +207,20 @@ public class InvoiceFacade {
         } else if (companyName.contains("VARROC")) {
             sb.append(" and d.\"AcctCode\" not in('42358005','42358010','42358015','42358016','42100510','42505005') ");
         }
+        if (isTaller) {
+            sb.append(" and a.\"Memo\" = 'TALLERES' ");
+        }
         sb.append(" group by year(n.\"DocDate\") ");
         sb.append("UNION ALL ");
         sb.append(" select 'DF' as Doc, cast(year(a.\"TaxDate\") as varchar(4)) as \"ano\", 0 as costoTotalVenta, 0 as costoTotalNota, 0 as valorTotalVenta,0 as valorTotalNota,cast(sum(d.\"Debit\"-d.\"Credit\") as numeric(18,2)) as valorTotalDescFin ");
         sb.append(" from OJDT a ");
         sb.append(" inner join JDT1 d on d.\"TransId\"=a.\"TransId\" ");
+        if (isTaller) {
+            sb.append(" inner join OCRD T2 on d.\"ContraAct\"=T2.\"CardCode\" ");
+            sb.append(" inner join CRD1 T3 on T2.\"ShipToDef\"=T3.\"Address\" and T2.\"CardCode\"=T3.\"CardCode\" ");
+            sb.append(" inner join OCST T4 on T3.\"State\" = T4.\"Code\" and T4.\"Country\"='CO'");
+            sb.append(" inner join OSLP T5 on T2.\"SlpCode\" = T5.\"SlpCode\" ");
+        }
         sb.append(" where a.\"TaxDate\" between ADD_YEARS(TO_DATE(current_date,'YYYY-MM-DD'),-3) and current_date and a.\"Memo\"<>'P.133 períodos de cierre' ");
         if (companyName.contains("IGB")) {
             sb.append(" and d.\"Account\" in ('41350520','41350521','41350522') ");
@@ -216,6 +228,9 @@ public class InvoiceFacade {
             sb.append(" and d.\"Account\" in ('41350515','41350520','41350521') ");
         }
         sb.append("  and a.\"TransId\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='AS') and a.\"TransType\" not in('13','14','30') ");
+        if (isTaller) {
+            sb.append(" and T5.\"Memo\" = 'TALLERES' ");
+        }
         sb.append(" group by year(a.\"TaxDate\") ");
         sb.append(")as t ");
         sb.append("group by t.\"ano\" order by t.\"ano\"");
@@ -228,7 +243,7 @@ public class InvoiceFacade {
         return null;
     }
 
-    public List<Object[]> getMonthlySales(String companyName, boolean testing) {
+    public List<Object[]> getMonthlySales(String companyName, boolean testing, boolean isTaller) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(v.\"U_MonthName\" as varchar(20))as mes, cast(year(current_date) as varchar(4)) as ano, ");
         sb.append(" ifnull(cast(sum(t.\"costoTotalVenta\" - t.\"costoTotalNota\") as numeric(18,0)),0) as costoTotal, ");
@@ -271,6 +286,9 @@ public class InvoiceFacade {
             if (companyName.contains("IGB")) {
                 sb.append(" and d.\"TaxOnly\"='N' ");
             }
+            if (isTaller) {
+                sb.append(" and a.\"Memo\" = 'TALLERES' ");
+            }
             sb.append("group by monthname(f.\"DocDate\"), year(f.\"DocDate\"), month(f.\"DocDate\") ");
         }
         sb.append("UNION ALL ");
@@ -311,6 +329,9 @@ public class InvoiceFacade {
             if (companyName.contains("IGB")) {
                 sb.append(" and d.\"TaxOnly\"='N' ");
             }
+            if (isTaller) {
+                sb.append(" and a.\"Memo\" = 'TALLERES' ");
+            }
             sb.append("group by monthname(n.\"DocDate\"), year(n.\"DocDate\"), month(n.\"DocDate\") ");
         }
         sb.append("UNION ALL ");
@@ -318,11 +339,20 @@ public class InvoiceFacade {
         sb.append(" 0 as \"valorTotalVenta\", 0 as \"valorTotalNota\", cast(sum(d.\"Debit\"-d.\"Credit\") as numeric(18,2)) as \"valorTotalDescFin\" ");
         sb.append("from OJDT a ");
         sb.append("inner join JDT1 d on d.\"TransId\"=a.\"TransId\" ");
+        if (isTaller) {
+            sb.append(" inner join OCRD T2 on d.\"ContraAct\"=T2.\"CardCode\" ");
+            sb.append(" inner join CRD1 T3 on T2.\"ShipToDef\"=T3.\"Address\" and T2.\"CardCode\"=T3.\"CardCode\" ");
+            sb.append(" inner join OCST T4 on T3.\"State\" = T4.\"Code\" and T4.\"Country\"='CO'");
+            sb.append(" inner join OSLP T5 on T2.\"SlpCode\" = T5.\"SlpCode\" ");
+        }
         sb.append("where year(a.\"TaxDate\")=year(current_date) and a.\"Memo\"<>'P.133 períodos de cierre' and a.\"TransId\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='AS') and a.\"TransType\" not in('13','14','30') ");
         if (companyName.contains("IGB")) {
             sb.append(" and d.\"Account\" in ('41350520','41350521','41350522') ");
         } else if (companyName.contains("VARROC")) {
             sb.append(" and d.\"Account\" in ('41350515','41350520','41350521') ");
+        }
+        if (isTaller) {
+            sb.append(" and T5.\"Memo\" = 'TALLERES' ");
         }
         sb.append("group by monthname(a.\"TaxDate\"), year(a.\"TaxDate\"), month(a.\"TaxDate\") ");
         sb.append(") as t on t.mm = v.\"U_Value\" ");
@@ -338,7 +368,7 @@ public class InvoiceFacade {
         return null;
     }
 
-    public BigDecimal getInvoiceTotal(String companyName, boolean testing) {
+    public BigDecimal getInvoiceTotal(String companyName, boolean testing, boolean isTaller) {
         StringBuilder sb = new StringBuilder();
         sb.append("select ifnull(cast(sum(t.valorTotalVenta-t.valorTotalNota-t.valorTotalDescFin) as numeric(18,0)),0)as Facturado ");
         sb.append("from ( ");
@@ -370,6 +400,9 @@ public class InvoiceFacade {
                 sb.append(" and d.\"TaxOnly\"='N' ");
             }
         }
+        if (isTaller) {
+            sb.append(" and a.\"Memo\"='TALLERES' ");
+        }
         sb.append("UNION ALL ");
         if (companyName.contains("VARROC")) {
             sb.append("select sum(t.valorTotalVenta)as valorTotalVenta,sum(t.valorTotalNota)as valorTotalNota,sum(t.valorTotalDescFin)as valorTotalDescFin ");
@@ -400,15 +433,27 @@ public class InvoiceFacade {
                 sb.append(" and d.\"TaxOnly\"='N' ");
             }
         }
+        if (isTaller) {
+            sb.append(" and a.\"Memo\"='TALLERES' ");
+        }
         sb.append("UNION ALL ");
         sb.append(" select 0 as valorTotalVenta,0 as valorTotalNota,cast(sum(d.\"Debit\"-d.\"Credit\") as numeric(18,2))as valorTotalDescFin ");
         sb.append(" from OJDT a ");
         sb.append(" inner join JDT1 d on d.\"TransId\"=a.\"TransId\" ");
+        if (isTaller) {
+            sb.append(" inner join OCRD T2 on d.\"ContraAct\" = T2.\"CardCode\" ");
+            sb.append("inner join CRD1 T3 on T2.\"ShipToDef\" = T3.\"Address\" and T2.\"CardCode\" = T3.\"CardCode\" ");
+            sb.append("inner join OCST T4 on T3.\"State\" = T4.\"Code\" and T4.\"Country\" = 'CO' ");
+            sb.append("inner join OSLP T5 on T2.\"SlpCode\" = T5.\"SlpCode\" ");
+        }
         sb.append(" where year(a.\"TaxDate\")=year(current_date) and month(a.\"TaxDate\")=month(current_date) and a.\"Memo\"<>'P.133 períodos de cierre' and a.\"TransId\" not in(select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='AS') and a.\"TransType\" not in('13','14','30') ");
         if (companyName.contains("IGB")) {
             sb.append(" and d.\"Account\" in ('41350520','41350521','41350522') ");
         } else if (companyName.contains("VARROC")) {
             sb.append(" and d.\"Account\" in ('41350515','41350520','41350521') ");
+        }
+        if (isTaller) {
+            sb.append(" and T5.\"Memo\" = 'TALLERES' ");
         }
         sb.append(")as t");
         try {

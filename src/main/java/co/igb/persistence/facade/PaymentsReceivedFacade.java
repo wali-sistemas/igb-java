@@ -22,7 +22,7 @@ public class PaymentsReceivedFacade {
     public PaymentsReceivedFacade() {
     }
 
-    public List<Object[]> getCollectMonthly(String companyName, boolean testing) {
+    public List<Object[]> getCollectMonthly(String companyName, boolean testing, boolean isTaller) {
         StringBuilder sb = new StringBuilder();
         sb.append("select z.\"IdMes\",z.\"Mes\",sum(z.\"Sin vencer\")as \"Sin vencer\", ");
         if (companyName.contains("REDPLAS")) {
@@ -77,6 +77,9 @@ public class PaymentsReceivedFacade {
                 sb.append("('11100507','11100505','11100510','11100515','11100520','11100521','11200505') ");
                 break;
         }
+        if (isTaller) {
+            sb.append(" and v.\"Memo\" = 'TALLERES' ");
+        }
         sb.append(" union all ");
         sb.append("  select distinct n.\"DocDueDate\" as \"fechaVenc\",d.\"SumApplied\"*-1 as \"TotalPago\",cast(r.\"DocDate\" as date) as \"fechaRecibo\",DAYS_BETWEEN(n.\"DocDueDate\",r.\"DocDate\")as \"diasAtraso\", r.\"DocNum\",r.\"DocTotal\" as \"TotalDoc\",d.\"DocEntry\" ");
         sb.append("  from ORCT r ");
@@ -102,6 +105,9 @@ public class PaymentsReceivedFacade {
                 sb.append("('11100507','11100505','11100510','11100515','11100520','11100521','11200505') ");
                 break;
         }
+        if (isTaller) {
+            sb.append(" and v.\"Memo\" = 'TALLERES' ");
+        }
         sb.append(" union all ");
         sb.append("  select distinct f.\"TaxDate\" as \"fechaVenc\",d.\"SumApplied\" as \"TotalPago\",cast(r.\"DocDate\" as date) as \"fechaRecibo\",DAYS_BETWEEN(f.\"TaxDate\",r.\"DocDate\")as \"diasAtraso\", r.\"DocNum\",r.\"DocTotal\" as \"TotalDoc\",d.\"DocEntry\" ");
         sb.append("  from ORCT r ");
@@ -112,11 +118,20 @@ public class PaymentsReceivedFacade {
         sb.append("  inner join RCT2 d on r.\"DocEntry\" = d.\"DocNum\" ");
         sb.append("  inner join OJDT f ON f.\"TransId\" = d.\"DocTransId\" ");
         sb.append("  where r.\"Canceled\"='N' and year(r.\"DocDate\")=year(current_date) and r.\"TrsfrAcct\" not in('41350520','13050510') and d.\"InvType\" IN ('24','30') and t.\"DebCred\"='C' and r.\"Canceled\"='N' ");
+        if (isTaller) {
+            sb.append(" and v.\"Memo\" = 'TALLERES' ");
+        }
         sb.append(" union all ");
         sb.append("  select distinct '' as \"fechaVenc\",r.\"NoDocSum\" as \"TotalPago\",cast(r.\"DocDate\" as date) as \"fechaRecibo\",'20' as \"diasAtraso\",r.\"DocNum\",r.\"DocTotal\" as \"TotalDoc\",0 as \"DocEntry\" ");
         sb.append("  from ORCT r ");
         sb.append("  inner join OJDT j on r.\"TransId\" = j.\"TransId\" ");
         sb.append("  inner join JDT1 t on j.\"TransId\" = t.\"TransId\" ");
+        if (isTaller) {
+            sb.append(" inner join OCRD T2 on t.\"ContraAct\"=T2.\"CardCode\" ");
+            sb.append(" inner join CRD1 T3 on T2.\"ShipToDef\"=T3.\"Address\" and T2.\"CardCode\"=T3.\"CardCode\" ");
+            sb.append(" inner join OCST T4 on T3.\"State\" = T4.\"Code\" and T4.\"Country\"='CO'");
+            sb.append(" inner join OSLP T5 on T2.\"SlpCode\" = T5.\"SlpCode\" ");
+        }
         sb.append("  where year(r.\"DocDate\")=year(current_date) and r.\"DocType\"='C' and r.\"Canceled\"='N' and r.\"PayNoDoc\"='Y' and r.\"NoDocSum\">0 and r.\"TrsfrAcct\" in ");
         //TODO: Configuración de cuentas de recaudo para compañias activas
         switch (companyName) {
@@ -132,6 +147,9 @@ public class PaymentsReceivedFacade {
             case "VELEZ":
                 sb.append("('11100507','11100505','11100510','11100515','11100520','11100521','11200505') ");
                 break;
+        }
+        if (isTaller) {
+            sb.append(" and T5.\"Memo\" = 'TALLERES' ");
         }
         sb.append("   )as t ");
         sb.append("  inner join \"@SPT_VALUES\" v on v.\"U_Value\" = month(t.\"fechaRecibo\") ");
@@ -150,7 +168,7 @@ public class PaymentsReceivedFacade {
         return null;
     }
 
-    public List<Object[]> getByCollect(String companyName, boolean testing) {
+    public List<Object[]> getByCollect(String companyName, boolean testing, boolean isTaller) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(t.diasvencimiento as varchar(1000)) as DiasVencimiento, sum(cast((t.ValorFV-t.ValorNC-t.ValorRC) as numeric(18,0))) as Valor ");
         sb.append("from (select case when (DAYS_BETWEEN(fac.\"DocDueDate\",current_date)) < 0 then '1. Sin vencer' ");
@@ -171,7 +189,13 @@ public class PaymentsReceivedFacade {
         }
         sb.append("  else '1. Sin vencer' end as diasvencimiento,cast(fac.\"DocTotal\" as numeric(18,0)) - cast(fac.\"PaidToDate\" as numeric(18,0)) as ValorFV,0 as ValorNC,0 as ValorRC ");
         sb.append(" from OINV fac ");
+        if (isTaller) {
+            sb.append(" inner join OSLP ase on fac.\"SlpCode\" = ase.\"SlpCode\" ");
+        }
         sb.append(" where fac.\"DocStatus\" = 'O' and fac.\"DocNum\" <> 339765 ");//TODO: FV excluida
+        if (isTaller) {
+            sb.append(" and ase.\"Memo\" = 'TALLERES' ");
+        }
         sb.append("UNION ALL ");
         sb.append(" select case when (DAYS_BETWEEN(nc.\"DocDueDate\",current_date)) < 0 then '1. Sin vencer' ");
         //TODO: configuración de edades recaudos para REDPLAS
@@ -191,6 +215,10 @@ public class PaymentsReceivedFacade {
         }
         sb.append("  else '1. Sin vencer' end as diasvencimiento,0 as ValorFV,(cast(nc.\"DocTotal\" as numeric(18,0))- (cast(nc.\"PaidToDate\" as numeric(18,0)))) as ValorNC,0 as ValorRC ");
         sb.append(" from ORIN nc ");
+        if (isTaller) {
+            sb.append(" inner join OSLP ase on nc.\"SlpCode\" = ase.\"SlpCode\" ");
+            sb.append(" where ase.\"Memo\" = 'TALLERES' ");
+        }
         sb.append("UNION ALL ");
         sb.append(" select distinct case when (DAYS_BETWEEN(rc.\"DocDueDate\",current_date)) < 0 then '1. Sin vencer' ");
         //TODO: configuración de edades recaudos para REDPLAS
@@ -213,8 +241,14 @@ public class PaymentsReceivedFacade {
         sb.append(" inner join OJDT oj ON rc.\"TransId\" = oj.\"TransId\" ");
         sb.append(" inner join JDT1 jt ON jt.\"TransId\" = jt.\"TransId\" ");
         sb.append(" inner join OCRD sn on sn.\"CardCode\" = rc.\"CardCode\" ");
+        if (isTaller) {
+            sb.append(" inner join OSLP ase on ase.\"SlpCode\" = sn.\"SlpCode\" ");
+        }
         sb.append(" where jt.\"Account\" >='11050505' and jt.\"Account\" <='13050510' and rc.\"PayNoDoc\" = 'Y' and rc.\"Canceled\" = 'N' and rc.\"OpenBal\" <> 0 ");
         sb.append("  and rc.\"DocNum\" not in (select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='PR') and rc.\"Series\" not in (167,142) ");
+        if (isTaller) {
+            sb.append(" and ase.\"Memo\" = 'TALLERES' ");
+        }
         sb.append(") as t ");
         sb.append("group by t.diasvencimiento order by t.diasvencimiento");
         try {

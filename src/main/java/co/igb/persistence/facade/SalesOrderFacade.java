@@ -338,20 +338,32 @@ public class SalesOrderFacade {
         return null;
     }
 
-    public List<Object[]> getOrderStates(String schemaName, boolean testing) {
+    public List<Object[]> getOrderStates(String schemaName, boolean testing, boolean isTaller) {
         StringBuilder sb = new StringBuilder();
         sb.append("select case when o.\"U_SEPARADOR\"='' then 'SAP NO APROB' when o.\"U_SEPARADOR\" is null then 'APP NO APROB' ");
         sb.append(" when o.\"U_SEPARADOR\"='PENDIENTE DE PAGO' then 'PEND PAGO' else cast(o.\"U_SEPARADOR\" as varchar(20))end as \"Estado\", ");
         sb.append(" cast(count(o.\"DocNum\")as int)as Pedidos, ");
         sb.append(" cast(ifnull(sum(((((((o.\"DocTotal\"+o.\"DiscSum\")-o.\"VatSum\")-o.\"TotalExpns\")+o.\"WTSum\")-o.\"RoundDif\")-o.\"DiscSum\")),0)as numeric(18,0))as Total ");
         sb.append("from  ORDR o ");
+        if (isTaller) {
+            sb.append(" inner join OSLP a on o.\"SlpCode\" = a.\"SlpCode\" ");
+        }
         sb.append("where o.\"DocStatus\"='O' and o.\"U_DESP\"='N' and o.\"DocDate\" between ADD_MONTHS(ADD_DAYS(current_date,-extract(day from current_date)+1),-1) and current_date and o.\"U_SEPARADOR\"<>'FACTURADO' ");
+        if (isTaller) {
+            sb.append(" and a.\"Memo\" = 'TALLERES' ");
+        }
         sb.append("group by o.\"U_SEPARADOR\" ");
         sb.append("union all ");
-        sb.append("select 'ENTREGA'as Estado,cast(count(e.\"DocNum\")as int)as Pedidos, ");
+        sb.append("select 'ENTREGA' as Estado,cast(count(e.\"DocNum\")as int)as Pedidos, ");
         sb.append(" cast(ifnull(sum(((((((e.\"DocTotal\"+e.\"DiscSum\")-e.\"VatSum\")-e.\"TotalExpns\")+e.\"WTSum\")-e.\"RoundDif\")-e.\"DiscSum\")),0)as numeric(18,0))as Total ");
         sb.append("from  ODLN e ");
+        if (isTaller) {
+            sb.append(" inner join OSLP a on e.\"SlpCode\" = a.\"SlpCode\" ");
+        }
         sb.append("where e.\"CANCELED\"='N' and e.\"DocStatus\"='O' and e.\"DocType\"='I' and e.\"DocDate\" between ADD_MONTHS(ADD_DAYS(current_date,-extract(day from current_date)+1),-1) and current_date ");
+        if (isTaller) {
+            sb.append(" and a.\"Memo\" = 'TALLERES' ");
+        }
         sb.append("order by \"Estado\" ASC");
         try {
             return persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
@@ -362,11 +374,17 @@ public class SalesOrderFacade {
         return null;
     }
 
-    public BigDecimal getTotalOrderMonth(String schemaName, boolean testing) {
+    public BigDecimal getTotalOrderMonth(String schemaName, boolean testing, boolean isTaller) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(sum((o.\"DocTotal\" - o.\"VatSum\" + o.\"DiscSum\" - o.\"TotalExpns\" + o.\"WTSum\") - o.\"DiscSum\") as numeric(18,0)) as TotalPedido ");
         sb.append("from ORDR o ");
-        sb.append("where o.\"U_SEPARADOR\"<>'FACTURADO' AND o.\"CANCELED\" = 'N' AND YEAR(o.\"DocDate\") = YEAR(current_date) AND MONTH(o.\"DocDate\") = MONTH(current_date) AND o.\"DocNum\" not in (select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='OR')");
+        if (isTaller) {
+            sb.append(" inner join OSLP a on o.\"SlpCode\" = a.\"SlpCode\" ");
+        }
+        sb.append("where o.\"CANCELED\" = 'N' AND YEAR(o.\"DocDate\") = YEAR(current_date) AND MONTH(o.\"DocDate\") = MONTH(current_date) AND o.\"DocNum\" not in (select \"Code\" from \"@DOC_EXCLU\" where \"U_TIPO\"='OR')");
+        if (isTaller) {
+            sb.append(" and a.\"Memo\" = 'TALLERES' ");
+        }
         try {
             return (BigDecimal) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException ex) {
@@ -462,18 +480,40 @@ public class SalesOrderFacade {
         return null;
     }
 
-    public List<Object[]> listOrdersOfDay(String companyName, boolean testing) {
+    public List<Object[]> listOrdersOfDay(String companyName, boolean testing, boolean isTaller) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(ADD_DAYS(TO_DATE(current_date,'YYYY-MM-DD'),-v.\"U_Value\")as varchar(20))as Fecha, ");
         sb.append(" ifnull(t.\"TotalOrder\",0)as TotalOrder,ifnull(t.\"Abiertas\",0)as Abiertas,ifnull(t.\"Cerradas\",0)as Cerradas,ifnull(t.\"Monto\",0)as Monto ");
         sb.append("from \"@SPT_VALUES\" v ");
         sb.append("left join( ");
         sb.append(" select cast(enc.\"DocDate\" as date)as \"Fecha\",cast(count(enc.\"DocNum\")as int)as \"TotalOrder\", ");
-        sb.append("  (select cast(count(e.\"DocNum\")as int) from ORDR e where e.\"DocStatus\"='O' and cast(e.\"DocDate\" as date)=cast(enc.\"DocDate\" as date))as \"Abiertas\", ");
-        sb.append("  (select cast(count(e.\"DocNum\")as int) from ORDR e where e.\"DocStatus\"='C' and cast(e.\"DocDate\" as date)=cast(enc.\"DocDate\" as date))as \"Cerradas\", ");
+        sb.append("  (select cast(count(e.\"DocNum\")as int) from ORDR e ");
+        if (isTaller) {
+            sb.append(" inner join OCRD cli on e.\"CardCode\" = cli.\"CardCode\" inner join OSLP ase on cli.\"SlpCode\" = ase.\"SlpCode\" ");
+        }
+        sb.append("where e.\"DocStatus\"='O' and cast(e.\"DocDate\" as date)=cast(enc.\"DocDate\" as date) ");
+        if (isTaller) {
+            sb.append(" and ase.\"Memo\" = 'TALLERES' ");
+        }
+        sb.append(" )as \"Abiertas\", ");
+        sb.append("  (select cast(count(e.\"DocNum\")as int) from ORDR e ");
+        if (isTaller) {
+            sb.append(" inner join OCRD cli on e.\"CardCode\" = cli.\"CardCode\" inner join OSLP ase on cli.\"SlpCode\" = ase.\"SlpCode\" ");
+        }
+        sb.append(" where e.\"DocStatus\"='C' and cast(e.\"DocDate\" as date)=cast(enc.\"DocDate\" as date) ");
+        if (isTaller) {
+            sb.append(" and ase.\"Memo\" = 'TALLERES' ");
+        }
+        sb.append(" )as \"Cerradas\", ");
         sb.append("   sum(cast(enc.\"DocTotal\"-enc.\"VatSum\" as numeric(18,2)))as \"Monto\" ");
         sb.append(" from ORDR enc ");
+        if (isTaller) {
+            sb.append(" inner join OCRD cli on enc.\"CardCode\" = cli.\"CardCode\" inner join OSLP ase on cli.\"SlpCode\" = ase.\"SlpCode\" ");
+        }
         sb.append(" where enc.\"CANCELED\"='N' and enc.\"DocDate\" between ADD_DAYS(TO_DATE(current_date,'YYYY-MM-DD'),-4) and current_date ");
+        if (isTaller) {
+            sb.append(" and ase.\"Memo\" = 'TALLERES' ");
+        }
         sb.append(" group by enc.\"DocDate\" ");
         sb.append(")as t on t.\"Fecha\"=ADD_DAYS(TO_DATE(current_date,'YYYY-MM-DD'),-v.\"U_Value\") ");
         sb.append("where v.\"U_Value\" between 0 and 4 ");

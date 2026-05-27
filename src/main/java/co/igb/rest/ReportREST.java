@@ -272,10 +272,11 @@ public class ReportREST implements Serializable {
     @Path("sales-annual")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response getSalesAnnual(@HeaderParam("X-Company-Name") String companyName,
+    public Response getSalesAnnual(@QueryParam("isTaller") boolean isTaller,
+                                   @HeaderParam("X-Company-Name") String companyName,
                                    @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Consultando el total de ventas anuales para la empresa [" + companyName + "]");
-        List<Object[]> sales = invoiceFacade.getAnnualSales(companyName, pruebas);
+        List<Object[]> sales = invoiceFacade.getAnnualSales(companyName, pruebas, isTaller);
         if (sales != null) {
             List<SalesAnnualDTO> listSales = new ArrayList<>();
             for (Object[] row : sales) {
@@ -292,10 +293,11 @@ public class ReportREST implements Serializable {
     @Path("sales-monthly")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response getSalesMonthly(@HeaderParam("X-Company-Name") String companyName,
+    public Response getSalesMonthly(@QueryParam("isTaller") boolean isTaller,
+                                    @HeaderParam("X-Company-Name") String companyName,
                                     @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Consultando el total de ventas mensuales para la empresa [" + companyName + "]");
-        List<Object[]> sales = invoiceFacade.getMonthlySales(companyName, pruebas);
+        List<Object[]> sales = invoiceFacade.getMonthlySales(companyName, pruebas, isTaller);
         if (sales != null || sales.size() <= 0) {
             List<SalesMonthlyDTO> listSales = new ArrayList<>();
             for (Object[] row : sales) {
@@ -312,10 +314,11 @@ public class ReportREST implements Serializable {
     @Path("sales-collect-monthly")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response getSalesCollectMonthly(@HeaderParam("X-Company-Name") String companyName,
+    public Response getSalesCollectMonthly(@QueryParam("isTaller") boolean isTaller,
+                                           @HeaderParam("X-Company-Name") String companyName,
                                            @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Consultando el recaudo de ventas mensuales para la empresa [" + companyName + "]");
-        List<Object[]> listCollect = paymentsReceivedFacade.getCollectMonthly(companyName, pruebas);
+        List<Object[]> listCollect = paymentsReceivedFacade.getCollectMonthly(companyName, pruebas, isTaller);
         if (listCollect != null || listCollect.size() <= 0) {
             CONSOLE.log(Level.INFO, "Retornando recaudos mensuales para la empresa [" + companyName + "]");
             return Response.ok(new ResponseDTO(0, listCollect)).build();
@@ -329,10 +332,11 @@ public class ReportREST implements Serializable {
     @Path("sales-by-collect")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response getSalesByCollect(@HeaderParam("X-Company-Name") String companyName,
+    public Response getSalesByCollect(@QueryParam("isTaller") boolean isTaller,
+                                      @HeaderParam("X-Company-Name") String companyName,
                                       @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Consultando la cartera por cobrar para la empresa [" + companyName + "]");
-        List<Object[]> listByCollect = paymentsReceivedFacade.getByCollect(companyName, pruebas);
+        List<Object[]> listByCollect = paymentsReceivedFacade.getByCollect(companyName, pruebas, isTaller);
         if (listByCollect != null || listByCollect.size() <= 0) {
             CONSOLE.log(Level.INFO, "Retornando la cartera por cobrar para la empresa [" + companyName + "]");
             return Response.ok(new ResponseDTO(0, listByCollect)).build();
@@ -346,13 +350,14 @@ public class ReportREST implements Serializable {
     @Path("states-order")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response listOrderStates(@HeaderParam("X-Company-Name") String companyName,
+    public Response listOrderStates(@QueryParam("isTaller") boolean isTaller,
+                                    @HeaderParam("X-Company-Name") String companyName,
                                     @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Consultando estados de las ordenes para la empresa [" + companyName + "]");
-        List<Object[]> listOrders = salesOrderFacade.getOrderStates(companyName, pruebas);
+        List<Object[]> listOrders = salesOrderFacade.getOrderStates(companyName, pruebas, isTaller);
         if (listOrders != null || listOrders.size() <= 0) {
-            BigDecimal totalInvoice = invoiceFacade.getInvoiceTotal(companyName, pruebas);
-            BigDecimal totalOrder = salesOrderFacade.getTotalOrderMonth(companyName, pruebas);
+            BigDecimal totalInvoice = invoiceFacade.getInvoiceTotal(companyName, pruebas, isTaller);
+            BigDecimal totalOrder = salesOrderFacade.getTotalOrderMonth(companyName, pruebas, isTaller);
             List<StatusOrderDTO> listStatusOrder = new ArrayList<>();
             for (Object[] row : listOrders) {
                 listStatusOrder.add(new StatusOrderDTO((String) row[0], (Integer) row[1], (BigDecimal) row[2], totalInvoice, totalOrder));
@@ -369,10 +374,11 @@ public class ReportREST implements Serializable {
     @Path("orders-of-day")
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Response listOrdersOfDay(@HeaderParam("X-Company-Name") String companyName,
+    public Response listOrdersOfDay(@QueryParam("isTaller") boolean isTaller,
+                                    @HeaderParam("X-Company-Name") String companyName,
                                     @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Iniciando servicio para consultar las ordenes del día en {0}", companyName);
-        return Response.ok(salesOrderFacade.listOrdersOfDay(companyName, pruebas)).build();
+        return Response.ok(salesOrderFacade.listOrdersOfDay(companyName, pruebas, isTaller)).build();
     }
 
     @GET
