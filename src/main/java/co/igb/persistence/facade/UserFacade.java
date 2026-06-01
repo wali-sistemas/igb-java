@@ -49,9 +49,22 @@ public class UserFacade {
         Root<User> root = cq.from(User.class);
         Predicate predicate = cb.like(cb.lower(root.get(User_.memberOf)), "%" + rol + "%");
         cq.select(root).where(predicate);
-        //Predicate predicateEqual = cb.equal(root.get(User_.companyName), companyName);
-        //Predicate predicateLike = cb.like(cb.lower(root.get(User_.memberOf)), "%" + rol + "%");
-        //cq.select(root).where(cb.and(predicateEqual,predicateLike));
+        try {
+            return em.createQuery(cq).getResultList();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error listando los usuarios. ", e);
+        }
+        return new ArrayList<>();
+    }
+
+    public List<User> findByMemberOfCompany(String rol, String companyName, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<User> cq = cb.createQuery(User.class);
+        Root<User> root = cq.from(User.class);
+        Predicate predicateEqual = cb.equal(root.get(User_.companyName), companyName);
+        Predicate predicateLike = cb.like(cb.lower(root.get(User_.memberOf)), "%" + rol + "%");
+        cq.select(root).where(cb.and(predicateEqual, predicateLike));
         try {
             return em.createQuery(cq).getResultList();
         } catch (Exception e) {

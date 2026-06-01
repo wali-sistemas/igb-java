@@ -210,7 +210,7 @@ public class UserREST {
     public Response listEmployees(@PathParam("groupName") String groupName,
                                   @HeaderParam("X-Company-Name") String companyName,
                                   @HeaderParam("X-Pruebas") boolean pruebas) {
-        return Response.ok(userFacade.findByMemberOf(groupName, companyName, pruebas)/*authenticator.listEmployeesInGroup(groupName, companyName)*/).build();
+        return Response.ok(userFacade.findByMemberOfCompany(groupName, companyName, pruebas)).build();
     }
 
     @GET
