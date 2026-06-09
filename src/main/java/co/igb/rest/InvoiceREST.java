@@ -211,7 +211,7 @@ public class InvoiceREST implements Serializable {
                 //if (companyName.contains("IGB") && sumOrdPromo.compareTo(BigDecimal.valueOf(5000000.00)) <= 0) {
                 //Validar gasto de flete por marca diferente a 54-REPSOL(Lubricante),112-ELF(Lubricante) y 113-REVO(Lubricante) en IGB y MTZ
                 //Flete gratis para el mes de MAYO, producto REVO mayor igual a 2M y producto TIMSUN mayor igual a 3M
-                if (companyName.contains("IGB") && ((itemMarca.equals("81") && sumOrdPromo.compareTo(BigDecimal.valueOf(2000000)) < 0) || (itemMarca.equals("96") && sumOrdPromo.compareTo(BigDecimal.valueOf(3000000)) < 0))) {
+                if (companyName.contains("IGB") /*&& ((itemMarca.equals("81") && sumOrdPromo.compareTo(BigDecimal.valueOf(2000000)) < 0) || (itemMarca.equals("96") && sumOrdPromo.compareTo(BigDecimal.valueOf(3000000)) < 0))*/) {
                     if (itemMarca.equals("54") || itemMarca.equals("112") || (itemMarca.equals("113") && itemGrupo.equals("09"))) {
                         //Validar si el destino NO es ciudad principal se cobra flete para los lubricantes
                         //Validar regla de negocio en las cantidades de los lubricantes, si es menor a 18 und o el valor neto es menor a $400.000 se cobra flete

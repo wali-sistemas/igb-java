@@ -34,11 +34,12 @@ public class SalesOrderDTO {
     private String promotion;
     private String docRelacionado;
     private String group;
+    private String groupCardCode;
 
     public SalesOrderDTO() {
     }
 
-    public SalesOrderDTO(Long docEntry, String docNum, String series, String confirmed, Integer salesPersonCode, Date docDate, String cardCode, String cardName, Integer items, String comments, String assignedPickingEmployee, String status, String address, String transp, String docNumMDL, String whsCode, BigDecimal subTotal, BigDecimal vlrDeclarStand, Integer undEmpStand, Integer qty, BigDecimal porcFlet, BigDecimal totalFlet, String condPayment, String marca, String promotion, String docRelacionado, String group) {
+    public SalesOrderDTO(Long docEntry, String docNum, String series, String confirmed, Integer salesPersonCode, Date docDate, String cardCode, String cardName, Integer items, String comments, String assignedPickingEmployee, String status, String address, String transp, String docNumMDL, String whsCode, BigDecimal subTotal, BigDecimal vlrDeclarStand, Integer undEmpStand, Integer qty, BigDecimal porcFlet, BigDecimal totalFlet, String condPayment, String marca, String promotion, String docRelacionado, String group, String groupCardCode) {
         this.docEntry = docEntry;
         this.docNum = docNum;
         this.series = series;
@@ -66,6 +67,7 @@ public class SalesOrderDTO {
         this.promotion = promotion;
         this.docRelacionado = docRelacionado;
         this.group = group;
+        this.groupCardCode = groupCardCode;
     }
 
     public Long getDocEntry() {
@@ -284,6 +286,14 @@ public class SalesOrderDTO {
         this.group = group;
     }
 
+    public String getGroupCardCode() {
+        return groupCardCode;
+    }
+
+    public void setGroupCardCode(String groupCardCode) {
+        this.groupCardCode = groupCardCode;
+    }
+
     @Override
     public String toString() {
         return "SalesOrderDTO{" +
@@ -314,6 +324,7 @@ public class SalesOrderDTO {
                 ", promotion='" + promotion + '\'' +
                 ", docRelacionado='" + docRelacionado + '\'' +
                 ", group='" + group + '\'' +
+                ", groupCardCode='" + groupCardCode + '\'' +
                 '}';
     }
 }
