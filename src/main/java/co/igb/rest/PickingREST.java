@@ -180,9 +180,11 @@ public class PickingREST implements Serializable {
 
             for (String pendingItemcode : pendingItems.keySet()) {
                 //Si no hay inventario y no se ha hecho picking para la referencia, la agrega a la lista de lineas para cerrar en la orden
-                if (!availableStock.containsKey(pendingItemcode) && !pickedItems.containsKey(pendingItemcode)) {
-                    itemsMissing.add(pendingItemcode);
-                    continue;
+                if (!companyName.contains("REDPLAS")) {
+                    if (!availableStock.containsKey(pendingItemcode) && !pickedItems.containsKey(pendingItemcode)) {
+                        itemsMissing.add(pendingItemcode);
+                        continue;
+                    }
                 }
                 //TODO: Pendiente al realizar las pruebas
                 /*if (!availableStock.containsKey(pendingItemcode) && pickedItems.containsKey(pendingItemcode)) {
