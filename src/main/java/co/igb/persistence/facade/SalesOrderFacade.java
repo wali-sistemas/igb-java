@@ -291,7 +291,7 @@ public class SalesOrderFacade {
         sb.append("  where o.\"DocNum\"=");
         sb.append(orderNumber);
         sb.append(")as t ");
-        sb.append("where ifnull(t.itemCodeSon,t.itemCodeFather) in (");
+        sb.append("where (t.itemCodeSon in (");
         if (itemCodes != null && !itemCodes.isEmpty()) {
             for (String itemCode : itemCodes) {
                 sb.append("'");
@@ -300,6 +300,16 @@ public class SalesOrderFacade {
             }
             sb.deleteCharAt(sb.length() - 1);
             sb.append(") ");
+        }
+        sb.append(" or t.itemCodeFather in (");
+        if (itemCodes != null && !itemCodes.isEmpty()) {
+            for (String itemCode : itemCodes) {
+                sb.append("'");
+                sb.append(itemCode);
+                sb.append("',");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            sb.append(")) ");
         }
         sb.append("order by t.velocidad,t.secuencia");
 
@@ -361,20 +371,47 @@ public class SalesOrderFacade {
 
     public LinkedHashMap<String, Integer> listPendingItems(Integer orderNumber, String schemaName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select cast(d.\"ItemCode\" as varchar(20))as \"ItemCode\", cast(d.\"Quantity\" as int)as pendingQuantity, ");
-        sb.append(" ifnull(cast((select t.\"Attr2Val\" from (select cast(u.\"Attr2Val\" as varchar(10))as \"Attr2Val\",row_number() over(partition by s.\"ItemCode\" order by cast(u.\"Attr2Val\" as varchar(10)),cast(u.\"Attr3Val\" as int))as \"fila\" ");
-        sb.append(" from OIBQ s ");
-        sb.append(" inner join OBIN u on u.\"AbsEntry\"=s.\"BinAbs\" and u.\"SysBin\"='N' and u.\"Attr1Val\" in ('PICKING','STORAGE') ");
-        sb.append(" where s.\"WhsCode\"=d.\"WhsCode\" and s.\"OnHandQty\">0 and s.\"ItemCode\"=d.\"ItemCode\")as t where t.\"fila\"=1)as varchar(5)),'Z')as \"Vel\",");
-        sb.append(" ifnull(cast((select r.\"Attr3Val\" from (select cast(u.\"Attr3Val\" as int)as \"Attr3Val\",row_number() over(partition by s.\"ItemCode\" order by cast(u.\"Attr2Val\" as varchar(10)),cast(u.\"Attr3Val\" as int))as \"fila\" ");
-        sb.append(" from OIBQ s ");
-        sb.append(" inner join OBIN u on u.\"AbsEntry\"=s.\"BinAbs\" and u.\"SysBin\"='N' and u.\"Attr1Val\" in ('PICKING','STORAGE') ");
-        sb.append(" where s.\"WhsCode\"=d.\"WhsCode\" and s.\"OnHandQty\">0 and s.\"ItemCode\"=d.\"ItemCode\")as r where r.\"fila\"=1)as int),'999999')as \"Sec\" ");
-        sb.append("from ORDR o ");
-        sb.append("inner join RDR1 d on d.\"DocEntry\"=o.\"DocEntry\" and d.\"Quantity\">0 ");
-        sb.append("where o.\"DocStatus\"='O' and d.\"LineStatus\"='O' and o.\"DocNum\"=");
-        sb.append(orderNumber);
-        sb.append(" order by \"Vel\",\"Sec\"");
+        if (schemaName.contains("REDPLAS")) {
+            sb.append("select t.itemCodeFather as \"ItemCode\",t.quantity as \"pendingQuantity\",t.velocidad as \"Vel\",t.secuencia as \"Sec\" ");
+            sb.append("from (");
+            sb.append(" select cast(d.\"ItemCode\" as varchar(20))as itemCodeFather,cast(d.\"Quantity\" as int)as quantity,cast(u.\"Attr2Val\" as varchar(5))as velocidad,cast(u.\"Attr3Val\" as int)as secuencia ");
+            sb.append(" from ORDR o ");
+            sb.append(" inner join RDR1 d on d.\"DocEntry\"=o.\"DocEntry\" and d.\"LineStatus\"='O' ");
+            sb.append(" inner join OITM a on a.\"ItemCode\"=d.\"ItemCode\" and a.\"DataSource\"='O' ");
+            sb.append(" inner join OIBQ s on s.\"ItemCode\"=d.\"ItemCode\" and s.\"WhsCode\"='01' and s.\"OnHandQty\">0 ");
+            sb.append(" inner join OBIN u on u.\"AbsEntry\"=s.\"BinAbs\" and u.\"SysBin\"='N' and u.\"Attr1Val\" in ('PICKING','STORAGE') ");
+            sb.append(" where o.\"DocNum\"=");
+            sb.append(orderNumber);
+            sb.append(" union all ");
+            sb.append(" select cast(t.\"Code\" as varchar(20))as itemCodeFather,cast(t.\"Quantity\" as int)as quantity,cast(u.\"Attr2Val\" as varchar(5))as velocidad,cast(u.\"Attr3Val\" as int)as secuencia ");
+            sb.append(" from ORDR o ");
+            sb.append(" inner join RDR1 d on d.\"DocEntry\"=o.\"DocEntry\" and d.\"LineStatus\"='O' ");
+            sb.append(" inner join OITT h on d.\"ItemCode\"=h.\"Code\" ");
+            sb.append(" inner join ITT1 t on h.\"Code\"=t.\"Father\" ");
+            sb.append(" inner join OITM i on h.\"Code\"=i.\"ItemCode\" and i.\"DataSource\"='I' ");
+            sb.append(" inner join OITM c on t.\"Code\"=c.\"ItemCode\" ");
+            sb.append(" inner join OIBQ s on s.\"ItemCode\"=t.\"Code\" and s.\"WhsCode\"='01' and s.\"OnHandQty\">0 ");
+            sb.append(" inner join OBIN u on u.\"AbsEntry\"=s.\"BinAbs\" and u.\"SysBin\"='N' and u.\"Attr1Val\" in ('PICKING','STORAGE') ");
+            sb.append(" where o.\"DocNum\"=");
+            sb.append(orderNumber);
+            sb.append(")as t ");
+            sb.append("order by \"Vel\",\"Sec\"");
+        } else {
+            sb.append("select cast(d.\"ItemCode\" as varchar(20))as \"ItemCode\", cast(d.\"Quantity\" as int)as pendingQuantity, ");
+            sb.append(" ifnull(cast((select t.\"Attr2Val\" from (select cast(u.\"Attr2Val\" as varchar(10))as \"Attr2Val\",row_number() over(partition by s.\"ItemCode\" order by cast(u.\"Attr2Val\" as varchar(10)),cast(u.\"Attr3Val\" as int))as \"fila\" ");
+            sb.append(" from OIBQ s ");
+            sb.append(" inner join OBIN u on u.\"AbsEntry\"=s.\"BinAbs\" and u.\"SysBin\"='N' and u.\"Attr1Val\" in ('PICKING','STORAGE') ");
+            sb.append(" where s.\"WhsCode\"=d.\"WhsCode\" and s.\"OnHandQty\">0 and s.\"ItemCode\"=d.\"ItemCode\")as t where t.\"fila\"=1)as varchar(5)),'Z')as \"Vel\",");
+            sb.append(" ifnull(cast((select r.\"Attr3Val\" from (select cast(u.\"Attr3Val\" as int)as \"Attr3Val\",row_number() over(partition by s.\"ItemCode\" order by cast(u.\"Attr2Val\" as varchar(10)),cast(u.\"Attr3Val\" as int))as \"fila\" ");
+            sb.append(" from OIBQ s ");
+            sb.append(" inner join OBIN u on u.\"AbsEntry\"=s.\"BinAbs\" and u.\"SysBin\"='N' and u.\"Attr1Val\" in ('PICKING','STORAGE') ");
+            sb.append(" where s.\"WhsCode\"=d.\"WhsCode\" and s.\"OnHandQty\">0 and s.\"ItemCode\"=d.\"ItemCode\")as r where r.\"fila\"=1)as int),'999999')as \"Sec\" ");
+            sb.append("from ORDR o ");
+            sb.append("inner join RDR1 d on d.\"DocEntry\"=o.\"DocEntry\" and d.\"Quantity\">0 ");
+            sb.append("where o.\"DocStatus\"='O' and d.\"LineStatus\"='O' and o.\"DocNum\"=");
+            sb.append(orderNumber);
+            sb.append(" order by \"Vel\",\"Sec\"");
+        }
         try {
             LinkedHashMap<String, Integer> results = new LinkedHashMap<>();
             List<Object[]> rows = (List<Object[]>) persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
