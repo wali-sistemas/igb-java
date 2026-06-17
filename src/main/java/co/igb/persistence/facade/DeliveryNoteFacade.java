@@ -100,7 +100,7 @@ public class DeliveryNoteFacade {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar la orden para la factura #[" + docNum.toString() + "]. ", e);
         }
-        return null;
+        return 0;
     }
 
     public Integer getDocNumInvoice(Integer orderNumber, String companyName, boolean testing) {
@@ -117,7 +117,7 @@ public class DeliveryNoteFacade {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando la factura desde la entrega. ", e);
         }
-        return null;
+        return 0;
     }
 
     public List<Object[]> listRecords(Integer docNum, String whsCode, String companyName, boolean testing) {
