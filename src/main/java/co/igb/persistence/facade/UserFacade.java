@@ -72,4 +72,18 @@ public class UserFacade {
         }
         return new ArrayList<>();
     }
+
+    public List<User> listAllUsersOfCompany(String companyName, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<User> cq = cb.createQuery(User.class);
+        Root<User> root = cq.from(User.class);
+        cq.select(root).where(cb.equal(root.get(User_.companyName), companyName));
+        try {
+            return em.createQuery(cq).getResultList();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error listando todos los usuarios registrados en la empresa " + companyName, e);
+        }
+        return new ArrayList<>();
+    }
 }

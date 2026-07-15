@@ -214,7 +214,8 @@ public class SalesOrderFacade {
         sb.append(" cast((select sum(det.\"Quantity\") from RDR1 det where det.\"DocEntry\"=enc.\"DocEntry\" and det.\"LineStatus\"='O')as int)as qty, ");
         sb.append(" ifnull(cast(tt.\"U_PORC_FLE_CLIE\" as numeric(4,2)),0)as porcFlete,cast(pg.\"PymntGroup\" as varchar(20))as condPayment, ");
         sb.append(" (select cast(m.\"Name\" as varchar(30)) from OITM t inner join \"@MARCAS\" m on m.\"Code\"=t.\"U_Marca\" where t.\"ItemCode\"=det.\"ItemCode\")as marca, ");
-        sb.append(" case when \"Dscription\" like 'COMBO%' then 'COMBO' else 'NO' end as promotion ");
+        sb.append(" case when \"Dscription\" like 'COMBO%' then 'COMBO' else 'NO' end as promotion, ");
+        sb.append(" cast(case when (select \"GroupCode\" from OCRD c where c.\"CardCode\"=enc.\"CardCode\")=114 then 'TALLERES' else 'DISTRIBUIDOR' end as varchar(20))as groupCode ");
         sb.append("from ORDR enc ");
         sb.append("inner join RDR1 det on det.\"DocEntry\"=enc.\"DocEntry\" and det.\"WhsCode\" in ('05','26','35','45','60') ");
         sb.append("inner join RDR12 lg on lg.\"DocEntry\"=enc.\"DocEntry\" ");
@@ -246,6 +247,7 @@ public class SalesOrderFacade {
                 order.setCondPayment((String) row[14]);
                 order.setMarca((String) row[15]);
                 order.setPromotion((String) row[16]);
+                order.setGroupCardCode((String) row[17]);
 
                 orders.add(order);
             }
