@@ -39,13 +39,13 @@ public class SalesOrdersREST implements Serializable {
     private static final Logger CONSOLE = Logger.getLogger(SalesOrdersREST.class.getSimpleName());
 
     @EJB
-    private SalesOrderFacade soFacade;
+    private SalesOrderFacade salesOrderFacade;
     @EJB
-    private AssignedOrderFacade aoFacade;
+    private AssignedOrderFacade assignedOrderFacade;
     @EJB
     private PickingRecordFacade pickingRecordFacade;
     @EJB
-    private PackingOrderFacade poFacade;
+    private PackingOrderFacade packingOrderFacade;
     @EJB
     private CustomerFacade customerFacade;
     @Inject
@@ -63,9 +63,9 @@ public class SalesOrdersREST implements Serializable {
         CONSOLE.log(Level.INFO, "Listando ordenes abiertas. mostrar no autorizadas? {0}", showAll);
         CONSOLE.log(Level.INFO, "en pruebas? {0}", pruebas);
         try {
-            List<SalesOrderDTO> orders = soFacade.findOpenOrders(showAll, filterGroup, companyName, pruebas, warehouseCode);
-            List<AssignedOrder> assignations = aoFacade.listOpenAssignations(companyName, pruebas);
-            List<AssignedOrder> closedAssignations = aoFacade.listClosedAssignations(companyName, pruebas);
+            List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(showAll, filterGroup, companyName, pruebas, warehouseCode);
+            List<AssignedOrder> assignations = assignedOrderFacade.listOpenAssignations(companyName, pruebas);
+            List<AssignedOrder> closedAssignations = assignedOrderFacade.listClosedAssignations(companyName, pruebas);
             CONSOLE.log(Level.INFO, "{0} ordenes abiertas encontradas...", orders.size());
 
             for (AssignedOrder assignation : closedAssignations) {
@@ -106,7 +106,7 @@ public class SalesOrdersREST implements Serializable {
                                          @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                          @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Listando ordenes abiertas de magnun cali-cartagena ");
-        return Response.ok(soFacade.findOpenOrdersMagnum(companyName, warehouseCode, pruebas)).build();
+        return Response.ok(salesOrderFacade.findOpenOrdersMagnum(companyName, warehouseCode, pruebas)).build();
     }
 
     @POST
@@ -120,14 +120,14 @@ public class SalesOrdersREST implements Serializable {
         CONSOLE.log(Level.INFO, "Asignando ordenes para picking. {0}", dto);
         boolean allAssigned = true;
         for (String[] orderId : dto.getOrders()) {
-            AssignedOrder assignation = aoFacade.findByOrderNumber(Integer.parseInt(orderId[0]), companyName, pruebas);
+            AssignedOrder assignation = assignedOrderFacade.findByOrderNumber(Integer.parseInt(orderId[0]), companyName, pruebas);
             if (assignation != null) {
                 //Reassign
                 assignation.setDateAssigned(new Date());
                 assignation.setAssignedBy(dto.getAssignedBy());
                 assignation.setEmpId(dto.getEmployeeId());
                 try {
-                    aoFacade.edit(assignation, companyName, pruebas);
+                    assignedOrderFacade.edit(assignation, companyName, pruebas);
                 } catch (Exception e) {
                     allAssigned = false;
                     CONSOLE.log(Level.SEVERE, "Ocurrio un error al reasignar la orden " + Arrays.toString(orderId) + " al empleado " + dto.getEmployeeId(), e);
@@ -153,7 +153,7 @@ public class SalesOrdersREST implements Serializable {
                 entity.setCompany(companyName);
 
                 try {
-                    aoFacade.create(entity, companyName, pruebas);
+                    assignedOrderFacade.create(entity, companyName, pruebas);
                 } catch (Exception e) {
                     allAssigned = false;
                     CONSOLE.log(Level.SEVERE, "Ocurrio un error al asignar la orden " + Arrays.toString(orderId) + " al empleado " + dto.getEmployeeId(), e);
@@ -178,7 +178,7 @@ public class SalesOrdersREST implements Serializable {
         if (companyName == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "No se especificó la empresa")).build();
         }
-        List<AssignedOrder> assignations = aoFacade.listOpenAssignationsByUserAndCompany(username, null, companyName, pruebas);
+        List<AssignedOrder> assignations = assignedOrderFacade.listOpenAssignationsByUserAndCompany(username, null, companyName, pruebas);
         if (assignations == null || assignations.isEmpty()) {
             return Response.ok(new ResponseDTO(-1, "No se encontraron asignaciones para el usuario")).build();
         }
@@ -186,7 +186,7 @@ public class SalesOrdersREST implements Serializable {
         for (AssignedOrder order : assignations) {
             orderIds.add(order.getOrderNumber());
         }
-        return Response.ok(new ResponseDTO(0, soFacade.findOrdersById(orderIds, companyName, pruebas))).build();
+        return Response.ok(new ResponseDTO(0, salesOrderFacade.findOrdersById(orderIds, companyName, pruebas))).build();
     }
 
     @GET
@@ -200,7 +200,7 @@ public class SalesOrdersREST implements Serializable {
             @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Validando saldo disponible para orden: {0}", orderNumber);
 
-        List<Object[]> data = soFacade.listRemainingStock(orderNumber, warehouseCode, companyName, pruebas);
+        List<Object[]> data = salesOrderFacade.listRemainingStock(orderNumber, warehouseCode, companyName, pruebas);
         if (data.isEmpty()) {
             return Response.ok(new ResponseDTO(-1, "No se pudo ejecutar la consulta. ")).build();
         } else {
@@ -217,7 +217,7 @@ public class SalesOrdersREST implements Serializable {
                                       @HeaderParam("X-Company-Name") String companyName,
                                       @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Habilitando asignacion de picking para orden: {0}", orderNumber);
-        boolean success = aoFacade.enablePicking(orderNumber, companyName, pruebas);
+        boolean success = assignedOrderFacade.enablePicking(orderNumber, companyName, pruebas);
         return Response.ok(new ResponseDTO(success ? 0 : -1, null)).build();
     }
 
@@ -233,7 +233,7 @@ public class SalesOrdersREST implements Serializable {
             return Response.ok(new ResponseDTO(-1, "Sin datos para des-asignar la orden.")).build();
         }
         CONSOLE.log(Level.INFO, "Des-asignando orden [" + orderNumber + ']');
-        return Response.ok(new ResponseDTO(aoFacade.deleteAssignedOrder(orderNumber, companyName, pruebas) ? 0 : 1, null)).build();
+        return Response.ok(new ResponseDTO(assignedOrderFacade.deleteAssignedOrder(orderNumber, companyName, pruebas) ? 0 : 1, null)).build();
     }
 
     @GET
@@ -243,7 +243,7 @@ public class SalesOrdersREST implements Serializable {
     public Response validateOrderAuthorized(@PathParam("orderNumber") String order,
                                             @HeaderParam("X-Company-Name") String companyName,
                                             @HeaderParam("X-Pruebas") boolean pruebas) {
-        return Response.ok(soFacade.validateOrderAuthorized(order, companyName, pruebas)).build();
+        return Response.ok(salesOrderFacade.validateOrderAuthorized(order, companyName, pruebas)).build();
     }
 
     @GET
@@ -254,7 +254,7 @@ public class SalesOrdersREST implements Serializable {
                                             @HeaderParam("X-Pruebas") boolean pruebas) {
         CONSOLE.log(Level.INFO, "Listando ordenes para alistamiento en {0}", companyName);
 
-        List<Object[]> objs = soFacade.listOrdersForEnlistment(companyName, pruebas);
+        List<Object[]> objs = salesOrderFacade.listOrdersForEnlistment(companyName, pruebas);
         if (objs.isEmpty()) {
             CONSOLE.log(Level.WARNING, "No se encontraron ordenes para alistamiento en {0}", companyName);
             return Response.ok(new ResponseDTO(-1, "No se encontraron ordenes para alistamiento.")).build();
@@ -287,6 +287,16 @@ public class SalesOrdersREST implements Serializable {
         return Response.ok(new ResponseDTO(0, orderEnlistmentDTO)).build();
     }
 
+    @GET
+    @Path("detail-items-order/{orderNumber}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response getDetailItemsByOrder(@PathParam("orderNumber") Integer orderNumber,
+                                          @HeaderParam("X-Company-Name") String companyName,
+                                          @HeaderParam("X-Pruebas") boolean pruebas) {
+        return Response.ok(new ResponseDTO(0, salesOrderFacade.getDetailItemsOrder(orderNumber, companyName, pruebas))).build();
+    }
+
     @POST
     @Path("update-status-order")
     @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
@@ -311,7 +321,7 @@ public class SalesOrdersREST implements Serializable {
 
         for (String order : orders) {
             try {
-                soFacade.updateUserFieldApproveOrder(order, status, new SimpleDateFormat("dd/MM/yyyy HH:MM").format(new Date()) + "-" + userName + "[" + status + "] orden desde WALI", confirmed, companyName, pruebas);
+                salesOrderFacade.updateUserFieldApproveOrder(order, status, new SimpleDateFormat("dd/MM/yyyy HH:MM").format(new Date()) + "-" + userName + "[" + status + "] orden desde WALI", confirmed, companyName, pruebas);
             } catch (Exception e) {
                 CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando el estado [" + status + "] a la orden " + order + " en " + companyName);
                 return Response.ok(new ResponseDTO(-1, "Ocurrio un error actualizando el estado [" + status + "] a la orden " + order + " en " + companyName)).build();

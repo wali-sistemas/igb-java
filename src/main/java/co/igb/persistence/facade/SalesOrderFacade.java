@@ -314,31 +314,6 @@ public class SalesOrderFacade {
             sb.append(")) ");
         }
         sb.append("order by t.velocidad,t.secuencia");
-
-
-        /*sb.append("select cast(d.\"ItemCode\" as varchar(20)) itemCode, cast(d.\"OpenQty\" as int) openQuantity, cast(d.\"Quantity\" as int) quantity, ");
-        sb.append("cast(s.\"BinAbs\" as int) binAbs, cast(s.\"OnHandQty\" as int) available, cast(u.\"BinCode\" as varchar(50)) binCode, ");
-        sb.append("cast(d.\"Dscription\" as varchar(100)) itemName, cast(o.\"DocNum\" as int) orderNumber, ");
-        sb.append("cast(u.\"Attr2Val\" as varchar(5)) \"velocidad\", cast(u.\"Attr3Val\" as int) \"secuencia\", ");
-        sb.append("cast(u.\"Attr1Val\" as varchar(10)) binType ");
-        sb.append("from ORDR o inner join RDR1 d on d.\"DocEntry\" = o.\"DocEntry\" and d.\"LineStatus\" = 'O' ");
-        if (itemCodes != null && !itemCodes.isEmpty()) {
-            sb.append("and d.\"ItemCode\" in (");
-            for (String itemCode : itemCodes) {
-                sb.append("'");
-                sb.append(itemCode);
-                sb.append("',");
-            }
-            sb.deleteCharAt(sb.length() - 1);
-            sb.append(") ");
-        }
-        sb.append("inner join OIBQ s on s.\"ItemCode\" = d.\"ItemCode\" and s.\"WhsCode\" = '");
-        sb.append(warehouseCode);
-        sb.append("' and s.\"OnHandQty\" > 0 inner join OBIN u on u.\"AbsEntry\" = s.\"BinAbs\" and u.\"SysBin\" = 'N' ");
-        sb.append("and u.\"Attr1Val\" IN ('PICKING','STORAGE') where o.\"DocNum\" = ");
-        sb.append(orderNumber);
-        sb.append(" order by \"velocidad\", \"secuencia\" ");
-        CONSOLE.log(Level.FINE, sb.toString());*/
         try {
             return persistenceConf.chooseSchema(schemaName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
@@ -792,5 +767,22 @@ public class SalesOrderFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando los gastos de la orden " + docNum + " en " + companyName, e);
         }
         return null;
+    }
+
+    public List<Object[]> getDetailItemsOrder(Integer docNum, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(d.\"ItemCode\" as varchar(20))as itemCode,cast(d.\"Dscription\" as varchar(250))as dscription,cast(d.\"Quantity\" as int)as qty ");
+        sb.append("from ORDR e ");
+        sb.append("inner join RDR1 d on e.\"DocEntry\"=d.\"DocEntry\" ");
+        sb.append("where e.\"DocNum\"='");
+        sb.append(docNum);
+        sb.append("' ");
+        sb.append("order by d.\"ItemCode\" asc");
+        try {
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el detalle de items de la orden " + docNum + " en " + companyName, e);
+        }
+        return new ArrayList<>();
     }
 }
