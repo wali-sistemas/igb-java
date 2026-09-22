@@ -6,6 +6,7 @@ import co.igb.persistence.entity.ShippingOrder;
 import co.igb.persistence.facade.*;
 import co.igb.transportws.dto.aldia.GuiaAldiaResponseDTO;
 import co.igb.transportws.dto.coordinadora.GuiaCoordinadoraResponseDTO;
+import co.igb.transportws.dto.envia.GuiaEnviaResponseDTO;
 import co.igb.transportws.dto.exxe.GuiaExxeResponseDTO;
 import co.igb.transportws.dto.ola.GuiaOlaDTO;
 import co.igb.transportws.dto.ola.GuiaOlaResponseDTO;
@@ -69,6 +70,8 @@ public class ShippingREST implements Serializable {
     private AldiaEJB aldiaEJB;
     @EJB
     private ExxeEJB exxeEJB;
+    @EJB
+    private EnviaEJB enviaEJB;
 
     @GET
     @Path("list-transport")
@@ -497,6 +500,28 @@ public class ShippingREST implements Serializable {
         } else {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error creando la guia con la transportadora Exxe." + res.getMessage());
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error creando la guia con la transportadora Exxe. " + res.getMessage())).build();
+        }
+    }
+
+    @POST
+    @Path("add-guia-envia/{docnum}")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Response createGuiaEnvia(ApiEnviaDTO dto,
+                                    @PathParam("docnum") String docNum,
+                                    @HeaderParam("X-Company-Name") String companyName,
+                                    @HeaderParam("X-Employee") String username,
+                                    @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Iniciando creacion de guia con la transportadora Envia");
+
+        GuiaEnviaResponseDTO res = enviaEJB.createGuia(dto, companyName);
+        if (res.getGuia() != null) {
+            invoiceFacade.updateGuiaTransport(docNum, res.getGuia(), res.getUrlGuia(), username, dto.getNumUnidades(), dto.getValorDeclarado(), dto.getMpesorealK(), companyName, pruebas);
+            CONSOLE.log(Level.INFO, "Creacion exitosa de guia #{0} con la transportadora Envia", res.getGuia());
+            return Response.ok(new ResponseDTO(0, new Object[]{res.getGuia(), null})).build();
+        } else {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error creando la guia con la transportadora Envia.");
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error creando la guia con la transportadora Envia.")).build();
         }
     }
 }

@@ -31,9 +31,7 @@ public class GopackClient {
     }
 
     public LoginGoPackResponseDTO getToken(LoginGoPackDTO dto) {
-        return webTarget.path("")
-                .queryParam("api", "servicio.Seguridad.login")
-                .request(MediaType.APPLICATION_JSON)
+        return webTarget.path("").queryParam("api", "servicio.Seguridad.login").request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity(dto, MediaType.APPLICATION_JSON), LoginGoPackResponseDTO.class);
     }
 
@@ -41,10 +39,7 @@ public class GopackClient {
         MultivaluedMap<String, Object> headers = new MultivaluedHashMap<>();
         headers.add("Authorization", token);
 
-        return webTarget.path("")
-                .queryParam("api", "Servicio.RemesaCliente.getCrear")
-                .request(MediaType.APPLICATION_JSON)
-                .headers(headers)
+        return webTarget.path("").queryParam("api", "Servicio.RemesaCliente.getCrear").request(MediaType.APPLICATION_JSON).headers(headers)
                 .post(Entity.entity(dto, MediaType.APPLICATION_JSON), GuiaGoPackResponseDTO.class);
     }
 }

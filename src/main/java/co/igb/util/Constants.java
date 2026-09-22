@@ -107,4 +107,7 @@ public class Constants {
     public static final String EXXE_WS_URL = "exxe.api.url";
     public static final String IGB_EXXE_WS_USER = "igb.exxe.api.user";
     public static final String IGB_EXXE_WS_PASSWORD = "igb.exxe.api.password";
+    public static final String IGB_ENVIA_WS_URL = "envia.api.url";
+    public static final String IGB_ENVIA_WS_USER = "igb.envia.api.user";
+    public static final String IGB_ENVIA_WS_PASSWORD = "igb.envia.api.password";
 }

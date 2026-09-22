@@ -28,17 +28,13 @@ public class RapidoochoaClient {
     }
 
     public TokenRapidoochoaResponseDTO createToken(String token, String user, String password) {
-        return webTarget.path("wstiquetes/auth")
-                .queryParam("token", token)
-                .queryParam("user", user)
-                .queryParam("password", password)
-                .request(MediaType.APPLICATION_JSON).get(TokenRapidoochoaResponseDTO.class);
+        return webTarget.path("wstiquetes/auth").queryParam("token", token).queryParam("user", user).queryParam("password", password).request(MediaType.APPLICATION_JSON)
+                .get(TokenRapidoochoaResponseDTO.class);
     }
 
     public Boolean validateToken(String token) {
-        return webTarget.path("wstiquetes/validarToken")
-                .queryParam("token", token)
-                .request(MediaType.APPLICATION_JSON).get(Boolean.class);
+        return webTarget.path("wstiquetes/validarToken").queryParam("token", token).request(MediaType.APPLICATION_JSON)
+                .get(Boolean.class);
     }
 
     public GuiaRapidoochoaResponseDTO createGuia(GuiaRapidoochoaDTO dto, String token) {
