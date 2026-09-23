@@ -518,7 +518,7 @@ public class ShippingREST implements Serializable {
         if (res.getGuia() != null) {
             invoiceFacade.updateGuiaTransport(docNum, res.getGuia(), res.getUrlGuia(), username, dto.getNumUnidades(), dto.getValorDeclarado(), dto.getMpesorealK(), companyName, pruebas);
             CONSOLE.log(Level.INFO, "Creacion exitosa de guia #{0} con la transportadora Envia", res.getGuia());
-            return Response.ok(new ResponseDTO(0, new Object[]{res.getGuia(), null})).build();
+            return Response.ok(new ResponseDTO(0, new Object[]{res.getUrlGuia(), res.getUrlGuia()})).build();
         } else {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error creando la guia con la transportadora Envia.");
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error creando la guia con la transportadora Envia.")).build();
