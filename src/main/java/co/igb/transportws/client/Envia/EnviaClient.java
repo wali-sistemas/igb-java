@@ -32,7 +32,7 @@ public class EnviaClient {
         String credentials = username + ":" + password;
         String basicAuth = Base64.getEncoder().encodeToString(credentials.getBytes(StandardCharsets.UTF_8));
 
-        return webTarget.path("ServicioLiquidacionRESTpruebas/Service1.svc/Generacion/").request(MediaType.APPLICATION_JSON).header("Authorization", "Basic " + basicAuth)
+        return webTarget.path("ServicioLiquidacionREST/Service1.svc/Generacion/").request(MediaType.APPLICATION_JSON).header("Authorization", "Basic " + basicAuth)
                 .post(Entity.entity(dto, MediaType.APPLICATION_JSON), String.class);
     }
 }
