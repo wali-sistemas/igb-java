@@ -1,9 +1,9 @@
 package co.igb.rest;
 
-import co.igb.dto.AuthenticationResponseDTO;
-import co.igb.dto.ResponseDTO;
-import co.igb.dto.UserDTO;
+import co.igb.dto.*;
 import co.igb.ejb.IGBApplicationBean;
+import co.igb.ejb.EmailManager;
+import co.igb.ejb.PasswordRecoveryEJB;
 import co.igb.exception.IGBAuthenticationException;
 import co.igb.persistence.entity.User;
 import co.igb.persistence.facade.GroupAllowedFacade;
@@ -40,8 +40,12 @@ public class UserREST {
     private WarehouseFacade warehouseFacade;
     @Inject
     private IGBApplicationBean applicationBean;
+    @Inject
+    private EmailManager emailManager;
     @EJB
     private GroupAllowedFacade groupAllowedFacade;
+    @EJB
+    private PasswordRecoveryEJB passwordRecoveryEJB;
 
     @GET
     @Path("list/{groupName}")
@@ -265,6 +269,68 @@ public class UserREST {
         }
     }
 
+    @POST
+    @Path("recover-password/request-code")
+    @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response requestRecoveryCode(UserDTO dto) {
+        // Validar datos obligatorios
+        if (dto == null || dto.getUsername() == null || dto.getUsername().trim().isEmpty() || dto.getEmail() == null || dto.getEmail().trim().isEmpty()) {
+            return Response.ok(new ResponseDTO(-1, "Debe ingresar el usuario y el correo electrónico.")).build();
+        }
+        try {
+            String username = dto.getUsername().trim();
+            String email = dto.getEmail().trim();
+            // Consultar usuario en USERS
+            User userData = userFacade.find(username, null, false);
+            // Validar existencia del usuario
+            if (userData == null || userData.getEmail() == null || !userData.getEmail().trim().equalsIgnoreCase(email)) {
+                return Response.ok(new ResponseDTO(-1, "No fue posible validar los datos suministrados.")).build();
+            }
+            // Genera y almacena temporalmente el código durante 4 minutos
+            String recoveryCode = passwordRecoveryEJB.createCode(userData.getUsername(), userData.getEmail());
+            try {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", userData.getUsername());
+                params.put("recoveryCode", recoveryCode);
+                params.put("expirationMinutes", "4");
+                sendEmail("PasswordRecovery", "soporte@igbcolombia.com", "WALI - Código de recuperación de contraseña", userData.getEmail(),
+                        "", "", null, params);
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error enviando el codigo de recuperacion para el usuario " + userData.getUsername(), e);
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error enviando el codigo de recuperacion.")).build();
+            }
+            CONSOLE.log(Level.INFO, "Codigo de recuperacion enviado al usuario {0}", userData.getUsername());
+            return Response.ok(new ResponseDTO(0, "Codigo de recuperacion enviado correctamente.")).build();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error enviando el codigo de recuperacion.", e);
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error enviando el codigo de recuperacion.")).build();
+        }
+    }
+
+    @POST
+    @Path("recover-password/verify-code")
+    @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response verifyRecoveryCode(PasswordRecoveryDTO dto) {
+        if (dto == null || dto.getUsername() == null || dto.getUsername().trim().isEmpty() || dto.getEmail() == null || dto.getEmail().trim().isEmpty() || dto.getCode() == null || dto.getCode().trim().isEmpty()) {
+            return Response.ok(new ResponseDTO(-1, "Debe ingresar el codigo de recuperación.")).build();
+        }
+
+        try {
+            boolean valid = passwordRecoveryEJB.verifyCode(dto.getUsername().trim(), dto.getEmail().trim(), dto.getCode().trim());
+            if (!valid) {
+                return Response.ok(new ResponseDTO(-1, "El codigo es incorrecto o ha expirado.")).build();
+            }
+            return Response.ok(new ResponseDTO(0, "Código validado correctamente.")).build();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error validando el código de recuperación.", e);
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error validando el codigo de recuperacion.")).build();
+        }
+    }
+
     @PUT
     @Path("update-wali")
     @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -310,6 +376,46 @@ public class UserREST {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error modificado el usuario. ", e);
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error modificado el usuario.")).build();
+        }
+    }
+
+    @PUT
+    @Path("recover-password/change-password")
+    @Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+    public Response changeRecoveryPassword(PasswordRecoveryDTO dto) {
+        if (dto == null || dto.getUsername() == null || dto.getUsername().trim().isEmpty() || dto.getEmail() == null || dto.getEmail().trim().isEmpty() || dto.getCode() == null
+                || dto.getCode().trim().isEmpty() || dto.getNewPassword() == null || dto.getNewPassword().trim().isEmpty() || dto.getConfirmPassword() == null || dto.getConfirmPassword().trim().isEmpty()) {
+            return Response.ok(new ResponseDTO(-1, "No se enviaron todos los datos necesarios.")).build();
+        }
+        if (!dto.getNewPassword().equals(dto.getConfirmPassword())) {
+            return Response.ok(new ResponseDTO(-1, "Las contraseñas no coinciden.")).build();
+        }
+
+        try {
+            boolean verified = passwordRecoveryEJB.isVerified(dto.getUsername().trim(), dto.getEmail().trim(), dto.getCode().trim());
+            if (!verified) {
+                return Response.ok(new ResponseDTO(-1, "El codigo de recuperación no es válido o ha expirado.")).build();
+            }
+
+            User userData = userFacade.find(dto.getUsername().trim(), null, false);
+            if (userData == null) {
+                return Response.ok(new ResponseDTO(-1, "No fue posible actualizar la contraseña.")).build();
+            }
+            if (userData.getEmail() == null || !userData.getEmail().trim().equalsIgnoreCase(dto.getEmail().trim())) {
+                return Response.ok(new ResponseDTO(-1, "No fue posible actualizar la contraseña.")).build();
+            }
+
+            userData.setPassword(dto.getNewPassword());
+            userData.setLastUpdate(new Date());
+            userFacade.edit(userData, null, false);
+            passwordRecoveryEJB.remove(dto.getUsername(), dto.getEmail());
+
+            CONSOLE.log(Level.INFO, "Contraseña actualizada mediante recuperacion para el usuario {0}", dto.getUsername());
+            return Response.ok(new ResponseDTO(0, "Contraseña actualizada correctamente.")).build();
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error actualizando la contraseña.", e);
+            return Response.ok(new ResponseDTO(-1, "Ocurrio un error actualizando la contraseña.")).build();
         }
     }
 
@@ -381,5 +487,22 @@ public class UserREST {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al generar el token JWT. ", e);
         }
         return null;
+    }
+
+    private void sendEmail(String template, String from, String subject, String toAddress, String ccAddress, String bccAddress, List<String[]> adjuntos, Map<String, String> params) {
+        MailMessageDTO dtoMail = new MailMessageDTO();
+        dtoMail.setTemplateName(template);
+        dtoMail.setParams(params);
+        dtoMail.setAttachments(adjuntos);
+        dtoMail.setFrom(from);
+        dtoMail.setSubject(subject);
+        dtoMail.addToAddress(toAddress + ',' + ccAddress);
+        dtoMail.addBccAddress(bccAddress);
+        dtoMail.addBccAddress(ccAddress);
+        try {
+            emailManager.sendEmail(dtoMail);
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al enviar la notificacion. ", e);
+        }
     }
 }
