@@ -104,6 +104,9 @@ public class ZebraPrintREST {
             if (i == 1) {
                 label.setInfo1("-------------------");
                 label.setInfo2("CONTIENE FACTURA");
+            } else {
+                label.setInfo1("");
+                label.setInfo2("");
             }
             DocPrintJob job = printService.createPrintJob();
             Doc doc = new SimpleDoc(ZPLPrinter.getPrintData(label, companyName), DocFlavor.BYTE_ARRAY.AUTOSENSE, null);
@@ -232,8 +235,10 @@ public class ZebraPrintREST {
             if (i == 1) {
                 label.setInfo1("-------------------");
                 label.setInfo2("CONTIENE FACTURA");
+            } else {
+                label.setInfo1("");
+                label.setInfo2("");
             }
-
             //Se valida si la etiqueta es para motorepuesto, para generar una etiqueta personalizada
             if (orderData[6].equals("C900998242")) {
                 companyName = "velez";
