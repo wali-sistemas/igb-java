@@ -31,7 +31,6 @@ public class PickingRecordFacade {
     private PersistenceConf persistenceConf;
 
     public PickingRecordFacade() {
-
     }
 
     public void create(PickingRecord pickingRecord, String companyName, boolean testing) {
@@ -45,19 +44,15 @@ public class PickingRecordFacade {
         sb.append(" and company_name = '");
         sb.append(companyName);
         sb.append("' and expires is not null");
-
         try {
             return new TreeSet<String>(persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getResultList());
+        } catch (NoResultException ex) {
         } catch (Exception e) {
-            return new TreeSet<>();
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error listando los skipped items de la orden " + orderNumber + " en " + companyName, e);
         }
+        return new TreeSet<>();
     }
 
-    /**
-     * @param orderNumber
-     * @param companyName
-     * @return map with structure [itemcode->[bin->quantity]]
-     */
     public Map<String, Map<Long, Integer>> listPickedItems(Integer orderNumber, Boolean excludeTemporary, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select item_code, quantity, bin_to from picking_record where order_number = ");
@@ -68,7 +63,6 @@ public class PickingRecordFacade {
         sb.append(" and company_name = '");
         sb.append(companyName);
         sb.append("'");
-        CONSOLE.log(Level.FINE, sb.toString());
         try {
             Map<String, Map<Long, Integer>> pickedItems = new HashMap<>();
             List<Object[]> results = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getResultList();
@@ -95,6 +89,54 @@ public class PickingRecordFacade {
         return null;
     }
 
+    public Map<Map<String, String>, Map<Long, Integer>> listPickedItemsRedplas(Integer orderNumber, Boolean excludeTemporary, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select item_code, quantity, bin_to, item_code_father from picking_record where order_number = ");
+        sb.append(orderNumber);
+        if (excludeTemporary) {
+            sb.append(" and expires is null ");
+        }
+        sb.append(" and company_name = '");
+        sb.append(companyName);
+        sb.append("'");
+        try {
+            Map<Map<String, String>, Map<Long, Integer>> pickedItems = new HashMap<>();
+            List<Object[]> results = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getResultList();
+            for (Object[] row : results) {
+                Map<String, String> mapItem = new HashMap<>();
+                String itemCode = (String) row[0];
+                Integer quantity = (Integer) row[1];
+                Long binAbs = ((Integer) row[2]).longValue();
+                String itemCodeFather = (String) row[3];
+
+                mapItem.put(itemCode, itemCodeFather);
+
+                Map<Long, Integer> bins = new HashMap<>();
+
+                if (companyName.contains("REDPLAS")) {
+                    bins = pickedItems.get(mapItem);
+                } else {
+                    bins = pickedItems.get(itemCode);
+                }
+
+                if (bins == null) {
+                    bins = new HashMap<>();
+                    bins.put(binAbs, quantity);
+                } else if (!bins.containsKey(binAbs)) {
+                    bins.put(binAbs, quantity);
+                } else {
+                    bins.put(binAbs, bins.get(binAbs) + quantity);
+                }
+                pickedItems.put(mapItem, bins);
+            }
+            return pickedItems;
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "There was an error loading already picked items. ", e);
+        }
+        return null;
+    }
+
     public List<Integer> listPickingsRecords(String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT DISTINCT order_number AS order_number FROM picking_record ");
@@ -106,7 +148,6 @@ public class PickingRecordFacade {
         }
         return null;
     }
-
 
     public List<PickingRecord> listPicking(Integer orderNumber, String companyName, boolean testing) {
         CriteriaBuilder cb = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).getCriteriaBuilder();

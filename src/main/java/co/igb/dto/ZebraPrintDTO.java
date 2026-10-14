@@ -17,11 +17,13 @@ public class ZebraPrintDTO {
     private String state;
     private String invoice;
     private String payment;
+    private String info1;
+    private String info2;
 
     public ZebraPrintDTO() {
     }
 
-    public ZebraPrintDTO(Integer boxNumber, Integer totalBoxes, String printerName, String packageTo, String carrier, String address, String salesOrderNumbers, String numAtCards, String employee, String city, String state, String invoice, String payment) {
+    public ZebraPrintDTO(Integer boxNumber, Integer totalBoxes, String printerName, String packageTo, String carrier, String address, String salesOrderNumbers, String numAtCards, String employee, String city, String state, String invoice, String payment, String info1, String info2) {
         this.boxNumber = boxNumber;
         this.totalBoxes = totalBoxes;
         this.printerName = printerName;
@@ -35,6 +37,8 @@ public class ZebraPrintDTO {
         this.state = state;
         this.invoice = invoice;
         this.payment = payment;
+        this.info1 = info1;
+        this.info2 = info2;
     }
 
     public void setAddress(String address) {
@@ -183,6 +187,22 @@ public class ZebraPrintDTO {
         this.payment = payment;
     }
 
+    public String getInfo1() {
+        return info1;
+    }
+
+    public void setInfo1(String info1) {
+        this.info1 = info1;
+    }
+
+    public String getInfo2() {
+        return info2;
+    }
+
+    public void setInfo2(String info2) {
+        this.info2 = info2;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -223,6 +243,10 @@ public class ZebraPrintDTO {
         sb.append(this.getInvoice());
         sb.append(", payment: ");
         sb.append(this.getPayment());
+        sb.append(", info1: ");
+        sb.append(this.getInfo1());
+        sb.append(", info2: ");
+        sb.append(this.getInfo2());
         sb.append("}");
         return sb.toString();
     }

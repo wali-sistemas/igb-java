@@ -213,18 +213,17 @@ public class StockTransferREST implements Serializable {
         //4. Validar y retornar
         if (docEntry > 0 || itemTransfer.getTemporary()) {
             //modificar la orden de venta por temas de unidad de empaque.
-            if (itemTransfer.getExpectedQuantity() != itemTransfer.getQuantity()) {
-                CONSOLE.log(Level.INFO, "La cantidad tomada ({0}) es diferente a la cantidad de la orden ({1}). Reajustando orden para acomodar nueva cantidad...",
-                        new Object[]{itemTransfer.getQuantity(), itemTransfer.getExpectedQuantity()});
+            /*if (itemTransfer.getExpectedQuantity() != itemTransfer.getQuantity()) {
+                CONSOLE.log(Level.INFO, "La cantidad tomada ({0}) es diferente a la cantidad de la orden ({1}). Reajustando orden para acomodar nueva cantidad...", new Object[]{itemTransfer.getQuantity(), itemTransfer.getExpectedQuantity()});
                 Integer orderDocEntry = salesOrderFacade.getOrderDocEntry(itemTransfer.getOrderNumber(), companyName, pruebas);
                 Long lineNumItem = salesOrderFacade.getLineNum(itemTransfer.getOrderNumber(), itemTransfer.getItemCode(), companyName, pruebas);
 
-                /*ResponseDTO res = salesOrderEJB.modifySalesOrderQuantity(companyName, orderDocEntry, lineNumItem, itemTransfer.getQuantity());
+                ResponseDTO res = salesOrderEJB.modifySalesOrderQuantity(companyName, orderDocEntry, lineNumItem, itemTransfer.getQuantity());
 
                 if (res.getCode() < 0) {
                     return Response.ok(new ResponseDTO(-1, "Ocurrio un error al modificar la cantidad de la orden #[" + orderDocEntry.toString() + "]")).build();
-                }*/
-            }
+                }
+            }*/
 
             try {
                 PickingRecord pickingRecord = new PickingRecord();
@@ -241,6 +240,9 @@ public class StockTransferREST implements Serializable {
                 pickingRecord.setTransactionDate(new Date());
                 pickingRecord.setStatus(PickingRecord.STATUS_PENDING);
                 pickingRecord.setCompanyName(companyName);
+                if (companyName.contains("REDPLAS")) {
+                    pickingRecord.setItemCodeFather(itemTransfer.getItemCodeFather().isEmpty() ? itemTransfer.getItemCode() : itemTransfer.getItemCodeFather());
+                }
                 if (itemTransfer.getTemporary()) {
                     GregorianCalendar cal = new GregorianCalendar();
                     cal.add(Calendar.MINUTE, Integer.parseInt(appBean.obtenerValorPropiedad(Constants.TEMPORARY_PICKING_TTL)));

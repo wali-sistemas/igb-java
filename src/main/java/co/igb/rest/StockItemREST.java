@@ -20,7 +20,6 @@ import java.util.logging.Logger;
 @Path("stockitem")
 public class StockItemREST implements Serializable {
     private static final Logger CONSOLE = Logger.getLogger(StockItemREST.class.getSimpleName());
-
     @EJB
     private ItemFacade itemFacade;
 

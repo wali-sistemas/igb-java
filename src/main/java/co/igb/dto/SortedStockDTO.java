@@ -3,7 +3,7 @@ package co.igb.dto;
 import java.util.Objects;
 
 /**
- * @author dbotero
+ * @author jguisao
  */
 public class SortedStockDTO implements Comparable<SortedStockDTO> {
     private String itemCode;
@@ -25,6 +25,20 @@ public class SortedStockDTO implements Comparable<SortedStockDTO> {
     }
 
     public SortedStockDTO(Object[] dbData) {
+        itemCode = (String) dbData[0];
+        openQuantity = ((Integer) dbData[1]).intValue();
+        quantity = ((Integer) dbData[2]).intValue();
+        binAbs = ((Integer) dbData[3]).longValue();
+        availableQuantity = ((Integer) dbData[4]).intValue();
+        binCode = (String) dbData[5];
+        itemName = (String) dbData[6];
+        orderNumber = ((Integer) dbData[7]).intValue();
+        velocity = (String) dbData[8];
+        sequence = (Integer) dbData[9];
+        binLocationType = (String) dbData[10];
+    }
+
+    public SortedStockDTO(Object[] dbData, String companyName) {
         itemCode = (String) dbData[0];
         openQuantity = ((Integer) dbData[1]).intValue();
         quantity = ((Integer) dbData[2]).intValue();

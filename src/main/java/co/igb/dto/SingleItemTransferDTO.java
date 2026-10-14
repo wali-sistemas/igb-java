@@ -3,11 +3,10 @@ package co.igb.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- * @author dbotero
+ * @author jguisao
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SingleItemTransferDTO {
-
     private Long binAbsFrom;
     private Long binAbsTo;
     private Integer quantity;
@@ -17,11 +16,12 @@ public class SingleItemTransferDTO {
     private String itemCode;
     private String warehouseCode;
     private Boolean temporary = false;
+    private String itemCodeFather;
 
     public SingleItemTransferDTO() {
     }
 
-    public SingleItemTransferDTO(Long binAbsFrom, Long binAbsTo, Integer quantity, Integer expectedQuantity, Integer orderNumber, String username, String itemCode, String warehouseCode, Boolean temporary) {
+    public SingleItemTransferDTO(Long binAbsFrom, Long binAbsTo, Integer quantity, Integer expectedQuantity, Integer orderNumber, String username, String itemCode, String warehouseCode, Boolean temporary, String itemCodeFather) {
         this.binAbsFrom = binAbsFrom;
         this.binAbsTo = binAbsTo;
         this.quantity = quantity;
@@ -31,6 +31,7 @@ public class SingleItemTransferDTO {
         this.itemCode = itemCode;
         this.warehouseCode = warehouseCode;
         this.temporary = temporary;
+        this.itemCodeFather = itemCodeFather;
     }
 
     public Long getBinAbsFrom() {
@@ -67,7 +68,6 @@ public class SingleItemTransferDTO {
         } else {
             this.itemCode = null;
         }
-
     }
 
     public String getWarehouseCode() {
@@ -110,8 +110,31 @@ public class SingleItemTransferDTO {
         this.temporary = temporary;
     }
 
+    public String getItemCodeFather() {
+        return itemCodeFather;
+    }
+
+    public void setItemCodeFather(String itemCodeFather) {
+        if (itemCodeFather != null) {
+            this.itemCodeFather = itemCodeFather.toUpperCase();
+        } else {
+            this.itemCodeFather = null;
+        }
+    }
+
     @Override
     public String toString() {
-        return "SingleItemTransferDTO{" + "binAbsFrom=" + binAbsFrom + ", binAbsTo=" + binAbsTo + ", quantity=" + quantity + ", expectedQuantity=" + expectedQuantity + ", orderNumber=" + orderNumber + ", username=" + username + ", itemCode=" + itemCode + ", warehouseCode=" + warehouseCode + ", temporary=" + temporary + '}';
+        return "SingleItemTransferDTO{" +
+                "binAbsFrom=" + binAbsFrom +
+                ", binAbsTo=" + binAbsTo +
+                ", quantity=" + quantity +
+                ", expectedQuantity=" + expectedQuantity +
+                ", orderNumber=" + orderNumber +
+                ", username='" + username + '\'' +
+                ", itemCode='" + itemCode + '\'' +
+                ", warehouseCode='" + warehouseCode + '\'' +
+                ", temporary=" + temporary +
+                ", itemCodeFather='" + itemCodeFather + '\'' +
+                '}';
     }
 }

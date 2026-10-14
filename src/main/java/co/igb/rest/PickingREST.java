@@ -27,7 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author dbotero
+ * @author jguisao
  */
 @Path("picking/v2")
 public class PickingREST implements Serializable {
@@ -61,11 +61,9 @@ public class PickingREST implements Serializable {
     public Response deleteTemporaryRecords(@HeaderParam("X-Company-Name") String companyName,
                                            @HeaderParam("X-Warehouse-Code") String warehouseCode,
                                            @HeaderParam("X-Pruebas") boolean pruebas) {
-        CONSOLE.log(Level.INFO, "Ejecutando proceso para eliminar registros de picking temporales. Empresa: {0}, Bodega: {1}",
-                new Object[]{companyName, warehouseCode});
+        CONSOLE.log(Level.INFO, "Ejecutando proceso para eliminar registros de picking temporales. Empresa: {0}, Bodega: {1}", new Object[]{companyName, warehouseCode});
         List<Object[]> records = prFacade.findTemporaryRecords(companyName, pruebas);
-        CONSOLE.log(Level.INFO, "Se encontraron {0} registros temporales para {1}-{2}",
-                new Object[]{records.size(), companyName, warehouseCode});
+        CONSOLE.log(Level.INFO, "Se encontraron {0} registros temporales para {1}-{2}", new Object[]{records.size(), companyName, warehouseCode});
         Date now = new Date();
         List<Integer> expiredRecords = new ArrayList<>();
         for (Object[] row : records) {
@@ -82,46 +80,82 @@ public class PickingREST implements Serializable {
         return Response.ok(new ResponseDTO(0, expiredRecords)).build();
     }
 
-    private boolean hasExpired(Date expires, Date now) {
-        return now.getTime() > expires.getTime();
-    }
-
-    private Object[] processPickingStatus(Integer orderNumber, Boolean excludeTemporary, String companyName, boolean pruebas) {
-        //consultar los items pickineados
-        Map<String, Map<Long, Integer>> pickedItems = prFacade.listPickedItems(orderNumber, excludeTemporary, companyName, pruebas);
-        //consultar los items pendientes por entregar de cada orden
-        LinkedHashMap<String, Integer> pendingItems = soFacade.listPendingItems(orderNumber, companyName, pruebas);
-
-        //validar que si retorne datos de las dos instancias
-        if (pickedItems.equals(null)) {
-            CONSOLE.log(Level.WARNING, "Ocurrio un error consultando los items pickineados instancia(MySQL)");
-            return null;
+    @GET
+    @Path("nextitem/redplas/{username}")
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response findNextItemToPickRedplas(@PathParam("username") String username,
+                                              @QueryParam("orderNumber") Integer orderNumber,
+                                              @HeaderParam("X-Company-Name") String companyName,
+                                              @HeaderParam("X-Warehouse-Code") String warehouseCode,
+                                              @HeaderParam("X-Pruebas") boolean pruebas) {
+        CONSOLE.log(Level.INFO, "Buscando siguiente item para packing para el usuario {0} ", username);
+        List<PickingWarningDTO> warnings = new ArrayList<>();
+        //buscar ordenes asignadas en estado open para el empleado en la empresa seleccionada
+        List<AssignedOrder> orders = aoFacade.listOpenAssignationsByUserAndCompany(username, orderNumber, companyName, pruebas);
+        //si no hay ordenes pendientes, mostrar alerta con mensaje de error
+        if (orders == null || orders.isEmpty()) {
+            CONSOLE.log(Level.WARNING, "No se encontraron ordenes de venta asignadas al usuario {0} en la empresa {1}", new Object[]{username, companyName});
+            return Response.ok(new ResponseDTO(-2, "El usuario no tiene órdenes de venta asignadas pendientes por picking")).build();
         }
-        if (pendingItems.equals(null)) {
-            CONSOLE.log(Level.WARNING, "Ocurrio un error consultando los items pendientes instancia(SAP)");
-            return null;
-        }
+        //boolean skippedItems = false;
+        LinkedHashSet<SortedStockDTO> sortedStock = new LinkedHashSet<>();
+        for (int i = 0; i < orders.size(); i++) {
+            AssignedOrder order = orders.get(i);
+            CONSOLE.log(Level.INFO, "Procesando nextPickingItem para orden {0}", order.toString());
+            //Integer orderDocEntry = soFacade.getOrderDocEntry(order.getOrderNumber(), companyName, pruebas);
+            Object[] pickingStatus = processPickingStatusRedplas(order.getOrderNumber(), false, companyName, pruebas);
+            //validar datos consultados de las dos instancias
+            if (pickingStatus.equals(null)) {
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error consultandos datos de alguna de las instancias(SAP-MySQL).")).build();
+            }
 
-        //si un item existe en la lista de picking pero no en la de pendientes, no se tiene en cuenta
-        for (int i = 0; i < pendingItems.keySet().size(); i++) {
-            String itemCode = (String) pendingItems.keySet().toArray()[i];
-            if (pickedItems.containsKey(itemCode)) {
-                int totalPicked = 0;
-                for (Long binAbs : pickedItems.get(itemCode).keySet()) {
-                    totalPicked += pickedItems.get(itemCode).get(binAbs);
+            HashMap<Map<String, String>, Integer> pendingItems = (HashMap<Map<String, String>, Integer>) pickingStatus[0];
+            HashMap<Map<String, String>, Map<Long, Integer>> pickedItems = (HashMap<Map<String, String>, Map<Long, Integer>>) pickingStatus[1];
+            //TreeSet<String> skipped = (TreeSet<String>) pickingStatus[2];
+
+            if (pendingItems == null || pendingItems.isEmpty()) {
+                CONSOLE.log(Level.WARNING, "La orden {0} no tiene items pendientes por despachar y se marca como cerrada. ", order.getOrderNumber());
+                /*try {
+                    closeAndPack(order, pickedItems, warehouseCode, companyName, pruebas);
+                } catch (Exception e) {
+                    CONSOLE.log(Level.SEVERE, "Ocurrio un error cerrando la orden " + order.getOrderNumber(), e);
+                    return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la orden " + order.getOrderNumber())).build();
+                }*/
+                continue;
+            }
+
+            LinkedHashMap<Map<String, String>, List<Object[]>> orderStock = soFacade.findOrdersStockAvailabilityRedplas(order.getOrderNumber(), warehouseCode, companyName, pruebas);
+            //quitamos los items que estan el pickedItems
+            for (Map.Entry<Map<String, String>, List<Object[]>> entry : orderStock.entrySet()) {
+                Map<String, String> item = entry.getKey();
+                List<Object[]> stockList = entry.getValue();
+
+                Map<Long, Integer> picked = pickedItems.get(item);
+
+                int orderQuantity = ((Number) stockList.get(0)[2]).intValue();
+                int pickedQuantity = picked == null ? 0 : picked.values().stream().mapToInt(Integer::intValue).sum();
+                int pendingQuantity = orderQuantity - pickedQuantity;
+
+                if (pendingQuantity <= 0) {
+                    continue;
                 }
-                Integer pending = pendingItems.get(itemCode);
-                if (pending != null && totalPicked >= pending) {
-                    pendingItems.remove(itemCode);
-                    i--;
-                } else if (pending != null) {
-                    pendingItems.put(itemCode, pending - totalPicked);
+
+                for (Object[] stock : stockList) {
+                    SortedStockDTO dto = new SortedStockDTO(stock, "REDPLAS");
+                    dto.setPendingQuantity(pendingQuantity);
+
+                    sortedStock.add(dto);
                 }
             }
         }
-
-        Set<String> skippedItems = prFacade.listSkippedItems(orderNumber, companyName, pruebas);
-        return new Object[]{pendingItems, pickedItems, skippedItems};
+        //seleccionar y retornar el siguiente item para picking
+        if (sortedStock.isEmpty()) {
+            return Response.ok(new ResponseDTO(-1, warnings)).build();
+        } else {
+            return Response.ok(new ResponseDTO(0, sortedStock)).build();
+        }
     }
 
     @GET
@@ -180,11 +214,9 @@ public class PickingREST implements Serializable {
 
             for (String pendingItemcode : pendingItems.keySet()) {
                 //Si no hay inventario y no se ha hecho picking para la referencia, la agrega a la lista de lineas para cerrar en la orden
-                if (!companyName.contains("REDPLAS")) {
-                    if (!availableStock.containsKey(pendingItemcode) && !pickedItems.containsKey(pendingItemcode)) {
-                        itemsMissing.add(pendingItemcode);
-                        continue;
-                    }
+                if (!availableStock.containsKey(pendingItemcode) && !pickedItems.containsKey(pendingItemcode)) {
+                    itemsMissing.add(pendingItemcode);
+                    continue;
                 }
                 //TODO: Pendiente al realizar las pruebas
                 /*if (!availableStock.containsKey(pendingItemcode) && pickedItems.containsKey(pendingItemcode)) {
@@ -251,37 +283,6 @@ public class PickingREST implements Serializable {
             //return Response.ok(new ResponseDTO(0, sortedStock.first())).build();
             return Response.ok(new ResponseDTO(0, sortedStock)).build();
         }
-    }
-
-    private HashMap<String, List<Object[]>> parseOrderAvailableStock(List<Object[]> stock) {
-        HashMap<String, List<Object[]>> availableStock = new HashMap<>();
-        for (Object[] row : stock) {
-            String itemcode = (String) row[0];
-            if (availableStock.containsKey(itemcode)) {
-                availableStock.get(itemcode).add(row);
-            } else {
-                List<Object[]> data = new ArrayList<>();
-                data.add(row);
-                availableStock.put(itemcode, data);
-            }
-        }
-        return availableStock;
-    }
-
-    private Integer getTotalPicked(Map<Long, Integer> picked) {
-        int sum = 0;
-        for (Integer quantity : picked.values()) {
-            sum += quantity;
-        }
-        return sum;
-    }
-
-    private BigDecimal getPriceItem(String itemcode, String companyName, boolean testing) {
-        return itemFacade.getItemPrice(itemcode, companyName, testing);
-    }
-
-    private boolean avoidBin(TreeSet<String> skippedItems, String itemCode, String binType, String binTypeToAvoid) {
-        return skippedItems != null && skippedItems.contains(itemCode) && binType != null && binType.equals(binTypeToAvoid);
     }
 
     @PUT
@@ -382,5 +383,123 @@ public class PickingREST implements Serializable {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el estado de la asignacion de picking. ", e);
         }
+    }
+
+    private Object[] processPickingStatus(Integer orderNumber, Boolean excludeTemporary, String companyName, boolean pruebas) {
+        //consultar los items pickineados
+        Map<String, Map<Long, Integer>> pickedItems = prFacade.listPickedItems(orderNumber, excludeTemporary, companyName, pruebas);
+        //consultar los items pendientes por entregar de cada orden
+        LinkedHashMap<String, Integer> pendingItems = soFacade.listPendingItems(orderNumber, companyName, pruebas);
+
+        //validar que si retorne datos de las dos instancias
+        if (pickedItems.equals(null)) {
+            CONSOLE.log(Level.WARNING, "Ocurrio un error consultando los items pickineados instancia(MySQL)");
+            return null;
+        }
+        if (pendingItems.equals(null)) {
+            CONSOLE.log(Level.WARNING, "Ocurrio un error consultando los items pendientes instancia(SAP)");
+            return null;
+        }
+
+        //si un item existe en la lista de picking pero no en la de pendientes, no se tiene en cuenta
+        for (int i = 0; i < pendingItems.keySet().size(); i++) {
+            String itemCode = (String) pendingItems.keySet().toArray()[i];
+            if (pickedItems.containsKey(itemCode)) {
+                int totalPicked = 0;
+                for (Long binAbs : pickedItems.get(itemCode).keySet()) {
+                    totalPicked += pickedItems.get(itemCode).get(binAbs);
+                }
+                Integer pending = pendingItems.get(itemCode);
+                if (pending != null && totalPicked >= pending) {
+                    pendingItems.remove(itemCode);
+                    i--;
+                } else if (pending != null) {
+                    pendingItems.put(itemCode, pending - totalPicked);
+                }
+            }
+        }
+
+        Set<String> skippedItems = prFacade.listSkippedItems(orderNumber, companyName, pruebas);
+        return new Object[]{pendingItems, pickedItems, skippedItems};
+    }
+
+    private Object[] processPickingStatusRedplas(Integer orderNumber, Boolean excludeTemporary, String companyName, boolean pruebas) {
+        // Consultar los items pickineados
+        Map<Map<String, String>, Map<Long, Integer>> pickedItems = prFacade.listPickedItemsRedplas(orderNumber, excludeTemporary, companyName, pruebas);
+        // Consultar los items pendientes por entregar
+        LinkedHashMap<Map<String, String>, Integer> pendingItems = soFacade.listPendingItemsRedplas(orderNumber, companyName, pruebas);
+        // Validar resultados
+        if (pickedItems == null) {
+            CONSOLE.log(Level.WARNING, "Ocurrio un error consultando los items pickineados instancia(MySQL)");
+            return null;
+        }
+        if (pendingItems == null) {
+            CONSOLE.log(Level.WARNING, "Ocurrio un error consultando los items pendientes instancia(SAP)");
+            return null;
+        }
+
+        Iterator<Map.Entry<Map<String, String>, Integer>> iterator = pendingItems.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Map<String, String>, Integer> pendingEntry = iterator.next();
+            Map<String, String> item = pendingEntry.getKey();
+            Integer pendingQuantity = pendingEntry.getValue();
+            // Buscar exactamente la misma combinación: itemCode + itemCodeFather
+            Map<Long, Integer> pickedBins = pickedItems.get(item);
+            if (pickedBins == null) {
+                continue;
+            }
+
+            int totalPicked = 0;
+            for (Integer quantity : pickedBins.values()) {
+                if (quantity != null) {
+                    totalPicked += quantity;
+                }
+            }
+            // Si ya se pickineó toda la cantidad pendiente, retirar el item de pendientes
+            if (totalPicked >= pendingQuantity) {
+                iterator.remove();
+            } else if (totalPicked > 0) {
+                // Si se pickineó parcialmente, actualizar la cantidad restante
+                pendingEntry.setValue(pendingQuantity - totalPicked);
+            }
+        }
+        Set<String> skippedItems = prFacade.listSkippedItems(orderNumber, companyName, pruebas);
+        return new Object[]{pendingItems, pickedItems, skippedItems};
+    }
+
+    private boolean hasExpired(Date expires, Date now) {
+        return now.getTime() > expires.getTime();
+    }
+
+    private HashMap<String, List<Object[]>> parseOrderAvailableStock(List<Object[]> stock) {
+        HashMap<String, List<Object[]>> availableStock = new HashMap<>();
+        for (Object[] row : stock) {
+            String itemcode = (String) row[0];
+            if (availableStock.containsKey(itemcode)) {
+                availableStock.get(itemcode).add(row);
+            } else {
+                List<Object[]> data = new ArrayList<>();
+                data.add(row);
+                availableStock.put(itemcode, data);
+            }
+        }
+        return availableStock;
+    }
+
+    private Integer getTotalPicked(Map<Long, Integer> picked) {
+        int sum = 0;
+        for (Integer quantity : picked.values()) {
+            sum += quantity;
+        }
+        return sum;
+    }
+
+    private BigDecimal getPriceItem(String itemcode, String companyName, boolean testing) {
+        return itemFacade.getItemPrice(itemcode, companyName, testing);
+    }
+
+    private boolean avoidBin(TreeSet<String> skippedItems, String itemCode, String binType, String
+            binTypeToAvoid) {
+        return skippedItems != null && skippedItems.contains(itemCode) && binType != null && binType.equals(binTypeToAvoid);
     }
 }

@@ -31,12 +31,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author dbotero
+ * @author jguisao
  */
 @Stateless
 @Path("print")
 public class ZebraPrintREST {
-
     private static final Logger CONSOLE = Logger.getLogger(ZebraPrintREST.class.getSimpleName());
     @EJB
     private PackingListRecordFacade plFacade;
@@ -102,7 +101,10 @@ public class ZebraPrintREST {
             label.setState((String) orderData[4]);
             label.setInvoice(invoice.toString());
             label.setPayment((String) orderData[5]);
-
+            if (i == 1) {
+                label.setInfo1("-------------------");
+                label.setInfo2("CONTIENE FACTURA");
+            }
             DocPrintJob job = printService.createPrintJob();
             Doc doc = new SimpleDoc(ZPLPrinter.getPrintData(label, companyName), DocFlavor.BYTE_ARRAY.AUTOSENSE, null);
             try {

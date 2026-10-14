@@ -13,7 +13,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 
 /**
- * @author dbotero
+ * @author jguisao
  */
 public class ZPLPrinter {
     private static final Logger CONSOLE = Logger.getLogger(ZPLPrinter.class.getSimpleName());
@@ -41,6 +41,8 @@ public class ZPLPrinter {
             context.put("city", dto.getCity() + '-' + dto.getState());
             context.put("container", dto.getInvoice() + '|' + String.format("%3d", dto.getBoxNumber()));
             context.put("payment", dto.getPayment());
+            context.put("info1", dto.getInfo1());
+            context.put("info2", dto.getInfo2());
 
             StringWriter writer = new StringWriter();
             Velocity.evaluate(context, writer, "TemplateName", templateText);

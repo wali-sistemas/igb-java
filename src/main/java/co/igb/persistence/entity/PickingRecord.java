@@ -14,12 +14,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * @author dbotero
+ * @author jguisao
  */
 @Entity
 @Table(name = "picking_record")
 public class PickingRecord implements Serializable {
-
     public static final String STATUS_PENDING = "P";
     public static final String STATUS_DONE = "D";
     private static final long serialVersionUID = 1L;
@@ -68,6 +67,8 @@ public class PickingRecord implements Serializable {
     private Date expires;
     @Column(name = "company_name")
     private String companyName;
+    @Column(name = "item_code_father")
+    private String itemCodeFather;
 
     public PickingRecord() {
     }
@@ -184,6 +185,14 @@ public class PickingRecord implements Serializable {
         this.binNameTo = binNameTo;
     }
 
+    public String getItemCodeFather() {
+        return itemCodeFather;
+    }
+
+    public void setItemCodeFather(String itemCodeFather) {
+        this.itemCodeFather = itemCodeFather;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -226,6 +235,7 @@ public class PickingRecord implements Serializable {
                 ", status='" + status + '\'' +
                 ", expires=" + expires +
                 ", companyName='" + companyName + '\'' +
+                ", itemCodeFather='" + itemCodeFather + '\'' +
                 '}';
     }
 }
