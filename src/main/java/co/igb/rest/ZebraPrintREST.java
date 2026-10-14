@@ -229,6 +229,10 @@ public class ZebraPrintREST {
             label.setState((String) orderData[4]);
             label.setInvoice(invoice.toString());
             label.setPayment((String) orderData[5]);
+            if (i == 1) {
+                label.setInfo1("-------------------");
+                label.setInfo2("CONTIENE FACTURA");
+            }
 
             //Se valida si la etiqueta es para motorepuesto, para generar una etiqueta personalizada
             if (orderData[6].equals("C900998242")) {
