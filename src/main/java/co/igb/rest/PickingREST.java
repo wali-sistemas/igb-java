@@ -101,8 +101,10 @@ public class PickingREST implements Serializable {
         }
         //boolean skippedItems = false;
         LinkedHashSet<SortedStockDTO> sortedStock = new LinkedHashSet<>();
+        HashMap<Map<String, String>, Map<Long, Integer>> pickedItems = new HashMap<>();
+        AssignedOrder order = new AssignedOrder();
         for (int i = 0; i < orders.size(); i++) {
-            AssignedOrder order = orders.get(i);
+            order = orders.get(i);
             CONSOLE.log(Level.INFO, "Procesando nextPickingItem para orden {0}", order.toString());
             //Integer orderDocEntry = soFacade.getOrderDocEntry(order.getOrderNumber(), companyName, pruebas);
             Object[] pickingStatus = processPickingStatusRedplas(order.getOrderNumber(), false, companyName, pruebas);
@@ -112,7 +114,7 @@ public class PickingREST implements Serializable {
             }
 
             HashMap<Map<String, String>, Integer> pendingItems = (HashMap<Map<String, String>, Integer>) pickingStatus[0];
-            HashMap<Map<String, String>, Map<Long, Integer>> pickedItems = (HashMap<Map<String, String>, Map<Long, Integer>>) pickingStatus[1];
+            pickedItems = (HashMap<Map<String, String>, Map<Long, Integer>>) pickingStatus[1];
             //TreeSet<String> skipped = (TreeSet<String>) pickingStatus[2];
 
             if (pendingItems == null || pendingItems.isEmpty()) {
@@ -152,10 +154,28 @@ public class PickingREST implements Serializable {
         }
         //seleccionar y retornar el siguiente item para picking
         if (sortedStock.isEmpty()) {
+            try {
+                closeAndPackRedPlas(order, pickedItems, warehouseCode, companyName, pruebas);
+            } catch (Exception e) {
+                CONSOLE.log(Level.SEVERE, "Ocurrio un error cerrando la orden " + orderNumber, e);
+                return Response.ok(new ResponseDTO(-1, "Ocurrio un error cerrando la orden " + orderNumber)).build();
+            }
             return Response.ok(new ResponseDTO(-1, warnings)).build();
         } else {
             return Response.ok(new ResponseDTO(0, sortedStock)).build();
         }
+    }
+
+    @GET
+    @Path("checkother-locations/redplas/{docnum}/{itemcode}")
+    @Consumes({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response checkOtherLocationsByItemAndOrder(@PathParam("itemcode") String ItemCode,
+                                                      @PathParam("docnum") Integer docNum,
+                                                      @HeaderParam("X-Company-Name") String companyName,
+                                                      @HeaderParam("X-Warehouse-Code") String warehouseCode,
+                                                      @HeaderParam("X-Pruebas") boolean testing) {
+        return Response.ok(soFacade.getCheckOtherLocationsByItemAndOrderRedplas(docNum, ItemCode, warehouseCode, companyName, testing)).build();
     }
 
     @GET
@@ -337,6 +357,58 @@ public class PickingREST implements Serializable {
             }
         }
         return Response.ok(new ResponseDTO(0, "")).build();
+    }
+
+    private void closeAndPackRedPlas(AssignedOrder order, HashMap<Map<String, String>, Map<Long, Integer>> pickedItems, String warehouseCode, String companyName, boolean pruebas) {
+        try {
+            HashMap<Long, String[]> bins = new HashMap<>();
+            PackingOrder packingOrder = new PackingOrder();
+            packingOrder.setCustomerId(order.getCustomerId());
+            packingOrder.setCustomerName(order.getCustomerName());
+            packingOrder.setOrderNumber(order.getOrderNumber());
+            packingOrder.setStatus(Constants.STATUS_OPEN);
+            packingOrder.setCompanyName(companyName);
+            packingOrder.setWarehouseCode(warehouseCode);
+
+            for (Map.Entry<Map<String, String>, Map<Long, Integer>> entry : pickedItems.entrySet()) {
+                Map<String, String> itemData = entry.getKey();
+                Map<Long, Integer> itemBins = entry.getValue();
+                String itemCode = itemData.get("itemCode");
+                PackingOrderItem packingItem = new PackingOrderItem();
+                packingItem.setItemCode(itemCode);
+                packingItem.setPackingOrder(packingOrder);
+
+                for (Map.Entry<Long, Integer> binEntry : itemBins.entrySet()) {
+                    Long binAbs = binEntry.getKey();
+                    Integer pickedQty = binEntry.getValue();
+                    PackingOrderItemBin bin = new PackingOrderItemBin();
+                    bin.setBinAbs(binAbs);
+
+                    if (!bins.containsKey(binAbs)) {
+                        Object[] binAndName = blFacade.getBinCodeAndName(binAbs, companyName, pruebas);
+                        bins.put(binAbs, Arrays.copyOf(binAndName, binAndName.length, String[].class));
+                    }
+
+                    bin.setBinCode(bins.get(binAbs)[0]);
+                    bin.setBinName(bins.get(binAbs)[1]);
+                    bin.setPackedQty(0);
+                    bin.setPickedQty(pickedQty);
+                    bin.setPackingOrderItem(packingItem);
+
+                    packingItem.getBins().add(bin);
+                }
+                packingOrder.getItems().add(packingItem);
+            }
+            if (!pickedItems.isEmpty()) {
+                //poFacade.create(packingOrder, companyName, pruebas);
+                CONSOLE.log(Level.INFO, "Se creo la orden de packing para la orden {0}", order.getOrderNumber());
+            }
+            order.setStatus(Constants.STATUS_CLOSED);
+            aoFacade.edit(order, companyName, pruebas);
+            CONSOLE.log(Level.INFO, "Cerro la asignacion de picking para la orden {0}", order.getOrderNumber());
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar el estado de la asignacion de picking.", e);
+        }
     }
 
     private void closeAndPack(AssignedOrder order, Map<String, Map<Long, Integer>> pickedItems, String warehouseCode, String companyName, boolean pruebas) {

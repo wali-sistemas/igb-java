@@ -847,4 +847,49 @@ public class SalesOrderFacade {
         }
         return new ArrayList<>();
     }
+
+    public List<Object[]> getCheckOtherLocationsByItemAndOrderRedplas(Integer docNum, String itemCode, String whsCode, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select ifnull(t.itemCodeSon,t.itemCodeFather)as itemCode,ifnull((t.qtyListEmp * t.quantity),t.quantity)as quantity,t.binCode,t.binType,t.cardCode ");
+        sb.append("from( ");
+        sb.append(" select cast(d.\"ItemCode\"as varchar(20))as itemCodeFather,cast(d.\"Quantity\"as int)as quantity,cast(u.\"BinCode\" as varchar (50))as binCode, ");
+        sb.append("  cast(u.\"Attr2Val\"as varchar(5)) as velocidad,cast(u.\"Attr3Val\" as int)as secuencia,cast(u.\"Attr1Val\" as varchar (10))as binType,null as itemCodeSon,null as qtyListEmp, ");
+        sb.append("  cast(ifnull(u.\"AltSortCod\",'')as varchar(20)) as cardCode");
+        sb.append(" from ORDR o ");
+        sb.append(" inner join RDR1 d on d.\"DocEntry\"=o.\"DocEntry\" and d.\"LineStatus\"='O' ");
+        sb.append(" inner join OITM a on a.\"ItemCode\"=d.\"ItemCode\" ");
+        sb.append(" inner join OIBQ s on s.\"ItemCode\"=d.\"ItemCode\" and s.\"WhsCode\"='");
+        sb.append(whsCode);
+        sb.append("' and s.\"OnHandQty\">0 ");
+        sb.append(" inner join OBIN u on u.\"AbsEntry\"=s.\"BinAbs\" and u.\"SysBin\"='N' and u.\"Attr1Val\" in('PICKING','STORAGE') ");
+        sb.append(" where o.\"DocNum\"=");
+        sb.append(docNum);
+        sb.append(" union all ");
+        sb.append(" select cast (d.\"ItemCode\" as varchar(20))as itemCodeFather,cast(d.\"Quantity\" as int)as quantity,cast(u.\"BinCode\" as varchar(50))as binCode, ");
+        sb.append("  cast(u.\"Attr2Val\"as varchar(5))as velocidad,cast(u.\"Attr3Val\" as int)as secuencia,cast(u.\"Attr1Val\" as varchar(10))as binType,cast (t.\"Code\" as varchar(20))as itemCodeSon, ");
+        sb.append("  cast (t.\"Quantity\" as int)as qtyListEmp,cast(ifnull(u.\"AltSortCod\",'')as varchar(20))as cardCode ");
+        sb.append(" from ORDR o ");
+        sb.append(" inner join RDR1 d on d.\"DocEntry\"=o.\"DocEntry\" and d.\"LineStatus\"='O' ");
+        sb.append(" inner join OITT h on d.\"ItemCode\"=h.\"Code\" ");
+        sb.append(" inner join ITT1 t on h.\"Code\"=t.\"Father\" ");
+        sb.append(" inner join OITM i on h.\"Code\"=i.\"ItemCode\" and i.\"DataSource\"='I' ");
+        sb.append(" inner join OITM c on t.\"Code\"=c.\"ItemCode\" ");
+        sb.append(" inner join OIBQ s on s.\"ItemCode\"=t.\"Code\" and s.\"WhsCode\"='");
+        sb.append(whsCode);
+        sb.append("' and s.\"OnHandQty\">0 ");
+        sb.append(" inner join OBIN u on u.\"AbsEntry\"=s.\"BinAbs\" and u.\"SysBin\"='N' and u.\"Attr1Val\" in('PICKING','STORAGE') ");
+        sb.append(" where o.\"DocNum\"=");
+        sb.append(docNum);
+        sb.append(")as t ");
+        sb.append("where ifnull(t.itemCodeSon,t.itemCodeFather)='");
+        sb.append(itemCode);
+        sb.append("' order by t.velocidad,t.secuencia ");
+        try {
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando otras ubicaciones para el item " + itemCode + " de la orden " + docNum + " en " + companyName, e);
+        }
+        return new ArrayList<>();
+    }
 }
