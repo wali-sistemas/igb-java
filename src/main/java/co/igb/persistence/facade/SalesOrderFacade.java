@@ -217,7 +217,7 @@ public class SalesOrderFacade {
         sb.append(" case when \"Dscription\" like 'COMBO%' then 'COMBO' else 'NO' end as promotion, ");
         sb.append(" cast(case when (select \"GroupCode\" from OCRD c where c.\"CardCode\"=enc.\"CardCode\")=114 then 'TALLERES' else 'DISTRIBUIDOR' end as varchar(20))as groupCode ");
         sb.append("from ORDR enc ");
-        sb.append("inner join RDR1 det on det.\"DocEntry\"=enc.\"DocEntry\" and det.\"WhsCode\" in ('05','26','35','45','60') ");
+        sb.append("inner join RDR1 det on det.\"DocEntry\"=enc.\"DocEntry\" and det.\"WhsCode\" in ('05','26','35','45','60','70') ");
         sb.append("inner join RDR12 lg on lg.\"DocEntry\"=enc.\"DocEntry\" ");
         sb.append("left join \"@TRANSP_TAR\" tt on tt.\"U_COD_TRA\"=enc.\"U_TRANSP\" and tt.\"Code\"=lg.\"U_MunicipioS\" ");
         sb.append("inner join \"OCTG\" pg on pg.\"GroupNum\"=enc.\"GroupNum\" ");
@@ -285,7 +285,7 @@ public class SalesOrderFacade {
         sb.append(" inner join RDR1 d on d.\"DocEntry\"=o.\"DocEntry\" and d.\"LineStatus\"='O' ");
         sb.append(" inner join OITT h on d.\"ItemCode\"=h.\"Code\" ");
         sb.append(" inner join ITT1 t on h.\"Code\"=t.\"Father\" ");
-        sb.append(" inner join OITM i on h.\"Code\"=i.\"ItemCode\" and i.\"DataSource\"='I' ");
+        sb.append(" inner join OITM i on h.\"Code\"=i.\"ItemCode\" /*and i.\"DataSource\"='I'*/ ");
         sb.append(" inner join OITM c on t.\"Code\"=c.\"ItemCode\" ");
         sb.append(" inner join OIBQ s on s.\"ItemCode\"=t.\"Code\" and s.\"WhsCode\"='");
         sb.append(warehouseCode);
