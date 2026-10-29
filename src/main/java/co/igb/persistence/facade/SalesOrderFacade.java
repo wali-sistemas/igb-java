@@ -603,7 +603,7 @@ public class SalesOrderFacade {
         return null;
     }
 
-    public List<Object[]> listOrdersOfDay(String companyName, boolean testing, boolean isTaller) {
+    public List<Object[]> listOrdersOfDay(boolean isTaller, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(ADD_DAYS(TO_DATE(current_date,'YYYY-MM-DD'),-v.\"U_Value\")as varchar(20))as Fecha, ");
         sb.append(" ifnull(t.\"TotalOrder\",0)as TotalOrder,ifnull(t.\"Abiertas\",0)as Abiertas,ifnull(t.\"Cerradas\",0)as Cerradas,ifnull(t.\"Monto\",0)as Monto ");
@@ -646,6 +646,35 @@ public class SalesOrderFacade {
         } catch (NoResultException ex) {
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando las ordenes del dia para la empresa " + companyName, e);
+        }
+        return new ArrayList<>();
+    }
+
+    public List<Object[]> listSalesByBrandOfDay(String docDate, boolean isTaller, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(mar.\"Name\" as varchar(100))as brand,cast(sum(det.\"LineTotal\"-(det.\"LineTotal\"*ifnull(enc.\"DiscPrcnt\",0)/100))as numeric(18,0))as total, ");
+        sb.append(" cast(round(sum(det.\"LineTotal\"-(det.\"LineTotal\"*ifnull(enc.\"DiscPrcnt\",0)/100))*100/ ");
+        sb.append(" nullif((select sum(d.\"LineTotal\"-(d.\"LineTotal\"*ifnull(e.\"DiscPrcnt\",0)/100)) ");
+        sb.append("         from ORDR e ");
+        sb.append("         inner join RDR1 d on e.\"DocEntry\"=d.\"DocEntry\" ");
+        sb.append("         inner join OITM a on d.\"ItemCode\"=a.\"ItemCode\" ");
+        sb.append("         inner join \"@MARCAS\" m on a.\"U_Marca\"=m.\"Code\" ");
+        sb.append("         where e.\"CANCELED\"='N' and e.\"DocDate\"='");
+        sb.append(docDate);
+        sb.append("'),0),2)as numeric(18,2))as participation ");
+        sb.append("from ORDR enc ");
+        sb.append("inner join RDR1 det on enc.\"DocEntry\"=det.\"DocEntry\" ");
+        sb.append("inner join OITM art on det.\"ItemCode\"=art.\"ItemCode\" ");
+        sb.append("inner join \"@MARCAS\" mar on art.\"U_Marca\"=mar.\"Code\" ");
+        sb.append("where enc.\"CANCELED\"='N' and enc.\"DocDate\"='");
+        sb.append(docDate);
+        sb.append("' group by mar.\"Name\" ");
+        sb.append("order by 2 desc");
+        try {
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar las ventas por marca del dia en " + companyName, e);
         }
         return new ArrayList<>();
     }

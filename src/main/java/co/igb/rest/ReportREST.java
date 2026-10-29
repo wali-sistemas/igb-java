@@ -82,12 +82,12 @@ public class ReportREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response obtainReportsOrders(@HeaderParam("X-Company-Name") String companyName,
                                         @HeaderParam("X-Warehouse-Code") String warehouseCode,
-                                        @HeaderParam("X-Pruebas") boolean pruebas) {
+                                        @HeaderParam("X-Pruebas") boolean testing) {
         CONSOLE.log(Level.INFO, "Consultando estados de ordenes en bodega general para la empresa [" + companyName + "]");
-        List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, false, companyName, pruebas, warehouseCode);
-        List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations(companyName, pruebas);
-        Integer packing = packingListRecordFacade.getOrdersForPacking(companyName, pruebas);
-        Integer shipping = invoiceFacade.getOrdersForShipping(companyName, pruebas);
+        List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, false, companyName, testing, warehouseCode);
+        List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations(companyName, testing);
+        Integer packing = packingListRecordFacade.getOrdersForPacking(companyName, testing);
+        Integer shipping = invoiceFacade.getOrdersForShipping(companyName, testing);
 
         Integer[] contador = new Integer[]{0, 0, packing.intValue(), shipping};
         for (SalesOrderDTO s : orders) {
@@ -117,15 +117,15 @@ public class ReportREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listPickingProgress(@HeaderParam("X-Company-Name") String companyName,
-                                        @HeaderParam("X-Pruebas") boolean pruebas) {
+                                        @HeaderParam("X-Pruebas") boolean testing) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd");
-        List<Integer> pickings = pickingRecordFacade.listPickingsRecords(companyName, pruebas);
+        List<Integer> pickings = pickingRecordFacade.listPickingsRecords(companyName, testing);
         List<Object[]> ordenes = new ArrayList<>();
 
         if (pickings != null && !pickings.isEmpty()) {
             for (Integer l : pickings) {
                 // Validar si el registro ya no fue registrado
-                ReportPickingProgress rpp = reportPickingProgressFacade.obtainReportOrder(l, companyName, pruebas);
+                ReportPickingProgress rpp = reportPickingProgressFacade.obtainReportOrder(l, companyName, testing);
 
                 if (rpp != null && rpp.getOrderNumber() != null && rpp.getOrderNumber() != 0) {
                     ordenes.add(new Object[]{l, rpp.getPromedio(), rpp.getTotalTiempo()});
@@ -138,7 +138,7 @@ public class ReportREST implements Serializable {
                     long time2;
                     double totalTiempo = 0.0;
                     double promedio = 0.0;
-                    List<PickingRecord> datos = pickingRecordFacade.listPicking(l, companyName, pruebas);
+                    List<PickingRecord> datos = pickingRecordFacade.listPicking(l, companyName, testing);
 
                     if (datos != null && !datos.isEmpty()) {
                         for (int i = 0; i < datos.size(); i++) {
@@ -196,7 +196,7 @@ public class ReportREST implements Serializable {
                     }
 
                     // Si la orden ya esta cerrada se hace un registro en la base de datos
-                    AssignedOrder order = assignedOrderFacade.findByOrderNumber(l, companyName, pruebas);
+                    AssignedOrder order = assignedOrderFacade.findByOrderNumber(l, companyName, testing);
 
                     if (order != null && order.getId() != null && order.getId() != 0 && order.getStatus().equals(Constants.STATUS_CLOSED)) {
                         ReportPickingProgress progress = new ReportPickingProgress();
@@ -210,7 +210,7 @@ public class ReportREST implements Serializable {
                         progress.setTotalTiempo(totalTiempo);
 
                         try {
-                            reportPickingProgressFacade.create(progress, companyName, pruebas);
+                            reportPickingProgressFacade.create(progress, companyName, testing);
                         } catch (Exception ignored) {
                         }
                     }
@@ -227,9 +227,9 @@ public class ReportREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response obtainReportsOrdersByClient(@HeaderParam("X-Company-Name") String companyName,
                                                 @HeaderParam("X-Warehouse-Code") String warehouseCode,
-                                                @HeaderParam("X-Pruebas") boolean pruebas) {
-        List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, false, companyName, pruebas, warehouseCode);
-        List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations(companyName, pruebas);
+                                                @HeaderParam("X-Pruebas") boolean testing) {
+        List<SalesOrderDTO> orders = salesOrderFacade.findOpenOrders(false, false, companyName, testing, warehouseCode);
+        List<AssignedOrder> assigned = assignedOrderFacade.listOpenAssignations(companyName, testing);
 
         List<Object[]> datos = new ArrayList<>();
         for (SalesOrderDTO s : orders) {
@@ -274,9 +274,9 @@ public class ReportREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response getSalesAnnual(@QueryParam("isTaller") boolean isTaller,
                                    @HeaderParam("X-Company-Name") String companyName,
-                                   @HeaderParam("X-Pruebas") boolean pruebas) {
+                                   @HeaderParam("X-Pruebas") boolean testing) {
         CONSOLE.log(Level.INFO, "Consultando el total de ventas anuales para la empresa [" + companyName + "]");
-        List<Object[]> sales = invoiceFacade.getAnnualSales(companyName, pruebas, isTaller);
+        List<Object[]> sales = invoiceFacade.getAnnualSales(companyName, testing, isTaller);
         if (sales != null) {
             List<SalesAnnualDTO> listSales = new ArrayList<>();
             for (Object[] row : sales) {
@@ -295,9 +295,9 @@ public class ReportREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response getSalesMonthly(@QueryParam("isTaller") boolean isTaller,
                                     @HeaderParam("X-Company-Name") String companyName,
-                                    @HeaderParam("X-Pruebas") boolean pruebas) {
+                                    @HeaderParam("X-Pruebas") boolean testing) {
         CONSOLE.log(Level.INFO, "Consultando el total de ventas mensuales para la empresa [" + companyName + "]");
-        List<Object[]> sales = invoiceFacade.getMonthlySales(companyName, pruebas, isTaller);
+        List<Object[]> sales = invoiceFacade.getMonthlySales(companyName, testing, isTaller);
         if (sales != null || sales.size() <= 0) {
             List<SalesMonthlyDTO> listSales = new ArrayList<>();
             for (Object[] row : sales) {
@@ -316,9 +316,9 @@ public class ReportREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response getSalesCollectMonthly(@QueryParam("isTaller") boolean isTaller,
                                            @HeaderParam("X-Company-Name") String companyName,
-                                           @HeaderParam("X-Pruebas") boolean pruebas) {
+                                           @HeaderParam("X-Pruebas") boolean testing) {
         CONSOLE.log(Level.INFO, "Consultando el recaudo de ventas mensuales para la empresa [" + companyName + "]");
-        List<Object[]> listCollect = paymentsReceivedFacade.getCollectMonthly(companyName, pruebas, isTaller);
+        List<Object[]> listCollect = paymentsReceivedFacade.getCollectMonthly(companyName, testing, isTaller);
         if (listCollect != null || listCollect.size() <= 0) {
             CONSOLE.log(Level.INFO, "Retornando recaudos mensuales para la empresa [" + companyName + "]");
             return Response.ok(new ResponseDTO(0, listCollect)).build();
@@ -334,9 +334,9 @@ public class ReportREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response getSalesByCollect(@QueryParam("isTaller") boolean isTaller,
                                       @HeaderParam("X-Company-Name") String companyName,
-                                      @HeaderParam("X-Pruebas") boolean pruebas) {
+                                      @HeaderParam("X-Pruebas") boolean testing) {
         CONSOLE.log(Level.INFO, "Consultando la cartera por cobrar para la empresa [" + companyName + "]");
-        List<Object[]> listByCollect = paymentsReceivedFacade.getByCollect(companyName, pruebas, isTaller);
+        List<Object[]> listByCollect = paymentsReceivedFacade.getByCollect(companyName, testing, isTaller);
         if (listByCollect != null || listByCollect.size() <= 0) {
             CONSOLE.log(Level.INFO, "Retornando la cartera por cobrar para la empresa [" + companyName + "]");
             return Response.ok(new ResponseDTO(0, listByCollect)).build();
@@ -352,12 +352,12 @@ public class ReportREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listOrderStates(@QueryParam("isTaller") boolean isTaller,
                                     @HeaderParam("X-Company-Name") String companyName,
-                                    @HeaderParam("X-Pruebas") boolean pruebas) {
+                                    @HeaderParam("X-Pruebas") boolean testing) {
         CONSOLE.log(Level.INFO, "Consultando estados de las ordenes para la empresa [" + companyName + "]");
-        List<Object[]> listOrders = salesOrderFacade.getOrderStates(companyName, pruebas, isTaller);
+        List<Object[]> listOrders = salesOrderFacade.getOrderStates(companyName, testing, isTaller);
         if (listOrders != null || listOrders.size() <= 0) {
-            BigDecimal totalInvoice = invoiceFacade.getInvoiceTotal(companyName, pruebas, isTaller);
-            BigDecimal totalOrder = salesOrderFacade.getTotalOrderMonth(companyName, pruebas, isTaller);
+            BigDecimal totalInvoice = invoiceFacade.getInvoiceTotal(companyName, testing, isTaller);
+            BigDecimal totalOrder = salesOrderFacade.getTotalOrderMonth(companyName, testing, isTaller);
             List<StatusOrderDTO> listStatusOrder = new ArrayList<>();
             for (Object[] row : listOrders) {
                 listStatusOrder.add(new StatusOrderDTO((String) row[0], (Integer) row[1], (BigDecimal) row[2], totalInvoice, totalOrder));
@@ -376,9 +376,20 @@ public class ReportREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listOrdersOfDay(@QueryParam("isTaller") boolean isTaller,
                                     @HeaderParam("X-Company-Name") String companyName,
-                                    @HeaderParam("X-Pruebas") boolean pruebas) {
+                                    @HeaderParam("X-Pruebas") boolean testing) {
         CONSOLE.log(Level.INFO, "Iniciando servicio para consultar las ordenes del día en {0}", companyName);
-        return Response.ok(salesOrderFacade.listOrdersOfDay(companyName, pruebas, isTaller)).build();
+        return Response.ok(salesOrderFacade.listOrdersOfDay(isTaller, companyName, testing)).build();
+    }
+
+    @GET
+    @Path("sales-brand-of-day")
+    @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Response getSalesByBrandOfDay(@QueryParam("isTaller") boolean isTaller,
+                                         @QueryParam("docDate") String docDate,
+                                         @HeaderParam("X-Company-Name") String companyName,
+                                         @HeaderParam("X-Pruebas") boolean testing) {
+        return Response.ok(salesOrderFacade.listSalesByBrandOfDay(docDate, isTaller, companyName, testing)).build();
     }
 
     @GET
@@ -386,9 +397,9 @@ public class ReportREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response getPurchaseCosto(@HeaderParam("X-Company-Name") String companyName,
-                                     @HeaderParam("X-Pruebas") boolean pruebas) {
+                                     @HeaderParam("X-Pruebas") boolean testing) {
         CONSOLE.log(Level.INFO, "Consultando el costo de compras de comex en [" + companyName + "]");
-        List<Object[]> costs = landedCostsFacade.listPurchesesCosts(companyName, pruebas);
+        List<Object[]> costs = landedCostsFacade.listPurchesesCosts(companyName, testing);
         if (costs != null || costs.size() <= 0) {
             List<PurchaseCostDTO> PurchasesCosts = new ArrayList<>();
             for (Object[] row : costs) {
@@ -406,8 +417,8 @@ public class ReportREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response getImportCosto(@HeaderParam("X-Company-Name") String companyName,
-                                   @HeaderParam("X-Pruebas") boolean pruebas) {
-        return Response.ok(new ResponseDTO(0, landedCostsFacade.listImportsCosto(companyName, pruebas))).build();
+                                   @HeaderParam("X-Pruebas") boolean testing) {
+        return Response.ok(new ResponseDTO(0, landedCostsFacade.listImportsCosto(companyName, testing))).build();
     }
 
     @GET
@@ -417,8 +428,8 @@ public class ReportREST implements Serializable {
     public Response getPurchaseCosto(@QueryParam("year") Integer year,
                                      @QueryParam("month") String month,
                                      @HeaderParam("X-Company-Name") String companyName,
-                                     @HeaderParam("X-Pruebas") boolean pruebas) {
-        return Response.ok(new ResponseDTO(0, landedCostsFacade.listPurchesesFactor(year, convertNameMonth(month), companyName, pruebas))).build();
+                                     @HeaderParam("X-Pruebas") boolean testing) {
+        return Response.ok(new ResponseDTO(0, landedCostsFacade.listPurchesesFactor(year, convertNameMonth(month), companyName, testing))).build();
     }
 
     @GET
@@ -427,9 +438,9 @@ public class ReportREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response getTrackingOrder(@PathParam("order") String docNum,
                                      @HeaderParam("X-Company-Name") String companyName,
-                                     @HeaderParam("X-Pruebas") boolean pruebas) {
+                                     @HeaderParam("X-Pruebas") boolean testing) {
         List<TrackingOrderDTO> trackingOrder = new ArrayList<>();
-        List<Object[]> datails = purchaseOrderFacade.listTrackingOrder(docNum, companyName, pruebas);
+        List<Object[]> datails = purchaseOrderFacade.listTrackingOrder(docNum, companyName, testing);
         for (Object[] obj : datails) {
             TrackingOrderDTO dto = new TrackingOrderDTO();
             dto.setConcept((String) obj[0]);
@@ -453,10 +464,10 @@ public class ReportREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response getTimeOperation(@HeaderParam("X-Company-Name") String companyName,
-                                     @HeaderParam("X-Pruebas") boolean pruebas,
+                                     @HeaderParam("X-Pruebas") boolean testing,
                                      @QueryParam("year") Integer year,
                                      @QueryParam("month") Integer month) {
-        List<Object[]> list = purchaseOrderFacade.listTimeOperation(year, month, companyName, pruebas);
+        List<Object[]> list = purchaseOrderFacade.listTimeOperation(year, month, companyName, testing);
         List<TimeOperationDTO> timeOperations = new ArrayList<>();
         for (Object[] obj : list) {
             TimeOperationDTO dto = new TimeOperationDTO();
@@ -479,10 +490,10 @@ public class ReportREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response getTimeLiquid(@HeaderParam("X-Company-Name") String companyName,
-                                  @HeaderParam("X-Pruebas") boolean pruebas,
+                                  @HeaderParam("X-Pruebas") boolean testing,
                                   @QueryParam("year") Integer year,
                                   @QueryParam("month") Integer month) {
-        List<Object[]> list = purchaseOrderFacade.listTimeLiquid(year, month, companyName, pruebas);
+        List<Object[]> list = purchaseOrderFacade.listTimeLiquid(year, month, companyName, testing);
         List<TimeLiquidDTO> timeLiquids = new ArrayList<>();
         for (Object[] obj : list) {
             TimeLiquidDTO dto = new TimeLiquidDTO();
@@ -505,10 +516,10 @@ public class ReportREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response getBooking(@HeaderParam("X-Company-Name") String companyName,
-                               @HeaderParam("X-Pruebas") boolean pruebas,
+                               @HeaderParam("X-Pruebas") boolean testing,
                                @QueryParam("year") Integer year,
                                @QueryParam("month") Integer month) {
-        List<Object[]> list = purchaseOrderFacade.listBooking(year, month, companyName, pruebas);
+        List<Object[]> list = purchaseOrderFacade.listBooking(year, month, companyName, testing);
         List<BookingDTO> bookings = new ArrayList<>();
         for (Object[] obj : list) {
             BookingDTO dto = new BookingDTO();
