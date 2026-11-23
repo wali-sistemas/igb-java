@@ -19,12 +19,11 @@ import javax.persistence.Table;
 
 /**
  *
- * @author dbotero
+ * @author jguisao
  */
 @Entity
 @Table(name = "packing_order_item")
 public class PackingOrderItem implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -40,6 +39,8 @@ public class PackingOrderItem implements Serializable {
     private String itemCode;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "packingOrderItem", fetch = FetchType.EAGER)
     private List<PackingOrderItemBin> bins;
+    @Column(name = "item_code_father")
+    private String itemCodeFather;
 
     public PackingOrderItem() {
         bins = new ArrayList<>();
@@ -77,6 +78,14 @@ public class PackingOrderItem implements Serializable {
         this.bins = bins;
     }
 
+    public String getItemCodeFather() {
+        return itemCodeFather;
+    }
+
+    public void setItemCodeFather(String itemCodeFather) {
+        this.itemCodeFather = itemCodeFather;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -104,7 +113,10 @@ public class PackingOrderItem implements Serializable {
 
     @Override
     public String toString() {
-        return "PackingOrderItem{" + "id=" + id + ", itemCode=" + itemCode + '}';
+        return "PackingOrderItem{" +
+                "id=" + id +
+                ", itemCode='" + itemCode + '\'' +
+                ", itemCodeFather='" + itemCodeFather + '\'' +
+                '}';
     }
-
 }

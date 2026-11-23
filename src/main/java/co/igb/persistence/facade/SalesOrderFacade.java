@@ -587,7 +587,7 @@ public class SalesOrderFacade {
         sb.append("  cast(o.\"CardCode\" as varchar(20))as nit ");
         sb.append(" from  ORDR o ");
         sb.append(" inner join ODLN e ON o.\"DocNum\" = e.\"U_NUNFAC\" ");
-        sb.append(" where e.\"CANCELED\"='N' and e.\"DocStatus\"='O' and e.\"DocType\"='I' and o.\"DocType\"='I' and o.\"CANCELED\"='N' and o.\"DocDate\" between ADD_DAYS(TO_DATE(current_date,'YYYY-MM-DD'),-20) and current_date");
+        sb.append(" where e.\"CANCELED\"='N' and e.\"DocStatus\"='O' and e.\"DocType\"='I' and o.\"DocType\"='I' and o.\"CANCELED\"='N' and o.\"DocDate\" between ADD_DAYS(TO_DATE(current_date,'YYYY-MM-DD'),-30) and current_date");
         sb.append(")as t ");
         if (companyName.contains("VARROC")) {
             sb.append("where t.almacen='");

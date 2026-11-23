@@ -87,6 +87,25 @@ public class PackingListRecordFacade {
         return null;
     }
 
+    public List<Object[]> listRecordsRedplas(Integer idPackingOrder, String companyName, boolean testing, boolean openRecordsOnly) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select 0 as '0',0 as '1',order_number,customer_id,'' as '4',cast(datetime_packed as date)as datePacked,idpacking_order,cast(item_code_father as varchar(20))as itemCodeFather,item_name,sum(quantity)as qty,bin_abs,bin_code,box_number,status,employee,company_name ");
+        sb.append("from packing_list_record ");
+        sb.append("where idpacking_order=");
+        sb.append(idPackingOrder);
+        sb.append(" and status='open' and company_name='");
+        sb.append(companyName);
+        sb.append("' group by order_number,customer_id,cast(datetime_packed as date),idpacking_order,item_code_father,item_name,bin_abs,bin_code,box_number,status,employee,company_name ");
+        sb.append("order by itemCodeFather,bin_abs ");
+        try {
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getResultList();
+        } catch (NoResultException e) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar los registros de packing. ", e);
+        }
+        return new ArrayList<>();
+    }
+
     public List<Object[]> listRecords(Integer idPackingOrder, String companyName, boolean testing, boolean openRecordsOnly) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from packing_list_record where idpacking_order = ");

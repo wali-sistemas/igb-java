@@ -143,10 +143,12 @@ public class ZebraPrintREST {
 
     private PrintService getPrintService(String printerName) {
         PrintService[] services = PrintServiceLookup.lookupPrintServices(null, null);
+        CONSOLE.log(Level.INFO, "Servicios encontrados: " + services.length);
         if (services == null || services.length == 0) {
             return null;
         }
         for (PrintService ps : services) {
+            CONSOLE.log(Level.INFO, "Impresorsas: " + ps.getName());
             if (ps.getName().equals(printerName)) {
                 return ps;
             }

@@ -80,9 +80,9 @@ public class PackingREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listPackingRecords(@HeaderParam("X-Company-Name") String companyName,
-                                       @HeaderParam("X-Pruebas") boolean pruebas) {
+                                       @HeaderParam("X-Pruebas") boolean testing) {
         CONSOLE.log(Level.INFO, "Listando registros de packing");
-        List<PackingDTO> list = poFacade.listOpen(companyName, pruebas);
+        List<PackingDTO> list = poFacade.listOpen(companyName, testing);
         CONSOLE.log(Level.INFO, "Se obtuvieron {0} registros de packing. {1}", new Object[]{list.size(), Arrays.toString(list.toArray())});
         return Response.ok(new ResponseDTO(0, list)).build();
     }
@@ -93,9 +93,9 @@ public class PackingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listCustomersWithPackingRecords(@HeaderParam("X-Company-Name") String companyName,
                                                     @HeaderParam("X-Warehouse-Code") String warehouseCode,
-                                                    @HeaderParam("X-Pruebas") boolean pruebas) {
+                                                    @HeaderParam("X-Pruebas") boolean testing) {
         CONSOLE.log(Level.INFO, "Listando clientes con registros de packing pendientes");
-        List<Object[]> customers = poFacade.listCustomersWithOpenRecords(companyName, warehouseCode, pruebas);
+        List<Object[]> customers = poFacade.listCustomersWithOpenRecords(companyName, warehouseCode, testing);
         CONSOLE.log(Level.INFO, "Se obtuvieron {0} clientes con ordenes de empaque abiertas", customers.size());
         return Response.ok(new ResponseDTO(0, customers)).build();
     }
@@ -107,9 +107,9 @@ public class PackingREST implements Serializable {
     public Response listCustomerOrders(@PathParam("customerId") String customerId,
                                        @HeaderParam("X-Company-Name") String companyName,
                                        @HeaderParam("X-Warehouse-Code") String warehouseCode,
-                                       @HeaderParam("X-Pruebas") boolean pruebas) {
+                                       @HeaderParam("X-Pruebas") boolean testing) {
         CONSOLE.log(Level.INFO, "Listando ordenes de packing abiertas para el cliente {0}", customerId);
-        List<Object[]> orders = poFacade.listCustomerOrders(customerId, warehouseCode, companyName, pruebas);
+        List<Object[]> orders = poFacade.listCustomerOrders(customerId, warehouseCode, companyName, testing);
         CONSOLE.log(Level.INFO, "Se obtuvieron {0} ordenes de empaque abiertas para el cliente {1}", new Object[]{orders.size(), customerId});
         return Response.ok(new ResponseDTO(0, orders)).build();
     }
@@ -121,12 +121,12 @@ public class PackingREST implements Serializable {
     public Response validateBinCode(@PathParam("orderNumber") Integer orderNumber,
                                     @PathParam("binCode") String binCode,
                                     @HeaderParam("X-Company-Name") String companyName,
-                                    @HeaderParam("X-Pruebas") boolean pruebas) {
+                                    @HeaderParam("X-Pruebas") boolean testing) {
         CONSOLE.log(Level.INFO, "Listando items por ubicacion y orden ");
         if (binCode == null) {
             return Response.ok(new ResponseDTO(-1, "El código de la ubicación es obligatorio")).build();
         }
-        Integer items = poFacade.countItemsOnBin(binCode, orderNumber, companyName, pruebas);
+        Integer items = poFacade.countItemsOnBin(binCode, orderNumber, companyName, testing);
         CONSOLE.log(Level.INFO, "Se obtuvieron {0} items para la orden {1} y ubicacion {2}", new Object[]{items, orderNumber, binCode});
         return Response.ok(new ResponseDTO(0, items)).build();
     }
@@ -139,15 +139,15 @@ public class PackingREST implements Serializable {
                                      @PathParam("itemCode") String itemCode,
                                      @PathParam("binCode") String binCode,
                                      @HeaderParam("X-Company-Name") String companyName,
-                                     @HeaderParam("X-Pruebas") boolean pruebas) {
+                                     @HeaderParam("X-Pruebas") boolean testing) {
         CONSOLE.log(Level.INFO, "Validando item {0} en orden {1} y ubicacion {2} ", new Object[]{itemCode, orderNumber, binCode});
 
         if (binCode == null) {
             return Response.ok(new ResponseDTO(-1, "El código de la ubicación es obligatorio")).build();
         }
 
-        Integer items = poFacade.validateItemOnBin(itemCode, binCode, orderNumber, companyName, pruebas);
-        String itemName = itemFacade.getItemName(itemCode, companyName, pruebas);
+        Integer items = poFacade.validateItemOnBin(itemCode, binCode, orderNumber, companyName, testing);
+        String itemName = itemFacade.getItemName(itemCode, companyName, testing);
         if (items > 0) {
             CONSOLE.log(Level.INFO, "El item existe en la orden {0} y ubicacion {1}", new Object[]{orderNumber, binCode});
             return Response.ok(new ResponseDTO(0, new ValidatePackingItemResponseDTO(itemName, items))).build();
@@ -164,18 +164,18 @@ public class PackingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response addToPackingList(PackingListRecordDTO packingRecord,
                                      @HeaderParam("X-Company-Name") String companyName,
-                                     @HeaderParam("X-Pruebas") boolean pruebas) {
+                                     @HeaderParam("X-Pruebas") boolean testing) {
         CONSOLE.log(Level.INFO, "Agregando item a packing list {0}", packingRecord);
 
         //Valida el estado de la orden. Si esta cerrada, informa el error
-        String orderStatus = salesOrderFacade.getOrderStatus(packingRecord.getOrderNumber(), companyName, pruebas);
+        String orderStatus = salesOrderFacade.getOrderStatus(packingRecord.getOrderNumber(), companyName, testing);
         if (orderStatus == null || !orderStatus.equals(Constants.SAP_STATUS_OPEN)) {
             return Response.ok(new ResponseDTO(-2, "La órden no se encuentra abierta y por lo tanto no se puede proceder con el proceso de packing")).build();
         }
 
         PackingListRecord record = new PackingListRecord();
         if (packingRecord.getIdPackingList() == null || packingRecord.getIdPackingList() == 0) {
-            record.setIdPackingList(plFacade.getNextPackingListId(companyName, pruebas));
+            record.setIdPackingList(plFacade.getNextPackingListId(companyName, testing));
             if (record.getIdPackingList() == 0) {
                 return Response.ok(new ResponseDTO(-1, "Ocurrió un error al guardar el registro. ")).build();
             }
@@ -186,7 +186,7 @@ public class PackingREST implements Serializable {
         if (packingRecord.getBinAbs() != null) {
             record.setBinAbs(packingRecord.getBinAbs());
         } else {
-            record.setBinAbs(blFacade.getBinAbs(packingRecord.getBinCode(), companyName, pruebas).longValue());
+            record.setBinAbs(blFacade.getBinAbs(packingRecord.getBinCode(), companyName, testing).longValue());
         }
 
         record.setBinCode(packingRecord.getBinCode());
@@ -197,11 +197,12 @@ public class PackingREST implements Serializable {
         if (packingRecord.getCustomerName() != null) {
             record.setCustomerName(packingRecord.getCustomerName());
         } else {
-            record.setCustomerName(cFacade.getCustomerName(packingRecord.getCustomerId(), companyName, pruebas));
+            record.setCustomerName(cFacade.getCustomerName(packingRecord.getCustomerId(), companyName, testing));
         }
 
         record.setDatetimePacked(new Date());
         record.setItemCode(packingRecord.getItemCode());
+        record.setItemCodeFather(packingRecord.getItemCodeFather());
         record.setItemName(packingRecord.getItemName());
         record.setOrderNumber(packingRecord.getOrderNumber());
         record.setIdPackingOrder(new PackingOrder(packingRecord.getIdPackingOrder().longValue()));
@@ -210,8 +211,13 @@ public class PackingREST implements Serializable {
         record.setCompanyName(companyName);
 
         try {
-            plFacade.create(record, companyName, pruebas);
-            poFacade.updatePackedQuantity(record.getBinCode(), record.getItemCode(), record.getOrderNumber(), record.getQuantity(), companyName, pruebas);
+            /*plFacade.create(record, companyName, testing);
+            poFacade.updatePackedQuantity(record.getBinCode(), record.getItemCode(), record.getOrderNumber(), record.getQuantity(), companyName, testing);
+            */
+
+            plFacade.create(record, companyName, testing);
+            poFacade.updatePackedQuantity(record.getIdPackingOrder().getId(), record.getBinCode(), record.getItemCode(), record.getItemCodeFather(), record.getQuantity(), companyName, testing);
+
             return Response.ok(new ResponseDTO(0, record)).build();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al crear el registro. ", e);
@@ -225,9 +231,9 @@ public class PackingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listOpenPackingJobs(@PathParam("username") String username,
                                         @HeaderParam("X-Company-Name") String companyName,
-                                        @HeaderParam("X-Pruebas") boolean pruebas) {
+                                        @HeaderParam("X-Pruebas") boolean testing) {
         CONSOLE.log(Level.INFO, "Listando procesos de packing abiertos para el empleado {0}", username);
-        List<Object[]> records = plFacade.listOpenPackingRecords(username, companyName, pruebas);
+        List<Object[]> records = plFacade.listOpenPackingRecords(username, companyName, testing);
         CONSOLE.log(Level.INFO, "Se encontraron {0} entradas de registro de packing abiertas para el empleado", records.size());
         return Response.ok(new ResponseDTO(0, records)).build();
     }
@@ -238,8 +244,8 @@ public class PackingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response listBoxesUsed(@PathParam("username") String username,
                                   @HeaderParam("X-Company-Name") String companyName,
-                                  @HeaderParam("X-Pruebas") boolean pruebas) {
-        return Response.ok(new ResponseDTO(0, plFacade.listBoxesUsedPackingRecords(username, companyName, pruebas))).build();
+                                  @HeaderParam("X-Pruebas") boolean testing) {
+        return Response.ok(new ResponseDTO(0, plFacade.listBoxesUsedPackingRecords(username, companyName, testing))).build();
     }
 
     @GET
@@ -249,14 +255,14 @@ public class PackingREST implements Serializable {
     public Response listPackingOrderItems(@PathParam("idPackingOrder") Long idPackingOrder,
                                           @PathParam("orderNumber") Integer orderNumber,
                                           @HeaderParam("X-Company-Name") String companyName,
-                                          @HeaderParam("X-Pruebas") boolean pruebas) {
+                                          @HeaderParam("X-Pruebas") boolean testing) {
         if (orderNumber != null) {
             //Validando si la orden ya tiene entrega en SAP
-            Integer delivery = deliveryNoteFacade.getDocNumDeliveryNote(orderNumber, companyName, pruebas);
+            Integer delivery = deliveryNoteFacade.getDocNumDeliveryNote(orderNumber, companyName, testing);
             if (delivery > 0) {
                 try {
                     //Se procede a cerrar el packing list en MySql
-                    poFacade.closePackingOrder(idPackingOrder.intValue(), companyName, pruebas);
+                    poFacade.closePackingOrder(idPackingOrder.intValue(), companyName, testing);
                 } catch (Exception e) {
                     CONSOLE.log(Level.WARNING, "Ocurrio una excepcion cerrando la orden #" + idPackingOrder.toString() + " en " + companyName, e);
                 }
@@ -265,19 +271,19 @@ public class PackingREST implements Serializable {
                 return Response.ok(new ResponseDTO(0, "Ya existe una entrega en SAP para la orden #" + orderNumber.toString())).build();
             } else {
                 //Validando si la orden se encuentra cerrada o cancelada
-                if (salesOrderFacade.getOrderStatus(orderNumber, companyName, pruebas).equals("C")) {
+                if (salesOrderFacade.getOrderStatus(orderNumber, companyName, testing).equals("C")) {
                     //Se procede a cerrar el packing list en MySql
-                    poFacade.closePackingOrder(idPackingOrder.intValue(), companyName, pruebas);
+                    poFacade.closePackingOrder(idPackingOrder.intValue(), companyName, testing);
 
                     CONSOLE.log(Level.WARNING, "La orden #{0} ya se encuentra cerrada en SAP.", orderNumber.toString());
                     return Response.ok(new ResponseDTO(0, "La orden " + orderNumber.toString() + " ya se encuentra cerrada en SAP")).build();
                 } else {
                     CONSOLE.log(Level.INFO, "Retornando items para la packing order #{0}", idPackingOrder);
-                    List<Object[]> items = poFacade.listOrderItems(idPackingOrder, companyName, pruebas);
+                    List<Object[]> items = poFacade.listOrderItems(idPackingOrder, companyName, testing);
                     List<Object[]> listItems = new ArrayList<>();
 
                     for (Object[] obj : items) {
-                        listItems.add(new Object[]{obj[0], obj[1], obj[2], obj[3], obj[4], obj[5], obj[6], null, null});
+                        listItems.add(new Object[]{obj[0], obj[1], obj[2], obj[3], obj[4], obj[5], obj[6], obj[7], null, null});
                     }
 
                     CONSOLE.log(Level.INFO, "Se encontraron {0} items para la packing list", items.size());
@@ -296,16 +302,16 @@ public class PackingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response createDeliveryNote(Integer idPackingOrder,
                                        @HeaderParam("X-Company-Name") String companyName,
-                                       @HeaderParam("X-Pruebas") boolean pruebas) {
+                                       @HeaderParam("X-Pruebas") boolean testing) {
         CONSOLE.log(Level.INFO, "Creando documento de entrega para packing orden {0}", idPackingOrder);
 
-        List<Object[]> packingRecords = plFacade.listRecords(idPackingOrder, companyName, pruebas, true);
+        List<Object[]> packingRecords = plFacade.listRecords(idPackingOrder, companyName, testing, true);
         if (packingRecords.isEmpty()) {
             return Response.ok(new ResponseDTO(-1, "No se encontraron registros de packing pendientes por entregar")).build();
         }
 
         //Valida el estado de la orden. Si esta cerrada, informa el error
-        String orderStatus = salesOrderFacade.getOrderStatus((Integer) packingRecords.get(0)[2], companyName, pruebas);
+        String orderStatus = salesOrderFacade.getOrderStatus((Integer) packingRecords.get(0)[2], companyName, testing);
         if (orderStatus == null || !orderStatus.equals(Constants.SAP_STATUS_OPEN)) {
             return Response.ok(new ResponseDTO(-2, "La órden no se encuentra abierta y por lo tanto no se puede proceder con el proceso de packing")).build();
         }
@@ -326,7 +332,7 @@ public class PackingREST implements Serializable {
             if (orderDocEntry == null) {
                 document.setSeries(Long.parseLong(getPropertyValue(Constants.DELIVERY_NOTE_SERIES, companyName)));
                 document.setCardCode(customerId);
-                String commentOV = salesOrderFacade.getOrderComment(orderNumber, companyName, pruebas);
+                String commentOV = salesOrderFacade.getOrderComment(orderNumber, companyName, testing);
                 if (commentOV != null) {
                     //limitando caracteres no mayores a 254 para que lo acepte SAP
                     String commentWms = "Orden #" + orderNumber + " creada por " + employee + " desde WALI.";
@@ -338,10 +344,10 @@ public class PackingREST implements Serializable {
                 } else {
                     document.setComments("Orden #" + orderNumber + " creada por " + employee + " desde WALI.");
                 }
-                document.setUtotcaj(plFacade.getTotalBoxNumber(orderNumber, companyName, pruebas).doubleValue());
-                document.setUvrdeclarado(salesOrderFacade.getValorDeclarado(orderNumber, companyName, pruebas));
+                document.setUtotcaj(plFacade.getTotalBoxNumber(orderNumber, companyName, testing).doubleValue());
+                document.setUvrdeclarado(salesOrderFacade.getValorDeclarado(orderNumber, companyName, testing));
                 document.setUnunfac(orderNumber.toString());
-                orderDocEntry = salesOrderFacade.getOrderDocEntry(orderNumber, companyName, pruebas);
+                orderDocEntry = salesOrderFacade.getOrderDocEntry(orderNumber, companyName, testing);
                 if (orderDocEntry == null || orderDocEntry <= 0) {
                     return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "Ocurrió un error al consultar los datos de la orden. ")).build();
                 }
@@ -356,7 +362,7 @@ public class PackingREST implements Serializable {
                 line.setWarehouseCode(binCode.substring(0, 2));
 
                 try {
-                    Long baseLineNum = salesOrderFacade.getLineNum(orderNumber, itemCode, companyName, pruebas);
+                    Long baseLineNum = salesOrderFacade.getLineNum(orderNumber, itemCode, companyName, testing);
                     if (baseLineNum < 0) {
                         return Response.ok(new ResponseDTO(-1, "Ocurrio un error al consultar el numero de linea de la orden (baseLine) para el ítem [" + itemCode + "]. Es posible que la orden de compra ya se haya cerrado")).build();
                     }
@@ -408,7 +414,7 @@ public class PackingREST implements Serializable {
 
         /***Agregando gastos de flete en la entrega, solo para motozone***/
         if (companyName.contains("VARROC")) {
-            Object[] dataBills = salesOrderFacade.getBillsByOrder(orderNumber, companyName, pruebas);
+            Object[] dataBills = salesOrderFacade.getBillsByOrder(orderNumber, companyName, testing);
             Integer docEntry = (Integer) dataBills[0];
             BigDecimal lineTotalFlet = (BigDecimal) dataBills[1];
             String taxCodeFlet = (String) dataBills[2];
@@ -491,15 +497,23 @@ public class PackingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response createDeliveryNoteV2(Integer idPackingOrder,
                                          @HeaderParam("X-Company-Name") String companyName,
-                                         @HeaderParam("X-Pruebas") boolean pruebas) {
+                                         @HeaderParam("X-Pruebas") boolean testing) {
         CONSOLE.log(Level.INFO, "Creando documento de entrega para packing orden {0}", idPackingOrder);
 
-        List<Object[]> packingRecords = plFacade.listRecords(idPackingOrder, companyName, pruebas, true);
-        if (packingRecords.isEmpty()) {
-            return Response.ok(new ResponseDTO(-1, "No se encontraron registros de packing pendientes por entregar")).build();
+        List<Object[]> packingRecords = new ArrayList<>();
+        if (companyName.contains("REDPLAS")) {
+            packingRecords = plFacade.listRecordsRedplas(idPackingOrder, companyName, testing, true);
+            if (packingRecords.isEmpty()) {
+                return Response.ok(new ResponseDTO(-1, "No se encontraron registros de packing pendientes por entregar")).build();
+            }
+        } else {
+            packingRecords = plFacade.listRecords(idPackingOrder, companyName, testing, true);
+            if (packingRecords.isEmpty()) {
+                return Response.ok(new ResponseDTO(-1, "No se encontraron registros de packing pendientes por entregar")).build();
+            }
         }
         //Valida el estado de la orden. Si esta cerrada, informa el error
-        String orderStatus = salesOrderFacade.getOrderStatus((Integer) packingRecords.get(0)[2], companyName, pruebas);
+        String orderStatus = salesOrderFacade.getOrderStatus((Integer) packingRecords.get(0)[2], companyName, testing);
         if (orderStatus == null || !orderStatus.equals(Constants.SAP_STATUS_OPEN)) {
             return Response.ok(new ResponseDTO(-2, "La órden no se encuentra abierta y por lo tanto no se puede proceder con el proceso de packing")).build();
         }
@@ -510,7 +524,7 @@ public class PackingREST implements Serializable {
         Integer orderNumber = (Integer) packingRecords.get(0)[2];
         String customerId = (String) packingRecords.get(0)[3];
         String employee = (String) packingRecords.get(0)[14];
-        String commentOV = salesOrderFacade.getOrderComment(orderNumber, companyName, pruebas);
+        String commentOV = salesOrderFacade.getOrderComment(orderNumber, companyName, testing);
 
         if (commentOV != null) {
             //limitando caracteres no mayores a 254 para que lo acepte SAP
@@ -526,11 +540,11 @@ public class PackingREST implements Serializable {
         //Encabezado
         document.setSeries(Long.parseLong(getPropertyValue(Constants.DELIVERY_NOTE_SERIES, companyName)));
         document.setCardCode(customerId);
-        document.setUtotcaj(plFacade.getTotalBoxNumber(orderNumber, companyName, pruebas).doubleValue());
-        document.setUvrdeclarado(salesOrderFacade.getValorDeclarado(orderNumber, companyName, pruebas));
+        document.setUtotcaj(plFacade.getTotalBoxNumber(orderNumber, companyName, testing).doubleValue());
+        document.setUvrdeclarado(salesOrderFacade.getValorDeclarado(orderNumber, companyName, testing));
         document.setUnunfac(orderNumber.toString());
 
-        orderDocEntry = salesOrderFacade.getOrderDocEntry(orderNumber, companyName, pruebas);
+        orderDocEntry = salesOrderFacade.getOrderDocEntry(orderNumber, companyName, testing);
         if (orderDocEntry == null || orderDocEntry <= 0) {
             return Response.status(Response.Status.BAD_REQUEST).entity(new ResponseDTO(-1, "Ocurrió un error al consultar los datos de la orden. ")).build();
         }
@@ -545,7 +559,7 @@ public class PackingREST implements Serializable {
             String binCode = (String) row[11];
 
             try {
-                Long baseLineNum = salesOrderFacade.getLineNum(orderNumber, itemCode, companyName, pruebas);
+                Long baseLineNum = salesOrderFacade.getLineNum(orderNumber, itemCode, companyName, testing);
                 if (baseLineNum < 0) {
                     return Response.ok(new ResponseDTO(-1, "Ocurrio un error al consultar el numero de linea de la orden (baseLine) para el ítem [" + itemCode + "]. Es posible que la orden de compra ya se haya cerrado")).build();
                 }
@@ -558,7 +572,16 @@ public class PackingREST implements Serializable {
             //Detalle
             line.setLineNum((long) itemsList.size());
             line.setItemCode(itemCode);
-            line.setQuantity(quantity.doubleValue());
+            if (companyName.contains("REDPLAS")) {
+                Object[] obj = itemFacade.getQtyMaterials(itemCode, companyName, testing);
+                if (obj != null) {
+                    line.setQuantity(quantity.doubleValue() / (Integer) obj[1]);
+                } else {
+                    line.setQuantity(quantity.doubleValue());
+                }
+            } else {
+                line.setQuantity(quantity.doubleValue());
+            }
             line.setWarehouseCode(binCode.substring(0, 2));
             line.setBaseEntry(orderDocEntry.longValue());
             line.setBaseType(Long.parseLong(getPropertyValue(Constants.SALES_ORDER_SERIES, companyName)));
@@ -579,7 +602,8 @@ public class PackingREST implements Serializable {
                 binAllocation.setAllowNegativeQuantity(Constants.SAP_STATUS_NO);
                 binAllocation.setBaseLineNumber(line.getLineNum());
                 binAllocation.setBinAbsEntry(binAbs.longValue());
-                binAllocation.setQuantity(quantity.doubleValue());
+                binAllocation.setQuantity(line.getQuantity());
+
                 line.getDocumentLinesBinAllocations().add(binAllocation);
             }
             itemsList.add(line);
@@ -589,7 +613,7 @@ public class PackingREST implements Serializable {
 
         /***Agregando gastos de flete en la entrega, solo para motozone***/
         if (companyName.contains("VARROC")) {
-            Object[] dataBills = salesOrderFacade.getBillsByOrder(orderNumber, companyName, pruebas);
+            Object[] dataBills = salesOrderFacade.getBillsByOrder(orderNumber, companyName, testing);
             Integer docEntry = (Integer) dataBills[0];
             BigDecimal lineTotalFlet = (BigDecimal) dataBills[1];
             String taxCodeFlet = (String) dataBills[2];
@@ -688,24 +712,24 @@ public class PackingREST implements Serializable {
     public Response closePackingOrder(@PathParam("username") String username,
                                       @PathParam("idPackingOrder") Integer idPackingOrder,
                                       @HeaderParam("X-Company-Name") String companyName,
-                                      @HeaderParam("X-Pruebas") boolean pruebas) {
+                                      @HeaderParam("X-Pruebas") boolean testing) {
         CONSOLE.log(Level.INFO, "Cerrando packing orden #{0} asignada al usuario {1} en [{2}]", new Object[]{idPackingOrder.toString(), username, companyName});
 
         try {
             //Cierra los registros de packing abiertos MySql
-            plFacade.closePackingOrder(idPackingOrder, companyName, pruebas);
+            plFacade.closePackingOrder(idPackingOrder, companyName, testing);
         } catch (Exception e) {
             CONSOLE.log(Level.WARNING, "Ocurrio una excepcion cerrando los registros de packing abiertos para la orden #" + idPackingOrder + " asignada al usuario " + username + " en " + companyName, e);
         }
 
-        if (!poFacade.isPackingOrderComplete(idPackingOrder, companyName, pruebas)) {
+        if (!poFacade.isPackingOrderComplete(idPackingOrder, companyName, testing)) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar si la orden de packing #{0} se encuentra completa", idPackingOrder.toString());
             return Response.ok(new ResponseDTO(-1, "Ocurrio un error al consultar si la orden de packing #" + idPackingOrder.toString() + "se encuentra completa.")).build();
         }
 
         try {
             //Se cierra la orden de packing MySql
-            poFacade.closePackingOrder(idPackingOrder, companyName, pruebas);
+            poFacade.closePackingOrder(idPackingOrder, companyName, testing);
         } catch (Exception e) {
             CONSOLE.log(Level.WARNING, "Ocurrio una excepcion cerrando la orden #" + idPackingOrder.toString() + " asignada al usuario " + username + " en " + companyName, e);
             return Response.ok(new ResponseDTO(-1, e.getMessage())).build();
@@ -762,9 +786,9 @@ public class PackingREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     public Response arePackingOrdersComplete(@HeaderParam("X-Employee") String username,
                                              @HeaderParam("X-Company-Name") String companyName,
-                                             @HeaderParam("X-Pruebas") boolean pruebas) {
+                                             @HeaderParam("X-Pruebas") boolean testing) {
         CONSOLE.log(Level.INFO, "Validando estado de packing para empleado {0}", username);
-        return Response.ok(new ResponseDTO(0, poFacade.arePackingOrdersComplete(username, companyName, pruebas))).build();
+        return Response.ok(new ResponseDTO(0, poFacade.arePackingOrdersComplete(username, companyName, testing))).build();
     }
 
     @POST
@@ -773,7 +797,7 @@ public class PackingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response autoPack(AutoPackDTO autoPackDTO,
                              @HeaderParam("X-Company-Name") String companyName,
-                             @HeaderParam("X-Pruebas") boolean pruebas,
+                             @HeaderParam("X-Pruebas") boolean testing,
                              @HeaderParam("X-Employee") String employee) {
         CONSOLE.log(Level.INFO, "Iniciando proceso de empaque automatico.");
         if (autoPackDTO == null) {
@@ -799,7 +823,7 @@ public class PackingREST implements Serializable {
         }
 
         //cargar datos de ordenes de packing
-        List<PackingOrder> packingOrders = poFacade.listOrders(autoPackDTO.getCustomerId(), autoPackDTO.getOrderNumber(), companyName, pruebas);
+        List<PackingOrder> packingOrders = poFacade.listOrders(autoPackDTO.getCustomerId(), autoPackDTO.getOrderNumber(), companyName, testing);
         if (packingOrders == null || packingOrders.isEmpty()) {
             CONSOLE.log(Level.SEVERE, "La packing order no existe o no se encuentra abierta");
             return Response.ok(new ResponseDTO(-1, "La packing order no existe o no se encuentra abierta")).build();
@@ -828,7 +852,7 @@ public class PackingREST implements Serializable {
                         recordDto.setOrderNumber(order.getOrderNumber());
                         recordDto.setQuantity(itemBin.getPickedQty() - itemBin.getPackedQty());
 
-                        ResponseDTO res = (ResponseDTO) this.addToPackingList(recordDto, companyName, pruebas).getEntity();
+                        ResponseDTO res = (ResponseDTO) this.addToPackingList(recordDto, companyName, testing).getEntity();
                         CONSOLE.log(Level.INFO, "  -> Packing record creado. Status: {0}", res.getCode());
                         if (res.getCode() != 0) {
                             return Response.ok(res).build();
@@ -844,14 +868,14 @@ public class PackingREST implements Serializable {
 
             //generar entrega
             CONSOLE.log(Level.INFO, "Creando documento de entrega para la orden de packing #{0}", order.getId());
-            ResponseDTO responseDelivery = (ResponseDTO) this.createDeliveryNote(order.getId().intValue(), companyName, pruebas).getEntity();
+            ResponseDTO responseDelivery = (ResponseDTO) this.createDeliveryNote(order.getId().intValue(), companyName, testing).getEntity();
             if (responseDelivery.getCode() != 0) {
                 return Response.ok(responseDelivery).build();
             }
 
             //cerrar packing order
             CONSOLE.log(Level.INFO, "Cerrando orden de packing #{0}", order.getId());
-            ResponseDTO res = (ResponseDTO) this.closePackingOrder(employee, order.getId().intValue(), companyName, pruebas).getEntity();
+            ResponseDTO res = (ResponseDTO) this.closePackingOrder(employee, order.getId().intValue(), companyName, testing).getEntity();
             if (res.getCode() != 0) {
                 return Response.ok(res).build();
             }
@@ -863,10 +887,10 @@ public class PackingREST implements Serializable {
             String documentType = IGBUtils.getProperParameter(appBean.obtenerValorPropiedad("igb.invoice.type"), companyName);
             CONSOLE.log(Level.INFO, "La empresa {0} usa el tipo de document {1}", new Object[]{companyName, documentType});
             if (documentType != null && documentType.equals("draft")) {
-                //responseInvoice = (ResponseDTO) invoiceREST.createDraft(((Long) responseDelivery.getContent()).intValue(), companyName, employee, pruebas).getEntity();
+                //responseInvoice = (ResponseDTO) invoiceREST.createDraft(((Long) responseDelivery.getContent()).intValue(), companyName, employee, testing).getEntity();
             } else if (documentType != null && documentType.equals("invoice")) {
                 InvoiceExpressDTO invoiceExpressDTO = new InvoiceExpressDTO((Integer) responseDelivery.getContent(), null);
-                responseInvoice = (ResponseDTO) invoiceREST.createInvoice(invoiceExpressDTO, companyName, employee, pruebas).getEntity();
+                responseInvoice = (ResponseDTO) invoiceREST.createInvoice(invoiceExpressDTO, companyName, employee, testing).getEntity();
             } else {
                 CONSOLE.log(Level.SEVERE, "La empresa no tiene configurado el tipo de documento (borrador o factura) que se debe crear");
                 return Response.ok(new ResponseDTO(-1, "La empresa no tiene configurado el tipo de documento (borrador o factura) que se debe crear")).build();
@@ -884,8 +908,8 @@ public class PackingREST implements Serializable {
     @Produces({MediaType.APPLICATION_JSON + ";charset=utf-8"})
     public Response getPackingOrders(@PathParam("customer") String customer,
                                      @HeaderParam("X-Company-Name") String companyName,
-                                     @HeaderParam("X-Pruebas") boolean pruebas) {
-        List<Object[]> customers = poFacade.listAllPackings(customer, companyName, pruebas);
+                                     @HeaderParam("X-Pruebas") boolean testing) {
+        List<Object[]> customers = poFacade.listAllPackings(customer, companyName, testing);
         return Response.ok(new ResponseDTO(0, customers)).build();
     }
 
@@ -895,18 +919,18 @@ public class PackingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response cleanPackingProcess(@PathParam("idPackingOrder") Integer idPackingOrder,
                                         @HeaderParam("X-Company-Name") String companyName,
-                                        @HeaderParam("X-Pruebas") boolean pruebas,
+                                        @HeaderParam("X-Pruebas") boolean testing,
                                         @HeaderParam("X-Employee") String username) {
         CONSOLE.log(Level.WARNING, "Cancelando proceso de packing para packingOrder {0}", idPackingOrder);
         try {
             //cerrar packing records
-            plFacade.closePackingOrder(idPackingOrder, companyName, pruebas);
+            plFacade.closePackingOrder(idPackingOrder, companyName, testing);
             CONSOLE.log(Level.WARNING, "--- Los packing records fueron cerrados");
             //consultar y cerrar packing order
-            poFacade.closePackingOrder(idPackingOrder, companyName, pruebas);
+            poFacade.closePackingOrder(idPackingOrder, companyName, testing);
             CONSOLE.log(Level.WARNING, "--- La orden de packing fue cerrada");
             //enviar correo de notificacion a sistemas y logistica
-            PackingOrder packingOrder = poFacade.find(idPackingOrder.longValue(), companyName, pruebas);
+            PackingOrder packingOrder = poFacade.find(idPackingOrder.longValue(), companyName, testing);
             emailManager.sendPackingErrorNotification(packingOrder.getOrderNumber(), username);
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al cancelar el proceso de packing " + idPackingOrder.toString(), e);
@@ -921,15 +945,15 @@ public class PackingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response cancelPackingOrder(@PathParam("idPackingOrder") Integer idPackingOrder,
                                        @HeaderParam("X-Company-Name") String companyName,
-                                       @HeaderParam("X-Pruebas") boolean pruebas,
+                                       @HeaderParam("X-Pruebas") boolean testing,
                                        @HeaderParam("X-Employee") String username) {
         try {
-            List<Integer> items = poFacade.listIdOrderItems(idPackingOrder.longValue(), companyName, pruebas);
+            List<Integer> items = poFacade.listIdOrderItems(idPackingOrder.longValue(), companyName, testing);
             for (Integer id : items) {
                 //reiniciar el packedQty a 0
-                poFacade.updatePackedQty(id, companyName, pruebas);
+                poFacade.updatePackedQty(id, companyName, testing);
                 //eliminar los registros de packing abiertos
-                plFacade.deletePackingOrder(idPackingOrder, companyName, pruebas);
+                plFacade.deletePackingOrder(idPackingOrder, companyName, testing);
             }
 
             return Response.ok(new ResponseDTO(0, "Ok")).build();
@@ -945,13 +969,13 @@ public class PackingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response getDeatilDelivery(@PathParam("orderNumber") Integer orderNumber,
                                       @HeaderParam("X-Company-Name") String companyName,
-                                      @HeaderParam("X-Pruebas") boolean pruebas) {
-        Integer delivery = deliveryNoteFacade.getDocNumDeliveryNote(orderNumber, companyName, pruebas);
+                                      @HeaderParam("X-Pruebas") boolean testing) {
+        Integer delivery = deliveryNoteFacade.getDocNumDeliveryNote(orderNumber, companyName, testing);
         if (delivery != null) {
             DeliveryNoteDTO deliveryNoteDTO = new DeliveryNoteDTO();
             deliveryNoteDTO.setDocNum(delivery);
 
-            List detailDelivery = deliveryNoteFacade.getDetailDeliveryNoteData(delivery, companyName, pruebas);
+            List detailDelivery = deliveryNoteFacade.getDetailDeliveryNoteData(delivery, companyName, testing);
             List<DeliveryNoteDTO.DeliveryNoteLineDTO> deliveryNoteLineDTO = new ArrayList<>();
 
             for (Object row : detailDelivery) {
@@ -976,7 +1000,7 @@ public class PackingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response addCheckOutOrder(CheckOutDTO dto,
                                      @HeaderParam("X-Company-Name") String companyName,
-                                     @HeaderParam("X-Pruebas") boolean pruebas) {
+                                     @HeaderParam("X-Pruebas") boolean testing) {
         if (dto.getOrderNumber() == null || dto.getOrderNumber() == 0) {
             CONSOLE.log(Level.SEVERE, "Numero de orden es obligatorio");
             return Response.ok(new ResponseDTO(-1, "Número de orden es obligatorio.")).build();
@@ -1001,7 +1025,7 @@ public class PackingREST implements Serializable {
         checkOutOrder.setEndTime(dto.getEndTime());
 
         try {
-            checkOutOrderFacade.create(checkOutOrder, companyName, pruebas);
+            checkOutOrderFacade.create(checkOutOrder, companyName, testing);
             CONSOLE.log(Level.INFO, "confirmado el checkout para la orden #", dto.getOrderNumber().toString());
             return Response.ok(new ResponseDTO(0, "CheckOut confirmado exitosamente.")).build();
         } catch (Exception e) {
@@ -1016,11 +1040,11 @@ public class PackingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response findCheckOut(@PathParam("orderNumber") String orderNumber,
                                  @HeaderParam("X-Company-Name") String companyName,
-                                 @HeaderParam("X-Pruebas") boolean pruebas) {
+                                 @HeaderParam("X-Pruebas") boolean testing) {
         if (orderNumber == null || orderNumber.isEmpty()) {
             return Response.ok(new ResponseDTO(-1, "Sin datos para validar check-out.")).build();
         }
-        Integer idCheckOut = checkOutOrderFacade.getIdCheckOut(orderNumber, companyName, pruebas);
+        Integer idCheckOut = checkOutOrderFacade.getIdCheckOut(orderNumber, companyName, testing);
         return Response.ok(new ResponseDTO(idCheckOut == 0 ? -1 : 0, idCheckOut)).build();
     }
 
@@ -1030,8 +1054,8 @@ public class PackingREST implements Serializable {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Response findOrdersPendingByInvoice(@HeaderParam("X-Company-Name") String companyName,
                                                @HeaderParam("X-Warehouse-Code") String whsCode,
-                                               @HeaderParam("X-Pruebas") boolean pruebas) {
-        List<Object[]> orders = salesOrderFacade.listPendingOrdersByInvoice(companyName, whsCode, pruebas);
+                                               @HeaderParam("X-Pruebas") boolean testing) {
+        List<Object[]> orders = salesOrderFacade.listPendingOrdersByInvoice(companyName, whsCode, testing);
         return Response.ok(new ResponseDTO(orders == null ? -1 : 0, orders)).build();
     }
 }

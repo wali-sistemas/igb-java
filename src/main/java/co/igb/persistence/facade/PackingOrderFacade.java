@@ -172,42 +172,106 @@ public class PackingOrderFacade {
         }
     }
 
-    public void updatePackedQuantity(String binCode, String itemCode, Integer orderNumber, Integer additionalQuantity, String companyName, boolean testing) {
+    public void updatePackedQuantity(Long idPackingOrder, String binCode, String itemCode, String itemCodeFather, Integer quantity, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("update packing_order_item_bin set packed_qty = packed_qty + ");
-        sb.append(additionalQuantity);
-        sb.append(" where bin_code = '");
-        sb.append(binCode.trim());
-        sb.append("' and idpacking_order_item = ( select itm.idpacking_order_item from packing_order ord ");
-        sb.append("inner join packing_order_item itm on itm.idpacking_order = ord.idpacking_order ");
-        sb.append("where itm.item_code = '");
-        sb.append(itemCode);
-        sb.append("' and ord.order_number = ");
-        sb.append(orderNumber);
-        sb.append(" and company_name = '");
-        sb.append(companyName);
-        sb.append("')");
+        sb.append("update bin set bin.packed_qty = bin.packed_qty + ?1 ");
+        sb.append("from packing_order_item_bin bin ");
+        sb.append("inner join packing_order_item itm on itm.idpacking_order_item = bin.idpacking_order_item ");
+        sb.append("inner join packing_order ord on ord.idpacking_order = itm.idpacking_order ");
+        sb.append("where ord.idpacking_order = ?2 and ord.company_name = ?3 and bin.bin_code = ?4 ");
+
+        boolean redplas = companyName.contains("REDPLAS");
+        if (redplas) {
+            sb.append("and itm.item_code_father = ?5 ");
+            if (itemCodeFather != null && !itemCodeFather.trim().isEmpty()) {
+                sb.append("and itm.item_code = ?6 ");   // <-- esto evita marcar las dos líneas
+            }
+        } else {
+            sb.append("and itm.item_code = ?5 ");
+        }
+
         try {
-            int result = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).executeUpdate();
+            javax.persistence.Query q = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI)
+                    .createNativeQuery(sb.toString())
+                    .setParameter(1, quantity)
+                    .setParameter(2, idPackingOrder)
+                    .setParameter(3, companyName)
+                    .setParameter(4, binCode.trim())
+                    .setParameter(5, itemCode);
+            if (redplas && itemCodeFather != null && !itemCodeFather.trim().isEmpty()) {
+                q.setParameter(6, itemCodeFather);
+            }
+            int result = q.executeUpdate();
             CONSOLE.log(Level.INFO, "Se actualizaron {0} filas", result);
+            if (result > 1) {
+                CONSOLE.log(Level.WARNING, "updatePackedQuantity afectó {0} filas para {1}/{2} en {3}", new Object[]{result, itemCodeFather, itemCode, binCode});
+            }
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar la cantidad de items empacados. ", e);
         }
     }
 
+    //public void updatePackedQuantity(String binCode, String itemCode, Integer orderNumber, Integer additionalQuantity, String companyName, boolean testing) {
+    //StringBuilder sb = new StringBuilder();
+    //sb.append("update packing_order_item_bin set packed_qty = /*packed_qty +*/ ");
+    //sb.append(additionalQuantity);
+    //sb.append(" where bin_code = '");
+    //sb.append(binCode.trim());
+    //sb.append("' and idpacking_order_item in ( select itm.idpacking_order_item from packing_order ord ");
+    //sb.append("inner join packing_order_item itm on itm.idpacking_order = ord.idpacking_order ");
+    //if (companyName.contains("REDPLAS")) {
+    //sb.append("where itm.item_code_father = '");
+    //} else {
+    //sb.append("where itm.item_code = '");
+    //}
+    // sb.append(itemCode);
+    // sb.append("' and ord.order_number = ");
+    // sb.append(orderNumber);
+    //sb.append(" and company_name = '");
+    //sb.append(companyName);
+    //  sb.append("')");
+    //   try {
+    //        int result = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).executeUpdate();
+    //        CONSOLE.log(Level.INFO, "Se actualizaron {0} filas", result);
+    //    } catch (Exception e) {
+    //        CONSOLE.log(Level.SEVERE, "Ocurrio un error al actualizar la cantidad de items empacados. ", e);
+    //    }
+    //}
+
     public List<Object[]> listOrderItems(Long idPackingOrder, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select bin.bin_code, bin.bin_name, bin.picked_qty - bin.packed_qty AS missing_quantity, itm.item_code, ");
-        sb.append("      bin.picked_qty, bin.packed_qty, 0 AS box_number ");
-        sb.append("from  packing_order ord ");
-        sb.append("inner join packing_order_item itm on itm.idpacking_order = ord.idpacking_order ");
-        sb.append("inner join packing_order_item_bin bin on bin.idpacking_order_item = itm.idpacking_order_item ");
-        sb.append("where ord.company_name = '");
+        sb.append("select bin.bin_code,bin.bin_name,bin.picked_qty-bin.packed_qty as missing_quantity,itm.item_code, ");
+        sb.append(" bin.picked_qty,bin.packed_qty, ");
+        sb.append(" cast(isnull(stuff(( ");
+        sb.append("    select ',' + cast(plr.box_number as varchar(10)) ");
+        sb.append("    from packing_list_record plr ");
+        sb.append("    where plr.idpacking_order = ord.idpacking_order ");
+        sb.append("      and plr.bin_code = bin.bin_code ");
+        sb.append("      and plr.item_code = isnull(itm.item_code_father, itm.item_code) ");
+        sb.append("      and isnull(plr.item_code_father, itm.item_code) = itm.item_code ");
+        sb.append("    group by plr.box_number ");
+        sb.append("    order by plr.box_number ");
+        sb.append("    for xml path('')),1,1,''),'0')as varchar(10))as box_number, ");
+        sb.append(" itm.item_code_father ");
+        sb.append("from packing_order ord ");
+        sb.append("inner join packing_order_item itm on itm.idpacking_order=ord.idpacking_order ");
+        sb.append("inner join packing_order_item_bin bin on bin.idpacking_order_item=itm.idpacking_order_item ");
+        sb.append("where ord.company_name='").append(companyName).append("' and ord.idpacking_order=").append(idPackingOrder);
+        sb.append(" and bin.picked_qty>0 order by bin_code,item_code");
+
+
+        /*sb.append("select bin.bin_code,bin.bin_name,bin.picked_qty-bin.packed_qty as missing_quantity,itm.item_code, ");
+        sb.append(" bin.picked_qty,bin.packed_qty,isnull(plr.box_number,0)as box_number,itm.item_code_father ");
+        sb.append("from packing_order ord ");
+        sb.append("inner join packing_order_item itm on itm.idpacking_order=ord.idpacking_order ");
+        sb.append("inner join packing_order_item_bin bin on bin.idpacking_order_item=itm.idpacking_order_item ");
+        sb.append("left  join packing_list_record plr on plr.idpacking_order=ord.idpacking_order and itm.item_code_father=plr.item_code ");
+        sb.append("where ord.company_name='");
         sb.append(companyName);
-        sb.append("' and ord.idpacking_order = ");
+        sb.append("' and ord.idpacking_order=");
         sb.append(idPackingOrder);
-        sb.append(" and bin.picked_qty > 0 ");
-        sb.append(" order by bin_code, item_code");
+        sb.append(" and bin.picked_qty>0 ");
+        sb.append("order by bin_code,item_code");*/
         try {
             return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_WALI).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {

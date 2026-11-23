@@ -7,6 +7,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.logging.Level;
@@ -40,7 +41,7 @@ public class ItemFacade {
         }
     }
 
-    public List<Object[]> getItemStock(String itemCode, String binCode, String whsCode, String companyName, boolean pruebas) {
+    public List<Object[]> getItemStock(String itemCode, String binCode, String whsCode, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select CAST(art.\"ItemCode\" AS varchar(20)) AS itemCode, CAST(art.\"ItemName\" AS varchar(200)) AS itemName, CAST(ubc.\"OnHandQty\" AS INT) AS Qty, ");
         sb.append(" CAST(ubc.\"WhsCode\" AS varchar(10)) AS whsCode, CAST(dub.\"BinCode\" AS varchar(22)) AS BinCode, ");
@@ -58,14 +59,14 @@ public class ItemFacade {
         sb.append(whsCode);
         sb.append("' order by dub.\"BinCode\"");
         try {
-            return persistenceConf.chooseSchema(companyName, pruebas, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
+            return persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getResultList();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al consultar el stock del item " + itemCode + ".", e);
             return null;
         }
     }
 
-    public BigDecimal getItemPrice(String itemCode, String companyName, boolean pruebas) {
+    public BigDecimal getItemPrice(String itemCode, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cast(p.\"Price\" as numeric(19,6)) as price from ITM1 p where p.\"ItemCode\" = '");
         sb.append(itemCode);
@@ -76,15 +77,15 @@ public class ItemFacade {
             sb.append("4");
         }
         try {
-            return (BigDecimal) persistenceConf.chooseSchema(companyName, pruebas, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
+            return (BigDecimal) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
         } catch (Exception e) {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando el precio unitario para el item [" + itemCode + "]");
         }
         return new BigDecimal(0);
     }
 
-    public Object getCheckOutStockItem(String itemCode, String location, String companyName, boolean pruebas) {
-        EntityManager em = persistenceConf.chooseSchema(companyName, pruebas, DB_TYPE_HANA);
+    public Object getCheckOutStockItem(String itemCode, String location, String companyName, boolean testing) {
+        EntityManager em = persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA);
         StringBuilder sb = new StringBuilder();
         sb.append("select CAST(oi.\"ItemCode\" AS varchar(20)) AS itemCode, CAST(oi.\"WhsCode\" AS varchar(10)) AS whsCode, CAST(oi.\"OnHandQty\" AS INT) AS stockLoc ");
         sb.append("from OBIN ob ");
@@ -100,5 +101,21 @@ public class ItemFacade {
             CONSOLE.log(Level.SEVERE, "Ocurrio un error al revisar el stock del item [" + itemCode + "] para la ubicacion [" + location + "]");
             return null;
         }
+    }
+
+    public Object[] getQtyMaterials(String itemCode, String companyName, boolean testing) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select cast(\"Father\" as varchar(20))as father,cast(sum(\"Quantity\")as int)as qty ");
+        sb.append("from ITT1 ");
+        sb.append("where \"Father\"='");
+        sb.append(itemCode);
+        sb.append("' group by \"Father\"");
+        try {
+            return (Object[]) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
+        } catch (NoResultException ex) {
+        } catch (Exception e) {
+            CONSOLE.log(Level.SEVERE, "Ocurrio un error consultando las cantidades de la lista de material para el item " + itemCode, e);
+        }
+        return null;
     }
 }

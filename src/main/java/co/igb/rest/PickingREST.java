@@ -373,17 +373,24 @@ public class PickingREST implements Serializable {
             for (Map.Entry<Map<String, String>, Map<Long, Integer>> entry : pickedItems.entrySet()) {
                 Map<String, String> itemData = entry.getKey();
                 Map<Long, Integer> itemBins = entry.getValue();
-                String itemCode = itemData.get("itemCode");
+                if (itemData == null || itemData.isEmpty()) {
+                    throw new IllegalArgumentException("No se encontró el código del artículo.");
+                }
+
+                String itemCode = itemData.values().iterator().next();
+                String itemCodeFather = itemData.keySet().iterator().next();
+
                 PackingOrderItem packingItem = new PackingOrderItem();
                 packingItem.setItemCode(itemCode);
+                packingItem.setItemCodeFather(itemCodeFather);
                 packingItem.setPackingOrder(packingOrder);
 
                 for (Map.Entry<Long, Integer> binEntry : itemBins.entrySet()) {
                     Long binAbs = binEntry.getKey();
                     Integer pickedQty = binEntry.getValue();
+
                     PackingOrderItemBin bin = new PackingOrderItemBin();
                     bin.setBinAbs(binAbs);
-
                     if (!bins.containsKey(binAbs)) {
                         Object[] binAndName = blFacade.getBinCodeAndName(binAbs, companyName, pruebas);
                         bins.put(binAbs, Arrays.copyOf(binAndName, binAndName.length, String[].class));
@@ -400,7 +407,7 @@ public class PickingREST implements Serializable {
                 packingOrder.getItems().add(packingItem);
             }
             if (!pickedItems.isEmpty()) {
-                //poFacade.create(packingOrder, companyName, pruebas);
+                poFacade.create(packingOrder, companyName, pruebas);
                 CONSOLE.log(Level.INFO, "Se creo la orden de packing para la orden {0}", order.getOrderNumber());
             }
             order.setStatus(Constants.STATUS_CLOSED);

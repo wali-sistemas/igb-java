@@ -11,7 +11,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "packing_list_record")
 public class PackingListRecord implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -65,6 +64,8 @@ public class PackingListRecord implements Serializable {
     @Basic(optional = false)
     @Column(name = "status")
     private String status;
+    @Column(name = "item_code_father")
+    private String itemCodeFather;
 
     public Long getId() {
         return id;
@@ -198,6 +199,14 @@ public class PackingListRecord implements Serializable {
         this.status = status;
     }
 
+    public String getItemCodeFather() {
+        return itemCodeFather;
+    }
+
+    public void setItemCodeFather(String itemCodeFather) {
+        this.itemCodeFather = itemCodeFather;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -242,6 +251,7 @@ public class PackingListRecord implements Serializable {
                 ", employee='" + employee + '\'' +
                 ", companyName='" + companyName + '\'' +
                 ", status='" + status + '\'' +
+                ", itemCodeFather='" + itemCodeFather + '\'' +
                 '}';
     }
 }

@@ -3,7 +3,7 @@ package co.igb.dto;
 import java.util.Date;
 
 /**
- * @author dbotero
+ * @author jguisao
  */
 public class PackingListRecordDTO {
     private Integer idPackingList;
@@ -13,6 +13,7 @@ public class PackingListRecordDTO {
     private Date datetimePacked;
     private Integer idPackingOrder;
     private String itemCode;
+    private String itemCodeFather;
     private String itemName;
     private Integer quantity;
     private String binCode;
@@ -77,6 +78,14 @@ public class PackingListRecordDTO {
         this.itemCode = itemCode;
     }
 
+    public String getItemCodeFather() {
+        return itemCodeFather;
+    }
+
+    public void setItemCodeFather(String itemCodeFather) {
+        this.itemCodeFather = itemCodeFather;
+    }
+
     public String getItemName() {
         return itemName;
     }
@@ -139,6 +148,22 @@ public class PackingListRecordDTO {
 
     @Override
     public String toString() {
-        return "PackingListRecordDTO{" + "idPackingList=" + idPackingList + ", orderNumber=" + orderNumber + ", customerId=" + customerId + ", customerName=" + customerName + ", datetimePacked=" + datetimePacked + ", idPackingOrder=" + idPackingOrder + ", itemCode=" + itemCode + ", quantity=" + quantity + ", binCode=" + binCode + ", binAbs=" + binAbs + ", boxNumber=" + boxNumber + ", employee=" + employee + ", status=" + status + '}';
+        return "PackingListRecordDTO{" +
+                "idPackingList=" + idPackingList +
+                ", orderNumber=" + orderNumber +
+                ", customerId='" + customerId + '\'' +
+                ", customerName='" + customerName + '\'' +
+                ", datetimePacked=" + datetimePacked +
+                ", idPackingOrder=" + idPackingOrder +
+                ", itemCode='" + itemCode + '\'' +
+                ", itemCodeFather='" + itemCodeFather + '\'' +
+                ", itemName='" + itemName + '\'' +
+                ", quantity=" + quantity +
+                ", binCode='" + binCode + '\'' +
+                ", binAbs=" + binAbs +
+                ", boxNumber=" + boxNumber +
+                ", employee='" + employee + '\'' +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

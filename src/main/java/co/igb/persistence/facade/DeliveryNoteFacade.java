@@ -72,12 +72,13 @@ public class DeliveryNoteFacade {
 
     public Integer getDocNumDeliveryNote(Integer orderNumber, String companyName, boolean testing) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select distinct cast(e.\"DocNum\" as int)as DocNum ");
+        sb.append("select distinct cast(e.\"DocNum\" as int)as \"DocNum\" ");
         sb.append("from ODLN e ");
         sb.append("inner join DLN1 d on e.\"DocEntry\"=d.\"DocEntry\" ");
+        sb.append("inner join ORDR o on o.\"DocNum\"=d.\"BaseRef\" ");
         sb.append("where d.\"BaseRef\"='");
         sb.append(orderNumber);
-        sb.append("'");
+        sb.append("' and not exists (select 1 from RDR1 l where l.\"DocEntry\"=o.\"DocEntry\" and l.\"LineStatus\"<>'C')");
         try {
             return (Integer) persistenceConf.chooseSchema(companyName, testing, DB_TYPE_HANA).createNativeQuery(sb.toString()).getSingleResult();
         } catch (NoResultException ex) {
